@@ -1,0 +1,59 @@
+::ng-deep .dt-my-tasks-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:first-child {
+  padding-right: 0;
+}
+::ng-deep .dt-my-tasks-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:nth-child(2) {
+  padding-left: 15px;
+}
+::ng-deep .dt-my-tasks-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:first-child {
+  padding-right: 0;
+}
+::ng-deep .dt-my-tasks-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:nth-child(2) {
+  padding-left: 15px;
+}
+::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:first-child {
+  padding-right: 25px !important;
+  padding-left: 0 !important;
+}
+::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:nth-child(2) {
+  padding-left: 25px !important;
+  padding-right: 15px !important;
+}
+::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:first-child {
+  padding-right: 25px !important;
+  padding-left: 0 !important;
+}
+::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:nth-child(2) {
+  padding-left: 25px !important;
+  padding-right: 15px !important;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:first-child {
+    padding-right: 17px !important;
+  }
+  ::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:nth-child(2) {
+    padding-left: 17px !important;
+  }
+  ::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:first-child {
+    padding-right: 17px !important;
+  }
+  ::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:nth-child(2) {
+    padding-left: 17px !important;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:first-child {
+    padding-right: 20px !important;
+  }
+  ::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:nth-child(2) {
+    padding-left: 20px !important;
+  }
+  ::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:first-child {
+    padding-right: 20px !important;
+  }
+  ::ng-deep .dt-my-tasks-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:nth-child(2) {
+    padding-left: 20px !important;
+  }
+}/*# sourceMappingURL=dt-my-tasks.component.css.map */

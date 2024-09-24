@@ -1,0 +1,158 @@
+<mat-card
+    class="recent-leads-card table-style-two mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Recent Leads
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border d-inline-block border-radius">
+                This Day
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            This Day
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Week
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Month
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Year
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource">
+
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox
+                            (change)="$event ? toggleAllRows() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()"
+                            [aria-label]="checkboxLabel()"
+                        >
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                        <mat-checkbox
+                            (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)"
+                            [aria-label]="checkboxLabel(row)"
+                        >
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <!-- Customer Column -->
+                <ng-container matColumnDef="customer">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Customer
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="customer-info d-flex align-items-center">
+                            <div class="img">
+                                <img [src]="element.customer.img" class="rounded-circle" alt="user-image">
+                            </div>
+                            <span class="d-block text-black fw-medium">
+                                {{element.customer.name}}
+                            </span>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Email Column -->
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Email
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.email}}
+                    </td>
+                </ng-container>
+
+                <!-- Source Column -->
+                <ng-container matColumnDef="source">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Source
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.source}}
+                    </td>
+                </ng-container>
+
+                <!-- Status Column -->
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Status
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="trezo-badge" *ngIf="element.status.confirmed">
+                            Confirmed
+                        </span>
+                        <span class="trezo-badge inProgress" *ngIf="element.status.inProgress">
+                            In Progress
+                        </span>
+                        <span class="trezo-badge pending" *ngIf="element.status.pending">
+                            Pending
+                        </span>
+                        <span class="trezo-badge rejected" *ngIf="element.status.rejected">
+                            Rejected
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="action-buttons d-flex align-items-center">
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.view}}
+                                </i>
+                            </button>
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.edit}}
+                                </i>
+                            </button>
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.delete}}
+                                </i>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+</mat-card>

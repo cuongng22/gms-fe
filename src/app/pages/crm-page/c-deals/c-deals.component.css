@@ -1,0 +1,47 @@
+::ng-deep .crm-deals-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title {
+  line-height: initial;
+  order: 2;
+}
+::ng-deep .crm-deals-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-subtitle {
+  order: 1;
+}
+::ng-deep .crm-deals-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell {
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+::ng-deep .crm-deals-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:first-child {
+  padding-right: 0;
+}
+::ng-deep .crm-deals-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:nth-child(2) {
+  padding-left: 15px;
+}
+::ng-deep .crm-deals-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:last-child {
+  text-align: end;
+}
+::ng-deep .crm-deals-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell {
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+::ng-deep .crm-deals-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:first-child {
+  padding-right: 0;
+}
+::ng-deep .crm-deals-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:nth-child(2) {
+  padding-left: 15px;
+}
+::ng-deep .crm-deals-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:last-child {
+  text-align: end;
+}
+::ng-deep .crm-deals-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:last-child .action-buttons {
+  justify-content: end;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .crm-deals-card .mat-mdc-card-header .mat-mdc-card-header-text {
+    display: block;
+  }
+  ::ng-deep .crm-deals-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell {
+    padding-top: 15px;
+    padding-bottom: 15px;
+  }
+}/*# sourceMappingURL=c-deals.component.css.map */

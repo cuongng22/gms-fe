@@ -1,0 +1,196 @@
+::ng-deep .email-inbox-card .mat-mdc-card-header {
+  margin-bottom: 20px;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title {
+  display: flex;
+  align-items: center;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .mdc-checkbox {
+  padding: 0;
+  top: -3px;
+  margin: 0;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .mdc-checkbox .mdc-checkbox__background {
+  top: 0;
+  left: 0;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .mdc-checkbox .mat-mdc-checkbox-touch-target {
+  width: 100%;
+  height: 100%;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .mdc-checkbox .mdc-checkbox__native-control {
+  width: 100%;
+  height: 100%;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list {
+  line-height: 1;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button {
+  padding: 0;
+  height: auto;
+  min-width: auto;
+  border-radius: 0;
+  margin-left: 10px;
+  display: inline-block;
+  color: var(--bodyColor);
+}
+::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button .mdc-button__label i {
+  font-size: 18px;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button:first-child {
+  margin-left: 1px;
+  margin-right: 25px;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button.mat-primary {
+  color: var(--blackColor);
+  margin-left: 15px;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button .mat-mdc-button-persistent-ripple::before {
+  margin-bottom: 1px;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links {
+  margin-bottom: 15px;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li {
+  margin-right: 35px;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button {
+  padding: 0;
+  height: auto;
+  min-width: auto;
+  border-radius: 0;
+  font-weight: 500;
+  position: relative;
+  display: inline-block;
+  color: var(--bodyColor);
+}
+::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button .mdc-button__label {
+  display: inline-block;
+  padding-left: 28px;
+}
+::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button .mdc-button__label i {
+  left: 0;
+  top: 50%;
+  font-size: 18px;
+  margin-top: -1px;
+  position: absolute;
+  transform: translateY(-50%);
+}
+::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button.active {
+  color: var(--primaryColor);
+}
+::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button.active::before {
+  transform: scaleX(1);
+}
+::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button::before {
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: 2px;
+  content: "";
+  bottom: -16px;
+  position: absolute;
+  transform: scaleX(0);
+  transition: var(--transition);
+  background: var(--primaryColor);
+}
+::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li:last-child {
+  margin-right: 0;
+}
+::ng-deep .email-inbox-card.component-dark-theme .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button.mat-primary {
+  color: var(--whiteColor);
+}
+::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button {
+  margin-left: 0;
+  margin-right: 10px;
+}
+::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button:first-child {
+  margin-left: 25px;
+  margin-right: 1px;
+}
+::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button.mat-primary {
+  margin-left: 0;
+  margin-right: 15px;
+}
+::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-content .inbox-nav-links li {
+  margin-right: 0;
+  margin-left: 35px;
+}
+::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button .mdc-button__label {
+  padding-left: 0;
+  padding-right: 28px;
+}
+::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button .mdc-button__label i {
+  left: auto;
+  right: 0;
+}
+::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-content .inbox-nav-links li:last-child {
+  margin-left: 0;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .email-inbox-card .mat-mdc-card-header {
+    margin-bottom: 15px;
+  }
+  ::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button {
+    margin-left: 10px;
+  }
+  ::ng-deep .email-inbox-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button:first-child {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+  ::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links {
+    margin-bottom: 12px;
+  }
+  ::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li {
+    margin-right: 25px;
+  }
+  ::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button .mdc-button__label {
+    padding-left: 23px;
+  }
+  ::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button .mdc-button__label i {
+    font-size: 16px;
+    margin-top: 0;
+  }
+  ::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button::before {
+    bottom: -13px;
+  }
+  ::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button {
+    margin-left: 0;
+    margin-right: 10px;
+  }
+  ::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title .buttons-list .mat-mdc-button:first-child {
+    margin-right: 0;
+    margin-left: 10px;
+  }
+  ::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-content .inbox-nav-links li {
+    margin-right: 0;
+    margin-left: 25px;
+  }
+  ::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button .mdc-button__label {
+    padding-left: 0;
+    padding-right: 23px;
+  }
+}
+/* Min width 576px to Max width 767px */
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  ::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li {
+    margin-right: 30px;
+  }
+  ::ng-deep .email-inbox-card .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button .mdc-button__label {
+    padding-left: 25px;
+  }
+  ::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-content .inbox-nav-links li {
+    margin-left: 30px;
+    margin-right: 0;
+  }
+  ::ng-deep .email-inbox-card.component-rtl-enabled .mat-mdc-card-content .inbox-nav-links li .mat-mdc-button .mdc-button__label {
+    padding-left: 0;
+    padding-right: 25px;
+  }
+}
+/* Min width 992px to Max width 1199px */
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=inbox.component.css.map */

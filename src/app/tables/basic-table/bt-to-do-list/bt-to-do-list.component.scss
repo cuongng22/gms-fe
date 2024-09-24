@@ -1,0 +1,235 @@
+::ng-deep {
+    .bt-to-do-list-card {
+        .mat-mdc-card-content {
+            .basic-table {
+                table, .table {
+                    thead {
+                        tr {
+                            th {
+                                &:first-child {
+                                    padding-right: 0;
+                                }
+                                &:nth-child(2) {
+                                    padding-left: 15px;
+                                }
+                            }
+                        }
+                    }
+                    tbody {
+                        tr {
+                            td {
+                                &:first-child {
+                                    padding-right: 0;
+                                }
+                                &:nth-child(2) {
+                                    padding-left: 15px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .mat-mdc-button {
+                &.add-new-task-btn {
+                    height: auto;
+                    min-width: auto;
+                    font-weight: 500;
+                    margin-top: 25px;
+                    padding: 8px 13px;
+                    border-radius: 7px;
+                    display: inline-block;
+                    color: var(--primaryColor);
+                    border: 1px solid var(--primaryColor);
+                    
+                    .mdc-button__label {
+                        display: inline-block;
+                        padding-left: 22px;
+                        
+                        i {
+                            top: 50%;
+                            left: -4px;
+                            font-size: 22px;
+                            position: absolute;
+                            transform: translateY(-50%);
+                        }
+                    }
+                }
+            }
+        }
+        &.component-rtl-enabled {
+            .mat-mdc-card-content {
+                .basic-table {
+                    table, .table {
+                        thead {
+                            tr {
+                                th {
+                                    &:first-child {
+                                        padding: {
+                                            right: 20px;
+                                            left: 0;
+                                        };
+                                    }
+                                    &:nth-child(2) {
+                                        padding: {
+                                            left: 20px;
+                                            right: 15px;
+                                        };
+                                    }
+                                }
+                            }
+                        }
+                        tbody {
+                            tr {
+                                td {
+                                    &:first-child {
+                                        padding: {
+                                            right: 20px;
+                                            left: 0;
+                                        };
+                                    }
+                                    &:nth-child(2) {
+                                        padding: {
+                                            left: 20px;
+                                            right: 15px;
+                                        };
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                .mat-mdc-button {
+                    &.add-new-task-btn {
+                        .mdc-button__label {
+                            padding: {
+                                left: 0;
+                                right: 22px;
+                            };
+                            i {
+                                left: auto;
+                                right: -4px;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    ::ng-deep {
+        .bt-to-do-list-card {
+            .mat-mdc-card-header {
+                .mat-mdc-card-header-text {
+                    display: block;
+                }
+            }
+            &.component-rtl-enabled {
+                .mat-mdc-card-content {
+                    .basic-table {
+                        table, .table {
+                            thead {
+                                tr {
+                                    th {
+                                        &:first-child {
+                                            padding: {
+                                                right: 17px;
+                                            };
+                                        }
+                                        &:nth-child(2) {
+                                            padding: {
+                                                left: 17px;
+                                            };
+                                        }
+                                    }
+                                }
+                            }
+                            tbody {
+                                tr {
+                                    td {
+                                        &:first-child {
+                                            padding: {
+                                                right: 17px;
+                                            };
+                                        }
+                                        &:nth-child(2) {
+                                            padding: {
+                                                left: 17px;
+                                            };
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    .mat-mdc-button {
+                        &.add-new-task-btn {
+                            margin-top: 17px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {
+
+    ::ng-deep {
+        .bt-to-do-list-card {
+            .mat-mdc-card-content {
+                .mat-mdc-button {
+                    &.add-new-task-btn {
+                        margin-top: 20px;
+                    }
+                }
+            }
+            &.component-rtl-enabled {
+                .mat-mdc-card-content {
+                    .basic-table {
+                        table, .table {
+                            thead {
+                                tr {
+                                    th {
+                                        &:first-child {
+                                            padding: {
+                                                right: 20px;
+                                            };
+                                        }
+                                        &:nth-child(2) {
+                                            padding: {
+                                                left: 20px;
+                                            };
+                                        }
+                                    }
+                                }
+                            }
+                            tbody {
+                                tr {
+                                    td {
+                                        &:first-child {
+                                            padding: {
+                                                right: 20px;
+                                            };
+                                        }
+                                        &:nth-child(2) {
+                                            padding: {
+                                                left: 20px;
+                                            };
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

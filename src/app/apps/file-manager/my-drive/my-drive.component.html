@@ -1,0 +1,439 @@
+<!-- My Drive -->
+<mat-card
+    class="my-drive-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+    [class.component-dark-theme]="themeService.isDark()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                My Drive
+            </h5>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="row">
+            <div class="col-xxl-3 col-sm-6">
+                <div class="box bg-primary-50 border-radius">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <mat-checkbox></mat-checkbox>
+                        <div class="action">
+                            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                                <i class="ri-more-fill"></i>
+                            </button>
+                            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                    <li>
+                                        <button mat-menu-item>
+                                            Edit
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            Delete
+                                        </button>
+                                    </li>
+                                </ul>
+                            </mat-menu>
+                        </div>
+                    </div>
+                    <div class="title d-flex align-items-center">
+                        <div class="icon text-primary lh-1">
+                            <i class="material-symbols-outlined">
+                                folder_open
+                            </i>
+                        </div>
+                        <h6 class="mb-0">
+                            Assets
+                        </h6>
+                    </div>
+                    <div class="info d-flex align-items-center justify-content-between">
+                        <span class="d-block text-black">
+                            387 Files
+                        </span>
+                        <span class="d-block text-black">
+                            4.5 GB
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-sm-6">
+                <div class="box bg-orange-50 border-radius">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <mat-checkbox></mat-checkbox>
+                        <div class="action">
+                            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                                <i class="ri-more-fill"></i>
+                            </button>
+                            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                    <li>
+                                        <button mat-menu-item>
+                                            Edit
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            Delete
+                                        </button>
+                                    </li>
+                                </ul>
+                            </mat-menu>
+                        </div>
+                    </div>
+                    <div class="title d-flex align-items-center">
+                        <div class="icon text-orange lh-1">
+                            <i class="material-symbols-outlined">
+                                news
+                            </i>
+                        </div>
+                        <h6 class="mb-0">
+                            Projects
+                        </h6>
+                    </div>
+                    <div class="info d-flex align-items-center justify-content-between">
+                        <span class="d-block text-black">
+                            123 Files
+                        </span>
+                        <span class="d-block text-black">
+                            1.4 GB
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-sm-6">
+                <div class="box bg-success-50 border-radius">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <mat-checkbox></mat-checkbox>
+                        <div class="action">
+                            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                                <i class="ri-more-fill"></i>
+                            </button>
+                            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                    <li>
+                                        <button mat-menu-item>
+                                            Edit
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            Delete
+                                        </button>
+                                    </li>
+                                </ul>
+                            </mat-menu>
+                        </div>
+                    </div>
+                    <div class="title d-flex align-items-center">
+                        <div class="icon text-success lh-1">
+                            <i class="material-symbols-outlined">
+                                folder
+                            </i>
+                        </div>
+                        <h6 class="mb-0">
+                            Personal
+                        </h6>
+                    </div>
+                    <div class="info d-flex align-items-center justify-content-between">
+                        <span class="d-block text-black">
+                            435 Files
+                        </span>
+                        <span class="d-block text-black">
+                            5.2 GB
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xxl-3 col-sm-6">
+                <div class="box bg-purple-50 border-radius">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <mat-checkbox></mat-checkbox>
+                        <div class="action">
+                            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                                <i class="ri-more-fill"></i>
+                            </button>
+                            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                    <li>
+                                        <button mat-menu-item>
+                                            Edit
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            Delete
+                                        </button>
+                                    </li>
+                                </ul>
+                            </mat-menu>
+                        </div>
+                    </div>
+                    <div class="title d-flex align-items-center">
+                        <div class="icon text-purple lh-1">
+                            <i class="material-symbols-outlined">
+                                topic
+                            </i>
+                        </div>
+                        <h6 class="mb-0">
+                            Templates
+                        </h6>
+                    </div>
+                    <div class="info d-flex align-items-center justify-content-between">
+                        <span class="d-block text-black">
+                            431 Files
+                        </span>
+                        <span class="d-block text-black">
+                            1.3 GB
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<!-- Recent Files -->
+<mat-card class="recent-files-card mb-25 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Recent Files
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button class="add-btn" type="button" mat-button (click)="toggleClass()">
+                <i class="material-symbols-outlined">
+                    add
+                </i>
+                Add New File
+            </button>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource">
+
+                <!-- File Name Column -->
+                <ng-container matColumnDef="fileName">
+                    <th mat-header-cell *matHeaderCellDef>
+                        File Name
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <a routerLink="/dashboard/apps/file-manager" class="file-name d-flex align-items-center fw-medium">
+                            <i class="material-symbols-outlined">
+                                folder
+                            </i>
+                            {{element.fileName}}
+                        </a>
+                    </td>
+                </ng-container>
+
+                <!-- Owner Column -->
+                <ng-container matColumnDef="owner">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Owner
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.owner}}
+                    </td>
+                </ng-container>
+
+                <!-- Listed Date Column -->
+                <ng-container matColumnDef="listedDate">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Listed Date
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.listedDate}}
+                    </td>
+                </ng-container>
+
+                <!-- File Type Column -->
+                <ng-container matColumnDef="fileType">
+                    <th mat-header-cell *matHeaderCellDef>
+                        File Type
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.fileType}}
+                    </td>
+                </ng-container>
+
+                <!-- File Size Column -->
+                <ng-container matColumnDef="fileSize">
+                    <th mat-header-cell *matHeaderCellDef>
+                        File Size
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.fileSize}}
+                    </td>
+                </ng-container>
+
+                <!-- File Items Column -->
+                <ng-container matColumnDef="fileItems">
+                    <th mat-header-cell *matHeaderCellDef>
+                        File Items
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.fileItems}}
+                    </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="action-buttons d-flex align-items-center">
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.view}}
+                                </i>
+                            </button>
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.edit}}
+                                </i>
+                            </button>
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.delete}}
+                                </i>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[8]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+</mat-card>
+
+<!-- Add New Popup -->
+<div
+    class="add-new-popup"
+    [class.active]="classApplied"
+>
+    <div class="popup-dialog">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none">
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mb-0">
+                        Add New File
+                    </h5>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <button
+                        mat-button
+                        (click)="toggleClass()"
+                    >
+                        <i class="ri-close-fill"></i>
+                    </button>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                File Name
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    File name
+                                </mat-label>
+                                <input matInput placeholder="E.g. Hand Watch">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Owner
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Select
+                                </mat-label>
+                                <mat-select>
+                                    <mat-option value="option1">
+                                        Shawn Kennedy
+                                    </mat-option>
+                                    <mat-option value="option2">
+                                        Roberto Cruz
+                                    </mat-option>
+                                    <mat-option value="option3">
+                                        Juli Johnson
+                                    </mat-option>
+                                    <mat-option value="option4">
+                                        Catalina Engles	
+                                    </mat-option>
+                                    <mat-option value="option5">
+                                        Louis Nagle
+                                    </mat-option>
+                                    <mat-option value="option6">
+                                        Michael Marquez
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                File Type
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Select
+                                </mat-label>
+                                <mat-select>
+                                    <mat-option value="option1">
+                                        .pdf
+                                    </mat-option>
+                                    <mat-option value="option2">
+                                        .png
+                                    </mat-option>
+                                    <mat-option value="option3">
+                                        .jpg
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Upload File
+                            </label>
+                            <file-upload class="file-uploader"></file-upload>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-box">
+                    <button
+                        mat-button
+                        (click)="toggleClass()"
+                        color="warn"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        mat-button
+                        color="primary"
+                    >
+                        <i class="material-symbols-outlined">
+                            add
+                        </i>
+                        Create
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,383 @@
+<!-- To Do List -->
+<mat-card
+    class="bt-to-do-list-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                To Do List
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <form class="search-box position-relative">
+                <label>
+                    <i class="material-symbols-outlined">
+                        search
+                    </i>
+                </label>
+                <input type="text" class="input-search" placeholder="Search here.....">
+            </form>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="basic-table table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col" class="fw-medium">
+                            <mat-checkbox></mat-checkbox>
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            ID
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Ticket Title
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Assigned To
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Due Date
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Priority
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Status
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Action
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <mat-checkbox></mat-checkbox>
+                        </td>
+                        <td class="text-body">#854</td>
+                        <td>
+                            <a routerLink="/dashboard/helpdesk-page/ticket-details" class="project-name fw-medium">
+                                Network Infrastructure
+                            </a>
+                        </td>
+                        <td>Oliver Clark</td>
+                        <td>30 Apr 2024</td>
+                        <td>High</td>
+                        <td>
+                            <span class="trezo-badge">
+                                Finished
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons d-flex align-items-center">
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> visibility </i>
+                                </button>
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> edit </i>
+                                </button>
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> delete </i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-checkbox></mat-checkbox>
+                        </td>
+                        <td class="text-body">#853</td>
+                        <td>
+                            <a routerLink="/dashboard/helpdesk-page/ticket-details" class="project-name fw-medium">
+                                Cloud Migration
+                            </a>
+                        </td>
+                        <td>Ethan Baker</td>
+                        <td>25 Apr 2024</td>
+                        <td>Low</td>
+                        <td>
+                            <span class="trezo-badge pending">
+                                Pending
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons d-flex align-items-center">
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> visibility </i>
+                                </button>
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> edit </i>
+                                </button>
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> delete </i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-checkbox></mat-checkbox>
+                        </td>
+                        <td class="text-body">#852</td>
+                        <td>
+                            <a routerLink="/dashboard/helpdesk-page/ticket-details" class="project-name fw-medium">
+                                Website Revamp
+                            </a>
+                        </td>
+                        <td>Sophia Carter</td>
+                        <td>20 Apr 2024</td>
+                        <td>Medium</td>
+                        <td>
+                            <span class="trezo-badge inProgress">
+                                In Progress
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons d-flex align-items-center">
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> visibility </i>
+                                </button>
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> edit </i>
+                                </button>
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> delete </i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-checkbox></mat-checkbox>
+                        </td>
+                        <td class="text-body">#851</td>
+                        <td>
+                            <a routerLink="/dashboard/helpdesk-page/ticket-details" class="project-name fw-medium">
+                                Mobile Application
+                            </a>
+                        </td>
+                        <td>Ava Cooper</td>
+                        <td>15 Apr 2024</td>
+                        <td>High</td>
+                        <td>
+                            <span class="trezo-badge">
+                                Finished
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons d-flex align-items-center">
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> visibility </i>
+                                </button>
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> edit </i>
+                                </button>
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> delete </i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-checkbox></mat-checkbox>
+                        </td>
+                        <td class="text-body">#850</td>
+                        <td>
+                            <a routerLink="/dashboard/helpdesk-page/ticket-details" class="project-name fw-medium">
+                                System Deployment
+                            </a>
+                        </td>
+                        <td>Isabella Evans</td>
+                        <td>10 Apr 2024</td>
+                        <td>Low</td>
+                        <td>
+                            <span class="trezo-badge cancelled">
+                                Cancelled
+                            </span>
+                        </td>
+                        <td>
+                            <div class="action-buttons d-flex align-items-center">
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> visibility </i>
+                                </button>
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> edit </i>
+                                </button>
+                                <button type="button" mat-button>
+                                    <i class="material-symbols-outlined"> delete </i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="text-end">
+            <button class="add-new-task-btn" type="button" mat-button (click)="toggleClass()">
+                <i class="material-symbols-outlined">
+                    add
+                </i>
+                Add New Task
+            </button>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<!-- Add New Popup -->
+<div
+    class="add-new-popup"
+    [class.active]="classApplied"
+>
+    <div class="popup-dialog">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none">
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mb-0">
+                        Add New Task
+                    </h5>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <button
+                        mat-button
+                        (click)="toggleClass()"
+                    >
+                        <i class="ri-close-fill"></i>
+                    </button>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Task Name
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Task name
+                                </mat-label>
+                                <input matInput placeholder="E.g. Hand Watch">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Assigned To
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Select
+                                </mat-label>
+                                <mat-select>
+                                    <mat-option value="option1">
+                                        Shawn Kennedy
+                                    </mat-option>
+                                    <mat-option value="option2">
+                                        Roberto Cruz
+                                    </mat-option>
+                                    <mat-option value="option3">
+                                        Juli Johnson
+                                    </mat-option>
+                                    <mat-option value="option4">
+                                        Catalina Engles	
+                                    </mat-option>
+                                    <mat-option value="option5">
+                                        Louis Nagle
+                                    </mat-option>
+                                    <mat-option value="option6">
+                                        Michael Marquez
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Due Date
+                            </label>
+                            <mat-form-field>
+                                <mat-label>Choose a date</mat-label>
+                                <input matInput [matDatepicker]="dueDatePicker">
+                                <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                                <mat-datepicker-toggle matIconSuffix [for]="dueDatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #dueDatePicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Priority
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Select
+                                </mat-label>
+                                <mat-select>
+                                    <mat-option value="option1">
+                                        High
+                                    </mat-option>
+                                    <mat-option value="option2">
+                                        Medium
+                                    </mat-option>
+                                    <mat-option value="option3">
+                                        Low
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Status
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Select
+                                </mat-label>
+                                <mat-select>
+                                    <mat-option value="option1">
+                                        In Progress
+                                    </mat-option>
+                                    <mat-option value="option2">
+                                        Pending
+                                    </mat-option>
+                                    <mat-option value="option3">
+                                        Finished
+                                    </mat-option>
+                                    <mat-option value="option4">
+                                        Cancelled
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-box">
+                    <button
+                        mat-button
+                        (click)="toggleClass()"
+                        color="warn"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        mat-button
+                        color="primary"
+                    >
+                        <i class="material-symbols-outlined">
+                            add
+                        </i>
+                        Create
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

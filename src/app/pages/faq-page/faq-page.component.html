@@ -1,0 +1,253 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0">
+        FAQ's
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative">
+            <a routerLink="/dashboard" class="d-inline-block position-relative">
+                <i class="material-symbols-outlined">
+                    home
+                </i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            FAQ's
+        </li>
+    </ol>
+</div>
+
+<!-- FAQ -->
+<mat-card
+    class="faq-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+    [class.component-dark-theme]="themeService.isDark()"
+>
+    <mat-card-content>
+        <div class="title text-center ml-auto mr-auto">
+            <h3>
+                Frequently Asked Questions
+            </h3>
+            <p>
+                Trezo offers customization options to tailor the platform to your team's unique requirements. You can customize workflows, templates, and dashboards to align with your processes.
+            </p>
+        </div>
+        <mat-accordion class="faq-accordion d-block ml-auto mr-auto">
+            <mat-expansion-panel expanded>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        What is Trezo?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        What features does Trezo offer?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+                <ul>
+                    <li class="position-relative">
+                        Pellentesque viverra lorem malesuada nunc tristique sapien.
+                    </li>
+                    <li class="position-relative">
+                        Imperdiet sit hendrerit tincidunt bibendum donec adipiscing.
+                    </li>
+                    <li class="position-relative">
+                        Tellus non morbi nascetur cursus etiam facilisis mi.
+                    </li>
+                    <li class="position-relative">
+                        Imperdiet sit hendrerit tincidunt bibendum donec adipiscing.
+                    </li>
+                </ul>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        How can Trezo benefit my team?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Is Trezo suitable for small businesses?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Can I customize Trezo to fit my team's specific needs?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Is Trezo cloud-based or on-premises?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Does Trezo integrate with other tools?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        How secure is Trezo?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Can I try Trezo before purchasing?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        What type of customer support does Trezo provide?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        How do I get started with Trezo?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Does Trezo offer training for new users?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Is Trezo GDPR compliant?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Does Trezo offer a mobile app?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        How does billing work for Trezo?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Can I cancel my Trezo subscription at any time?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Can I track time spent on tasks with Trezo?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Does Trezo offer recurring task capabilities?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Does Trezo offer Gantt chart functionality?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+            <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        Can I generate custom reports in Trezo?
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <p>
+                    Trezo is a comprehensive project management software designed to help teams streamline their workflow, collaborate effectively, and achieve project success.
+                </p>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-card-content>
+</mat-card>

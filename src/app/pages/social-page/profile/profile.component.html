@@ -1,0 +1,824 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0">
+        Profile
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative">
+            <a routerLink="/dashboard" class="d-inline-block position-relative">
+                <i class="material-symbols-outlined">
+                    home
+                </i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Social
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Profile
+        </li>
+    </ol>
+</div>
+
+<!-- Profile -->
+<div class="row">
+    <div class="col-xxxl-9 col-md-12">
+        <mat-card
+            class="profile-card mb-25 border-radius d-block bg-white border-0 shadow-none p-0"
+            [class.card-without-border-radius]="themeService.isCardWithoutBorderRadius()"
+            [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+            [class.component-dark-theme]="themeService.isDark()"
+        >
+            <mat-card-content>
+                <div class="cover-image position-relative border-top-radius">
+                    <img src="images/profile-cover.jpg" class="border-top-radius" alt="cover-image">
+                    <button type="button" mat-button class="edit-btn" [matMenuTriggerFor]="editCoverPhotoMenu">
+                        Update Cover Photo
+                    </button>
+                    <mat-menu #editCoverPhotoMenu="matMenu" class="card-header-menu" xPosition="after">
+                        <ul class="p-0 mt-0 mb-0 list-unstyled">
+                            <li>
+                                <button mat-menu-item>
+                                    Upload Photo
+                                </button>
+                            </li>
+                            <li>
+                                <button mat-menu-item>
+                                    Reposition
+                                </button>
+                            </li>
+                            <li>
+                                <button mat-menu-item>
+                                    Remove
+                                </button>
+                            </li>
+                        </ul>
+                    </mat-menu>
+                </div>
+                <div class="profile-content">
+                    <div class="d-md-flex align-items-end justify-content-between">
+                        <div class="d-md-flex align-items-end">
+                            <div class="image position-relative">
+                                <img src="images/profile.jpg" class="profile-image rounded-circle" alt="profile-image">
+                                <img src="images/icons/verified.svg" class="verified" alt="verified">
+                            </div>
+                            <div class="title">
+                                <span class="d-block text-black fw-bold">
+                                    Alice Johnson
+                                </span>
+                                <span class="d-block fw-medium">
+                                    Product Designer
+                                </span>
+                            </div>
+                        </div>
+                        <div class="btn-box">
+                            <button type="button" mat-button class="edit-btn" [matMenuTriggerFor]="editProfilePhotoMenu">
+                                <i class="material-symbols-outlined">
+                                    edit
+                                </i>
+                                Edit
+                            </button>
+                            <mat-menu #editProfilePhotoMenu="matMenu" class="card-header-menu" xPosition="after">
+                                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                    <li>
+                                        <button mat-menu-item>
+                                            See Photo
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            Upload Photo
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            Remove
+                                        </button>
+                                    </li>
+                                </ul>
+                            </mat-menu>
+                            <button type="button" mat-button class="edit-btn" [matMenuTriggerFor]="profileShareMenu">
+                                <i class="material-symbols-outlined">
+                                    share
+                                </i>
+                                Share
+                            </button>
+                            <mat-menu #profileShareMenu="matMenu" class="card-header-menu" xPosition="after">
+                                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                    <li>
+                                        <button mat-menu-item>
+                                            Facebook
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            X
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            Instagram
+                                        </button>
+                                    </li>
+                                </ul>
+                            </mat-menu>
+                        </div>
+                    </div>
+                </div>
+            </mat-card-content>
+        </mat-card>
+        <ul class="profile-nav-links text-center p-0 mb-25 list-unstyled">
+            <li class="d-inline-block">
+                <a routerLink="/dashboard/social" mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    Timeline
+                </a>
+            </li>
+            <li class="d-inline-block">
+                <a routerLink="/dashboard/social/about" mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    About
+                </a>
+            </li>
+            <li class="d-inline-block">
+                <a routerLink="/dashboard/social/activity" mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                    Activity
+                </a>
+            </li>
+        </ul>
+        <div class="row">
+            <div class="col-lg-4 col-md-12 order-2 order-lg-1">
+                <mat-card
+                    class="friends-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+                    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+                    [class.component-dark-theme]="themeService.isDark()"
+                >
+                    <mat-card-header>
+                        <mat-card-title>
+                            <h5 class="mb-0">
+                                Friends
+                            </h5>
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border d-inline-block border-radius">
+                                This Month
+                            </button>
+                            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Day
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Week
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Month
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Year
+                                        </button>
+                                    </li>
+                                </ul>
+                            </mat-menu>
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <form class="search-box position-relative">
+                            <label>
+                                <i class="material-symbols-outlined">
+                                    search
+                                </i>
+                            </label>
+                            <input type="text" class="input-search" placeholder="Search...">
+                        </form>
+                        <div class="user d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="img position-relative">
+                                    <img src="images/users/user7.jpg" class="rounded-circle" alt="user-image">
+                                    <span class="active-status off"></span>
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Carolyn Barnes
+                                    </span>
+                                    <span class="d-block">
+                                        barnes&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="user d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="img position-relative">
+                                    <img src="images/users/user6.jpg" class="rounded-circle" alt="user-image">
+                                    <span class="active-status"></span>
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Marcia Baker
+                                    </span>
+                                    <span class="d-block">
+                                        baker&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="user d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="img position-relative">
+                                    <img src="images/users/user8.jpg" class="rounded-circle" alt="user-image">
+                                    <span class="active-status"></span>
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Donna Miller
+                                    </span>
+                                    <span class="d-block">
+                                        miller&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="user d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="img position-relative">
+                                    <img src="images/users/user9.jpg" class="rounded-circle" alt="user-image">
+                                    <span class="active-status"></span>
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Barbara Cross
+                                    </span>
+                                    <span class="d-block">
+                                        cross&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="user d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="img position-relative">
+                                    <img src="images/users/user10.jpg" class="rounded-circle" alt="user-image">
+                                    <span class="active-status off"></span>
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Rebecca Block
+                                    </span>
+                                    <span class="d-block">
+                                        block&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="user d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="img position-relative">
+                                    <img src="images/users/user11.jpg" class="rounded-circle" alt="user-image">
+                                    <span class="active-status off"></span>
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Ramiro McCarty
+                                    </span>
+                                    <span class="d-block">
+                                        mccarty&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="user d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="img position-relative">
+                                    <img src="images/users/user12.jpg" class="rounded-circle" alt="user-image">
+                                    <span class="active-status"></span>
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Robert Fairweather
+                                    </span>
+                                    <span class="d-block">
+                                        fairweather&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="user d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="img position-relative">
+                                    <img src="images/users/user13.jpg" class="rounded-circle" alt="user-image">
+                                    <span class="active-status off"></span>
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Marcelino Haddock
+                                    </span>
+                                    <span class="d-block">
+                                        haddock&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="user d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="img position-relative">
+                                    <img src="images/users/user14.jpg" class="rounded-circle" alt="user-image">
+                                    <span class="active-status off"></span>
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Thomas Wilson
+                                    </span>
+                                    <span class="d-block">
+                                        wilson&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="user d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="img position-relative">
+                                    <img src="images/users/user15.jpg" class="rounded-circle" alt="user-image">
+                                    <span class="active-status off"></span>
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Nathaniel Hulsey
+                                    </span>
+                                    <span class="d-block">
+                                        hulsey&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-lg-8 col-md-12 order-1 order-lg-2">
+                <router-outlet />
+            </div>
+        </div>
+    </div>
+    <div class="col-xxxl-3 col-md-12">
+        <div class="row">
+            <div class="col-lg-6 col-xxxl-12">
+                <mat-card
+                    class="profile-intro-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+                    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+                >
+                    <mat-card-header>
+                        <mat-card-title>
+                            <h5 class="mb-0">
+                                Profile Intro
+                            </h5>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="user d-flex align-items-center">
+                            <div class="image">
+                                <img src="images/profile.jpg" class="rounded-circle" alt="profile-image">
+                            </div>
+                            <div class="title">
+                                <span class="d-block text-black fw-semibold">
+                                    Alice Johnson
+                                </span>
+                                <span class="d-block">
+                                    johnson&#64;trezo.com
+                                </span>
+                            </div>
+                        </div>
+                        <span class="sub-title d-block fw-semibold text-black">
+                            About Me
+                        </span>
+                        <p>
+                            Molestie tincidunt ut consequat a urna tortor. Vitae velit ac nisl velit mauris placerat nisi placerat. Pellentesque viverra lorem malesuada nunc tristique sapien. Imperdiet sit hendrerit tincidunt bibendum donec adipiscing.
+                        </p>
+                        <h6 class="fw-semibold">
+                            Social Profile
+                        </h6>
+                        <div class="socials-link">
+                            <a href="https://www.facebook.com/" target="_blank" class="facebook d-inline-block text-center position-relative rounded-circle">
+                                <i class="ri-facebook-fill"></i>
+                            </a>
+                            <a href="https://twitter.com/" target="_blank" class="x d-inline-block text-center position-relative rounded-circle">
+                                <i class="ri-twitter-x-fill"></i>
+                            </a>
+                            <a href="https://www.linkedin.com/" target="_blank" class="linkedin d-inline-block text-center position-relative rounded-circle">
+                                <i class="ri-linkedin-fill"></i>
+                            </a>
+                            <a href="mailto:micheal@gmail.com" class="mail d-inline-block text-center position-relative rounded-circle">
+                                <i class="ri-mail-fill"></i>
+                            </a>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-lg-6 col-xxxl-12">
+                <mat-card
+                    class="followers-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+                    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+                >
+                    <mat-card-header>
+                        <mat-card-title>
+                            <h5 class="mb-0">
+                                Followers
+                            </h5>
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border d-inline-block border-radius">
+                                This Month
+                            </button>
+                            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Day
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Week
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Month
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Year
+                                        </button>
+                                    </li>
+                                </ul>
+                            </mat-menu>
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="follower d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="image">
+                                    <img src="images/users/user6.jpg" class="rounded-circle" alt="user-image">
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Salvatore Dewall
+                                    </span>
+                                    <span class="d-block">
+                                        dewall&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="follower d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="image">
+                                    <img src="images/users/user7.jpg" class="rounded-circle" alt="user-image">
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Alina Smith
+                                    </span>
+                                    <span class="d-block">
+                                        smith&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="follower d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="image">
+                                    <img src="images/users/user8.jpg" class="rounded-circle" alt="user-image">
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Russell Colon
+                                    </span>
+                                    <span class="d-block">
+                                        colon&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="follower d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="image">
+                                    <img src="images/users/user9.jpg" class="rounded-circle" alt="user-image">
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Leslie Shadle
+                                    </span>
+                                    <span class="d-block">
+                                        shadle&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="follower d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="image">
+                                    <img src="images/users/user10.jpg" class="rounded-circle" alt="user-image">
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Raymond Nguyen
+                                    </span>
+                                    <span class="d-block">
+                                        nguyen&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-lg-6 col-xxxl-12">
+                <mat-card
+                    class="followers-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+                    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+                >
+                    <mat-card-header>
+                        <mat-card-title>
+                            <h5 class="mb-0">
+                                Following
+                            </h5>
+                        </mat-card-title>
+                        <mat-card-subtitle>
+                            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border d-inline-block border-radius">
+                                This Month
+                            </button>
+                            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Day
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Week
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Month
+                                        </button>
+                                    </li>
+                                    <li>
+                                        <button mat-menu-item>
+                                            This Year
+                                        </button>
+                                    </li>
+                                </ul>
+                            </mat-menu>
+                        </mat-card-subtitle>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="follower d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="image">
+                                    <img src="images/users/user11.jpg" class="rounded-circle" alt="user-image">
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Lenore Crum
+                                    </span>
+                                    <span class="d-block">
+                                        crum&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="follower d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="image">
+                                    <img src="images/users/user12.jpg" class="rounded-circle" alt="user-image">
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Paul Bartlett
+                                    </span>
+                                    <span class="d-block">
+                                        bartlett&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="follower d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="image">
+                                    <img src="images/users/user13.jpg" class="rounded-circle" alt="user-image">
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Nikki Lowe
+                                    </span>
+                                    <span class="d-block">
+                                        lowe&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="follower d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="image">
+                                    <img src="images/users/user14.jpg" class="rounded-circle" alt="user-image">
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Milton Laskowski
+                                    </span>
+                                    <span class="d-block">
+                                        laskowski&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                        <div class="follower d-flex align-items-center justify-content-between">
+                            <div class="d-flex align-items-center">
+                                <div class="image">
+                                    <img src="images/users/user15.jpg" class="rounded-circle" alt="user-image">
+                                </div>
+                                <div class="title">
+                                    <span class="d-block text-black fw-medium">
+                                        Ethel Hillen
+                                    </span>
+                                    <span class="d-block">
+                                        hillen&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                            <a routerLink="." mat-button class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+            <div class="col-lg-6 col-xxxl-12">
+                <mat-card class="photos-card mb-25 border-radius d-block bg-white border-0 shadow-none">
+                    <mat-card-header>
+                        <mat-card-title>
+                            <h5 class="mb-0">
+                                Photos
+                            </h5>
+                        </mat-card-title>
+                    </mat-card-header>
+                    <mat-card-content>
+                        <div class="row">
+                            <div class="col-4">
+                                <a routerLink="." class="d-block">
+                                    <img src="images/products/product6.jpg" alt="photo-image">
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a routerLink="." class="d-block">
+                                    <img src="images/products/product7.jpg" alt="photo-image">
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a routerLink="." class="d-block">
+                                    <img src="images/products/product8.jpg" alt="photo-image">
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a routerLink="." class="d-block">
+                                    <img src="images/products/product9.jpg" alt="photo-image">
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a routerLink="." class="d-block">
+                                    <img src="images/products/product10.jpg" alt="photo-image">
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a routerLink="." class="d-block">
+                                    <img src="images/products/product11.jpg" alt="photo-image">
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a routerLink="." class="d-block">
+                                    <img src="images/products/product12.jpg" alt="photo-image">
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a routerLink="." class="d-block">
+                                    <img src="images/products/product13.jpg" alt="photo-image">
+                                </a>
+                            </div>
+                            <div class="col-4">
+                                <a routerLink="." class="d-block">
+                                    <img src="images/products/product14.jpg" alt="photo-image">
+                                </a>
+                            </div>
+                        </div>
+                    </mat-card-content>
+                </mat-card>
+            </div>
+        </div>
+    </div>
+</div>

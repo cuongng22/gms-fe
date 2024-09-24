@@ -1,0 +1,201 @@
+::ng-deep .email-sidebar-card .mat-mdc-card-content .search-box {
+  margin-bottom: 20px;
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .search-box i {
+  top: 50%;
+  left: 13px;
+  font-size: 18px;
+  position: absolute;
+  color: var(--blackColor);
+  transform: translateY(-50%);
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .search-box .input-search {
+  height: 40px;
+  font-size: 12px;
+  padding-left: 38px;
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list {
+  margin-top: 25px;
+  margin-bottom: 25px;
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list li {
+  margin-bottom: 18px;
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list li a {
+  padding-left: 30px;
+  color: #526077;
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list li a i {
+  transform: translateY(-50%);
+  position: absolute;
+  font-size: 18px;
+  top: 50%;
+  left: 0;
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list li a span {
+  font-size: 12px;
+  font-weight: normal;
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list li a:hover {
+  color: var(--blackColor);
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list li a.active {
+  font-weight: 600;
+  color: var(--primaryColor);
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list li:last-child {
+  margin-bottom: 0;
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.btn {
+  width: 100%;
+  height: auto;
+  display: block;
+  min-width: auto;
+  text-align: center;
+  border-radius: 7px;
+  padding: 14px 22px;
+  color: var(--whiteColor);
+  background-color: var(--primaryColor);
+  font-size: 16px;
+  font-weight: 500;
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.btn .mdc-button__label {
+  padding-left: 29px;
+  display: inline-block;
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.btn .mdc-button__label i {
+  left: 0;
+  top: 50%;
+  font-size: 20px;
+  position: absolute;
+  transform: translateY(-50%);
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.add-btn {
+  height: auto;
+  min-width: auto;
+  font-weight: 500;
+  padding: 8px 13px;
+  border-radius: 7px;
+  display: inline-block;
+  color: var(--primaryColor);
+  border: 1px solid var(--primaryColor);
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.add-btn .mdc-button__label {
+  display: inline-block;
+  padding-left: 22px;
+}
+::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.add-btn .mdc-button__label i {
+  top: 50%;
+  left: -4px;
+  font-size: 22px;
+  position: absolute;
+  transform: translateY(-50%);
+}
+::ng-deep .email-sidebar-card.component-dark-theme .mat-mdc-card-content .search-box i {
+  color: var(--whiteColor);
+}
+::ng-deep .email-sidebar-card.component-dark-theme .mat-mdc-card-content .sidebar-list li a {
+  color: var(--bodyColor);
+}
+::ng-deep .email-sidebar-card.component-dark-theme .mat-mdc-card-content .sidebar-list li a:hover {
+  color: var(--whiteColor);
+}
+::ng-deep .email-sidebar-card.component-dark-theme .mat-mdc-card-content .sidebar-list li a.active {
+  color: var(--primaryColor);
+}
+::ng-deep .email-sidebar-card.component-rtl-enabled .mat-mdc-card-content .search-box i {
+  left: auto;
+  right: 13px;
+}
+::ng-deep .email-sidebar-card.component-rtl-enabled .mat-mdc-card-content .search-box .input-search {
+  padding-left: 15px;
+  padding-right: 38px;
+}
+::ng-deep .email-sidebar-card.component-rtl-enabled .mat-mdc-card-content .sidebar-list li a {
+  padding-left: 0;
+  padding-right: 30px;
+}
+::ng-deep .email-sidebar-card.component-rtl-enabled .mat-mdc-card-content .sidebar-list li a i {
+  left: auto;
+  right: 0;
+}
+::ng-deep .email-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-button.btn .mdc-button__label {
+  padding-left: 0;
+  padding-right: 29px;
+}
+::ng-deep .email-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-button.btn .mdc-button__label i {
+  left: auto;
+  right: 0;
+}
+::ng-deep .email-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-button.add-btn .mdc-button__label {
+  padding-left: 0;
+  padding-right: 22px;
+}
+::ng-deep .email-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-button.add-btn .mdc-button__label i {
+  left: auto;
+  right: -4px;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .search-box {
+    margin-bottom: 17px;
+  }
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list {
+    margin-top: 17px;
+    margin-bottom: 20px;
+  }
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list li {
+    margin-bottom: 16px;
+  }
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list li a {
+    padding-left: 26px;
+  }
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list li a i {
+    font-size: 16px;
+  }
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.btn {
+    font-size: 13px;
+  }
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.btn .mdc-button__label {
+    padding-left: 25px;
+  }
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.btn .mdc-button__label i {
+    font-size: 18px;
+  }
+  ::ng-deep .email-sidebar-card.component-rtl-enabled .mat-mdc-card-content .sidebar-list li a {
+    padding-left: 0;
+    padding-right: 26px;
+  }
+  ::ng-deep .email-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-button.btn .mdc-button__label {
+    padding-left: 0;
+    padding-right: 25px;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .search-box {
+    margin-bottom: 20px;
+  }
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .sidebar-list {
+    margin-top: 20px;
+    margin-bottom: 20px;
+  }
+}
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.btn {
+    font-size: 14px;
+  }
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.btn .mdc-button__label i {
+    font-size: 18px;
+  }
+}
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  ::ng-deep .email-sidebar-card .mat-mdc-card-content .mat-mdc-button.btn {
+    font-size: 15px;
+  }
+}
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=sidebar.component.css.map */

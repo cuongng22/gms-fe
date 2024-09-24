@@ -1,0 +1,98 @@
+::ng-deep .seller-card .mat-mdc-card-header {
+  margin-bottom: 0;
+}
+::ng-deep .seller-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title {
+  line-height: initial;
+  order: 2;
+}
+::ng-deep .seller-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-subtitle {
+  order: 1;
+}
+::ng-deep .seller-card .mat-mdc-card-content .info .icon {
+  margin-right: 15px;
+}
+::ng-deep .seller-card .mat-mdc-card-content .info .title {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+::ng-deep .seller-card .mat-mdc-card-content .info .mat-mdc-button.dot-menu {
+  height: 21.59px;
+  min-width: auto;
+  font-size: 26px;
+  margin-right: -2px;
+  line-height: 21.59px;
+  color: var(--bodyColor);
+}
+::ng-deep .seller-card .mat-mdc-card-content .info .mat-mdc-button.dot-menu .mdc-button__ripple {
+  display: none;
+}
+::ng-deep .seller-card .mat-mdc-card-content .info .mat-mdc-button.dot-menu .mdc-button__label {
+  display: block;
+}
+::ng-deep .seller-card .mat-mdc-card-content .info .mat-mdc-button.dot-menu:hover {
+  color: var(--primaryColor);
+}
+::ng-deep .seller-card .mat-mdc-card-content ul {
+  margin-top: 20px;
+}
+::ng-deep .seller-card .mat-mdc-card-content ul li {
+  margin-bottom: 14px;
+}
+::ng-deep .seller-card .mat-mdc-card-content ul li:last-child {
+  margin-bottom: 0;
+}
+::ng-deep .seller-card .mat-mdc-card-content form {
+  margin-top: 20px;
+}
+::ng-deep .seller-card .mat-mdc-card-content form .form-group {
+  margin-bottom: 15px;
+}
+::ng-deep .component-rtl-enabled .seller-card .mat-mdc-card-content .info .icon {
+  margin-right: 0;
+  margin-left: 15px;
+}
+::ng-deep .component-rtl-enabled .seller-card .mat-mdc-card-content .info .mat-mdc-button.dot-menu {
+  margin-right: 0;
+  margin-left: -2px;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .seller-card .mat-mdc-card-header .mat-mdc-card-header-text {
+    display: block;
+  }
+  ::ng-deep .seller-card .mat-mdc-card-content .info .title {
+    font-size: 14px;
+  }
+  ::ng-deep .seller-card .mat-mdc-card-content ul {
+    margin-top: 17px;
+  }
+  ::ng-deep .seller-card .mat-mdc-card-content ul li {
+    margin-bottom: 13px;
+  }
+  ::ng-deep .seller-card .mat-mdc-card-content form {
+    margin-top: 17px;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .seller-card .mat-mdc-card-header .mat-mdc-card-header-text {
+    display: flex;
+  }
+  ::ng-deep .seller-card .mat-mdc-card-header .mat-mdc-card-header-text .search-box {
+    width: 265px;
+    margin-top: 0;
+  }
+  ::ng-deep .seller-card .mat-mdc-card-content ul {
+    margin-top: 20px;
+  }
+}
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  ::ng-deep .seller-card .mat-mdc-card-content .info .title {
+    font-size: 15px;
+  }
+}
+/* Min width 992px to Max width 1199px */
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=e-seller-details.component.css.map */

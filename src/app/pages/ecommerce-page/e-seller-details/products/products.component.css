@@ -1,0 +1,112 @@
+::ng-deep .products-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title {
+  line-height: initial;
+  order: 2;
+}
+::ng-deep .products-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-subtitle {
+  order: 1;
+}
+::ng-deep .products-card .mat-mdc-tab-group {
+  --mat-stepper-header-selected-state-icon-background-color: var(--primaryColor);
+  --mat-stepper-header-edit-state-icon-background-color: var(--primaryColor);
+  --mdc-tab-indicator-active-indicator-color: var(--primaryColor);
+  --mat-tab-header-active-focus-indicator-color: var(--primaryColor);
+  --mat-tab-header-active-hover-indicator-color: var(--primaryColor);
+}
+::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab-header {
+  margin-bottom: 25px;
+}
+::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab-label-container {
+  border-width: 0;
+}
+::ng-deep .products-card .mat-mdc-tab-group.mat-mdc-tab-group-stretch-tabs > .mat-mdc-tab-header .mat-mdc-tab {
+  flex-grow: unset !important;
+}
+::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab-ripple {
+  border-radius: 7px;
+}
+::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab-labels {
+  gap: 15px;
+}
+::ng-deep .products-card .mat-mdc-tab-group .mdc-tab {
+  height: 45px;
+  border-radius: 7px;
+  background-color: #F6F7F9;
+  padding-left: 30px;
+  padding-right: 30px;
+}
+::ng-deep .products-card .mat-mdc-tab-group .mdc-tab .mdc-tab__text-label {
+  color: var(--blackColor);
+  transition: unset;
+  font-weight: 600;
+}
+::ng-deep .products-card .mat-mdc-tab-group .mdc-tab.mdc-tab--active {
+  background-color: var(--primaryColor);
+}
+::ng-deep .products-card .mat-mdc-tab-group .mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: var(--whiteColor);
+}
+::ng-deep .products-card .mat-mdc-tab-group .mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
+  color: var(--whiteColor);
+}
+::ng-deep .products-card .mat-mdc-tab-group .mdc-tab.mdc-tab--active:hover .mdc-tab__text-label {
+  color: var(--whiteColor);
+}
+::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab .mdc-tab__ripple::before {
+  border-radius: 7px;
+}
+::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab .mdc-tab-indicator__content--underline {
+  border-color: var(--primaryColor);
+  display: none;
+}
+::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab-header-pagination-before, ::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab-header-rtl .mat-mdc-tab-header-pagination-after {
+  padding-left: 0;
+}
+::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab-header-rtl .mat-mdc-tab-header-pagination-before, ::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab-header-pagination-after {
+  padding-right: 0;
+}
+::ng-deep .products-card.component-dark-theme .mat-mdc-tab-group .mdc-tab {
+  background-color: #15203c;
+}
+::ng-deep .products-card.component-dark-theme .mat-mdc-tab-group .mdc-tab .mdc-tab__text-label {
+  color: var(--whiteColor);
+}
+::ng-deep .products-card.component-dark-theme .mat-mdc-tab-group .mdc-tab.mdc-tab--active {
+  background-color: var(--primaryColor);
+}
+::ng-deep .products-card.component-dark-theme .mat-mdc-tab-group .mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: var(--whiteColor);
+}
+::ng-deep .products-card.component-dark-theme .mat-mdc-tab-group .mdc-tab.mdc-tab--active:focus .mdc-tab__text-label {
+  color: var(--whiteColor);
+}
+::ng-deep .products-card.component-dark-theme .mat-mdc-tab-group .mdc-tab.mdc-tab--active:hover .mdc-tab__text-label {
+  color: var(--whiteColor);
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .products-card .mat-mdc-card-header .mat-mdc-card-header-text {
+    display: block;
+  }
+  ::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab-header {
+    margin-bottom: 17px;
+  }
+  ::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab-labels {
+    gap: 10px;
+  }
+  ::ng-deep .products-card .mat-mdc-tab-group .mdc-tab {
+    height: 42px;
+    padding-left: 25px;
+    padding-right: 25px;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .products-card .mat-mdc-tab-group .mat-mdc-tab-header {
+    margin-bottom: 20px;
+  }
+}
+/* Min width 768px to Max width 991px */
+/* Min width 992px to Max width 1199px */
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=products.component.css.map */

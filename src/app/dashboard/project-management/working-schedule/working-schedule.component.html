@@ -1,0 +1,62 @@
+<mat-card
+    class="working-schedule-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+    [class.component-dark-theme]="themeService.isDark()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Working Schedule
+            </h5>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <mat-calendar></mat-calendar>
+        <div class="upcoming-events">
+            <span class="title d-block fw-medium">
+                Upcoming Events:
+            </span>
+            <owl-carousel-o [options]="upcomingEventsSlides">
+                <ng-template carouselSlide>
+                    <div class="event-item position-relative">
+                        <h6 class="fw-semibold">
+                            Pythons Unleashed: A Development Expedition
+                        </h6>
+                        <span>
+                            <span class="text-primary">
+                                15 April 2024
+                            </span>
+                            -  12.00 PM - 6.00 PM
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template carouselSlide>
+                    <div class="event-item position-relative">
+                        <h6 class="fw-semibold">
+                            Pythons Unleashed: A Development Expedition
+                        </h6>
+                        <span>
+                            <span class="text-primary">
+                                15 April 2024
+                            </span>
+                            -  12.00 PM - 6.00 PM
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template carouselSlide>
+                    <div class="event-item position-relative">
+                        <h6 class="fw-semibold">
+                            Pythons Unleashed: A Development Expedition
+                        </h6>
+                        <span>
+                            <span class="text-primary">
+                                15 April 2024
+                            </span>
+                            -  12.00 PM - 6.00 PM
+                        </span>
+                    </div>
+                </ng-template>
+            </owl-carousel-o>
+        </div>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,11 @@
+::ng-deep {
+    .projects-list-card {
+        .mat-mdc-card-header {
+            .mat-mdc-card-header-text {
+                .mat-mdc-card-subtitle {
+                    line-height: initial;
+                }
+            }
+        }
+    }
+}

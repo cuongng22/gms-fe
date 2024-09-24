@@ -1,0 +1,23 @@
+<mat-card
+    class="congratulations-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-content>
+        <h5 class="fw-semibold">
+            Congratulations, <span class="text-primary">Olivia!</span>
+        </h5>
+        <p>
+            Best agent of the month
+        </p>
+        <h6 class="text-secondary">
+            1.5k+
+        </h6>
+        <span class="d-block">
+            Ticket Solved
+        </span>
+        <a routerLink="/dashboard/my-profile" mat-button>
+            View Profile
+        </a>
+        <img src="images/trophy.gif" alt="trophy-image">
+    </mat-card-content>
+</mat-card>

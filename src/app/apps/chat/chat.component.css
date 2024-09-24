@@ -1,0 +1,735 @@
+::ng-deep .chat-sidebar-card .mat-mdc-card-header {
+  margin-bottom: 20px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title h5 {
+  font-size: 16px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .search-box i {
+  top: 50%;
+  left: 13px;
+  font-size: 18px;
+  position: absolute;
+  color: var(--blackColor);
+  transform: translateY(-50%);
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .search-box .input-search {
+  height: 40px;
+  font-size: 12px;
+  padding-left: 38px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group {
+  display: block;
+  margin-top: 20px;
+  --mdc-tab-indicator-active-indicator-color: var(--primaryColor);
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header {
+  display: block;
+  margin-bottom: 0;
+  border-bottom: 1px solid var(--borderColor);
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container {
+  display: block;
+  border: 0;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab {
+  display: inline-block;
+  margin-right: 33px;
+  padding: 0 0 8px;
+  min-width: auto;
+  height: auto;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab .mdc-tab__content {
+  display: block;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab .mdc-tab__text-label {
+  font-weight: 500;
+  color: var(--bodyColor);
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab.mdc-tab--active .mdc-tab__text-label {
+  color: var(--primaryColor);
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab:last-child {
+  margin-right: 0;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab-labels {
+  display: block;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-header-pagination {
+  display: none;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
+  display: block;
+  margin-right: -25px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-body-wrapper .mat-mdc-tab-body {
+  overflow: hidden;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-body-wrapper .mat-mdc-tab-body .mat-mdc-tab-body-content {
+  height: auto;
+  overflow: hidden;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list {
+  overflow-y: scroll;
+  height: 820px;
+  padding-right: 25px;
+  padding-top: 20px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list::-webkit-scrollbar-track {
+  border-radius: 50px;
+  background-color: var(--whiteColor);
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list::-webkit-scrollbar-thumb {
+  border-radius: 50px;
+  background: #B5C3D7;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--borderColor);
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item .user .img {
+  margin-right: 10px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item .user .img img {
+  width: 35px;
+  margin-bottom: -3px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item .user .img .active-status {
+  right: 0;
+  bottom: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  background: #37D80A;
+  border: 2px solid var(--whiteColor);
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item .user .img .active-status.off {
+  background: #FE7A36;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item .user .title span:not(:first-child) {
+  margin-top: 5px;
+  font-size: 12px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item .user .title span.voice, ::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item .user .title span.attachment {
+  position: relative;
+  padding-left: 16px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item .user .title span.voice i, ::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item .user .title span.attachment i {
+  left: 0;
+  top: 50%;
+  margin-top: -0.5px;
+  position: absolute;
+  transform: translateY(-50%);
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item .info {
+  text-align: end;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item .info .time {
+  font-size: 12px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list .single-user-item:last-child {
+  margin-bottom: 0;
+  padding-bottom: 0;
+  border-bottom-width: 0;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .btn {
+  padding-right: 25px;
+  margin-top: 20px;
+}
+::ng-deep .chat-sidebar-card .mat-mdc-card-content .btn .mat-mdc-button {
+  width: 100%;
+  height: auto;
+  display: block;
+  min-width: auto;
+  border-radius: 0;
+  padding: 14px 22px;
+  color: var(--whiteColor);
+  background-color: var(--primaryColor);
+  font-size: 16px;
+  font-weight: 500;
+}
+::ng-deep .chat-sidebar-card.component-dark-theme .mat-mdc-card-content .search-box i {
+  color: var(--whiteColor);
+}
+::ng-deep .chat-sidebar-card.component-dark-theme .mat-mdc-card-content .chat-users-list::-webkit-scrollbar-track {
+  background-color: #0C1427;
+}
+::ng-deep .chat-sidebar-card.component-dark-theme .mat-mdc-card-content .chat-users-list::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+::ng-deep .chat-sidebar-card.component-dark-theme .mat-mdc-card-content .chat-users-list .single-user-item .user .img .active-status {
+  border-color: #0C1427;
+}
+::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .search-box i {
+  left: auto;
+  right: 13px;
+}
+::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .search-box .input-search {
+  padding-left: 14px;
+  padding-right: 38px;
+}
+::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab {
+  margin-right: 0;
+  margin-left: 33px;
+}
+::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab:last-child {
+  margin-left: 0;
+}
+::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
+  margin-right: 0;
+  margin-left: -25px;
+}
+::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .chat-users-list {
+  padding-right: 0;
+  padding-left: 25px;
+}
+::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .chat-users-list .single-user-item .user .img {
+  margin-right: 0;
+  margin-left: 10px;
+}
+::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .chat-users-list .single-user-item .user .img .active-status {
+  right: auto;
+  left: 0;
+}
+::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .chat-users-list .single-user-item .user .title span.voice, ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .chat-users-list .single-user-item .user .title span.attachment {
+  padding-left: 0;
+  padding-right: 16px;
+}
+::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .chat-users-list .single-user-item .user .title span.voice i, ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .chat-users-list .single-user-item .user .title span.attachment i {
+  left: auto;
+  right: 0;
+}
+::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .btn {
+  padding-right: 0;
+  padding-left: 25px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-header .user .img {
+  margin-right: 15px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-header .user .img img {
+  width: 75px;
+  margin-bottom: -3px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-header .user .img .active-status {
+  right: 5px;
+  bottom: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  background: #37D80A;
+  border: 2px solid var(--whiteColor);
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-header .user .img .active-status.off {
+  background: #FE7A36;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-header .user .title span:nth-child(1) {
+  font-size: 16px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-header .user .title span:not(:first-child) {
+  margin-top: 5px;
+  font-size: 14px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-header .buttons-list .mat-mdc-button {
+  padding: 0;
+  height: auto;
+  min-width: auto;
+  border-radius: 0;
+  margin-left: 15px;
+  color: var(--bodyColor);
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-header .buttons-list .mat-mdc-button .mdc-button__label i {
+  font-size: 16px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-header .buttons-list .mat-mdc-button:first-child {
+  margin-left: 0;
+}
+::ng-deep .chat-card .mat-mdc-card-content .border-top {
+  border-color: var(--borderColor) !important;
+  margin-top: 20px;
+  margin-bottom: 18px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .current-time {
+  padding-bottom: 18px;
+  font-size: 12px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body {
+  transform: rotate(180deg);
+  margin-right: -25px;
+  overflow-y: scroll;
+  direction: rtl;
+  height: 703px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body::-webkit-scrollbar {
+  width: 2px;
+  height: 2px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body::-webkit-scrollbar-track {
+  border-radius: 50px;
+  background-color: var(--whiteColor);
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body::-webkit-scrollbar-thumb {
+  border-radius: 50px;
+  background: #B5C3D7;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul {
+  flex-direction: column-reverse;
+  justify-content: flex-end;
+  display: flex;
+  padding-left: 25px;
+  padding-right: 0;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li {
+  transform: rotate(180deg);
+  padding-left: 45px;
+  direction: ltr;
+  width: 90%;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li .user {
+  top: 0;
+  left: 0;
+  position: absolute;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li .message {
+  text-align: start;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li .message p {
+  padding: 10px 15px;
+  display: inline-block;
+  background-color: #F6F7F9;
+  border-radius: 0 7px 7px 7px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li .message div {
+  margin-bottom: 5px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li .message div:last-child {
+  margin-bottom: 0;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li .time {
+  font-size: 12px;
+  text-align: start;
+  margin-bottom: 20px;
+  margin-top: 7px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li.right {
+  text-align: end;
+  margin-left: auto;
+  padding-left: 0;
+  padding-right: 0;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li.right .user {
+  left: auto;
+  right: 0;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li.right .message {
+  text-align: end;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li.right .message p {
+  color: var(--whiteColor);
+  border-radius: 7px 0 7px 7px;
+  background-color: var(--primaryColor);
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li.right .time {
+  text-align: end;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-footer {
+  padding: 20px;
+  background-color: #F6F7F9;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-footer .buttons-list {
+  top: 2px;
+  position: relative;
+  margin-right: 20px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-footer .buttons-list .mat-mdc-button {
+  padding: 0;
+  height: auto;
+  min-width: auto;
+  border-radius: 0;
+  margin-left: 10px;
+  display: inline-block;
+  color: var(--bodyColor);
+  transition: var(--transition);
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-footer .buttons-list .mat-mdc-button i {
+  font-size: 16px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-footer .buttons-list .mat-mdc-button:hover {
+  color: var(--primaryColor);
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-footer .buttons-list .mat-mdc-button:first-child {
+  margin-left: 0;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-footer form {
+  flex: 1 1 auto;
+  padding-right: 70px;
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-footer form .mat-mdc-form-field .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  border-color: var(--whiteColor);
+  background-color: var(--whiteColor);
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-footer form .mat-mdc-button {
+  right: 0;
+  top: 50%;
+  padding: 0;
+  width: 55px;
+  height: 55px;
+  min-width: auto;
+  border-radius: 3px;
+  position: absolute;
+  display: inline-block;
+  color: var(--whiteColor);
+  transform: translateY(-50%);
+  background-color: var(--primaryColor);
+}
+::ng-deep .chat-card .mat-mdc-card-content .chat-footer form .mat-mdc-button .mdc-button__label {
+  left: 0;
+  right: 0;
+  top: 50%;
+  margin-top: 2px;
+  position: absolute;
+  transform: translateY(-50%);
+}
+::ng-deep .chat-card.component-dark-theme .mat-mdc-card-content .chat-body::-webkit-scrollbar-track {
+  background-color: #0C1427;
+}
+::ng-deep .chat-card.component-dark-theme .mat-mdc-card-content .chat-body::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.1);
+}
+::ng-deep .chat-card.component-dark-theme .mat-mdc-card-content .chat-body ul li .message p {
+  background-color: #15203c;
+}
+::ng-deep .chat-card.component-dark-theme .mat-mdc-card-content .chat-body ul li.right .message p {
+  background-color: var(--primaryColor);
+}
+::ng-deep .chat-card.component-dark-theme .mat-mdc-card-content .chat-footer {
+  background-color: #15203c;
+}
+::ng-deep .chat-card.component-dark-theme .mat-mdc-card-content .chat-footer form .mat-mdc-form-field .mdc-text-field--filled:not(.mdc-text-field--disabled) {
+  border-color: #0C1427;
+  background-color: #0C1427;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-header .user .img {
+  margin-right: 0;
+  margin-left: 15px;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-header .user .img .active-status {
+  right: auto;
+  left: 5px;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-header .buttons-list .mat-mdc-button {
+  margin-left: 0;
+  margin-right: 15px;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-header .buttons-list .mat-mdc-button:first-child {
+  margin-right: 0;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body {
+  direction: ltr;
+  margin-right: 0;
+  margin-left: -25px;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body ul {
+  padding-left: 0;
+  padding-right: 25px;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body ul li {
+  direction: rtl;
+  padding-left: 0;
+  padding-right: 45px;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body ul li .user {
+  left: auto;
+  right: 0;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body ul li .message p {
+  border-radius: 7px 0 7px 7px;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body ul li.right {
+  margin-right: auto;
+  margin-left: 0;
+  padding-left: 0;
+  padding-right: 0;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body ul li.right .user {
+  left: 0;
+  right: auto;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body ul li.right .message p {
+  border-radius: 0 7px 7px 7px;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-footer .buttons-list {
+  margin-left: 20px;
+  margin-right: 0;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-footer .buttons-list .mat-mdc-button {
+  margin-left: 0;
+  margin-right: 10px;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-footer .buttons-list .mat-mdc-button:first-child {
+  margin-right: 0;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-footer form {
+  padding-right: 0;
+  padding-left: 70px;
+}
+::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-footer form .mat-mdc-button {
+  right: auto;
+  left: 0;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-header {
+    margin-bottom: 17px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title h5 {
+    font-size: 15px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .search-box i {
+    left: 12px;
+    font-size: 17px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .search-box .input-search {
+    height: 38px;
+    padding-left: 35px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group {
+    margin-top: 17px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab {
+    margin-right: 20px;
+    padding: 0 0 6px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
+    margin-right: -17px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list {
+    height: 476px;
+    padding-right: 17px;
+    padding-top: 17px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .btn {
+    padding-right: 17px;
+    margin-top: 17px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .btn .mat-mdc-button {
+    padding: 13px 22px;
+    font-size: 13px;
+  }
+  ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .search-box i {
+    left: auto;
+    right: 12px;
+  }
+  ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .search-box .input-search {
+    padding-left: 10px;
+    padding-right: 35px;
+  }
+  ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab {
+    margin-right: 0;
+    margin-left: 20px;
+  }
+  ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
+    margin-right: 0;
+    margin-left: -17px;
+  }
+  ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .chat-users-list {
+    padding-right: 0;
+    padding-left: 17px;
+  }
+  ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .btn {
+    padding-right: 0;
+    padding-left: 17px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-header .user .img {
+    margin-right: 13px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-header .user .img img {
+    width: 65px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-header .user .img .active-status {
+    right: 4px;
+    bottom: 4px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-header .user .title span:nth-child(1) {
+    font-size: 15px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-header .user .title span:not(:first-child) {
+    font-size: 13px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-header .buttons-list {
+    margin-top: 15px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .border-top {
+    margin-top: 12px;
+    margin-bottom: 13px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .current-time {
+    padding-bottom: 13px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-body {
+    margin-right: -17px;
+    height: 650px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-body ul {
+    padding-left: 17px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li {
+    width: 100%;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li .message p {
+    padding: 10px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li .time {
+    margin-bottom: 17px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-footer {
+    padding: 17px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-footer .buttons-list {
+    top: 0;
+    margin-right: 0;
+    margin-bottom: 12px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-footer form {
+    padding-right: 0;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-footer form .mat-mdc-button {
+    top: 0;
+    width: 50px;
+    height: 50px;
+    margin-top: 15px;
+    position: relative;
+    transform: translateY(0);
+  }
+  ::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-header .user .img {
+    margin-right: 0;
+    margin-left: 13px;
+  }
+  ::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-header .user .img .active-status {
+    right: auto;
+    left: 4px;
+  }
+  ::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body {
+    margin-right: 0;
+    margin-left: -17px;
+  }
+  ::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body ul {
+    padding-left: 0;
+    padding-right: 17px;
+  }
+  ::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body ul li.right {
+    padding-right: 0;
+  }
+  ::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-footer .buttons-list {
+    margin-left: 0;
+  }
+  ::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-footer form {
+    padding-left: 0;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-header {
+    margin-bottom: 20px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group {
+    margin-top: 20px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
+    margin-right: -20px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list {
+    padding-right: 20px;
+    padding-top: 20px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .btn {
+    padding-right: 20px;
+    margin-top: 20px;
+  }
+  ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-body-wrapper {
+    margin-right: 0;
+    margin-left: -20px;
+  }
+  ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .chat-users-list {
+    padding-right: 0;
+    padding-left: 20px;
+  }
+  ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .btn {
+    padding-right: 0;
+    padding-left: 20px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-header .buttons-list {
+    margin-top: 0;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-body {
+    margin-right: -20px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-body ul {
+    padding-left: 20px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-body ul li .time {
+    margin-bottom: 20px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-footer {
+    padding: 20px;
+  }
+  ::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body {
+    margin-right: 0;
+    margin-left: -20px;
+  }
+  ::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body ul {
+    padding-left: 0;
+    padding-right: 20px;
+  }
+  ::ng-deep .chat-card.component-rtl-enabled .mat-mdc-card-content .chat-body ul li.right {
+    padding-right: 0;
+  }
+}
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list {
+    height: 559px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .btn .mat-mdc-button {
+    font-size: 14px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-body {
+    height: 650px;
+  }
+}
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab {
+    margin-right: 20px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .chat-users-list {
+    height: 720px;
+  }
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .btn .mat-mdc-button {
+    font-size: 15px;
+  }
+  ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab {
+    margin-right: 0;
+    margin-left: 20px;
+  }
+  ::ng-deep .chat-card .mat-mdc-card-content .chat-body {
+    height: 603px;
+  }
+}
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {
+  ::ng-deep .chat-sidebar-card .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab {
+    margin-right: 25px;
+  }
+  ::ng-deep .chat-sidebar-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-tab-group .mat-mdc-tab-header .mat-mdc-tab-label-container .mat-mdc-tab {
+    margin-right: 0;
+    margin-left: 25px;
+  }
+}
+/* Min width 1600px *//*# sourceMappingURL=chat.component.css.map */

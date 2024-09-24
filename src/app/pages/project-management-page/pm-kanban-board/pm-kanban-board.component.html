@@ -1,0 +1,396 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0">
+        Kanban Board
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative">
+            <a routerLink="/dashboard" class="d-inline-block position-relative">
+                <i class="material-symbols-outlined">
+                    home
+                </i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Project Management
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Kanban Board
+        </li>
+    </ol>
+</div>
+
+<!-- Kanban Board -->
+<div
+    class="row"
+    cdkDropListGroup
+>
+    <div class="col-sm-6 col-lg-4">
+        <mat-card
+            class="kanban-board-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+            [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+        >
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mb-0">
+                        To Do
+                    </h5>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                        <i class="ri-more-fill"></i>
+                    </button>
+                    <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                        <ul class="p-0 mt-0 mb-0 list-unstyled">
+                            <li>
+                                <button mat-menu-item>
+                                    Select All
+                                </button>
+                            </li>
+                            <li>
+                                <button mat-menu-item>
+                                    Edit All
+                                </button>
+                            </li>
+                            <li>
+                                <button mat-menu-item>
+                                    Delete All
+                                </button>
+                            </li>
+                        </ul>
+                    </mat-menu>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <div
+                cdkDropList
+                [cdkDropListData]="toDo"
+                (cdkDropListDropped)="drop($event)"
+            >
+                @for (item of toDo; track item) {
+                    <mat-card-content
+                        [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+                        [class.component-dark-theme]="themeService.isDark()"
+                        class="kanban-board-task"
+                        [ngClass]="item.bgClass"
+                        cdkDrag
+                    >
+                        <div class="title d-flex align-items-center justify-content-between">
+                            <span class="d-block text-black fw-semibold">
+                                {{item.title}}
+                            </span>
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    edit
+                                </i>
+                            </button>
+                        </div>
+                        <p>
+                            {{item.description}}
+                        </p>
+                        <div class="info d-flex align-items-center justify-content-between">
+                            <div class="users d-flex align-items-center">
+                                @for (user of item.users; track user) {
+                                    <img [src]="user.img" class="rounded-circle" alt="user-image">
+                                }
+                            </div>
+                            <span class="days-left d-block text-secondary">
+                                5 days left
+                            </span>
+                        </div>
+                    </mat-card-content>
+                }
+            </div>
+            <button class="add-new-card-btn" type="button" mat-button (click)="toggleClass()">
+                <i class="material-symbols-outlined">
+                    add
+                </i>
+                Add New Card
+            </button>
+        </mat-card>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <mat-card
+            class="kanban-board-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+            [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+        >
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mb-0">
+                        Doing
+                    </h5>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                        <i class="ri-more-fill"></i>
+                    </button>
+                    <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                        <ul class="p-0 mt-0 mb-0 list-unstyled">
+                            <li>
+                                <button mat-menu-item>
+                                    Select All
+                                </button>
+                            </li>
+                            <li>
+                                <button mat-menu-item>
+                                    Edit All
+                                </button>
+                            </li>
+                            <li>
+                                <button mat-menu-item>
+                                    Delete All
+                                </button>
+                            </li>
+                        </ul>
+                    </mat-menu>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <div
+                cdkDropList
+                [cdkDropListData]="doing"
+                (cdkDropListDropped)="drop($event)"
+            >
+                @for (item of doing; track item) {
+                    <mat-card-content
+                        [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+                        [class.component-dark-theme]="themeService.isDark()"
+                        class="kanban-board-task"
+                        [ngClass]="item.bgClass"
+                        cdkDrag
+                    >
+                        <div class="title d-flex align-items-center justify-content-between">
+                            <span class="d-block text-black fw-semibold">
+                                {{item.title}}
+                            </span>
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    edit
+                                </i>
+                            </button>
+                        </div>
+                        <p>
+                            {{item.description}}
+                        </p>
+                        <div class="info d-flex align-items-center justify-content-between">
+                            <div class="users d-flex align-items-center">
+                                @for (user of item.users; track user) {
+                                    <img [src]="user.img" class="rounded-circle" alt="user-image">
+                                }
+                            </div>
+                            <span class="days-left d-block text-danger">
+                                5 days left
+                            </span>
+                        </div>
+                    </mat-card-content>
+                }
+            </div>
+            <button class="add-new-card-btn" type="button" mat-button (click)="toggleClass()">
+                <i class="material-symbols-outlined">
+                    add
+                </i>
+                Add New Card
+            </button>
+        </mat-card>
+    </div>
+    <div class="col-sm-6 col-lg-4">
+        <mat-card
+            class="kanban-board-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+            [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+        >
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mb-0">
+                        Done
+                    </h5>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                        <i class="ri-more-fill"></i>
+                    </button>
+                    <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                        <ul class="p-0 mt-0 mb-0 list-unstyled">
+                            <li>
+                                <button mat-menu-item>
+                                    Select All
+                                </button>
+                            </li>
+                            <li>
+                                <button mat-menu-item>
+                                    Edit All
+                                </button>
+                            </li>
+                            <li>
+                                <button mat-menu-item>
+                                    Delete All
+                                </button>
+                            </li>
+                        </ul>
+                    </mat-menu>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <div
+                cdkDropList
+                [cdkDropListData]="done"
+                (cdkDropListDropped)="drop($event)"
+            >
+                @for (item of done; track item) {
+                    <mat-card-content
+                        [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+                        [class.component-dark-theme]="themeService.isDark()"
+                        class="kanban-board-task"
+                        [ngClass]="item.bgClass"
+                        cdkDrag
+                    >
+                        <div class="title d-flex align-items-center justify-content-between">
+                            <span class="d-block text-black fw-semibold">
+                                {{item.title}}
+                            </span>
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    edit
+                                </i>
+                            </button>
+                        </div>
+                        <p>
+                            {{item.description}}
+                        </p>
+                        <div class="info d-flex align-items-center justify-content-between">
+                            <div class="users d-flex align-items-center">
+                                @for (user of item.users; track user) {
+                                    <img [src]="user.img" class="rounded-circle" alt="user-image">
+                                }
+                            </div>
+                            <span class="days-left d-block text-primary">
+                                5 days left
+                            </span>
+                        </div>
+                    </mat-card-content>
+                }
+            </div>
+            <button class="add-new-card-btn" type="button" mat-button (click)="toggleClass()">
+                <i class="material-symbols-outlined">
+                    add
+                </i>
+                Add New Card
+            </button>
+        </mat-card>
+    </div>
+</div>
+
+<!-- Add New Popup -->
+<div
+    class="add-new-popup"
+    [class.active]="classApplied"
+>
+    <div class="popup-dialog">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none">
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mb-0">
+                        Add New Card
+                    </h5>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <button
+                        mat-button
+                        (click)="toggleClass()"
+                    >
+                        <i class="ri-close-fill"></i>
+                    </button>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Card Name
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Title
+                                </mat-label>
+                                <input matInput placeholder="E.g. Trezo Dashboard">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Card Description
+                            </label>
+                            <mat-form-field>
+                                <mat-label>Type here....</mat-label>
+                                <textarea matInput></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Team Members
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Select
+                                </mat-label>
+                                <mat-select multiple>
+                                    <mat-option value="one">
+                                        Sarah Johnson
+                                    </mat-option>
+                                    <mat-option value="two">
+                                        Michael Smith
+                                    </mat-option>
+                                    <mat-option value="three">
+                                        Emily Brown
+                                    </mat-option>
+                                    <mat-option value="four">
+                                        Jason Lee
+                                    </mat-option>
+                                    <mat-option value="five">
+                                        Ashley Davis
+                                    </mat-option>
+                                    <mat-option value="six">
+                                        Mark Thompson
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Deadline Date
+                            </label>
+                            <mat-form-field>
+                                <mat-label>Choose a date</mat-label>
+                                <input matInput [matDatepicker]="deadlineDatePicker">
+                                <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                                <mat-datepicker-toggle matIconSuffix [for]="deadlineDatePicker"></mat-datepicker-toggle>
+                                <mat-datepicker #deadlineDatePicker></mat-datepicker>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-box">
+                    <button
+                        mat-button
+                        (click)="toggleClass()"
+                        color="warn"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        mat-button
+                        color="primary"
+                    >
+                        <i class="material-symbols-outlined">
+                            add
+                        </i>
+                        Create
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

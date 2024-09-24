@@ -1,0 +1,34 @@
+::ng-deep .refunds-card .mat-mdc-card-header .mat-mdc-card-header-text {
+  display: block;
+}
+::ng-deep .refunds-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-subtitle {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .refunds-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-subtitle {
+    display: block;
+  }
+  ::ng-deep .refunds-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-subtitle .search-box {
+    margin-top: 0;
+    margin-bottom: 12px;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .refunds-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-subtitle {
+    display: flex;
+  }
+  ::ng-deep .refunds-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-subtitle .search-box {
+    width: 265px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+/* Min width 768px to Max width 991px */
+/* Min width 992px to Max width 1199px */
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=e-refunds.component.css.map */

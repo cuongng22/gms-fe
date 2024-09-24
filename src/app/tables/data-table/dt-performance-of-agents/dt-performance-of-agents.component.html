@@ -1,0 +1,196 @@
+<mat-card class="table-style-two mb-25 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Performance of Agents
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border d-inline-block border-radius">
+                Last 30 Days
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            This Day
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Week
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Month
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Year
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource">
+
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef>
+                        ID
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.id}}
+                    </td>
+                </ng-container>
+
+                <!-- Agent Name Column -->
+                <ng-container matColumnDef="agentName">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Agent Name
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="customer-info d-flex align-items-center">
+                            <div class="img">
+                                <img [src]="element.agentName.img" class="rounded-circle" alt="agent-image">
+                            </div>
+                            <span class="d-block text-black fw-medium">
+                                {{element.agentName.name}}
+                            </span>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Total Tickets Column -->
+                <ng-container matColumnDef="totalTickets">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Total Tickets
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.totalTickets}}
+                    </td>
+                </ng-container>
+
+                <!-- Open Tickets Column -->
+                <ng-container matColumnDef="openTickets">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Open Tickets
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.openTickets}}
+                    </td>
+                </ng-container>
+
+                <!-- Resolved Tickets Column -->
+                <ng-container matColumnDef="resolvedTickets">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Resolved Tickets
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.resolvedTickets}}
+                    </td>
+                </ng-container>
+
+                <!-- Avg. Resolution Time Column -->
+                <ng-container matColumnDef="avgResolutionTime">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Avg. Resolution Time
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.avgResolutionTime}}
+                    </td>
+                </ng-container>
+
+                <!-- Satisfaction Rate Column -->
+                <ng-container matColumnDef="satisfactionRate">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Satisfaction Rate
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div
+                            class="circle-progress-bar position-relative"
+                            *ngIf="element.satisfactionRate.primaryClassName"
+                        >
+                            <mat-spinner mode="determinate" value="{{element.satisfactionRate.percentage}}"></mat-spinner>
+                            <span class="percentage d-block text-body">
+                                {{element.satisfactionRate.percentage}}%
+                            </span>
+                        </div>
+                        <div
+                            class="circle-progress-bar purple position-relative"
+                            *ngIf="element.satisfactionRate.purpleClassName"
+                        >
+                            <mat-spinner mode="determinate" value="{{element.satisfactionRate.percentage}}"></mat-spinner>
+                            <span class="percentage d-block text-body">
+                                {{element.satisfactionRate.percentage}}%
+                            </span>
+                        </div>
+                        <div
+                            class="circle-progress-bar success position-relative"
+                            *ngIf="element.satisfactionRate.successClassName"
+                        >
+                            <mat-spinner mode="determinate" value="{{element.satisfactionRate.percentage}}"></mat-spinner>
+                            <span class="percentage d-block text-body">
+                                {{element.satisfactionRate.percentage}}%
+                            </span>
+                        </div>
+                        <div
+                            class="circle-progress-bar secondary position-relative"
+                            *ngIf="element.satisfactionRate.secondaryClassName"
+                        >
+                            <mat-spinner mode="determinate" value="{{element.satisfactionRate.percentage}}"></mat-spinner>
+                            <span class="percentage d-block text-body">
+                                {{element.satisfactionRate.percentage}}%
+                            </span>
+                        </div>
+                        <div
+                            class="circle-progress-bar orange position-relative"
+                            *ngIf="element.satisfactionRate.orangeClassName"
+                        >
+                            <mat-spinner mode="determinate" value="{{element.satisfactionRate.percentage}}"></mat-spinner>
+                            <span class="percentage d-block text-body">
+                                {{element.satisfactionRate.percentage}}%
+                            </span>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="action-buttons d-flex align-items-center">
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.view}}
+                                </i>
+                            </button>
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.edit}}
+                                </i>
+                            </button>
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.delete}}
+                                </i>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[6]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+</mat-card>

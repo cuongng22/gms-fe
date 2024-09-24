@@ -1,0 +1,13 @@
+.example-buttons {
+  margin-bottom: -15px;
+}
+.example-buttons button, .example-buttons a {
+  margin-bottom: 15px;
+}
+.example-buttons a.mat-mdc-fab, .example-buttons a.mat-mdc-mini-fab {
+  color: var(--whiteColor, inherit);
+}
+
+.w-100 {
+  width: 100% !important;
+}/*# sourceMappingURL=buttons.component.css.map */

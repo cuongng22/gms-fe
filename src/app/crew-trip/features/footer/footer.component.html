@@ -1,0 +1,14 @@
+<footer
+  [class.card-without-border-radius]="themeService.isCardWithoutBorderRadius()"
+  [class.card-with-box-shadow]="themeService.isCardWithBoxShadow()"
+  class="footer-area text-center bg-white border-top-radius toggle-switch transition"
+  [class.card-borderd]="themeService.isCardBordered()"
+  [ngClass]="{'active': isSidebarToggled}"
+>
+  <div>
+    <p>
+      © <span>Teca problem</span> is Owned by <a href="https://www.vietnamairlines.com/vn/vi/home" target="_blank">Gimasys
+      FPT</a>
+    </p>
+  </div>
+</footer>

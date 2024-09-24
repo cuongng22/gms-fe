@@ -1,0 +1,235 @@
+::ng-deep .profile-card .mat-mdc-card-content .cover-image img {
+  margin-bottom: -3px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+  right: 28px;
+  bottom: 28px;
+  height: auto;
+  min-width: auto;
+  border-radius: 7px;
+  position: absolute;
+  padding: 10.5px 16px;
+  color: var(--whiteColor);
+  background-color: transparent;
+  border: 1px solid var(--whiteColor);
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content {
+  margin-top: -60px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 45px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .image {
+  width: 160px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .image .profile-image {
+  margin-bottom: -3.5px;
+  border: 2px solid var(--whiteColor);
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .image .verified {
+  right: -7px;
+  bottom: 11px;
+  position: absolute;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .title {
+  margin-left: 30px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span {
+  font-size: 24px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span:not(:first-child) {
+  margin-top: 5px;
+  font-size: 16px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button {
+  height: auto;
+  min-width: auto;
+  margin-right: 12px;
+  padding: 13px 27px;
+  border-radius: 7px;
+  color: var(--bodyColor);
+  border: 1px solid var(--borderColor);
+  font-size: 16px;
+  font-weight: 500;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button .mdc-button__label {
+  display: flex;
+  align-items: center;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button .mdc-button__label i {
+  font-size: 20px;
+  margin-right: 8px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button:nth-child(3) {
+  margin-right: 0;
+  color: var(--whiteColor);
+  border-color: var(--primaryColor);
+  background-color: var(--primaryColor);
+}
+::ng-deep .profile-card.component-dark-theme .mat-mdc-card-content .profile-content .image .profile-image {
+  border-color: #0C1427;
+}
+::ng-deep .profile-card.card-without-border-radius .mat-mdc-card-content .cover-image {
+  border-radius: 0 !important;
+}
+::ng-deep .profile-card.card-without-border-radius .mat-mdc-card-content .cover-image img {
+  border-radius: 0 !important;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+  right: auto;
+  left: 28px;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .image .verified {
+  right: auto;
+  left: -7px;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .title {
+  margin-left: 0;
+  margin-right: 30px;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button {
+  margin-right: 0;
+  margin-left: 12px;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button .mdc-button__label i {
+  margin-right: 0;
+  margin-left: 8px;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button:nth-child(3) {
+  margin-left: 0;
+}
+::ng-deep .profile-nav-links li {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+::ng-deep .profile-nav-links li .mat-mdc-button {
+  height: auto;
+  min-width: auto;
+  font-weight: 500;
+  border-radius: 7px;
+  padding: 10.5px 15px;
+  color: var(--primaryColor);
+  background-color: transparent;
+  border: 1px solid var(--primaryColor);
+}
+::ng-deep .profile-nav-links li .mat-mdc-button.active, ::ng-deep .profile-nav-links li .mat-mdc-button:hover {
+  color: var(--whiteColor);
+  background-color: var(--primaryColor);
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .profile-card .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    right: 0;
+    bottom: 0;
+    position: relative;
+    color: var(--blackColor);
+    border-color: var(--blackColor);
+    margin-left: 17px;
+    margin-top: 17px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content {
+    margin-top: 17px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 17px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .image .profile-image {
+    border-color: #f7f7f7;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title {
+    margin-left: 0;
+    margin-top: 12px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span {
+    font-size: 18px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span:not(:first-child) {
+    margin-top: 6px;
+    font-size: 13px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box {
+    margin-top: 17px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button {
+    margin-right: 10px;
+    padding: 11px 25px;
+    font-size: 13px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button .mdc-button__label i {
+    font-size: 18px;
+    margin-right: 5px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    right: auto;
+    left: 0;
+    margin-left: 0;
+    margin-right: 17px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .title {
+    margin-right: 0;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button {
+    margin-right: 0;
+    margin-left: 10px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button .mdc-button__label i {
+    margin-right: 0;
+    margin-left: 5px;
+  }
+  ::ng-deep .profile-nav-links li .mat-mdc-button {
+    padding: 10px 15px;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .profile-card .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    margin-left: 20px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content {
+    padding-bottom: 20px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    margin-left: 0;
+    margin-right: 20px;
+  }
+  ::ng-deep .profile-nav-links li .mat-mdc-button {
+    padding: 10px 15px;
+  }
+}
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  ::ng-deep .profile-card .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    right: 25px;
+    bottom: 20px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 40px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title {
+    margin-left: 25px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span {
+    font-size: 20px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span:not(:first-child) {
+    font-size: 14px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button {
+    padding: 11px 25px;
+    font-size: 14px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    right: auto;
+    left: 25px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .title {
+    margin-left: 0;
+    margin-right: 25px;
+  }
+}
+/* Min width 992px to Max width 1199px */
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=profile-page.component.css.map */

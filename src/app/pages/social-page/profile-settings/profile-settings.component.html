@@ -1,0 +1,440 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0">
+        Settings
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative">
+            <a routerLink="/dashboard" class="d-inline-block position-relative">
+                <i class="material-symbols-outlined">
+                    home
+                </i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Social
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Profile
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Settings
+        </li>
+    </ol>
+</div>
+
+<!-- Profile Settings -->
+<div class="row">
+    <div class="col-xxl-7 col-xxxl-8">
+        <mat-card class="profile-settings-card mb-25 border-radius d-block bg-white border-0 shadow-none">
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mb-0">
+                        Profile Settings
+                    </h5>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                First Name
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter first name
+                                </mat-label>
+                                <input matInput value="Alice">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Last Name
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter last name
+                                </mat-label>
+                                <input matInput value="Johnson">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Email Address
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter email address
+                                </mat-label>
+                                <input matInput value="johnson@trezo.com">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Phone Number
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter phone number
+                                </mat-label>
+                                <input matInput value="+1 444 555 6699">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Password
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter password
+                                </mat-label>
+                                <input matInput [type]="hide ? 'password' : 'text'">
+                                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                                    <span class="material-symbols-outlined">
+                                        {{hide ? 'visibility_off' : 'visibility'}}
+                                    </span>
+                                </button>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Confirm Password
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter confirm password
+                                </mat-label>
+                                <input matInput [type]="hide2 ? 'password' : 'text'">
+                                <button mat-icon-button matSuffix (click)="hide2 = !hide2" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide2">
+                                    <span class="material-symbols-outlined">
+                                        {{hide2 ? 'visibility_off' : 'visibility'}}
+                                    </span>
+                                </button>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Address
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter address
+                                </mat-label>
+                                <input matInput value="84 S. Arrowhead Court Branford">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Country
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Select
+                                </mat-label>
+                                <mat-select [(value)]="countrySelected">
+                                    <mat-option value="option1">
+                                        Switzerland
+                                    </mat-option>
+                                    <mat-option value="option2">
+                                        New Zealand
+                                    </mat-option>
+                                    <mat-option value="option3">
+                                        Germany
+                                    </mat-option>
+                                    <mat-option value="option4">
+                                        United States
+                                    </mat-option>
+                                    <mat-option value="option5">
+                                        Japan
+                                    </mat-option>
+                                    <mat-option value="option6">
+                                        Netherlands
+                                    </mat-option>
+                                    <mat-option value="option7">
+                                        Sweden
+                                    </mat-option>
+                                    <mat-option value="option8">
+                                        Canada
+                                    </mat-option>
+                                    <mat-option value="option9">
+                                        United Kingdom
+                                    </mat-option>
+                                    <mat-option value="option10">
+                                        Australia
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Add Your Bio
+                            </label>
+                            <mat-form-field>
+                                <mat-label>Type here....</mat-label>
+                                <textarea matInput value="It makes me feel..."></textarea>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Who will be able to see your profile?
+                            </label>
+                            <mat-radio-group>
+                                <mat-radio-button value="1">
+                                    Only me
+                                </mat-radio-button>
+                                <mat-radio-button value="2">
+                                    My followers
+                                </mat-radio-button>
+                                <mat-radio-button value="3">
+                                    Everyone
+                                </mat-radio-button>
+                            </mat-radio-group>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Your Skills
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Select
+                                </mat-label>
+                                <mat-select [(value)]="skillsSelected">
+                                    <mat-option value="option1">
+                                        Leadership
+                                    </mat-option>
+                                    <mat-option value="option2">
+                                        Project Management
+                                    </mat-option>
+                                    <mat-option value="option3">
+                                        Data Analysis
+                                    </mat-option>
+                                    <mat-option value="option4">
+                                        Teamwork
+                                    </mat-option>
+                                    <mat-option value="option5">
+                                        Web Development
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Your Profession
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Select
+                                </mat-label>
+                                <mat-select [(value)]="professionSelected">
+                                    <mat-option value="option1">
+                                        Financial Manager
+                                    </mat-option>
+                                    <mat-option value="option2">
+                                        IT Manager
+                                    </mat-option>
+                                    <mat-option value="option3">
+                                        Software Developer
+                                    </mat-option>
+                                    <mat-option value="option4">
+                                        Physician Assistant
+                                    </mat-option>
+                                    <mat-option value="option5">
+                                        Data Scientist
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Company Name
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter company name
+                                </mat-label>
+                                <input matInput value="Trezo Admin">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Company Website
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter company website
+                                </mat-label>
+                                <input matInput value="http://website.com">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Facebook
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter facebook link
+                                </mat-label>
+                                <input matInput value="https://www.facebook.com/">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                X
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter x link
+                                </mat-label>
+                                <input matInput value="https://x.com/">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Linkedin
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter linkedin link
+                                </mat-label>
+                                <input matInput value="https://www.linkedin.com/">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                YouTube
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter youtube link
+                                </mat-label>
+                                <input matInput value="https://www.youtube.com/">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Profile Picture
+                            </label>
+                            <file-upload class="file-uploader" [multiple]="multiple"></file-upload>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Cover Photo
+                            </label>
+                            <file-upload class="file-uploader" [multiple]="multiple"></file-upload>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-btn-box">
+                    <button type="button" mat-button color="warn">
+                        Cancel
+                    </button>
+                    <button type="button" mat-button color="primary">
+                        <i class="material-symbols-outlined">
+                            add
+                        </i>
+                        Save Information
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+    <div class="col-xxl-5 col-xxxl-4">
+        <mat-card
+            class="profile-settings-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+            [class.component-dark-theme]="themeService.isDark()"
+        >
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mb-0">
+                        Privacy Policy
+                    </h5>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="boxes">
+                    <mat-checkbox>
+                        Allow users to show your email
+                    </mat-checkbox>
+                    <mat-checkbox>
+                        Allow users to show your experiences
+                    </mat-checkbox>
+                    <mat-checkbox>
+                        Allow users to show your followers
+                    </mat-checkbox>
+                </div>
+                <div class="form-group">
+                    <label class="main-label d-block fw-medium text-black">
+                        Who can tag you?
+                    </label>
+                    <mat-radio-group>
+                        <mat-radio-button value="1">
+                            Everyone
+                        </mat-radio-button>
+                        <mat-radio-button value="2">
+                            Group Member
+                        </mat-radio-button>
+                    </mat-radio-group>
+                </div>
+                <div class="form-group">
+                    <label class="main-label d-block fw-medium text-black">
+                        Account Deletion Or Transfer
+                    </label>
+                    <p class="minus">
+                        Transfer this account to another person or to a company repositories.
+                    </p>
+                </div>
+                <div class="form-btn-box">
+                    <button type="button" mat-button color="warn">
+                        Delete Account
+                    </button>
+                    <button type="button" mat-button color="primary">
+                        <i class="material-symbols-outlined">
+                            swap_horiz
+                        </i>
+                        Transfer Account
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

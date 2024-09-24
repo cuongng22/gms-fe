@@ -1,0 +1,18 @@
+.mat-badges {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.mat-badges .demo-section + .demo-section {
+  margin-top: 20px;
+}
+
+.example-badges {
+  margin-bottom: -15px;
+  margin-right: -15px;
+}
+.example-badges .badge {
+  display: inline-block;
+  margin-right: 15px;
+  margin-bottom: 15px;
+}/*# sourceMappingURL=badges.component.css.map */

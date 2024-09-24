@@ -1,0 +1,188 @@
+<mat-card class="mb-25 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Top Selling Products
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu d-inline-block border-radius">
+                Today
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            This Day
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Week
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Month
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Year
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="basic-table table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col" class="fw-medium">
+                            Product
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Price
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Order
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Stock
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Amount
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="product-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="product-image" src="images/products/product1.jpg" />
+                                </div>
+                                <div class="info">
+                                    <a routerLink="/dashboard/ecommerce-page/product-details" class="fw-medium d-inline-block">
+                                        Smart Band
+                                    </a>
+                                    <span class="d-block text-body">
+                                        08 Jun 2024
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            $35.00
+                        </td>
+                        <td>
+                            75
+                        </td>
+                        <td>
+                            <span class="d-block">
+                                750
+                            </span>
+                        </td>
+                        <td>
+                            $2,625
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="product-image" src="images/products/product2.jpg" />
+                                </div>
+                                <div class="info">
+                                    <a routerLink="/dashboard/ecommerce-page/product-details" class="fw-medium d-inline-block">
+                                        Headphone
+                                    </a>
+                                    <span class="d-block text-body">
+                                        07 Jun 2024
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>$49.00</td>
+                        <td>25</td>
+                        <td>
+                            <span class="d-block">825</span>
+                        </td>
+                        <td>$1,225</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="product-image" src="images/products/product3.jpg" />
+                                </div>
+                                <div class="info">
+                                    <a routerLink="/dashboard/ecommerce-page/product-details" class="fw-medium d-inline-block">
+                                        iPhone 15 Plus
+                                    </a>
+                                    <span class="d-block text-body">
+                                        06 Jun 2024
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>$99.00</td>
+                        <td>55</td>
+                        <td>
+                            <span class="d-block stock-out">Stock Out</span>
+                        </td>
+                        <td>$5,445</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="product-image" src="images/products/product4.jpg" />
+                                </div>
+                                <div class="info">
+                                    <a routerLink="/dashboard/ecommerce-page/product-details" class="fw-medium d-inline-block">
+                                        Bluetooth Speaker
+                                    </a>
+                                    <span class="d-block text-body">
+                                        05 Jun 2024
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>$59.00</td>
+                        <td>40</td>
+                        <td>
+                            <span class="d-block">535</span>
+                        </td>
+                        <td>$2,360</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="product-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="product-image" src="images/products/product5.jpg" />
+                                </div>
+                                <div class="info">
+                                    <a routerLink="/dashboard/ecommerce-page/product-details" class="fw-medium d-inline-block">
+                                        Airbuds 2nd Gen
+                                    </a>
+                                    <span class="d-block text-body">
+                                        04 Jun 2024
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>$79.00</td>
+                        <td>56</td>
+                        <td>
+                            <span class="d-block">460</span>
+                        </td>
+                        <td>$4,424</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>

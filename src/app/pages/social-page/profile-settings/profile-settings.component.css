@@ -1,0 +1,78 @@
+::ng-deep .profile-settings-card .mat-mdc-card-content .boxes {
+  margin-bottom: 25px;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .boxes .mat-mdc-checkbox {
+  margin-bottom: 15px;
+  display: block;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .boxes .mat-mdc-checkbox .mdc-checkbox {
+  padding: 0;
+  margin: 0;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .boxes .mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__native-control {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .boxes .mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__background {
+  top: 0;
+  left: 0;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .boxes .mat-mdc-checkbox .mdc-checkbox .mat-mdc-checkbox-touch-target {
+  width: 100%;
+  height: 100%;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .boxes .mat-mdc-checkbox .mdc-label {
+  color: var(--bodyColor);
+  margin-left: 8px;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .boxes .mat-mdc-checkbox:last-child {
+  margin-bottom: 0;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .form-group .mat-mdc-radio-group {
+  margin-top: 14px;
+  display: block;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .form-group .mat-mdc-radio-group .mat-mdc-radio-button {
+  margin-right: 17px;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .form-group .mat-mdc-radio-group .mat-mdc-radio-button .mdc-radio {
+  padding: 0 3px 0 0;
+  cursor: pointer;
+  margin: 0;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .form-group .mat-mdc-radio-group .mat-mdc-radio-button .mdc-label {
+  cursor: pointer;
+  margin-left: 5px;
+  color: var(--bodyColor);
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .form-group .mat-mdc-radio-group .mat-mdc-radio-button:last-child {
+  margin-right: 0;
+}
+::ng-deep .profile-settings-card .mat-mdc-card-content .form-group .minus {
+  margin-top: -3px;
+}
+::ng-deep .profile-settings-card.component-dark-theme .mat-mdc-card-content .form-group .mat-mdc-radio-group .mat-mdc-radio-button {
+  margin-right: 17px;
+  --mdc-radio-unselected-icon-color: rgba(255, 255, 255, .40);
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .profile-settings-card .mat-mdc-card-content .boxes {
+    margin-bottom: 17px;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .profile-settings-card .mat-mdc-card-content .boxes {
+    margin-bottom: 20px;
+  }
+}
+/* Min width 768px to Max width 991px */
+/* Min width 992px to Max width 1199px */
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=profile-settings.component.css.map */

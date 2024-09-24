@@ -1,0 +1,91 @@
+::ng-deep {
+    .lesson-preview-card {
+        .mat-mdc-card-content {
+            video {
+                width: 100%;
+                height: auto;
+                border-radius: 7px;
+            }
+            h4 {
+                margin: {
+                    top: 25px;
+                    bottom: 10px;
+                };
+            }
+            p {
+                margin-bottom: 20px;
+            }
+            .mat-mdc-button {
+                height: auto;
+                min-width: auto;
+                border-radius: 7px;
+                padding: 14px 22px;
+                display: inline-block;
+                color: var(--whiteColor);
+                background-color: var(--primaryColor);
+                font: {
+                    size: 16px;
+                    weight: 500;
+                };
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    ::ng-deep {
+        .lesson-preview-card {
+            .mat-mdc-card-content {
+                h4 {
+                    margin: {
+                        top: 17px;
+                        bottom: 10px;
+                    };
+                }
+                p {
+                    margin-bottom: 15px;
+                }
+                .mat-mdc-button {
+                    padding: 13px 20px;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    ::ng-deep {
+        .lesson-preview-card {
+            .mat-mdc-card-content {
+                h4 {
+                    margin: {
+                        top: 20px;
+                        bottom: 10px;
+                    };
+                }
+                .mat-mdc-button {
+                    font-size: 15px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

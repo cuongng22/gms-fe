@@ -1,0 +1,11 @@
+@if (type == 'success') {
+  <div class="alert alert-bg-success d-flex align-items-center" role="alert">
+    <i class="ri-check-double-line"></i>
+    {{ message }}
+  </div>
+} @else if (type == 'error') {
+  <div class="alert alert-bg-warning d-flex align-items-center" role="alert">
+    <i class="ri-error-warning-line"></i>
+    {{ message }}
+  </div>
+}

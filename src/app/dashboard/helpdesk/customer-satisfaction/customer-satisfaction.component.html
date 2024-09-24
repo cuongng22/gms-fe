@@ -1,0 +1,67 @@
+<mat-card
+    class="customer-satisfaction-card mb-25 border-radius d-block bg-primary border-0 shadow-none"
+    [class.component-dark-theme]="themeService.isDark()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0 fw-semibold text-white">
+                Customer Satisfaction
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border text-white d-inline-block border-radius">
+                This Month
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            This Day
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Week
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Month
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Year
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="chart">
+            <apx-chart
+                [chart]="chartOptions.chart!"
+                [legend]="chartOptions.legend!"
+                [colors]="chartOptions.colors!"
+                [stroke]="chartOptions.stroke!"
+                [labels]="chartOptions.labels!"
+                [series]="chartOptions.series!"
+                [tooltip]="chartOptions.tooltip!"
+                [dataLabels]="chartOptions.dataLabels!"
+                [plotOptions]="chartOptions.plotOptions!"
+            ></apx-chart>
+            <div class="text text-center">
+                <span class="d-block text-white">
+                    Overall
+                </span>
+                <h6 class="mb-0 fw-semibold text-white">
+                    98%
+                </h6>
+            </div>
+        </div>
+        <div class="image ml-auto mr-auto text-center">
+            <img src="images/man-with-tablet.png" alt="man-with-tablet-image">
+        </div>
+    </mat-card-content>
+</mat-card>

@@ -1,0 +1,124 @@
+::ng-deep {
+    .project-folder-card {
+        .mat-mdc-card-content {
+            .mdc-checkbox {
+                padding: 0;
+                margin: 0;
+
+                .mdc-checkbox__background {
+                    top: 0;
+                    left: 0;
+                }
+                .mat-mdc-checkbox-touch-target {
+                    width: 100%;
+                    height: 100%;
+                }
+                .mdc-checkbox__native-control {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .mat-mdc-button {
+                &.dot-menu {
+                    height: 21.59px;
+                    min-width: auto;
+                    font-size: 26px;
+                    margin-right: -2px;
+                    line-height: 21.59px;
+                    color: var(--bodyColor);
+
+                    .mdc-button__ripple {
+                        display: none;
+                    }
+                    .mdc-button__label {
+                        display: block;
+                    }
+                    &:hover {
+                        color: var(--primaryColor);
+                    }
+                }
+            }
+            .title {
+                margin-top: 40px;
+            }
+            .icon {
+                margin-right: 12px;
+            }
+            .info {
+                margin-top: 40px;
+
+                span {
+                    font-size: 13px;
+                }
+            }
+        }
+    }
+    .component-rtl-enabled {
+        .project-folder-card {
+            .mat-mdc-card-content {
+                .mat-mdc-button {
+                    &.dot-menu {
+                        margin: {
+                            right: 0;
+                            left: -2px;
+                        };
+                    }
+                }
+                .icon {
+                    margin: {
+                        left: 12px;
+                        right: 0;
+                    };
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    ::ng-deep {
+        .project-folder-card {
+            .mat-mdc-card-content {
+                .title {
+                    margin-top: 22px;
+                }
+                .info {
+                    margin-top: 20px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    ::ng-deep {
+        .project-folder-card {
+            .mat-mdc-card-content {
+                .title {
+                    margin-top: 35px;
+                }
+                .info {
+                    margin-top: 35px;
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

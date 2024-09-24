@@ -1,0 +1,163 @@
+<mat-card
+    class="bt-top-performers-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Top Performers
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border d-inline-block border-radius">
+                This Week
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            This Week
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Month
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Year
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="basic-table table-responsive">
+            <table>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="user-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="user-image" class="rounded-circle" src="images/users/user6.jpg" />
+                                </div>
+                                <div class="info">
+                                    <span class="fw-medium d-block">
+                                        Alex Davis
+                                    </span>
+                                    <span class="email d-block text-body">
+                                        alex&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a mat-button routerLink="/dashboard/tables" class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="user-image" class="rounded-circle" src="images/users/user7.jpg" />
+                                </div>
+                                <div class="info">
+                                    <span class="fw-medium d-block">
+                                        Laura Martinez
+                                    </span>
+                                    <span class="email d-block text-body">
+                                        laura&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a mat-button routerLink="/dashboard/tables" class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="user-image" class="rounded-circle" src="images/users/user8.jpg" />
+                                </div>
+                                <div class="info">
+                                    <span class="fw-medium d-block">
+                                        Mark Thompson
+                                    </span>
+                                    <span class="email d-block text-body">
+                                        mark&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a mat-button routerLink="/dashboard/tables" class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="user-image" class="rounded-circle" src="images/users/user9.jpg" /></div>
+                                <div class="info">
+                                    <span class="fw-medium d-block">
+                                        Rachel White
+                                    </span>
+                                    <span class="email d-block text-body">
+                                        rachel&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a mat-button routerLink="/dashboard/tables" class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="user-image" class="rounded-circle" src="images/users/user10.jpg" />
+                                </div>
+                                <div class="info">
+                                    <span class="fw-medium d-block">
+                                        Kevin Lee
+                                    </span>
+                                    <span class="email d-block text-body">
+                                        kevin&#64;trezo.com
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <a mat-button routerLink="/dashboard/tables" class="link-btn d-inline-block rounded-circle position-relative">
+                                <i class="material-symbols-outlined">
+                                    arrow_outward
+                                </i>
+                            </a>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>

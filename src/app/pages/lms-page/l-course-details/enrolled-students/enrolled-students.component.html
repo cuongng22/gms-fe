@@ -1,0 +1,58 @@
+<mat-card class="enrolled-students-card table-style-two mb-25 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Enrolled Students
+            </h5>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource">
+
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef>
+                        ID
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.id}}
+                    </td>
+                </ng-container>
+
+                <!-- Name Column -->
+                <ng-container matColumnDef="user">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Name
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="user-info d-flex align-items-center">
+                            <div class="image">
+                                <img [src]="element.user.img" class="rounded-circle" alt="user-image">
+                            </div>
+                            <div class="info">
+                                <span class="fw-medium d-block">
+                                    {{element.user.name}}
+                                </span>
+                            </div>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Email Column -->
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Email
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.email}}
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>

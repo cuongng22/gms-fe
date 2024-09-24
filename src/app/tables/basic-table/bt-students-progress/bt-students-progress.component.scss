@@ -1,0 +1,18 @@
+.bt-students-progress-card {
+    .mat-mdc-card-content {
+        .basic-table {
+            table, .table {
+                thead {
+                    tr {
+                        th {
+                            padding: {
+                                top: 14px;
+                                bottom: 14px;
+                            };
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

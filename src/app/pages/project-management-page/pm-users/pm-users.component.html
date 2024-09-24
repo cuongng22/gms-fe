@@ -1,0 +1,338 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0">
+        Users
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative">
+            <a routerLink="/dashboard" class="d-inline-block position-relative">
+                <i class="material-symbols-outlined">
+                    home
+                </i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Project Management
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Users
+        </li>
+    </ol>
+</div>
+
+<!-- Users -->
+<mat-card class="users-card mb-25 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header>
+        <mat-card-title>
+            <button class="add-btn" type="button" mat-button (click)="toggleClass()">
+                <i class="material-symbols-outlined">
+                    add
+                </i>
+                Add New User
+            </button>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <form class="search-box position-relative">
+                <label>
+                    <i class="material-symbols-outlined">
+                        search
+                    </i>
+                </label>
+                <input type="text" class="input-search" placeholder="Search user here....." (keyup)="applyFilter($event)" #input>
+            </form>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource">
+
+                <!-- Checkbox Column -->
+                <ng-container matColumnDef="select">
+                    <th mat-header-cell *matHeaderCellDef>
+                        <mat-checkbox
+                            (change)="$event ? toggleAllRows() : null"
+                            [checked]="selection.hasValue() && isAllSelected()"
+                            [indeterminate]="selection.hasValue() && !isAllSelected()"
+                            [aria-label]="checkboxLabel()"
+                        >
+                        </mat-checkbox>
+                    </th>
+                    <td mat-cell *matCellDef="let row">
+                        <mat-checkbox
+                            (click)="$event.stopPropagation()"
+                            (change)="$event ? selection.toggle(row) : null"
+                            [checked]="selection.isSelected(row)"
+                            [aria-label]="checkboxLabel(row)"
+                        >
+                        </mat-checkbox>
+                    </td>
+                </ng-container>
+
+                <!-- ID Column -->
+                <ng-container matColumnDef="id">
+                    <th mat-header-cell *matHeaderCellDef>
+                        ID
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.id}}
+                    </td>
+                </ng-container>
+
+                <!-- User Column -->
+                <ng-container matColumnDef="user">
+                    <th mat-header-cell *matHeaderCellDef>
+                        User
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="customer-info d-flex align-items-center">
+                            <div class="img">
+                                <img [src]="element.user.img" class="rounded-circle" alt="user-image">
+                            </div>
+                            <span class="d-block text-black fw-medium">
+                                {{element.user.name}}
+                            </span>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <!-- Email Column -->
+                <ng-container matColumnDef="email">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Email
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.email}}
+                    </td>
+                </ng-container>
+
+                <!-- Role Column -->
+                <ng-container matColumnDef="role">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Role
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.role}}
+                    </td>
+                </ng-container>
+
+                <!-- Project Access Column -->
+                <ng-container matColumnDef="projectAccess">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Project Access
+                    </th>
+                    <td mat-cell *matCellDef="let element" class="text-body">
+                        {{element.projectAccess}}
+                    </td>
+                </ng-container>
+
+                <!-- Status Column -->
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Status
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <span class="trezo-badge" *ngIf="element.status.active">
+                            Active
+                        </span>
+                        <span class="trezo-badge cancelled" *ngIf="element.status.deactive">
+                            Deactive
+                        </span>
+                    </td>
+                </ng-container>
+
+                <!-- Action Column -->
+                <ng-container matColumnDef="action">
+                    <th mat-header-cell *matHeaderCellDef>
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        <div class="action-buttons d-flex align-items-center">
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.view}}
+                                </i>
+                            </button>
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.edit}}
+                                </i>
+                            </button>
+                            <button type="button" mat-button>
+                                <i class="material-symbols-outlined">
+                                    {{element.action.delete}}
+                                </i>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+
+                <!-- Row shown when there is no matching data. -->
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell" colspan="4">No data matching the filter "{{input.value}}"</td>
+                </tr>
+
+            </table>
+        </div>
+        <mat-paginator [pageSizeOptions]="[10]" showFirstLastButtons></mat-paginator>
+    </mat-card-content>
+</mat-card>
+
+<!-- Add New Popup -->
+<div
+    class="add-new-popup"
+    [class.active]="classApplied"
+>
+    <div class="popup-dialog">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none">
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mb-0">
+                        Add New User
+                    </h5>
+                </mat-card-title>
+                <mat-card-subtitle>
+                    <button
+                        mat-button
+                        (click)="toggleClass()"
+                    >
+                        <i class="ri-close-fill"></i>
+                    </button>
+                </mat-card-subtitle>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Name
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter name
+                                </mat-label>
+                                <input matInput placeholder="E.g. Olivia">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Email
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Enter email address
+                                </mat-label>
+                                <input matInput placeholder="E.g. olivia@trezo.com">
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Role
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Select
+                                </mat-label>
+                                <mat-select>
+                                    <mat-option value="one">
+                                        Project Manager
+                                    </mat-option>
+                                    <mat-option value="two">
+                                        Developer
+                                    </mat-option>
+                                    <mat-option value="three">
+                                        Business Analyst
+                                    </mat-option>
+                                    <mat-option value="four">
+                                        UI/UX Designer
+                                    </mat-option>
+                                    <mat-option value="five">
+                                        QA Tester
+                                    </mat-option>
+                                    <mat-option value="six">
+                                        Admin
+                                    </mat-option>
+                                    <mat-option value="six">
+                                        Editor
+                                    </mat-option>
+                                    <mat-option value="six">
+                                        Plugin Developer
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Project Access
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Select
+                                </mat-label>
+                                <mat-select multiple>
+                                    <mat-option value="one">
+                                        Hotel Management
+                                    </mat-option>
+                                    <mat-option value="two">
+                                        Python Upgrade
+                                    </mat-option>
+                                    <mat-option value="three">
+                                        Project Monitoring
+                                    </mat-option>
+                                    <mat-option value="four">
+                                        Project Alpho
+                                    </mat-option>
+                                    <mat-option value="five">
+                                        Aegis Service
+                                    </mat-option>
+                                    <mat-option value="six">
+                                        Beja Banking Finance
+                                    </mat-option>
+                                    <mat-option value="six">
+                                        Aoriv AI Design
+                                    </mat-option>
+                                    <mat-option value="seven">
+                                        Vaxo App Design
+                                    </mat-option>
+                                    <mat-option value="eight">
+                                        Product Development
+                                    </mat-option>
+                                    <mat-option value="nine">
+                                        Trezo Dashboard
+                                    </mat-option>
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+                <div class="btn-box">
+                    <button
+                        mat-button
+                        (click)="toggleClass()"
+                        color="warn"
+                    >
+                        Cancel
+                    </button>
+                    <button
+                        mat-button
+                        color="primary"
+                    >
+                        <i class="material-symbols-outlined">
+                            add
+                        </i>
+                        Create
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

@@ -1,0 +1,206 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0">
+        Compose
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative">
+            <a routerLink="/dashboard" class="d-inline-block position-relative">
+                <i class="material-symbols-outlined">
+                    home
+                </i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Apps
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Email
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Compose
+        </li>
+    </ol>
+</div>
+
+<!-- Compose -->
+<div class="row">
+    <div class="col-lg-4 col-md-12">
+        <app-sidebar />
+    </div>
+    <div class="col-lg-8 col-md-12">
+        <mat-card
+            class="email-compose-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+            [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+        >
+            <mat-card-header>
+                <mat-card-title>
+                    <h5 class="mb-0 fw-semibold">
+                        New Message
+                    </h5>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+                <div class="row">
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                To
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    To
+                                </mat-label>
+                                <mat-select [formControl]="emails" multiple>
+                                    @for (email of emailList; track email) {
+                                        <mat-option [value]="email">
+                                            {{email}}
+                                        </mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Cc
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Cc
+                                </mat-label>
+                                <mat-select [formControl]="emails" multiple>
+                                    @for (email of emailList; track email) {
+                                        <mat-option [value]="email">
+                                            {{email}}
+                                        </mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Bcc
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Bcc
+                                </mat-label>
+                                <mat-select [formControl]="emails" multiple>
+                                    @for (email of emailList; track email) {
+                                        <mat-option [value]="email">
+                                            {{email}}
+                                        </mat-option>
+                                    }
+                                </mat-select>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-6">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Subject
+                            </label>
+                            <mat-form-field>
+                                <mat-label>
+                                    Write your subject...
+                                </mat-label>
+                                <input matInput>
+                            </mat-form-field>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="form-group">
+                            <label class="main-label d-block fw-medium text-black">
+                                Your Email
+                            </label>
+                            <div class="NgxEditor__Wrapper">
+                                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                                <ngx-editor [editor]="editor" [placeholder]="'Enter details...'"></ngx-editor>
+                            </div>
+                            <!-- <mat-form-field>
+                                <mat-label>Type here....</mat-label>
+                                <textarea matInput></textarea>
+                            </mat-form-field> -->
+                        </div>
+                    </div>
+                </div>
+                <div class="buttons-list d-sm-flex align-items-center justify-content-between">
+                    <div class="d-flex align-items-center">
+                        <button type="submit" mat-button color="primary">
+                            Send
+                        </button>
+                        <button type="button" mat-button>
+                            <i class="material-symbols-outlined">
+                                text_fields_alt
+                            </i>
+                        </button>
+                        <button type="button" mat-button>
+                            <i class="material-symbols-outlined">
+                                attach_file
+                            </i>
+                        </button>
+                        <button type="button" mat-button>
+                            <i class="material-symbols-outlined">
+                                link
+                            </i>
+                        </button>
+                        <button type="button" mat-button>
+                            <i class="material-symbols-outlined">
+                                mood
+                            </i>
+                        </button>
+                        <button type="button" mat-button>
+                            <i class="material-symbols-outlined">
+                                add_to_drive
+                            </i>
+                        </button>
+                        <button type="button" mat-button>
+                            <i class="material-symbols-outlined">
+                                add_photo_alternate
+                            </i>
+                        </button>
+                        <button type="button" mat-button>
+                            <i class="material-symbols-outlined">
+                                ink_pen
+                            </i>
+                        </button>
+                        <button type="button" mat-button [matMenuTriggerFor]="cardHeaderMenu">
+                            <i class="material-symbols-outlined">
+                                more_vert
+                            </i>
+                        </button>
+                        <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                            <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                <li>
+                                    <button mat-menu-item>
+                                        Print
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Plain text mode
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Check spelling
+                                    </button>
+                                </li>
+                            </ul>
+                        </mat-menu>
+                    </div>
+                    <button type="button" mat-button color="warn">
+                        <i class="material-symbols-outlined">
+                            delete
+                        </i>
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

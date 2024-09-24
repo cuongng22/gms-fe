@@ -1,0 +1,20 @@
+::ng-deep {
+    .students-progress-card {
+        .mat-mdc-card-content {
+            .mat-mdc-table {
+                &.mdc-data-table__table {
+                    .mdc-data-table__content {
+                        .mat-mdc-row {
+                            .mat-mdc-cell {
+                                padding: {
+                                    top: 13px;
+                                    bottom: 13px;
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,125 @@
+<mat-card
+    class="bt-my-tasks-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                My Tasks
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu without-border d-inline-block border-radius">
+                All Tasks
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            This Day
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Week
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Month
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Year
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="basic-table table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col" class="fw-medium">
+                            <mat-checkbox></mat-checkbox>
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Project Name
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Deadline
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Status
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <mat-checkbox></mat-checkbox>
+                        </td>
+                        <td>
+                            <a routerLink="/dashboard/project-management-page/" class="fw-medium"> Web Development </a>
+                        </td>
+                        <td>10 Jan 2024</td>
+                        <td>
+                            <span class="trezo-badge"> Completed </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-checkbox></mat-checkbox>
+                        </td>
+                        <td>
+                            <a routerLink="/dashboard/project-management-page/" class="fw-medium"> UX/UI Design </a>
+                        </td>
+                        <td>05 Feb 2024</td>
+                        <td>
+                            <span class="trezo-badge inProgress"> In Progress </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-checkbox></mat-checkbox>
+                        </td>
+                        <td>
+                            <a routerLink="/dashboard/project-management-page/" class="fw-medium"> React Development </a>
+                        </td>
+                        <td>28 Mar 2024</td>
+                        <td>
+                            <span class="trezo-badge rejected"> Cancelled </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-checkbox></mat-checkbox>
+                        </td>
+                        <td>
+                            <a routerLink="/dashboard/project-management-page/" class="fw-medium"> Python Research </a>
+                        </td>
+                        <td>09 Mar 2024</td>
+                        <td>
+                            <span class="trezo-badge pending"> Pending </span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <mat-checkbox></mat-checkbox>
+                        </td>
+                        <td>
+                            <a routerLink="/dashboard/project-management-page/" class="fw-medium"> Python Research </a>
+                        </td>
+                        <td>09 Mar 2024</td>
+                        <td>
+                            <span class="trezo-badge pending"> Pending </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>

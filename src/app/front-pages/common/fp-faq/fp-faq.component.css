@@ -1,0 +1,112 @@
+::ng-deep .faq-accordion {
+  max-width: 738px;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel {
+  border-radius: 7px;
+  margin-bottom: 15px;
+  color: var(--blackColor);
+  background-color: var(--whiteColor);
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel.mat-expansion-panel-spacing {
+  margin: 0 0 15px;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel.mat-expansion-panel-spacing:last-child {
+  margin-bottom: 0;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-header-title {
+  color: var(--blackColor);
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-header-title, ::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-header-description {
+  margin-right: 15px;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-header {
+  height: auto;
+  padding: 13px 25px;
+  font-size: 16px;
+  font-weight: 500;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body {
+  color: var(--bodyColor);
+  padding-left: 25px;
+  padding-right: 25px;
+  padding-bottom: 20px;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body p {
+  line-height: 1.6;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body ol, ::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body ul {
+  padding-left: 18px;
+  margin-top: 15px;
+  margin-bottom: 15px;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body ol li, ::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body ul li {
+  line-height: 1.6;
+  margin-bottom: 7px;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body ol li:last-child, ::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body ul li:last-child {
+  margin-bottom: 0;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body ol:last-child, ::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body ul:last-child {
+  margin-bottom: 0;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel:not([class*=mat-elevation-z]) {
+  box-shadow: unset;
+}
+::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel:last-child {
+  margin-bottom: 0;
+}
+::ng-deep .faq-accordion.mat-accordion.component-dark-theme .mat-expansion-panel {
+  color: var(--whiteColor);
+  background-color: #15203c;
+}
+::ng-deep .faq-accordion.mat-accordion.component-dark-theme .mat-expansion-panel .mat-expansion-panel-header-title {
+  color: var(--whiteColor);
+}
+::ng-deep .faq-accordion.mat-accordion.component-rtl-enabled .mat-expansion-panel .mat-expansion-panel-header-title, ::ng-deep .faq-accordion.mat-accordion.component-rtl-enabled .mat-expansion-panel .mat-expansion-panel-header-description {
+  margin-right: 0;
+  margin-left: 15px;
+}
+::ng-deep .faq-accordion.mat-accordion.component-rtl-enabled .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body ol, ::ng-deep .faq-accordion.mat-accordion.component-rtl-enabled .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body ul {
+  padding-left: 0;
+  padding-right: 18px;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .faq-accordion {
+    max-width: 100%;
+  }
+  ::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-header {
+    padding: 12px 17px;
+    font-size: 14px;
+  }
+  ::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body {
+    padding-left: 17px;
+    padding-right: 17px;
+    padding-bottom: 17px;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-header {
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  ::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body {
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 20px;
+  }
+}
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  ::ng-deep .faq-accordion {
+    max-width: 100%;
+  }
+  ::ng-deep .faq-accordion.mat-accordion .mat-expansion-panel .mat-expansion-panel-header {
+    font-size: 15px;
+  }
+}
+/* Min width 992px to Max width 1199px */
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=fp-faq.component.css.map */

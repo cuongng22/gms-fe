@@ -1,0 +1,490 @@
+::ng-deep .profile-card .mat-mdc-card-content .cover-image img {
+  margin-bottom: -3px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+  right: 28px;
+  bottom: 28px;
+  height: auto;
+  min-width: auto;
+  border-radius: 7px;
+  position: absolute;
+  padding: 10.5px 16px;
+  color: var(--whiteColor);
+  background-color: transparent;
+  border: 1px solid var(--whiteColor);
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content {
+  margin-top: -60px;
+  padding-left: 30px;
+  padding-right: 30px;
+  padding-bottom: 45px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .image {
+  width: 160px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .image .profile-image {
+  margin-bottom: -3.5px;
+  border: 2px solid var(--whiteColor);
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .image .verified {
+  right: -7px;
+  bottom: 11px;
+  position: absolute;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .title {
+  margin-left: 30px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span {
+  font-size: 24px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span:not(:first-child) {
+  margin-top: 5px;
+  font-size: 16px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button {
+  height: auto;
+  min-width: auto;
+  margin-right: 12px;
+  padding: 13px 27px;
+  border-radius: 7px;
+  color: var(--bodyColor);
+  border: 1px solid var(--borderColor);
+  font-size: 16px;
+  font-weight: 500;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button .mdc-button__label {
+  display: flex;
+  align-items: center;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button .mdc-button__label i {
+  font-size: 20px;
+  margin-right: 8px;
+}
+::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button:nth-child(3) {
+  margin-right: 0;
+  color: var(--whiteColor);
+  border-color: var(--primaryColor);
+  background-color: var(--primaryColor);
+}
+::ng-deep .profile-card.component-dark-theme .mat-mdc-card-content .profile-content .image .profile-image {
+  border-color: #0C1427;
+}
+::ng-deep .profile-card.card-without-border-radius .mat-mdc-card-content .cover-image {
+  border-radius: 0 !important;
+}
+::ng-deep .profile-card.card-without-border-radius .mat-mdc-card-content .cover-image img {
+  border-radius: 0 !important;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+  right: auto;
+  left: 28px;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .image .verified {
+  left: -7px;
+  right: auto;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .title {
+  margin-left: 0;
+  margin-right: 30px;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button {
+  margin-right: 0;
+  margin-left: 12px;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button .mdc-button__label i {
+  margin-right: 0;
+  margin-left: 8px;
+}
+::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button:nth-child(3) {
+  margin-left: 0;
+}
+::ng-deep .profile-nav-links li {
+  margin-left: 5px;
+  margin-right: 5px;
+}
+::ng-deep .profile-nav-links li .mat-mdc-button {
+  height: auto;
+  min-width: auto;
+  font-weight: 500;
+  border-radius: 7px;
+  padding: 10.5px 15px;
+  color: var(--primaryColor);
+  background-color: transparent;
+  border: 1px solid var(--primaryColor);
+}
+::ng-deep .profile-nav-links li .mat-mdc-button.active, ::ng-deep .profile-nav-links li .mat-mdc-button:hover {
+  color: var(--whiteColor);
+  background-color: var(--primaryColor);
+}
+::ng-deep .friends-card .mat-mdc-card-content .search-box {
+  margin-bottom: 20px;
+}
+::ng-deep .friends-card .mat-mdc-card-content .search-box i {
+  top: 50%;
+  left: 13px;
+  font-size: 20px;
+  position: absolute;
+  transform: translateY(-50%);
+}
+::ng-deep .friends-card .mat-mdc-card-content .search-box .input-search {
+  padding-left: 38px;
+}
+::ng-deep .friends-card .mat-mdc-card-content .user {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--borderColor);
+}
+::ng-deep .friends-card .mat-mdc-card-content .user .img {
+  margin-right: 13px;
+}
+::ng-deep .friends-card .mat-mdc-card-content .user .img img {
+  width: 45px;
+  margin-bottom: -3px;
+}
+::ng-deep .friends-card .mat-mdc-card-content .user .img .active-status {
+  right: -2px;
+  bottom: 4px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  position: absolute;
+  background: var(--successColor);
+  border: 2px solid var(--whiteColor);
+}
+::ng-deep .friends-card .mat-mdc-card-content .user .img .active-status.off {
+  background: var(--dangerColor);
+}
+::ng-deep .friends-card .mat-mdc-card-content .user .title span:not(:first-child) {
+  margin-top: 6px;
+}
+::ng-deep .friends-card .mat-mdc-card-content .user .link-btn {
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  min-width: auto;
+  transition: unset;
+  text-align: center;
+  color: var(--bodyColor);
+  border: 1px solid var(--borderColor);
+}
+::ng-deep .friends-card .mat-mdc-card-content .user .link-btn .mdc-button__label {
+  left: 0;
+  right: 0;
+  top: 50%;
+  margin-top: 2px;
+  position: absolute;
+  transform: translateY(-50%);
+}
+::ng-deep .friends-card .mat-mdc-card-content .user .link-btn .mdc-button__label i {
+  font-size: 18px;
+}
+::ng-deep .friends-card .mat-mdc-card-content .user:last-child {
+  border-bottom-width: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+::ng-deep .friends-card.component-dark-theme .mat-mdc-card-content .user .img .active-status {
+  border-color: #0C1427;
+}
+::ng-deep .friends-card.component-rtl-enabled .mat-mdc-card-content .search-box i {
+  left: auto;
+  right: 13px;
+}
+::ng-deep .friends-card.component-rtl-enabled .mat-mdc-card-content .search-box .input-search {
+  padding-left: 15px;
+  padding-right: 38px;
+}
+::ng-deep .friends-card.component-rtl-enabled .mat-mdc-card-content .user .img {
+  margin-right: 0;
+  margin-left: 13px;
+}
+::ng-deep .friends-card.component-rtl-enabled .mat-mdc-card-content .user .img .active-status {
+  right: auto;
+  left: -2px;
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .user {
+  margin-bottom: 18px;
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .user .image img {
+  width: 75px;
+  margin-bottom: -3px;
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .user .title {
+  margin-left: 15px;
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .user .title span {
+  font-size: 17px;
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .user .title span:not(:first-child) {
+  margin-top: 6px;
+  font-size: var(--fontSize);
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .sub-title {
+  margin-bottom: 7px;
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content h6 {
+  font-size: var(--fontSize);
+  margin-bottom: 12px;
+  margin-top: 18px;
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .socials-link a {
+  width: 28px;
+  height: 28px;
+  margin-right: 7px;
+  text-align: center;
+  color: var(--whiteColor);
+  background-color: var(--primaryColor);
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .socials-link a i {
+  left: 0;
+  right: 0;
+  top: 50%;
+  position: absolute;
+  transform: translateY(-50%);
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .socials-link a.facebook {
+  background-color: #3A559F;
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .socials-link a.x {
+  background-color: #03A9F4;
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .socials-link a.linkedin {
+  background-color: #007AB9;
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .socials-link a.mail {
+  background-color: #2196F3;
+}
+::ng-deep .profile-intro-card .mat-mdc-card-content .socials-link a:last-child {
+  margin-right: 0;
+}
+::ng-deep .profile-intro-card.component-rtl-enabled .mat-mdc-card-content .user .title {
+  margin-left: 0;
+  margin-right: 15px;
+}
+::ng-deep .profile-intro-card.component-rtl-enabled .mat-mdc-card-content .socials-link a {
+  margin-right: 0;
+  margin-left: 7px;
+}
+::ng-deep .profile-intro-card.component-rtl-enabled .mat-mdc-card-content .socials-link a:last-child {
+  margin-left: 0;
+}
+::ng-deep .followers-card .mat-mdc-card-content .follower {
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  border-bottom: 1px solid var(--borderColor);
+}
+::ng-deep .followers-card .mat-mdc-card-content .follower .image img {
+  width: 42px;
+  margin-bottom: -3px;
+}
+::ng-deep .followers-card .mat-mdc-card-content .follower .title {
+  margin-left: 12px;
+}
+::ng-deep .followers-card .mat-mdc-card-content .follower .title span:not(:first-child) {
+  margin-top: 6px;
+}
+::ng-deep .followers-card .mat-mdc-card-content .follower .link-btn {
+  padding: 0;
+  width: 36px;
+  height: 36px;
+  min-width: auto;
+  transition: unset;
+  text-align: center;
+  color: var(--bodyColor);
+  border: 1px solid var(--borderColor);
+}
+::ng-deep .followers-card .mat-mdc-card-content .follower .link-btn .mdc-button__label {
+  left: 0;
+  right: 0;
+  top: 50%;
+  margin-top: 2px;
+  position: absolute;
+  transform: translateY(-50%);
+}
+::ng-deep .followers-card .mat-mdc-card-content .follower .link-btn .mdc-button__label i {
+  font-size: 18px;
+}
+::ng-deep .followers-card .mat-mdc-card-content .follower:last-child {
+  border-bottom-width: 0;
+  padding-bottom: 0;
+  margin-bottom: 0;
+}
+::ng-deep .followers-card.component-rtl-enabled .mat-mdc-card-content .follower .title {
+  margin-left: 0;
+  margin-right: 12px;
+}
+::ng-deep .photos-card .mat-mdc-card-content a {
+  border-radius: 5px;
+}
+::ng-deep .photos-card .mat-mdc-card-content a img {
+  margin-bottom: -3px;
+  border-radius: 5px;
+}
+::ng-deep .photos-card .mat-mdc-card-content .row {
+  margin: -5px;
+}
+::ng-deep .photos-card .mat-mdc-card-content .row .col-4 {
+  padding: 5px;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .profile-card .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    right: 0;
+    bottom: 0;
+    position: relative;
+    color: var(--blackColor);
+    border-color: var(--blackColor);
+    margin-left: 17px;
+    margin-top: 17px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content {
+    margin-top: 17px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 17px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .image .profile-image {
+    border-color: #f7f7f7;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title {
+    margin-left: 0;
+    margin-top: 12px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span {
+    font-size: 18px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span:not(:first-child) {
+    margin-top: 6px;
+    font-size: 13px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box {
+    margin-top: 17px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button {
+    margin-right: 10px;
+    padding: 11px 25px;
+    font-size: 13px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button .mdc-button__label i {
+    font-size: 18px;
+    margin-right: 5px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    left: 0;
+    margin-left: 0;
+    margin-right: 17px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .title {
+    margin-right: 0;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button {
+    margin-right: 0;
+    margin-left: 10px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button .mdc-button__label i {
+    margin-right: 0;
+    margin-left: 5px;
+  }
+  ::ng-deep .profile-nav-links li .mat-mdc-button {
+    padding: 10px 15px;
+  }
+  ::ng-deep .friends-card .mat-mdc-card-content .search-box {
+    margin-bottom: 15px;
+  }
+  ::ng-deep .friends-card .mat-mdc-card-content .search-box i {
+    left: 12px;
+    font-size: 18px;
+  }
+  ::ng-deep .friends-card .mat-mdc-card-content .search-box .input-search {
+    padding-left: 35px;
+  }
+  ::ng-deep .friends-card.component-rtl-enabled .mat-mdc-card-content .search-box i {
+    left: auto;
+    right: 12px;
+  }
+  ::ng-deep .friends-card.component-rtl-enabled .mat-mdc-card-content .search-box .input-search {
+    padding-left: 10px;
+    padding-right: 35px;
+  }
+  ::ng-deep .profile-intro-card .mat-mdc-card-content .user {
+    margin-bottom: 15px;
+  }
+  ::ng-deep .profile-intro-card .mat-mdc-card-content .user .image img {
+    width: 60px;
+  }
+  ::ng-deep .profile-intro-card .mat-mdc-card-content .user .title {
+    margin-left: 12px;
+  }
+  ::ng-deep .profile-intro-card .mat-mdc-card-content .user .title span {
+    font-size: 15px;
+  }
+  ::ng-deep .profile-intro-card .mat-mdc-card-content .user .title span:not(:first-child) {
+    font-size: 13px;
+  }
+  ::ng-deep .profile-intro-card .mat-mdc-card-content .sub-title {
+    margin-bottom: 8px;
+  }
+  ::ng-deep .profile-intro-card .mat-mdc-card-content h6 {
+    font-size: 13px;
+    margin-bottom: 12px;
+    margin-top: 15px;
+  }
+  ::ng-deep .profile-intro-card.component-rtl-enabled .mat-mdc-card-content .user .title {
+    margin-left: 0;
+    margin-right: 12px;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .profile-card .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    margin-left: 20px;
+    margin-top: 20px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content {
+    padding-bottom: 20px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    margin-left: 0;
+    margin-right: 20px;
+  }
+}
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  ::ng-deep .profile-card .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    right: 25px;
+    bottom: 20px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content {
+    padding-left: 25px;
+    padding-right: 25px;
+    padding-bottom: 40px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title {
+    margin-left: 25px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span {
+    font-size: 20px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .title span:not(:first-child) {
+    font-size: 14px;
+  }
+  ::ng-deep .profile-card .mat-mdc-card-content .profile-content .btn-box .mat-mdc-button {
+    padding: 11px 25px;
+    font-size: 14px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .cover-image .edit-btn.mat-mdc-button {
+    right: auto;
+    left: 25px;
+  }
+  ::ng-deep .profile-card.component-rtl-enabled .mat-mdc-card-content .profile-content .title {
+    margin-left: 0;
+    margin-right: 25px;
+  }
+  ::ng-deep .profile-intro-card .mat-mdc-card-content .user .title span {
+    font-size: 16px;
+  }
+}
+/* Min width 992px to Max width 1199px */
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=profile.component.css.map */

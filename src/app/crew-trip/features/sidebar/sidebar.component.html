@@ -1,0 +1,96 @@
+<div
+  class="sidebar-area bg-white transition"
+  [ngClass]="{'active': isSidebarToggled}"
+  [class.card-borderd]="themeService.isCardBordered()"
+  [class.vna-sidebar]="true"
+  [class.hide-sidebar]="themeService.isHideSidebar()"
+  [class.component-dark-theme]="themeService.isDark()"
+  [class.right-sidebar]="themeService.isRightSidebar()"
+  [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+  [class.card-with-box-shadow]="themeService.isCardWithBoxShadow()"
+>
+  <div class="logo bg-white-static">
+    <a routerLink="/" class="d-flex align-items-center position-relative">
+      <img src="images/vietnam-airline-logo.svg" alt="logo-icon">
+<!--      <span class="fw-bold text-black position-relative">-->
+<!--                Crew Trip-->
+<!--            </span>-->
+    </a>
+  </div>
+  <div
+    (click)="toggle()"
+    class="burger-menu transition"
+    [ngClass]="{'active': isSidebarToggled}"
+  >
+    <span class="top-bar transition d-block bg-black"></span>
+    <span class="middle-bar transition d-block bg-black"></span>
+    <span class="bottom-bar transition d-block bg-black"></span>
+  </div>
+  <ng-scrollbar visibility="hover">
+    <div class="sidebar-inner">
+      <div class="sidebar-menu">
+        <mat-accordion>
+          <span class="sub-title d-block fw-medium text-uppercase">THÔNG TIN</span>
+          <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">
+            <i class="material-symbols-outlined">
+              dashboard
+            </i>
+            <span class="title">Dashboard</span>
+          </a>
+          <span class="sub-title d-block fw-medium text-uppercase">QUAN LÝ DỮ LIỆU</span>
+          <a routerLink="/ke-hoach" class="sidebar-menu-link" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">
+            <i class="material-symbols-outlined">
+              event_available
+            </i>
+            <span class="title">Kế hoạch</span>
+          </a>
+          <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">
+            <i class="material-symbols-outlined">
+              flight
+            </i>
+            <span class="title">Lịch bay</span>
+          </a>
+          <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"
+             [routerLinkActiveOptions]="{exact: true}">
+            <i class="material-symbols-outlined">
+              hotel
+            </i>
+            <span class="title">QUản lý đặt phòng</span>
+          </a>
+          <!--<mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)" expanded>
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <i class="material-symbols-outlined">
+                business_center
+              </i>
+              <span class="title">
+                                    Quản lý dữ liệu
+                                </span>
+              <span class="trezo-badge rounded-circle fw-medium d-inline-block text-center">
+                                    5
+                                </span>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ul class="sidebar-sub-menu">
+            <li class="sidemenu-item">
+              <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                 class="sidemenu-link ri-calendar-schedule-fill">
+                Kế hoạch
+              </a>
+            </li>
+            <li class="sidemenu-item">
+              <a routerLink="/dashboard" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
+                 class="sidemenu-link ri-flight-land-fill">
+                Lịch bay
+              </a>
+            </li>
+          </ul>
+          </mat-expansion-panel>-->
+        </mat-accordion>
+      </div>
+    </div>
+  </ng-scrollbar>
+</div>

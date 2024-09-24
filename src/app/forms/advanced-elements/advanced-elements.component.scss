@@ -1,0 +1,29 @@
+h6 {
+    margin-bottom: 17px;
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    .col-md-4 {
+        &:not(:first-child) {
+            h6 {
+                margin-top: 17px;
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {
+
+    .col-md-4 {
+        &:not(:first-child) {
+            h6 {
+                margin-top: 20px;
+            }
+        }
+    }
+
+}

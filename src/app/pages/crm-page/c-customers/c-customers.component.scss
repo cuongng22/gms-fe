@@ -1,0 +1,92 @@
+::ng-deep {
+    .crm-customers-card {
+        .mat-mdc-card-header {
+            .mat-mdc-card-header-text {
+                display: block;
+
+                .mat-mdc-card-subtitle {
+                    display: flex;
+                    align-items: center;
+                    justify-content: space-between;
+                }
+            }
+        }
+        .mat-mdc-card-content {
+            .mat-mdc-table {
+                &.mdc-data-table__table {
+                    .mat-mdc-header-row {
+                        .mat-mdc-header-cell {
+                            &:first-child {
+                                padding-right: 0;
+                            }
+                            &:nth-child(2) {
+                                padding-left: 15px;
+                            }
+                        }
+                    }
+                    .mdc-data-table__content {
+                        .mat-mdc-row {
+                            .mat-mdc-cell {
+                                &:first-child {
+                                    padding-right: 0;
+                                }
+                                &:nth-child(2) {
+                                    padding-left: 15px;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    ::ng-deep {
+        .crm-customers-card {
+            .mat-mdc-card-header {
+                .mat-mdc-card-header-text {
+                    .mat-mdc-card-subtitle {
+                        display: block;
+
+                        .search-box {
+                            margin: {
+                                top: 0;
+                                bottom: 12px;
+                            };
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {
+
+    ::ng-deep {
+        .crm-customers-card {
+            .mat-mdc-card-header {
+                .mat-mdc-card-header-text {
+                    .mat-mdc-card-subtitle {
+                        display: flex;
+
+                        .search-box {
+                            width: 265px;
+                            margin: {
+                                top: 0;
+                                bottom: 0;
+                            };
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}

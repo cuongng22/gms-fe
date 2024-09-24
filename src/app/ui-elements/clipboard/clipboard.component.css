@@ -1,0 +1,10 @@
+textarea {
+  padding: 15px;
+  outline: 0 !important;
+  background-color: transparent;
+  border: 1px solid var(--borderColor);
+}
+
+.w-100 {
+  width: 100%;
+}/*# sourceMappingURL=clipboard.component.css.map */

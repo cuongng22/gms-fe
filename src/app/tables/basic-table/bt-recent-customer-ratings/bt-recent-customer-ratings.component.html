@@ -1,0 +1,194 @@
+<mat-card class="mb-25 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Recent Customer Ratings
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                <i class="ri-more-fill"></i>
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            This Day
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Week
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Month
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Year
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="basic-table table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col" class="fw-medium">
+                            Name
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Date
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Ratings
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <div class="user-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="user-image" class="rounded-circle" src="images/users/user13.jpg" />
+                                </div>
+                                <div class="info">
+                                    <span class="fw-medium d-block">
+                                        Olivia Clark
+                                    </span>
+                                    <span class="email d-block text-body">
+                                        Big Data
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-body">28 April 2024</td>
+                        <td>
+                            <div class="ratings lh-1">
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="user-image" class="rounded-circle" src="images/users/user16.jpg" />
+                                </div>
+                                <div class="info">
+                                    <span class="fw-medium d-block">
+                                        Ethan Parker
+                                    </span>
+                                    <span class="email d-block text-body">
+                                        Python
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-body">25 April 2024</td>
+                        <td>
+                            <div class="ratings lh-1">
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-half-fill"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="user-image" class="rounded-circle" src="images/users/user17.jpg" />
+                                </div>
+                                <div class="info">
+                                    <span class="fw-medium d-block">
+                                        Ava Turner
+                                    </span>
+                                    <span class="email d-block text-body">
+                                        UX/UI
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-body">23 April 2024</td>
+                        <td>
+                            <div class="ratings lh-1">
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-line"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="user-image" class="rounded-circle" src="images/users/user18.jpg" />
+                                </div>
+                                <div class="info">
+                                    <span class="fw-medium d-block">
+                                        Lucas Morgan
+                                    </span>
+                                    <span class="email d-block text-body">
+                                        Developer
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-body">20 April 2024</td>
+                        <td>
+                            <div class="ratings lh-1">
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-half-fill"></i>
+                                <i class="ri-star-line"></i>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <div class="user-info d-flex align-items-center">
+                                <div class="image">
+                                    <img alt="user-image" class="rounded-circle" src="images/users/user19.jpg" />
+                                </div>
+                                <div class="info">
+                                    <span class="fw-medium d-block">
+                                        Isabella Cooper
+                                    </span>
+                                    <span class="email d-block text-body">
+                                        Designer
+                                    </span>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="text-body">15 April 2024</td>
+                        <td>
+                            <div class="ratings lh-1">
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                                <i class="ri-star-fill"></i>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>

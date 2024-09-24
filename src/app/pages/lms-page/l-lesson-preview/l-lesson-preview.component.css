@@ -1,0 +1,52 @@
+::ng-deep .lesson-preview-card .mat-mdc-card-content video {
+  width: 100%;
+  height: auto;
+  border-radius: 7px;
+}
+::ng-deep .lesson-preview-card .mat-mdc-card-content h4 {
+  margin-top: 25px;
+  margin-bottom: 10px;
+}
+::ng-deep .lesson-preview-card .mat-mdc-card-content p {
+  margin-bottom: 20px;
+}
+::ng-deep .lesson-preview-card .mat-mdc-card-content .mat-mdc-button {
+  height: auto;
+  min-width: auto;
+  border-radius: 7px;
+  padding: 14px 22px;
+  display: inline-block;
+  color: var(--whiteColor);
+  background-color: var(--primaryColor);
+  font-size: 16px;
+  font-weight: 500;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .lesson-preview-card .mat-mdc-card-content h4 {
+    margin-top: 17px;
+    margin-bottom: 10px;
+  }
+  ::ng-deep .lesson-preview-card .mat-mdc-card-content p {
+    margin-bottom: 15px;
+  }
+  ::ng-deep .lesson-preview-card .mat-mdc-card-content .mat-mdc-button {
+    padding: 13px 20px;
+    font-size: 14px;
+  }
+}
+/* Min width 576px to Max width 767px */
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  ::ng-deep .lesson-preview-card .mat-mdc-card-content h4 {
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  ::ng-deep .lesson-preview-card .mat-mdc-card-content .mat-mdc-button {
+    font-size: 15px;
+  }
+}
+/* Min width 992px to Max width 1199px */
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=l-lesson-preview.component.css.map */

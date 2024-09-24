@@ -1,0 +1,109 @@
+import {Component, inject, OnInit, ViewChild} from '@angular/core';
+import {MatTableDataSource} from "@angular/material/table";
+import {SelectionModel} from "@angular/cdk/collections";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
+import {NgxSpinnerService} from "ngx-spinner";
+import {ToggleService} from "src/app/common/header/toggle.service";
+import {BaseService} from "src/app/crew-trip/core/services/base-service";
+import {FormGroup} from "@angular/forms";
+
+@Component({
+  selector: 'app-header-list-base',
+  standalone: true,
+  imports: [],
+  templateUrl: './header-list-base.component.html',
+  styleUrl: './header-list-base.component.scss',
+})
+export class HeaderListBaseComponent implements OnInit {
+  spinner = inject(NgxSpinnerService);
+  toggleService = inject(ToggleService);
+  themeService = inject(CustomizerSettingsService);
+  displayedColumns: string[] = [];
+  dataSource = new MatTableDataSource();
+  selection = new SelectionModel<any>(true, []);
+  pageSize: any = 10;
+  pageIndex: any = 0;
+  pageSizeOptions = [10, 50, 100]
+  totalElement = 0;
+  showFirstLastButtons = true;
+  // isSidebarToggled
+  isSidebarToggled = false;
+  // isToggled
+  isToggled = false;
+
+  @ViewChild(MatPaginator) paginator: MatPaginator;
+  baseService = new BaseService();
+  formGroup!: FormGroup;
+
+  ngOnInit(): void {
+  }
+
+
+  constructor() {
+    this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
+      this.isSidebarToggled = isSidebarToggled;
+    });
+    this.themeService.isToggled$.subscribe(isToggled => {
+      this.isToggled = isToggled;
+    });
+  }
+
+  /** Whether the number of selected elements matches the total number of rows. */
+  isAllSelected() {
+    const numSelected = this.selection.selected.length;
+    const numRows = this.dataSource.data.length;
+    return numSelected === numRows;
+  }
+
+  ngAfterViewInit() {
+  }
+
+  /** Selects all rows if they are not all selected; otherwise clear selection. */
+  toggleAllRows() {
+    if (this.isAllSelected()) {
+      this.selection.clear();
+      return;
+    }
+    this.selection.select(...this.dataSource.data);
+  }
+
+  checkboxLabel(row?: any): string {
+    if (!row) {
+      return `${this.isAllSelected() ? 'deselect' : 'select'} all`;
+    }
+    return `${this.selection.isSelected(row) ? 'deselect' : 'select'} row ${row.projectName + 1}`;
+  }
+
+  onPageChange(event: PageEvent) {
+    this.pageSize = event.pageSize
+    this.pageIndex = event.pageIndex
+    this.search();
+  }
+
+  async search() {
+    try {
+      await this.spinner.show();
+      let res = await this.baseService.search({
+        ...
+          this.formGroup.value,
+        paggingReq: {
+          limit: this.pageSize,
+          page: this.pageIndex
+        }
+      });
+      console.log(res)
+      this.dataSource.data = res.data.content;
+      this.totalElement = res.data.totalElements;
+      this.baseService.showSuccess("Tìm kiếm thành công");
+    } catch (e) {
+      console.log(e);
+      this.baseService.showError("Không tìm thấy dữ liệu");
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+  clear(){
+    this.formGroup.reset();
+  }
+}

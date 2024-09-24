@@ -1,0 +1,364 @@
+<!-- Create Post -->
+<mat-card
+    class="publish-post-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Create Post
+            </h5>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="form-group">
+            <mat-form-field>
+                <mat-label>
+                    What's on your mind, Alice Johnson?
+                </mat-label>
+                <textarea matInput placeholder="E.g. It makes me feel..."></textarea>
+            </mat-form-field>
+        </div>
+        <div class="btn-box d-md-flex align-items-center">
+            <button mat-button class="btn">
+                <i class="material-symbols-outlined">
+                    send
+                </i>
+                Publish Post
+            </button>
+            <div class="buttons-list d-flex align-items-center">
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        sentiment_satisfied
+                    </i>
+                </button>
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        attach_file
+                    </i>
+                </button>
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        mic_none
+                    </i>
+                </button>
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        image
+                    </i>
+                </button>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+<!-- Timeline -->
+<mat-card
+    class="timeline-post-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                <i class="ri-more-fill"></i>
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            Save Post
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Hide Post
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Report Post
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Block Cynthia
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="user d-flex align-items-center">
+            <div class="img">
+                <img src="images/users/user6.jpg" class="rounded-circle" alt="user-image">
+            </div>
+            <div class="title">
+                <span class="d-block text-black fw-semibold">
+                    Cynthia Baggett
+                </span>
+                <span class="d-block">
+                    05 mins ago
+                </span>
+            </div>
+        </div>
+        <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+        </p>
+        <p>
+            It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions.
+        </p>
+        <div class="post-info d-sm-flex align-items-center">
+            <button mat-button>
+                <i class="material-symbols-outlined">
+                    thumb_up
+                </i>
+                10 Likes
+            </button>
+            <button mat-button>
+                <i class="material-symbols-outlined">
+                    chat_bubble_outline
+                </i>
+                0 Comments
+            </button>
+            <button mat-button>
+                <i class="material-symbols-outlined">
+                    share
+                </i>
+                0 Share
+            </button>
+        </div>
+        <div class="post-comment d-sm-flex align-items-center">
+            <div class="img">
+                <img src="images/profile.jpg" class="rounded-circle" alt="profile-image">
+            </div>
+            <form class="position-relative">
+                <mat-form-field>
+                    <mat-label>Type something....</mat-label>
+                    <input matInput>
+                </mat-form-field>
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        send
+                    </i>
+                </button>
+            </form>
+            <div class="buttons-list d-flex align-items-center">
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        sentiment_satisfied
+                    </i>
+                </button>
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        attach_file
+                    </i>
+                </button>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+<mat-card
+    class="timeline-post-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                <i class="ri-more-fill"></i>
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            Save Post
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Hide Post
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Report Post
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Block Douglas
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="user d-flex align-items-center">
+            <div class="img">
+                <img src="images/users/user7.jpg" class="rounded-circle" alt="user-image">
+            </div>
+            <div class="title">
+                <span class="d-block text-black fw-semibold">
+                    Douglas Hairston
+                </span>
+                <span class="d-block">
+                    1 hour ago
+                </span>
+            </div>
+        </div>
+        <p>
+            It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of lorem ipsum.
+        </p>
+        <div class="post-info d-sm-flex align-items-center">
+            <button mat-button>
+                <i class="material-symbols-outlined">
+                    thumb_up
+                </i>
+                42 Likes
+            </button>
+            <button mat-button>
+                <i class="material-symbols-outlined">
+                    chat_bubble_outline
+                </i>
+                2 Comments
+            </button>
+            <button mat-button>
+                <i class="material-symbols-outlined">
+                    share
+                </i>
+                1 Share
+            </button>
+        </div>
+        <div class="post-comment d-sm-flex align-items-center">
+            <div class="img">
+                <img src="images/profile.jpg" class="rounded-circle" alt="profile-image">
+            </div>
+            <form class="position-relative">
+                <mat-form-field>
+                    <mat-label>Type something....</mat-label>
+                    <input matInput>
+                </mat-form-field>
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        send
+                    </i>
+                </button>
+            </form>
+            <div class="buttons-list d-flex align-items-center">
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        sentiment_satisfied
+                    </i>
+                </button>
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        attach_file
+                    </i>
+                </button>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>
+<mat-card
+    class="timeline-post-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                <i class="ri-more-fill"></i>
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            Save Post
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Hide Post
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Report Post
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Block Olivia
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="user d-flex align-items-center">
+            <div class="img">
+                <img src="images/users/user8.jpg" class="rounded-circle" alt="user-image">
+            </div>
+            <div class="title">
+                <span class="d-block text-black fw-semibold">
+                    Olivia John
+                </span>
+                <span class="d-block">
+                    1 day ago
+                </span>
+            </div>
+        </div>
+        <p>
+            Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged.
+        </p>
+        <div class="post-info d-sm-flex align-items-center">
+            <button mat-button>
+                <i class="material-symbols-outlined">
+                    thumb_up
+                </i>
+                100 Likes
+            </button>
+            <button mat-button>
+                <i class="material-symbols-outlined">
+                    chat_bubble_outline
+                </i>
+                16 Comments
+            </button>
+            <button mat-button>
+                <i class="material-symbols-outlined">
+                    share
+                </i>
+                5 Share
+            </button>
+        </div>
+        <div class="post-comment d-sm-flex align-items-center">
+            <div class="img">
+                <img src="images/profile.jpg" class="rounded-circle" alt="profile-image">
+            </div>
+            <form class="position-relative">
+                <mat-form-field>
+                    <mat-label>Type something....</mat-label>
+                    <input matInput>
+                </mat-form-field>
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        send
+                    </i>
+                </button>
+            </form>
+            <div class="buttons-list d-flex align-items-center">
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        sentiment_satisfied
+                    </i>
+                </button>
+                <button mat-button>
+                    <i class="material-symbols-outlined">
+                        attach_file
+                    </i>
+                </button>
+            </div>
+        </div>
+    </mat-card-content>
+</mat-card>

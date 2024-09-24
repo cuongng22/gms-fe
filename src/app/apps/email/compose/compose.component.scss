@@ -1,0 +1,267 @@
+::ng-deep {
+    .email-compose-card {
+        .mat-mdc-card-header {
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--borderColor);
+
+            .mat-mdc-card-header-text {
+                .mat-mdc-card-title {
+                    h5 {
+                        font-size: 16px;
+                    }
+                }
+            }
+        }
+        .mat-mdc-card-content {
+            .NgxEditor__Wrapper {
+                .NgxEditor {
+                    .NgxEditor__Content {
+                        min-height: 206px;
+                    }
+                }
+            }
+            .buttons-list {
+                .mat-mdc-button {
+                    padding: 0;
+                    height: auto;
+                    min-width: auto;
+                    border-radius: 0;
+                    margin-left: 15px;
+                    display: inline-block;
+                    color: var(--bodyColor);
+
+                    .mdc-button__label {
+                        i {
+                            font-size: 20px;
+                        }
+                    }
+                    &:first-child {
+                        margin-left: 0;
+                    }
+                    &.mat-primary {
+                        margin-right: 2px;
+                        padding: 10px 26px;
+                        border-radius: 7px;
+                        color: var(--whiteColor);
+                        background-color: var(--primaryColor);
+                        font: {
+                            size: 16px;
+                            weight: 600;
+                        };
+                    }
+                    &.mat-warn {
+                        color: var(--dangerColor);
+                    }
+                }
+            }
+        }
+        &.component-rtl-enabled {
+            .mat-mdc-card-content {
+                .buttons-list {
+                    .mat-mdc-button {
+                        margin: {
+                            left: 0;
+                            right: 15px;
+                        };
+                        &:first-child {
+                            margin-right: 0;
+                        }
+                        &.mat-primary {
+                            margin: {
+                                right: 0;
+                                left: 2px;
+                            };
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* Max width 767px */
+@media only screen and (max-width : 767px) {
+
+    ::ng-deep {
+        .email-compose-card {
+            .mat-mdc-card-header {
+                padding-bottom: 15px;
+    
+                .mat-mdc-card-header-text {
+                    .mat-mdc-card-title {
+                        h5 {
+                            font-size: 15px;
+                        }
+                    }
+                }
+            }
+            .mat-mdc-card-content {
+                .NgxEditor__Wrapper {
+                    .NgxEditor {
+                        .NgxEditor__Content {
+                            min-height: 190px;
+                        }
+                    }
+                }
+                .buttons-list {
+                    .mat-mdc-button {
+                        margin-left: 12px;
+    
+                        .mdc-button__label {
+                            i {
+                                font-size: 16px;
+                            }
+                        }
+                        &.mat-primary {
+                            padding: 10px 20px;
+                            margin-right: 0;
+                            font-size: 14px;
+                        }
+                        &.mat-warn {
+                            margin: {
+                                left: 0;
+                                top: 12px;
+                            };
+                        }
+                    }
+                }
+            }
+            &.component-rtl-enabled {
+                .mat-mdc-card-content {
+                    .buttons-list {
+                        .mat-mdc-button {
+                            margin: {
+                                left: 0;
+                                right: 12px;
+                            };
+                            &.mat-primary {
+                                margin-left: 0;
+                            }
+                            &.mat-warn {
+                                margin: {
+                                    right: 0;
+                                };
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width : 576px) and (max-width : 767px) {
+
+    ::ng-deep {
+        .email-compose-card {
+            .mat-mdc-card-content {
+                .buttons-list {
+                    .mat-mdc-button {
+                        margin-left: 15px;
+    
+                        &.mat-warn {
+                            margin-top: 0;
+                        }
+                    }
+                }
+            }
+            &.component-rtl-enabled {
+                .mat-mdc-card-content {
+                    .buttons-list {
+                        .mat-mdc-button {
+                            margin: {
+                                left: 0;
+                                right: 15px;
+                            };
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width : 768px) and (max-width : 991px) {
+
+    ::ng-deep {
+        .email-compose-card {
+            .mat-mdc-card-header {
+                padding-bottom: 18px;
+            }
+            .mat-mdc-card-content {
+                .NgxEditor__Wrapper {
+                    .NgxEditor {
+                        .NgxEditor__Content {
+                            min-height: 200px;
+                        }
+                    }
+                }
+                .buttons-list {
+                    .mat-mdc-button {
+                        .mdc-button__label {
+                            i {
+                                font-size: 18px;
+                            }
+                        }
+                        &.mat-primary {
+                            font-size: 14px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width : 992px) and (max-width : 1199px) {
+
+    ::ng-deep {
+        .email-compose-card {
+            .mat-mdc-card-content {
+                .NgxEditor__Wrapper {
+                    .NgxEditor {
+                        .NgxEditor__Content {
+                            min-height: 176px;
+                        }
+                    }
+                }
+                .buttons-list {
+                    .mat-mdc-button {
+                        &.mat-primary {
+                            font-size: 15px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 1200px to Max width 1399px */
+@media only screen and (min-width: 1200px) and (max-width: 1399px) {
+
+    ::ng-deep {
+        .email-compose-card {
+            .mat-mdc-card-content {
+                .NgxEditor__Wrapper {
+                    .NgxEditor {
+                        .NgxEditor__Content {
+                            min-height: 176px;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+}
+
+/* Min width 1600px */
+@media only screen and (min-width: 1600px) {}

@@ -1,0 +1,83 @@
+::ng-deep .customer-details-card .mat-mdc-card-content .info img {
+  width: 65px;
+  height: 65px;
+  margin-right: 12px;
+  border: 2px solid var(--borderColor);
+}
+::ng-deep .customer-details-card .mat-mdc-card-content .info .title {
+  font-size: 16px;
+  margin-bottom: 6px;
+}
+::ng-deep .customer-details-card .mat-mdc-card-content .info .mat-mdc-button.dot-menu {
+  height: 21.59px;
+  min-width: auto;
+  font-size: 26px;
+  margin-right: -2px;
+  line-height: 21.59px;
+  color: var(--bodyColor);
+}
+::ng-deep .customer-details-card .mat-mdc-card-content .info .mat-mdc-button.dot-menu .mdc-button__ripple {
+  display: none;
+}
+::ng-deep .customer-details-card .mat-mdc-card-content .info .mat-mdc-button.dot-menu .mdc-button__label {
+  display: block;
+}
+::ng-deep .customer-details-card .mat-mdc-card-content .info .mat-mdc-button.dot-menu:hover {
+  color: var(--primaryColor);
+}
+::ng-deep .customer-details-card .mat-mdc-card-content ul {
+  margin-top: 20px;
+}
+::ng-deep .customer-details-card .mat-mdc-card-content ul li {
+  margin-bottom: 20px;
+}
+::ng-deep .customer-details-card .mat-mdc-card-content ul li span {
+  margin-bottom: 8px;
+}
+::ng-deep .customer-details-card .mat-mdc-card-content ul li:last-child {
+  margin-bottom: 0;
+}
+::ng-deep .customer-details-card.component-rtl-enabled .mat-mdc-card-content .info img {
+  margin-right: 0;
+  margin-left: 12px;
+}
+::ng-deep .customer-details-card.component-rtl-enabled .mat-mdc-card-content .info .mat-mdc-button.dot-menu {
+  margin-right: 0;
+  margin-left: -2px;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .customer-details-card .mat-mdc-card-content .info img {
+    width: 60px;
+    height: 60px;
+  }
+  ::ng-deep .customer-details-card .mat-mdc-card-content .info .title {
+    font-size: 14px;
+  }
+  ::ng-deep .customer-details-card .mat-mdc-card-content ul {
+    margin-top: 17px;
+  }
+  ::ng-deep .customer-details-card .mat-mdc-card-content ul li {
+    margin-bottom: 13px;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .customer-details-card .mat-mdc-card-content ul {
+    margin-top: 20px;
+  }
+}
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  ::ng-deep .customer-details-card .mat-mdc-card-content .info img {
+    width: 60px;
+    height: 60px;
+  }
+  ::ng-deep .customer-details-card .mat-mdc-card-content .info .title {
+    font-size: 15px;
+  }
+}
+/* Min width 992px to Max width 1199px */
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=e-customer-details.component.css.map */

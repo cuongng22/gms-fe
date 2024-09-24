@@ -1,0 +1,186 @@
+::ng-deep .email-read-card .mat-mdc-card-header {
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--borderColor);
+}
+::ng-deep .email-read-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title h5 {
+  font-size: 16px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .info {
+  margin-bottom: 25px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .info .user .img {
+  margin-right: 12px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .info .user .img img {
+  width: 45px;
+  margin-bottom: -3px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .info .user .title span:not(:first-child) {
+  margin-top: 5px;
+  font-size: 12px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .info .mat-mdc-button {
+  top: 1px;
+  padding: 0;
+  height: auto;
+  min-width: auto;
+  margin-right: 10px;
+  position: relative;
+  display: inline-block;
+  color: var(--bodyColor);
+}
+::ng-deep .email-read-card .mat-mdc-card-content .info .mat-mdc-button .mdc-button__label i {
+  font-size: 20px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .content {
+  padding-left: 57px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .content .title {
+  margin-bottom: 26px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .content .sub-title {
+  margin-bottom: 26px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .content p {
+  margin-bottom: 21px;
+  line-height: 1.6;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .content p:last-child {
+  margin-bottom: 0;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .content .regards {
+  margin-top: 51px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .content .regards span {
+  margin-bottom: 5px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .content .regards span:last-child {
+  margin-bottom: 0;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .btn-box {
+  border-top: 1px solid var(--borderColor);
+  margin-top: 26px;
+  padding-top: 26px;
+  padding-left: 57px;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .btn-box .mat-mdc-button {
+  height: auto;
+  min-width: auto;
+  padding: 9px 25px;
+  border-radius: 7px;
+  margin-right: 16px;
+  color: var(--primaryColor);
+  background-color: transparent;
+  border: 1px solid var(--primaryColor);
+  font-size: 16px;
+  font-weight: 600;
+}
+::ng-deep .email-read-card .mat-mdc-card-content .btn-box .mat-mdc-button.mat-primary {
+  color: var(--whiteColor);
+  border-color: var(--primaryColor);
+  background-color: var(--primaryColor);
+}
+::ng-deep .email-read-card .mat-mdc-card-content .btn-box .mat-mdc-button:last-child {
+  margin-right: 0;
+}
+::ng-deep .email-read-card.component-rtl-enabled .mat-mdc-card-content .info .user .img {
+  margin-right: 0;
+  margin-left: 12px;
+}
+::ng-deep .email-read-card.component-rtl-enabled .mat-mdc-card-content .info .mat-mdc-button {
+  margin-right: 0;
+  margin-left: 10px;
+}
+::ng-deep .email-read-card.component-rtl-enabled .mat-mdc-card-content .content {
+  padding-left: 0;
+  padding-right: 57px;
+}
+::ng-deep .email-read-card.component-rtl-enabled .mat-mdc-card-content .btn-box {
+  padding-right: 57px;
+  padding-left: 0;
+}
+::ng-deep .email-read-card.component-rtl-enabled .mat-mdc-card-content .btn-box .mat-mdc-button {
+  margin-right: 0;
+  margin-left: 16px;
+}
+::ng-deep .email-read-card.component-rtl-enabled .mat-mdc-card-content .btn-box .mat-mdc-button:last-child {
+  margin-left: 0;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .email-read-card .mat-mdc-card-header {
+    padding-bottom: 15px;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title h5 {
+    font-size: 15px;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .info {
+    margin-bottom: 15px;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .info .user {
+    margin-bottom: 15px;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .info .mat-mdc-button {
+    margin-right: 8px;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .info .mat-mdc-button .mdc-button__label i {
+    font-size: 18px;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .content {
+    padding-left: 0;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .content .title {
+    margin-bottom: 15px;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .content .sub-title {
+    margin-bottom: 15px;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .content p {
+    margin-bottom: 15px;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .content .regards {
+    margin-top: 15px;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .btn-box {
+    margin-top: 20px;
+    padding-top: 20px;
+    padding-left: 0;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .btn-box .mat-mdc-button {
+    margin-right: 15px;
+    font-size: 13px;
+  }
+  ::ng-deep .email-read-card.component-rtl-enabled .mat-mdc-card-content .info .mat-mdc-button {
+    margin-right: 0;
+    margin-left: 8px;
+  }
+  ::ng-deep .email-read-card.component-rtl-enabled .mat-mdc-card-content .content {
+    padding-right: 0;
+  }
+  ::ng-deep .email-read-card.component-rtl-enabled .mat-mdc-card-content .btn-box {
+    padding-right: 0;
+  }
+  ::ng-deep .email-read-card.component-rtl-enabled .mat-mdc-card-content .btn-box .mat-mdc-button {
+    margin-left: 15px;
+    margin-right: 0;
+  }
+}
+/* Min width 576px to Max width 767px */
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  ::ng-deep .email-read-card .mat-mdc-card-header {
+    padding-bottom: 18px;
+  }
+  ::ng-deep .email-read-card .mat-mdc-card-content .btn-box .mat-mdc-button {
+    font-size: 14px;
+  }
+}
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  ::ng-deep .email-read-card .mat-mdc-card-content .btn-box .mat-mdc-button {
+    font-size: 15px;
+  }
+}
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=read.component.css.map */

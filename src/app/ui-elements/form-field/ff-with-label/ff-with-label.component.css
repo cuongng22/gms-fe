@@ -1,0 +1,30 @@
+::ng-deep .ff-with-label-card .mat-mdc-card-content .mat-mdc-checkbox .mdc-checkbox {
+  padding: 0;
+  margin: 0;
+}
+::ng-deep .ff-with-label-card .mat-mdc-card-content .mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__native-control {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  height: 100%;
+}
+::ng-deep .ff-with-label-card .mat-mdc-card-content .mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__background {
+  top: 0;
+  left: 0;
+}
+::ng-deep .ff-with-label-card .mat-mdc-card-content .mat-mdc-checkbox .mdc-checkbox .mat-mdc-checkbox-ripple, ::ng-deep .ff-with-label-card .mat-mdc-card-content .mat-mdc-checkbox .mdc-checkbox .mdc-checkbox__ripple {
+  border-radius: 2px;
+}
+::ng-deep .ff-with-label-card .mat-mdc-card-content .mat-mdc-checkbox .mdc-checkbox .mat-mdc-checkbox-touch-target {
+  width: 100%;
+  height: 100%;
+}
+::ng-deep .ff-with-label-card .mat-mdc-card-content .mat-mdc-checkbox .mdc-label {
+  margin-left: 10px;
+}
+::ng-deep .ff-with-label-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-checkbox .mdc-label {
+  margin-left: 0;
+  margin-right: 10px;
+}/*# sourceMappingURL=ff-with-label.component.css.map */

@@ -1,0 +1,101 @@
+::ng-deep .apps-to-do-list-card {
+  padding-bottom: 8px;
+}
+::ng-deep .apps-to-do-list-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-title {
+  line-height: initial;
+  order: 2;
+}
+::ng-deep .apps-to-do-list-card .mat-mdc-card-header .mat-mdc-card-header-text .mat-mdc-card-subtitle {
+  order: 1;
+}
+::ng-deep .apps-to-do-list-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell {
+  padding-top: 13px;
+  padding-bottom: 13px;
+}
+::ng-deep .apps-to-do-list-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:first-child {
+  padding-right: 0;
+}
+::ng-deep .apps-to-do-list-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:nth-child(2) {
+  padding-left: 15px;
+}
+::ng-deep .apps-to-do-list-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell {
+  padding-top: 17px;
+  padding-bottom: 17px;
+}
+::ng-deep .apps-to-do-list-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:first-child {
+  padding-right: 0;
+}
+::ng-deep .apps-to-do-list-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:nth-child(2) {
+  padding-left: 15px;
+}
+::ng-deep .apps-to-do-list-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row:last-child .mat-mdc-cell {
+  border-bottom-width: 0;
+}
+::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:first-child {
+  padding-right: 25px !important;
+  padding-left: 0 !important;
+}
+::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:nth-child(2) {
+  padding-left: 25px !important;
+  padding-right: 15px !important;
+}
+::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:first-child {
+  padding-right: 25px !important;
+  padding-left: 0 !important;
+}
+::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:nth-child(2) {
+  padding-left: 25px !important;
+  padding-right: 15px !important;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  ::ng-deep .apps-to-do-list-card {
+    padding-bottom: 4px;
+  }
+  ::ng-deep .apps-to-do-list-card .mat-mdc-card-header .mat-mdc-card-header-text {
+    display: block;
+  }
+  ::ng-deep .apps-to-do-list-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell {
+    padding-top: 8px;
+    padding-bottom: 8px;
+  }
+  ::ng-deep .apps-to-do-list-card .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell {
+    padding-top: 13px;
+    padding-bottom: 13px;
+  }
+  ::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:first-child {
+    padding-right: 17px !important;
+  }
+  ::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:nth-child(2) {
+    padding-left: 17px !important;
+  }
+  ::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:first-child {
+    padding-right: 17px !important;
+  }
+  ::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:nth-child(2) {
+    padding-left: 17px !important;
+  }
+}
+/* Min width 576px to Max width 767px */
+@media only screen and (min-width: 576px) and (max-width: 767px) {
+  ::ng-deep .apps-to-do-list-card {
+    padding-bottom: 7px;
+  }
+  ::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:first-child {
+    padding-right: 20px !important;
+  }
+  ::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell:nth-child(2) {
+    padding-left: 20px !important;
+  }
+  ::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:first-child {
+    padding-right: 20px !important;
+  }
+  ::ng-deep .apps-to-do-list-card.component-rtl-enabled .mat-mdc-card-content .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell:nth-child(2) {
+    padding-left: 20px !important;
+  }
+}
+/* Min width 768px to Max width 991px */
+/* Min width 992px to Max width 1199px */
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=to-do-list.component.css.map */

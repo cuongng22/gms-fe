@@ -1,0 +1,188 @@
+.banner-area {
+  padding-top: 185px;
+}
+.banner-area .shape1 {
+  z-index: -1;
+  right: -30px;
+  bottom: 50px;
+  position: absolute;
+  filter: blur(150px);
+}
+.banner-area .shape2 {
+  left: 25px;
+  top: -210px;
+  z-index: -1;
+  position: absolute;
+  filter: blur(125px);
+}
+.banner-area .shape3 {
+  top: -125px;
+  z-index: -1;
+  right: 260px;
+  position: absolute;
+  filter: blur(75px);
+}
+.banner-area .shape4 {
+  bottom: 0;
+  left: -50px;
+  z-index: -1;
+  filter: blur(75px);
+  position: absolute;
+}
+.banner-area.component-rtl-enabled .shape1 {
+  left: -30px;
+  right: auto;
+}
+.banner-area.component-rtl-enabled .shape2 {
+  right: 25px;
+  left: auto;
+}
+.banner-area.component-rtl-enabled .shape3 {
+  left: 260px;
+  right: auto;
+}
+.banner-area.component-rtl-enabled .shape4 {
+  right: -50px;
+  left: auto;
+}
+
+.banner-content {
+  max-width: 935px;
+  margin-bottom: 60px;
+}
+.banner-content h1 {
+  font-size: 60px;
+  margin-bottom: 30px;
+  letter-spacing: -1.5px;
+}
+.banner-content p {
+  max-width: 740px;
+  font-size: 18px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.banner-content .mat-mdc-button {
+  height: auto;
+  min-width: auto;
+  margin-top: 25px;
+  border-radius: 7px;
+  padding: 14px 17px;
+  display: inline-block;
+  color: var(--whiteColor);
+  background-color: var(--primaryColor);
+  font-size: 16px;
+  font-weight: 500;
+}
+.banner-content .mat-mdc-button:not(:disabled) {
+  color: var(--whiteColor);
+}
+
+::ng-deep .banner-content .mat-mdc-button .mdc-button__label {
+  padding-left: 29px;
+}
+::ng-deep .banner-content .mat-mdc-button .mdc-button__label i {
+  left: 0;
+  top: 50%;
+  position: absolute;
+  transform: translateY(-50%);
+}
+::ng-deep .component-rtl-enabled .banner-content .mat-mdc-button .mdc-button__label {
+  padding-left: 0;
+  padding-right: 29px;
+}
+::ng-deep .component-rtl-enabled .banner-content .mat-mdc-button .mdc-button__label i {
+  left: auto;
+  right: 0;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  .banner-area {
+    padding-top: 125px;
+  }
+  .banner-content {
+    max-width: 100%;
+    margin-bottom: 30px;
+  }
+  .banner-content h1 {
+    font-size: 32px;
+    margin-bottom: 13px;
+    letter-spacing: -0.5px;
+  }
+  .banner-content p {
+    max-width: 100%;
+    font-size: 13px;
+  }
+  .banner-content .mat-mdc-button {
+    margin-top: 5px;
+    font-size: 13px;
+  }
+  ::ng-deep .banner-content .mat-mdc-button .mdc-button__label {
+    padding-left: 25px;
+  }
+  ::ng-deep .banner-content .mat-mdc-button .mdc-button__label i {
+    font-size: 20px;
+  }
+  ::ng-deep .component-rtl-enabled .banner-content .mat-mdc-button .mdc-button__label {
+    padding-left: 0;
+    padding-right: 25px;
+  }
+}
+/* Min width 576px to Max width 767px */
+/* Min width 768px to Max width 991px */
+@media only screen and (min-width: 768px) and (max-width: 991px) {
+  .banner-area {
+    padding-top: 145px;
+  }
+  .banner-content {
+    max-width: 100%;
+    margin-bottom: 45px;
+  }
+  .banner-content h1 {
+    font-size: 40px;
+    margin-bottom: 22px;
+    letter-spacing: -1px;
+  }
+  .banner-content p {
+    max-width: 600px;
+    font-size: 15px;
+  }
+  .banner-content .mat-mdc-button {
+    margin-top: 12px;
+    font-size: 14px;
+  }
+  ::ng-deep .banner-content .mat-mdc-button .mdc-button__label {
+    padding-left: 28px;
+  }
+  ::ng-deep .banner-content .mat-mdc-button .mdc-button__label i {
+    font-size: 22px;
+  }
+  ::ng-deep .component-rtl-enabled .banner-content .mat-mdc-button .mdc-button__label {
+    padding-left: 0;
+    padding-right: 28px;
+  }
+}
+/* Min width 992px to Max width 1199px */
+@media only screen and (min-width: 992px) and (max-width: 1199px) {
+  .banner-area {
+    padding-top: 185px;
+  }
+  .banner-content {
+    max-width: 100%;
+  }
+  .banner-content h1 {
+    font-size: 50px;
+    margin-bottom: 25px;
+    letter-spacing: -1px;
+  }
+  .banner-content p {
+    max-width: 650px;
+    font-size: 16px;
+  }
+  .banner-content .mat-mdc-button {
+    margin-top: 20px;
+    font-size: 15px;
+  }
+}
+/* Min width 1200px to Max width 1399px */
+/* Min width 1600px *//*# sourceMappingURL=fp-banner.component.css.map */

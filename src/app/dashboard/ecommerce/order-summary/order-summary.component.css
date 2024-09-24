@@ -1,0 +1,45 @@
+.order-summary-card .mat-mdc-card-content ul {
+  margin-top: -5px;
+}
+.order-summary-card .mat-mdc-card-content ul li {
+  margin-bottom: 14px;
+}
+.order-summary-card .mat-mdc-card-content ul li .progressbar {
+  margin-top: 2px;
+}
+.order-summary-card .mat-mdc-card-content ul li .progressbar .mdc-linear-progress {
+  position: relative;
+  top: 2px;
+}
+.order-summary-card .mat-mdc-card-content ul li .progressbar .percentage {
+  margin-left: 15px;
+}
+.order-summary-card .mat-mdc-card-content ul li.completed-order {
+  --mdc-linear-progress-active-indicator-color: #37D80A;
+}
+.order-summary-card .mat-mdc-card-content ul li.new-order {
+  --mdc-linear-progress-active-indicator-color: var(--primaryColor);
+}
+.order-summary-card .mat-mdc-card-content ul li.pending-order {
+  --mdc-linear-progress-active-indicator-color: var(--purpleColor);
+}
+.order-summary-card .mat-mdc-card-content ul li:last-child {
+  margin-bottom: 0;
+}
+.order-summary-card.component-rtl-enabled .mat-mdc-card-content ul li .progressbar .percentage {
+  margin-left: 0;
+  margin-right: 15px;
+}
+
+/* Max width 767px */
+@media only screen and (max-width: 767px) {
+  .order-summary-card .mat-mdc-card-content ul {
+    margin-top: -25px;
+  }
+  .order-summary-card .mat-mdc-card-content ul li {
+    margin-bottom: 12px;
+  }
+  .order-summary-card .mat-mdc-card-content ul li .progressbar {
+    margin-top: 1px;
+  }
+}/*# sourceMappingURL=order-summary.component.css.map */

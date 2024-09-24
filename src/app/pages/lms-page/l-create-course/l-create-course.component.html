@@ -1,0 +1,241 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0">
+        Create Course
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative">
+            <a routerLink="/dashboard" class="d-inline-block position-relative">
+                <i class="material-symbols-outlined">
+                    home
+                </i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            LMS
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Create Course
+        </li>
+    </ol>
+</div>
+
+<!-- Create Course -->
+<form>
+    <div class="row">
+        <div class="col-xxl-7 col-xxxl-8">
+            <mat-card class="mb-25 border-radius d-block bg-white border-0 shadow-none">
+                <mat-card-header>
+                    <mat-card-title>
+                        <h5 class="mb-0">
+                            Add Course
+                        </h5>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="main-label d-block fw-medium text-black">
+                                    Title
+                                </label>
+                                <mat-form-field>
+                                    <mat-label>
+                                        Write title
+                                    </mat-label>
+                                    <input matInput placeholder="E.g. Cybersecurity Awareness">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="main-label d-block fw-medium text-black">
+                                    Description
+                                </label>
+                                <div class="NgxEditor__Wrapper">
+                                    <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                                    <ngx-editor [editor]="editor" [placeholder]="'Type here...'"></ngx-editor>
+                                </div>
+                                <!-- <mat-form-field>
+                                    <mat-label>Type here....</mat-label>
+                                    <textarea matInput></textarea>
+                                </mat-form-field> -->
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="main-label d-block fw-medium text-black">
+                                    Price
+                                </label>
+                                <mat-form-field>
+                                    <mat-label>
+                                        Write price
+                                    </mat-label>
+                                    <input matInput placeholder="E.g. $90">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="main-label d-block fw-medium text-black">
+                                    Start Date
+                                </label>
+                                <mat-form-field>
+                                    <mat-label>Choose a date</mat-label>
+                                    <input matInput [matDatepicker]="startDatePicker">
+                                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                                    <mat-datepicker-toggle matIconSuffix [for]="startDatePicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #startDatePicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="main-label d-block fw-medium text-black">
+                                    End Date
+                                </label>
+                                <mat-form-field>
+                                    <mat-label>Choose a date</mat-label>
+                                    <input matInput [matDatepicker]="endDatePicker">
+                                    <!-- <mat-hint>MM/DD/YYYY</mat-hint> -->
+                                    <mat-datepicker-toggle matIconSuffix [for]="endDatePicker"></mat-datepicker-toggle>
+                                    <mat-datepicker #endDatePicker></mat-datepicker>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="main-label d-block fw-medium text-black">
+                                    Instructor
+                                </label>
+                                <mat-form-field>
+                                    <mat-label>
+                                        Select
+                                    </mat-label>
+                                    <mat-select>
+                                        <mat-option value="one">
+                                            Olivia Clark
+                                        </mat-option>
+                                        <mat-option value="two">
+                                            Ava Turner
+                                        </mat-option>
+                                        <mat-option value="three">
+                                            Lucas Morgan
+                                        </mat-option>
+                                        <mat-option value="four">
+                                            Isabella Cooper
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="main-label d-block fw-medium text-black">
+                                    Tags
+                                </label>
+                                <mat-form-field>
+                                    <mat-label>
+                                        Select
+                                    </mat-label>
+                                    <mat-select multiple>
+                                        <mat-option value="one">
+                                            Technology
+                                        </mat-option>
+                                        <mat-option value="two">
+                                            Science
+                                        </mat-option>
+                                        <mat-option value="three">
+                                            Health & Wellness
+                                        </mat-option>
+                                        <mat-option value="four">
+                                            Education
+                                        </mat-option>
+                                        <mat-option value="five">
+                                            Food & Cooking
+                                        </mat-option>
+                                        <mat-option value="six">
+                                            Lifestyle & Fashion
+                                        </mat-option>
+                                    </mat-select>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group mb-0">
+                                <label class="main-label d-block fw-medium text-black">
+                                    Course Avatar
+                                </label>
+                                <file-upload class="file-uploader"></file-upload>
+                            </div>
+                        </div>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+        <div class="col-xxl-5 col-xxxl-4">
+            <mat-card class="mb-25 border-radius d-block bg-white border-0 shadow-none">
+                <mat-card-header>
+                    <mat-card-title>
+                        <h5 class="mb-0">
+                            Course Content
+                        </h5>
+                    </mat-card-title>
+                </mat-card-header>
+                <mat-card-content>
+                    <div class="row">
+                        <div class="col-xl-12 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="main-label d-block fw-medium text-black">
+                                    Lesson Title
+                                </label>
+                                <mat-form-field>
+                                    <mat-label>
+                                        Write lesson title
+                                    </mat-label>
+                                    <input matInput placeholder="E.g. Course Overview">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-xl-12 col-md-6 col-sm-12">
+                            <div class="form-group">
+                                <label class="main-label d-block fw-medium text-black">
+                                    Lesson Time
+                                </label>
+                                <mat-form-field>
+                                    <mat-label>
+                                        Write lesson time
+                                    </mat-label>
+                                    <input matInput placeholder="E.g. 05:30">
+                                </mat-form-field>
+                            </div>
+                        </div>
+                        <div class="col-sm-12">
+                            <div class="form-group">
+                                <label class="main-label d-block fw-medium text-black">
+                                    Lesson Description
+                                </label>
+                                <mat-form-field>
+                                    <mat-label>Type here....</mat-label>
+                                    <textarea matInput placeholder="E.g. It makes me feel..."></textarea>
+                                </mat-form-field>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-btn-box d-md-flex align-items-center justify-content-between">
+                        <button type="button" mat-button color="warn">
+                            Save Course
+                        </button>
+                        <button type="button" mat-button color="primary">
+                            <i class="material-symbols-outlined">
+                                add
+                            </i>
+                            Add More Field
+                        </button>
+                    </div>
+                </mat-card-content>
+            </mat-card>
+        </div>
+    </div>
+</form>

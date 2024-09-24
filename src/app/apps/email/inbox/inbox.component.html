@@ -1,0 +1,176 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-25 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0">
+        Inbox
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative">
+            <a routerLink="/dashboard" class="d-inline-block position-relative">
+                <i class="material-symbols-outlined">
+                    home
+                </i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Apps
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Email
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative">
+            Inbox
+        </li>
+    </ol>
+</div>
+
+<!-- Inbox -->
+<div class="row">
+    <div class="col-lg-4 col-md-12">
+        <app-sidebar />
+    </div>
+    <div class="col-lg-8 col-md-12">
+        <mat-card
+            class="email-inbox-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+            [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+            [class.component-dark-theme]="themeService.isDark()"
+        >
+            <mat-card-header>
+                <mat-card-title>
+                    <mat-checkbox matTooltip="Select"></mat-checkbox>
+                    <div class="buttons-list d-flex align-items-center">
+                        <button type="button" mat-button [matMenuTriggerFor]="selectHeaderMenu" matTooltip="Select">
+                            <i class="material-symbols-outlined">
+                                arrow_drop_down
+                            </i>
+                        </button>
+                        <mat-menu #selectHeaderMenu="matMenu" class="card-header-menu" xPosition="after">
+                            <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                <li>
+                                    <button mat-menu-item>
+                                        All
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        None
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Read
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Unread
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Starred
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Unstarred
+                                    </button>
+                                </li>
+                            </ul>
+                        </mat-menu>
+                        <button type="button" mat-button matTooltip="Archive">
+                            <i class="material-symbols-outlined">
+                                archive
+                            </i>
+                        </button>
+                        <button type="button" mat-button matTooltip="Report Spam">
+                            <i class="material-symbols-outlined">
+                                help_clinic
+                            </i>
+                        </button>
+                        <button type="button" mat-button matTooltip="Delete">
+                            <i class="material-symbols-outlined">
+                                delete
+                            </i>
+                        </button>
+                        <button type="button" mat-button color="primary" [matMenuTriggerFor]="cardHeaderMenu" matTooltip="More">
+                            <i class="material-symbols-outlined">
+                                more_vert
+                            </i>
+                        </button>
+                        <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                            <ul class="p-0 mt-0 mb-0 list-unstyled">
+                                <li>
+                                    <button mat-menu-item>
+                                        Mark as unread
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Snooze
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Add star
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Mark as important
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Mark as not important
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Forward as attachment
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Filter
+                                    </button>
+                                </li>
+                                <li>
+                                    <button mat-menu-item>
+                                        Mute
+                                    </button>
+                                </li>
+                            </ul>
+                        </mat-menu>
+                    </div>
+                </mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+                <!-- Nav Links -->
+                <ul class="inbox-nav-links p-0 mt-0 list-unstyled">
+                    <li class="d-inline-block">
+                        <a routerLink="/dashboard/apps/email" mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                inbox
+                            </i>
+                            Primary
+                        </a>
+                    </li>
+                    <li class="d-inline-block">
+                        <a routerLink="/dashboard/apps/email/promotions" mat-button routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+                            <i class="material-symbols-outlined">
+                                shoppingmode
+                            </i>
+                            Promotions
+                        </a>
+                    </li>
+                </ul>
+
+                <!-- Router Outlet -->
+                <router-outlet />
+
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

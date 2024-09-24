@@ -1,0 +1,87 @@
+<mat-card
+    class="balance-overview-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+    [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+>
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Balance Overview
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="card-header-menu d-inline-block border-radius">
+                Current Year
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            Current Week
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Current Month
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            Current Year
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="chart">
+            <apx-chart
+                [fill]="chartOptions.fill!"
+                [grid]="chartOptions.grid!"
+                [chart]="chartOptions.chart!"
+                [xaxis]="chartOptions.xaxis!"
+                [yaxis]="chartOptions.yaxis!"
+                [title]="chartOptions.title!"
+                [series]="chartOptions.series!"
+                [labels]="chartOptions.labels!"
+                [colors]="chartOptions.colors!"
+                [stroke]="chartOptions.stroke!"
+                [legend]="chartOptions.legend!"
+                [subtitle]="chartOptions.subtitle!"
+                [dataLabels]="chartOptions.dataLabels!"
+            ></apx-chart>
+        </div>
+        <ul class="list p-0 mb-0 list-unstyled text-center">
+            <li class="d-inline-block">
+                <div class="d-sm-flex align-items-center">
+                    <span class="fw-semibold text-primary">
+                        $628k
+                    </span>
+                    <span class="d-block">
+                        Revenue
+                    </span>
+                </div>
+            </li>
+            <li class="d-inline-block">
+                <div class="d-sm-flex align-items-center">
+                    <span class="fw-semibold text-purple">
+                        $379k
+                    </span>
+                    <span class="d-block">
+                        Expenses
+                    </span>
+                </div>
+            </li>
+            <li class="d-inline-block">
+                <div class="d-sm-flex align-items-center">
+                    <span class="fw-semibold text-success">
+                        11.2%
+                    </span>
+                    <span class="d-block">
+                        Profit Ratio
+                    </span>
+                </div>
+            </li>
+        </ul>
+    </mat-card-content>
+</mat-card>

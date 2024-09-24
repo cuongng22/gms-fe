@@ -1,0 +1,129 @@
+<mat-card class="bt-students-progress-card mb-25 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0">
+                Student's Progress
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button [matMenuTriggerFor]="cardHeaderMenu" class="dot-menu p-0 d-inline-block border-radius-0">
+                <i class="ri-more-fill"></i>
+            </button>
+            <mat-menu #cardHeaderMenu="matMenu" class="card-header-menu" xPosition="before">
+                <ul class="p-0 mt-0 mb-0 list-unstyled">
+                    <li>
+                        <button mat-menu-item>
+                            This Day
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Week
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Month
+                        </button>
+                    </li>
+                    <li>
+                        <button mat-menu-item>
+                            This Year
+                        </button>
+                    </li>
+                </ul>
+            </mat-menu>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="basic-table table-responsive">
+            <table>
+                <thead>
+                    <tr>
+                        <th scope="col" class="fw-medium">
+                            Name
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Course Name
+                        </th>
+                        <th scope="col" class="fw-medium">
+                            Status
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="fw-medium">Olivia Clark</td>
+                        <td class="text-body">Web Design</td>
+                        <td>
+                            <mat-progress-bar
+                                value="55"
+                                mode="determinate"
+                            >
+                            </mat-progress-bar>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-medium">Alexander Garcia</td>
+                        <td class="text-body">Python Dev</td>
+                        <td>
+                            <mat-progress-bar
+                                value="80"
+                                class="success-progressbar"
+                                mode="determinate"
+                            >
+                            </mat-progress-bar>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-medium">Chloe Lewis</td>
+                        <td class="text-body">Front-end</td>
+                        <td>
+                            <mat-progress-bar
+                                value="25"
+                                class="purple-progressbar"
+                                mode="determinate"
+                            >
+                            </mat-progress-bar>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-medium">Ava Turner</td>
+                        <td class="text-body">Back-end</td>
+                        <td>
+                            <mat-progress-bar
+                                value="50"
+                                class="orange-progressbar"
+                                mode="determinate"
+                            >
+                            </mat-progress-bar>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-medium">Ryan Flores</td>
+                        <td class="text-body">Data Analytics</td>
+                        <td>
+                            <mat-progress-bar
+                                value="100"
+                                mode="determinate"
+                            >
+                            </mat-progress-bar>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="fw-medium">John Doe</td>
+                        <td class="text-body">Plugin Dev</td>
+                        <td>
+                            <mat-progress-bar
+                                value="10"
+                                class="purple-progressbar"
+                                mode="determinate"
+                            >
+                            </mat-progress-bar>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>
