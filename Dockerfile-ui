@@ -1,0 +1,24 @@
+# Stage 1: Build Angular app
+FROM crew-trip-node-module AS build
+
+
+# Copy các file package và cài đặt dependencies
+COPY . /app
+RUN npm install
+
+# Copy toàn bộ mã nguồn và build ứng dụng
+# Ở đây chúng ta sử dụng môi trường staging
+# Để build ứng dụng với môi trường production, thay staging bằng production
+RUN npm run build:staging
+
+# Stage 2: Setup Nginx để serve app
+FROM nginx:alpine
+
+# Copy các file build từ image trước sang Nginx
+COPY --from=build /app/dist/crew-trip/browser /usr/share/nginx/html
+
+# Expose port 80 để Nginx phục vụ ứng dụng
+EXPOSE 80
+
+# Khởi động Nginx
+CMD ["nginx", "-g", "daemon off;"]
