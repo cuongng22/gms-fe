@@ -1,14 +1,15 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
-import {firstValueFrom} from "rxjs";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {ActionAlertComponent} from "src/app/crew-trip/shared/action-alert/action-alert.component";
-
+import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { firstValueFrom } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ActionAlertComponent } from "src/app/crew-trip/shared/action-alert/action-alert.component";
+import { environment } from 'src/environments/environment';
+fetch(environment.apiUrl);
 @Injectable({
   providedIn: 'root'
 })
 export class BaseService {
-  api = 'http://192.168.1.80:8888/qlnv-hang';
+  api = 'http://192.168.1.80:8888/qlnv-hang'; //environment.apiUrl;
   path = '';
   http = inject(HttpClient);
   snackBar = inject(MatSnackBar);
@@ -55,7 +56,7 @@ export class BaseService {
       duration: 3000,
       horizontalPosition: 'right',
       verticalPosition: 'top',
-      data: {type: 'success', message: message}
+      data: { type: 'success', message: message }
     })
   }
 
@@ -64,7 +65,7 @@ export class BaseService {
       duration: 3000,
       horizontalPosition: 'right',
       verticalPosition: 'top',
-      data: {type: 'error', message: message}
+      data: { type: 'error', message: message }
     })
   }
 }
