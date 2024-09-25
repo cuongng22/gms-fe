@@ -103,7 +103,42 @@ export class HeaderListBaseComponent implements OnInit {
       await this.spinner.hide();
     }
   }
-  clear(){
+
+  async getAll() {
+    try {
+      await this.spinner.show();
+      let res = await this.baseService.getAll({
+        page: 1
+      });
+      console.log(res)
+      this.dataSource.data = res.data.content;
+      this.totalElement = res.data.totalElements;
+      this.baseService.showSuccess("Tìm kiếm thành công");
+    } catch (e) {
+      console.log(e);
+      this.baseService.showError("Không tìm thấy dữ liệu");
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async detail(id: any) {
+    try {
+      await this.spinner.show();
+      let res = await this.baseService.detail(id);
+      console.log(res)
+      this.dataSource.data = res.data.content;
+      this.totalElement = res.data.totalElements;
+      this.baseService.showSuccess("Tìm kiếm thành công");
+    } catch (e) {
+      console.log(e);
+      this.baseService.showError("Không tìm thấy dữ liệu");
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  clear() {
     this.formGroup.reset();
   }
 }

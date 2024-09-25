@@ -205,19 +205,21 @@ import {PolarChartsComponent} from './charts/polar-charts/polar-charts.component
 import {MoreChartsComponent} from './charts/more-charts/more-charts.component';
 import {KeHoachComponent} from 'src/app/crew-trip/features/ke-hoach/ke-hoach.component';
 import {FirstPageComponent} from "src/app/crew-trip/features/first-page/first-page.component";
+import {UsersComponent} from "src/app/crew-trip/features/users/users.component";
 
 
 export const routes: Routes = [
   {
     path: '',
     redirectTo:"/ke-hoach",
-    pathMatch:'full'
+    pathMatch:'full',
   },
   {
-    path: 'ke-hoach',
+    path: '',
     component: FirstPageComponent,
     children: [
-      {path: '', component: KeHoachComponent},
+      {path: 'ke-hoach', component: KeHoachComponent},
+      {path: 'users', component: UsersComponent},
     ]
   },
   {

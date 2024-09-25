@@ -126,7 +126,7 @@
               i {
                 transition: var(--transition);
                 transform: translateY(-50%);
-                color: var(--bodyColor);
+                color: var(--warningColor);
                 position: absolute;
                 font-size: 22px;
                 line-height: 1;
@@ -180,7 +180,7 @@
                   content: "\ea6e";
                   position: relative;
                   display: inline-block;
-                  color: var(--bodyColor);
+                  color: var(--warningColor);
                   transition: var(--transition);
                   font: {
                     size: 19px;
@@ -355,7 +355,7 @@
                     display: block;
                     position: relative;
                     border-radius: 7px;
-                    color: var(--bodyColor);
+                    color: var(--warningColor);
                     transition: var(--transition);
                     font: {
                       size: var(--fontSize);
@@ -368,25 +368,25 @@
                       top: 8px;
                     };
 
-                    &::after {
-                      top: 50%;
-                      left: 18px;
-                      width: 10px;
-                      content: '';
-                      height: 10px;
-                      transition: .3s;
-                      border-radius: 50%;
-                      position: absolute;
-                      transform: translateY(-50%);
-                      border: 1px solid var(--bodyColor);
-                    }
+                    //&::after {
+                    //  top: 50%;
+                    //  left: 18px;
+                    //  width: 10px;
+                    //  content: '';
+                    //  height: 10px;
+                    //  transition: .3s;
+                    //  border-radius: 50%;
+                    //  position: absolute;
+                    //  transform: translateY(-50%);
+                    //  border: 1px solid var(--bodyColor);
+                    //}
 
                     &:hover, &.active {
                       background-color: #ECF0FF;
-                      color: var(--primaryColor);
+                      color: var(--whiteColor);
 
                       &::after {
-                        border-color: var(--primaryColor);
+                        border-color: var(--whiteColor);
                       }
                     }
 
@@ -933,8 +933,8 @@
                 }
 
                 &.mat-expanded {
-                  color: var(--warningColor);
-                  background-color: #d3a023;
+                  color: var(--whiteColor);
+                  background-color: var(--vnaXanhColor);
 
                   i {
                     color: var(--warningColor);
@@ -952,12 +952,12 @@
                   background-color: #d3a023;
 
                   i {
-                    color: var(--warningColor);
+                    color: var(--whiteColor);
                   }
 
                   .mat-content {
                     .mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
-                      color: var(--warningColor);
+                      color: var(--whiteColor);
                     }
                   }
 
@@ -1000,7 +1000,7 @@
               &:has(> .mat-expansion-panel-content > .mat-expansion-panel-body > .sidebar-sub-menu > .sidemenu-item > .sidemenu-link.active) {
                 .mat-expansion-panel-header {
                   color: var(--warningColor);
-                  background-color: #d3a023;
+                  background-color: var(--vnaXanhColor);
 
                   i {
                     color: var(--warningColor);

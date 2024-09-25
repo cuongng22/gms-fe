@@ -12,9 +12,9 @@
   <div class="logo bg-white-static">
     <a routerLink="/" class="d-flex align-items-center position-relative">
       <img src="images/vietnam-airline-logo.svg" alt="logo-icon">
-<!--      <span class="fw-bold text-black position-relative">-->
-<!--                Crew Trip-->
-<!--            </span>-->
+      <!--      <span class="fw-bold text-black position-relative">-->
+      <!--                Crew Trip-->
+      <!--            </span>-->
     </a>
   </div>
   <div
@@ -58,8 +58,31 @@
             <i class="material-symbols-outlined">
               hotel
             </i>
-            <span class="title">QUản lý đặt phòng</span>
+            <span class="title">Quản lý đặt phòng</span>
           </a>
+          <span class="sub-title d-block fw-medium text-uppercase">HỆ THỐNG</span>
+          <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+            <mat-expansion-panel-header>
+              <mat-panel-title>
+                <i class="material-symbols-outlined">
+                  business_center
+                </i>
+                <span class="title">
+                                    Quyền và tài khoản
+                                </span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ul class="sidebar-sub-menu">
+              <li class="sidemenu-item">
+                <a routerLink="/users" routerLinkActive="active"
+                   class="sidemenu-link ri-calendar-schedule-fill">
+                   <span class="title">
+                                    Tài khoản
+                                </span>
+                </a>
+              </li>
+            </ul>
+          </mat-expansion-panel>
           <!--<mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)" expanded>
           <mat-expansion-panel-header>
             <mat-panel-title>

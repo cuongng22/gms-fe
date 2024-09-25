@@ -1,10 +1,11 @@
-import { Component, signal } from '@angular/core';
+import {AfterViewInit, Component, inject, OnInit, signal} from '@angular/core';
 import { NgScrollbarModule } from 'ngx-scrollbar';
 import { MatExpansionModule } from '@angular/material/expansion';
-import { RouterLink, RouterLinkActive } from '@angular/router';
+import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import { NgClass } from '@angular/common';
 import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
 import {ToggleService} from "src/app/common/header/toggle.service";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 
 @Component({
@@ -14,7 +15,15 @@ import {ToggleService} from "src/app/common/header/toggle.service";
     templateUrl: './sidebar.component.html',
     styleUrl: './sidebar.component.scss'
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit{
+  router = inject(Router);
+  ngOnInit(): void {
+    // let currentRoute = this.router.url.split('/').pop();
+    // console.log(currentRoute)
+    // if (currentRoute=='users') {
+    //   this.panelOpenState.set(true);  // Mở panel nếu route là "user"
+    // }
+  }
 
     // Mat Expansion
     readonly panelOpenState = signal(false);
