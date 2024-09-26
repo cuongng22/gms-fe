@@ -41,6 +41,7 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
 
   //variable
   listRoles = [];
+  readMode = false;
 
   constructor() {
     super();
@@ -108,7 +109,7 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
       // this.search(),
     ]).then(() => {
     });
-    this.dataSource.data =[{
+    this.dataSource.data = [{
       "ngayTao": "2024-09-13T15:37:48.725",
       "nguoiTaoId": 566,
       "ngaySua": "2024-09-13T15:40:06.518",
@@ -202,7 +203,8 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
         "tenTrangThai": "Đã tạo - CB Vụ",
         "tenTrangThaiTh": "Chưa tổng hợp",
         "tenTrangThaiQd": "Ban hành",
-        "canCu": []
+        "canCu": [],
+        email: 'aaaaa'
       }
     ]
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
@@ -229,6 +231,14 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
       console.log(res)
       //todo: check res thanh cong thi thong bao
       this.search();
+    });
+  }
+
+  async _detail(id: any, mode: boolean) {
+    super.showDetail(id).then(res => {
+      console.log(res)
+      this.readMode = mode;
+      this.formGroupDetail[mode ? 'disable' : 'enable']();
     });
   }
 }

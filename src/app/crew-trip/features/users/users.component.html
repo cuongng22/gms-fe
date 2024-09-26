@@ -125,12 +125,12 @@
           </th>
           <td mat-cell *matCellDef="let element">
             <div class="action-buttons d-flex align-items-center">
-              <a mat-button (click)="detail(element.id)">
+              <a mat-button (click)="_detail(element.id,true)">
                 <i class="material-symbols-outlined" title="Chi tiết">
                   visibility
                 </i>
               </a>
-              <a routerLink="/dashboard/ecommerce-page/edit-product" mat-button>
+              <a mat-button (click)="_detail(element.id,false)">
                 <i class="material-symbols-outlined" title="Sửa">
                   edit
                 </i>
@@ -196,7 +196,7 @@
                   <mat-label>
                     Enter title
                   </mat-label>
-                  <input matInput placeholder="E.g. Network Infrastructure" formControlName="email">
+                  <input matInput formControlName="email">
                 </mat-form-field>
               </div>
             </div>
