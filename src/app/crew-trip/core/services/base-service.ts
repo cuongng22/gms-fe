@@ -26,27 +26,29 @@ export class BaseService {
   };
 
   search(body: any): Promise<any> {
-    const url = `${this.api}/${this.path}/tra-cuu`
-    // const url = `http://192.168.1.80:8888/qlnv-hang/kh-cn-bq/tra-cuu`
-    return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
+    const url = `${this.api}/${this.path}/get-all`
+    let params = new HttpParams({fromObject: body})
+    return firstValueFrom(this.http.get<any>(url, {params}));
+  }
+
+  detail(id: any): Promise<any> {
+    const url = `${this.api}/${this.path}/${id}`
+    return firstValueFrom(this.http.get<any>(url, this.httpOptions));
   }
 
   create(body: any): Promise<any> {
     const url = `${this.api}/${this.path}/them-moi`
-    // const url = `http://192.168.1.80:8888/qlnv-hang/kh-cn-bq/tra-cuu`
     return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
   }
 
   update(body: any): Promise<any> {
-    const url = `${this.api}/${this.path}/cap-nhat`
-    // const url = `http://192.168.1.80:8888/qlnv-hang/kh-cn-bq/tra-cuu`
-    return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
+    const url = `${this.api}/${this.path}/${body.id}`
+    return firstValueFrom(this.http.put<any>(url, body, this.httpOptions));
   }
 
-  delete(body: any): Promise<any> {
-    const url = `${this.api}/${this.path}/xoa`
-    // const url = `http://192.168.1.80:8888/qlnv-hang/kh-cn-bq/tra-cuu`
-    return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
+  delete(id: any): Promise<any> {
+    const url = `${this.api}/${this.path}/${id}`
+    return firstValueFrom(this.http.delete<any>(url, this.httpOptions));
   }
 
   showNotification(message: string, options: any) {
@@ -69,16 +71,5 @@ export class BaseService {
       verticalPosition: 'top',
       data: {type: 'error', message: message}
     })
-  }
-
-  getAll(body: any): Promise<any> {
-    const url = `${this.api}/${this.path}/get-all`
-    let params = new HttpParams({fromObject: body})
-    return firstValueFrom(this.http.get<any>(url, {params}));
-  }
-
-  detail(id: any): Promise<any> {
-    const url = `${this.api}/${this.path}/${id}`
-    return firstValueFrom(this.http.get<any>(url));
   }
 }

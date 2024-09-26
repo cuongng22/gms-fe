@@ -61,7 +61,7 @@
             <span class="title">Quản lý đặt phòng</span>
           </a>
           <span class="sub-title d-block fw-medium text-uppercase">HỆ THỐNG</span>
-          <mat-expansion-panel (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+          <mat-expansion-panel [expanded]="checkActiveRoute('admin')" (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <i class="material-symbols-outlined">
@@ -74,7 +74,7 @@
             </mat-expansion-panel-header>
             <ul class="sidebar-sub-menu">
               <li class="sidemenu-item">
-                <a routerLink="/users" routerLinkActive="active"
+                <a routerLink="admin/users" routerLinkActive="active"
                    class="sidemenu-link ri-calendar-schedule-fill">
                    <span class="title">
                                     Tài khoản

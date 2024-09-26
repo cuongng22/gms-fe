@@ -100,7 +100,7 @@ export class KeHoachComponent extends HeaderListBaseComponent implements OnInit 
 
   override async ngOnInit() {
     await Promise.all([
-      this.search()
+      // this.search()
     ]).then(() => {
     });
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value)];

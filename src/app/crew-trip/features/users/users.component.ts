@@ -1,4 +1,4 @@
-import {Component, Inject, inject, LOCALE_ID, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {NgClass, NgIf, TitleCasePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
@@ -38,9 +38,11 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
 
   constructor() {
     super();
-    this.formGroup = this.fb.group({
-      username: ['', Validators.required],
-      password: ['',]
+    this.formGroupSearch = this.fb.group({
+      s: ['',],
+    });
+    this.formGroupDetail = this.fb.group({
+      email: ['', Validators.required],
     });
   }
 
@@ -96,8 +98,7 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
 
   override async ngOnInit() {
     await Promise.all([
-      this.getAll(),
-      this.detail(1),
+      this.search(),
     ]).then(() => {
     });
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value)];

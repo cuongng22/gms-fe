@@ -5,3 +5,12 @@ export class Constant {
   static NUMBER = 'number'
   static DATE = 'date'
 }
+
+export class MESSAGE {
+  static ERROR = 'Có lỗi xảy ra'
+  static CREATE_SUCCESS = 'Thêm mới thành công'
+  static CREATE_FAIL = 'Thêm mới thất bại'
+  static UPDATE_SUCCESS = 'Cập nhật thành công'
+  static UPDATE_FAIL = 'Cập nhật thất bại'
+}
+

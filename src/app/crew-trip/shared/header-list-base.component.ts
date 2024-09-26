@@ -7,6 +7,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ToggleService} from "src/app/common/header/toggle.service";
 import {BaseService} from "src/app/crew-trip/core/services/base-service";
 import {FormGroup} from "@angular/forms";
+import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 
 @Component({
   selector: 'app-header-list-base',
@@ -35,6 +36,8 @@ export class HeaderListBaseComponent implements OnInit {
   @ViewChild(MatPaginator) paginator: MatPaginator;
   baseService = new BaseService();
   formGroup!: FormGroup;
+  formGroupSearch!: FormGroup;
+  formGroupDetail!: FormGroup;
 
   ngOnInit(): void {
   }
@@ -81,42 +84,21 @@ export class HeaderListBaseComponent implements OnInit {
     this.search();
   }
 
-  async search() {
+  async search(body?: any) {
     try {
       await this.spinner.show();
       let res = await this.baseService.search({
         ...
-          this.formGroup.value,
-        paggingReq: {
-          limit: this.pageSize,
-          page: this.pageIndex
-        }
+        body || this.formGroupSearch.value,
+        page: this.pageIndex,
+        size: this.pageSize
       });
       console.log(res)
       this.dataSource.data = res.data.content;
       this.totalElement = res.data.totalElements;
-      this.baseService.showSuccess("Tìm kiếm thành công");
     } catch (e) {
       console.log(e);
-      this.baseService.showError("Không tìm thấy dữ liệu");
-    } finally {
-      await this.spinner.hide();
-    }
-  }
-
-  async getAll() {
-    try {
-      await this.spinner.show();
-      let res = await this.baseService.getAll({
-        page: 1
-      });
-      console.log(res)
-      this.dataSource.data = res.data.content;
-      this.totalElement = res.data.totalElements;
-      this.baseService.showSuccess("Tìm kiếm thành công");
-    } catch (e) {
-      console.log(e);
-      this.baseService.showError("Không tìm thấy dữ liệu");
+      this.baseService.showError(MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -127,12 +109,30 @@ export class HeaderListBaseComponent implements OnInit {
       await this.spinner.show();
       let res = await this.baseService.detail(id);
       console.log(res)
-      this.dataSource.data = res.data.content;
-      this.totalElement = res.data.totalElements;
-      this.baseService.showSuccess("Tìm kiếm thành công");
+      this.formGroupDetail.patchValue(res)
     } catch (e) {
       console.log(e);
-      this.baseService.showError("Không tìm thấy dữ liệu");
+      this.baseService.showError(MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async save(data: any) {
+    try {
+      await this.spinner.show();
+      let res;
+      if (data.id) {
+        res = await this.baseService.update(data);
+      } else {
+        res = await this.baseService.create(data);
+      }
+      console.log(res)
+      return res;
+    } catch (e) {
+      console.log(e);
+      this.baseService.showError(MESSAGE.ERROR);
+      return null;
     } finally {
       await this.spinner.hide();
     }
@@ -140,5 +140,28 @@ export class HeaderListBaseComponent implements OnInit {
 
   clear() {
     this.formGroup.reset();
+  }
+
+  // New Popup Trigger
+  classApplied = false;
+
+  toggleClass() {
+    this.classApplied = !this.classApplied;
+  }
+
+  async showDetail(id?: any) {
+    if (id) {
+      await this.detail(id);
+    } else {
+      this.formGroupDetail.patchValue({
+        email: 'ok'
+      })
+    }
+    this.toggleClass();
+  }
+
+  async closeDetail() {
+    this.formGroupDetail.reset();
+    this.toggleClass();
   }
 }
