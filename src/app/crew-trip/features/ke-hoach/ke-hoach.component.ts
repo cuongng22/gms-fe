@@ -11,11 +11,14 @@ import {HeaderListBaseComponent} from "src/app/crew-trip/shared/header-list-base
 import {KeHoachService} from "src/app/crew-trip/core/services/ke-hoach-service";
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
+import {MatOption, MatSelect, MatSelectModule} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Constant} from "src/app/crew-trip/shared/utils/constant";
 import { InputComponent } from '../../shared/input/input.component';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 
 
 export interface PeriodicElement {
@@ -27,7 +30,7 @@ export interface PeriodicElement {
 @Component({
   selector: 'app-ke-hoach',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent],
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent, MatSelectModule, MatDatepickerModule, MatNativeDateModule, NgxMaterialTimepickerModule],
   templateUrl: './ke-hoach.component.html',
   styleUrl: './ke-hoach.component.scss',
 })

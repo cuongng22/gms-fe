@@ -46,6 +46,25 @@
             <input matInput placeholder="Ex. Olivia">
           </mat-form-field>
         </div>
+        <div class="col-sm-3" sizeInput="md">
+          <mat-form-field class="mb-25">
+            <mat-label>Town/City</mat-label>
+            <mat-select>
+              <mat-option value="volvo">New York</mat-option>
+              <mat-option value="saab">Amsterdam</mat-option>
+              <mat-option value="mercedes">Nalchity</mat-option>
+              <mat-option value="audi">Beijing</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3" sizeInput="md">
+          <mat-form-field appearance="fill">
+            <mat-label>MM/DD/YYYY</mat-label>
+            <input matInput [matDatepicker]="picker2">
+            <mat-datepicker-toggle matIconSuffix [for]="picker2"></mat-datepicker-toggle>
+            <mat-datepicker #picker2></mat-datepicker>
+          </mat-form-field>
+        </div>
 
       </div>
     </form>
@@ -85,21 +104,13 @@
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
           <th mat-header-cell *matHeaderCellDef>
-            <mat-checkbox
-              (change)="$event ? toggleAllRows() : null"
-              [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()"
-              [aria-label]="checkboxLabel()"
-            >
+            <mat-checkbox (change)="$event ? toggleAllRows() : null" [checked]="selection.hasValue() && isAllSelected()"
+              [indeterminate]="selection.hasValue() && !isAllSelected()" [aria-label]="checkboxLabel()">
             </mat-checkbox>
           </th>
           <td mat-cell *matCellDef="let row">
-            <mat-checkbox
-              (click)="$event.stopPropagation()"
-              (change)="$event ? selection.toggle(row) : null"
-              [checked]="selection.isSelected(row)"
-              [aria-label]="checkboxLabel(row)"
-            >
+            <mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null"
+              [checked]="selection.isSelected(row)" [aria-label]="checkboxLabel(row)">
             </mat-checkbox>
           </td>
         </ng-container>
@@ -109,10 +120,10 @@
         </ng-container>
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
         <ng-container matColumnDef="{{innerColumn.value}}">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
-            <td mat-cell *matCellDef="let element">{{
-        element[innerColumn.value]|dataTransformPipe:[innerColumn.type,innerColumn.format] }}</td>
-          </ng-container>
+          <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
+          <td mat-cell *matCellDef="let element">{{
+            element[innerColumn.value]|dataTransformPipe:[innerColumn.type,innerColumn.format] }}</td>
+        </ng-container>
         }
         <!--&lt;!&ndash; Project Name Column &ndash;&gt;
         <ng-container matColumnDef="soDx">
@@ -169,13 +180,8 @@
       </table>
     </div>
     <!--<mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons (page)="onPageChange($event)" ></mat-paginator>-->
-    <mat-paginator
-      (page)="onPageChange($event)"
-      [length]="totalElement"
-      [pageSize]="pageSize"
-      [showFirstLastButtons]="showFirstLastButtons"
-      [pageSizeOptions]="pageSizeOptions"
-      [pageIndex]="pageIndex"
+    <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+      [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
       aria-label="Select page">
     </mat-paginator>
   </mat-card-content>
