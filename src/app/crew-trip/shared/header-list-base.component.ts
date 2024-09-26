@@ -138,6 +138,19 @@ export class HeaderListBaseComponent implements OnInit {
     }
   }
 
+  async delete(id: any) {
+    try {
+      await this.spinner.show();
+      let res = await this.baseService.delete(id);
+      console.log(res)
+    } catch (e) {
+      console.log(e);
+      this.baseService.showError(MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
   clear() {
     this.formGroup.reset();
   }

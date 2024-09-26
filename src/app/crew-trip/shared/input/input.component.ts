@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'sizeInput,[sizeInput1]',
+  selector: 'sizeInput,[sizeInput]',
   standalone: true,
   imports: [],
   templateUrl: './input.component.html',
@@ -13,8 +13,6 @@ export class InputComponent implements OnInit {
   inputField = inject(ElementRef);
 
   ngOnInit(): void {
-    console.log(`sizeInput:  ${this.sizeInput}`);
-    console.log(this.inputField);
     this.inputField.nativeElement.children[0].classList.add(`size-input-${this.sizeInput()}`);
   }
 

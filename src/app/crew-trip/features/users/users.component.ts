@@ -104,11 +104,108 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
 
   override async ngOnInit() {
     await Promise.all([
-      this.loadListRoleGroup(),
-      this.search(),
+      // this.loadListRoleGroup(),
+      // this.search(),
     ]).then(() => {
     });
-    this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value)];
+    this.dataSource.data =[{
+      "ngayTao": "2024-09-13T15:37:48.725",
+      "nguoiTaoId": 566,
+      "ngaySua": "2024-09-13T15:40:06.518",
+      "nguoiSuaId": 566,
+      "id": 4623,
+      "nam": 2024,
+      "maDvi": "010124",
+      "loaiNhapXuat": "8",
+      "tenLoaiNhapXuat": "Xuất hỗ trợ",
+      "kieuNhapXuat": "Xuất không thu tiền",
+      "phanLoai": "01.04",
+      "mucDichXuat": "Học sinh kỳ II năm học 2023-2024",
+      "soDx": "13/TTr-QLHDT",
+      "trichYeu": "Đề xuất phương án xuất CT,VT",
+      "loaiVthh": "0102",
+      "cloaiVthh": null,
+      "tenVthh": "Gạo tẻ",
+      "ngayDx": "2024-09-13",
+      "ngayKetThuc": "2024-09-19",
+      "noiDung": null,
+      "trangThai": "52",
+      "idThop": null,
+      "maTongHop": null,
+      "idQdPd": 3121,
+      "soQdPd": "192/QĐ-TCDT",
+      "ngayKyQd": "2024-09-13",
+      "tongSoLuong": null,
+      "tongSoLuongDeXuat": 10000,
+      "tongSoLuongXuatCap": 10000,
+      "ngayGduyet": null,
+      "nguoiGduyetId": null,
+      "ngayPduyet": "2024-09-13",
+      "nguoiPduyetId": 566,
+      "lyDoTuChoi": null,
+      "type": null,
+      "tonKhoDvi": 258282010,
+      "ngayTapKet": null,
+      "ngayGiaoHang": null,
+      "tenDvi": "Vụ Quản lý Hàng dự trữ",
+      "tenDviDx": "Tổng cục Dự trữ Nhà nước",
+      "tenLoaiVthh": null,
+      "tenCloaiVthh": null,
+      "tenTrangThai": "Đã tạo - CB Vụ",
+      "tenTrangThaiTh": "Chưa tổng hợp",
+      "tenTrangThaiQd": "Ban hành",
+      "canCu": []
+    },
+      {
+        "ngayTao": "2024-09-13T15:37:48.725",
+        "nguoiTaoId": 566,
+        "ngaySua": "2024-09-13T15:40:06.518",
+        "nguoiSuaId": 566,
+        "id": 461123,
+        "nam": 2024,
+        "maDvi": "010124",
+        "loaiNhapXuat": "8",
+        "tenLoaiNhapXuat": "Xuất hỗ trợ",
+        "kieuNhapXuat": "Xuất không thu tiền",
+        "phanLoai": "01.04",
+        "mucDichXuat": "Học sinh kỳ II năm học 2023-2024",
+        "soDx": "13/TTr-QLHDT",
+        "trichYeu": "Đề xuất phương án xuất CT,VT",
+        "loaiVthh": "0102",
+        "cloaiVthh": null,
+        "tenVthh": "Gạo tẻ",
+        "ngayDx": "2024-09-13",
+        "ngayKetThuc": "2024-09-19",
+        "noiDung": null,
+        "trangThai": "52",
+        "idThop": null,
+        "maTongHop": null,
+        "idQdPd": 3121,
+        "soQdPd": "192/QĐ-TCDT",
+        "ngayKyQd": "2024-09-13",
+        "tongSoLuong": null,
+        "tongSoLuongDeXuat": 10000,
+        "tongSoLuongXuatCap": 10000,
+        "ngayGduyet": null,
+        "nguoiGduyetId": null,
+        "ngayPduyet": "2024-09-13",
+        "nguoiPduyetId": 566,
+        "lyDoTuChoi": null,
+        "type": null,
+        "tonKhoDvi": 258282010,
+        "ngayTapKet": null,
+        "ngayGiaoHang": null,
+        "tenDvi": "Vụ Quản lý Hàng dự trữ",
+        "tenDviDx": "Tổng cục Dự trữ Nhà nước",
+        "tenLoaiVthh": null,
+        "tenCloaiVthh": null,
+        "tenTrangThai": "Đã tạo - CB Vụ",
+        "tenTrangThaiTh": "Chưa tổng hợp",
+        "tenTrangThaiQd": "Ban hành",
+        "canCu": []
+      }
+    ]
+    this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }
 
   async loadListRoleGroup() {
@@ -116,5 +213,22 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
     if (res) {
       this.listRoles = res;
     }
+  }
+
+  override async save(data: any) {
+    super.save(data).then(res => {
+      console.log(res)
+      /*todo: check res thanh cong thi thong bao*/
+      this.search();
+      this.closeDetail();
+    });
+  }
+
+  override async delete(id: any) {
+    super.delete(id).then(res => {
+      console.log(res)
+      //todo: check res thanh cong thi thong bao
+      this.search();
+    });
   }
 }

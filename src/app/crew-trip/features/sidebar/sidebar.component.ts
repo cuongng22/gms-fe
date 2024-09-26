@@ -1,4 +1,4 @@
-import {Component, inject, signal} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {NgScrollbarModule} from 'ngx-scrollbar';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
@@ -14,7 +14,7 @@ import {ToggleService} from "src/app/common/header/toggle.service";
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
-export class SidebarComponent {
+export class SidebarComponent implements OnInit {
   router = inject(Router);
 
   // Mat Expansion
@@ -36,6 +36,10 @@ export class SidebarComponent {
     this.themeService.isToggled$.subscribe(isToggled => {
       this.isToggled = isToggled;
     });
+  }
+
+  ngOnInit(): void {
+    console.log(this.router);
   }
 
   // Burger Menu Toggle
