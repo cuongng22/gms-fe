@@ -10,37 +10,31 @@ import {MatCheckboxModule} from "@angular/material/checkbox";
 import {HeaderListBaseComponent} from "src/app/crew-trip/shared/header-list-base.component";
 import {UsersService} from "src/app/crew-trip/core/services/users-service";
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
-import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Constant} from "src/app/crew-trip/shared/utils/constant";
 import {InputComponent} from "src/app/crew-trip/shared/input/input.component";
 import {RolesService} from "src/app/crew-trip/core/services/roles-service";
 
 
-export interface PeriodicElement {
-  projectName: string;
-  deadline: string;
-  status: any;
-}
-
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent],
-  templateUrl: './users.component.html',
-  styleUrl: './users.component.scss',
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent, MatError, MatPrefix, MatSuffix],
+  templateUrl: './roles.component.html',
+  styleUrl: './roles.component.scss',
 })
 
 
-export class UsersComponent extends HeaderListBaseComponent implements OnInit {
-  override baseService = inject(UsersService);
-  rolesService = inject(RolesService);
+export class RolesComponent extends HeaderListBaseComponent implements OnInit {
+  override baseService = inject(RolesService);
+  usersService = inject(UsersService);
   fb = inject(FormBuilder);
 
   //variable
-  listRoles = [];
+  listUsers = [];
   readMode = false;
 
   constructor() {
@@ -49,45 +43,72 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
       s: ['',],
     });
     this.formGroupDetail = this.fb.group({
-      email: ['', Validators.required],
+      roleName: ['', [Validators.required]],
     });
   }
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: "Email", value: "email"},
-    {label: "Họ và Tên", value: "fullName"},
-    {label: "Kích hoạt", value: "active"},
-    {label: "Phòng ban", value: "department"},
-    {label: "Ảnh đại diện", value: "avartar_url"},
-    {label: "Số điện thoại", value: "phone"},
-    {label: "Giới tính", value: "gender"},
-    {label: "Mô tả", value: "description"},
+    {label: "Tên nhóm quyền", value: "roleName"},
+    {label: "Quyền", value: "functionCount"},
+    {label: "Tài khoản", value: "userCount"},
+    {label: "Trạng thái", value: "isActive"},
   ];
 
   override async ngOnInit() {
     await Promise.all([
-      this.search(),
-      // this.loadListRoleGroup(),
+      // this.search(),
+      // this.loadListUsers(),
     ]).then(() => {
     });
+
+    this.dataSource.data=[
+      {
+        "userCount": 1,
+        "roleId": 1,
+        "roleName": "admin",
+        "functionCount": 4,
+        "isActive": 1
+      },
+      {
+        "userCount": 1,
+        "roleId": 2,
+        "roleName": "manager",
+        "functionCount": 3,
+        "isActive": 1
+      },
+      {
+        "userCount": 0,
+        "roleId": 21,
+        "roleName": "Thêm mới 1",
+        "functionCount": 2,
+        "isActive": 0
+      },
+      {
+        "userCount": 0,
+        "roleId": 22,
+        "roleName": "Thêm mới 2",
+        "functionCount": 1,
+        "isActive": 0
+      }
+    ]
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }
 
-  async loadListRoleGroup() {
-    let res = await this.rolesService.search({page: -1});
+  async loadListUsers() {
+    let res = await this.usersService.search({page: -1});
     if (res) {
-      this.listRoles = res;
+      this.listUsers = res;
     }
   }
 
   override async save(data: any) {
-    super.save(data).then(res => {
+    /*super.save(data).then(res => {
       console.log(res)
-      /*todo: check res thanh cong thi thong bao*/
+      /!*todo: check res thanh cong thi thong bao*!/
       this.search();
       this.closeDetail();
-    });
+    });*/
   }
 
   override async delete(id: any) {

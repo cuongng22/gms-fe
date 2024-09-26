@@ -8,6 +8,7 @@ import {ToggleService} from "src/app/common/header/toggle.service";
 import {BaseService} from "src/app/crew-trip/core/services/base-service";
 import {FormGroup} from "@angular/forms";
 import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {HttpStatusCode} from "@angular/common/http";
 
 @Component({
   selector: 'app-header-list-base',
@@ -94,8 +95,10 @@ export class HeaderListBaseComponent implements OnInit {
         size: this.pageSize
       });
       console.log(res)
-      this.dataSource.data = res.data.content;
-      this.totalElement = res.data.totalElements;
+      if (res && res.status === HttpStatusCode.Ok) {
+        this.dataSource.data = res.data.content;
+        this.totalElement = res.data.totalElements;
+      }
     } catch (e) {
       console.log(e);
       this.baseService.showError(MESSAGE.ERROR);
@@ -163,18 +166,18 @@ export class HeaderListBaseComponent implements OnInit {
   }
 
   async showDetail(id?: any) {
+    console.log(this.formGroupDetail.controls['roleName'])
     if (id) {
       await this.detail(id);
-    } else {
-      this.formGroupDetail.patchValue({
-        email: 'ok'
-      })
     }
     this.toggleClass();
   }
 
   async closeDetail() {
     this.formGroupDetail.reset();
+    this.formGroupDetail.markAsUntouched();
+    this.formGroupDetail.markAsPristine();
+    this.formGroupDetail.updateValueAndValidity();
     this.toggleClass();
   }
 }
