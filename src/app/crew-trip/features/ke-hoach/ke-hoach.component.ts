@@ -15,6 +15,7 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Constant} from "src/app/crew-trip/shared/utils/constant";
+import { InputComponent } from '../../shared/input/input.component';
 
 
 export interface PeriodicElement {
@@ -26,7 +27,7 @@ export interface PeriodicElement {
 @Component({
   selector: 'app-ke-hoach',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule],
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent],
   templateUrl: './ke-hoach.component.html',
   styleUrl: './ke-hoach.component.scss',
 })
