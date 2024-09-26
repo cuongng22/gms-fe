@@ -15,6 +15,8 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Constant} from "src/app/crew-trip/shared/utils/constant";
+import {InputComponent} from "src/app/crew-trip/shared/input/input.component";
+import {RolesService} from "src/app/crew-trip/core/services/roles-service";
 
 
 export interface PeriodicElement {
@@ -26,7 +28,7 @@ export interface PeriodicElement {
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule],
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
 })
@@ -34,7 +36,11 @@ export interface PeriodicElement {
 
 export class UsersComponent extends HeaderListBaseComponent implements OnInit {
   override baseService = inject(UsersService);
+  rolesService = inject(RolesService);
   fb = inject(FormBuilder);
+
+  //variable
+  listRoles = [];
 
   constructor() {
     super();
@@ -98,9 +104,17 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
 
   override async ngOnInit() {
     await Promise.all([
+      this.loadListRoleGroup(),
       this.search(),
     ]).then(() => {
     });
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value)];
+  }
+
+  async loadListRoleGroup() {
+    let res = await this.rolesService.search({page: -1});
+    if (res) {
+      this.listRoles = res;
+    }
   }
 }

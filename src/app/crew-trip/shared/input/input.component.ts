@@ -1,7 +1,7 @@
 import { Component, ElementRef, inject, input, OnInit } from '@angular/core';
 
 @Component({
-  selector: 'sizeInput,[sizeInput]',
+  selector: 'sizeInput,[sizeInput1]',
   standalone: true,
   imports: [],
   templateUrl: './input.component.html',
