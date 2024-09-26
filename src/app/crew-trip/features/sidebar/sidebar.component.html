@@ -36,29 +36,29 @@
             <i class="material-symbols-outlined">
               dashboard
             </i>
-            <span class="title">Dashboard</span>
+            <span class="title text-white">Dashboard</span>
           </a>
-          <span class="sub-title d-block fw-medium text-uppercase">QUAN LÝ DỮ LIỆU</span>
+          <span class="sub-title d-block fw-medium text-uppercase">QUẢN LÝ DỮ LIỆU</span>
           <a routerLink="/ke-hoach" class="sidebar-menu-link" routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: true}">
             <i class="material-symbols-outlined">
               event_available
             </i>
-            <span class="title">Kế hoạch</span>
+            <span class="title text-white">Kế hoạch</span>
           </a>
           <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: true}">
             <i class="material-symbols-outlined">
               flight
             </i>
-            <span class="title">Lịch bay</span>
+            <span class="title text-white">Lịch bay</span>
           </a>
           <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: true}">
             <i class="material-symbols-outlined">
               hotel
             </i>
-            <span class="title">Quản lý đặt phòng</span>
+            <span class="title text-white">Quản lý đặt phòng</span>
           </a>
           <span class="sub-title d-block fw-medium text-uppercase">HỆ THỐNG</span>
           <mat-expansion-panel [expanded]="checkActiveRoute('admin')" (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
@@ -67,7 +67,7 @@
                 <i class="material-symbols-outlined">
                   business_center
                 </i>
-                <span class="title">
+                <span class="title text-white">
                                     Quyền và tài khoản
                                 </span>
               </mat-panel-title>
@@ -76,7 +76,7 @@
               <li class="sidemenu-item">
                 <a routerLink="admin/users" routerLinkActive="active"
                    class="sidemenu-link ri-calendar-schedule-fill">
-                   <span class="title">
+                   <span class="title text-white">
                                     Tài khoản
                                 </span>
                 </a>
