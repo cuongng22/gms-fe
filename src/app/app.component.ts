@@ -15,7 +15,7 @@ export class AppComponent {
 
     constructor(
         private router: Router,
-        private viewportScroller: ViewportScroller
+        private viewportScroller: ViewportScroller,
     ) {
         this.router.events.subscribe((event: Event) => {
             if (event instanceof NavigationEnd) {

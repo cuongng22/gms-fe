@@ -4,15 +4,25 @@ import {provideRouter} from '@angular/router';
 import {routes} from './app.routes';
 import {provideClientHydration} from '@angular/platform-browser';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
-import {provideHttpClient, withInterceptors} from "@angular/common/http";
+import {HttpClient, provideHttpClient, withInterceptors} from "@angular/common/http";
 import {loggingInterceptor} from "src/app/crew-trip/core/auth/auth.interceptor";
 import {NgxSpinnerModule} from "ngx-spinner";
 import {registerLocaleData} from "@angular/common";
 import localeVi from '@angular/common/locales/vi';
 import localeEn from '@angular/common/locales/en';
+import {TranslateHttpLoader} from "@ngx-translate/http-loader";
+import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 
 registerLocaleData(localeVi, 'vi-VN');
 registerLocaleData(localeEn, 'en-US');
+
+
+// Factory để tạo HttpLoader cho TranslateModule
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, './language/i18n/', '.json');
+}
+
+
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({eventCoalescing: true}),
     provideRouter(routes),
@@ -22,6 +32,13 @@ export const appConfig: ApplicationConfig = {
     provideHttpClient(
       withInterceptors([loggingInterceptor]),
     ),
+    importProvidersFrom(TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: HttpLoaderFactory,
+        deps: [HttpClient]
+      }
+    })),
     importProvidersFrom(NgxSpinnerModule.forRoot()),
     [{provide: LOCALE_ID, useValue: 'vi-VN'}],
   ]

@@ -29,6 +29,11 @@
                             {
                                 "glob": "**/*",
                                 "input": "public"
+                            },
+                            {
+                              "glob": "**/*",
+                              "input": "src/app/crew-trip/language",
+                              "output": "language"
                             }
                         ],
                         "styles": [
@@ -130,6 +135,11 @@
                             {
                                 "glob": "**/*",
                                 "input": "public"
+                            },
+                            {
+                                "glob": "**/*",
+                                "input": "src/app/crew-trip/language",
+                                "output": "language"
                             }
                         ],
                         "styles": [
