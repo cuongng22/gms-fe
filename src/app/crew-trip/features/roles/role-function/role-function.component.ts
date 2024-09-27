@@ -19,19 +19,18 @@ import {InputComponent} from "src/app/crew-trip/shared/input/input.component";
 import {RolesService} from "src/app/crew-trip/core/services/roles-service";
 import {HttpStatusCode} from "@angular/common/http";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
 
 
 @Component({
-  selector: 'app-roles',
+  selector: 'app-role-function',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent],
-  templateUrl: './roles.component.html',
-  styleUrl: './roles.component.scss',
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup],
+  templateUrl: './role-function.component.html',
+  styleUrl: './role-function.component.scss',
 })
 
 
-export class RolesComponent extends HeaderListBaseComponent implements OnInit {
+export class RoleFunctionComponent extends HeaderListBaseComponent implements OnInit {
   override baseService = inject(RolesService);
   usersService = inject(UsersService);
   fb = inject(FormBuilder);
@@ -39,7 +38,6 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
   //variable
   listUsers = [];
   readMode = false;
-  step = 1;
 
   constructor() {
     super();
@@ -108,11 +106,6 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
   async _detail(index: number) {
     this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
     this.toggleClass()
-  }
-
-  async nextStep(index: number) {
-    this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
-    this.step = 2;
   }
 
   //

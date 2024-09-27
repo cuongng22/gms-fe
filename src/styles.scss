@@ -388,3 +388,12 @@ button {
 .title-font{
   font-family: var(--fontFamily);
 }
+
+.step2-menu-button {
+  height: 40px !important;
+
+  .slot1 {
+    background-color: var(--vnaXanhColor) !important;
+    color: var(--whiteColor) !important;
+  }
+}

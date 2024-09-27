@@ -39,6 +39,9 @@ export class HeaderListBaseComponent implements OnInit {
   formGroup!: FormGroup;
   formGroupSearch!: FormGroup;
   formGroupDetail!: FormGroup;
+  formGroupSearchInit: any = {};
+  formGroupDetailInit: any = {};
+
 
   ngOnInit(): void {
   }
@@ -89,10 +92,9 @@ export class HeaderListBaseComponent implements OnInit {
     try {
       await this.spinner.show();
       let res = await this.baseService.search({
-        ...
-        body || this.formGroupSearch.value,
         page: this.pageIndex,
-        size: this.pageSize
+        size: this.pageSize,
+        ...body || this.formGroupSearch.value
       });
       console.log(res)
       if (res && res.status === HttpStatusCode.Ok) {
@@ -125,7 +127,7 @@ export class HeaderListBaseComponent implements OnInit {
     try {
       await this.spinner.show();
       let res;
-      if (data.id) {
+      if (data.id || data.roleId) {
         res = await this.baseService.update(data);
       } else {
         res = await this.baseService.create(data);
@@ -170,14 +172,17 @@ export class HeaderListBaseComponent implements OnInit {
     if (id) {
       await this.detail(id);
     }
+    console.log(this.formGroupDetail.value)
     this.toggleClass();
   }
 
   async closeDetail() {
-    this.formGroupDetail.reset();
+    this.formGroupDetail.reset(this.formGroupDetailInit);
     this.formGroupDetail.markAsUntouched();
     this.formGroupDetail.markAsPristine();
     this.formGroupDetail.updateValueAndValidity();
+
     this.toggleClass();
+    console.log(this.formGroupDetail.value)
   }
 }
