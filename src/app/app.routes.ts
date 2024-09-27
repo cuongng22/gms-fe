@@ -83,7 +83,7 @@ export const routes: Routes = [
             component: FileManagerComponent,
             children: [
               {path: '', component: MyDriveComponent},
-              {path: 'assets', component: AssetsComponent},
+              {path: 'language', component: AssetsComponent},
               {path: 'projects', component: ProjectsComponent},
               {path: 'personal', component: PersonalComponent},
               {path: 'applications', component: ApplicationsComponent},

@@ -7,11 +7,11 @@ import { RouterLink } from '@angular/router';
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 
 @Component({
-    selector: 'app-assets',
+    selector: 'app-language',
     standalone: true,
     imports: [RouterLink, MatCardModule, MatMenuModule, MatButtonModule, MatCheckboxModule],
     templateUrl: './assets.component.html',
-    styleUrl: './assets.component.scss'
+    styleUrl: './language.component.scss'
 })
 export class AssetsComponent {
 

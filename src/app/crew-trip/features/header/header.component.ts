@@ -1,22 +1,31 @@
 import {Component, HostListener, inject} from '@angular/core';
-import {RouterLink} from '@angular/router';
+import {Router, RouterLink} from '@angular/router';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import {NgClass} from '@angular/common';
 import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
 import {ToggleService} from "src/app/common/header/toggle.service";
+import {UsersService} from "src/app/crew-trip/core/services/users-service";
+import {MatDialog, MatDialogModule} from "@angular/material/dialog";
+import {
+  ConfirmDialogComponent,
+  ConfirmDialogData
+} from "src/app/crew-trip/component/confirm-dialog/confirm-dialog.component";
 
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, MatButtonModule, MatMenuModule, NgClass],
+  imports: [RouterLink, MatButtonModule, MatMenuModule, NgClass,MatDialogModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent {
   toggleService = inject(ToggleService);
   themeService = inject(CustomizerSettingsService);
+  userService = inject(UsersService);
+  router = inject(Router);
+  dialog = inject(MatDialog); // Inject MatDialog
   // isSidebarToggled
   isSidebarToggled = false;
 
@@ -121,5 +130,23 @@ export class HeaderComponent {
     };
     this.isFullscreen = !!(document.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
   }
-
+  logOut() {
+    const dialogData: ConfirmDialogData = {
+      title: 'Confirm Logout',
+      message: 'Are you sure you want to log out?',
+      confirmText: 'Logout',
+      cancelText: 'Cancel'
+    };
+    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
+      width: '300px',
+      data: dialogData
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.userService.logout();
+        this.router.navigate(['/auth/login']);
+      } else {
+      }
+    });
+  }
 }

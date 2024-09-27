@@ -30,14 +30,39 @@
     <div class="sidebar-inner">
       <div class="sidebar-menu">
         <mat-accordion>
-          <span class="sub-title d-block fw-medium text-uppercase">THÔNG TIN</span>
-          <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">
-            <i class="material-symbols-outlined">
-              dashboard
-            </i>
-            <span class="title text-white">Dashboard</span>
-          </a>
+          <span class="sub-title d-block fw-medium text-uppercase">Dashboard</span>
+<!--          <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"-->
+<!--             [routerLinkActiveOptions]="{exact: true}">-->
+<!--            <i class="material-symbols-outlined">-->
+<!--              dashboard-->
+<!--            </i>-->
+<!--            <span class="title text-white">Dashboard</span>-->
+<!--          </a>-->
+          <mat-expansion-panel class="menu-level-1" [expanded]="checkActiveRoute('category')" (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+            <mat-expansion-panel-header class="menu-level-1">
+              <mat-panel-title>
+<!--                <i class="material-symbols-outlined">-->
+<!--                  business_center-->
+<!--                </i>-->
+                <span class="title text-white">
+                                    DANH MỤC
+                                </span>
+              </mat-panel-title>
+            </mat-expansion-panel-header>
+            <ul class="sidebar-sub-menu">
+              <li class="sidemenu-item">
+                <a routerLink="admin/users" routerLinkActive="active"
+                   class="sidemenu-link ri-calendar-schedule-fill">
+                   <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
+                                    Tài khoản
+                                </span>
+                </a>
+              </li>
+            </ul>
+          </mat-expansion-panel>
+
+
+
           <span class="sub-title d-block fw-medium text-uppercase">QUẢN LÝ DỮ LIỆU</span>
           <a routerLink="/ke-hoach" class="sidebar-menu-link" routerLinkActive="active"
              [routerLinkActiveOptions]="{exact: true}">
