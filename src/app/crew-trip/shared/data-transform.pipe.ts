@@ -7,7 +7,7 @@ import moment from 'moment';
 })
 export class DataTransformPipe implements PipeTransform {
   transform(value: any, args: any[]): any {
-    console.log(value, args)
+    // console.log(value, args)
     const type = args[0];
     const format = args[1];
     if (type === 'number') {

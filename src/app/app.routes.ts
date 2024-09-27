@@ -3,6 +3,7 @@ import {KeHoachComponent} from 'src/app/crew-trip/features/ke-hoach/ke-hoach.com
 import {FirstPageComponent} from "src/app/crew-trip/features/first-page/first-page.component";
 import {UsersComponent} from "src/app/crew-trip/features/users/users.component";
 import {SignInComponent} from "src/app/crew-trip/core/auth/sign-in/sign-in.component";
+import {RolesComponent} from "src/app/crew-trip/features/roles/roles.component";
 
 
 export const routes: Routes = [
@@ -19,6 +20,7 @@ export const routes: Routes = [
       {
         path: 'admin', children: [
           {path: 'users', component: UsersComponent},
+          {path: 'roles', component: RolesComponent},
         ]
       },
 
