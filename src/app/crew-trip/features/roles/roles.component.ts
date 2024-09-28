@@ -44,7 +44,7 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
     super();
     this.formGroupSearch = this.fb.group({
       s: ['',],
-      active: ['',],
+      a: ['',],
     });
     this.formGroupDetail = this.fb.group({
       id: ['',],
@@ -67,7 +67,7 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
 
   override async ngOnInit() {
     await Promise.all([
-      this.search({page: 1}),
+      this.search(),
     ]).then(() => {
     });
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
@@ -85,7 +85,7 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
     super.save(data).then(res => {
       //todo check de tra ve thong bao
       this.baseService.showSuccess(data.id?MESSAGE.UPDATE_SUCCESS:MESSAGE.CREATE_SUCCESS)
-      this.search({page: 1});
+      this.search();
       this.closeDetail();
     });
   }
@@ -107,7 +107,7 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
     this.step = 2;
   }
   async backStep() {
-    this.search({page: 1}),
+    this.search(),
     this.step = 1;
   }
 
