@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {NgClass, NgIf, TitleCasePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
@@ -13,18 +13,27 @@ import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
 import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
-import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Constant} from "src/app/crew-trip/shared/utils/constant";
+import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {InputComponent} from "src/app/crew-trip/shared/input/input.component";
 import {RolesService} from "src/app/crew-trip/core/services/roles-service";
-import {HttpStatusCode} from "@angular/common/http";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
+import {NgxEditorModule} from "ngx-editor";
+import {HttpStatusCode} from "@angular/common/http";
+import lodash from "lodash";
+import {
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle
+} from "@angular/material/expansion";
+import {v4 as uuidv4} from 'uuid';
+import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 
 
 @Component({
   selector: 'app-role-function',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup],
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, NgxEditorModule, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle],
   templateUrl: './role-function.component.html',
   styleUrl: './role-function.component.scss',
 })
@@ -33,86 +42,114 @@ import {MatTab, MatTabGroup} from "@angular/material/tabs";
 export class RoleFunctionComponent extends HeaderListBaseComponent implements OnInit {
   override baseService = inject(RolesService);
   usersService = inject(UsersService);
+  functionsService = inject(UsersService);
   fb = inject(FormBuilder);
 
   //variable
-  listUsers = [];
-  readMode = false;
+  @Input() id: any;
+  @Output() backStep = new EventEmitter<any>();
+  listUser: any = [];
+  listFunction: any = [];
+  listFunctionView: any;
+  listRoleFunction: any = [];
+  displayedColumnsUser: string[] = [];
+  displayedColumnsFunction: string[] = [];
 
   constructor() {
     super();
-    this.formGroupSearch = this.fb.group({
-      s: ['',],
-    });
-    this.formGroupDetail = this.fb.group({
-      id: ['',],
-      roleId: ['',],
-      roleName: ['', [Validators.required]],
-      name: [''],
-      isActive: [true,],
-    });
-    this.formGroupSearchInit = {...this.formGroupSearch.value}
-    this.formGroupDetailInit = {...this.formGroupDetail.value}
   }
 
-  _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
-    // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: "Tên nhóm quyền", value: "roleName"},
-    {label: "Quyền", value: "functionCount"},
-    {label: "Tài khoản", value: "userCount"},
-    {label: "Trạng thái", value: "isActive"},
+  _displayedColumnsUser: { label: string; value: string, type?: string, format?: string }[] = [
+    {label: "Full Name", value: "full-name"},
+    {label: "Active", value: "active"},
+  ];
+  _displayedColumnsFunction: { label: string; value: string, type?: string, format?: string }[] = [
+    {label: "Active", value: "active"},
+    {label: "ID", value: "id"},
+    {label: "Name", value: "name"},
   ];
 
   override async ngOnInit() {
     await Promise.all([
-      this.search({page: 1}),
-      // this.loadListUsers(),
-    ]).then(() => {
+      this._detail(),
+    ]).then((result) => {
+      this.buildView()
     });
-    this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
+    this.displayedColumnsUser = [...this._displayedColumnsUser.map(s => s.value)];
+    this.displayedColumnsFunction = ['select', ...this._displayedColumnsFunction.map(s => s.value)];
   }
 
-  async loadListUsers() {
-    let res = await this.usersService.search({page: -1});
-    if (res) {
-      this.listUsers = res;
+  async _detail() {
+    await this.baseService.detail(this.id).then(res => {
+      if (res.data && res.status == HttpStatusCode.Ok) {
+        this.listUser = res.data.user || [];
+        if (res.data.function && res.data.function.length > 0) {
+          this.listFunction = res.data.function;
+          this.listFunction = this.listFunction.map((s: any) => {
+            const parent = s.name.split('-')[0];
+            return {
+              ...s,
+              parent: parent,
+              uuid: uuidv4()
+            }
+          });
+        }
+        if (res.data['role-function'] && res.data['role-function'].length > 0) {
+          this.listRoleFunction = res.data['role-function'];
+          this.listRoleFunction.forEach((rf: any) => {
+            let existsFunction = this.listFunction.find((f: any) => rf.functionId == f.id);
+            existsFunction.active = true;
+          });
+        }
+      } else {
+        this.baseService.showWarning("Không tìm thấy dữ liệu")
+      }
+    })
+  }
+
+  async buildView() {
+    this.listFunctionView = lodash.chain(this.listFunction).groupBy("parent").map((v: any, k) => {
+      let currrent = this.listFunction.find((s: any) => s.parent === k);
+      return {
+        name: k,
+        active: currrent.active,
+        id: currrent.id,
+        uuid: currrent.uuid,
+        child: v
+      }
+    }).value();
+    console.log(this.listFunctionView)
+  }
+
+  checkBoxChange(value: any, uuid?: any,) {
+    console.log(value, 'valueeeee')
+    if (uuid) {
+      let row: any = this.listFunction.find((s: any) => s.uuid === uuid);
+      row.active = value!!;
+    } else {
+      this.listFunction.forEach((s: any) => s.active = value);
     }
+    this.buildView();
+
   }
 
-  override async save(data: any) {
-    //fix tam
-    data.name = this.formGroupDetail.value.roleName
-    data.id = this.formGroupDetail.value.roleId
-
-    this.formGroupDetail.markAllAsTouched();
-    if (this.formGroupDetail.invalid) {
-      return;
-    }
-    super.save(data).then(res => {
-      //todo check de tra ve thong bao
-      this.search({page: 1});
-      this.closeDetail();
-    });
+  goBack() {
+    this.backStep.emit();
   }
 
-  override async delete(id: any) {
-    super.delete(id).then(res => {
-      console.log(res, 92)
-      //todo: check res thanh cong thi thong bao
-      this.search();
-    });
-  }
-
-  async _detail(index: number) {
-    this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
-    this.toggleClass()
-  }
-
-  //
-  // New Popup Trigger
-  classAppliedFunction = false;
-
-  toggleClassFunction() {
-    this.classAppliedFunction = !this.classAppliedFunction;
+  addFunction() {
+    let bodyReq = this.listFunction.filter((s: any) => s.active === true).map((s: any) => ({functionId: s.id}));
+    this.baseService.addFunction(this.id, {data: bodyReq}).then((res) => {
+      if (res && res.status == HttpStatusCode.Ok) {
+        this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
+      } else if (res.status == HttpStatusCode.BadRequest) {
+        this.baseService.showWarning('Chức năng không được để trống');
+      } else {
+        this.baseService.showError(MESSAGE.ERROR);
+      }
+    }).catch(reason => {
+      console.log(reason);
+      this.baseService.showError(MESSAGE.ERROR);
+    }).finally(() => this.goBack())
   }
 }

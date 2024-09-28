@@ -40,6 +40,7 @@ export class SignInComponent {
     private translate: TranslateService,
     private storageService: StorageService
   ) {
+    this.usersService.showWarning("Token hết hạn hoạc không hợp lệ")
     this.translate.setDefaultLang('en');
     this.themeService.isToggled$.subscribe(isToggled => {
       this.isToggled = isToggled;

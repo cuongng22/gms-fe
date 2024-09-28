@@ -381,19 +381,40 @@ button {
 /* Min width 1600px */
 @media only screen and (min-width: 1600px) {
 }
+
 .mat-mdc-snack-bar-container .mat-mdc-snackbar-surface {
   //background-color: white!important;
   display: contents;
 }
-.title-font{
+
+.title-font {
   font-family: var(--fontFamily);
 }
 
-.step2-menu-button {
+.step-2-menu-button {
   height: 40px !important;
+  margin-left: 10px !important;
+  padding-left: 15px !important;
+  padding-right: 15px !important;
 
-  .slot1 {
+  &:hover {
+    filter: brightness(110%);
+  }
+
+  &.btn-slot-1 {
     background-color: var(--vnaXanhColor) !important;
     color: var(--whiteColor) !important;
+
   }
+
+  &.btn-slot-2 {
+    background-color: var(--lightColor) !important;
+    color: var(--darkColor) !important;
+  }
+
+  &.btn-slot-3 {
+    background-color: var(--lightColor) !important;
+    color: var(--vnaXanhColor) !important;
+  }
+
 }

@@ -74,4 +74,26 @@ export class BaseService {
       })
     }
   }
+
+  showWarning(message: string | undefined) {
+    if (message) {
+      this.showNotification(message, {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        data: {type: 'warning', message: message}
+      })
+    }
+  }
+
+  showInfo(message: string | undefined) {
+    if (message) {
+      this.showNotification(message, {
+        duration: 3000,
+        horizontalPosition: 'right',
+        verticalPosition: 'top',
+        data: {type: 'info', message: message}
+      })
+    }
+  }
 }

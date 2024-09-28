@@ -11,13 +11,14 @@ import {catchError} from "rxjs/operators";
 import {inject} from "@angular/core";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {Router} from "@angular/router";
+import {BaseService} from "src/app/crew-trip/core/services/base-service";
 
 
 export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   const notification = inject(MatSnackBar);
+  const baseService = inject(BaseService);
   const router = inject(Router);
-  // localStorage.setItem('access_token1', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbiIsIk1BX1FEIjoiUcSQLVRDRFQiLCJNQV9UUiI6IlRUci1RTEhEVCIsIk1BX0RWSSI6IjAxMDEiLCJDQVBfRFZJIjoiMSIsIlRFTl9EVkkiOiJU4buVbmcgY-G7pWMgROG7sSB0cuG7ryBOaMOgIG7GsOG7m2MiLCJURU5fUEhPTkdfQkFOIjoiIiwiVEVOX0RBWV9EVSI6IkFkbWluaXN0YXRvciIsIlBPU0lUSU9OIjoiUXXhuqNuIHRy4buLIGjhu4cgdGjhu5FuZyIsIklEIjoxLCJleHAiOjE3MjY4Mjc3MzB9.qu5L9kiWGQPqI7uMi0dwvmNFwlDRpZLZDJA6IQJ0vRgT7oxxSqmRQv7xu55Da2AIHeH_-9yotXnKce9kdMSDhQ');
-  localStorage.setItem('access_token1', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnaW1hc3lzLmNvbSIsImlhdCI6MTcyNzQ1MTQzMiwiZXhwIjoxNzI3NDY5NDMyfQ.6Mla1GYraL0HnstFJwSzhYCFfogXWttGIz_8ZK-ePONiK0ORJx1WJPWnhI9pS42jOW-ezhIQItvrCdybGYj1Mw');
+  localStorage.setItem('access_token1', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnaW1hc3lzLmNvbSIsImlhdCI6MTcyNzUzMjA4MSwiZXhwIjoxNzI3NTUwMDgxfQ.Ns_MN8W7kPrLjj1f6eMIaO0OqkU1hf8G9a684aJr8UE4_r-d3lR9OcpeSJRJuxF6d8enzN4fUSCqYpMkx5ycUQ');
   const token = localStorage.getItem('access_token1');
   if (token) {
     const authReq = req.clone({
@@ -35,15 +36,7 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
           console.error('Unauthorized : ', error.message);
-          /*let _noti = notification.open('Tài khoản không hợp lệ', 'Đăng nhập', {
-            duration: 5000
-          });
-          _noti.onAction().subscribe(() => {
-            router.navigate(['/login']);
-          });
-          _noti.afterDismissed().subscribe(() => {
-            // router.navigate(['/dashboard']);
-          });*/
+          router.navigate(['auth/login'], {fragment: '401',skipLocationChange: true});
         } else if (error.status === 404) {
           console.error('Not Found: ', error.message);
         } else if (error.status === 500) {

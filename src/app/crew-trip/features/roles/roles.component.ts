@@ -4,7 +4,7 @@ import {NgClass, NgIf, TitleCasePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
 import {MatButtonModule} from "@angular/material/button";
 import {MatMenuModule} from "@angular/material/menu";
-import {MatTableModule} from "@angular/material/table";
+import {MatTableDataSource, MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {HeaderListBaseComponent} from "src/app/crew-trip/shared/header-list-base.component";
@@ -14,18 +14,19 @@ import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/m
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Constant} from "src/app/crew-trip/shared/utils/constant";
+import {Constant, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {InputComponent} from "src/app/crew-trip/shared/input/input.component";
 import {RolesService} from "src/app/crew-trip/core/services/roles-service";
 import {HttpStatusCode} from "@angular/common/http";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
+import {NoDataRowOutlet} from "@angular/cdk/table";
 
 
 @Component({
   selector: 'app-roles',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent],
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet],
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.scss',
 })
@@ -37,14 +38,13 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
   fb = inject(FormBuilder);
 
   //variable
-  listUsers = [];
-  readMode = false;
   step = 1;
 
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
       s: ['',],
+      active: ['',],
     });
     this.formGroupDetail = this.fb.group({
       id: ['',],
@@ -68,17 +68,9 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
   override async ngOnInit() {
     await Promise.all([
       this.search({page: 1}),
-      // this.loadListUsers(),
     ]).then(() => {
     });
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
-  }
-
-  async loadListUsers() {
-    let res = await this.usersService.search({page: -1});
-    if (res) {
-      this.listUsers = res;
-    }
   }
 
   override async save(data: any) {
@@ -92,6 +84,7 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
     }
     super.save(data).then(res => {
       //todo check de tra ve thong bao
+      this.baseService.showSuccess(data.id?MESSAGE.UPDATE_SUCCESS:MESSAGE.CREATE_SUCCESS)
       this.search({page: 1});
       this.closeDetail();
     });
@@ -99,7 +92,6 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
 
   override async delete(id: any) {
     super.delete(id).then(res => {
-      console.log(res, 92)
       //todo: check res thanh cong thi thong bao
       this.search();
     });
@@ -113,6 +105,10 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
   async nextStep(index: number) {
     this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
     this.step = 2;
+  }
+  async backStep() {
+    this.search({page: 1}),
+    this.step = 1;
   }
 
   //

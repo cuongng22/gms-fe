@@ -34,14 +34,26 @@
           </div>
           <div class="col-sm-3">
             <mat-form-field>
-              <mat-label>First Name</mat-label>
-              <input matInput placeholder="Ex. Olivia">
+              <mat-label>All Status</mat-label>
+              <mat-select formControlName="active">
+                <mat-option>-- All Status</mat-option>
+                <mat-option value="active">Active</mat-option>
+                <mat-option value="inActive">InActive</mat-option>
+              </mat-select>
             </mat-form-field>
+          </div>
+          <div class="col-sm-3">
+            <button mat-fab extended class="step-2-menu-button btn-slot-1" (click)="search()">
+              <i class="material-symbols-outlined">
+                search
+              </i>
+              Search
+            </button>
           </div>
         </div>
       </form>
     </mat-card-content>
-    <mat-card-header class="mt-20 mb-0 search">
+    <!--<mat-card-header class="mt-20 mb-0 search">
       <mat-card-title clas>
         <button class="search-btn" type="button" mat-button (click)="search()">
           <i class="material-symbols-outlined">
@@ -56,7 +68,7 @@
           Nhập lại
         </button>
       </mat-card-title>
-    </mat-card-header>
+    </mat-card-header>-->
   </mat-card>
 
   <!-- Content -->
@@ -138,19 +150,22 @@
           </ng-container>
           <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          <tr class="mat-row" *matNoDataRow>
+            <td class="mat-cell border-none" colspan="1"><strong>No data matching the filter</strong></td>
+          </tr>
           <!--        <tr mat-row *matRowDef="let row; columns: ['child'];"></tr>-->
 
         </table>
       </div>
       <!--<mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons (page)="onPageChange($event)" ></mat-paginator>-->
-      <mat-paginator
-        (page)="onPageChange($event)"
-        [length]="totalElement"
-        [pageSize]="pageSize"
-        [showFirstLastButtons]="showFirstLastButtons"
-        [pageSizeOptions]="pageSizeOptions"
-        [pageIndex]="pageIndex"
-        aria-label="Select page">
+      <mat-paginator noda
+                     (page)="onPageChange($event)"
+                     [length]="totalElement"
+                     [pageSize]="pageSize"
+                     [showFirstLastButtons]="showFirstLastButtons"
+                     [pageSizeOptions]="pageSizeOptions"
+                     [pageIndex]="pageIndex"
+                     aria-label="Select page">
       </mat-paginator>
     </mat-card-content>
   </mat-card>
@@ -220,5 +235,5 @@
 </ng-container>
 <!-- Add Function Popup -->
 <ng-container *ngIf="step==2">
-  <app-role-function></app-role-function>
+  <app-role-function [id]="formGroupDetail.value.roleId" (backStep)="backStep()"></app-role-function>
 </ng-container>
