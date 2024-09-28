@@ -1,9 +1,9 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {firstValueFrom} from "rxjs";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {ActionAlertComponent} from "src/app/crew-trip/shared/action-alert/action-alert.component";
-import {environment} from 'src/environments/environment';
+import { inject, Injectable } from '@angular/core';
+import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { firstValueFrom } from "rxjs";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { ActionAlertComponent } from "src/app/crew-trip/shared/action-alert/action-alert.component";
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -23,10 +23,10 @@ export class BaseService {
     })
   };
 
-  search(body: any): Promise<any> {
-    const url = `${this.api}/${this.path}/get-all`
-    let params = new HttpParams({fromObject: body})
-    return firstValueFrom(this.http.get<any>(url, {params}));
+  search(body: any, path?: string): Promise<any> {
+    const url = `${this.api}/${this.path}/${path ? path : 'get-all'}`
+    let params = new HttpParams({ fromObject: body })
+    return firstValueFrom(this.http.get<any>(url, { params }));
   }
 
   detail(id: any): Promise<any> {
@@ -59,7 +59,7 @@ export class BaseService {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
-        data: {type: 'success', message: message}
+        data: { type: 'success', message: message }
       })
     }
   }
@@ -70,7 +70,7 @@ export class BaseService {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
-        data: {type: 'error', message: message}
+        data: { type: 'error', message: message }
       })
     }
   }

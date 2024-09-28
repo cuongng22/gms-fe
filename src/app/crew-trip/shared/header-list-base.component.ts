@@ -7,7 +7,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ToggleService} from "src/app/common/header/toggle.service";
 import {BaseService} from "src/app/crew-trip/core/services/base-service";
 import {FormGroup} from "@angular/forms";
-import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {Constant, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {HttpStatusCode} from "@angular/common/http";
 
 @Component({
@@ -22,10 +22,10 @@ export class HeaderListBaseComponent implements OnInit {
   toggleService = inject(ToggleService);
   themeService = inject(CustomizerSettingsService);
   displayedColumns: string[] = [];
-  dataSource = new MatTableDataSource();
+  dataSource:MatTableDataSource<any, MatPaginator> | any = new MatTableDataSource();
   selection = new SelectionModel<any>(true, []);
-  pageSize: any = 10;
-  pageIndex: any = 0;
+  pageSize = Constant.PAGE_SIZE;
+  pageIndex = Constant.PAGE;
   pageSizeOptions = [10, 50, 100]
   totalElement = 0;
   showFirstLastButtons = true;
@@ -88,7 +88,7 @@ export class HeaderListBaseComponent implements OnInit {
     this.search();
   }
 
-  async search(body?: any) {
+  async search(body?: any, path?: string) {
     try {
       await this.spinner.show();
       let res = await this.baseService.search({

@@ -4,6 +4,8 @@ export class Constant {
   static TIME_FORMAT = 'HH:mm'
   static NUMBER = 'number'
   static DATE = 'date'
+  static PAGE = 0;
+  static PAGE_SIZE = 10
 }
 
 export class MESSAGE {
