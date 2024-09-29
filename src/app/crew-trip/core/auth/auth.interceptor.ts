@@ -18,7 +18,7 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
   const notification = inject(MatSnackBar);
   const baseService = inject(BaseService);
   const router = inject(Router);
-  localStorage.setItem('access_token1', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnaW1hc3lzLmNvbSIsImlhdCI6MTcyNzUzMjA4MSwiZXhwIjoxNzI3NTUwMDgxfQ.Ns_MN8W7kPrLjj1f6eMIaO0OqkU1hf8G9a684aJr8UE4_r-d3lR9OcpeSJRJuxF6d8enzN4fUSCqYpMkx5ycUQ');
+  localStorage.setItem('access_token1', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnaW1hc3lzLmNvbSIsImlhdCI6MTcyNzU4MDMxOCwiZXhwIjoxNzI3NTk4MzE4fQ.ks7Tp6SDHHmDnHMG8A_g5qHYabdXt1Tm2YxLWCgss0i7fcurjBHIfq-1clJyWpaaTwIG0hj0SX8jJ7GaBDSrtg');
   const token = localStorage.getItem('access_token1');
   if (token) {
     const authReq = req.clone({

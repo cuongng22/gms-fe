@@ -121,11 +121,14 @@ export class RoleFunctionComponent extends HeaderListBaseComponent implements On
     console.log(this.listFunctionView)
   }
 
-  checkBoxChange(value: any, uuid?: any,) {
-    console.log(value, 'valueeeee')
+  checkBoxChange(value: any, uuid?: any, parentValue?: any) {
     if (uuid) {
       let row: any = this.listFunction.find((s: any) => s.uuid === uuid);
-      row.active = value!!;
+      row.active = !!value;
+
+      let checkExists = parentValue.child.some((s: any) => s.active == true && s.uuid !== parentValue.uuid);
+      let parent = this.listFunction.find((s: any) => s.uuid === parentValue.uuid);
+      parent.active = checkExists
     } else {
       this.listFunction.forEach((s: any) => s.active = value);
     }

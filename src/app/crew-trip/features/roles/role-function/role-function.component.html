@@ -19,10 +19,10 @@
 
 
 </div>
-<div class="row">
+<div class="row" style="min-height: 80vh">
   <div class="col-lg-4 col-md-12">
     <mat-card
-      class="email-compose-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+      class="email-compose-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table"
       [class.component-rtl-enabled]="themeService.isRTLEnabled()"
     >
       <mat-card-header>
@@ -58,7 +58,7 @@
   </div>
   <div class="col-lg-8 col-md-12">
     <mat-card
-      class="tables-of-content-card mb-25 border-radius d-block bg-white border-0 shadow-none"
+      class="tables-of-content-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table"
       [class.component-rtl-enabled]="themeService.isRTLEnabled()"
     >
       <mat-card-header>
@@ -66,19 +66,22 @@
           <h5 class="mb-0 fw-semibold">
             Danh sách chức năng
           </h5>
+          <mat-checkbox
+
+          > Chọn tất cả
+          </mat-checkbox>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
-        <div class="tables-of-content-list">
+        <div class="tables-of-content-list p-0">
           <mat-accordion [multi]="true">
             @for (item of listFunctionView; track item.uuid) {
               <mat-expansion-panel disabled expanded>
-                <mat-expansion-panel-header>
+                <mat-expansion-panel-header class="p-0">
                   <mat-panel-title>
                     <mat-checkbox [checked]="item.active" (change)="checkBoxChange(!item.active)"><strong>{{ item.id }}
                       -{{ item.name }}</strong></mat-checkbox>
                   </mat-panel-title>
-
                 </mat-expansion-panel-header>
                 <ul class="p-0 m-0 list-unstyled bg-white">
                   @for (itemChild of item.child; track itemChild.uuid) {
@@ -86,7 +89,7 @@
                       <li class="d-sm-flex align-items-center justify-content-between">
                       <span class="d-block text-body">
                                   <mat-checkbox [checked]="itemChild.active"
-                                                (change)="checkBoxChange(!itemChild.active,itemChild.uuid)"> {{ itemChild.id }}
+                                                (change)="checkBoxChange(!itemChild.active,itemChild.uuid,item)"> {{ itemChild.id }}
                                     -{{ item.name }}</mat-checkbox>
                                     </span>
                         <span class="d-block text-body">
