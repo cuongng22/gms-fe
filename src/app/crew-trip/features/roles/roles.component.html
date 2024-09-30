@@ -1,8 +1,8 @@
 <!-- Breadcrumb -->
 <ng-container *ngIf="step==1">
   <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
-    <h5 class="mb-0">
-      Kế hoạch
+    <h5 class="mb-0" i18n>
+      Roles
     </h5>
     <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
       <li class="breadcrumb-item d-inline-block position-relative">
@@ -205,7 +205,7 @@
                   <mat-form-field>
                     <mat-label>Tên nhóm quyền</mat-label>
                     <input matInput placeholder="Nhập tên nhóm quyền" formControlName="roleName" required>
-                    @if (!!formGroupDetail.controls.roleName.errors?.required) {
+                    @if (!!formGroupDetail.controls['roleName'].hasError('required')) {
                       <mat-error>Chưa có thông tin</mat-error>
                     }
                   </mat-form-field>
