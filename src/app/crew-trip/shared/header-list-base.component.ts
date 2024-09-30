@@ -101,6 +101,10 @@ export class HeaderListBaseComponent implements OnInit {
       console.log(res)
       if (res && res.status === HttpStatusCode.Ok) {
         this.dataSource.data = res.data.content;
+        this.dataSource.data = this.dataSource.data.map((s: any) => ({
+          ...s,
+          isActiveLabel: !!s.isActive ? $localize`Active` : $localize`Inactive`
+        }))
         this.totalElement = res.data.totalElements;
       }
     } catch (e) {

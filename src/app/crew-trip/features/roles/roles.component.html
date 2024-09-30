@@ -43,12 +43,16 @@
             </mat-form-field>
           </div>
           <div class="col-sm-3">
-            <button mat-fab extended class="step-2-menu-button btn-slot-1" (click)="search()">
-              <i class="material-symbols-outlined">
-                search
-              </i>
-              Search
-            </button>
+            <mat-card-header class="mb-0">
+              <mat-card-title clas>
+                <button mat-button class="search-btn" (click)="search()">
+                  <i class="material-symbols-outlined">
+                    search
+                  </i>
+                  Search
+                </button>
+              </mat-card-title>
+            </mat-card-header>
           </div>
         </div>
       </form>
@@ -215,11 +219,10 @@
             </div>
           </form>
           <div class="btn-box">
-            <button
-              mat-button
-              (click)="closeDetail()"
-              color="warn"
-            >
+            <button type="button" mat-button (click)="closeDetail()" color="warn">
+              <i class="material-symbols-outlined">
+                close
+              </i>
               Cancel
             </button>
             <button
