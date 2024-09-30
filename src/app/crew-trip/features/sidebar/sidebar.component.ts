@@ -5,12 +5,13 @@ import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {NgClass} from '@angular/common';
 import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
 import {ToggleService} from "src/app/common/header/toggle.service";
+import { TranslateModule } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [NgScrollbarModule, MatExpansionModule, RouterLinkActive, RouterLink, NgClass],
+  imports: [NgScrollbarModule, MatExpansionModule, RouterLinkActive, RouterLink, NgClass, TranslateModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })

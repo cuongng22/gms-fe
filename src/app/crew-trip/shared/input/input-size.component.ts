@@ -4,10 +4,10 @@ import { Component, ElementRef, inject, input, OnInit } from '@angular/core';
   selector: 'sizeInput,[sizeInput]',
   standalone: true,
   imports: [],
-  templateUrl: './input.component.html',
-  styleUrl: './input.component.scss'
+  templateUrl: './input-size.component.html',
+  styleUrl: './input-size.component.scss'
 })
-export class InputComponent implements OnInit {
+export class InputSizeComponent implements OnInit {
 
   sizeInput = input<string>('md');
   inputField = inject(ElementRef);

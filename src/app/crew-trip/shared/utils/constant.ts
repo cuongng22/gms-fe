@@ -1,9 +1,11 @@
 export class Constant {
-  static DATE_FORMAT = 'DD/MM/YYYY'
-  static DATE_TIME_FORMAT = 'DD/MM/YYYY HH:mm'
-  static TIME_FORMAT = 'HH:mm'
-  static NUMBER = 'number'
-  static DATE = 'date'
+  static DATE_FORMAT = 'DD/MM/YYYY';
+  static DATE_TIME_FORMAT = 'DD/MM/YYYY HH:mm';
+  static TIME_FORMAT = 'HH:mm';
+  static NUMBER = 'number';
+  static DATE = 'date';
+  static PAGE = 0;
+  static PAGE_SIZE = 20;
 }
 
 export class MESSAGE {
@@ -13,4 +15,6 @@ export class MESSAGE {
   static UPDATE_SUCCESS = 'Cập nhật thành công'
   static UPDATE_FAIL = 'Cập nhật thất bại'
 }
+
+export const DEFAULT_LANGUAGE = 'en';
 

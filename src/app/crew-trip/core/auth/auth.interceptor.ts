@@ -6,19 +6,20 @@ import {
   HttpHeaders,
   HttpRequest
 } from '@angular/common/http';
-import {Observable, tap, throwError, timeout} from 'rxjs';
-import {catchError} from "rxjs/operators";
-import {inject} from "@angular/core";
-import {MatSnackBar} from "@angular/material/snack-bar";
-import {Router} from "@angular/router";
-import {BaseService} from "src/app/crew-trip/core/services/base-service";
+import { Observable, tap, throwError, timeout } from 'rxjs';
+import { catchError } from "rxjs/operators";
+import { inject } from "@angular/core";
+import { MatSnackBar } from "@angular/material/snack-bar";
+import { Router } from "@angular/router";
+import { BaseService } from '../services/base-service';
+import { MESSAGE } from '../../shared/utils/constant';
 
 
 export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
   const notification = inject(MatSnackBar);
   const baseService = inject(BaseService);
   const router = inject(Router);
-  localStorage.setItem('access_token1', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnaW1hc3lzLmNvbSIsImlhdCI6MTcyNzU4MDMxOCwiZXhwIjoxNzI3NTk4MzE4fQ.ks7Tp6SDHHmDnHMG8A_g5qHYabdXt1Tm2YxLWCgss0i7fcurjBHIfq-1clJyWpaaTwIG0hj0SX8jJ7GaBDSrtg');
+  localStorage.setItem('access_token1', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnaW1hc3lzLmNvbSIsImlhdCI6MTcyNzcwOTk2MywiZXhwIjoxNzI3NzI3OTYzfQ.J8i_SZImlsBBIz4LNX99We433wPM8K4ODIWrNq8oT1nVDOaV6V5ZiOqbY-ioqLSZYyVEM6BulEGGLujy0OHw2A');
   const token = localStorage.getItem('access_token1');
   if (token) {
     const authReq = req.clone({
@@ -27,7 +28,7 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
       })
     });
     return next(authReq).pipe(
-      timeout(3000),
+      timeout(10000),
       tap(event => {
         if (event.type === HttpEventType.Response) {
           console.log(req.url, 'returned a response with status', event.status);
@@ -44,7 +45,9 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
         } else {
           console.error('Error occurred: ', error.message);
         }
+        baseService.showError(MESSAGE.ERROR);
         return throwError(() => new Error(error.message));
+        
       })
     );
     // return next(authReq)

@@ -3,11 +3,6 @@
     <i class="ri-check-double-line"></i>
     {{ message }}
   </div>
-} @else if (type == 'error') {
-  <div class="alert alert-bg-danger d-flex align-items-center" role="alert">
-    <i class="ri-error-warning-line"></i>
-    {{ message }}
-  </div>
 } @else if (type == 'warning') {
   <div class="alert alert-bg-warning d-flex align-items-center" role="alert">
     <i class="ri-error-warning-line"></i>
@@ -16,6 +11,12 @@
 } @else if (type == 'info') {
   <div class="alert alert-bg-info d-flex align-items-center" role="alert">
     <i class="ri-error-warning-line"></i>
+    {{ message }}
+  </div>
+}
+@else if (type == 'error') {
+  <div class="alert alert-bg-danger d-flex align-items-center" role="alert">
+    <i class="ri-error-danger-line"></i>
     {{ message }}
   </div>
 }

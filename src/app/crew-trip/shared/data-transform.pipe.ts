@@ -1,5 +1,6 @@
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import moment from 'moment';
+import { Constant } from './utils/constant';
 
 @Pipe({
   name: 'dataTransformPipe',
@@ -12,7 +13,7 @@ export class DataTransformPipe implements PipeTransform {
     const format = args[1];
     if (type === 'number') {
       return value.toLocaleString('vi-VN');
-    } else if (type === 'date') {
+    } else if (type === Constant.DATE) {
       return moment(value).format(format);
     }
     return value;

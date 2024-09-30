@@ -590,7 +590,7 @@ input {
             };
             .mat-mdc-header-cell {
                 border: 0;
-                font-weight: 500;
+                font-weight: 550; //500;
                 text-align: start;
                 padding: 10px 20px;
                 white-space: nowrap;
@@ -2190,6 +2190,18 @@ apx-chart {
                         &.mat-warn {
                             color: var(--whiteColor);
                             background-color: var(--dangerColor);
+
+                            .mdc-button__label {
+                                padding-left: 25px;
+
+                                i {
+                                    left: 0;
+                                    top: 50%;
+                                    font-size: 20px;
+                                    position: absolute;
+                                    transform: translateY(-50%);
+                                }
+                            }
                         }
                         &.mat-primary {
                             color: var(--whiteColor);

@@ -13,8 +13,8 @@ import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
 import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
-import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
-import {InputComponent} from "src/app/crew-trip/shared/input/input.component";
+import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
+import {Constant} from "src/app/crew-trip/shared/utils/constant";
 import {RolesService} from "src/app/crew-trip/core/services/roles-service";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {NgxEditorModule} from "ngx-editor";
@@ -28,12 +28,13 @@ import {
 } from "@angular/material/expansion";
 import {v4 as uuidv4} from 'uuid';
 import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 
 
 @Component({
   selector: 'app-role-function',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, NgxEditorModule, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle],
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, NgxEditorModule, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle],
   templateUrl: './role-function.component.html',
   styleUrl: './role-function.component.scss',
 })
