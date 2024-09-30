@@ -16,13 +16,14 @@
             <mat-form-field appearance="outline" class="full-width">
               <mat-label>{{ 'EMAIL' | translate }}</mat-label>
               <input matInput type="email"  formControlName="email"  required />
-              <mat-error *ngIf="formGroup.get('email')?.hasError('required') && formGroup.get('email')?.touched">
-                Email is required.
+              <mat-error *ngIf="formGroup.get('email')?.invalid && formGroup.get('email')?.touched">
+                <span *ngIf="formGroup.get('email')?.hasError('required')">
+                Email is required
+                </span>
+                <span *ngIf="formGroup.get('email')?.hasError('email')">
+                  Invalid email
+                </span>
               </mat-error>
-              <mat-error *ngIf="formGroup.get('email')?.hasError('email') && formGroup.get('email')?.touched">
-                Vui lòng nhập email hợp lệ.
-              </mat-error>
-<!--              <mat-icon matSuffix>account_circle</mat-icon>-->
             </mat-form-field>
 
             <mat-form-field appearance="outline" class="full-width">
@@ -31,11 +32,8 @@
               <mat-error *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched">
                 Password is required
               </mat-error>
-<!--              <mat-icon matSuffix>lock</mat-icon>-->
             </mat-form-field>
-
             <mat-checkbox>{{ 'REMEMBER_ME' | translate }}</mat-checkbox>
-
             <div class="login-actions">
               <button mat-raised-button type="submit" [disabled]="formGroup.invalid"  class="login-btn">
                 {{ 'LOGIN' | translate }}

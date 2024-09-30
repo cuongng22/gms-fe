@@ -30,4 +30,5 @@ export class StorageService {
   clearAll() {
     localStorage.clear();
   }
+
 }

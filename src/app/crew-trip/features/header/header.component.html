@@ -118,7 +118,7 @@
         <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-menu-btn">
           <img src="images/admin.png" class="rounded-circle" alt="admin-image">
           <span class="fw-semibold text-black">
-                        VNA
+                        {{ userInfo?.email }}
                     </span>
         </button>
         <mat-menu class="profile-menu-dropdown" #profileMenu="matMenu" xPosition="before">
@@ -126,10 +126,10 @@
             <img src="images/admin.png" class="rounded-circle" alt="admin-image">
             <div>
                             <span class="d-block text-black fw-medium">
-                                VNA
+                                  {{ userInfo?.email }}
                             </span>
               <span class="d-block">
-                                Marketing Manager
+                               {{ userInfo?.department }}
                             </span>
             </div>
           </div>

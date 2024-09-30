@@ -36,7 +36,6 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
       }),
       catchError((error: HttpErrorResponse) => {
         if (error.status === 401) {
-          console.error('Unauthorized : ', error.message);
           router.navigate(['auth/login'], {fragment: '401',skipLocationChange: true});
         } else if (error.status === 404) {
           console.error('Not Found: ', error.message);
@@ -47,7 +46,6 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
         }
         baseService.showError(MESSAGE.ERROR);
         return throwError(() => new Error(error.message));
-        
       })
     );
     // return next(authReq)

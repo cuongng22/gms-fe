@@ -11,6 +11,7 @@ import {
   ConfirmDialogComponent,
   ConfirmDialogData
 } from "src/app/crew-trip/component/confirm-dialog/confirm-dialog.component";
+import {UserLogin} from "src/app/crew-trip/shared/models/userInfo";
 
 
 @Component({
@@ -28,7 +29,7 @@ export class HeaderComponent {
   dialog = inject(MatDialog); // Inject MatDialog
   // isSidebarToggled
   isSidebarToggled = false;
-
+  userInfo: UserLogin | null;
   // isToggled
   isToggled = false;
 
@@ -74,6 +75,7 @@ export class HeaderComponent {
 
   ngOnInit() {
     // Listen for fullscreen change events to update the button text
+    this.userInfo = this.userService.getUserLogin();
     document.addEventListener('fullscreenchange', this.onFullscreenChange.bind(this));
     document.addEventListener('webkitfullscreenchange', this.onFullscreenChange.bind(this));
     document.addEventListener('mozfullscreenchange', this.onFullscreenChange.bind(this));
