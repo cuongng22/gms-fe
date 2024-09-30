@@ -1,4 +1,9 @@
-# Trezo
+# GMSFPTTECAPRO
+
+# Build localize
+ng extract-i18n --output-path src/locale
+cp .\src\locale\messages.xlf .\src\locale\messages.vi.xlf
+
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.0.0.
 
