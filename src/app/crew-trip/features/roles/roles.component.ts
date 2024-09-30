@@ -15,17 +15,17 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormControl, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Constant} from "src/app/crew-trip/shared/utils/constant";
-import {InputComponent} from "src/app/crew-trip/shared/input/input.component";
 import {RolesService} from "src/app/crew-trip/core/services/roles-service";
 import {HttpStatusCode} from "@angular/common/http";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
+import { InputSizeComponent } from '../../shared/input/input-size.component';
 
 
 @Component({
   selector: 'app-roles',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent],
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent],
   templateUrl: './roles.component.html',
   styleUrl: './roles.component.scss',
 })

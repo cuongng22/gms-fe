@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {BaseService} from "src/app/crew-trip/core/services/base-service";
 import {firstValueFrom} from "rxjs";
-import { Response, User } from '../../features/users/users.model';
 import { HttpParams } from '@angular/common/http';
+import { ResetPasswordRequest, Response, User } from '../../features/users/users.model';
 
 @Injectable({
   providedIn: 'root'
@@ -22,11 +22,9 @@ export class UsersService extends BaseService {
     localStorage.clear();
   }
 
-
-
-  getUsers(body: any): Promise<Response<User>> {
-    const url = `${this.api}/${this.path}/get-all`
-    let params = new HttpParams({ fromObject: body })
-    return firstValueFrom(this.http.get<Response<User>>(url, { params }));
+  resetPassword(body: ResetPasswordRequest): Promise<any> {
+    const url = `${this.api}/${this.path}/auth/reset-password`
+    return firstValueFrom(this.http.put<any>(url, body, this.httpOptions));
   }
+
 }

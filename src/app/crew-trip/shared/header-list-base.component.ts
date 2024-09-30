@@ -1,14 +1,15 @@
-import {Component, inject, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {SelectionModel} from "@angular/cdk/collections";
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {ToggleService} from "src/app/common/header/toggle.service";
-import {BaseService} from "src/app/crew-trip/core/services/base-service";
-import {FormGroup} from "@angular/forms";
-import {Constant, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
-import {HttpStatusCode} from "@angular/common/http";
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from "@angular/material/table";
+import { SelectionModel } from "@angular/cdk/collections";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { CustomizerSettingsService } from "src/app/customizer-settings/customizer-settings.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { ToggleService } from "src/app/common/header/toggle.service";
+import { BaseService } from "src/app/crew-trip/core/services/base-service";
+import { FormGroup } from "@angular/forms";
+import { Constant, MESSAGE } from "src/app/crew-trip/shared/utils/constant";
+import { HttpStatusCode } from "@angular/common/http";
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-header-list-base',
@@ -18,11 +19,12 @@ import {HttpStatusCode} from "@angular/common/http";
   styleUrl: './header-list-base.component.scss',
 })
 export class HeaderListBaseComponent implements OnInit {
+  Constant = Constant;
   spinner = inject(NgxSpinnerService);
   toggleService = inject(ToggleService);
   themeService = inject(CustomizerSettingsService);
   displayedColumns: string[] = [];
-  dataSource:MatTableDataSource<any, MatPaginator> | any = new MatTableDataSource();
+  dataSource = new MatTableDataSource();
   selection = new SelectionModel<any>(true, []);
   pageSize = Constant.PAGE_SIZE;
   pageIndex = Constant.PAGE;
@@ -95,7 +97,7 @@ export class HeaderListBaseComponent implements OnInit {
         page: this.pageIndex,
         size: this.pageSize,
         ...body || this.formGroupSearch.value
-      });
+      }, path);
       console.log(res)
       if (res && res.status === HttpStatusCode.Ok) {
         this.dataSource.data = res.data.content;
@@ -103,7 +105,7 @@ export class HeaderListBaseComponent implements OnInit {
       }
     } catch (e) {
       console.log(e);
-      this.baseService.showError(MESSAGE.ERROR);
+      // this.baseService.showError(MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -117,27 +119,26 @@ export class HeaderListBaseComponent implements OnInit {
       this.formGroupDetail.patchValue(res)
     } catch (e) {
       console.log(e);
-      this.baseService.showError(MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
   }
 
-  async save(data: any) {
+  async save(data: any, resourcePath?: string) {
     try {
       await this.spinner.show();
       let res;
       if (data.id || data.roleId) {
-        res = await this.baseService.update(data);
+        res = await this.baseService.update(data, resourcePath);
       } else {
-        res = await this.baseService.create(data);
+        res = await this.baseService.create(data, resourcePath);
       }
       console.log(res)
       return res;
-    } catch (e) {
+    } catch (e: any) {
       console.log(e);
       this.baseService.showError(MESSAGE.ERROR);
-      return null;
+      throw new Error(e.message);
     } finally {
       await this.spinner.hide();
     }
@@ -172,7 +173,6 @@ export class HeaderListBaseComponent implements OnInit {
     if (id) {
       await this.detail(id);
     }
-    console.log(this.formGroupDetail.value)
     this.toggleClass();
   }
 

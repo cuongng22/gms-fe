@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {BaseService} from "src/app/crew-trip/core/services/base-service";
 import {firstValueFrom} from "rxjs";
-import { Response, Role } from '../../features/users/users.model';
 import { HttpParams } from '@angular/common/http';
+import { Response, Role } from '../../features/users/users.model';
 
 @Injectable({
   providedIn: 'root'
@@ -12,10 +12,10 @@ export class RolesService extends BaseService {
     super();
     this.path = 'roles';
   }
-  override search(body: any): Promise<any> {
+  override search(body: any): Promise<Response<Role>> {
     const url = `${this.api}/${this.path}/roles-list`
     let params = new HttpParams({fromObject: body})
-    return firstValueFrom(this.http.get<any>(url, {params}));
+    return firstValueFrom(this.http.get<Response<Role>>(url, {params}));
   }
 
   override create(body: any): Promise<any> {
@@ -27,11 +27,4 @@ export class RolesService extends BaseService {
     const url = `${this.api}/${this.path}/role-update/${body.id}`
     return firstValueFrom(this.http.put<any>(url, body, this.httpOptions));
   }
-
-  getRoles(body: any): Promise<Response<Role>> {
-    const url = `${this.api}/${this.path}/roles-list`
-    let params = new HttpParams({ fromObject: body })
-    return firstValueFrom(this.http.get<Response<Role>>(url, { params }));
-  }
-
 }

@@ -23,8 +23,8 @@ export class BaseService {
     })
   };
 
-  search(body: any, path?: string): Promise<any> {
-    const url = `${this.api}/${this.path}/${path ? path : 'get-all'}`
+  search(body: any, resourcePath?: string): Promise<any> {
+    const url = `${this.api}/${this.path}/${resourcePath ?? 'get-all'}`
     let params = new HttpParams({ fromObject: body })
     return firstValueFrom(this.http.get<any>(url, { params }));
   }
@@ -34,18 +34,18 @@ export class BaseService {
     return firstValueFrom(this.http.get<any>(url, this.httpOptions));
   }
 
-  create(body: any): Promise<any> {
-    const url = `${this.api}/${this.path}/them-moi`
+  create(body: any, resourcePath?: string): Promise<any> {
+    const url = `${this.api}/${this.path}/${resourcePath ?? 'them-moi'}`
     return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
   }
 
-  update(body: any): Promise<any> {
-    const url = `${this.api}/${this.path}/${body.id}`
+  update(body: any, resourcePath?: string): Promise<any> {
+    const url = `${this.api}/${this.path}/${resourcePath ?? ''}/${body.id}`
     return firstValueFrom(this.http.put<any>(url, body, this.httpOptions));
   }
 
-  delete(id: any): Promise<any> {
-    const url = `${this.api}/${this.path}/${id}`
+  delete(id: any, resourcePath?: string): Promise<any> {
+    const url = `${this.api}/${this.path}/${resourcePath ?? ''}/${id}`
     return firstValueFrom(this.http.delete<any>(url, this.httpOptions));
   }
 

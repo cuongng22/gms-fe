@@ -1,14 +1,8 @@
-<div
-  class="sidebar-area bg-white transition"
-  [ngClass]="{'active': isSidebarToggled}"
-  [class.card-borderd]="themeService.isCardBordered()"
-  [class.vna-sidebar]="true"
-  [class.hide-sidebar]="themeService.isHideSidebar()"
-  [class.component-dark-theme]="themeService.isDark()"
-  [class.right-sidebar]="themeService.isRightSidebar()"
-  [class.component-rtl-enabled]="themeService.isRTLEnabled()"
-  [class.card-with-box-shadow]="themeService.isCardWithBoxShadow()"
->
+<div class="sidebar-area bg-white transition" [ngClass]="{'active': isSidebarToggled}"
+  [class.card-borderd]="themeService.isCardBordered()" [class.vna-sidebar]="true"
+  [class.hide-sidebar]="themeService.isHideSidebar()" [class.component-dark-theme]="themeService.isDark()"
+  [class.right-sidebar]="themeService.isRightSidebar()" [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+  [class.card-with-box-shadow]="themeService.isCardWithBoxShadow()">
   <div class="logo bg-white-static">
     <a routerLink="/" class="d-flex align-items-center position-relative">
       <img src="images/vietnam-airline-logo.svg" alt="logo-icon">
@@ -17,11 +11,7 @@
       <!--            </span>-->
     </a>
   </div>
-  <div
-    (click)="toggle()"
-    class="burger-menu transition"
-    [ngClass]="{'active': isSidebarToggled}"
-  >
+  <div (click)="toggle()" class="burger-menu transition" [ngClass]="{'active': isSidebarToggled}">
     <span class="top-bar transition d-block bg-black"></span>
     <span class="middle-bar transition d-block bg-black"></span>
     <span class="bottom-bar transition d-block bg-black"></span>
@@ -31,31 +21,31 @@
       <div class="sidebar-menu">
         <mat-accordion>
           <span class="sub-title d-block fw-medium text-uppercase">Dashboard</span>
-<!--          <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"-->
-<!--             [routerLinkActiveOptions]="{exact: true}">-->
-<!--            <i class="material-symbols-outlined">-->
-<!--              dashboard-->
-<!--            </i>-->
-<!--            <span class="title text-white">Dashboard</span>-->
-<!--          </a>-->
-          <mat-expansion-panel class="menu-level-1" [expanded]="checkActiveRoute('category')" (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+          <!--          <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"-->
+          <!--             [routerLinkActiveOptions]="{exact: true}">-->
+          <!--            <i class="material-symbols-outlined">-->
+          <!--              dashboard-->
+          <!--            </i>-->
+          <!--            <span class="title text-white">Dashboard</span>-->
+          <!--          </a>-->
+          <mat-expansion-panel class="menu-level-1" [expanded]="checkActiveRoute('category')"
+            (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
             <mat-expansion-panel-header class="menu-level-1">
               <mat-panel-title>
-<!--                <i class="material-symbols-outlined">-->
-<!--                  business_center-->
-<!--                </i>-->
+                <!--                <i class="material-symbols-outlined">-->
+                <!--                  business_center-->
+                <!--                </i>-->
                 <span class="title text-white">
-                                    DANH MỤC
-                                </span>
+                  DANH MỤC
+                </span>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <ul class="sidebar-sub-menu">
               <li class="sidemenu-item">
-                <a routerLink="admin/users" routerLinkActive="active"
-                   class="sidemenu-link ri-calendar-schedule-fill">
-                   <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
-                                    Tài khoản
-                                </span>
+                <a routerLink="admin/users" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">
+                  <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
+                    Tài khoản
+                  </span>
                 </a>
               </li>
             </ul>
@@ -65,53 +55,52 @@
 
           <span class="sub-title d-block fw-medium text-uppercase">QUẢN LÝ DỮ LIỆU</span>
           <a routerLink="/ke-hoach" class="sidebar-menu-link" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">
+            [routerLinkActiveOptions]="{exact: true}">
             <i class="material-symbols-outlined">
               event_available
             </i>
             <span class="title text-white">Kế hoạch</span>
           </a>
           <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">
+            [routerLinkActiveOptions]="{exact: true}">
             <i class="material-symbols-outlined">
               flight
             </i>
             <span class="title text-white">Lịch bay</span>
           </a>
           <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"
-             [routerLinkActiveOptions]="{exact: true}">
+            [routerLinkActiveOptions]="{exact: true}">
             <i class="material-symbols-outlined">
               hotel
             </i>
             <span class="title text-white">Quản lý đặt phòng</span>
           </a>
           <span class="sub-title d-block fw-medium text-uppercase">HỆ THỐNG</span>
-          <mat-expansion-panel [expanded]="checkActiveRoute('admin')" (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+          <mat-expansion-panel [expanded]="checkActiveRoute('admin')" (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <i class="material-symbols-outlined">
                   business_center
                 </i>
                 <span class="title text-white">
-                                    Quyền và tài khoản
-                                </span>
+                  Quyền và tài khoản
+                </span>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <ul class="sidebar-sub-menu">
               <li class="sidemenu-item">
-                <a routerLink="admin/users" routerLinkActive="active"
-                   class="sidemenu-link ri-calendar-schedule-fill">
-                   <span class="title-font text-white">
-                                    Tài khoản
-                                </span>
+                <a routerLink="admin/users" routerLinkActive="active" class="sidemenu-link ri-group-fill">
+                  <span class="title-font text-white">
+                    {{ 'ACCOUNT' | translate }}
+                  </span>
                 </a>
               </li>
               <li class="sidemenu-item">
-                <a routerLink="admin/roles" routerLinkActive="active"
-                   class="sidemenu-link ri-calendar-schedule-fill">
-                   <span class="title-font text-white">
-                                    Nhóm quyền
-                                </span>
+                <a routerLink="admin/roles" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">
+                  <span class="title-font text-white">
+                    Nhóm quyền
+                  </span>
                 </a>
               </li>
             </ul>

@@ -3,5 +3,43 @@
   "PASSWORD": "Password",
   "REMEMBER_ME": "Remember Me",
   "FORGOT_PASSWORD": "Forgot Password?",
-  "EMAIL" : "Email"
+  "EMAIL": "Email",
+  "ACCOUNT": "Account",
+  "SYSTEM": "System",
+  "ROLE_AND_ACCOUNT": "Role and Account",
+  "ROLE": "Role",
+  "KEY_SEARCH": "Key Search",
+  "STATUS": "Status",
+  "SEARCH": "Search",
+  "ACCOUNT_NAME": "Account Name",
+  "DEPARTMENT": "Department",
+  "ACTION": "Action",
+  "ALL_STATUS": "All Status",
+  "EDIT": "Edit",
+  "DELETE": "Delete",
+  "CHANGE_PASSWORD": "Change Password",
+  "CREATE_ACCOUNT": "Create Account",
+  "UPDATE_ACCOUNT": "Update Account",
+  "ACCOUNT_FULLNAME" : "Account fullname",
+  "GENDER": "Gender",
+  "FEMALE": "Female",
+  "MALE": "Male",
+  "PHONE_NUMBER": "Phone number",
+  "DESCRIPTION" : "Description",
+
+
+  "CREATE": "Create",
+  "SAVE": "Save",
+  "CANCEL": "Cancel",
+
+
+  "REQUIRED": " is required",
+  "FORMAT_INVALID":" is not in correct format.",
+  "MIN_LENGTH_INVALID": " must be greater than %d characters",
+  "PASSWORD_FORMAT_INVALID": " must include number, letter and special character",
+
+
+  "ITEMS_PER_PAGE": "Items per page",
+  "NEXT_PAGE": "Next page",
+  "PRIVIOUS_PAGE": "Privious page"
 }

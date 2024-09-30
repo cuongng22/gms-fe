@@ -15,10 +15,10 @@ import {MatOption, MatSelect, MatSelectModule} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Constant} from "src/app/crew-trip/shared/utils/constant";
-import { InputSizeComponent } from '../../shared/input/input-size.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { InputSizeComponent } from '../../shared/input/input-size.component';
 
 
 export interface PeriodicElement {

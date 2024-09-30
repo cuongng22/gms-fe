@@ -13,6 +13,7 @@ import {HelperService} from "src/app/crew-trip/core/services/helper.service";
 import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {StorageService} from "src/app/crew-trip/core/services/storage.service";
 import {STORAGE_KEY} from "src/app/crew-trip/core/constants/config";
+import { DEFAULT_LANGUAGE } from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-sign-in',
@@ -40,7 +41,7 @@ export class SignInComponent {
     private translate: TranslateService,
     private storageService: StorageService
   ) {
-    this.translate.setDefaultLang('en');
+    this.translate.setDefaultLang(DEFAULT_LANGUAGE);
     this.themeService.isToggled$.subscribe(isToggled => {
       this.isToggled = isToggled;
     });
