@@ -42,6 +42,7 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
           console.error('Not Found: ', error.message);
         } else if (error.status === 500) {
           console.error('Server Error: ', error.message);
+          baseService.showError('Server Error: ' + error.message)
         } else {
           console.error('Error occurred: ', error.message);
         }
