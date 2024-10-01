@@ -59,17 +59,16 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: "Tên nhóm quyền", value: "roleName"},
-    {label: "Quyền", value: "functionCount"},
-    {label: "Tài khoản", value: "userCount"},
-    {label: "Trạng thái", value: "isActiveLabel"},
+    {label: $localize`Role Name`, value: "roleName"},
+    {label: $localize`Function`, value: "functionCount"},
+    {label: $localize`Account`, value: "userCount"},
+    {label: $localize`Status`, value: "isActiveLabel"},
   ];
 
   override async ngOnInit() {
     await Promise.all([
       this.search(),
     ]).then(() => {
-      this.dataSource.data = this.dataSource.data.map((s:any)=>({...s,isActiveLabel:!!s.isActive?'Hoạt động':'Không hoạt động'}))
     });
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }

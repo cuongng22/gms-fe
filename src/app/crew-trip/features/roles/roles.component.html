@@ -13,8 +13,8 @@
           Dashboard
         </a>
       </li>
-      <li class="breadcrumb-item d-inline-block position-relative">
-        Blank Page
+      <li class="breadcrumb-item d-inline-block position-relative" i18n>
+        Roles
       </li>
     </ol>
   </div>
@@ -25,7 +25,7 @@
         <div class="row">
           <div class="col-sm-3">
             <mat-form-field>
-              <mat-label>Từ khóa</mat-label>
+              <mat-label i18n>Keyword</mat-label>
               <input matInput formControlName="s">
               <i class="material-symbols-outlined mr-15" matSuffix>
                 search
@@ -34,18 +34,18 @@
           </div>
           <div class="col-sm-3">
             <mat-form-field>
-              <mat-label>All Status</mat-label>
+              <mat-label i18n>All Status</mat-label>
               <mat-select formControlName="a">
-                <mat-option value="">-- All Status</mat-option>
-                <mat-option value="1">Active</mat-option>
-                <mat-option value="0">InActive</mat-option>
+                <mat-option value="" i18n>--All Status--</mat-option>
+                <mat-option value="1" i18n>Active</mat-option>
+                <mat-option value="0" i18n>InActive</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
           <div class="col-sm-3">
             <mat-card-header class="mb-0">
               <mat-card-title clas>
-                <button mat-button class="search-btn" (click)="search()">
+                <button mat-button class="search-btn" (click)="search()" i18n>
                   <i class="material-symbols-outlined">
                     search
                   </i>
@@ -81,11 +81,11 @@
       <mat-card-title>
       </mat-card-title>
       <mat-card-subtitle>
-        <button class="add-btn" type="button" mat-button (click)="showDetail()">
+        <button class="add-btn" type="button" mat-button (click)="showDetail()" i18n>
           <i class="material-symbols-outlined">
             add
           </i>
-          Tạo mới
+          Add new
         </button>
       </mat-card-subtitle>
     </mat-card-header>
@@ -115,7 +115,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="stt">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header> STT</th>
+            <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
             <td mat-cell *matCellDef="let element; let i = dataIndex">{{ i + 1 }}</td>
           </ng-container>
           @for (innerColumn of _displayedColumns; track innerColumn.value) {
@@ -134,23 +134,23 @@
           }
           <!-- Action Column -->
           <ng-container matColumnDef="action" stickyEnd>
-            <th class="text-end" mat-header-cell *matHeaderCellDef>
+            <th class="text-end" mat-header-cell *matHeaderCellDef i18n>
               Action
             </th>
             <td mat-cell *matCellDef="let element;let i = dataIndex">
               <div class="action-buttons d-flex align-items-center justify-content-end">
                 <a type="button" mat-button (click)="nextStep(i)">
-                  <i class="material-symbols-outlined" title="Chi tiết">
+                  <i class="material-symbols-outlined" title="Detail" i18n-title>
                     link
                   </i>
                 </a>
                 <a type="button" mat-button (click)="_detail(i)">
-                  <i class="material-symbols-outlined" title="Sửa">
+                  <i class="material-symbols-outlined" title="Edit" i18n-title>
                     edit
                   </i>
                 </a>
                 <button type="button" mat-button (click)="delete(i)">
-                  <i class="material-symbols-outlined" title="Xóa">
+                  <i class="material-symbols-outlined" title="Delete" i18n-title>
                     delete
                   </i>
                 </button>
@@ -160,7 +160,7 @@
           <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky: true"></tr>
           <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
           <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell border-none" colspan="1"><strong>No data matching the filter</strong></td>
+            <td class="mat-cell border-none" colspan="1"><span i18n>No data matching the filter</span></td>
           </tr>
           <!--        <tr mat-row *matRowDef="let row; columns: ['child'];"></tr>-->
 
@@ -189,7 +189,8 @@
         <mat-card-header>
           <mat-card-title>
             <h5 class="mb-0">
-              Thêm mới nhóm quyền
+              <span *ngIf="!formGroupDetail.value.id" i18n>Create roles</span>
+              <span *ngIf="formGroupDetail.value.id"i18n>Update roles</span>
             </h5>
           </mat-card-title>
           <mat-card-subtitle>
@@ -207,19 +208,19 @@
               <div class="col-md-12">
                 <div class="form-group">
                   <mat-form-field>
-                    <mat-label>Tên nhóm quyền</mat-label>
-                    <input matInput placeholder="Nhập tên nhóm quyền" formControlName="roleName" required>
+                    <mat-label i18n>Role Name</mat-label>
+                    <input matInput placeholder="Input role name" formControlName="roleName" required i18n-placeholder>
                     @if (!!formGroupDetail.controls['roleName'].hasError('required')) {
-                      <mat-error>Chưa có thông tin</mat-error>
+                      <mat-error><span i18n>Role name</span><span i18n> not empty</span></mat-error>
                     }
                   </mat-form-field>
-                  <mat-checkbox class="mt-10" formControlName="isActive">Hoạt động</mat-checkbox>
+                  <mat-checkbox class="mt-10" formControlName="isActive" i18n>Active</mat-checkbox>
                 </div>
               </div>
             </div>
           </form>
           <div class="btn-box">
-            <button type="button" mat-button (click)="closeDetail()" color="warn">
+            <button type="button" mat-button (click)="closeDetail()" color="warn" i18n>
               <i class="material-symbols-outlined">
                 close
               </i>
@@ -228,7 +229,7 @@
             <button
               mat-button
               (click)="save(formGroupDetail.value)"
-              color="primary"
+              color="primary" i18n
             >
               <i class="material-symbols-outlined">
                 save

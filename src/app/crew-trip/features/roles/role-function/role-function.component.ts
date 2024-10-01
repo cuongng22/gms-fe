@@ -62,7 +62,7 @@ export class RoleFunctionComponent extends HeaderListBaseComponent implements On
 
   _displayedColumnsUser: { label: string; value: string, type?: string, format?: string }[] = [
     {label: "Full Name", value: "full-name"},
-    {label: "Active", value: "active"},
+    {label: "Active", value: "isActiveLabel"},
   ];
   _displayedColumnsFunction: { label: string; value: string, type?: string, format?: string }[] = [
     {label: "Active", value: "active"},
@@ -83,7 +83,10 @@ export class RoleFunctionComponent extends HeaderListBaseComponent implements On
   async _detail() {
     await this.baseService.detail(this.id).then(res => {
       if (res.data && res.status == HttpStatusCode.Ok) {
-        this.listUser = res.data.user || [];
+        this.listUser = res.data.user.map((s: any) => ({
+          ...s,
+          isActiveLabel: !!s.active ? $localize`Active` : $localize`Inactive`
+        }));
         if (res.data.function && res.data.function.length > 0) {
           this.listFunction = res.data.function;
           this.listFunction = this.listFunction.map((s: any) => {
