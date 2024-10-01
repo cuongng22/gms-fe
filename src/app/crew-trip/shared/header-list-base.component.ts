@@ -20,6 +20,7 @@ import { throwError } from 'rxjs';
 })
 export class HeaderListBaseComponent implements OnInit {
   Constant = Constant;
+  MESSAGE = MESSAGE;
   spinner = inject(NgxSpinnerService);
   toggleService = inject(ToggleService);
   themeService = inject(CustomizerSettingsService);
