@@ -1,4 +1,4 @@
-import { Component, effect, inject, model, OnInit } from '@angular/core';
+import { Component, effect, inject, model, OnInit, ViewChild } from '@angular/core';
 import { RouterLink } from "@angular/router";
 import { NgClass, NgIf, TitleCasePipe } from "@angular/common";
 import { MatCardModule } from "@angular/material/card";
@@ -13,7 +13,7 @@ import { DataTransformPipe } from "src/app/crew-trip/shared/data-transform.pipe"
 import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatOption, MatSelect, MatSelectModule } from "@angular/material/select";
 import { MatInput, MatInputModule } from "@angular/material/input";
-import { FormBuilder, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Validators } from "@angular/forms";
+import { FormBuilder, FormControl, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Validators } from "@angular/forms";
 import { Constant, DEFAULT_LANGUAGE, MESSAGE } from "src/app/crew-trip/shared/utils/constant";
 import { RolesService } from "src/app/crew-trip/core/services/roles-service";
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -62,15 +62,16 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
   dialogResetPassword = false;
   passwordInputType = 'password';
   changePassword: ResetPasswordRequest = new ResetPasswordRequest('', '');
+  @ViewChild('newPassword') newPassword: NgModel;
 
   override formGroupDetail = this.fb.group({
     id: [''],
-    department: ['', Validators.compose([Validators.required])],
+    department: ['', Validators.required],
     fullName: ['', Validators.required],
     gender: [true],
     email: ['', [Validators.required, Validators.email]],
     phone: [''],
-    roles: [],
+    roles: [<any>[], Validators.required],
     active: ['true', [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(8), Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')]],
     description: ['']
@@ -99,9 +100,9 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
   }
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
-    { label: 'Full name', value: 'fullName' },
-    { label: 'Department', value: 'department' },
-    { label: 'Email', value: 'email' },
+    { label: $localize`:@@fullName:Full name`, value: 'fullName' },
+    { label: $localize`:@@department:Department`, value: 'department' },
+    { label: $localize`:@@email:Email`, value: 'email' },
   ]
     ;
 
@@ -138,7 +139,8 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
         await this.spinner.show();
         let res = await this.baseService.detail(id);
         console.log(res)
-        this.formGroupDetail.patchValue({ ...res.data, roles: res.data?.roles?.map((role: any) => role.id) });
+        this.formGroupDetail.reset({ ...res.data, roles: res.data?.roles?.map((role: any) => role.id) });
+        // this.formGroupDetail.patchValue({ ...res.data, roles: res.data?.roles?.map((role: any) => role.id) });
         console.log(this.formGroupDetail.value);
         this.toggleClass();
       } catch (e) {
@@ -148,23 +150,25 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
       }
       this.readMode = true;
     } else {
-      this.formGroupDetail.reset({ active: 'true' });
-      Object.keys(this.formGroupDetail.controls).forEach(key => {
-        (this.formGroupDetail.controls as any)[key].setErrors(null);
-      });
+      this.formGroupDetail.reset();
+      this.formGroupDetail.markAsPristine();
+      this.formGroupDetail.markAsUntouched();
       this.toggleClass();
     }
   }
 
   async saveUser() {
-    this.formGroupDetail.markAllAsTouched;
+    this.formGroupDetail.markAllAsTouched();
+    Object.keys(this.formGroupDetail.controls).forEach(key => {
+      (this.formGroupDetail.get(key) as FormControl).markAsTouched();
+    });
     this.formGroupDetail.controls.password.clearValidators();
     this.formGroupDetail.controls.password.updateValueAndValidity();
 
     if (this.formGroupDetail.valid) {
       try {
         let selectedRoles: Role[] = [];
-        (this.formGroupDetail.value.roles as unknown as any[]).forEach(roleId => {
+        this.formGroupDetail.value.roles ?? [].forEach(roleId => {
           selectedRoles.push(this.listRolesForCreate.filter(role => role.roleId == roleId)[0]);
         });
 
@@ -199,9 +203,9 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
     });
   }
 
-  openDialogResetPassword(email: string, newPassword?: NgModel) {
-    newPassword?.reset();
-    newPassword?.control.reset();
+  openDialogResetPassword(email: string) {
+    this.newPassword?.reset();
+    this.newPassword?.control.reset();
     this.changePassword = new ResetPasswordRequest('', email);
     console.log(this.changePassword);
   }
