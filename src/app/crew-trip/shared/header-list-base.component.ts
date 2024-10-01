@@ -141,9 +141,8 @@ export class HeaderListBaseComponent implements OnInit {
       console.log(res)
       return res;
     } catch (e: any) {
-      console.log(e);
+      console.error(e);
       this.baseService.showError(MESSAGE.ERROR);
-      throw new Error(e.message);
     } finally {
       await this.spinner.hide();
     }

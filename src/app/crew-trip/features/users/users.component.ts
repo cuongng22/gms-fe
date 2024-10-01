@@ -171,14 +171,19 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
         this.formGroupDetail.value.roles ?? [].forEach(roleId => {
           selectedRoles.push(this.listRolesForCreate.filter(role => role.roleId == roleId)[0]);
         });
-
-        await super.save({ ...this.formGroupDetail.value, roles: selectedRoles }, 'auth/register');
-        if (this.formGroupDetail.value.id) {
+        const dataSave = { ...this.formGroupDetail.value, roles: selectedRoles };
+        if (dataSave.id) {
+          await this.baseService.update(dataSave, 'update');
           this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
         } else {
+          await this.baseService.create(dataSave, 'auth/register');
           this.baseService.showSuccess(MESSAGE.CREATE_SUCCESS);
         }
+
         this.search();
+      } catch (ex) {
+        console.log(ex);
+        this.baseService.showError(MESSAGE.ERROR);
       } finally {
         this.toggleClass();
       }
