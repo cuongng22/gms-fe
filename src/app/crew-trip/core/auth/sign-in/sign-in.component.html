@@ -10,11 +10,11 @@
       <div class="login-container">
         <mat-card class="login-card">
           <img class="logo" src="images/logo_vna7.png" alt="Vietnam Airlines Logo" />
-          <h2 class="title">VNA CREW TRIP</h2>
+          <h2 class="title" i18n>VNA CREW TRIP</h2>
           <div class="form-login">
           <form ngForm  [formGroup]="formGroup" (ngSubmit)="login()">
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ 'EMAIL' | translate }}</mat-label>
+              <mat-label i18n>EMAIL</mat-label>
               <input matInput type="email"  formControlName="email"  required />
               <mat-error *ngIf="formGroup.get('email')?.invalid && formGroup.get('email')?.touched">
                 <span *ngIf="formGroup.get('email')?.hasError('required')">
@@ -25,9 +25,8 @@
                 </span>
               </mat-error>
             </mat-form-field>
-
             <mat-form-field appearance="outline" class="full-width">
-              <mat-label>{{ 'PASSWORD' | translate }}</mat-label>
+              <mat-label i18n>PASSWORD</mat-label>
               <input matInput type="password" formControlName="password" required />
               <mat-error *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched">
                 Password is required
@@ -38,13 +37,12 @@
               <button mat-raised-button type="submit" [disabled]="formGroup.invalid"  class="login-btn">
                 {{ 'LOGIN' | translate }}
               </button>
-              <a href="#" class="sso-login">Login with SSO</a>
+              <a href="#" class="sso-login" i18n>Login with SSO</a>
             </div>
-            <!-- Vùng chứa liên kết "Quên mật khẩu?" dưới cùng -->
           </form>
           </div>
           <div class="forgot-password-container">
-            <a href="#" class="forgot-password">{{ 'FORGOT_PASSWORD' | translate }}</a>
+            <a href="#" class="forgot-password" i18n>Forgot password?</a>
           </div>
         </mat-card>
       </div>
