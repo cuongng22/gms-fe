@@ -98,49 +98,49 @@
             </mat-expansion-panel-header>
             <ul class="sidebar-sub-menu">
               <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-calendar-schedule-fill">
+                <a routerLink="category/users" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
                     Lịch bay năm
                   </span>
                 </a>
               </li>
               <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-calendar-schedule-fill">
+                <a routerLink="category/users" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
                     Lịch bay mùa
                   </span>
                 </a>
               </li>
               <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-contract-line">
+                <a routerLink="category/contract" routerLinkActive="active" class="sidemenu-link ri-contract-line">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
                     Hợp đồng
                   </span>
                 </a>
               </li>
               <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-hotel-bed-fill">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
+                <a routerLink="category/hotel" routerLinkActive="active" class="sidemenu-link ri-hotel-bed-fill">
+                  <span class="title text-white"  i18n style="font-family: 'Aperto', sans-serif;">
                     Khách sạn
                   </span>
                 </a>
               </li>
               <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-car-line">
+                <a routerLink="category/vehicle" routerLinkActive="active" class="sidemenu-link ri-car-line">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
                     Nhà xe
                   </span>
                 </a>
               </li>
               <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-store-line">
+                <a routerLink="category/users" routerLinkActive="active" class="sidemenu-link ri-store-line">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
                     Thị trường bay
                   </span>
                 </a>
               </li>
               <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-exchange-cny-line">
+                <a routerLink="category/rate" routerLinkActive="active" class="sidemenu-link ri-exchange-cny-line">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
                     Tỉ giá ngoại tệ
                   </span>
@@ -148,29 +148,6 @@
               </li>
             </ul>
           </mat-expansion-panel>
-
-<!--          <span class="sub-title d-block fw-medium text-uppercase">QUẢN LÝ DỮ LIỆU</span>-->
-<!--          <a routerLink="/ke-hoach" class="sidebar-menu-link" routerLinkActive="active"-->
-<!--            [routerLinkActiveOptions]="{exact: true}">-->
-<!--            <i class="material-symbols-outlined">-->
-<!--              event_available-->
-<!--            </i>-->
-<!--            <span class="title text-white">Kế hoạch</span>-->
-<!--          </a>-->
-<!--          <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"-->
-<!--            [routerLinkActiveOptions]="{exact: true}">-->
-<!--            <i class="material-symbols-outlined">-->
-<!--              flight-->
-<!--            </i>-->
-<!--            <span class="title text-white">Lịch bay</span>-->
-<!--          </a>-->
-<!--          <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"-->
-<!--            [routerLinkActiveOptions]="{exact: true}">-->
-<!--            <i class="material-symbols-outlined">-->
-<!--              hotel-->
-<!--            </i>-->
-<!--            <span class="title text-white">Quản lý đặt phòng</span>-->
-<!--          </a>-->
           <mat-expansion-panel class="menu-level-1 right-aligned-header"
                                (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
             <mat-expansion-panel-header>
@@ -219,10 +196,6 @@
               </ul>
             </mat-expansion-panel>
           </mat-expansion-panel>
-
-
-
-
 <!--          <span class="sub-title d-block fw-medium text-uppercase">HỆ THỐNG</span>-->
 <!--          <mat-expansion-panel [expanded]="checkActiveRoute('admin')" (opened)="panelOpenState.set(true)"-->
 <!--            (closed)="panelOpenState.set(false)">-->

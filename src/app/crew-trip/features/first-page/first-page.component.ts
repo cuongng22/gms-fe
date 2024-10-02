@@ -2,9 +2,9 @@ import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA} from '@angu
 import {RouterOutlet} from "@angular/router";
 import {NgClass} from "@angular/common";
 import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
-import {HeaderComponent} from "src/app/crew-trip/features/header/header.component";
-import {SidebarComponent} from "src/app/crew-trip/features/sidebar/sidebar.component";
-import {FooterComponent} from "src/app/crew-trip/features/footer/footer.component";
+import {HeaderComponent} from "src/app/crew-trip/features/menu/header/header.component";
+import {SidebarComponent} from "src/app/crew-trip/features/menu/sidebar/sidebar.component";
+import {FooterComponent} from "src/app/crew-trip/features/menu/footer/footer.component";
 import {NgxSpinnerComponent, NgxSpinnerService} from "ngx-spinner";
 import {ToggleService} from "src/app/common/header/toggle.service";
 import {CustomizerSettingsComponent} from "src/app/customizer-settings/customizer-settings.component";
