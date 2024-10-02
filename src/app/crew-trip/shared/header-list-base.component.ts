@@ -104,7 +104,7 @@ export class HeaderListBaseComponent implements OnInit {
         this.dataSource.data = res.data.content;
         this.dataSource.data = this.dataSource.data.map((s: any) => ({
           ...s,
-          isActiveLabel: !!s.isActive ? $localize`Active` : $localize`Inactive`
+          isActiveLabel: (!!s.isActive || !!s.active) ? $localize`:@@active:Active` : $localize`:@@inactive:Inactive`
         }))
         this.totalElement = res.data.totalElements;
       }

@@ -120,17 +120,26 @@
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
         <ng-container matColumnDef="{{innerColumn.value}}">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">{{ innerColumn.label}}</th>
-          <td mat-cell *matCellDef="let element">{{
-            element[innerColumn.value]|dataTransformPipe:[innerColumn.type,innerColumn.format] }}</td>
+          <td mat-cell *matCellDef="let element">
+            {{element[innerColumn.value]|dataTransformPipe:[innerColumn.type,innerColumn.format] }}
+          </td>
         </ng-container>
         }
         <ng-container matColumnDef="active">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Status</th>
-          <td mat-cell *matCellDef="let element;">{{ element.active ? MESSAGE.ACTIVE : MESSAGE.INACTIVE }}</td>
+          <th mat-header-cell *matHeaderCellDef class="font-weight-bold" mat-sort-header i18n="@@status">Status</th>
+          <td mat-cell *matCellDef="let element;">
+            <span class="badge" [ngClass]="{
+              'text-soft-primary':  element['active'] == true,
+              'text-soft-danger':  element['active'] == false}">
+              {{ element.isActiveLabel}}
+            </span>
+          </td>
         </ng-container>
         <ng-container matColumnDef="roles">
-          <th mat-header-cell *matHeaderCellDef mat-sort-header>Role</th>
-          <td mat-cell *matCellDef="let element">{{ getRoleName(element.roles)}}</td>
+          <th mat-header-cell *matHeaderCellDef class="font-weight-bold" mat-sort-header i18n="@@role">Role</th>
+          <td mat-cell *matCellDef="let element">
+            {{ getRoleName(element.roles)}}
+          </td>
         </ng-container>
         <!-- Action Column -->
         <ng-container matColumnDef="action" stickyEnd>
@@ -202,7 +211,7 @@
                   @if (
                   formGroupDetail.controls.department.hasError('required') &&
                   formGroupDetail.controls.department.touched) {
-                  <mat-error>Department {{MESSAGE.REQUIRED}}</mat-error>
+                  <mat-error i18n="@@departmentRequired">Department {{MESSAGE.REQUIRED}}</mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -219,7 +228,7 @@
                   @if (
                   formGroupDetail.controls.fullName.hasError('required') &&
                   formGroupDetail.controls.fullName.touched) {
-                  <mat-error>Account fullname {{MESSAGE.REQUIRED}}</mat-error>
+                  <mat-error i18n="@@accountFullnameRequired">Account fullname {{MESSAGE.REQUIRED}}</mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -253,12 +262,12 @@
                   @if (
                   formGroupDetail.controls.email.hasError('required') &&
                   formGroupDetail.controls.email.touched) {
-                  <mat-error>Email {{MESSAGE.REQUIRED}}</mat-error>
+                  <mat-error i18n="@@emailRequired">Email {{MESSAGE.REQUIRED}}</mat-error>
                   }
                   @if (
                   formGroupDetail.controls.email.hasError('email') &&
                   formGroupDetail.controls.email.touched) {
-                  <mat-error>Email {{MESSAGE.FORMAT_INVALID}}</mat-error>
+                  <mat-error i18n="@@emailFormatInvalid">Email {{MESSAGE.FORMAT_INVALID}}</mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -275,7 +284,7 @@
                   @if (
                   formGroupDetail.controls.phone.hasError('required') &&
                   formGroupDetail.controls.phone.touched) {
-                  <mat-error>Phone number {{MESSAGE.REQUIRED}}</mat-error>
+                  <mat-error i18n="@@phoneNumberRequired">Phone number {{MESSAGE.REQUIRED}}</mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -289,11 +298,11 @@
                   <mat-select formControlName="roles" multiple>
                     <form class="mb-1" sizeInput="sm">
                       <mat-form-field>
-                        <!-- <mat-label>Tìm kiếm</mat-label> -->
                         <input matInput type="text" name="clearable-input" [(ngModel)]="searchRoleForCreate"
-                          placeholder="Search">
+                          i18n-placeholder="@@search" placeholder="Search">
                         @if (searchRoleForCreate()) {
-                        <button matSuffix mat-icon-button aria-label="Clear" (click)="searchRoleForCreate.set('')">
+                        <button matSuffix mat-icon-button i18n-aria-label="@@clear" aria-label="Clear"
+                          (click)="searchRoleForCreate.set('')">
                           <i class="material-symbols-outlined">
                             close
                           </i>

@@ -102,7 +102,7 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     { label: $localize`:@@fullName:Full name`, value: 'fullName' },
     { label: $localize`:@@department:Department`, value: 'department' },
-    { label: $localize`:@@email:Email`, value: 'email' },
+    { label: $localize`:@@email:Email`, value: 'email' }
   ]
     ;
 
