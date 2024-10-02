@@ -24,6 +24,9 @@ export class MESSAGE {
   static PASSWORD_FORMAT_INVALID = $localize`:@@passwordFormat:must include number, letter and special character`
   static ACTIVE = $localize`:@@active:Active`
   static INACTIVE = $localize`:@@inactive:Inactive`
+  static ITEMS_PER_PAGE= $localize`:@@itemsPerPage:Items per page`
+  static NEXT_PAGE = $localize`:@@nextPage:Next page`
+  static PRIVIOUS_PAGE = $localize`:@@priviousPage:Privious page`
 }
 
 export const DEFAULT_LANGUAGE = 'en';

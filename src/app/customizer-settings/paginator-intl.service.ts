@@ -1,7 +1,7 @@
 import { inject, Injectable } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
-import { DEFAULT_LANGUAGE } from '../crew-trip/shared/utils/constant';
+import { DEFAULT_LANGUAGE, MESSAGE } from '../crew-trip/shared/utils/constant';
 
 @Injectable()
 export class CustomMatPaginatorIntl extends MatPaginatorIntl {
@@ -11,18 +11,13 @@ export class CustomMatPaginatorIntl extends MatPaginatorIntl {
     this.translate.setDefaultLang(DEFAULT_LANGUAGE);
 
     // Tùy chỉnh văn bản cho "Items per page"
-    this.translate.get('ITEMS_PER_PAGE').subscribe((data: string) => {
-      this.itemsPerPageLabel = data;
-    });
+    this.itemsPerPageLabel = MESSAGE.ITEMS_PER_PAGE;
+ 
 
     // Bạn có thể tùy chỉnh thêm các văn bản khác tại đây
-    this.translate.get('NEXT_PAGE').subscribe((data: string) => {
-      this.nextPageLabel = data;
-    });
+    this.nextPageLabel = MESSAGE.NEXT_PAGE
 
-    this.translate.get('PRIVIOUS_PAGE').subscribe((data: string) => {
-      this.previousPageLabel = data;
-    });
+    this.previousPageLabel = MESSAGE.PRIVIOUS_PAGE;
   }
   
   override getRangeLabel = (page: number, pageSize: number, length: number) => {
