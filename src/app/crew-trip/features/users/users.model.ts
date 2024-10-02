@@ -39,6 +39,10 @@ export class Role {
     isActive: number;
 }
 
+export class RoleUpdate {
+    constructor(public id: number, public name: string) { }
+}
+
 export class User {
     email: string;
     fullName: string;

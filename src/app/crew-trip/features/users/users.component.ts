@@ -20,7 +20,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { InputSizeComponent } from '../../shared/input/input-size.component';
-import { ResetPasswordRequest, Response, Role, User } from './users.model';
+import { ResetPasswordRequest, Response, Role, RoleUpdate, User } from './users.model';
 import { CustomMatPaginatorIntl } from 'src/app/customizer-settings/paginator-intl.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
@@ -140,7 +140,6 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
         let res = await this.baseService.detail(id);
         console.log(res)
         this.formGroupDetail.reset({ ...res.data, roles: res.data?.roles?.map((role: any) => role.id) });
-        // this.formGroupDetail.patchValue({ ...res.data, roles: res.data?.roles?.map((role: any) => role.id) });
         console.log(this.formGroupDetail.value);
         this.toggleClass();
       } catch (e) {
@@ -167,9 +166,11 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
 
     if (this.formGroupDetail.valid) {
       try {
-        let selectedRoles: Role[] = [];
-        this.formGroupDetail.value.roles ?? [].forEach(roleId => {
-          selectedRoles.push(this.listRolesForCreate.filter(role => role.roleId == roleId)[0]);
+        let selectedRoles: RoleUpdate[] = [];
+        this.formGroupDetail.value.roles.forEach((roleId: any) => {
+          const selectedRole = this.listRolesForCreate.filter(role => role.roleId == roleId)[0];
+          const roleUpdate = new RoleUpdate(selectedRole.roleId, selectedRole.roleName);
+          selectedRoles.push(roleUpdate);
         });
         const dataSave = { ...this.formGroupDetail.value, roles: selectedRoles };
         if (dataSave.id) {
