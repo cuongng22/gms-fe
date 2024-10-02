@@ -3,13 +3,13 @@
     Grant access
   </h5>
   <div>
-    <button mat-fab extended class="step-2-menu-button btn-slot-1" (click)="addFunction()">
+    <button (click)="addFunction()" class="step-2-menu-button btn-slot-1" extended mat-fab>
       <i class="material-symbols-outlined">
         save
       </i>
       Grant Permission
     </button>
-    <button mat-fab extended class="step-2-menu-button btn-slot-2" (click)="goBack()" i18n>
+    <button (click)="goBack()" class="step-2-menu-button btn-slot-2" extended i18n mat-fab>
       <i class="material-symbols-outlined">
         undo
       </i>
@@ -22,8 +22,8 @@
 <div class="row" style="min-height: 80vh">
   <div class="col-lg-4 col-md-12">
     <mat-card
-      class="email-compose-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table"
       [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+      class="email-compose-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table"
     >
       <mat-card-header>
         <mat-card-title>
@@ -34,13 +34,13 @@
       </mat-card-header>
       <mat-card-content>
         <div class="table-responsive">
-          <table mat-table [dataSource]="listUser">
+          <table [dataSource]="listUser" mat-table>
             <ng-container matColumnDef="stt">
-              <th mat-header-cell *matHeaderCellDef mat-sort-header>#</th>
-              <td mat-cell *matCellDef="let element; let i = dataIndex">{{ i + 1 }}</td>
+              <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
+              <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
             </ng-container>
             @for (innerColumn of _displayedColumnsUser; track innerColumn.value) {
-            <ng-container matColumnDef="{{innerColumn.value}}">
+              <ng-container matColumnDef="{{innerColumn.value}}">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
                 <td mat-cell *matCellDef="let element">
                 <span [ngClass]="{
@@ -48,15 +48,15 @@
             'text-soft-primary': innerColumn.value === 'isActiveLabel' && element['active'] == 1,
             'text-soft-danger': innerColumn.value === 'isActiveLabel' && element['active'] == 0
             }">{{
-            element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-            }}
+                    element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+                  }}
             </span>
-            </td>
-          </ng-container>
+                </td>
+              </ng-container>
             }
 
-            <tr mat-header-row *matHeaderRowDef="displayedColumnsUser"></tr>
-            <tr mat-row *matRowDef="let row; columns: displayedColumnsUser;"></tr>
+            <tr *matHeaderRowDef="displayedColumnsUser" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: displayedColumnsUser;" mat-row></tr>
           </table>
         </div>
       </mat-card-content>
@@ -64,46 +64,48 @@
   </div>
   <div class="col-lg-8 col-md-12">
     <mat-card
-      class="tables-of-content-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table"
       [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+      class="tables-of-content-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table"
     >
       <mat-card-header>
         <mat-card-title>
           <h5 class="mb-0 fw-semibold" i18n>
             List Functions
           </h5>
-          <mat-checkbox i18n>Select all</mat-checkbox>
+          <mat-checkbox (change)="checkBoxChange()" [(ngModel)]="selectAllValue" i18n>Select all
+          </mat-checkbox>
         </mat-card-title>
       </mat-card-header>
       <mat-card-content>
         <div class="tables-of-content-list p-0">
           <mat-accordion [multi]="true">
             @for (item of listFunctionView; track item.uuid) {
-            <mat-expansion-panel disabled expanded>
-              <mat-expansion-panel-header class="p-0">
-                <mat-panel-title>
-                  <mat-checkbox [checked]="item.active" (change)="checkBoxChange(!item.active)"><strong>{{ item.id }}
-            -{{ item.name }}</strong></mat-checkbox>
+              <mat-expansion-panel disabled expanded>
+                <mat-expansion-panel-header class="p-0">
+                  <mat-panel-title>
+                    <mat-checkbox [checked]="item.active" (change)="checkBoxChange(item)">
+                      <strong>{{ item.id }}
+                        -{{ item.name }}</strong></mat-checkbox>
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <ul class="p-0 m-0 list-unstyled bg-white">
-                  @for (itemChild of item.child; track itemChild.uuid) {
-            <ng-container *ngIf="itemChild.name !== itemChild.parent">
-              <li class="d-sm-flex align-items-center justify-content-between">
+                  @for (itemChild of item['child']; track itemChild.uuid) {
+                    <ng-container *ngIf="itemChild.name !== itemChild.parent">
+                      <li class="d-sm-flex align-items-center justify-content-between">
                       <span class="d-block text-body">
                                   <mat-checkbox [checked]="itemChild.active"
-                                                (change)="checkBoxChange(!itemChild.active,itemChild.uuid,item)"> {{ itemChild.id }}
+                                                (change)="checkBoxChange(itemChild)"> {{ itemChild.id }}
                                     -{{ item.name }}</mat-checkbox>
                                     </span>
-                <span class="d-block text-body">
+                        <span class="d-block text-body">
                                         {{ itemChild.name }}
                                     </span>
-              </li>
-            </ng-container>
-            }
+                      </li>
+                    </ng-container>
+                  }
 
-            </ul>
-          </mat-expansion-panel>
+                </ul>
+              </mat-expansion-panel>
             }
 
           </mat-accordion>

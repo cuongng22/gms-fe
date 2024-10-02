@@ -91,14 +91,14 @@ export class HeaderListBaseComponent implements OnInit {
     this.search();
   }
 
-  async search(body?: any, path?: string) {
+  async search(body?: any) {
     try {
       await this.spinner.show();
       let res = await this.baseService.search({
         page: this.pageIndex,
         size: this.pageSize,
         ...body || this.formGroupSearch.value
-      }, path);
+      });
       console.log(res)
       if (res && res.status === HttpStatusCode.Ok) {
         this.dataSource.data = res.data.content;
@@ -121,7 +121,7 @@ export class HeaderListBaseComponent implements OnInit {
       await this.spinner.show();
       let res = await this.baseService.detail(id);
       console.log(res)
-      this.formGroupDetail.patchValue(res)
+      this.formGroupDetail.patchValue(res);
     } catch (e) {
       console.log(e);
     } finally {
@@ -129,16 +129,17 @@ export class HeaderListBaseComponent implements OnInit {
     }
   }
 
-  async save(data: any, resourcePath?: string) {
+  async save(data: any) {
     try {
       await this.spinner.show();
       let res;
       if (data.id || data.roleId) {
-        res = await this.baseService.update(data, resourcePath);
+        res = await this.baseService.update(data);
       } else {
-        res = await this.baseService.create(data, resourcePath);
+        res = await this.baseService.create(data);
       }
       console.log(res)
+      await this.search();
       return res;
     } catch (e: any) {
       console.error(e);
@@ -153,6 +154,7 @@ export class HeaderListBaseComponent implements OnInit {
       await this.spinner.show();
       let res = await this.baseService.delete(id);
       console.log(res)
+      await this.search();
     } catch (e) {
       console.log(e);
       this.baseService.showError(MESSAGE.ERROR);

@@ -15,6 +15,7 @@ export class MESSAGE {
   static CREATE_FAIL = $localize`:@@createFail:Thêm mới thất bại`
   static UPDATE_SUCCESS = $localize`:@@updateSuccess:Cập nhật thành công`
   static UPDATE_FAIL = $localize`:@@updateFail:Cập nhật thất bại`
+  static DATA_EMPTY = $localize`Không tìm thấy dữ liệu`
 
   static REQUIRED = $localize`:@@required:is required`
   static FORMAT_INVALID = $localize`:@@formatInvalid:is not in correct format.`
