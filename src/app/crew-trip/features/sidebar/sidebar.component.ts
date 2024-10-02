@@ -50,6 +50,7 @@ export class SidebarComponent implements OnInit {
 
   checkActiveRoute(panel: string) {
     let currentRoute = this.router.url.split('/');
-    return currentRoute[1] === panel
+    // return currentRoute[1] === panel
+    return true
   }
 }

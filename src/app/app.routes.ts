@@ -4,6 +4,7 @@ import {FirstPageComponent} from "src/app/crew-trip/features/first-page/first-pa
 import {UsersComponent} from "src/app/crew-trip/features/users/users.component";
 import {SignInComponent} from "src/app/crew-trip/core/auth/sign-in/sign-in.component";
 import {RolesComponent} from "src/app/crew-trip/features/roles/roles.component";
+import {AuthGuard} from "src/app/crew-trip/core/guards/menu.guard";
 
 
 export const routes: Routes = [
@@ -15,6 +16,7 @@ export const routes: Routes = [
   {
     path: '',
     component: FirstPageComponent,
+    canActivate: [AuthGuard],
     children: [
       {path: 'ke-hoach', component: KeHoachComponent},
       {
