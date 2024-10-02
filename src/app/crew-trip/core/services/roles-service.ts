@@ -13,7 +13,7 @@ export class RolesService extends BaseService {
     this.path = 'roles';
   }
   override search(body: any): Promise<Response<Role>> {
-    const url = `${this.api}/${this.path}/roles-list`
+    const url = `${this.api}/${this.path}`
     let params = new HttpParams({fromObject: body})
     return firstValueFrom(this.http.get<Response<Role>>(url, {params}));
   }
