@@ -25,8 +25,8 @@ export class UsersService extends BaseService {
   }
 
   override update(body: any, resourcePath?: string): Promise<any> {
-    const url = `${this.api}/${this.path}/${resourcePath ?? ''}`
-    return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
+    const url = `${this.api}/${this.path}/${resourcePath ?? ''}/${body.id}`;
+    return firstValueFrom(this.http.put<any>(url, body, this.httpOptions));
   }
 
   resetPassword(body: ResetPasswordRequest): Promise<any> {
