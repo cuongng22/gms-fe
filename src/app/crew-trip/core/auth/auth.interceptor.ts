@@ -47,7 +47,8 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
           console.error('Error occurred: ', error.message);
         }
         baseService.showError(MESSAGE.ERROR);
-        return throwError(() => new Error(error.message));
+        // return throwError(() => new Error(error.message));
+        return next(authReq)
       })
     );
     // return next(authReq)

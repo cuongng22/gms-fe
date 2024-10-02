@@ -10,12 +10,13 @@ export class Constant {
 }
 
 export class MESSAGE {
-  static ERROR = $localize`:@@error:Có lỗi xảy ra`
-  static CREATE_SUCCESS = $localize`:@@createSuccess:Thêm mới thành công`
-  static CREATE_FAIL = $localize`:@@createFail:Thêm mới thất bại`
-  static UPDATE_SUCCESS = $localize`:@@updateSuccess:Cập nhật thành công`
-  static UPDATE_FAIL = $localize`:@@updateFail:Cập nhật thất bại`
-  static DATA_EMPTY = $localize`Không tìm thấy dữ liệu`
+  static ERROR = $localize`:@@error:Something wrong`
+  static CREATE_SUCCESS = $localize`:@@createSuccess:Create success`
+  static CREATE_FAIL = $localize`:@@createFail:Create fail`
+  static UPDATE_SUCCESS = $localize`:@@updateSuccess:Update success`
+  static UPDATE_FAIL = $localize`:@@updateFail:Update fail`
+  static DATA_EMPTY = $localize`No data found`
+  static DELETE_SUCCESS = $localize`Delete success`
 
   static REQUIRED = $localize`:@@required:is required`
   static FORMAT_INVALID = $localize`:@@formatInvalid:is not in correct format.`

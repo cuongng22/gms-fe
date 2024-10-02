@@ -38,7 +38,7 @@
               <mat-select formControlName="a">
                 <mat-option i18n value="">-- All Status --</mat-option>
                 <mat-option i18n value="1">Active</mat-option>
-                <mat-option i18n value="0">InActive</mat-option>
+                <mat-option i18n value="0">Inactive</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -149,15 +149,15 @@
                     edit
                   </i>
                 </a>
-                <button (click)="delete(i)" mat-button type="button">
+                <a (click)="delete(i)" mat-button type="button">
                   <i class="material-symbols-outlined" i18n-title title="Delete">
                     delete
                   </i>
-                </button>
+                </a>
               </div>
             </td>
           </ng-container>
-          <tr *matHeaderRowDef="displayedColumns;sticky: true" mat-header-row></tr>
+          <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
           <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
           <tr *matNoDataRow class="mat-row">
             <td class="mat-cell border-none" colspan="1"><span i18n>No data matching the filter</span></td>
