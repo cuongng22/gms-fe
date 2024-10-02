@@ -10,7 +10,8 @@ import {VehicleComponent} from "src/app/crew-trip/features/category/vehicle/vehi
 import {ContractComponent} from "src/app/crew-trip/features/category/contract/contract.component";
 import {RateComponent} from "src/app/crew-trip/features/category/rate/rate.component";
 import {HotelComponent} from "src/app/crew-trip/features/category/hotel/hotel.component";
-import {NationComponent} from "src/app/crew-trip/features/nation/nation.component";
+import {NationComponent} from "src/app/crew-trip/features/category/nation/nation.component";
+import { ServiceFeeComponent } from 'src/app/crew-trip/features/category/service-fee/service-fee.component';
 
 
 export const routes: Routes = [
@@ -39,6 +40,7 @@ export const routes: Routes = [
           {path: 'rate', component: RateComponent},
           {path: 'hotel', component: HotelComponent},
           {path: 'nation', component: NationComponent},
+          {path: 'service-fee', component: ServiceFeeComponent},
         ]
       },
     ]

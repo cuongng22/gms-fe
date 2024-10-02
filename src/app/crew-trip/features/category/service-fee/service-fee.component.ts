@@ -1,0 +1,92 @@
+import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
+import {CommonModule, NgClass, NgIf, TitleCasePipe} from "@angular/common";
+import {MatCardModule} from "@angular/material/card";
+import {UsersService} from "src/app/crew-trip/core/services/users-service";
+import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
+import {MatOption, MatSelect} from "@angular/material/select";
+import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NationService} from "src/app/crew-trip/core/services/nation-service";
+import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
+import {RouterLink} from '@angular/router';
+import {MatButtonModule} from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatInput} from '@angular/material/input';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {NoDataRowOutlet} from '@angular/cdk/table';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
+import {HeaderListBaseComponent1} from 'src/app/crew-trip/shared/header-list-base1.component';
+import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-service';
+
+
+@Component({
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+  selector: 'app-service-fee',
+  standalone: true,
+  styleUrl: 'service-fee.component.scss',
+  templateUrl: 'service-fee.component.html'
+})
+
+
+export class ServiceFeeComponent extends HeaderListBaseComponent1 implements OnInit {
+  override baseService = inject(ServiceFeeService);
+  usersService = inject(UsersService);
+  fb = inject(FormBuilder);
+
+  //variable
+  _displayedColumns: {
+    label: string;
+    value: string,
+    type?: string,
+    format?: string
+  }[] = [
+    {label: $localize`Code`, value: "code"},
+    {label: $localize`Name`, value: "name"},
+    {label: $localize`Description`, value: "description"},
+    {label: $localize`Status`, value: "activeLabel"}
+  ]
+  ;
+
+  constructor() {
+    super();
+    this.formGroupSearch = this.fb.group({
+      s: ['',], active: ['',], area: ['',],
+    });
+    this.formGroupDetail = this.fb.group({
+      id: ['',],
+      code: ['', [Validators.required]],
+      name: ['', [Validators.required]],
+      description: ['',],
+      active: [true,]
+    });
+    this.formGroupSearchInit = {...this.formGroupSearch.value}
+    this.formGroupDetailInit = {...this.formGroupDetail.value}
+  }
+
+  override async ngOnInit() {
+    await Promise.all([this.search(),]).then(() => {
+      console.log(this.dataSource)
+    });
+    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
+  }
+
+  async _detail(index: number) {
+    this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
+    /*this.formGroupDetail.patchValue({
+      currencyCode: this.formGroupDetail.value.curCode
+    });*/
+    this.toggleDialogCreate();
+  }
+
+  override async save(): Promise<any> {
+  /*  this.formGroupDetail.patchValue({
+      currencyCode: this.formGroupDetail.value.curCode
+    });*/
+    return super.save();
+  }
+
+}

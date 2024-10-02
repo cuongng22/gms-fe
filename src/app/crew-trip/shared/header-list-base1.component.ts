@@ -163,17 +163,14 @@ export class HeaderListBaseComponent1 implements OnInit {
       await this.spinner.show();
       let res = await this.baseService.delete(this.formGroupDetail.value.id);
       console.log(res)
-      if (res?.status == HttpStatusCode.Ok) {
-        await this.search();
-        this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
-      }
+      this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
+      await this.search();
       await this.closeConfirmDelete();
       return res;
     } catch (e: any) {
       console.log(e);
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
     } finally {
-
       await this.spinner.hide();
     }
   }
