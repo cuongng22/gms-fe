@@ -27,7 +27,7 @@
                 </div>
                 <div class="col-auto" sizeInput="md">
                     <mat-form-field class="mb-25">
-                        <mat-label i18n="@@status">Status</mat-label>   
+                        <mat-label i18n="@@status">Status</mat-label>
                         <mat-select formControlName="status">
                             <mat-option [value]="null" i18n="@@allStatus">-- All Status --</mat-option>
                             <mat-option [value]="true" i18n="@@active">Active</mat-option>
@@ -41,24 +41,24 @@
                         <mat-select formControlName="role" multiple>
                             <form class="mb-1" sizeInput="sm">
                                 <!-- <mat-form-field>
-                                    <input matInput type="text" name="clearable-input" [(ngModel)]="searchRole"
-                                        placeholder="Search">
-                                    @if (searchRole()) {
-                                    <button matSuffix mat-icon-button aria-label="Clear" (click)="searchRole.set('')">
-                                        <i class="material-symbols-outlined">
-                                            close
-                                        </i>
-                                    </button>
-                                    }
-                                </mat-form-field> -->
+                                        <input matInput type="text" name="clearable-input" [(ngModel)]="searchRole"
+                                            placeholder="Search">
+                                        @if (searchRole()) {
+                                        <button matSuffix mat-icon-button aria-label="Clear" (click)="searchRole.set('')">
+                                            <i class="material-symbols-outlined">
+                                                close
+                                            </i>
+                                        </button>
+                                        }
+                                    </mat-form-field> -->
                             </form>
                             <!-- @for (item of listRoles; track $index) {
-                            <mat-option [value]="item.roleId">{{item.roleName}}</mat-option>
-                            } -->
+                                <mat-option [value]="item.roleId">{{item.roleName}}</mat-option>
+                                } -->
                         </mat-select>
                     </mat-form-field>
                 </div>
-                <div class="col-1 d-flex flex-row">
+                <div class="col-auto d-flex flex-row">
                     <mat-card-header class="mb-0 search">
                         <mat-card-title clas>
                             <button class="search-btn" type="submit" mat-button>
@@ -71,6 +71,8 @@
                     </mat-card-header>
                 </div>
             </div>
+
+
         </form>
     </mat-card-content>
 </mat-card>
