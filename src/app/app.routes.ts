@@ -28,7 +28,7 @@ export const routes: Routes = [
       {path: 'ke-hoach', component: KeHoachComponent},
       {
         path: 'admin', children: [
-          // {path: 'users', component: UsersComponent},
+          {path: 'users', component: UsersComponent},
           {path: 'roles', component: RolesComponent},
         ]
       },
