@@ -81,7 +81,7 @@
       <mat-card-title>
       </mat-card-title>
       <mat-card-subtitle>
-        <button (click)="showDetail()" class="add-btn" i18n mat-button type="button">
+        <button (click)="showDialogDetail()" class="add-btn" i18n mat-button type="button">
           <i class="material-symbols-outlined">
             add
           </i>
@@ -144,12 +144,12 @@
                     link
                   </i>
                 </a>
-                <a (click)="_detail(i)" mat-button type="button">
+                <a (click)="showDialogDetail(i,'index')" mat-button type="button">
                   <i class="material-symbols-outlined" i18n-title title="Edit">
                     edit
                   </i>
                 </a>
-                <a (click)="delete(i)" mat-button type="button">
+                <a (click)="showConfirmDelete(element.id)" mat-button type="button">
                   <i class="material-symbols-outlined" i18n-title title="Delete">
                     delete
                   </i>
@@ -181,7 +181,7 @@
 
   <!-- Add New Popup -->
   <div
-    [class.active]="classApplied"
+    [class.active]="showDialogCreate"
     class="add-new-popup"
   >
     <div class="popup-dialog">
@@ -195,7 +195,7 @@
           </mat-card-title>
           <mat-card-subtitle>
             <button
-              (click)="toggleClass()"
+              (click)="toggleDialogCreate()"
               mat-button
             >
               <i class="ri-close-fill"></i>
@@ -227,7 +227,7 @@
               Cancel
             </button>
             <button
-              (click)="save(formGroupDetail.value)"
+              (click)="save()"
               color="primary"
               i18n mat-button
             >

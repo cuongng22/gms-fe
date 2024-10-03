@@ -11,11 +11,11 @@ import {Constant, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {HttpStatusCode} from "@angular/common/http";
 
 @Component({
-  selector: 'app-header-list-base', standalone: true, imports: [], template: `
+  selector: 'app-common-base', standalone: true, imports: [], template: `
 
   `
 })
-export class HeaderListBaseComponent1 implements OnInit {
+export class CommonComponent implements OnInit {
   Constant = Constant;
   MESSAGE = MESSAGE;
   spinner = inject(NgxSpinnerService);
@@ -187,8 +187,10 @@ export class HeaderListBaseComponent1 implements OnInit {
     this.showDialogDelete = !this.showDialogDelete;
   }
 
-  async showDetail(id?: any) {
-    if (id) {
+  async showDialogDetail(id?: any, type?: string) {
+    if (id && type === 'index') {
+      this.formGroupDetail.patchValue(this.dataSource.data[id] as JSON);
+    } else if (id) {
       await this.detail(id);
     }
     this.toggleDialogCreate();

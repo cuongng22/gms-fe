@@ -18,7 +18,7 @@ import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.comp
 import {NoDataRowOutlet} from '@angular/cdk/table';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
-import {HeaderListBaseComponent1} from 'src/app/crew-trip/shared/header-list-base1.component';
+import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 
 
 @Component({
@@ -31,7 +31,7 @@ import {HeaderListBaseComponent1} from 'src/app/crew-trip/shared/header-list-bas
 })
 
 
-export class NationComponent extends HeaderListBaseComponent1 implements OnInit {
+export class NationComponent extends CommonComponent implements OnInit {
   override baseService = inject(NationService);
   usersService = inject(UsersService);
   fb = inject(FormBuilder);

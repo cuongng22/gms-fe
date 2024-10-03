@@ -64,7 +64,7 @@
     <mat-card-title>
     </mat-card-title>
     <mat-card-subtitle>
-      <button (click)="showDetail()" class="add-btn" i18n mat-button type="button">
+      <button (click)="showDialogDetail()" class="add-btn" i18n mat-button type="button">
         <i class="material-symbols-outlined">
           add
         </i>
@@ -125,7 +125,7 @@
               <a mat-button type="button">
 
               </a>
-              <a (click)="_detail(i)" mat-button type="button">
+              <a (click)="showDialogDetail(i,'index')" mat-button type="button">
                 <i class="material-symbols-outlined" i18n-title title="Edit">
                   edit
                 </i>

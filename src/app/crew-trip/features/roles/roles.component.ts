@@ -7,7 +7,6 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import {HeaderListBaseComponent} from "src/app/crew-trip/shared/header-list-base.component";
 import {UsersService} from "src/app/crew-trip/core/services/users-service";
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
 import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
@@ -20,6 +19,7 @@ import {RolesService} from "src/app/crew-trip/core/services/roles-service";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
 import {NoDataRowOutlet} from "@angular/cdk/table";
+import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 
 
 @Component({
@@ -31,7 +31,7 @@ import {NoDataRowOutlet} from "@angular/cdk/table";
 })
 
 
-export class RolesComponent extends HeaderListBaseComponent implements OnInit {
+export class RolesComponent extends CommonComponent implements OnInit {
   override baseService = inject(RolesService);
   usersService = inject(UsersService);
   fb = inject(FormBuilder);
@@ -73,7 +73,7 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }
 
-  override async save(data: any) {
+ /* override async save() {
     //fix tam
     data.name = this.formGroupDetail.value.roleName
     data.id = this.formGroupDetail.value.roleId
@@ -82,16 +82,16 @@ export class RolesComponent extends HeaderListBaseComponent implements OnInit {
     if (this.formGroupDetail.invalid) {
       return;
     }
-    super.save(data).then(res => {
+    super.save().then(res => {
       //todo check de tra ve thong bao
       this.baseService.showSuccess(data.id ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
       this.closeDetail();
     });
-  }
+  }*/
 
   async _detail(index: number) {
     this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
-    this.toggleClass();
+    this.toggleDialogCreate();
   }
 
   async nextStep(index: number) {

@@ -5,7 +5,6 @@ import {UsersService} from "src/app/crew-trip/core/services/users-service";
 import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NationService} from "src/app/crew-trip/core/services/nation-service";
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
 import {RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
@@ -18,8 +17,8 @@ import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.comp
 import {NoDataRowOutlet} from '@angular/cdk/table';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
-import {HeaderListBaseComponent1} from 'src/app/crew-trip/shared/header-list-base1.component';
-import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-service';
+import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
+import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 
 
 @Component({
@@ -32,7 +31,7 @@ import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-s
 })
 
 
-export class ServiceFeeComponent extends HeaderListBaseComponent1 implements OnInit {
+export class ServiceFeeComponent extends CommonComponent implements OnInit {
   override baseService = inject(ServiceFeeService);
   usersService = inject(UsersService);
   fb = inject(FormBuilder);
@@ -83,9 +82,9 @@ export class ServiceFeeComponent extends HeaderListBaseComponent1 implements OnI
   }
 
   override async save(): Promise<any> {
-  /*  this.formGroupDetail.patchValue({
-      currencyCode: this.formGroupDetail.value.curCode
-    });*/
+    /*  this.formGroupDetail.patchValue({
+        currencyCode: this.formGroupDetail.value.curCode
+      });*/
     return super.save();
   }
 

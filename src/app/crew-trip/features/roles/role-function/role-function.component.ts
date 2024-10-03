@@ -7,7 +7,6 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import {HeaderListBaseComponent} from "src/app/crew-trip/shared/header-list-base.component";
 import {UsersService} from "src/app/crew-trip/core/services/users-service";
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
 import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
@@ -28,6 +27,7 @@ import {
 } from "@angular/material/expansion";
 import {v4 as uuidv4} from 'uuid';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 
 
 @Component({
@@ -39,7 +39,7 @@ import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.comp
 })
 
 
-export class RoleFunctionComponent extends HeaderListBaseComponent implements OnInit {
+export class RoleFunctionComponent extends CommonComponent implements OnInit {
   override baseService = inject(RolesService);
   usersService = inject(UsersService);
   functionsService = inject(UsersService);
