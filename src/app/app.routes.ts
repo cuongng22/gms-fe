@@ -5,13 +5,13 @@ import {UsersComponent} from "src/app/crew-trip/features/users/users.component";
 import {SignInComponent} from "src/app/crew-trip/core/auth/sign-in/sign-in.component";
 import {RolesComponent} from "src/app/crew-trip/features/roles/roles.component";
 import {AuthGuard} from "src/app/crew-trip/core/guards/menu.guard";
-import {FeeComponent} from "src/app/crew-trip/features/category/fee/fee.component";
 import {VehicleComponent} from "src/app/crew-trip/features/category/vehicle/vehicle.component";
 import {ContractComponent} from "src/app/crew-trip/features/category/contract/contract.component";
 import {RateComponent} from "src/app/crew-trip/features/category/rate/rate.component";
 import {HotelComponent} from "src/app/crew-trip/features/category/hotel/hotel.component";
 import {NationComponent} from "src/app/crew-trip/features/category/nation/nation.component";
 import { ServiceFeeComponent } from 'src/app/crew-trip/features/category/service-fee/service-fee.component';
+import {CrewsComponent} from "src/app/crew-trip/features/category/crews/crews.component";
 
 
 export const routes: Routes = [
@@ -28,19 +28,19 @@ export const routes: Routes = [
       {path: 'ke-hoach', component: KeHoachComponent},
       {
         path: 'admin', children: [
-          {path: 'users', component: UsersComponent},
+          // {path: 'users', component: UsersComponent},
           {path: 'roles', component: RolesComponent},
         ]
       },
       {
         path: 'category', children: [
-          {path: 'fee', component: FeeComponent},
           {path: 'vehicle', component: VehicleComponent},
           {path: 'contract', component: ContractComponent},
           {path: 'rate', component: RateComponent},
           {path: 'hotel', component: HotelComponent},
           {path: 'nation', component: NationComponent},
           {path: 'service-fee', component: ServiceFeeComponent},
+          {path: 'crews', component: CrewsComponent},
         ]
       },
     ]

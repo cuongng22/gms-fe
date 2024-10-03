@@ -1,6 +1,6 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {firstValueFrom} from "rxjs";
+import {firstValueFrom, Observable} from "rxjs";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {ActionAlertComponent} from "src/app/crew-trip/shared/action-alert/action-alert.component";
 import {environment} from 'src/environments/environment';
@@ -43,6 +43,19 @@ export class BaseService {
     const url = `${this.api}/${this.path}/${body.id}`
     return firstValueFrom(this.http.put<any>(url, body, this.httpOptions));
   }
+
+  async exportData(): Promise<Blob> {
+    const url = `${this.api}/${this.path}/download`
+    const httpOptionsExport = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/octet-stream'
+      }),
+      responseType: 'blob' as 'json'
+    };
+    return await firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
+  }
+
 
   delete(id: any): Promise<any> {
     const url = `${this.api}/${this.path}/${id}`

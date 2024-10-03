@@ -8,7 +8,9 @@ import {ToggleService} from "src/app/common/header/toggle.service";
 import {BaseService} from "src/app/crew-trip/core/services/base-service";
 import {FormGroup} from "@angular/forms";
 import {Constant, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
-import {HttpStatusCode} from "@angular/common/http";
+import {HttpClient, HttpStatusCode} from "@angular/common/http";
+import { saveAs } from 'file-saver';
+
 
 @Component({
   selector: 'app-common', standalone: true, imports: [], template: `
@@ -45,7 +47,8 @@ export class CommonComponent implements OnInit {
   showDialogCreate = false;
   showDialogDelete = false;
 
-  constructor() {
+  constructor(
+  ) {
     this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
       this.isSidebarToggled = isSidebarToggled;
     });
@@ -219,5 +222,9 @@ export class CommonComponent implements OnInit {
 
     this.toggleDialogDelete();
     console.log(this.formGroupDetail.value)
+  }
+
+  downloadFile(blob: Blob, filename: string) {
+    saveAs(blob, filename);
   }
 }
