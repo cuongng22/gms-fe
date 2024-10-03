@@ -7,7 +7,6 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import {HeaderListBaseComponent} from "src/app/crew-trip/shared/header-list-base.component";
 import {KeHoachService} from "src/app/crew-trip/core/services/ke-hoach-service";
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
 import {MatFormField, MatLabel} from "@angular/material/form-field";
@@ -15,10 +14,11 @@ import {MatOption, MatSelect, MatSelectModule} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Constant} from "src/app/crew-trip/shared/utils/constant";
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { InputSizeComponent } from '../../shared/input/input-size.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {InputSizeComponent} from '../../shared/input/input-size.component';
+import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 
 
 export interface PeriodicElement {
@@ -36,22 +36,9 @@ export interface PeriodicElement {
 })
 
 
-export class KeHoachComponent extends HeaderListBaseComponent implements OnInit {
+export class KeHoachComponent extends CommonComponent implements OnInit {
   override baseService = inject(KeHoachService);
   fb = inject(FormBuilder);
-
-  constructor(
-    @Inject(LOCALE_ID) public locale: string
-
-    // public _actionAlertComponent:ActionAlertComponent
-  ) {
-    super();
-    this.formGroup = this.fb.group({
-      username: ['', Validators.required],
-      password: ['',]
-    });
-  }
-
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: 'Người tạo ID', value: 'nguoiTaoId'},
@@ -101,6 +88,18 @@ export class KeHoachComponent extends HeaderListBaseComponent implements OnInit 
     {label: 'Căn cứ', value: 'canCu'}
   ]
   ;
+
+  constructor(
+    @Inject(LOCALE_ID) public locale: string
+
+    // public _actionAlertComponent:ActionAlertComponent
+  ) {
+    super();
+    this.formGroup = this.fb.group({
+      username: ['', Validators.required],
+      password: ['',]
+    });
+  }
 
   override async ngOnInit() {
     await Promise.all([

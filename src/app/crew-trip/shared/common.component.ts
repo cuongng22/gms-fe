@@ -11,7 +11,7 @@ import {Constant, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {HttpStatusCode} from "@angular/common/http";
 
 @Component({
-  selector: 'app-common-base', standalone: true, imports: [], template: `
+  selector: 'app-common', standalone: true, imports: [], template: `
 
   `
 })
