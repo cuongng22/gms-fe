@@ -104,8 +104,8 @@ export class CommonComponent implements OnInit {
           this.dataSource.data = res.data.content;
           this.dataSource.data = this.dataSource.data.map((s: any) => ({
             ...s,
-            isActiveLabel: !!s.isActive ? $localize`:@@active:Active` : $localize`:@@inactive:Inactive`,
-            activeLabel: !!s.active ? $localize`:@@active:Active` : $localize`:@@inactive:Inactive`
+            isActiveLabel: !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
+            activeLabel: !!s.active ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
           }))
           this.totalElement = res.data.totalElements;
         }

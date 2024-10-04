@@ -7,22 +7,22 @@ import { MatMenuModule } from "@angular/material/menu";
 import { MatTableModule } from "@angular/material/table";
 import { MatPaginatorIntl, MatPaginatorModule } from "@angular/material/paginator";
 import { MatCheckboxModule } from "@angular/material/checkbox";
-import { HeaderListBaseComponent } from "src/app/crew-trip/shared/header-list-base.component";
 import { UsersService } from "src/app/crew-trip/core/services/users-service";
 import { DataTransformPipe } from "src/app/crew-trip/shared/data-transform.pipe";
 import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
 import { MatOption, MatSelect, MatSelectModule } from "@angular/material/select";
 import { MatInput, MatInputModule } from "@angular/material/input";
-import { FormBuilder, FormControl, FormGroup, FormsModule, NgModel, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Constant, DEFAULT_LANGUAGE, MESSAGE } from "src/app/crew-trip/shared/utils/constant";
+import { FormBuilder, FormControl, FormsModule, NgModel, ReactiveFormsModule, Validators } from "@angular/forms";
+import { MESSAGE } from "src/app/crew-trip/shared/utils/constant";
 import { RolesService } from "src/app/crew-trip/core/services/roles-service";
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { InputSizeComponent } from '../../shared/input/input-size.component';
-import { ResetPasswordRequest, Response, Role, User } from './users.model';
+import { ResetPasswordRequest, Role } from './users.model';
 import { CustomMatPaginatorIntl } from 'src/app/customizer-settings/paginator-intl.service';
-import { TranslateModule, TranslateService } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
+import { CommonComponent } from '../../shared/common.component';
 
 export interface PeriodicElement {
   projectName: string;
@@ -46,7 +46,7 @@ export interface PeriodicElement {
 })
 
 
-export class UsersComponent extends HeaderListBaseComponent implements OnInit {
+export class UsersComponent extends CommonComponent implements OnInit {
   override baseService = inject(UsersService);
   rolesService = inject(RolesService);
   fb = inject(FormBuilder);
@@ -133,7 +133,7 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
     }
   }
 
-  override async showDetail(id?: any) {
+  async showDetail(id?: any) {
     if (id) {
       try {
         await this.spinner.show();
@@ -141,7 +141,7 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
         console.log(res)
         this.formGroupDetail.reset({ ...res.data, roles: res.data?.roles?.map((role: any) => role.id) });
         console.log(this.formGroupDetail.value);
-        this.toggleClass();
+        this.toggleDialogCreate();
       } catch (e) {
         console.log(e);
       } finally {
@@ -152,7 +152,7 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
       this.formGroupDetail.reset();
       this.formGroupDetail.markAsPristine();
       this.formGroupDetail.markAsUntouched();
-      this.toggleClass();
+      this.toggleDialogCreate();
     }
   }
 
@@ -176,7 +176,7 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
           await this.baseService.update(dataSave, 'update');
           this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
         } else {
-          await this.baseService.create(dataSave, 'auth/register');
+          await this.baseService.create(dataSave);
           this.baseService.showSuccess(MESSAGE.CREATE_SUCCESS);
         }
 
@@ -185,19 +185,12 @@ export class UsersComponent extends HeaderListBaseComponent implements OnInit {
         console.log(ex);
         this.baseService.showError(MESSAGE.ERROR);
       } finally {
-        this.toggleClass();
+        this.toggleDialogCreate();
       }
 
 
 
     }
-  }
-
-  getRoleName(roles: any[]) {
-    if (roles) {
-      return roles.map(role => role.name).join('; ');
-    }
-    return '';
   }
 
   override search(): Promise<void> {
