@@ -9,10 +9,10 @@ import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {MatInput} from "@angular/material/input";
-import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
+import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
+import {MatOption, MatSelect, MatSelectModule} from "@angular/material/select";
+import {MatInput, MatInputModule} from "@angular/material/input";
+import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
@@ -20,35 +20,65 @@ import {NoDataRowOutlet} from "@angular/cdk/table";
 import {NationService} from "src/app/crew-trip/core/services/nation-service";
 import {UsersService} from "src/app/crew-trip/core/services/users-service";
 import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
+import {MatDatepickerModule} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
+import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
+import {map, Observable, startWith} from "rxjs";
+import {debounceTime} from "rxjs/operators";
 
 @Component({
   selector: 'app-hotel',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
+  imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
+    MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
+    MatTableModule, MatPaginatorModule
+  ],
   templateUrl: './hotel.component.html',
   styleUrl: './hotel.component.scss'
 })
 export class HotelComponent extends CommonComponent implements OnInit {
   override baseService = inject(HotelService);
-  usersService = inject(UsersService);
-  fb = inject(FormBuilder);
+  formBuilder = inject(FormBuilder);
+
+  options: any[] = [{
+    key: 'HAN',
+    value: 'HAN'
+  },
+    {
+      key: 'SGN',
+      value: 'SGN'
+    }];
 
 
 
+  filteredOptionsMarket: Observable<any[]>;
+
+  override formGroupSearch = this.formBuilder.group({
+    s: [''], //Keyword Search
+    marketCode: [''],
+    contractEndDate: [''],
+    active: [''],
+  });
 
   override async ngOnInit() {
+    super.ngOnInit();
+    this.filteredOptionsMarket = this.formGroupSearch.controls.marketCode.valueChanges.pipe(
+      debounceTime(300), // Đợi 300ms sau lần nhập cuối cùng
+      startWith(''),
+      map(value => this._filterMarket(value ?? '')));
 
+    this.displayedColumns = ['stt', 'market', 'hotel', 'address', 'contactDetails', 'status', 'notes'];
+    this.search();
   }
 
-  override async downloadFile(): Promise<any> {
-    try {
-      const response = await this.baseService.exportData();
-      return super.downloadFile(response,'exported-data.xlsx');
-    } catch (error) {
-      console.error('Export failed', error);  // Xử lý khi có lỗi xảy ra
+  private _filterMarket(value: string): any[] {
+    if (!value) {
+      return this.options;
     }
-
+    const filterValue = value.toLowerCase();
+    return this.options.filter(option => option.value.toLowerCase().includes(filterValue));
   }
 
 }
