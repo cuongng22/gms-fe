@@ -37,6 +37,7 @@
     "@types/luxon": "^1.11.1",
     "@types/sprintf-js": "^1.1.4",
     "apexcharts": "~3.49.2",
+    "bootstrap": "^5.3.3",
     "express": "^4.18.2",
     "file-saver": "^2.0.5",
     "luxon": "^1.28.1",

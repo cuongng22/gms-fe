@@ -81,7 +81,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
-      keySearch: [''],
+      keywords: [''],
       status: [''],
       role: ['']
     });
@@ -112,7 +112,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
       this.search()
     ]).then(() => {
     });
-    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'roles', 'active', 'action'];
+    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'roles', 'status', 'action'];
 
 
 
@@ -196,7 +196,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
   override search(): Promise<void> {
     return super.search({
       active: this.formGroupSearch.controls['status'].value,
-      s: this.formGroupSearch.controls['keySearch'].value,
+      s: this.formGroupSearch.controls['keywords'].value,
       role: this.formGroupSearch.controls['role'].value
     });
   }

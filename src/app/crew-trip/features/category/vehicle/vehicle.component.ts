@@ -14,18 +14,24 @@ import { map, Observable, startWith } from 'rxjs';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { debounceTime } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
 
 @Component({
   selector: 'app-vehicle',
   standalone: true,
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
-    MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule
+    MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
+    MatTableModule, MatPaginatorModule
   ],
   templateUrl: './vehicle.component.html',
   styleUrl: './vehicle.component.scss'
 })
 export class VehicleComponent extends CommonComponent implements OnInit {
+  override baseService = inject(VehicleService);
+
   formBuilder = inject(FormBuilder);
 
   options: any[] = [{
@@ -40,10 +46,10 @@ export class VehicleComponent extends CommonComponent implements OnInit {
   filteredOptionsMarket: Observable<any[]>;
 
   override formGroupSearch = this.formBuilder.group({
-    keySearch: [''],
-    market: [''],
-    periodOfTheContract: [''],
-    status: [''],
+    s: [''], //Keyword Search
+    marketCode: [''],
+    contractEndDate: [''],
+    active: [''],
   });
 
   override formGroupDetail = this.formBuilder.group({
@@ -61,10 +67,13 @@ export class VehicleComponent extends CommonComponent implements OnInit {
 
   override ngOnInit(): void {
     super.ngOnInit();
-    this.filteredOptionsMarket = this.formGroupSearch.controls.market.valueChanges.pipe(
+    this.filteredOptionsMarket = this.formGroupSearch.controls.marketCode.valueChanges.pipe(
       debounceTime(300), // Đợi 300ms sau lần nhập cuối cùng
-      startWith(''), 
+      startWith(''),
       map(value => this._filterMarket(value ?? '')));
+
+    this.displayedColumns = ['stt', 'market', 'carRentalCompany', 'address', 'contactDetails', 'status', 'notes'];
+    this.search();
   }
 
   private _filterMarket(value: string): any[] {

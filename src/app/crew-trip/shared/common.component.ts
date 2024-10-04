@@ -7,7 +7,7 @@ import {NgxSpinnerService} from "ngx-spinner";
 import {ToggleService} from "src/app/common/header/toggle.service";
 import {BaseService} from "src/app/crew-trip/core/services/base-service";
 import {FormGroup} from "@angular/forms";
-import {Constant, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {Constant, MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
 import {HttpClient, HttpStatusCode} from "@angular/common/http";
 import { saveAs } from 'file-saver';
 
@@ -96,7 +96,7 @@ export class CommonComponent implements OnInit {
     try {
       await this.spinner.show();
       let res = await this.baseService.search({
-        page: this.pageIndex, size: this.pageSize, ...body || this.formGroupSearch.value
+        page: this.pageIndex, size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
       });
       console.log(res)
       if (res) {
@@ -105,7 +105,7 @@ export class CommonComponent implements OnInit {
           this.dataSource.data = this.dataSource.data.map((s: any) => ({
             ...s,
             isActiveLabel: !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
-            activeLabel: !!s.active ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
+            activeLabel: !!s.active || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
           }))
           this.totalElement = res.data.totalElements;
         }
