@@ -86,13 +86,12 @@
     <mat-card-title>
     </mat-card-title>
     <mat-card-subtitle>
-      <!-- <button class="add-btn" type="button" mat-button
-          (click)="showDetail()">
-          <i class="material-symbols-outlined">
-            add
-          </i>
-          <span i18n="@@create">Create</span>
-        </button> -->
+      <button class="add-btn" type="button" mat-button (click)="exportFile(null,'Car Rentals.xlsx')">
+        <i class="material-symbols-outlined">
+          download
+        </i>
+        <span i18n="@@export">Export</span>
+      </button>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>

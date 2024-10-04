@@ -1,7 +1,3 @@
-a {
-  text-decoration: none;
-}
-
 ::ng-deep .sidebar-area {
   overflow: hidden;
   position: fixed;

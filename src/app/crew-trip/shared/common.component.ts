@@ -1,14 +1,14 @@
-import {Component, inject, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {SelectionModel} from "@angular/cdk/collections";
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {ToggleService} from "src/app/common/header/toggle.service";
-import {BaseService} from "src/app/crew-trip/core/services/base-service";
-import {FormGroup} from "@angular/forms";
-import {Constant, MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
-import {HttpClient, HttpStatusCode} from "@angular/common/http";
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from "@angular/material/table";
+import { SelectionModel } from "@angular/cdk/collections";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { CustomizerSettingsService } from "src/app/customizer-settings/customizer-settings.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { ToggleService } from "src/app/common/header/toggle.service";
+import { BaseService } from "src/app/crew-trip/core/services/base-service";
+import { FormGroup } from "@angular/forms";
+import { Constant, MESSAGE, removeNullValues } from "src/app/crew-trip/shared/utils/constant";
+import { HttpClient, HttpStatusCode } from "@angular/common/http";
 import { saveAs } from 'file-saver';
 
 
@@ -210,7 +210,7 @@ export class CommonComponent implements OnInit {
   }
 
   async showConfirmDelete(id: any) {
-    this.formGroupDetail.patchValue({id: id});
+    this.formGroupDetail.patchValue({ id: id });
     this.toggleDialogDelete();
   }
 
@@ -227,4 +227,19 @@ export class CommonComponent implements OnInit {
   downloadFile(blob: Blob, filename: string) {
     saveAs(blob, filename);
   }
+
+  async exportFile(body?: any, filename?: string) {
+    try {
+      await this.spinner.show();
+      let res = await this.baseService.exportData({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) });
+      console.log(res)
+      this.downloadFile(res, filename ?? 'export.xlsx');
+    } catch (e: any) {
+      console.log(e);
+      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
 }

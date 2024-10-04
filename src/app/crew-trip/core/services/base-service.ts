@@ -44,14 +44,15 @@ export class BaseService {
     return firstValueFrom(this.http.put<any>(url, body, this.httpOptions));
   }
 
-  async exportData(sourcePath?: string): Promise<Blob> {
+  async exportData(body?: any, sourcePath?: string): Promise<Blob> {
     const url = `${this.api}/${this.path}/${sourcePath ?? 'export'}`
     const httpOptionsExport = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Accept': 'application/octet-stream'
       }),
-      responseType: 'blob' as 'json'
+      responseType: 'blob' as 'json',
+      params: new HttpParams({ fromObject: body })
     };
     return await firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
   }
