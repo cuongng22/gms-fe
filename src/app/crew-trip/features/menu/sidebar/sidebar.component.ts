@@ -6,6 +6,7 @@ import {NgClass} from '@angular/common';
 import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
 import {ToggleService} from "src/app/common/header/toggle.service";
 import { TranslateModule } from '@ngx-translate/core';
+import { menu } from './sidebar.model';
 
 
 @Component({
@@ -17,6 +18,8 @@ import { TranslateModule } from '@ngx-translate/core';
 })
 export class SidebarComponent implements OnInit {
   router = inject(Router);
+
+  menu = menu;
 
   // Mat Expansion
   readonly panelOpenState = signal(false);
