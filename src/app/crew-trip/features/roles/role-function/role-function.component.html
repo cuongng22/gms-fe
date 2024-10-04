@@ -79,26 +79,24 @@
       <mat-card-content>
         <div class="tables-of-content-list p-0">
           <mat-accordion [multi]="true">
-            @for (item of listFunctionView; track item.uuid) {
+            @for (item of listFunction; track item.name) {
               <mat-expansion-panel disabled expanded>
                 <mat-expansion-panel-header class="p-0">
                   <mat-panel-title>
                     <mat-checkbox [checked]="item.active" (change)="checkBoxChange(item)">
-                      <strong>{{ item.id }}
-                        -{{ item.name }}</strong></mat-checkbox>
+                      <strong>{{item.label}}</strong></mat-checkbox>
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <ul class="p-0 m-0 list-unstyled bg-white">
-                  @for (itemChild of item['child']; track itemChild.uuid) {
-                    <ng-container *ngIf="itemChild.name !== itemChild.parent">
+                  @for (itemChild of item['child']; track itemChild.name) {
+                    <ng-container>
                       <li class="d-sm-flex align-items-center justify-content-between">
                       <span class="d-block text-body">
                                   <mat-checkbox [checked]="itemChild.active"
-                                                (change)="checkBoxChange(itemChild)"> {{ itemChild.id }}
-                                    -{{ item.name }}</mat-checkbox>
+                                                (change)="checkBoxChange(itemChild)">{{ itemChild.name }}</mat-checkbox>
                                     </span>
                         <span class="d-block text-body">
-                                        {{ itemChild.name }}
+                                        {{ itemChild.alias }}
                                     </span>
                       </li>
                     </ng-container>

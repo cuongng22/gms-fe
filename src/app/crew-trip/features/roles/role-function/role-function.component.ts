@@ -25,9 +25,9 @@ import {
   MatExpansionPanelHeader,
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
-import {v4 as uuidv4} from 'uuid';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
+import {FunctionsService} from "src/app/crew-trip/core/services/functions-service";
 
 
 @Component({
@@ -42,7 +42,7 @@ import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 export class RoleFunctionComponent extends CommonComponent implements OnInit {
   override baseService = inject(RolesService);
   usersService = inject(UsersService);
-  functionsService = inject(UsersService);
+  functionsService = inject(FunctionsService);
   fb = inject(FormBuilder);
 
   //variable
@@ -70,14 +70,28 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   }
 
   override async ngOnInit() {
-    await Promise.all([
-      this._detail(),
-    ]).then(() => {
-      this.buildView();
-      this.watch();
-    });
-    this.displayedColumnsUser = [...this._displayedColumnsUser.map(s => s.value)];
-    this.displayedColumnsFunction = ['select', ...this._displayedColumnsFunction.map(s => s.value)];
+    try {
+      await this.spinner.show();
+      await Promise.all([
+        // this.getAllFunction(),
+        this._detail(),
+      ]).then(() => {
+        console.log(this.listFunction)
+        /*this.listRoleFunction.forEach((rf: any) => {
+          let existsFunction = this.listFunction.find((f: any) => rf.functionId == f.id);
+          existsFunction.active = true;
+        });*/
+        // this.buildView();
+        // this.watch();
+
+      });
+      this.displayedColumnsUser = [...this._displayedColumnsUser.map(s => s.value)];
+      this.displayedColumnsFunction = ['select', ...this._displayedColumnsFunction.map(s => s.value)];
+    } catch (e) {
+      console.log(e)
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
   watch() {
@@ -85,32 +99,55 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
     this.selectAllValue = currentCheck.length === this.listFunction.length;
   }
 
+  async getAllFunction() {
+    let res = (await this.functionsService.search({})).data;
+
+    Object.keys(res).forEach(key => {
+      const controller = res[key];
+      /*this.listRoleFunction.forEach((rf: any) => {
+          let existsFunction = this.listFunction.find((f: any) => rf.functionId == f.id);
+          existsFunction.active = true;
+        });*/
+      this.listFunction = [...this.listFunction, {
+        name: key,
+        label: controller.label,
+        active: true,
+        child: controller.functionsDtos
+      }];
+    })
+    console.log(this.listFunction);
+  }
+
   async _detail() {
     try {
       await this.baseService.detail(this.id).then(res => {
-        if (res.data && res.status == HttpStatusCode.Ok) {
+        if (res.data) {
+          //user
           this.listUser = res.data.user.map((s: any) => ({
             ...s,
             isActiveLabel: !!s.active ? $localize`Active` : $localize`Inactive`
           }));
-          if (res.data.function && res.data.function.length > 0) {
-            this.listFunction = res.data.function;
-            this.listFunction = this.listFunction.map((s: any) => {
-              const parent = s.name.split('-')[0];
-              return {
-                ...s,
-                parent: parent,
-                uuid: uuidv4()
-              }
+          //role-func
+          this.listRoleFunction = res.data['role-function'];
+
+          //func
+          let objFunction = res.data.function;
+          Object.keys(objFunction).forEach(key => {
+            let func = objFunction[key];
+
+            func.functionsDtos.forEach((f: any) => {
+              let existsFunction = this.listRoleFunction.some((rf: any) => rf.functionId == f.id);
+              console.log(f,existsFunction)
+              f.active = existsFunction;
             });
-          }
-          if (res.data['role-function'] && res.data['role-function'].length > 0) {
-            this.listRoleFunction = res.data['role-function'];
-            this.listRoleFunction.forEach((rf: any) => {
-              let existsFunction = this.listFunction.find((f: any) => rf.functionId == f.id);
-              existsFunction.active = true;
-            });
-          }
+
+            this.listFunction = [...this.listFunction, {
+              name: key,
+              label: func.label,
+              active: null,
+              child: func.functionsDtos
+            }];
+          })
         } else {
           this.baseService.showWarning(MESSAGE.DATA_EMPTY)
         }
@@ -157,6 +194,9 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   }
 
   addFunction() {
+    this.listFunction.forEach((s:any)=>{
+
+    });
     let bodyReq = this.listFunction.filter((s: any) => s.active === true).map((s: any) => ({functionId: s.id}));
     this.baseService.addFunction(this.id, {data: bodyReq}).then((res) => {
       if (res && res.status == HttpStatusCode.Ok) {
