@@ -1,15 +1,15 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from "@angular/material/table";
-import { SelectionModel } from "@angular/cdk/collections";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { CustomizerSettingsService } from "src/app/customizer-settings/customizer-settings.service";
-import { NgxSpinnerService } from "ngx-spinner";
-import { ToggleService } from "src/app/common/header/toggle.service";
-import { BaseService } from "src/app/crew-trip/core/services/base-service";
-import { FormGroup } from "@angular/forms";
-import { Constant, MESSAGE, removeNullValues } from "src/app/crew-trip/shared/utils/constant";
-import { HttpClient, HttpStatusCode } from "@angular/common/http";
-import { saveAs } from 'file-saver';
+import {Component, inject, OnInit, ViewChild} from '@angular/core';
+import {MatTableDataSource} from "@angular/material/table";
+import {SelectionModel} from "@angular/cdk/collections";
+import {MatPaginator, PageEvent} from "@angular/material/paginator";
+import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
+import {NgxSpinnerService} from "ngx-spinner";
+import {ToggleService} from "src/app/common/header/toggle.service";
+import {BaseService} from "src/app/crew-trip/core/services/base-service";
+import {FormGroup} from "@angular/forms";
+import {Constant, MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
+import {HttpClient, HttpStatusCode} from "@angular/common/http";
+import {saveAs} from 'file-saver';
 
 
 @Component({
@@ -47,8 +47,7 @@ export class CommonComponent implements OnInit {
   showDialogCreate = false;
   showDialogDelete = false;
 
-  constructor(
-  ) {
+  constructor() {
     this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
       this.isSidebarToggled = isSidebarToggled;
     });
@@ -96,7 +95,8 @@ export class CommonComponent implements OnInit {
     try {
       await this.spinner.show();
       let res = await this.baseService.search({
-        page: this.pageIndex, size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+        page: this.pageIndex,
+        size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
       });
       console.log(res)
       if (res) {
@@ -191,9 +191,9 @@ export class CommonComponent implements OnInit {
   }
 
   async showDialogDetail(id?: any, type?: string) {
-    if (id && type === 'index') {
+    if (id != null && type === 'index') {
       this.formGroupDetail.patchValue(this.dataSource.data[id] as JSON);
-    } else if (id) {
+    } else if (id != null) {
       await this.detail(id);
     }
     this.toggleDialogCreate();
@@ -210,7 +210,7 @@ export class CommonComponent implements OnInit {
   }
 
   async showConfirmDelete(id: any) {
-    this.formGroupDetail.patchValue({ id: id });
+    this.formGroupDetail.patchValue({id: id});
     this.toggleDialogDelete();
   }
 
@@ -231,7 +231,7 @@ export class CommonComponent implements OnInit {
   async exportFile(body?: any, filename?: string) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.exportData({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) });
+      let res = await this.baseService.exportData({...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)});
       console.log(res)
       this.downloadFile(res, filename ?? 'export.xlsx');
     } catch (e: any) {

@@ -72,7 +72,7 @@
           <h5 class="mb-0 fw-semibold" i18n>
             List Functions
           </h5>
-          <mat-checkbox (change)="checkBoxChange()" [(ngModel)]="selectAllValue" i18n>Select all
+          <mat-checkbox (change)="checkBoxChange()" [(ngModel)]="selectAllChecked" i18n>Select all
           </mat-checkbox>
         </mat-card-title>
       </mat-card-header>
@@ -83,8 +83,8 @@
               <mat-expansion-panel disabled expanded>
                 <mat-expansion-panel-header class="p-0">
                   <mat-panel-title>
-                    <mat-checkbox [checked]="item.active" (change)="checkBoxChange(item)">
-                      <strong>{{item.label}}</strong></mat-checkbox>
+                    <mat-checkbox [checked]="item.active" (change)="checkBoxChange(item)" [indeterminate]="item.indeterminate">
+                      <strong>{{ item.label }}</strong></mat-checkbox>
                   </mat-panel-title>
                 </mat-expansion-panel-header>
                 <ul class="p-0 m-0 list-unstyled bg-white">
@@ -93,7 +93,7 @@
                       <li class="d-sm-flex align-items-center justify-content-between">
                       <span class="d-block text-body">
                                   <mat-checkbox [checked]="itemChild.active"
-                                                (change)="checkBoxChange(itemChild)">{{ itemChild.name }}</mat-checkbox>
+                                                (change)="checkBoxChange(itemChild,item)">{{ itemChild.name }}</mat-checkbox>
                                     </span>
                         <span class="d-block text-body">
                                         {{ itemChild.alias }}

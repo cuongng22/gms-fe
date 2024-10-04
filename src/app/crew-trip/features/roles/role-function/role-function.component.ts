@@ -18,7 +18,6 @@ import {RolesService} from "src/app/crew-trip/core/services/roles-service";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {NgxEditorModule} from "ngx-editor";
 import {HttpStatusCode} from "@angular/common/http";
-import lodash from "lodash";
 import {
   MatAccordion,
   MatExpansionPanel,
@@ -47,6 +46,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
 
   //variable
   @Input() id: any;
+  @Input() roleObject: any;
   @Output() backStep = new EventEmitter<any>();
   listUser: any = [];
   listFunction: any = [];
@@ -54,16 +54,14 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   listRoleFunction: any = [];
   displayedColumnsUser: string[] = [];
   displayedColumnsFunction: string[] = [];
-  _displayedColumnsUser: { label: string; value: string, type?: string, format?: string }[] = [
-    {label: "Full Name", value: "full-name"},
-    {label: "Active", value: "isActiveLabel"},
-  ];
-  _displayedColumnsFunction: { label: string; value: string, type?: string, format?: string }[] = [
-    {label: "Active", value: "active"},
-    {label: "ID", value: "id"},
-    {label: "Name", value: "name"},
-  ];
-  selectAllValue: boolean = false;
+  _displayedColumnsUser: { label: string; value: string, type?: string, format?: string }[] = [{
+    label: "Full Name", value: "full-name"
+  }, {label: "Active", value: "isActiveLabel"},];
+  _displayedColumnsFunction: { label: string; value: string, type?: string, format?: string }[] = [{
+    label: "Active", value: "active"
+  }, {label: "ID", value: "id"}, {label: "Name", value: "name"},];
+  selectAllChecked: boolean = false;
+  selectAllIndeterminate: boolean = false;
 
   constructor() {
     super();
@@ -72,18 +70,8 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   override async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        // this.getAllFunction(),
-        this._detail(),
-      ]).then(() => {
-        console.log(this.listFunction)
-        /*this.listRoleFunction.forEach((rf: any) => {
-          let existsFunction = this.listFunction.find((f: any) => rf.functionId == f.id);
-          existsFunction.active = true;
-        });*/
-        // this.buildView();
-        // this.watch();
-
+      await Promise.all([// this.getAllFunction(),
+        this._detail(),]).then(() => {
       });
       this.displayedColumnsUser = [...this._displayedColumnsUser.map(s => s.value)];
       this.displayedColumnsFunction = ['select', ...this._displayedColumnsFunction.map(s => s.value)];
@@ -94,38 +82,13 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
     }
   }
 
-  watch() {
-    let currentCheck = this.listFunction.filter((s: any) => s.active === true);
-    this.selectAllValue = currentCheck.length === this.listFunction.length;
-  }
-
-  async getAllFunction() {
-    let res = (await this.functionsService.search({})).data;
-
-    Object.keys(res).forEach(key => {
-      const controller = res[key];
-      /*this.listRoleFunction.forEach((rf: any) => {
-          let existsFunction = this.listFunction.find((f: any) => rf.functionId == f.id);
-          existsFunction.active = true;
-        });*/
-      this.listFunction = [...this.listFunction, {
-        name: key,
-        label: controller.label,
-        active: true,
-        child: controller.functionsDtos
-      }];
-    })
-    console.log(this.listFunction);
-  }
-
   async _detail() {
     try {
       await this.baseService.detail(this.id).then(res => {
         if (res.data) {
           //user
           this.listUser = res.data.user.map((s: any) => ({
-            ...s,
-            isActiveLabel: !!s.active ? $localize`Active` : $localize`Inactive`
+            ...s, isActiveLabel: !!s.active ? $localize`Active` : $localize`Inactive`
           }));
           //role-func
           this.listRoleFunction = res.data['role-function'];
@@ -137,16 +100,24 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
 
             func.functionsDtos.forEach((f: any) => {
               let existsFunction = this.listRoleFunction.some((rf: any) => rf.functionId == f.id);
-              console.log(f,existsFunction)
               f.active = existsFunction;
             });
 
             this.listFunction = [...this.listFunction, {
-              name: key,
-              label: func.label,
-              active: null,
-              child: func.functionsDtos
+              name: key, label: func.label, active: null, child: func.functionsDtos
             }];
+
+            //check indeterminate
+            this.listFunction.forEach((s: any) => {
+              let has = s.child.some((s: any) => s.active == true);
+              let every = s.child.every((s: any) => s.active == true);
+              s.indeterminate = has && !every;
+              s.active = every;
+            });
+            let has = this.listFunction.some((s: any) => s.active == true);
+            let every = this.listFunction.every((s: any) => s.active == true);
+            this.selectAllIndeterminate = has && !every;
+            this.selectAllChecked = every;
           })
         } else {
           this.baseService.showWarning(MESSAGE.DATA_EMPTY)
@@ -158,35 +129,63 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
     }
   }
 
-  async buildView() {
-    this.listFunctionView = lodash.chain(this.listFunction).groupBy("parent").map((v: any, k) => {
-      let currrent = this.listFunction.find((s: any) => s.parent === k);
-      return {
-        name: k,
-        active: currrent.active,
-        id: currrent.id,
-        uuid: currrent.uuid,
-        child: v
+  checkBoxChange(row?: any, parent?: any) {
+    let nextValue = row ? !row.active : this.selectAllChecked;
+    if (row?.child) {
+      if (nextValue) {
+        row.child.forEach((s: any) => {
+          this.listRoleFunction = [...this.listRoleFunction, {
+            roleName: this.roleObject.roleName, functionId: s.id, functionName: s.name, functionDescription: s.alias
+          }];
+          s.active = nextValue;
+        });
+      } else {
+        row.child.forEach((s: any) => {
+          this.listRoleFunction.pop((s1: any) => s1.roleId == s.id);
+          s.active = nextValue;
+        });
+        this.selectAllChecked = false;
       }
-    }).value();
-    console.log(this.listFunctionView)
-  }
-
-  checkBoxChange(row?: any) {
-    let nextValue = !row?.active;
-    if (row && row.child) {
-      row.child.forEach((s: any) => {
-        let row = this.listFunction.find((s1: any) => s.uuid === s1.uuid);
-        row.active = nextValue;
-      });
+      row.active = nextValue;
+      row.indeterminate = false;
     } else if (row) {
-      let cur = this.listFunction.find((s: any) => s.uuid === row.uuid);
-      cur.active = nextValue;
+      if (nextValue) {
+        this.listRoleFunction = [...this.listRoleFunction, {
+          roleName: this.roleObject.roleName, functionId: row.id, functionName: row.name, functionDescription: row.alias
+        }];
+      } else {
+        this.listRoleFunction.pop((s: any) => s.roleId == row.id);
+        this.selectAllChecked = false;
+      }
+      row.active = nextValue;
+
+      //check indeterminate
+      let has = parent.child.some((s: any) => s.active == true);
+      let every = parent.child.every((s: any) => s.active == true);
+      parent.indeterminate = has && !every;
+      parent.active = every;
     } else {
-      this.listFunction.forEach((s: any) => s.active = this.selectAllValue);
+      if (nextValue) {
+        this.listFunction.forEach((item: any) => {
+          item.child.forEach((s: any) => {
+            this.listRoleFunction = [...this.listRoleFunction, {
+              roleName: this.roleObject.roleName, functionId: s.id, functionName: s.name, functionDescription: s.alias
+            }];
+            s.active = nextValue;
+          });
+          item.indeterminate = false;
+          item.active = nextValue;
+        });
+      } else {
+        this.listFunction.forEach((item: any) => {
+          item.child.forEach((s: any) => {
+            this.listRoleFunction.pop((s1: any) => s1.roleId == s.id);
+            s.active = nextValue;
+          });
+          item.active = nextValue;
+        })
+      }
     }
-    this.buildView();
-    this.watch();
   }
 
   goBack() {
@@ -194,11 +193,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   }
 
   addFunction() {
-    this.listFunction.forEach((s:any)=>{
-
-    });
-    let bodyReq = this.listFunction.filter((s: any) => s.active === true).map((s: any) => ({functionId: s.id}));
-    this.baseService.addFunction(this.id, {data: bodyReq}).then((res) => {
+    this.baseService.addFunction(this.id, {data: this.listRoleFunction}).then((res) => {
       if (res && res.status == HttpStatusCode.Ok) {
         this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
       } else if (res.status == HttpStatusCode.BadRequest) {

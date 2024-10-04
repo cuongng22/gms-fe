@@ -244,5 +244,5 @@
 </ng-container>
 <!-- Add Function Popup -->
 <ng-container *ngIf="step==2">
-  <app-role-function (backStep)="backStep()" [id]="formGroupDetail.value.roleId"></app-role-function>
+  <app-role-function (backStep)="backStep()" [id]="formGroupDetail.value.roleId" [roleObject]="formGroupDetail.value"></app-role-function>
 </ng-container>
