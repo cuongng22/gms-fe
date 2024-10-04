@@ -268,18 +268,18 @@
                   top: 8px;
                 };
 
-                &::after {
-                  top: 50%;
-                  left: 18px;
-                  width: 10px;
-                  content: '';
-                  height: 10px;
-                  transition: .3s;
-                  border-radius: 50%;
-                  position: absolute;
-                  transform: translateY(-50%);
-                  border: 1px solid var(--bodyColor);
-                }
+                // &::after {
+                //   top: 50%;
+                //   left: 18px;
+                //   width: 10px;
+                //   content: '';
+                //   height: 10px;
+                //   transition: .3s;
+                //   border-radius: 50%;
+                //   position: absolute;
+                //   transform: translateY(-50%);
+                //   border: 1px solid var(--bodyColor);
+                // }
 
                 .mat-content {
                   .mat-expansion-panel-header-title, .mat-expansion-panel-header-description {
