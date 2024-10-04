@@ -1,17 +1,26 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { map, Observable, startWith } from 'rxjs';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { debounceTime } from 'rxjs/operators';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-vehicle',
   standalone: true,
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-    MatFormField, MatInputModule
+    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
+    MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule
   ],
   templateUrl: './vehicle.component.html',
   styleUrl: './vehicle.component.scss'
@@ -19,10 +28,22 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 export class VehicleComponent extends CommonComponent implements OnInit {
   formBuilder = inject(FormBuilder);
 
+  options: any[] = [{
+    key: 'HAN',
+    value: 'HAN'
+  },
+  {
+    key: 'SGN',
+    value: 'SGN'
+  }];
+
+  filteredOptionsMarket: Observable<any[]>;
+
   override formGroupSearch = this.formBuilder.group({
     keySearch: [''],
+    market: [''],
+    periodOfTheContract: [''],
     status: [''],
-    role: ['']
   });
 
   override formGroupDetail = this.formBuilder.group({
@@ -38,4 +59,20 @@ export class VehicleComponent extends CommonComponent implements OnInit {
     description: ['']
   });
 
+  override ngOnInit(): void {
+    super.ngOnInit();
+    this.filteredOptionsMarket = this.formGroupSearch.controls.market.valueChanges.pipe(
+      debounceTime(300), // Đợi 300ms sau lần nhập cuối cùng
+      startWith(''), 
+      map(value => this._filterMarket(value ?? '')));
+  }
+
+  private _filterMarket(value: string): any[] {
+    if (!value) {
+      return this.options;
+    }
+    const filterValue = value.toLowerCase();
+    return this.options.filter(option => option.value.toLowerCase().includes(filterValue));
+  }
 }
+

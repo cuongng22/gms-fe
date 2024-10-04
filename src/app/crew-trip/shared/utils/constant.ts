@@ -30,4 +30,3 @@ export class MESSAGE {
 }
 
 export const DEFAULT_LANGUAGE = 'en';
-
