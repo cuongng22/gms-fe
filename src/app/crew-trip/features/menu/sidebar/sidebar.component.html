@@ -31,54 +31,51 @@
 
             <!-- SubMenu -->
             @if(menu1.subMenu.length > 0) {
-            <ul class="sidebar-sub-menu">
-              @for (subMenu1 of menu1.subMenu; track $index) {
-              <li class="sidemenu-item">
-                <a [routerLink]="subMenu1.path" class="sidemenu-link" [ngClass]="subMenu1.icon">
-                  <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
-                    {{ subMenu1.title }}
-                  </span>
-                </a>
-              </li>
+              <ul class="sidebar-sub-menu">
+                @for (subMenu1 of menu1.subMenu; track $index) {
+                <li class="sidemenu-item">
+                  <a [routerLink]="subMenu1.path" class="sidemenu-link" [ngClass]="subMenu1.icon">
+                    <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
+                      {{ subMenu1.title }}
+                    </span>
+                  </a>
+                </li>
 
-              <!-- Menu level 2 -->
-              @if (subMenu1.menu) {
-                @for (menu2 of subMenu1.menu; track $index) {
-                  <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
-                    (closed)="panelOpenState.set(false)">
-                    <!-- Menu -->
-                    <mat-expansion-panel-header>
-                      <mat-panel-title>
-                        <span class="title text-white">
-                          {{menu2.title}}
-                        </span>
-                      </mat-panel-title>
-                    </mat-expansion-panel-header>
-
-                    <!-- SubMenu -->
-                    @if(menu2.subMenu.length > 0) {
-                    <ul class="sidebar-sub-menu">
-                      @for (subMenu2 of menu2.subMenu; track $index) {
-                      <li class="sidemenu-item">
-                        <a [routerLink]="subMenu2.path" routerLinkActive="active" class="sidemenu-link" [ngClass]="subMenu2.icon">
-                          <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
-                            {{ subMenu2.title }}
+                <!-- Menu level 2 -->
+                @if (subMenu1.menu) {
+                  @for (menu2 of subMenu1.menu; track $index) {
+                    <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
+                      (closed)="panelOpenState.set(false)">
+                      <!-- Menu -->
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          <span class="title text-white">
+                            {{menu2.title}}
                           </span>
-                        </a>
-                      </li>
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
 
+                      <!-- SubMenu -->
+                      @if(menu2.subMenu.length > 0) {
+                      <ul class="sidebar-sub-menu">
+                        @for (subMenu2 of menu2.subMenu; track $index) {
+                        <li class="sidemenu-item">
+                          <a [routerLink]="subMenu2.path" routerLinkActive="active" class="sidemenu-link" [ngClass]="subMenu2.icon">
+                            <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
+                              {{ subMenu2.title }}
+                            </span>
+                          </a>
+                        </li>
+
+                        }
+                      </ul>
                       }
-                    </ul>
-                    }
-                  </mat-expansion-panel>
+                    </mat-expansion-panel>
+                  }
                 }
               }
-
-              }
-            </ul>
+              </ul>
             }
-
-
           </mat-expansion-panel>
           }
         </mat-accordion>
