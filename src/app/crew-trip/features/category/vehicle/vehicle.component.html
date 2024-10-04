@@ -21,14 +21,14 @@
       <div class="row">
         <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
           <div class="row">
-            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" sizeInput="md">
+            <div class="col" sizeInput="md">
               <mat-form-field>
                 <mat-label i18n="@@keywords">Keywords</mat-label>
                 <input matInput formControlName="s">
               </mat-form-field>
             </div>
 
-            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" sizeInput="md">
+            <div class="col" sizeInput="md">
               <mat-form-field>
                 <mat-label i18n="market">Market</mat-label>
                 <input type="text" matInput formControlName="marketCode" [matAutocomplete]="marketComplete">
@@ -40,7 +40,7 @@
               </mat-form-field>
             </div>
 
-            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" sizeInput="md">
+            <div class="col" sizeInput="md">
               <mat-form-field class="mb-25">
                 <mat-label i18n="@@status">Status</mat-label>
                 <mat-select formControlName="active">
@@ -51,7 +51,7 @@
               </mat-form-field>
             </div>
 
-            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" sizeInput="md">
+            <div class="col" sizeInput="md">
               <mat-form-field appearance="fill">
                 <mat-label i18n="@@contractEndDate">Contract end date</mat-label>
                 <input formControlName="contractEndDate" matInput [matDatepicker]="pickerContractEndDate">
@@ -63,7 +63,7 @@
         </div>
         <div class="col-1 d-flex flex-row">
           <mat-card-header class="mb-0 search">
-            <mat-card-title clas>
+            <mat-card-title>
               <button class="search-btn" type="submit" mat-button>
                 <i class="material-symbols-outlined">
                   search
@@ -84,6 +84,7 @@
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
   <mat-card-header class="mb-10">
     <mat-card-title>
+      <h5 i18n="@@carRentalCompanies">Car rental companies</h5>
     </mat-card-title>
     <mat-card-subtitle>
       <button class="add-btn" type="button" mat-button (click)="exportFile(null,'Car Rentals.xlsx')">

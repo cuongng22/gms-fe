@@ -17,220 +17,67 @@
     <div class="sidebar-inner">
       <div class="sidebar-menu">
         <mat-accordion>
-<!--          <span class="sub-title d-block fw-medium text-uppercase">Dashboard</span>-->
-          <!--          <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"-->
-          <!--             [routerLinkActiveOptions]="{exact: true}">-->
-          <!--            <i class="material-symbols-outlined">-->
-          <!--              dashboard-->
-          <!--            </i>-->
-          <!--            <span class="title text-white">Dashboard</span>-->
-          <!--          </a>-->
-          <mat-expansion-panel class="menu-level-1 right-aligned-header"
-                               (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+          @for (menu1 of menu; track $index) {
+          <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)">
+            <!-- Menu -->
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <span class="title text-white uppercase-text" i18n>
-                 Quản lý dữ liệu
+                <span class="title text-white uppercase-text">
+                  {{menu1.title}}
                 </span>
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <ul class="sidebar-sub-menu">
-              <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-calendar-line">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;text-up">
-                    Kế hoạch ngân sách
-                  </span>
-                </a>
-              </li>
-              <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-folder-chart-line">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;text-up">
-                    Lịch bay ngày
-                  </span>
-                </a>
-              </li>
-              <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-shopping-cart-line">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;text-up">
-                    Quản lý đặt phòng/xe
-                  </span>
-                </a>
-              </li>
-              <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-bill-line">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;text-up">
-                    Chứng từ hóa đơn
-                  </span>
-                </a>
-              </li>
-            </ul>
-          </mat-expansion-panel>
-          <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <span class="title text-white uppercase-text" i18n>
-                 Quản lý báo cáo
-                </span>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <ul class="sidebar-sub-menu">
-              <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-folder-chart-line">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;text-up">
-                    Báo cáo ngân sách theo thị trường
-                  </span>
-                </a>
-              </li>
-            </ul>
-          </mat-expansion-panel>
-          <mat-expansion-panel class="menu-level-1 right-aligned-header" [expanded]="checkActiveRoute('category')"
-            (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <span class="title text-white uppercase-text" i18n>
-                Category
-                </span>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <ul class="sidebar-sub-menu">
-              <li class="sidemenu-item">
-                <a routerLink="category/users" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
-                    Lịch bay năm
-                  </span>
-                </a>
-              </li>
-              <li class="sidemenu-item">
-                <a routerLink="category/users" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
-                    Lịch bay mùa
-                  </span>
-                </a>
-              </li>
-              <li class="sidemenu-item">
-                <a routerLink="category/contract" routerLinkActive="active" class="sidemenu-link ri-contract-line">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
-                    Contract
-                  </span>
-                </a>
-              </li>
-              <li class="sidemenu-item">
-                <a routerLink="category/hotel" routerLinkActive="active" class="sidemenu-link ri-hotel-bed-fill">
-                  <span class="title text-white"  i18n style="font-family: 'Aperto', sans-serif;">
-                    Hotels
-                  </span>
-                </a>
-              </li>
-              <li class="sidemenu-item">
-                <a routerLink="category/vehicle" routerLinkActive="active" class="sidemenu-link ri-car-line">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
-                    Car Rentals
-                  </span>
-                </a>
-              </li>
-              <li class="sidemenu-item">
-                <a routerLink="category/users" routerLinkActive="active" class="sidemenu-link ri-store-line">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
-                    Market
-                  </span>
-                </a>
-              </li>
-              <li class="sidemenu-item">
-                <a routerLink="category/rate" routerLinkActive="active" class="sidemenu-link ri-exchange-cny-line">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
-                    Exchange rate
-                  </span>
-                </a>
-              </li> <li class="sidemenu-item">
-                <a routerLink="category/nation" routerLinkActive="active" class="sidemenu-link ri-global-fill">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
-                    Country
-                  </span>
-                </a>
-              </li><li class="sidemenu-item">
-                <a routerLink="category/service-fee" routerLinkActive="active" class="sidemenu-link ri-money-dollar-box-fill">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
-                    Cost Categories
-                  </span>
-                </a>
-              </li>
-            </ul>
-          </mat-expansion-panel>
-          <mat-expansion-panel class="menu-level-1 right-aligned-header"
-                               (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
-            <mat-expansion-panel-header>
-              <mat-panel-title>
-                <span class="title text-white text-uppercase" i18n>
-                 System
-                </span>
-              </mat-panel-title>
-            </mat-expansion-panel-header>
-            <ul class="sidebar-sub-menu mb-10">
-              <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-calendar-schedule-fill">
-                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
-                    Account information
-                  </span>
-                </a>
-              </li>
-            </ul>
-            <mat-expansion-panel [expanded]="checkActiveRoute('admin')" (opened)="panelOpenState.set(true)"
-                                 (closed)="panelOpenState.set(false)">
-              <mat-expansion-panel-header style="list-style-type: none; ">
-                <mat-panel-title>
-                 <span class="title text-white text-uppercase" i18n>
-                  System
-                </span>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
+
+            <!-- SubMenu -->
+            @if(menu1.subMenu.length > 0) {
               <ul class="sidebar-sub-menu">
+                @for (subMenu1 of menu1.subMenu; track $index) {
                 <li class="sidemenu-item">
-                  <a routerLink="admin/users" routerLinkActive="active" class="sidemenu-link ri-group-fill">
-                  <span class="title-font text-white" i18n>
-                    Account
-                  </span>
+                  <a [routerLink]="subMenu1.path" class="sidemenu-link" [ngClass]="subMenu1.icon">
+                    <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
+                      {{ subMenu1.title }}
+                    </span>
                   </a>
                 </li>
-                <li class="sidemenu-item">
-                  <a routerLink="admin/roles" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">
-                  <span class="title-font text-white">
-                    Nhóm quyền
-                  </span>
-                  </a>
-                </li>
+
+                <!-- Menu level 2 -->
+                @if (subMenu1.menu) {
+                  @for (menu2 of subMenu1.menu; track $index) {
+                    <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
+                      (closed)="panelOpenState.set(false)">
+                      <!-- Menu -->
+                      <mat-expansion-panel-header>
+                        <mat-panel-title>
+                          <span class="title text-white">
+                            {{menu2.title}}
+                          </span>
+                        </mat-panel-title>
+                      </mat-expansion-panel-header>
+
+                      <!-- SubMenu -->
+                      @if(menu2.subMenu.length > 0) {
+                      <ul class="sidebar-sub-menu">
+                        @for (subMenu2 of menu2.subMenu; track $index) {
+                        <li class="sidemenu-item">
+                          <a [routerLink]="subMenu2.path" routerLinkActive="active" class="sidemenu-link" [ngClass]="subMenu2.icon">
+                            <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
+                              {{ subMenu2.title }}
+                            </span>
+                          </a>
+                        </li>
+
+                        }
+                      </ul>
+                      }
+                    </mat-expansion-panel>
+                  }
+                }
+              }
               </ul>
-            </mat-expansion-panel>
+            }
           </mat-expansion-panel>
-<!--          <span class="sub-title d-block fw-medium text-uppercase">HỆ THỐNG</span>-->
-<!--          <mat-expansion-panel [expanded]="checkActiveRoute('admin')" (opened)="panelOpenState.set(true)"-->
-<!--            (closed)="panelOpenState.set(false)">-->
-<!--            <mat-expansion-panel-header>-->
-<!--              <mat-panel-title>-->
-<!--                <i class="material-symbols-outlined">-->
-<!--                  business_center-->
-<!--                </i>-->
-<!--                <span class="title text-white">-->
-<!--                  Quyền và tài khoản-->
-<!--                </span>-->
-<!--              </mat-panel-title>-->
-<!--            </mat-expansion-panel-header>-->
-<!--            <ul class="sidebar-sub-menu">-->
-<!--              <li class="sidemenu-item">-->
-<!--                <a routerLink="admin/users" routerLinkActive="active" class="sidemenu-link ri-group-fill">-->
-<!--                  <span class="title-font text-white">-->
-<!--                    {{ 'ACCOUNT' | translate }}-->
-<!--                  </span>-->
-<!--                </a>-->
-<!--              </li>-->
-<!--              <li class="sidemenu-item">-->
-<!--                <a routerLink="admin/roles" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">-->
-<!--                  <span class="title-font text-white">-->
-<!--                    Nhóm quyền-->
-<!--                  </span>-->
-<!--                </a>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </mat-expansion-panel>-->
+          }
         </mat-accordion>
       </div>
     </div>
