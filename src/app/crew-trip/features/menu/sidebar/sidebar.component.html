@@ -65,8 +65,7 @@
               </li>
             </ul>
           </mat-expansion-panel>
-          <mat-expansion-panel class="menu-level-1 right-aligned-header"
-                               (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+          <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <span class="title text-white uppercase-text" i18n>
@@ -88,8 +87,8 @@
             (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
             <mat-expansion-panel-header>
               <mat-panel-title>
-                <span class="title text-white">
-                  DANH MỤC
+                <span class="title text-white uppercase-text" i18n>
+                 Danh mục
                 </span>
               </mat-panel-title>
             </mat-expansion-panel-header>
@@ -166,7 +165,7 @@
                 </span>
               </mat-panel-title>
             </mat-expansion-panel-header>
-            <ul class="sidebar-sub-menu">
+            <ul class="sidebar-sub-menu mb-10">
               <li class="sidemenu-item">
                 <a routerLink="admin/users" class="sidemenu-link ri-calendar-schedule-fill">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
@@ -179,11 +178,8 @@
                                  (closed)="panelOpenState.set(false)">
               <mat-expansion-panel-header style="list-style-type: none; ">
                 <mat-panel-title>
-<!--                  <i class="material-symbols-outlined">-->
-<!--                    business_center-->
-<!--                  </i>-->
-                  <span class="title text-white">
-                  Quyền và tài khoản
+                 <span class="title text-white text-uppercase" i18n>
+                  HỆ THỐNG
                 </span>
                 </mat-panel-title>
               </mat-expansion-panel-header>
