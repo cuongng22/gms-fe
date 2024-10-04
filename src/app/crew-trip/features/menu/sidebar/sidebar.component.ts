@@ -22,7 +22,7 @@ export class SidebarComponent implements OnInit {
   menu = menu;
 
   // Mat Expansion
-  readonly panelOpenState = signal(false);
+  readonly panelOpenState = signal(true);
 
   // isSidebarToggled
   isSidebarToggled = false;
