@@ -1,7 +1,10 @@
-<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between" (scroll)="onScroll()"
+  [ngClass]="isSticky ? 'fixed' : 'notfixed' ">
+  @if (!isSticky) {
   <h5 class="mb-0" i18n>
     Grant access
   </h5>
+  }
   <div>
     <button (click)="addFunction()" class="step-2-menu-button btn-slot-1" extended mat-fab>
       <i class="material-symbols-outlined">
@@ -9,7 +12,7 @@
       </i>
       Grant Permission
     </button>
-    <button (click)="goBack()" class="step-2-menu-button btn-slot-2" extended i18n mat-fab>
+    <button (click)="goBack()" class="step-2-menu-button btn-slot-2" extended i18n mat-fab style="background-color: #ffc107 !important;">
       <i class="material-symbols-outlined">
         undo
       </i>
@@ -19,12 +22,10 @@
 
 
 </div>
-<div class="row" style="min-height: 80vh">
+<div class="row">
   <div class="col-lg-4 col-md-12">
-    <mat-card
-      [class.component-rtl-enabled]="themeService.isRTLEnabled()"
-      class="email-compose-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table"
-    >
+    <mat-card [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+      class="scroll email-compose-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table">
       <mat-card-header>
         <mat-card-title>
           <h5 class="mb-0 fw-semibold" i18n>
@@ -40,19 +41,19 @@
               <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
             </ng-container>
             @for (innerColumn of _displayedColumnsUser; track innerColumn.value) {
-              <ng-container matColumnDef="{{innerColumn.value}}">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
-                <td mat-cell *matCellDef="let element">
+            <ng-container matColumnDef="{{innerColumn.value}}">
+              <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
+              <td mat-cell *matCellDef="let element">
                 <span [ngClass]="{
             'badge rounded-pill': innerColumn.value === 'isActiveLabel',
             'text-soft-primary': innerColumn.value === 'isActiveLabel' && element['active'] == 1,
             'text-soft-danger': innerColumn.value === 'isActiveLabel' && element['active'] == 0
             }">{{
-                    element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+                  element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
                   }}
-            </span>
-                </td>
-              </ng-container>
+                </span>
+              </td>
+            </ng-container>
             }
 
             <tr *matHeaderRowDef="displayedColumnsUser" mat-header-row></tr>
@@ -63,10 +64,8 @@
     </mat-card>
   </div>
   <div class="col-lg-8 col-md-12">
-    <mat-card
-      [class.component-rtl-enabled]="themeService.isRTLEnabled()"
-      class="tables-of-content-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table"
-    >
+    <mat-card [class.component-rtl-enabled]="themeService.isRTLEnabled()"
+      class="scroll tables-of-content-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table">
       <mat-card-header>
         <mat-card-title>
           <h5 class="mb-0 fw-semibold" i18n>
@@ -80,30 +79,31 @@
         <div class="tables-of-content-list p-0">
           <mat-accordion [multi]="true">
             @for (item of listFunction; track item.name) {
-              <mat-expansion-panel disabled expanded>
-                <mat-expansion-panel-header class="p-0">
-                  <mat-panel-title>
-                    <mat-checkbox [checked]="item.active" (change)="checkBoxChange(item)" [indeterminate]="item.indeterminate">
-                      <strong>{{ item.label }}</strong></mat-checkbox>
-                  </mat-panel-title>
-                </mat-expansion-panel-header>
-                <ul class="p-0 m-0 list-unstyled bg-white">
-                  @for (itemChild of item['child']; track itemChild.name) {
-                    <ng-container>
-                      <li class="d-sm-flex align-items-center justify-content-between">
-                      <span class="d-block text-body">
-                                  <mat-checkbox [checked]="itemChild.active"
-                                                (change)="checkBoxChange(itemChild,item)">{{ itemChild.name }}</mat-checkbox>
-                                    </span>
-                        <span class="d-block text-body">
-                                        {{ itemChild.alias }}
-                                    </span>
-                      </li>
-                    </ng-container>
-                  }
+            <mat-expansion-panel disabled expanded>
+              <mat-expansion-panel-header class="p-0">
+                <mat-panel-title>
+                  <mat-checkbox [checked]="item.active" (change)="checkBoxChange(item)"
+                    [indeterminate]="item.indeterminate">
+                    <strong>{{ item.label }}</strong></mat-checkbox>
+                </mat-panel-title>
+              </mat-expansion-panel-header>
+              <ul class="p-0 m-0 list-unstyled bg-white">
+                @for (itemChild of item['child']; track itemChild.name) {
+                <ng-container>
+                  <li class="d-sm-flex align-items-center justify-content-between">
+                    <span class="d-block text-body">
+                      <mat-checkbox [checked]="itemChild.active" (change)="checkBoxChange(itemChild,item)">{{
+                        itemChild.name }}</mat-checkbox>
+                    </span>
+                    <span class="d-block text-body">
+                      {{ itemChild.alias }}
+                    </span>
+                  </li>
+                </ng-container>
+                }
 
-                </ul>
-              </mat-expansion-panel>
+              </ul>
+            </mat-expansion-panel>
             }
 
           </mat-accordion>

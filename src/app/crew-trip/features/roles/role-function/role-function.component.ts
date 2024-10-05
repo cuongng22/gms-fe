@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, inject, Input, OnInit, Output} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {NgClass, NgIf, TitleCasePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
@@ -198,5 +198,16 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
       console.log(reason);
       this.baseService.showSuccess(MESSAGE.UPDATE_FAIL);
     }).finally(() => this.goBack())
+  }
+
+
+
+  isSticky: boolean = false;
+  @HostListener('window:scroll', ['$event']) onScroll() {
+    if (window.scrollY > 60) {
+      this.isSticky = true;
+    } else {
+      this.isSticky = false;
+    }
   }
 }

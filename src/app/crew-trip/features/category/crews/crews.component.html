@@ -1,1 +1,69 @@
-<p>crews works!</p>
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0" i18n="@@crewList">
+        Crew List
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+      <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
+        Category
+      </li>
+      <li class="breadcrumb-item d-inline-block position-relative" i18n="@@crewList">
+        Crew List
+      </li>
+    </ol>
+  </div>
+  
+  
+  <!--Search-->
+<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+      <form [formGroup]="formGroupSearch" (ngSubmit)="search()" autocomplete="off">
+        <div class="row">
+          <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+            <div class="row">
+              <div class="col" sizeInput="md">
+                <mat-form-field>
+                  <mat-label i18n="@@keywords">Keywords</mat-label>
+                  <input matInput formControlName="s">
+                </mat-form-field>
+              </div>
+              <div class="col" sizeInput="md">
+                <mat-form-field class="mb-25">
+                  <mat-label i18n="@@gender">Gender</mat-label>
+                  <mat-select formControlName="active">
+                    <mat-option [value]="null" i18n="@@allStatus">-- All Gender --</mat-option>
+                    <mat-option [value]="true" i18n="@@m">M</mat-option>
+                    <mat-option [value]="false" i18n="@@w">W</mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+  
+              <!-- <div class="col" sizeInput="md">
+                <mat-form-field>
+                  <mat-label i18n="market">Market</mat-label>
+                  <input type="text" matInput formControlName="marketCode" [matAutocomplete]="marketComplete">
+                  <mat-autocomplete autoActiveFirstOption #marketComplete="matAutocomplete">
+                    @for (option of filteredOptionsMarket | async; track option) {
+                    <mat-option [value]="option.key">{{option.value}}</mat-option>
+                    }
+                  </mat-autocomplete>
+                </mat-form-field>
+              </div> -->
+            </div>
+          </div>
+          <div class="col-1 d-flex flex-row">
+            <mat-card-header class="mb-0 search">
+              <mat-card-title>
+                <button class="search-btn" type="submit" mat-button>
+                  <i class="material-symbols-outlined">
+                    search
+                  </i>
+                  <span i18n="@@search">Search</span>
+                </button>
+              </mat-card-title>
+            </mat-card-header>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
