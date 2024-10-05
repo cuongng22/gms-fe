@@ -17,7 +17,6 @@ import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {RolesService} from "src/app/crew-trip/core/services/roles-service";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {NgxEditorModule} from "ngx-editor";
-import {HttpStatusCode} from "@angular/common/http";
 import {
   MatAccordion,
   MatExpansionPanel,
@@ -70,7 +69,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   override async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([// this.getAllFunction(),
+      await Promise.all([
         this._detail(),]).then(() => {
       });
       this.displayedColumnsUser = [...this._displayedColumnsUser.map(s => s.value)];
@@ -131,7 +130,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
 
   checkBoxChange(row?: any, parent?: any) {
     let nextValue = row ? !row.active : this.selectAllChecked;
-    if (row?.child) {
+    if (row?.child) {//cap cha
       if (nextValue) {
         row.child.forEach((s: any) => {
           this.listRoleFunction = [...this.listRoleFunction, {
@@ -148,7 +147,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
       }
       row.active = nextValue;
       row.indeterminate = false;
-    } else if (row) {
+    } else if (row) {//cap con
       if (nextValue) {
         this.listRoleFunction = [...this.listRoleFunction, {
           roleName: this.roleObject.roleName, functionId: row.id, functionName: row.name, functionDescription: row.alias
@@ -164,7 +163,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
       let every = parent.child.every((s: any) => s.active == true);
       parent.indeterminate = has && !every;
       parent.active = every;
-    } else {
+    } else {//select all
       if (nextValue) {
         this.listFunction.forEach((item: any) => {
           item.child.forEach((s: any) => {
@@ -194,16 +193,10 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
 
   addFunction() {
     this.baseService.addFunction(this.id, {data: this.listRoleFunction}).then((res) => {
-      if (res && res.status == HttpStatusCode.Ok) {
-        this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
-      } else if (res.status == HttpStatusCode.BadRequest) {
-        this.baseService.showWarning('Chức năng không được để trống');
-      } else {
-        this.baseService.showError(MESSAGE.ERROR);
-      }
+      this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
     }).catch(reason => {
       console.log(reason);
-      this.baseService.showError(MESSAGE.ERROR);
+      this.baseService.showSuccess(MESSAGE.UPDATE_FAIL);
     }).finally(() => this.goBack())
   }
 }

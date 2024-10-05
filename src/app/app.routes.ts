@@ -12,6 +12,7 @@ import {HotelComponent} from "src/app/crew-trip/features/category/hotel/hotel.co
 import {NationComponent} from "src/app/crew-trip/features/category/nation/nation.component";
 import { ServiceFeeComponent } from 'src/app/crew-trip/features/category/service-fee/service-fee.component';
 import {CrewsComponent} from "src/app/crew-trip/features/category/crews/crews.component";
+import {NotFoundComponent} from "src/app/not-found/not-found.component";
 
 
 export const routes: Routes = [
@@ -51,6 +52,8 @@ export const routes: Routes = [
       {path: 'login', component: SignInComponent},
     ]
   },
+  {path: '**', component: NotFoundComponent}
+
   /*,
   {
     path: '',
