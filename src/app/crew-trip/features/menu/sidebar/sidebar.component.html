@@ -16,10 +16,10 @@
   <ng-scrollbar visibility="hover">
     <div class="sidebar-inner">
       <div class="sidebar-menu">
-        <mat-accordion>
+        <mat-accordion [multi]="true">
           @for (menu1 of menu; track $index) {
           <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
-            (closed)="panelOpenState.set(false)">
+            (closed)="panelOpenState.set(false)"  [expanded]="true" [class.active]="isActive(menu1.rootPath)">
             <!-- Menu -->
             <mat-expansion-panel-header>
               <mat-panel-title>
@@ -28,19 +28,17 @@
                 </span>
               </mat-panel-title>
             </mat-expansion-panel-header>
-
             <!-- SubMenu -->
             @if(menu1.subMenu.length > 0) {
               <ul class="sidebar-sub-menu">
                 @for (subMenu1 of menu1.subMenu; track $index) {
                 <li class="sidemenu-item">
-                  <a [routerLink]="subMenu1.path" class="sidemenu-link" [ngClass]="subMenu1.icon">
+                  <a [routerLink]="subMenu1.path" class="sidemenu-link" [ngClass]="subMenu1.icon"  [class.active]="isActive(subMenu1.path)">
                     <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
                       {{ subMenu1.title }}
                     </span>
                   </a>
                 </li>
-
                 <!-- Menu level 2 -->
                 @if (subMenu1.menu) {
                   @for (menu2 of subMenu1.menu; track $index) {

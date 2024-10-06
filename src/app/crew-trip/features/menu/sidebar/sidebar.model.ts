@@ -1,5 +1,5 @@
 export type Menu = {
-    title: string; subMenu: subMenu[];
+    title: string;rootPath:string; subMenu: subMenu[];
 }
 export type subMenu = {
     path: string; title: string; icon: string; menu?: Menu[];
@@ -9,31 +9,34 @@ export type subMenu = {
 export const menu: Menu[] = [
     {
         title: $localize`:@@Data Management:Quản lý dữ liệu`,
+        rootPath : 'data',
         subMenu: [
             {
-                path: 'admin/users', title: $localize`:@@budgetPlan:Kế hoạch ngân sách`, icon: 'ri-calendar-line'
+                path: 'data/users', title: $localize`:@@budgetPlan:Kế hoạch ngân sách`, icon: 'ri-calendar-line'
             },
             {
-                path: 'admin/users', title: $localize`:@@dailyFlight schedule:Lịch bay ngày`, icon: 'ri-folder-chart-line'
+                path: 'data/users', title: $localize`:@@dailyFlight schedule:Lịch bay ngày`, icon: 'ri-folder-chart-line'
             },
             {
-                path: 'admin/users', title: $localize`:@@manageBookingsVehicles:Quản lý đặt phòng/xe`, icon: 'ri-shopping-cart-line'
+                path: 'data/users', title: $localize`:@@manageBookingsVehicles:Quản lý đặt phòng/xe`, icon: 'ri-shopping-cart-line'
             },
             {
-                path: 'admin/users', title: $localize`:@@invoiceDocuments:Chứng từ hóa đơn`, icon: 'ri-bill-line'
+                path: 'data/users', title: $localize`:@@invoiceDocuments:Chứng từ hóa đơn`, icon: 'ri-bill-line'
             }
         ]
     },
     {
         title: $localize`:@@reportManagement:Quản lý báo cáo`,
+        rootPath : 'report',
         subMenu: [
             {
-                path: 'admin/users', title: $localize`:@@budgetReport:Báo cáo ngân sách theo thị trường`, icon: 'ri-folder-chart-line', menu: []
+                path: 'report/report1', title: $localize`:@@budgetReport:Báo cáo ngân sách theo thị trường`, icon: 'ri-folder-chart-line', menu: []
             }
         ]
     },
     {
-        title: $localize`:@@category:Danh mục`,
+        title: $localize`:@@category:Category`,
+        rootPath : 'category',
         subMenu: [
             {
                 path: 'category/users', title: $localize`:@@annualFlightSchedule:Lịch bay năm`, icon: 'ri-calendar-schedule-fill'
@@ -42,19 +45,19 @@ export const menu: Menu[] = [
                 path: 'category/users', title: $localize`:@@seasonalFlightSchedule:Lịch bay mùa`, icon: 'ri-calendar-schedule-fill'
             },
             {
-                path: 'category/contract', title: $localize`:@@contract:Hợp đồng`, icon: 'ri-contract-line'
+                path: 'category/contract', title: $localize`:@@contract:Contract`, icon: 'ri-contract-line'
             },
             {
-                path: 'category/users', title: $localize`:@@hotel:Khách sạn`, icon: 'ri-hotel-bed-fill'
+                path: 'category/hotel', title: $localize`:@@hotel:Hotels`, icon: 'ri-hotel-bed-fill'
             },
             {
-                path: 'category/vehicle', title: $localize`:@@carRentalCompany:Nhà xe`, icon: 'ri-car-line'
+                path: 'category/vehicle', title: $localize`:@@carRentalCompany:Car rental`, icon: 'ri-car-line'
             },
             {
                 path: 'category/users', title: $localize`:@@flightMarket:Thị trường bay`, icon: 'ri-store-line'
             },
             {
-                path: 'category/rate', title: $localize`:@@exchangeRate:Tỉ giá ngoại tệ`, icon: 'ri-exchange-cny-line'
+                path: 'category/rate', title: $localize`:@@exchangeRate:Exchange rate`, icon: 'ri-exchange-cny-line'
             },
             {
                 path: 'category/crews', title: $localize`:@@crewList:Crew List`, icon: 'ri-id-card-line'
@@ -68,13 +71,15 @@ export const menu: Menu[] = [
 
         ]
     }, {
-        title: $localize`:@@system:Hệ Thống`,
+        title: $localize`:@@system:System`,
+        rootPath : 'system',
         subMenu: [
             {
                 path: 'admin/users', title: $localize`:@@profile:Profile`, icon: 'ri-calendar-schedule-fill',
                 menu: [
                     {
                         title: $localize`:@@rolesAccounts:Roles & Accounts`,
+                        rootPath : '',
                         subMenu: [
                             {
                                 path: 'admin/users', title: $localize`:@@account:Account`, icon: 'ri-group-fill'
