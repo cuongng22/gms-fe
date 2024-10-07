@@ -75,7 +75,7 @@ export const menu: Menu[] = [
         rootPath : 'system',
         subMenu: [
             {
-                path: 'admin/users', title: $localize`:@@profile:Profile`, icon: 'ri-calendar-schedule-fill',
+                path: '', title: '', icon: 'ri-calendar-schedule-fill',
                 menu: [
                     {
                         title: $localize`:@@rolesAccounts:Roles & Accounts`,

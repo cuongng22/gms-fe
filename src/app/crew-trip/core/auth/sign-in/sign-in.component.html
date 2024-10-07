@@ -34,15 +34,17 @@
             </mat-form-field>
             <mat-checkbox>{{ 'REMEMBER_ME' | translate }}</mat-checkbox>
             <div class="login-actions">
-              <button mat-raised-button type="submit" [disabled]="formGroup.invalid"  class="login-btn">
-                {{ 'LOGIN' | translate }}
+              <ngx-spinner bdColor="rgba(0, 0, 0, 0.1)" size="medium" color="#2a6886" type="ball-climbing-dot"
+                           [fullScreen]="false"></ngx-spinner>
+              <button mat-raised-button type="submit" [disabled]="formGroup.invalid" i18n  class="login-btn">
+                Login
               </button>
               <a href="#" class="sso-login" i18n>Login with SSO</a>
             </div>
           </form>
           </div>
           <div class="forgot-password-container">
-            <a href="#" class="forgot-password" i18n>Forgot password?</a>
+            <a href="/auth/forgot-password" class="forgot-password" i18n>Forgot password?</a>
           </div>
         </mat-card>
       </div>

@@ -21,6 +21,11 @@ export class UsersService extends BaseService {
     return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
   }
 
+  forgotPassword(body: any): Promise<any> {
+    const url = `${this.api}/${this.path}/auth/request-reset-password`
+    return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
+  }
+
   logout() {
     localStorage.clear();
   }

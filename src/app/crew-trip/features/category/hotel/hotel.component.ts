@@ -69,7 +69,7 @@ export class HotelComponent extends CommonComponent implements OnInit {
       startWith(''),
       map(value => this._filterMarket(value ?? '')));
 
-    this.displayedColumns = ['stt', 'market', 'hotel', 'address', 'contactDetails', 'status', 'notes'];
+    this.displayedColumns = ['stt', 'market', 'hotel', 'address', 'contactDetails', 'active', 'notes'];
     this.search();
   }
 

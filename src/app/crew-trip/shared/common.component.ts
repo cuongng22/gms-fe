@@ -13,9 +13,7 @@ import {saveAs} from 'file-saver';
 
 
 @Component({
-  selector: 'app-common', standalone: true, imports: [], template: `
-
-  `
+  selector: 'app-common', standalone: true, imports: [], template: ``
 })
 export class CommonComponent implements OnInit {
   Constant = Constant;

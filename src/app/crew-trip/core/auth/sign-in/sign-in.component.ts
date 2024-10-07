@@ -13,12 +13,13 @@ import {TranslateModule, TranslateService} from "@ngx-translate/core";
 import {StorageService} from "src/app/crew-trip/core/services/storage.service";
 import {STORAGE_KEY} from "src/app/crew-trip/core/constants/config";
 import {CommonModule} from "@angular/common";
+import {NgxSpinnerComponent, NgxSpinnerService} from "ngx-spinner";
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule,ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
-    TranslateModule
+  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
+    TranslateModule, NgxSpinnerComponent
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss'
@@ -27,6 +28,7 @@ export class SignInComponent {
   fb = inject(FormBuilder);
   usersService = inject(UsersService);
   router = inject(Router);
+  spinner = inject(NgxSpinnerService);
   // Password Hide
   hide = true;
   // isToggled
@@ -61,23 +63,27 @@ export class SignInComponent {
     });
   }
 
-  login() {
+ async login() {
     if (this.formGroup.invalid) {
       this.formGroup.markAllAsTouched();
       return;
     }
-    this.usersService.login(this.formGroup.value)
+    await this.spinner.show();
+    await this.usersService.login(this.formGroup.value)
       .then(response => {
         if (response.data) {
           this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, response.data.token);
           this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(response.data.userInfo));
           this.router.navigate(['/ke-hoach']);
+          this.spinner.hide();
         } else {
           this.usersService.showError(response.error);
+          this.spinner.hide();
         }
       })
       .catch(error => {
         console.error('Login error:', error);
+        this.spinner.hide();
       })
   }
 }
