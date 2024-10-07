@@ -111,8 +111,8 @@
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@carRentalCompany">Car
             Rental Company</th>
           <td mat-cell *matCellDef="let element">
-            <span><span class="text-secondary-bootstrap" i18n="@@code">Code</span>: {{element.vehicleCode}}</span> <br>
-            <span><span class="text-secondary-bootstrap" i18n="@@Name">Name</span>: {{element.vehicleName}}</span>
+            <span><span class="text-secondary-bootstrap" i18n="@@code">Code</span>: {{element.code}}</span> <br>
+            <span><span class="text-secondary-bootstrap" i18n="@@Name">Name</span>: {{element.name}}</span>
 
           </td>
         </ng-container>
@@ -129,12 +129,12 @@
             <span><span class="text-secondary-bootstrap" i18n="@@phoneNumber">Phone number</span>: {{element.phone}}</span>
           </td>
         </ng-container>
-        <ng-container matColumnDef="status">
+        <ng-container matColumnDef="active">
           <th mat-header-cell *matHeaderCellDef class="font-weight-bold" mat-sort-header i18n="@@status">Status</th>
           <td mat-cell *matCellDef="let element;">
             <span class="badge" [ngClass]="{
-              'text-soft-primary':  element['status'] == true,
-              'text-soft-danger':  element['status'] == false}">
+              'text-soft-primary':  element['active'] == true,
+              'text-soft-danger':  element['active'] == false}">
               {{ element.activeLabel}}
             </span>
           </td>
