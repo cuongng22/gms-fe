@@ -17,6 +17,9 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
+import { FlightMarketService } from 'src/app/crew-trip/core/services/ flight-market.service';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-vehicle',
@@ -26,29 +29,24 @@ import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service'
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule
   ],
+  providers: [DataTransformPipe],
   templateUrl: './vehicle.component.html',
   styleUrl: './vehicle.component.scss'
 })
 export class VehicleComponent extends CommonComponent implements OnInit {
   override baseService = inject(VehicleService);
-
+  flightMarketService = inject(FlightMarketService)
   formBuilder = inject(FormBuilder);
 
-  options: any[] = [{
-    key: 'HAN',
-    value: 'HAN'
-  },
-  {
-    key: 'SGN',
-    value: 'SGN'
-  }];
+  // danh sách thị trường
+  markets: any[] = [];
 
   filteredOptionsMarket: Observable<any[]>;
 
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
     marketCode: [''],
-    contractEndDate: [''],
+    contractDate: [''],
     active: [''],
   });
 
@@ -65,23 +63,40 @@ export class VehicleComponent extends CommonComponent implements OnInit {
     description: ['']
   });
 
+  constructor(public dataTransformPipe: DataTransformPipe) {
+    super();
+  }
+
   override ngOnInit(): void {
     super.ngOnInit();
-    this.filteredOptionsMarket = this.formGroupSearch.controls.marketCode.valueChanges.pipe(
-      debounceTime(300), // Đợi 300ms sau lần nhập cuối cùng
-      startWith(''),
-      map(value => this._filterMarket(value ?? '')));
+
 
     this.displayedColumns = ['stt', 'market', 'carRentalCompany', 'address', 'contactDetails', 'active', 'notes'];
     this.search();
+
+    // Lấy danh sách thị trường
+    this.flightMarketService.search({ option: 1 }).then(res => {
+      this.markets = res.data;
+
+      this.filteredOptionsMarket = this.formGroupSearch.controls.marketCode.valueChanges.pipe(
+        debounceTime(300), // Đợi 300ms sau lần nhập cuối cùng
+        startWith(''),
+        map(value => this._filterMarket(value ?? '')));
+    });
   }
 
   private _filterMarket(value: string): any[] {
     if (!value) {
-      return this.options;
+      return this.markets;
     }
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.value.toLowerCase().includes(filterValue));
+    return this.markets.filter(market => market.value.toLowerCase().includes(filterValue));
+  }
+
+  override search(): any {
+    const contractDate = this.formGroupSearch.controls.contractDate.value;
+    const searchValue = { ...this.formGroupSearch.value, contractDate: contractDate ? this.dataTransformPipe.transform(contractDate, ['date', Constant.DATE_FORMAT]) : null };
+    super.search(searchValue);
   }
 }
 
