@@ -5,6 +5,23 @@
 .mat-column-stt {
   width: 70px !important;
 }
+
+.mat-column-name,
+.mat-column-alias {
+  width: 40%
+}
+.mat-column-expandedDetail{
+  padding: 0px !important;
+  border: none !important;
+}
+
+.basic-table table {
+  width: 100%;
+}
+
+.child-table {
+  width: 100%;
+}
 .form-group{
   .mat-mdc-form-field{
     margin: 10px 0px !important;

@@ -14,6 +14,7 @@ import { ServiceFeeComponent } from 'src/app/crew-trip/features/category/service
 import {CrewsComponent} from "src/app/crew-trip/features/category/crews/crews.component";
 import {NotFoundComponent} from "src/app/not-found/not-found.component";
 import {ForgotPasswordComponent} from "src/app/crew-trip/core/auth/forgot-password/forgot-password.component";
+import {FunctionsComponent} from "src/app/crew-trip/features/functions/functions.component";
 
 
 export const routes: Routes = [
@@ -32,6 +33,7 @@ export const routes: Routes = [
         path: 'admin', children: [
           {path: 'users', component: UsersComponent},
           {path: 'roles', component: RolesComponent},
+          {path: 'functions', component: FunctionsComponent},
         ]
       },
       {
