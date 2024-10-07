@@ -161,19 +161,51 @@
           </ul>
         </mat-menu>
       </li>
-      <!-- <li>
-        <button
-          mat-button
-          type="button"
-          class="settings-btn"
-          (click)="settingsButtonToggle()"
-          [ngClass]="{'active': isToggled}"
-        >
-          <i class="material-symbols-outlined">
-            settings
-          </i>
-        </button>
-      </li> -->
     </ul>
   </div>
 </div>
+<div
+  [class.active]="showDialogConfirm"
+  class="add-new-popup"
+>
+  <div class="popup-dialog">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
+      <mat-card-header>
+        <mat-card-title>
+          <h5 class="mb-0">
+            <span i18n>Are you sure you want to log out?</span>
+          </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <button
+            (click)="onCancel()"
+            mat-button
+          >
+            <i class="ri-close-fill"></i>
+          </button>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="btn-box">
+          <button (click)="onCancel()" color="warn" i18n mat-button type="button">
+            <i class="material-symbols-outlined">
+              close
+            </i>
+            Cancel
+          </button>
+          <button
+            (click)="onConfirm()"
+            color="primary"
+            i18n mat-button
+          >
+            <i class="material-symbols-outlined">
+              save
+            </i>
+            Logout
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+

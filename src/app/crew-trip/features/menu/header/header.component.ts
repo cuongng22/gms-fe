@@ -1,23 +1,33 @@
-import {Component, HostListener, inject} from '@angular/core';
+import {Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, inject, NO_ERRORS_SCHEMA} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
-import {NgClass} from '@angular/common';
+import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
 import {ToggleService} from "src/app/common/header/toggle.service";
 import {UsersService} from "src/app/crew-trip/core/services/users-service";
-import {MatDialog, MatDialogModule} from "@angular/material/dialog";
-import {
-  ConfirmDialogComponent,
-  ConfirmDialogData
-} from "src/app/crew-trip/component/confirm-dialog/confirm-dialog.component";
+import {MatDialog, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
 import {UserLogin} from "src/app/crew-trip/shared/models/userInfo";
+import {MatCardModule} from "@angular/material/card";
+import {MatTableModule} from "@angular/material/table";
+import {MatPaginatorModule} from "@angular/material/paginator";
+import {MatCheckboxModule} from "@angular/material/checkbox";
+import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
+import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
+import {MatOption, MatSelect} from "@angular/material/select";
+import {MatInput} from "@angular/material/input";
+import {ReactiveFormsModule} from "@angular/forms";
+import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
+import {MatTab, MatTabGroup} from "@angular/material/tabs";
+import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
+import {NoDataRowOutlet} from "@angular/cdk/table";
+import {DialogComponent} from "src/app/ui-elements/dialog/dialog.component";
 
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, MatButtonModule, MatMenuModule, NgClass,MatDialogModule],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -32,6 +42,7 @@ export class HeaderComponent {
   userInfo: UserLogin | null;
   // isToggled
   isToggled = false;
+  showDialogConfirm = false;
 
   constructor() {
     this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
@@ -133,22 +144,20 @@ export class HeaderComponent {
     this.isFullscreen = !!(document.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
   }
   logOut() {
-    const dialogData: ConfirmDialogData = {
-      title: 'Confirm Logout',
-      message: 'Are you sure you want to log out?',
-      confirmText: 'Logout',
-      cancelText: 'Cancel'
-    };
-    const dialogRef = this.dialog.open(ConfirmDialogComponent, {
-      width: '300px',
-      data: dialogData
-    });
-    dialogRef.afterClosed().subscribe(result => {
-      if (result) {
-        this.userService.logout();
-        this.router.navigate(['/auth/login']);
-      } else {
-      }
-    });
+    this.showDialogConfirm = true;
+  }
+
+  onConfirm(): void {
+    this.toggleDialogConfirm();
+    this.userService.logout();
+    this.router.navigate(['/auth/login']);
+  }
+
+  onCancel(): void {
+    this.toggleDialogConfirm();
+  }
+
+  toggleDialogConfirm() {
+    this.showDialogConfirm = !this.showDialogConfirm;
   }
 }
