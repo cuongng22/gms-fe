@@ -17,6 +17,8 @@ import { MatTableModule } from '@angular/material/table';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-crews',
@@ -31,6 +33,7 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 export class CrewsComponent extends CommonComponent implements OnInit {
   override baseService = inject(CrewsService);
   usersService = inject(UsersService);
+  flightMarketService = inject(FlightMarketService);
   formBuilder = inject(FormBuilder);
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
@@ -47,12 +50,13 @@ export class CrewsComponent extends CommonComponent implements OnInit {
 
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
-    gender: [''],
-    active: [''],
   });
+
+  filteredOptionsMarket: Observable<any[]>;
 
   override ngOnInit(): void {
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value)];
-    // this.search();
+    this.search();
+    
   }
 }
