@@ -13,6 +13,7 @@ import {NationComponent} from "src/app/crew-trip/features/category/nation/nation
 import { ServiceFeeComponent } from 'src/app/crew-trip/features/category/service-fee/service-fee.component';
 import {CrewsComponent} from "src/app/crew-trip/features/category/crews/crews.component";
 import {NotFoundComponent} from "src/app/not-found/not-found.component";
+import { FlightMarketComponent } from './crew-trip/features/category/flight-market/flight-market.component';
 import {ForgotPasswordComponent} from "src/app/crew-trip/core/auth/forgot-password/forgot-password.component";
 
 
@@ -43,6 +44,7 @@ export const routes: Routes = [
           {path: 'nation', component: NationComponent},
           {path: 'service-fee', component: ServiceFeeComponent},
           {path: 'crews', component: CrewsComponent},
+          {path: 'flight-market', component: FlightMarketComponent},
         ]
       },
     ]

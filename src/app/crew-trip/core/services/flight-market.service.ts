@@ -4,9 +4,10 @@ import { BaseService } from './base-service';
 @Injectable({
   providedIn: 'root'
 })
-export class FlightMarketService extends BaseService {
+export class FlightMarketService extends BaseService{
 
-  constructor() {
+  constructor() { 
     super();
+    this.path = 'market-flight';
   }
 }
