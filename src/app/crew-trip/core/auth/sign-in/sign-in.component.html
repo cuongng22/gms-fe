@@ -24,12 +24,18 @@
                   Invalid email
                 </span>
               </mat-error>
+              <mat-error *ngIf="formGroup.get('email')?.hasError('incorrect')">
+                {{ errorMessage }}
+              </mat-error>
             </mat-form-field>
             <mat-form-field appearance="outline" class="full-width">
               <mat-label i18n>PASSWORD</mat-label>
               <input matInput type="password" formControlName="password" required />
               <mat-error *ngIf="formGroup.get('password')?.hasError('required') && formGroup.get('password')?.touched">
                 Password is required
+              </mat-error>
+              <mat-error *ngIf="formGroup.get('password')?.hasError('incorrect')">
+                {{ errorMessage }}
               </mat-error>
             </mat-form-field>
             <mat-checkbox>{{ 'REMEMBER_ME' | translate }}</mat-checkbox>

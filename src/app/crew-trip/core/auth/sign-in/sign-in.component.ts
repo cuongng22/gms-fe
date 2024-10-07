@@ -14,6 +14,8 @@ import {StorageService} from "src/app/crew-trip/core/services/storage.service";
 import {STORAGE_KEY} from "src/app/crew-trip/core/constants/config";
 import {CommonModule} from "@angular/common";
 import {NgxSpinnerComponent, NgxSpinnerService} from "ngx-spinner";
+import {response} from "express";
+import {BaseService} from "src/app/crew-trip/core/services/base-service";
 
 @Component({
   selector: 'app-sign-in',
@@ -27,13 +29,14 @@ import {NgxSpinnerComponent, NgxSpinnerService} from "ngx-spinner";
 export class SignInComponent {
   fb = inject(FormBuilder);
   usersService = inject(UsersService);
+  baseService = inject(BaseService);
   router = inject(Router);
   spinner = inject(NgxSpinnerService);
   // Password Hide
   hide = true;
   // isToggled
   isToggled = false;
-
+  errorMessage :string;
   formGroup: FormGroup;
 
   constructor(
@@ -64,26 +67,36 @@ export class SignInComponent {
   }
 
  async login() {
+   this.formGroup.get('username')?.setErrors(null);
+   this.formGroup.get('password')?.setErrors(null);
     if (this.formGroup.invalid) {
       this.formGroup.markAllAsTouched();
       return;
     }
-    await this.spinner.show();
-    await this.usersService.login(this.formGroup.value)
-      .then(response => {
-        if (response.data) {
-          this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, response.data.token);
-          this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(response.data.userInfo));
-          this.router.navigate(['/ke-hoach']);
-          this.spinner.hide();
-        } else {
-          this.usersService.showError(response.error);
-          this.spinner.hide();
-        }
-      })
-      .catch(error => {
-        console.error('Login error:', error);
-        this.spinner.hide();
-      })
+   try {
+     if (this.formGroup.valid) {
+       await this.spinner.show();
+       const resp = await this.usersService.login(this.formGroup.value)
+       this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, resp.data.token);
+       this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(resp.data.userInfo));
+       this.router.navigate(['/ke-hoach']);
+       this.spinner.hide();
+     }
+   } catch (error: any) {
+     if (error.status === 401 && error.error?.error) {
+       this.formGroup.get('password')?.setErrors({ incorrect: true });
+       this.errorMessage = error.error.error;
+     } else if (error.status === 404) {
+       this.formGroup.get('email')?.setErrors({ incorrect: true });
+       this.errorMessage = error.error.error;
+     } else if (error.status === 500) {
+       this.baseService.showError(error.message)
+       console.error('Server Error: ', error.message);
+     } else {
+       this.errorMessage = $localize`An unexpected error occurred. Please try again.`;
+     }
+   } finally {
+     await this.spinner.hide();
+   }
   }
 }
