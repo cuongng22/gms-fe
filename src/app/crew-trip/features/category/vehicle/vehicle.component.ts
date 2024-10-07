@@ -72,7 +72,7 @@ export class VehicleComponent extends CommonComponent implements OnInit {
       startWith(''),
       map(value => this._filterMarket(value ?? '')));
 
-    this.displayedColumns = ['stt', 'market', 'carRentalCompany', 'address', 'contactDetails', 'status', 'notes'];
+    this.displayedColumns = ['stt', 'market', 'carRentalCompany', 'address', 'contactDetails', 'active', 'notes'];
     this.search();
   }
 
