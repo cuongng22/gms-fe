@@ -52,10 +52,13 @@ export class ForgotPasswordComponent {
         await this.spinner.show();
         await this.usersService.forgotPassword(this.formGroup.value);
         this.successMessage = $localize`A password reset link has been sent to your email. Please check your email.`;
+        this.formGroup.get('email')?.setErrors(null);
         this.errorMessage = null;
+        this.formGroup.reset();
       }
     } catch (error: any) {
       if (error?.status === 404 && error.error?.error) {
+        this.formGroup.get('email')?.setErrors({ incorrect: true });
         this.errorMessage = error?.error?.error;
       } else {
         this.errorMessage = $localize`An unexpected error occurred. Please try again.`;
