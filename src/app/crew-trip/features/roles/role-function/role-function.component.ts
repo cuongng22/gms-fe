@@ -61,6 +61,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   }, {label: "ID", value: "id"}, {label: "Name", value: "name"},];
   selectAllChecked: boolean = false;
   selectAllIndeterminate: boolean = false;
+  isSticky: boolean = false;
 
   constructor() {
     super();
@@ -68,6 +69,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
 
   override async ngOnInit() {
     try {
+      window.scrollTo(0, 0)
       await this.spinner.show();
       await Promise.all([
         this._detail(),]).then(() => {
@@ -83,7 +85,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
 
   async _detail() {
     try {
-      await this.baseService.detail(this.id).then(res => {
+      await this.baseService.detailRoleFunction(this.id).then(res => {
         if (res.data) {
           //user
           this.listUser = res.data.user.map((s: any) => ({
@@ -129,6 +131,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   }
 
   checkBoxChange(row?: any, parent?: any) {
+    console.log(this.listFunction, this.listRoleFunction)
     let nextValue = row ? !row.active : this.selectAllChecked;
     if (row?.child) {//cap cha
       if (nextValue) {
@@ -140,7 +143,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
         });
       } else {
         row.child.forEach((s: any) => {
-          this.listRoleFunction.pop((s1: any) => s1.roleId == s.id);
+          this.listRoleFunction.pop((s1: any) => s1.functionId == s.id);
           s.active = nextValue;
         });
         this.selectAllChecked = false;
@@ -153,7 +156,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
           roleName: this.roleObject.roleName, functionId: row.id, functionName: row.name, functionDescription: row.alias
         }];
       } else {
-        this.listRoleFunction.pop((s: any) => s.roleId == row.id);
+        this.listRoleFunction.pop((s: any) => s.functionId == row.id);
         this.selectAllChecked = false;
       }
       row.active = nextValue;
@@ -178,7 +181,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
       } else {
         this.listFunction.forEach((item: any) => {
           item.child.forEach((s: any) => {
-            this.listRoleFunction.pop((s1: any) => s1.roleId == s.id);
+            this.listRoleFunction.pop((s1: any) => s1.functionId == s.id);
             s.active = nextValue;
           });
           item.active = nextValue;
@@ -192,17 +195,17 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   }
 
   addFunction() {
-    this.baseService.addFunction(this.id, {data: this.listRoleFunction}).then((res) => {
+    this.spinner.show();
+    this.baseService.addRoleFunction(this.id, {data: this.listRoleFunction}).then((res) => {
       this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
-    }).catch(reason => {
-      console.log(reason);
-      this.baseService.showSuccess(MESSAGE.UPDATE_FAIL);
-    }).finally(() => this.goBack())
+      this.goBack();
+    }).catch(e => {
+      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.UPDATE_FAIL);
+    }).finally(() => {
+      this.spinner.show();
+    });
   }
 
-
-
-  isSticky: boolean = false;
   @HostListener('window:scroll', ['$event']) onScroll() {
     if (window.scrollY > 60) {
       this.isSticky = true;

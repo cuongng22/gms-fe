@@ -57,22 +57,6 @@
         </div>
       </form>
     </mat-card-content>
-    <!--<mat-card-header class="mt-20 mb-0 search">
-      <mat-card-title clas>
-        <button class="search-btn" type="button" mat-button (click)="search()">
-          <i class="material-symbols-outlined">
-            search
-          </i>
-          Tìm kiếm
-        </button>
-        <button class="reset-btn" type="button" mat-button (click)="clear()">
-          <i class="material-symbols-outlined">
-            refresh
-          </i>
-          Nhập lại
-        </button>
-      </mat-card-title>
-    </mat-card-header>-->
   </mat-card>
 
   <!-- Content -->
@@ -119,16 +103,16 @@
             <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
           </ng-container>
           @for (innerColumn of _displayedColumns; track innerColumn.value) {
-            <ng-container matColumnDef="{{innerColumn.value}}">
+          <ng-container matColumnDef="{{innerColumn.value}}">
               <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
               <td mat-cell *matCellDef="let element">
                 <span [ngClass]="{
-                'badge rounded-pill': innerColumn.value === 'isActiveLabel',
-                'text-soft-primary': innerColumn.value === 'isActiveLabel' && element['isActive'] == 1,
-                'text-soft-danger': innerColumn.value === 'isActiveLabel' && element['isActive'] == 0
-                }">{{
-                    element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-                  }}</span>
+          'badge rounded-pill': innerColumn.value === 'isActiveLabel',
+          'text-soft-primary': innerColumn.value === 'isActiveLabel' && element['isActive'] == 1,
+          'text-soft-danger': innerColumn.value === 'isActiveLabel' && element['isActive'] == 0
+          }">{{
+          element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+          }}</span>
               </td>
             </ng-container>
           }
@@ -181,6 +165,8 @@
 
   <!-- Add New Popup -->
   <div
+    (keydown.enter)="save()"
+    (keydown.escape)="toggleDialogCreate()"
     [class.active]="showDialogCreate"
     class="add-new-popup"
   >
@@ -189,8 +175,8 @@
         <mat-card-header>
           <mat-card-title>
             <h5 class="mb-0">
-              <span *ngIf="!formGroupDetail.value.roleId" i18n>Create Role</span>
-              <span *ngIf="formGroupDetail.value.roleId" i18n>Update Role</span>
+              <span *ngIf="!formGroupDetail.value.id" i18n>Create Role</span>
+              <span *ngIf="formGroupDetail.value.id" i18n>Update Role</span>
             </h5>
           </mat-card-title>
           <mat-card-subtitle>
@@ -211,7 +197,7 @@
                     <mat-label i18n>Role Name</mat-label>
                     <input formControlName="roleName" i18n-placeholder matInput placeholder="Input role name" required>
                     @if (!!formGroupDetail.controls['roleName'].hasError('required')) {
-                      <mat-error><span i18n>Role name</span><span i18n> not empty</span></mat-error>
+                    <mat-error><span i18n>Role name</span><span i18n> not empty</span></mat-error>
                     }
                   </mat-form-field>
                   <mat-checkbox class="mt-10" formControlName="isActive" i18n>Active</mat-checkbox>
@@ -241,8 +227,56 @@
       </mat-card>
     </div>
   </div>
+
+  <!-- Delete confirm Popup -->
+  <div
+    [class.active]="showDialogDelete"
+    class="add-new-popup"
+  >
+    <div class="popup-dialog">
+      <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
+        <mat-card-header>
+          <mat-card-title>
+            <h5 class="mb-0">
+              <span i18n>Confirm delete</span>
+            </h5>
+          </mat-card-title>
+          <mat-card-subtitle>
+            <button
+              (click)="closeConfirmDelete()"
+              mat-button
+            >
+              <i class="ri-close-fill"></i>
+            </button>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <div class="btn-box">
+            <button (click)="closeConfirmDelete()" color="warn" i18n mat-button type="button">
+              <i class="material-symbols-outlined">
+                close
+              </i>
+              Cancel
+            </button>
+            <button
+              (click)="delete()"
+              color="primary"
+              i18n mat-button
+            >
+              <i class="material-symbols-outlined">
+                save
+              </i>
+              Confirm
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
+
 </ng-container>
 <!-- Add Function Popup -->
 <ng-container *ngIf="step==2">
-  <app-role-function (backStep)="backStep()" [id]="formGroupDetail.value.roleId" [roleObject]="formGroupDetail.value"></app-role-function>
+  <app-role-function (backStep)="backStep()" [id]="formGroupDetail.value.roleId"
+                     [roleObject]="formGroupDetail.value"></app-role-function>
 </ng-container>

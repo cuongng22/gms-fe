@@ -20,7 +20,6 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
   const notification = inject(MatSnackBar);
   const baseService = inject(BaseService);
   const router = inject(Router);
-  // localStorage.setItem('access_token1', 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJhZG1pbkBnaW1hc3lzLmNvbSIsImlhdCI6MTcyNzcwOTk2MywiZXhwIjoxNzI3NzI3OTYzfQ.J8i_SZImlsBBIz4LNX99We433wPM8K4ODIWrNq8oT1nVDOaV6V5ZiOqbY-ioqLSZYyVEM6BulEGGLujy0OHw2A');
   const token = localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN);
   if (token) {
     const authReq = req.clone({
@@ -42,13 +41,11 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
           console.error('Not Found: ', error.message);
         } else if (error.status === 500) {
           console.error('Server Error: ', error.message);
-          baseService.showError('Server Error: ' + error.message)
+          // baseService.showError('Server Error: ' + error.message)
         } else {
           console.error('Error occurred: ', error.message);
         }
-        baseService.showError(MESSAGE.ERROR);
-        // return throwError(() => new Error(error.message));
-        return next(authReq)
+        return throwError(() => error.error);
       })
     );
     // return next(authReq)

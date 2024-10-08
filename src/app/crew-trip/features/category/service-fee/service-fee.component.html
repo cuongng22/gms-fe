@@ -138,11 +138,12 @@
             </div>
           </td>
         </ng-container>
-        <tr *matHeaderRowDef="displayedColumns;sticky: true" mat-header-row></tr>
+        <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
         <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
         <tr *matNoDataRow class="mat-row">
-          <td class="mat-cell border-none" colspan="1"><span i18n>No data matching the filter</span></td>
+          <td class="mat-cell" [attr.colspan]="displayedColumns.length"><span i18n>No data matching the filter</span></td>
         </tr>
+
         <!--        <tr mat-row *matRowDef="let row; columns: ['child'];"></tr>-->
 
       </table>

@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, input, OnInit } from '@angular/core';
+import {Component, ElementRef, inject, input, OnInit} from '@angular/core';
 
 @Component({
   selector: 'sizeInput,[sizeInput]',
@@ -13,7 +13,12 @@ export class InputSizeComponent implements OnInit {
   inputField = inject(ElementRef);
 
   ngOnInit(): void {
-    this.inputField.nativeElement.children[0].classList.add(`size-input-${this.sizeInput()}`);
+    let form = Array.from(this.inputField.nativeElement.children);
+    form.forEach((s: any) => {
+      if (s.localName === 'mat-form-field') {
+        s.classList.add(`size-input-${this.sizeInput()}`);
+      }
+    })
   }
 
 

@@ -111,7 +111,7 @@ export class CommonComponent implements OnInit {
       }
     } catch (e: any) {
       console.log(e);
-      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -125,7 +125,7 @@ export class CommonComponent implements OnInit {
       this.formGroupDetail.patchValue(res);
     } catch (e: any) {
       console.log(e);
-      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -151,8 +151,7 @@ export class CommonComponent implements OnInit {
       await this.closeDetail();
       return res;
     } catch (e: any) {
-      console.error(e);
-      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -163,14 +162,12 @@ export class CommonComponent implements OnInit {
     try {
       await this.spinner.show();
       let res = await this.baseService.delete(this.formGroupDetail.value.id);
-      console.log(res)
       this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
       await this.search();
       await this.closeConfirmDelete();
       return res;
     } catch (e: any) {
-      console.log(e);
-      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -234,7 +231,7 @@ export class CommonComponent implements OnInit {
       this.downloadFile(res, filename ?? 'export.xlsx');
     } catch (e: any) {
       console.log(e);
-      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }

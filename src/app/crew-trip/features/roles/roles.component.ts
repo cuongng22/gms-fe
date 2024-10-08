@@ -13,7 +13,6 @@ import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/m
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 import {RolesService} from "src/app/crew-trip/core/services/roles-service";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
@@ -45,8 +44,7 @@ export class RolesComponent extends CommonComponent implements OnInit {
     {label: $localize`Account`, value: "userCount"},
     {label: $localize`Status`, value: "isActiveLabel"},
   ];
-  // New Popup Trigger
-  classAppliedFunction = false;
+
 
   constructor() {
     super();
@@ -57,8 +55,9 @@ export class RolesComponent extends CommonComponent implements OnInit {
     this.formGroupDetail = this.fb.group({
       id: ['',],
       roleId: ['',],
-      roleName: ['', [Validators.required]],
       name: [''],
+      roleName: ['', [Validators.required]],
+      active: [true,],
       isActive: [true,],
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value}
@@ -73,25 +72,12 @@ export class RolesComponent extends CommonComponent implements OnInit {
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }
 
- /* override async save() {
-    //fix tam
-    data.name = this.formGroupDetail.value.roleName
-    data.id = this.formGroupDetail.value.roleId
-
-    this.formGroupDetail.markAllAsTouched();
-    if (this.formGroupDetail.invalid) {
-      return;
-    }
-    super.save().then(res => {
-      //todo check de tra ve thong bao
-      this.baseService.showSuccess(data.id ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
-      this.closeDetail();
+  override async save() {
+    this.formGroupDetail.patchValue({
+      name: this.formGroupDetail.value.roleName,
+      active: this.formGroupDetail.value.isActive
     });
-  }*/
-
-  async _detail(index: number) {
-    this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
-    this.toggleDialogCreate();
+    await super.save();
   }
 
   async nextStep(index: number) {
@@ -99,14 +85,13 @@ export class RolesComponent extends CommonComponent implements OnInit {
     this.step = 2;
   }
 
-  //
-
   async backStep() {
-    this.search(),
+    await this.search(),
       this.step = 1;
   }
 
-  toggleClassFunction() {
-    this.classAppliedFunction = !this.classAppliedFunction;
+  override async search(body?: any) {
+    await super.search({});
+    this.dataSource.data.forEach((s: any) => s.id = s.roleId)
   }
 }
