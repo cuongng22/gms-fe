@@ -3,7 +3,7 @@ import {CommonModule, NgClass, NgIf, TitleCasePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
 import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
-import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
 import {RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
@@ -44,7 +44,10 @@ export class FunctionsComponent extends CommonComponent implements OnInit {
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({});
-    this.formGroupDetail = this.fb.group({});
+    this.formGroupDetail = this.fb.group({
+      id: ['',],
+      alias: ['', [Validators.required]],
+    });
   }
 
   override async ngOnInit() {
@@ -72,5 +75,13 @@ export class FunctionsComponent extends CommonComponent implements OnInit {
     } catch (e) {
       this.baseService.showWarning(MESSAGE.ERROR)
     }
+  }
+
+  async _showDialogDetail(data: any) {
+    this.formGroupDetail.patchValue({
+      id: data.id,
+      alias: data.alias,
+    })
+    this.toggleDialogCreate();
   }
 }

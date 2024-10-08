@@ -49,11 +49,14 @@
               </ng-container>
               <ng-container matColumnDef="alias">
                 <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
-                <td *matCellDef="let element" mat-cell>
-                  <input [(ngModel)]="element.alias" i18n-placeholder matInput placeholder="Input code" required>
-               <!--   @if (!!formGroupDetail.controls['code'].hasError('required')) {
-                    <mat-error><span i18n>Code</span><span i18n> not empty</span></mat-error>
-                  }-->
+                <td *matCellDef="let element" mat-cell sizeInput="sm">
+                  <mat-form-field>
+                  <input [(ngModel)]="element.alias" i18n-placeholder matInput placeholder="Alias Name" required>
+                    <mat-hint align="end">{{element.alias.length}} / 250</mat-hint>
+                     @if (!!formGroupDetail.controls['alias'].hasError('required')) {
+                       <mat-error><span i18n>Alias</span><span i18n> not empty</span></mat-error>
+                     }
+                  </mat-form-field>
                 </td>
               </ng-container>
               <!-- Action Column -->
@@ -62,18 +65,10 @@
                   Action
                 </th>
                 <td *matCellDef="let element;let i = dataIndex" mat-cell>
-                  <div class="action-buttons d-flex align-items-center justify-content-end">
-                    <a mat-button type="button">
-
-                    </a>
-                    <a (click)="showDialogDetail(i,'index')" mat-button type="button">
-                      <i class="material-symbols-outlined" i18n-title title="Edit">
-                        edit
-                      </i>
-                    </a>
-                    <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">
-                      <i class="material-symbols-outlined" title="Delete">
-                        delete
+                  <div class="action-buttons d-flex align-items-center justify-content-center">
+                    <a (click)="_showDialogDetail(element)" mat-button type="button">
+                      <i class="material-symbols-outlined" style="font-size: 30px" i18n-title title="Save">
+                        save
                       </i>
                     </a>
                   </div>
@@ -92,3 +87,49 @@
     </div>
   </mat-card-content>
 </mat-card>
+
+<!-- Save confirm Popup -->
+<div
+  [class.active]="showDialogCreate"
+  class="add-new-popup"
+>
+  <div class="popup-dialog">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
+      <mat-card-header>
+        <mat-card-title>
+          <h5 class="mb-0">
+            <span i18n>Confirm Save</span>
+          </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <button
+            (click)="closeDetail()"
+            mat-button
+          >
+            <i class="ri-close-fill"></i>
+          </button>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="btn-box">
+          <button (click)="closeDetail()" color="warn" i18n mat-button type="button">
+            <i class="material-symbols-outlined">
+              close
+            </i>
+            Cancel
+          </button>
+          <button
+            (click)="save()"
+            color="primary"
+            i18n mat-button
+          >
+            <i class="material-symbols-outlined">
+              save
+            </i>
+            Confirm
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
