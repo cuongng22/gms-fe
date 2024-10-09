@@ -94,7 +94,8 @@ export class CommonComponent implements OnInit {
       await this.spinner.show();
       let res = await this.baseService.search({
         page: this.pageIndex,
-        size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+        size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
+        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
       });
       console.log(res)
       if (res) {

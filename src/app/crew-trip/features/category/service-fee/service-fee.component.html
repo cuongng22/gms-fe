@@ -102,16 +102,16 @@
           <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
         </ng-container>
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
-          <ng-container matColumnDef="{{innerColumn.value}}">
+        <ng-container matColumnDef="{{innerColumn.value}}">
             <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
             <td mat-cell *matCellDef="let element">
                 <span [ngClass]="{
-          'badge rounded-pill': innerColumn.value === 'activeLabel',
-          'text-soft-primary': innerColumn.value === 'activeLabel' && element['active'] == 1,
-          'text-soft-danger': innerColumn.value === 'activeLabel' && element['active'] == 0
-          }">{{
-                    element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-                  }}</span>
+        'badge rounded-pill': innerColumn.value === 'activeLabel',
+        'text-soft-primary': innerColumn.value === 'activeLabel' && element['active'] == 1,
+        'text-soft-danger': innerColumn.value === 'activeLabel' && element['active'] == 0
+        }">{{
+        element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+        }}</span>
             </td>
           </ng-container>
         }
@@ -141,7 +141,8 @@
         <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
         <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
         <tr *matNoDataRow class="mat-row">
-          <td class="mat-cell" [attr.colspan]="displayedColumns.length"><span i18n>No data matching the filter</span></td>
+          <td [attr.colspan]="displayedColumns.length" class="mat-cell"><span i18n>No data matching the filter</span>
+          </td>
         </tr>
 
         <!--        <tr mat-row *matRowDef="let row; columns: ['child'];"></tr>-->
@@ -193,23 +194,36 @@
                   <mat-label i18n>Code</mat-label>
                   <input formControlName="code" i18n-placeholder matInput placeholder="Input code" required>
                   @if (!!formGroupDetail.controls['code'].hasError('required')) {
-                    <mat-error><span i18n>Code</span><span i18n> not empty</span></mat-error>
+                  <mat-error><span i18n>Code</span><span i18n> not empty</span></mat-error>
                   }
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label i18n>Name</mat-label>
                   <input formControlName="name" i18n-placeholder matInput placeholder="Input Name" required>
                   @if (!!formGroupDetail.controls['name'].hasError('required')) {
-                    <mat-error><span i18n>Name</span><span i18n> not empty</span></mat-error>
+                  <mat-error><span i18n>Name</span><span i18n> not empty</span></mat-error>
                   }
                 </mat-form-field>
                 <mat-form-field>
+                  <mat-label i18n>Choose unit</mat-label>
+                  <mat-select formControlName="unit" required>
+                    <mat-option i18n value="AC">AC</mat-option>
+                    <mat-option i18n value="Buổi">Buổi</mat-option>
+                    <mat-option i18n value="Chuyến">Chuyến</mat-option>
+                    <mat-option i18n value="Đêm">Đêm</mat-option>
+                    <mat-option i18n value="Gói">Gói</mat-option>
+                    <mat-option i18n value="Lần">Lần</mat-option>
+                    <mat-option i18n value="Lượt">Lượt</mat-option>
+                    <mat-option i18n value="Người">Người</mat-option>
+                    <mat-option i18n value="Phòng">Phòng</mat-option>
+                    <mat-option i18n value="Tháng">Tháng</mat-option>
+                  </mat-select>
+                </mat-form-field>
+                <mat-form-field>
                   <mat-label i18n>Description</mat-label>
-                  <input formControlName="description" i18n-placeholder matInput placeholder="Input Description"
-                         required>
-                  @if (!!formGroupDetail.controls['description'].hasError('required')) {
-                    <mat-error><span i18n>Description</span><span i18n> not empty</span></mat-error>
-                  }
+                  <textarea formControlName="description" i18n-placeholder matInput
+                            placeholder="Input Description"></textarea>
+                  <mat-hint align="end">{{formGroupDetail.value.description.length}} / 500</mat-hint>
                 </mat-form-field>
                 <mat-checkbox class="mt-10" formControlName="active" i18n>Active</mat-checkbox>
               </div>

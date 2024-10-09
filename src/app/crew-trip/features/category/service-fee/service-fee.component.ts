@@ -45,6 +45,7 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
   }[] = [
     {label: $localize`Code`, value: "code"},
     {label: $localize`Name`, value: "name"},
+    {label: $localize`Unit`, value: "unit"},
     {label: $localize`Description`, value: "description"},
     {label: $localize`Status`, value: "activeLabel"}
   ]
@@ -59,6 +60,7 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
       id: ['',],
       code: ['', [Validators.required]],
       name: ['', [Validators.required]],
+      unit: ['', [Validators.required]],
       description: ['',],
       active: [true,]
     });
