@@ -1,0 +1,170 @@
+<mat-card class="border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0" i18n="@@carRentalInformation">
+                Car rental information
+            </h5>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="formGroupDetail" (ngSubmit)="save()" autocomplete="off">
+            <div class="row">
+                @if(!data.isCreate){
+                <div class="col-md-6">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@airport">Airport</mat-label>
+                            <input matInput formControlName="airport" [readonly]="readonlyDetail()">
+                        </mat-form-field>
+                    </div>
+                </div>
+                }
+                <div [ngClass]="{'col-md-6':!data.isCreate}" class="col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@carRentalCode">
+                                Car rental code
+                            </mat-label>
+                            <input matInput formControlName="code" required [readonly]="readonlyDetail()"
+                                maxlength="250">
+                            @if (
+                            formGroupDetail.controls.code.hasError('required') &&
+                            formGroupDetail.controls.code.touched) {
+                            <mat-error i18n="@@carRentalCodeRequired">Car rental code {{MESSAGE.REQUIRED}}</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@carRentalCompany">
+                                Car rental company
+                            </mat-label>
+                            <input matInput formControlName="name" required maxlength="250"
+                                [readonly]="readonlyDetail()">
+                            @if (
+                            formGroupDetail.controls.name.hasError('required') &&
+                            formGroupDetail.controls.name.touched) {
+                            <mat-error i18n="@@carRentalCompanyRequired">Car rental company {{MESSAGE.REQUIRED}}</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@address">
+                                Address
+                            </mat-label>
+                            <input matInput formControlName="address" [readonly]="readonlyDetail()">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@contactName">
+                                Contact name
+                            </mat-label>
+                            <input matInput formControlName="fullName" [readonly]="readonlyDetail()">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@emailBooking">Email</mat-label>
+                            <input type="email" matInput formControlName="email" required maxlength="250"
+                                [readonly]="readonlyDetail()">
+                            @if (
+                            formGroupDetail.controls.email.hasError('required') &&
+                            formGroupDetail.controls.email.touched) {
+                            <mat-error i18n="@@emailBooking:emailRequired">Email {{MESSAGE.REQUIRED}}</mat-error>
+                            }
+                            @if (
+                            formGroupDetail.controls.email.hasError('email') &&
+                            formGroupDetail.controls.email.touched) {
+                            <mat-error i18n="@@eemailBooking:mailFormatInvalid">Email
+                                {{MESSAGE.FORMAT_INVALID}}</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@phoneNumber">
+                                Phone number
+                            </mat-label>
+                            <input matInput formControlName="phone" [readonly]="readonlyDetail()">
+                            <!-- @if (
+                            formGroupDetail.controls.phone.hasError('required') &&
+                            formGroupDetail.controls.phone.touched) {
+                            <mat-error i18n="@@phoneNumberRequired">Phone number {{MESSAGE.REQUIRED}}</mat-error>
+                            } -->
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20">
+                        <mat-form-field>
+                            <mat-label i18n="@@notes">
+                                Notes
+                            </mat-label>
+                            <textarea matInput formControlName="notes" matAutosizeMaxRows=3 maxlength="500"
+                                [readonly]="readonlyDetail()"></textarea>
+
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-6">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@status">Status</mat-label>
+                            @if(data.isCreate){
+                            <mat-select formControlName="active">
+                                <mat-option [value]="true" i18n="@@active">Active</mat-option>
+                                <mat-option [value]="false" i18n="@@inactive">Inactive</mat-option>
+                            </mat-select>
+                            }@else {
+                            <input matInput [value]="data.carRental.activeLable" [readonly]="readonlyDetail()">
+                            }
+
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-box text-center">
+                <button type="button" mat-button (click)="close()" class="danger-btn mr-20">
+                    <i class="material-symbols-outlined">
+                        close
+                    </i>
+                    @if(data.isCreate){
+                    <span i18n="@@cancel">Cancel</span>
+                    }@else {
+                    <span i18n="@@close">Close</span>
+                    }
+                </button>
+                @if(data.isCreate){
+                <button mat-button color="primary" type="submit" class="add-btn">
+                    <i class="material-symbols-outlined">
+                        save
+                    </i>
+                    <span i18n="@@save">Save</span>
+                </button>
+                }
+
+            </div>
+        </form>
+
+    </mat-card-content>
+</mat-card>

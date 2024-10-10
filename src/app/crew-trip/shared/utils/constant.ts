@@ -1,3 +1,5 @@
+import { effect, Signal, signal } from "@angular/core";
+
 export class Constant {
   static DATE_FORMAT = 'DD/MM/YYYY';
   static DATE_TIME_FORMAT = 'DD/MM/YYYY HH:mm';
@@ -40,3 +42,16 @@ export function removeNullValues(obj: any): any {
   return obj;
 }
 
+export function debouncedSignal<T>(input: Signal<T>, timeOutMs = 0): Signal<T> {
+  const debounceSignal = signal(input());
+  effect(() => {
+    const value = input();
+    const timeout = setTimeout(() => {
+      debounceSignal.set(value);
+    }, timeOutMs);
+    return () => {
+      clearTimeout(timeout);
+    };
+  });
+  return debounceSignal;
+}

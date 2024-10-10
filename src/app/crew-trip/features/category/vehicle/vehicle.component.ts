@@ -40,7 +40,6 @@ export class VehicleComponent extends CommonComponent implements OnInit {
 
   // danh sách thị trường
   markets: any[] = [];
-
   filteredOptionsMarket: Observable<any[]>;
 
   override formGroupSearch = this.formBuilder.group({
@@ -90,7 +89,7 @@ export class VehicleComponent extends CommonComponent implements OnInit {
       return this.markets;
     }
     const filterValue = value.toLowerCase();
-    return this.markets.filter(market => market.value.toLowerCase().includes(filterValue));
+    return this.markets.filter(market => market.toLowerCase().includes(filterValue));
   }
 
   override search(): any {
