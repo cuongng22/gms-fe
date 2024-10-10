@@ -2,7 +2,7 @@
 <ng-container *ngIf="step==1">
   <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
     <h5 class="mb-0" i18n>
-      Roles
+      Contract
     </h5>
     <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
       <li class="breadcrumb-item d-inline-block position-relative">
@@ -14,7 +14,7 @@
         </a>
       </li>
       <li class="breadcrumb-item d-inline-block position-relative" i18n>
-        Roles
+        Contract
       </li>
     </ol>
   </div>
@@ -162,122 +162,9 @@
       </mat-paginator>
     </mat-card-content>
   </mat-card>
-
-  <!-- Add New Popup -->
-  <div
-    (keydown.enter)="save()"
-    (keydown.escape)="toggleDialogCreate()"
-    [class.active]="showDialogCreate"
-    class="add-new-popup"
-  >
-    <div class="popup-dialog">
-      <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
-        <mat-card-header>
-          <mat-card-title>
-            <h5 class="mb-0">
-              <span *ngIf="!formGroupDetail.value.id" i18n>Create Role</span>
-              <span *ngIf="formGroupDetail.value.id" i18n>Update Role</span>
-            </h5>
-          </mat-card-title>
-          <mat-card-subtitle>
-            <button
-              (click)="toggleDialogCreate()"
-              mat-button
-            >
-              <i class="ri-close-fill"></i>
-            </button>
-          </mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <form [formGroup]="formGroupDetail" autocomplete="off">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="form-group">
-                  <mat-form-field>
-                    <mat-label i18n>Role Name</mat-label>
-                    <input formControlName="roleName" i18n-placeholder matInput maxlength="250" placeholder="Input role name"
-                           required>
-                    @if (!!formGroupDetail.controls['roleName'].hasError('required')) {
-                    <mat-error><span i18n>Role name</span><span i18n> not empty</span></mat-error>
-                    }
-                  </mat-form-field>
-                  <mat-checkbox class="mt-10" formControlName="isActive" i18n>Active</mat-checkbox>
-                </div>
-              </div>
-            </div>
-          </form>
-          <div class="btn-box">
-            <button (click)="closeDetail()" color="warn" i18n mat-button type="button">
-              <i class="material-symbols-outlined">
-                close
-              </i>
-              Cancel
-            </button>
-            <button
-              (click)="save()"
-              color="primary"
-              i18n mat-button
-            >
-              <i class="material-symbols-outlined">
-                save
-              </i>
-              Save
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-
-  <!-- Delete confirm Popup -->
-  <div
-    [class.active]="showDialogDelete"
-    class="add-new-popup"
-  >
-    <div class="popup-dialog">
-      <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
-        <mat-card-header>
-          <mat-card-title>
-            <h5 class="mb-0">
-              <span i18n>Confirm delete</span>
-            </h5>
-          </mat-card-title>
-          <mat-card-subtitle>
-            <button
-              (click)="closeConfirmDelete()"
-              mat-button
-            >
-              <i class="ri-close-fill"></i>
-            </button>
-          </mat-card-subtitle>
-        </mat-card-header>
-        <mat-card-content>
-          <div class="btn-box">
-            <button (click)="closeConfirmDelete()" color="warn" i18n mat-button type="button">
-              <i class="material-symbols-outlined">
-                close
-              </i>
-              Cancel
-            </button>
-            <button
-              (click)="delete()"
-              color="primary"
-              i18n mat-button
-            >
-              <i class="material-symbols-outlined">
-                save
-              </i>
-              Confirm
-            </button>
-          </div>
-        </mat-card-content>
-      </mat-card>
-    </div>
-  </div>
-
 </ng-container>
-<!-- Detail page -->
+<!-- Add Function Popup -->
 <ng-container *ngIf="step==2">
-  <app-contract-detail (backStep)="backStep()" [dataSelected]="formGroupDetail.value"
-                       [id]="formGroupDetail.value.id"></app-contract-detail>
+  <app-role-function (backStep)="backStep()" [id]="formGroupDetail.value.roleId"
+                     [roleObject]="formGroupDetail.value"></app-role-function>
 </ng-container>
