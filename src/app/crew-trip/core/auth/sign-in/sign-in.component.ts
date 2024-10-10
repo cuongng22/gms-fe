@@ -75,7 +75,7 @@ export class SignInComponent {
     }
    try {
      if (this.formGroup.valid) {
-       `await this.spinner.show();`
+       await this.spinner.show();
        const resp = await this.usersService.login(this.formGroup.value)
        this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, resp.data.token);
        this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(resp.data.userInfo));
