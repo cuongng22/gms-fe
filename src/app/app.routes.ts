@@ -6,7 +6,6 @@ import {SignInComponent} from "src/app/crew-trip/core/auth/sign-in/sign-in.compo
 import {RolesComponent} from "src/app/crew-trip/features/roles/roles.component";
 import {AuthGuard} from "src/app/crew-trip/core/guards/menu.guard";
 import {VehicleComponent} from "src/app/crew-trip/features/category/vehicle/vehicle.component";
-import {ContractComponent} from "src/app/crew-trip/features/category/contract/contract.component";
 import {RateComponent} from "src/app/crew-trip/features/category/rate/rate.component";
 import {HotelComponent} from "src/app/crew-trip/features/category/hotel/hotel.component";
 import {NationComponent} from "src/app/crew-trip/features/category/nation/nation.component";
@@ -15,6 +14,7 @@ import {CrewsComponent} from "src/app/crew-trip/features/category/crews/crews.co
 import {NotFoundComponent} from "src/app/not-found/not-found.component";
 import {ForgotPasswordComponent} from "src/app/crew-trip/core/auth/forgot-password/forgot-password.component";
 import {FunctionsComponent} from "src/app/crew-trip/features/functions/functions.component";
+import {ContractComponent} from "src/app/crew-trip/features/contract/contract.component";
 import {ProfileComponent} from "src/app/crew-trip/core/auth/profile/profile.component";
 import {ResetPasswordComponent} from "src/app/crew-trip/core/auth/reset-password/reset-password.component";
 
@@ -31,6 +31,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       {path: 'ke-hoach', component: KeHoachComponent},
+      {path: 'contract', component: ContractComponent},
       {
         path: 'admin', children: [
           {path: 'users', component: UsersComponent},

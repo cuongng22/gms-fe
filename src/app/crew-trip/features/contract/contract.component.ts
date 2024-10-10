@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {CommonModule, NgClass, NgIf, TitleCasePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
@@ -19,19 +19,18 @@ import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
 import {NoDataRowOutlet} from "@angular/cdk/table";
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {ContractDetailComponent} from "src/app/crew-trip/features/contract/contract-detail/contract-detail.component";
 
 
 @Component({
-  selector: 'app-roles',
+  selector: 'app-contract',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent],
-  templateUrl: './roles.component.html',
-  styleUrl: './roles.component.scss',
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet],
+  templateUrl: './contract.component.html',
+  styleUrl: './contract.component.scss',
 })
 
 
-export class RolesComponent extends CommonComponent implements OnInit {
+export class ContractComponent extends CommonComponent implements OnInit {
   override baseService = inject(RolesService);
   usersService = inject(UsersService);
   fb = inject(FormBuilder);
@@ -45,21 +44,16 @@ export class RolesComponent extends CommonComponent implements OnInit {
     {label: $localize`Account`, value: "userCount"},
     {label: $localize`Status`, value: "isActiveLabel"},
   ];
+  @Input() contractId: any;
 
 
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
-      s: ['',],
-      a: ['',],
+
     });
     this.formGroupDetail = this.fb.group({
-      id: ['',],
-      roleId: ['',],
-      name: [''],
-      roleName: ['', [Validators.required, Validators.maxLength(250)]],
-      active: [true,],
-      isActive: [true,],
+
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value}
     this.formGroupDetailInit = {...this.formGroupDetail.value}
@@ -67,10 +61,18 @@ export class RolesComponent extends CommonComponent implements OnInit {
 
   override async ngOnInit() {
     await Promise.all([
-      this.search(),
+      // this.search(),
     ]).then(() => {
     });
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
+  }
+
+  override async save() {
+    this.formGroupDetail.patchValue({
+      name: this.formGroupDetail.value.roleName,
+      active: this.formGroupDetail.value.isActive
+    });
+    await super.save();
   }
 
   async nextStep(index: number) {
@@ -81,5 +83,10 @@ export class RolesComponent extends CommonComponent implements OnInit {
   async backStep() {
     await this.search(),
       this.step = 1;
+  }
+
+  override async search(body?: any) {
+    await super.search({});
+    this.dataSource.data.forEach((s: any) => s.id = s.roleId)
   }
 }
