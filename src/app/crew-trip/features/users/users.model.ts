@@ -60,3 +60,4 @@ export class User {
 export class ResetPasswordRequest {
     constructor(public newPassword: string, public email: string) { }
 }
+

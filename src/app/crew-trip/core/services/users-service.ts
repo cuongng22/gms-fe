@@ -26,6 +26,11 @@ export class UsersService extends BaseService {
     return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
   }
 
+  forgotResetPassword(body: any): Promise<any> {
+    const url = `${this.api}/${this.path}/auth/reset-password`
+    return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
+  }
+
   logout() {
     localStorage.clear();
   }
@@ -38,6 +43,11 @@ export class UsersService extends BaseService {
   resetPassword(body: ResetPasswordRequest): Promise<any> {
     const url = `${this.api}/${this.path}/auth/reset-password`
     return firstValueFrom(this.http.put<any>(url, body, this.httpOptions));
+  }
+
+  changePassword(body: any): Promise<any> {
+    const url = `${this.api}/${this.path}/auth/self-reset-password`
+    return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
   }
 
   getUserLogin(): UserLogin | null{

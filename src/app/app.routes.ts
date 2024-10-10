@@ -15,6 +15,8 @@ import {CrewsComponent} from "src/app/crew-trip/features/category/crews/crews.co
 import {NotFoundComponent} from "src/app/not-found/not-found.component";
 import {ForgotPasswordComponent} from "src/app/crew-trip/core/auth/forgot-password/forgot-password.component";
 import {FunctionsComponent} from "src/app/crew-trip/features/functions/functions.component";
+import {ProfileComponent} from "src/app/crew-trip/core/auth/profile/profile.component";
+import {ResetPasswordComponent} from "src/app/crew-trip/core/auth/reset-password/reset-password.component";
 
 
 export const routes: Routes = [
@@ -47,6 +49,7 @@ export const routes: Routes = [
           {path: 'crews', component: CrewsComponent},
         ]
       },
+      {path: 'profile', component: ProfileComponent},
     ]
   },
   {
@@ -54,6 +57,7 @@ export const routes: Routes = [
     children: [
       {path: 'login', component: SignInComponent},
       {path: 'forgot-password', component: ForgotPasswordComponent},
+      { path: 'reset-password', component: ResetPasswordComponent}
     ]
   },
   {path: '**', component: NotFoundComponent}

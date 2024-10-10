@@ -1,0 +1,91 @@
+<mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
+<div class="account-settings-card">
+  <h5>
+    Profile
+  </h5>
+  <div class="row mt-10">
+<!--    <div class="col-md-2 mb-10">-->
+<!--    <file-upload class="file-uploader" [multiple]="multiple"></file-upload>-->
+<!--  </div>-->
+    <form  ngForm [formGroup]="formGroup"  autocomplete="off">
+  <div class="row col-md-8">
+    <div class="col-sm-12 mb-10">
+      <div class="form-group">
+        <mat-form-field >
+          <mat-label>
+            Enter first name
+          </mat-label>
+          <input matInput formControlName="email" value="Olivia" sizeInput="sm">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-sm-12 mb-10">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>
+            Enter email address
+          </mat-label>
+          <input matInput value="olivia@trezo.com">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-sm-12 mb-10">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>
+            Enter phone number
+          </mat-label>
+          <input matInput value="+1 444 555 6699">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-sm-12 mb-10">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>
+            Enter address
+          </mat-label>
+          <input matInput value="84 S. Arrowhead Court Branford">
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-sm-12 mb-10">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label>
+            Select
+          </mat-label>
+          <mat-select [(value)]="genderSelected">
+            <mat-option value="option1">
+              Male
+            </mat-option>
+            <mat-option value="option2">
+              Female
+            </mat-option>
+            <mat-option value="option3">
+              Custom
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </div>
+    </div>
+  </div>
+      <div class="btn-box text-center mt-10">
+        <button type="button" mat-button color="warn">
+          <i class="material-symbols-outlined">
+            close
+          </i>
+          <span i18n="@@cancel">Cancel</span>
+        </button>
+        <button mat-button color="primary" type="submit">
+          <i class="material-symbols-outlined">
+            check_circle
+          </i>
+          <span i18n="@@confirm">Confirm</span>
+        </button>
+      </div>
+    </form>
+
+</div>
+</div>
+</mat-card>

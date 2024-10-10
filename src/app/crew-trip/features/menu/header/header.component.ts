@@ -1,4 +1,12 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, HostListener, inject, NO_ERRORS_SCHEMA} from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  HostListener,
+  inject,
+  NO_ERRORS_SCHEMA,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {Router, RouterLink} from '@angular/router';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
@@ -16,26 +24,26 @@ import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
 import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
-import {ReactiveFormsModule} from "@angular/forms";
+import {Constant, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
-import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
-import {NoDataRowOutlet} from "@angular/cdk/table";
-import {DialogComponent} from "src/app/ui-elements/dialog/dialog.component";
+import {NgxSpinnerService} from "ngx-spinner";
 
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent],
+  imports: [RouterLink, FormsModule, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent  {
+  fb = inject(FormBuilder);
   toggleService = inject(ToggleService);
   themeService = inject(CustomizerSettingsService);
   userService = inject(UsersService);
   router = inject(Router);
+  spinner = inject(NgxSpinnerService);
   dialog = inject(MatDialog); // Inject MatDialog
   // isSidebarToggled
   isSidebarToggled = false;
@@ -43,7 +51,10 @@ export class HeaderComponent {
   // isToggled
   isToggled = false;
   showDialogConfirm = false;
-
+  passwordInputType = 'password';
+  dialogResetPassword = false;
+  formGroup: FormGroup;
+  errorMessage: string | null = null;
   constructor() {
     this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
       this.isSidebarToggled = isSidebarToggled;
@@ -51,7 +62,15 @@ export class HeaderComponent {
     this.themeService.isToggled$.subscribe(isToggled => {
       this.isToggled = isToggled;
     });
+
+    this.formGroup = this.fb.group({
+      email: ['',  [Validators.required]],
+      oldPassword: ['',  [Validators.required]],
+      newPassword: ['',  [Validators.required]],
+      confirmNewPassword: ['',  [Validators.required]],
+    });
   }
+
 
   // Burger Menu Toggle
   toggle() {
@@ -159,5 +178,35 @@ export class HeaderComponent {
 
   toggleDialogConfirm() {
     this.showDialogConfirm = !this.showDialogConfirm;
+  }
+
+  openDialogResetPassword(email: string) {
+    this.dialogResetPassword = !this.dialogResetPassword;
+    this.formGroup?.reset();
+    this.formGroup.patchValue({
+      email: email
+    });
+  }
+
+  async confirmChangePassword() {
+    if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
+      return;
+    }
+    if(this.formGroup.get("newPassword")?.value !== this.formGroup.get("confirmNewPassword")?.value){
+      this.formGroup.get('confirmNewPassword')?.setErrors({ incorrect: true });
+      this.errorMessage = $localize`Confirm new password does not match new password`;
+      return;
+    }
+    try {
+      this.spinner.show();
+      await this.userService.changePassword(this.formGroup.value);
+      this.userService.showSuccess(MESSAGE.UPDATE_SUCCESS);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      this.spinner.hide();
+      this.dialogResetPassword = false;
+    }
   }
 }

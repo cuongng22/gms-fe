@@ -18,7 +18,7 @@ import {NgxSpinnerModule, NgxSpinnerService} from "ngx-spinner";
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
+  imports: [CommonModule,FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
     TranslateModule, MatIconModule,NgxSpinnerModule
   ],
   templateUrl: './forgot-password.component.html',

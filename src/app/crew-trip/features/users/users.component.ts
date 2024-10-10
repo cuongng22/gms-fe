@@ -113,9 +113,6 @@ export class UsersComponent extends CommonComponent implements OnInit {
     ]).then(() => {
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'roles', 'status', 'action'];
-
-
-
   }
 
   async getRoles() {
