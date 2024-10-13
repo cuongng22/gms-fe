@@ -28,6 +28,8 @@ import {Constant, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 import {NgxSpinnerService} from "ngx-spinner";
+import {LanguageService} from "src/app/crew-trip/core/services/language.service";
+import {Observable} from "rxjs";
 
 
 @Component({
@@ -37,7 +39,8 @@ import {NgxSpinnerService} from "ngx-spinner";
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent  {
+export class HeaderComponent implements OnInit {
+  currentLanguage!: Observable<string>;
   fb = inject(FormBuilder);
   toggleService = inject(ToggleService);
   themeService = inject(CustomizerSettingsService);
@@ -55,7 +58,7 @@ export class HeaderComponent  {
   dialogResetPassword = false;
   formGroup: FormGroup;
   errorMessage: string | null = null;
-  constructor() {
+  constructor(private languageService: LanguageService) {
     this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
       this.isSidebarToggled = isSidebarToggled;
     });
@@ -70,7 +73,9 @@ export class HeaderComponent  {
       confirmNewPassword: ['',  [Validators.required]],
     });
   }
-
+  changeLanguage(language: string) {
+    this.languageService.setLanguage(language);
+  }
 
   // Burger Menu Toggle
   toggle() {
@@ -105,6 +110,7 @@ export class HeaderComponent  {
 
   ngOnInit() {
     // Listen for fullscreen change events to update the button text
+    this.currentLanguage = this.languageService.currentLanguage$;
     this.userInfo = this.userService.getUserLogin();
     document.addEventListener('fullscreenchange', this.onFullscreenChange.bind(this));
     document.addEventListener('webkitfullscreenchange', this.onFullscreenChange.bind(this));

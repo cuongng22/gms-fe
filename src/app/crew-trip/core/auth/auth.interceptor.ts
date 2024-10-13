@@ -8,22 +8,24 @@ import {
 } from '@angular/common/http';
 import { Observable, tap, throwError, timeout } from 'rxjs';
 import { catchError } from "rxjs/operators";
-import { inject } from "@angular/core";
+import {inject, LOCALE_ID} from "@angular/core";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { Router } from "@angular/router";
 import { BaseService } from '../services/base-service';
 import { MESSAGE } from '../../shared/utils/constant';
 import {STORAGE_KEY} from "src/app/crew-trip/core/constants/config";
+import {LanguageService} from "src/app/crew-trip/core/services/language.service";
 
 
 export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
-  const notification = inject(MatSnackBar);
-  const baseService = inject(BaseService);
+  const locale = inject(LOCALE_ID);
   const router = inject(Router);
+  const languageService = inject(LanguageService);
   const token = localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN);
   if (token) {
     const authReq = req.clone({
       headers: new HttpHeaders({
+        'Accept-Language':  languageService.getLanguage(),
         'Authorization': `Bearer ${token}`
       })
     });
