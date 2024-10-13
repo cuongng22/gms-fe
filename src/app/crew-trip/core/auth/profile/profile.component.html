@@ -1,8 +1,26 @@
 <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
 <div class="account-settings-card">
+  <div class="d-flex justify-content-between align-items-center">
   <h5>
     Profile
   </h5>
+    <div>
+      <button mat-button color="primary" *ngIf="!isEditMode" (click)="updateEditMode()">
+        <i class="material-symbols-outlined">edit</i>
+        <span i18n="@@edit">Edit</span>
+      </button>
+      <div *ngIf="isEditMode">
+        <button mat-button color="primary" (click)="saveProfile()">
+          <i class="material-symbols-outlined">save</i>
+          <span i18n="@@save">Save</span>
+        </button>
+        <button mat-button color="warn" (click)="onCancel()">
+          <i class="material-symbols-outlined">cancel</i>
+          <span i18n="@@cancel">Cancel</span>
+        </button>
+      </div>
+    </div>
+  </div>
   <div class="row mt-10">
 <!--    <div class="col-md-2 mb-10">-->
 <!--    <file-upload class="file-uploader" [multiple]="multiple"></file-upload>-->
@@ -12,20 +30,62 @@
     <div class="col-sm-12 mb-10">
       <div class="form-group">
         <mat-form-field >
-          <mat-label>
-            Enter first name
+          <mat-label i18n="@@department">
+            Department
           </mat-label>
-          <input matInput formControlName="email" value="Olivia" sizeInput="sm">
+          <input matInput formControlName="department"  sizeInput="sm" >
+          <mat-error *ngIf="formGroup.get('department')?.invalid && formGroup.get('department')?.touched">
+                                <span *ngIf="formGroup.get('department')?.hasError('required')">
+                                Department is required
+                                </span>
+          </mat-error>
         </mat-form-field>
       </div>
     </div>
     <div class="col-sm-12 mb-10">
       <div class="form-group">
         <mat-form-field>
-          <mat-label>
-            Enter email address
+          <mat-label i18n="@@fullName">
+            Full name
           </mat-label>
-          <input matInput value="olivia@trezo.com">
+          <input matInput formControlName="fullName" sizeInput="sm" >
+          <mat-error *ngIf="formGroup.get('fullName')?.invalid && formGroup.get('fullName')?.touched">
+                                <span *ngIf="formGroup.get('fullName')?.hasError('required')">
+                                FullName is required
+                                </span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-sm-12 mb-10">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label i18n="@@gender">
+            Gender
+          </mat-label>
+          <mat-select formControlName="gender" >
+            <mat-option [value]="0" i18n="@@female">
+              Female
+            </mat-option>
+            <mat-option [value]="1" i18n="@@male">
+              Male
+            </mat-option>
+          </mat-select>
+          <mat-error *ngIf="formGroup.get('gender')?.invalid && formGroup.get('gender')?.touched">
+                                <span *ngIf="formGroup.get('gender')?.hasError('required')">
+                                Gender is required
+                                </span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+    </div>
+    <div class="col-sm-12 mb-10">
+      <div class="form-group">
+        <mat-form-field>
+          <mat-label i18n="@@email">
+            Email
+          </mat-label>
+          <input matInput formControlName="email" [disabled]="true">
         </mat-form-field>
       </div>
     </div>
@@ -35,55 +95,25 @@
           <mat-label>
             Enter phone number
           </mat-label>
-          <input matInput value="+1 444 555 6699">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="col-sm-12 mb-10">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>
-            Enter address
-          </mat-label>
-          <input matInput value="84 S. Arrowhead Court Branford">
-        </mat-form-field>
-      </div>
-    </div>
-    <div class="col-sm-12 mb-10">
-      <div class="form-group">
-        <mat-form-field>
-          <mat-label>
-            Select
-          </mat-label>
-          <mat-select [(value)]="genderSelected">
-            <mat-option value="option1">
-              Male
-            </mat-option>
-            <mat-option value="option2">
-              Female
-            </mat-option>
-            <mat-option value="option3">
-              Custom
-            </mat-option>
-          </mat-select>
+          <input matInput  formControlName="phone">
         </mat-form-field>
       </div>
     </div>
   </div>
-      <div class="btn-box text-center mt-10">
-        <button type="button" mat-button color="warn">
-          <i class="material-symbols-outlined">
-            close
-          </i>
-          <span i18n="@@cancel">Cancel</span>
-        </button>
-        <button mat-button color="primary" type="submit">
-          <i class="material-symbols-outlined">
-            check_circle
-          </i>
-          <span i18n="@@confirm">Confirm</span>
-        </button>
-      </div>
+<!--      <div class="btn-box text-center mt-10">-->
+<!--        <button type="button" mat-button color="warn">-->
+<!--          <i class="material-symbols-outlined">-->
+<!--            close-->
+<!--          </i>-->
+<!--          <span i18n="@@cancel">Cancel</span>-->
+<!--        </button>-->
+<!--        <button mat-button color="primary" type="submit">-->
+<!--          <i class="material-symbols-outlined">-->
+<!--            check_circle-->
+<!--          </i>-->
+<!--          <span i18n="@@confirm">Confirm</span>-->
+<!--        </button>-->
+<!--      </div>-->
     </form>
 
 </div>

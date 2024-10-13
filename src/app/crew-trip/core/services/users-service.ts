@@ -66,4 +66,10 @@ export class UsersService extends BaseService {
     return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
+
+  getUserById(id: any): Promise<any> {
+    const url = `${this.api}/${this.path}/${id}`
+    return firstValueFrom(this.http.get<any>(url, this.httpOptions));
+  }
+
 }

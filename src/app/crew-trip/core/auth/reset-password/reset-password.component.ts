@@ -78,7 +78,7 @@ export class ResetPasswordComponent{
         this.router.navigate(['/auth/login']);
       }, 2000);
     } catch (error: any) {
-      if (error?.status === 401 && error.error?.error) {
+      if (error?.status === 400 && error.error?.error) {
         this.baseService.showError(error?.error?.error);
       } else {
         this.errorMessage = $localize`An unexpected error occurred. Please try again.`;
