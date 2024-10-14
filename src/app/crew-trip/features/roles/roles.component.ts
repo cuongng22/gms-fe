@@ -82,4 +82,17 @@ export class RolesComponent extends CommonComponent implements OnInit {
     await this.search(),
       this.step = 1;
   }
+
+  override async save(): Promise<any> {
+    this.formGroupDetail.patchValue({
+      name: this.formGroupDetail.value.roleName,
+      active: this.formGroupDetail.value.isActive,
+    })
+    return super.save();
+  }
+
+  override async search(body?: any): Promise<any> {
+    await super.search(body);
+    this.dataSource.data.forEach((s: any) => s.id = s.roleId)
+  }
 }
