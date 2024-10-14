@@ -51,6 +51,7 @@ export const routes: Routes = [
             path: 'flight-market', component: FlightMarketComponent,
             children: [
               { path: '', component: FlightMarketListComponent },
+              { path: 'detail', component: FlightMarketDetailComponent },
               { path: 'detail/:id', component: FlightMarketDetailComponent }
             ]
           },

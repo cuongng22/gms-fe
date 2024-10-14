@@ -1,14 +1,14 @@
 import { inject, Injectable } from '@angular/core';
 import { MatPaginatorIntl } from '@angular/material/paginator';
 import { TranslateService } from '@ngx-translate/core';
-import { DEFAULT_LANGUAGE, MESSAGE } from '../crew-trip/shared/utils/constant';
+import { MESSAGE } from '../crew-trip/shared/utils/constant';
 
 @Injectable()
 export class CustomMatPaginatorIntl extends MatPaginatorIntl {
   translate = inject(TranslateService);
   constructor (){
     super();
-    this.translate.setDefaultLang(DEFAULT_LANGUAGE);
+    this.translate.setDefaultLang('vi');
 
     // Tùy chỉnh văn bản cho "Items per page"
     this.itemsPerPageLabel = MESSAGE.ITEMS_PER_PAGE;

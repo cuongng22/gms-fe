@@ -1,3 +1,32 @@
+// Customize
+button.btn {
+    display: flex;
+}
+
+// .mat-mdc-form-field.read-only {
+//     cursor: not-allowed;
+//     pointer-events: none;
+
+//     div.mat-mdc-text-field-wrapper {
+//         background-color: #f3f3f3;
+//     }
+
+//     mat-label {
+//         cursor: not-allowed;
+//         pointer-events: none;
+//     }
+// }
+.mdc-text-field--filled.mdc-text-field--disabled {
+    background-color: #f3f3f396 !important;
+}
+
+.mdc-text-field--filled.mdc-text-field--disabled .mdc-floating-label {
+    color: rgb(59 66 82) !important;
+}
+
+.mdc-text-field--filled.mdc-text-field--disabled .mdc-text-field__input, .mat-mdc-select-disabled {
+    color: rgb(59 66 82) !important;
+}
 
 .danger-btn {
     height: auto !important;
@@ -19,6 +48,38 @@
             font-size: 22px !important;
             position: absolute !important;
             transform: translateY(-50%) !important;
+        }
+    }
+}
+
+.add-btn {
+    height: auto;
+    min-width: auto;
+    font-weight: 500;
+    padding: 8px 13px !important;
+    border-radius: 7px;
+    display: inline-block;
+    color: var(--whiteColor);
+    border: 1px solid var(--vnaXanhColor);
+    background-color: var(--vnaXanhColor);
+
+    &:hover {
+        transition: 0.3s;
+        color: var(--vnaXanhColor);
+        border: 1px solid var(--vnaXanhColor);
+        background-color: var(--lightColor);
+    }
+
+    .mdc-button__label {
+        display: inline-block;
+        padding-left: 22px;
+
+        i {
+            top: 50%;
+            left: -4px;
+            font-size: 22px;
+            position: absolute;
+            transform: translateY(-50%);
         }
     }
 }
@@ -46,6 +107,19 @@
         }
     }
 }
+
+
+.min-with-100 {
+    min-width: 100px !important;
+}
+
+
+
+
+
+
+
+
 
 // Heading
 .h1,
@@ -316,6 +390,7 @@ input {
                         }
                     }
                 }
+
                 &.danger-btn {
                     height: auto !important;
                     min-width: auto !important;
@@ -325,11 +400,11 @@ input {
                     display: inline-block !important;
                     color: var(--dangerColor) !important;
                     border: 1px solid var(--dangerColor) !important;
-                
+
                     .mdc-button__label {
                         display: inline-block !important;
                         padding-left: 22px !important;
-                
+
                         i {
                             top: 50% !important;
                             left: -4px !important;
@@ -563,6 +638,7 @@ input {
                     }
                 }
             }
+
             &.danger-btn {
                 height: auto !important;
                 min-width: auto !important;
@@ -572,11 +648,11 @@ input {
                 display: inline-block !important;
                 color: var(--dangerColor) !important;
                 border: 1px solid var(--dangerColor) !important;
-            
+
                 .mdc-button__label {
                     display: inline-block !important;
                     padding-left: 22px !important;
-            
+
                     i {
                         top: 50% !important;
                         left: -4px !important;
@@ -880,6 +956,7 @@ input {
                 }
             }
         }
+
     }
 
     .mat-mdc-form-field-focus-overlay {

@@ -34,24 +34,19 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
         if (event.type === HttpEventType.Response) {
           console.log(req.url, 'returned a response with status', event.status);
         }
-      }),
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === 401) {
-          router.navigate(['auth/login'], {fragment: '401',skipLocationChange: true});
-        } else if (error.status === 404) {
-          console.error('Not Found: ', error.message);
-        } else if (error.status === 500) {
-          console.error('Server Error: ', error.message);
-          baseService.showError('Server Error: ' + error.message)
-        } else {
-          console.error('Error occurred: ', error.message);
+      },(error: any) => {
+        if (error instanceof HttpErrorResponse) {
+          if (error.status === 401) {
+            router.navigate(['auth/login'], {fragment: '401',skipLocationChange: true});
+          } else if (error.status === 503 || (error.status == 0 && error.statusText == 'Unknown Error')) {
+            baseService.showError(MESSAGE.ERROR_CONNECT);
+          } else {
+            return next(authReq);
+          }
         }
-        baseService.showError(MESSAGE.ERROR);
-        // return throwError(() => new Error(error.message));
-        return next(authReq)
+        return throwError(() => new Error(error.message));
       })
     );
-    // return next(authReq)
   } else {
     return next(req);
   }

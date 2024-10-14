@@ -31,9 +31,10 @@
             <div class="col" sizeInput="md">
               <mat-form-field>
                 <mat-label i18n="market">Market</mat-label>
-                <input type="text" matInput formControlName="marketCode" [matAutocomplete]="marketComplete" >
+                <input type="text" #marketCode matInput formControlName="marketCode" [matAutocomplete]="marketComplete"
+                  (input)="filterMarket()" (focus)="filterMarket()">
                 <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
-                  @for (option of filteredOptionsMarket | async; track option) {
+                  @for (option of filteredOptionsMarket ; track option) {
                   <mat-option [value]="option">{{option}}</mat-option>
                   }
                 </mat-autocomplete>

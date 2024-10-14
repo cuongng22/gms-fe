@@ -12,9 +12,10 @@ import localeVi from '@angular/common/locales/vi';
 import localeEn from '@angular/common/locales/en';
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import { LOCALE } from './crew-trip/shared/utils/constant';
 
-registerLocaleData(localeVi, 'vi-VN');
-registerLocaleData(localeEn, 'en-US');
+registerLocaleData(localeVi, LOCALE.VN);
+registerLocaleData(localeEn, LOCALE.EN);
 
 
 // Factory để tạo HttpLoader cho TranslateModule
@@ -28,7 +29,6 @@ export const appConfig: ApplicationConfig = {
     provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(),
     provideHttpClient(
       withInterceptors([loggingInterceptor]),
     ),

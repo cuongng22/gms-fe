@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, Inject, model, OnInit } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -15,6 +15,8 @@ import { MatTableModule } from '@angular/material/table';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
+import { AlreadyExistsValidator } from 'src/app/crew-trip/core/validator/already-exists';
 
 @Component({
   selector: 'app-car-rental-detail',
@@ -28,20 +30,25 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 })
 export class CarRentalDetailComponent extends CommonComponent implements OnInit {
   formBuilder = inject(FormBuilder);
+  carRentalService = inject(VehicleService);
 
   readonlyDetail = model<boolean>(false);
 
   override formGroupDetail = this.formBuilder.group({
-    airport: ['',],
-    code: [''],
-    name: [''],
+    id: [],
+    marketCode: [{ value: '', disabled: true }],
+    code: ['', {
+      validators: [Validators.required],
+      asyncValidators: [AlreadyExistsValidator.existsCarRentalCode(this.carRentalService)],
+      updateOn: 'blur'
+    }],
+    name: ['', Validators.required],
     address: [''],
     fullName: [''],
-    email: [''],
+    email: ['', Validators.required],
     phone: [''],
     notes: [''],
-    active: [true],
-    flightMarketId: [''],
+    active: [true, Validators.required]
   });
 
   constructor(
@@ -55,12 +62,23 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
     if (this.data.carRental) {
       console.log(this.data.carRental);
       this.formGroupDetail.patchValue(this.data.carRental);
-      this.readonlyDetail.set(true)
+      this.readonlyDetail.set(this.data.isViewDetail)
     }
+    
+    if (this.readonlyDetail()) {
+      Object.keys(this.formGroupDetail.controls).forEach(control => {
+          this.formGroupDetail.get(control)?.disable()
+      })
+    }
+    this.carRentalService.isUpdate = this.data.isViewDetail || !!this.formGroupDetail.controls.id.value;
   }
 
-  override save(): Promise<any> {
-    throw new Error('Method not implemented.');
+  override async save(): Promise<any> {
+    this.formGroupDetail.markAllAsTouched();
+    if (this.formGroupDetail.invalid) {
+      return;
+    }
+    this.dialogRef.close({ ...this.formGroupDetail.value, hotelCode: this.formGroupDetail.controls.code.value?.toUpperCase().trim() });
   }
 
   close(): void {

@@ -45,6 +45,9 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
   markets: any[] = [];
   filteredOptionsMarket: Observable<any[]>;
 
+  override formGroupDetail = this.formBuilder.group({
+    id: ['']
+  })
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
     code: [''], // Mã thị trường
@@ -97,31 +100,37 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
     return this.markets.filter(market => market.value.toLowerCase().includes(filterValue));
   }
 
-  showHotelDetail(isCreate?: boolean, hotel?: any, airport?: string) {
+  showHotelDetail(isViewDetail?: boolean, hotel?: any, marketCode?: string) {
     if (hotel) {
       hotel = {
         ...hotel, activeLable: hotel.active ? this.MESSAGE.ACTIVE : this.MESSAGE.INACTIVE,
-        airport: airport
+        marketCode: marketCode
       }
     }
     this.dialog.open(HotelDetailComponent, {
-      data: { hotel: hotel, isCreate: isCreate },
+      data: { hotel: hotel, isViewDetail: isViewDetail },
     })
   }
 
 
-  showCarRentalDetail(isCreate?: boolean, carRental?: any, airport?: string) {
+  showCarRentalDetail(isViewDetail?: boolean, carRental?: any, marketCode?: string) {
     if (carRental) {
       carRental = {
         ...carRental, activeLable: carRental.active ? this.MESSAGE.ACTIVE : this.MESSAGE.INACTIVE,
-        airport: airport
+        marketCode: marketCode
       }
     }
     this.dialog.open(CarRentalDetailComponent, {
-      data: { carRental: carRental, isCreate: isCreate },
+      data: { carRental: carRental, isViewDetail: isViewDetail },
     })
   }
 
+
+  override async delete() {
+    if (this.formGroupDetail.value.id) {
+      super.delete();
+    }
+  }
 
 }
 

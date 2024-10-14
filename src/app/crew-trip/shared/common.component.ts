@@ -166,13 +166,13 @@ export class CommonComponent implements OnInit {
       console.log(res)
       this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
       await this.search();
-      await this.closeConfirmDelete();
       return res;
     } catch (e: any) {
       console.log(e);
-      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+      this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
+      await this.closeConfirmDelete();
     }
   }
 
