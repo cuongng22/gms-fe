@@ -166,6 +166,12 @@
 .m-0 {
     margin: 0 !important;
 }
+.m-5 {
+    margin: 5px !important;
+}
+.m-10 {
+    margin: 10px !important;
+}
 .ml-0 {
     margin-left: 0 !important;
 }
@@ -248,6 +254,19 @@
     margin-left: 12px !important;
 }
 
+.mlr-5{
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+}
+.mlr-10{
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+}
+.mlr-15{
+    margin-left: 15px !important;
+    margin-right: 15px !important;
+}
+
 // Padding
 .p-auto {
     padding: auto !important;
@@ -266,6 +285,9 @@
 }
 .p-0 {
     padding: 0 !important;
+}
+.p-5 {
+    padding: 5px !important;
 }
 .pl-0 {
     padding-left: 0 !important;

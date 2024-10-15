@@ -1,22 +1,25 @@
-import {Routes} from '@angular/router';
-import {KeHoachComponent} from 'src/app/crew-trip/features/ke-hoach/ke-hoach.component';
-import {FirstPageComponent} from "src/app/crew-trip/features/first-page/first-page.component";
-import {UsersComponent} from "src/app/crew-trip/features/users/users.component";
-import {SignInComponent} from "src/app/crew-trip/core/auth/sign-in/sign-in.component";
-import {RolesComponent} from "src/app/crew-trip/features/roles/roles.component";
-import {AuthGuard} from "src/app/crew-trip/core/guards/menu.guard";
-import {VehicleComponent} from "src/app/crew-trip/features/category/vehicle/vehicle.component";
-import {RateComponent} from "src/app/crew-trip/features/category/rate/rate.component";
-import {HotelComponent} from "src/app/crew-trip/features/category/hotel/hotel.component";
-import {NationComponent} from "src/app/crew-trip/features/category/nation/nation.component";
+import { Routes } from '@angular/router';
+import { KeHoachComponent } from 'src/app/crew-trip/features/ke-hoach/ke-hoach.component';
+import { FirstPageComponent } from "src/app/crew-trip/features/first-page/first-page.component";
+import { UsersComponent } from "src/app/crew-trip/features/users/users.component";
+import { SignInComponent } from "src/app/crew-trip/core/auth/sign-in/sign-in.component";
+import { RolesComponent } from "src/app/crew-trip/features/roles/roles.component";
+import { AuthGuard } from "src/app/crew-trip/core/guards/menu.guard";
+import { VehicleComponent } from "src/app/crew-trip/features/category/vehicle/vehicle.component";
+import { RateComponent } from "src/app/crew-trip/features/category/rate/rate.component";
+import { HotelComponent } from "src/app/crew-trip/features/category/hotel/hotel.component";
+import { NationComponent } from "src/app/crew-trip/features/category/nation/nation.component";
 import { ServiceFeeComponent } from 'src/app/crew-trip/features/category/service-fee/service-fee.component';
-import {CrewsComponent} from "src/app/crew-trip/features/category/crews/crews.component";
-import {NotFoundComponent} from "src/app/not-found/not-found.component";
-import {ForgotPasswordComponent} from "src/app/crew-trip/core/auth/forgot-password/forgot-password.component";
-import {FunctionsComponent} from "src/app/crew-trip/features/functions/functions.component";
-import {ContractComponent} from "src/app/crew-trip/features/contract/contract.component";
-import {ProfileComponent} from "src/app/crew-trip/core/auth/profile/profile.component";
-import {ResetPasswordComponent} from "src/app/crew-trip/core/auth/reset-password/reset-password.component";
+import { CrewsComponent } from "src/app/crew-trip/features/category/crews/crews.component";
+import { NotFoundComponent } from "src/app/not-found/not-found.component";
+import { ForgotPasswordComponent } from "src/app/crew-trip/core/auth/forgot-password/forgot-password.component";
+import { FunctionsComponent } from "src/app/crew-trip/features/functions/functions.component";
+import { ContractComponent } from "src/app/crew-trip/features/contract/contract.component";
+import { ProfileComponent } from "src/app/crew-trip/core/auth/profile/profile.component";
+import { ResetPasswordComponent } from "src/app/crew-trip/core/auth/reset-password/reset-password.component";
+import { FlightMarketComponent } from './crew-trip/features/category/flight-market/flight-market.component';
+import { FlightMarketDetailComponent } from './crew-trip/features/category/flight-market/flight-market-detail/flight-market-detail.component';
+import { FlightMarketListComponent } from './crew-trip/features/category/flight-market/flight-market-list/flight-market-list.component';
 
 
 export const routes: Routes = [
@@ -30,38 +33,46 @@ export const routes: Routes = [
     component: FirstPageComponent,
     canActivate: [AuthGuard],
     children: [
-      {path: 'ke-hoach', component: KeHoachComponent},
-      {path: 'contract', component: ContractComponent},
+      { path: 'ke-hoach', component: KeHoachComponent },
+      { path: 'contract', component: ContractComponent },
       {
         path: 'admin', children: [
-          {path: 'users', component: UsersComponent},
-          {path: 'roles', component: RolesComponent},
-          {path: 'functions', component: FunctionsComponent},
+          { path: 'users', component: UsersComponent },
+          { path: 'roles', component: RolesComponent },
+          { path: 'functions', component: FunctionsComponent },
         ]
       },
       {
         path: 'category', children: [
-          {path: 'vehicle', component: VehicleComponent},
-          {path: 'contract', component: ContractComponent},
-          {path: 'rate', component: RateComponent},
-          {path: 'hotel', component: HotelComponent},
-          {path: 'nation', component: NationComponent},
-          {path: 'service-fee', component: ServiceFeeComponent},
-          {path: 'crews', component: CrewsComponent},
+          { path: 'vehicle', component: VehicleComponent },
+          { path: 'contract', component: ContractComponent },
+          { path: 'rate', component: RateComponent },
+          { path: 'hotel', component: HotelComponent },
+          { path: 'nation', component: NationComponent },
+          { path: 'service-fee', component: ServiceFeeComponent },
+          { path: 'crews', component: CrewsComponent },
+          {
+            path: 'flight-market', component: FlightMarketComponent,
+            children: [
+              { path: '', component: FlightMarketListComponent },
+              { path: 'detail', component: FlightMarketDetailComponent },
+              { path: 'detail/:id', component: FlightMarketDetailComponent }
+            ]
+          },
         ]
       },
-      {path: 'profile', component: ProfileComponent},
+      { path: 'profile', component: ProfileComponent },
     ]
   },
   {
     path: 'auth',
     children: [
-      {path: 'login', component: SignInComponent},
-      {path: 'forgot-password', component: ForgotPasswordComponent},
-      { path: 'reset-password', component: ResetPasswordComponent}
+      { path: 'login', component: SignInComponent },
+      { path: 'forgot-password', component: ForgotPasswordComponent },
+      { path: 'reset-password', component: ResetPasswordComponent }
     ]
   },
-  {path: '**', component: NotFoundComponent}
+  { path: '**', component: NotFoundComponent }
 
   /*,
   {

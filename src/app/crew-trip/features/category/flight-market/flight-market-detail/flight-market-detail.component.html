@@ -1,0 +1,537 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+    <div class="d-md-flex align-items-center justify-content-between">
+        <button type="button" class="btn btn-outline-secondary mr-20" i18n="@@back"
+            routerLink="/category/flight-market">
+            <i class="material-symbols-outlined">
+                undo
+            </i>
+            Back
+        </button>
+        @if(!isCreate()){
+        <h5 class="mb-0" i18n="@@addNewAirport">
+            Add new airport
+        </h5>
+        }@else if(readonlyDetail()){
+        <h5 class="mb-0" i18n="@@airportCode">
+            View airport
+        </h5>
+        }@else {
+        <h5 class="mb-0" i18n="@@editAirport">
+            Edit airport
+        </h5>
+        }
+    </div>
+
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
+            Category
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" style="padding-right: 8px;;" i18n="@@airportCode">
+            Airport code
+        </li>
+        @if(!isCreate()){
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@addNewAirport">
+            Add new airport
+        </li>
+        }@else if(readonlyDetail()){
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@viewAirport">
+            View airport
+        </li>
+        }@else {
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@editAirport">
+            Edit airport
+        </li>
+        }
+    </ol>
+</div>
+
+<!-- THông tin thị trường bay -->
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="mb-10">
+        <mat-card-title>
+            <h5 i18n="@@airportDetails">Airport details</h5>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="formGroupDetail" autocomplete="off">
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="row">
+                        <div class="col" sizeInput="sm">
+                            <mat-form-field>
+                                <mat-label i18n="@@airportCode">Airport Code</mat-label>
+                                <input required matInput formControlName="marketCode">
+                                @if (
+                                formGroupDetail.controls.marketCode.hasError('required') &&
+                                formGroupDetail.controls.marketCode.touched) {
+                                <mat-error i18n="@@marketCodeRequired">Airport Code
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                        <div class="col" sizeInput="sm">
+                            <mat-form-field>
+                                <mat-label i18n="@@airportName">Airport Name</mat-label>
+                                <input matInput formControlName="marketName">
+                            </mat-form-field>
+                        </div>
+                        <div class="col" sizeInput="sm">
+                            <mat-form-field>
+                                <mat-label i18n="@@country">Country</mat-label>
+                                <input type="text" required #nationName matInput formControlName="nationName"
+                                    [matAutocomplete]="countryComplete" (input)="filterCountry()"
+                                    (focus)="filterCountry()">
+                                <mat-autocomplete autoActiveFirstOption requireSelection
+                                    #countryComplete="matAutocomplete" (optionSelected)="countrySelected($event)">
+                                    @for (country of filteredCountry(); track country) {
+                                    <mat-option [value]="country">
+                                        {{locale == LOCALE.VN ? country.vniName:country.engName}}</mat-option>
+                                    }
+                                </mat-autocomplete>
+                                @if (
+                                formGroupDetail.controls.nationId.hasError('required') &&
+                                formGroupDetail.controls.nationId.touched) {
+                                <mat-error i18n="@@countryRequired">Country
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                        <div class="col" sizeInput="sm">
+                            <mat-form-field>
+                                <mat-label matInput i18n="@@category">Category</mat-label>
+                                <mat-select required formControlName="marketType">
+                                    <mat-option [value]="null" i18n="@@allCategory">-- All Category --</mat-option>
+                                    <mat-option value="International" i18n="@@international">International</mat-option>
+                                    <mat-option value="Domestic" i18n="@@domestic">Domestic</mat-option>
+                                </mat-select>
+                                @if (
+                                formGroupDetail.controls.marketType.hasError('required') &&
+                                formGroupDetail.controls.marketType.touched) {
+                                <mat-error i18n="@@categoryRequired">Category
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div class="row">
+                        <div class="col mt-15" sizeInput="sm">
+                            <mat-form-field>
+                                <mat-label i18n="@@flightGroup">Flight Group</mat-label>
+                                <mat-select required formControlName="flightGroup">
+                                    @for (flightGroup of flightGroupData; track $index) {
+                                    <mat-option [value]="flightGroup">{{flightGroup}}</mat-option>
+                                    }
+                                </mat-select>
+                                @if (
+                                formGroupDetail.controls.flightGroup.hasError('required') &&
+                                formGroupDetail.controls.flightGroup.touched) {
+                                <mat-error i18n="@@flightGroupRequired">Flight Group
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                        <div class="col mt-15" sizeInput="sm">
+                            <mat-form-field>
+                                <mat-label i18n="@@costCategory">Cost Category</mat-label>
+                                <mat-select formControlName="serviceFeeCode" multiple>
+                                    <form class="mb-1" sizeInput="sm">
+                                        <mat-form-field>
+                                            <input matInput type="text" name="clearable-input"
+                                                [(ngModel)]="searchCostCategory" i18n-placeholder="@@search"
+                                                placeholder="Search">
+                                            @if (searchCostCategory()) {
+                                            <button matSuffix mat-icon-button i18n-aria-label="@@clear"
+                                                aria-label="Clear" (click)="searchCostCategory.set('')">
+                                                <i class="material-symbols-outlined">
+                                                    close
+                                                </i>
+                                            </button>
+                                            }
+                                        </mat-form-field>
+                                    </form>
+                                    @for (costCategory of costCategorys; track $index) {
+                                    <mat-option [value]="costCategory.code">{{costCategory.name}}</mat-option>
+                                    }
+                                </mat-select>
+                                @if (
+                                formGroupDetail.controls.serviceFeeCode.hasError('required') &&
+                                formGroupDetail.controls.serviceFeeCode.touched) {
+                                <mat-error i18n="@@costCategoryRequired">Cost Category
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                        <div class="col mt-15" sizeInput="sm">
+                            <mat-form-field>
+                                <mat-label i18n="@@airportCode:status">Status</mat-label>
+                                <mat-select required formControlName="statusUsage">
+                                    <mat-option [value]="null" i18n="@@allStatus">-- All Status --</mat-option>
+                                    <mat-option value="Not operational" i18n="@@notOperational">Not
+                                        operational</mat-option>
+                                    <mat-option value="Operational" i18n="@@operational">Operational</mat-option>
+                                    <mat-option value="Suspended" i18n="@@suspended">Suspended</mat-option>
+                                </mat-select>
+                                @if (
+                                formGroupDetail.controls.statusUsage.hasError('required') &&
+                                formGroupDetail.controls.statusUsage.touched) {
+                                <mat-error i18n="@@airportCode:statusRequired">Status
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
+                            </mat-form-field>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-15">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <mat-form-field>
+                        <mat-label i18n="@@notes">Notes</mat-label>
+                        <textarea matInput matTextareaAutosize cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                            cdkAutosizeMinRows="2" cdkAutosizeMaxRows="10" formControlName="notes"
+                            maxlength="500"></textarea>
+                    </mat-form-field>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+
+
+
+<!-- Thông tin khách sạn -->
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="mb-10">
+        <mat-card-title>
+            <h5 i18n="@@hotelInformation">Hotel information</h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            @if(!readonlyDetail()){
+            <button class="add-btn" type="button" mat-button (click)="hotelDetail(false)">
+                <i class="material-symbols-outlined">
+                    add
+                </i>
+                <span i18n="@@create">Create</span>
+            </button>
+            }
+
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="hotelDataSource" multiTemplateDataRows="true">
+                <ng-container matColumnDef="hotelCode">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@hotelCode">
+                        Hotel Code
+                    </th>
+                    <td mat-cell *matCellDef="let hotel">{{hotel.hotelCode}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="hotelName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@hotelName">
+                        Hotel Name
+                    </th>
+                    <td mat-cell *matCellDef="let hotel">{{hotel.hotelName}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="address">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@address">
+                        Address
+                    </th>
+                    <td mat-cell *matCellDef="let hotel">{{hotel.address}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="fullName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@contactName">
+                        Contact name
+                    </th>
+                    <td mat-cell *matCellDef="let hotel">{{hotel.fullName}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                        i18n="@@emailBooking:email">Email</th>
+                    <td mat-cell *matCellDef="let hotel">{{hotel.email}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="phone">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@phoneNumber">
+                        Phone number
+                    </th>
+                    <td mat-cell *matCellDef="let hotel">{{hotel.phone}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="active">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@status">
+                        Status
+                    </th>
+                    <td mat-cell *matCellDef="let hotel">{{hotel.active?MESSAGE.ACTIVE:MESSAGE.INACTIVE}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="notes">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@notes">
+                        Notes
+                    </th>
+                    <td mat-cell *matCellDef="let hotel">{{hotel.notes}}</td>
+                </ng-container>
+
+                @if(!readonlyDetail()){
+                <ng-container matColumnDef="action" stickyEnd>
+                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                        i18n="@@action">
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let hotel; let i = dataIndex">
+                        <div class="action-buttons d-flex align-items-center">
+                            <button type="button" mat-button (click)="hotelDetail(false, hotel)">
+                                <i class="material-symbols-outlined text-warning" title="Edit hotel"
+                                    i18n-title="@@editHotel">
+                                    edit
+                                </i>
+                            </button>
+
+                            <button type="button" mat-button title="Delete hotel" i18n-title="@@deleteHotel"
+                                (click)="indexDeleteHotel = i ;toggleDialogDeleteHotel()">
+                                <span class="material-symbols-outlined text-danger">
+                                    delete
+                                </span>
+                            </button>
+
+                        </div>
+                    </td>
+                </ng-container>
+                }
+
+                <tr mat-header-row *matHeaderRowDef="hotelColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: hotelColumns;" [hidden]="row.isDelete === true"></tr>
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+
+
+<!-- Thông tin nhà xe -->
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="mb-10">
+        <mat-card-title>
+            <h5 i18n="@@carRentalInformation">Car rental information</h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            @if(!readonlyDetail()){
+            <button class="add-btn" type="button" mat-button (click)="carRentalDetail(false)">
+                <i class="material-symbols-outlined">
+                    add
+                </i>
+                <span i18n="@@create">Create</span>
+            </button>
+            }
+
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="carRentalDataSource" multiTemplateDataRows="true">
+                <ng-container matColumnDef="code">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                        i18n="@@carRentalCode">
+                        Car rental code
+                    </th>
+                    <td mat-cell *matCellDef="let carRental">{{carRental.code}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="name">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                        i18n="@@carRentalCompany">
+                        Car rental company
+                    </th>
+                    <td mat-cell *matCellDef="let carRental">{{carRental.name}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="address">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@address">
+                        Address
+                    </th>
+                    <td mat-cell *matCellDef="let carRental">{{carRental.address}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="fullName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@contactName">
+                        Contact name
+                    </th>
+                    <td mat-cell *matCellDef="let carRental">{{carRental.fullName}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="email">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                        i18n="@@emailBooking:email">Email</th>
+                    <td mat-cell *matCellDef="let carRental">{{carRental.email}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="phone">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@phoneNumber">
+                        Phone number
+                    </th>
+                    <td mat-cell *matCellDef="let carRental">{{carRental.phone}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="active">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@status">
+                        Status
+                    </th>
+                    <td mat-cell *matCellDef="let carRental">{{carRental.active?MESSAGE.ACTIVE:MESSAGE.INACTIVE}}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="notes">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@notes">
+                        Notes
+                    </th>
+                    <td mat-cell *matCellDef="let carRental">{{carRental.notes}}</td>
+                </ng-container>
+
+                @if(!readonlyDetail()){
+                <ng-container matColumnDef="action" stickyEnd>
+                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                        i18n="@@action">
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let carRental; let i = dataIndex">
+                        <div class="action-buttons d-flex align-items-center">
+                            <button type="button" mat-button (click)="carRentalDetail(false, carRental)">
+                                <i class="material-symbols-outlined text-warning" title="Edit Car rental"
+                                    i18n-title="@@editCarRental">
+                                    edit
+                                </i>
+                            </button>
+
+                            <button type="button" mat-button title="Delete hotel" i18n-title="@@deleteHotel"
+                                (click)="indexDeleteCarRental = i ;toggleDialogDeleteCarRental()">
+                                <span class="material-symbols-outlined text-danger">
+                                    delete
+                                </span>
+                            </button>
+
+                        </div>
+                    </td>
+                </ng-container>
+                }
+
+                <tr mat-header-row *matHeaderRowDef="carRentalColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: carRentalColumns;" [hidden]="row.isDelete === true"></tr>
+            </table>
+        </div>
+    </mat-card-content>
+</mat-card>
+
+
+
+
+<!-- Nút lưu, hủy flight-market -->
+<mat-card class="p-5 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="mb-0" style="display: flex;flex-direction: row-reverse;">
+        <mat-card-subtitle>
+
+            <button type="button" mat-button class="danger-btn  min-with-100 mlr-5"
+                routerLink="/category/flight-market">
+                <i class="material-symbols-outlined">
+                    close
+                </i>
+                @if(readonlyDetail()){
+                <span i18n="@@close">Close</span>
+                }@else {
+                <span i18n="@@cancel">Cancel</span>
+                }
+            </button>
+            @if(!readonlyDetail()){
+            <button mat-button color="primary" type="button" class="add-btn min-with-100 mlr-5" (click)="save()">
+                <i class="material-symbols-outlined">
+                    save
+                </i>
+                <span i18n="@@save">Save</span>
+            </button>
+            }
+            <!-- <button class="add-btn" type="button" mat-button (click)="carRentalDetail(false)">
+                <i class="material-symbols-outlined">
+                    add
+                </i>
+                <span i18n="@@create">Create</span>
+            </button> -->
+        </mat-card-subtitle>
+    </mat-card-header>
+</mat-card>
+
+<!-- ------------------------------------------------------------------------------------------------ -->
+
+<!-- Dialog delete hotel -->
+<div class="add-new-popup" [class.active]="dialogDeleteHotel">
+    <div class="popup-dialog dialog-with">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+            <mat-card-content>
+                <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+                </div>
+                <div class="text-center mb-20">
+                    <h3 class="mb-0" i18n="@@deleteHotelMessage">Are you sure you want to delete</h3>
+                </div>
+                <div class="btn-box text-center">
+                    <button type="button" mat-button (click)="toggleDialogDeleteHotel()"
+                        class="danger-btn  min-with-100 mlr-5">
+                        <i class="material-symbols-outlined">
+                            close
+                        </i>
+                        <span i18n="@@cancel">Cancel</span>
+                    </button>
+                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="confirmDeleteHotel()">
+                        <i class="material-symbols-outlined">
+                            save
+                        </i>
+                        <span i18n="@@confirm">Confirm</span>
+                    </button>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+<!-- Dialog delete CarRental -->
+<div class="add-new-popup" [class.active]="dialogDeleteCarRental">
+    <div class="popup-dialog dialog-with">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+            <mat-card-content>
+                <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+                </div>
+                <div class="text-center mb-20">
+                    <h3 class="mb-0" i18n="@@deleteHotelMessage">Are you sure you want to delete</h3>
+                </div>
+                <div class="btn-box text-center">
+                    <button type="button" mat-button (click)="toggleDialogDeleteCarRental()"
+                        class="danger-btn  min-with-100 mlr-5">
+                        <i class="material-symbols-outlined">
+                            close
+                        </i>
+                        <span i18n="@@cancel">Cancel</span>
+                    </button>
+                    <button mat-button type="button" class="add-btn min-with-100 mlr-5"
+                        (click)="confirmDeleteCarRental()">
+                        <i class="material-symbols-outlined">
+                            save
+                        </i>
+                        <span i18n="@@confirm">Confirm</span>
+                    </button>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

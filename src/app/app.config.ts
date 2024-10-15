@@ -1,5 +1,5 @@
 import {ApplicationConfig, importProvidersFrom, LOCALE_ID, provideZoneChangeDetection} from '@angular/core';
-import {provideRouter} from '@angular/router';
+import {provideRouter, withComponentInputBinding} from '@angular/router';
 
 import {routes} from './app.routes';
 import {provideClientHydration} from '@angular/platform-browser';
@@ -12,9 +12,10 @@ import localeVi from '@angular/common/locales/vi';
 import localeEn from '@angular/common/locales/en';
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
+import { LOCALE } from './crew-trip/shared/utils/constant';
 
-registerLocaleData(localeVi, 'vi-VN');
-registerLocaleData(localeEn, 'en-US');
+registerLocaleData(localeVi, LOCALE.VN);
+registerLocaleData(localeEn, LOCALE.EN);
 
 
 // Factory để tạo HttpLoader cho TranslateModule
@@ -25,10 +26,9 @@ export function HttpLoaderFactory(http: HttpClient) {
 
 export const appConfig: ApplicationConfig = {
   providers: [provideZoneChangeDetection({eventCoalescing: true}),
-    provideRouter(routes),
+    provideRouter(routes, withComponentInputBinding()),
     provideClientHydration(),
     provideAnimationsAsync(),
-    provideHttpClient(),
     provideHttpClient(
       withInterceptors([loggingInterceptor]),
     ),

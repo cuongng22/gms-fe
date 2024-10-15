@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,7 +24,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 @Component({
   selector: 'app-vehicle',
   standalone: true,
-  imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+  imports: [MatCardModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule
@@ -38,10 +38,11 @@ export class VehicleComponent extends CommonComponent implements OnInit {
   flightMarketService = inject(FlightMarketService)
   formBuilder = inject(FormBuilder);
 
+  @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
+
   // danh sách thị trường
   markets: any[] = [];
-
-  filteredOptionsMarket: Observable<any[]>;
+  filteredOptionsMarket: any[];
 
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
@@ -77,20 +78,15 @@ export class VehicleComponent extends CommonComponent implements OnInit {
     // Lấy danh sách thị trường
     this.flightMarketService.search({ option: 1 }).then(res => {
       this.markets = res.data;
-
-      this.filteredOptionsMarket = this.formGroupSearch.controls.marketCode.valueChanges.pipe(
-        debounceTime(300), // Đợi 300ms sau lần nhập cuối cùng
-        startWith(''),
-        map(value => this._filterMarket(value ?? '')));
     });
   }
 
-  private _filterMarket(value: string): any[] {
-    if (!value) {
-      return this.markets;
+  filterMarket(): void {
+    const filterValue = this.marketCode.nativeElement.value.toLowerCase();
+    if (!filterValue) {
+      this.filteredOptionsMarket = this.markets;
     }
-    const filterValue = value.toLowerCase();
-    return this.markets.filter(market => market.value.toLowerCase().includes(filterValue));
+    this.filteredOptionsMarket = this.markets.filter(market => market.toLowerCase().includes(filterValue));
   }
 
   override search(): any {

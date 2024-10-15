@@ -1,5 +1,5 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams } from "@angular/common/http";
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from "@angular/common/http";
 import { firstValueFrom, Observable } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActionAlertComponent } from "src/app/crew-trip/shared/action-alert/action-alert.component";
@@ -44,8 +44,8 @@ export class BaseService {
     return firstValueFrom(this.http.put<any>(url, body, this.httpOptions));
   }
 
-  async exportData(body?: any, sourcePath?: string): Promise<Blob> {
-    const url = `${this.api}/${this.path}/${sourcePath ?? 'export'}`
+  async exportData(body?: any, sourcePath?: string): Promise<{ blob: Blob, fileName: string }> {
+    const url = `${this.api}/${this.path}/${sourcePath ?? 'export'}`;
     const httpOptionsExport = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
@@ -54,17 +54,53 @@ export class BaseService {
       responseType: 'blob' as 'json',
       params: new HttpParams({ fromObject: body })
     };
-    return await firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
+
+    const response = await firstValueFrom(this.http.get(url, { ...httpOptionsExport, observe: 'response' }));
+    const contentDisposition = response.headers.get('Content-Disposition');
+    let fileName = 'downloaded-file.xlsx';
+    if (contentDisposition) {
+      const matches = /filename="([^"]*)"/.exec(contentDisposition);
+      if (matches != null && matches[1]) {
+        fileName = matches[1];
+      }
+    }
+
+    return { blob: response.body as Blob, fileName };
   }
 
   async download(): Promise<Blob> {
-    return this.exportData('download');
+    return (await this.exportData('download')).blob;
   }
 
 
   delete(id: any): Promise<any> {
     const url = `${this.api}/${this.path}/${id}`
     return firstValueFrom(this.http.delete<any>(url, this.httpOptions));
+  }
+
+  async uploadFile(form: FormData): Promise<{ blob: Blob, fileName: string, totalErrors: string }> {
+    const url = `${this.api}/${this.path}/import`;
+    const httpOptionsExport = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/octet-stream',
+        'mimeType': 'multipart/form-data'
+      }),
+      responseType: 'blob' as 'json'
+    };
+
+    const response = await firstValueFrom(this.http.post(url, form, { ...httpOptionsExport, observe: 'response' }));
+    const contentDisposition = response.headers.get('Content-Disposition');
+    const totalErrors = response.headers.get('totalErrors');
+    let fileName = 'error-file.xlsx';
+    if (contentDisposition) {
+      const matches = /filename="([^"]*)"/.exec(contentDisposition);
+      if (matches != null && matches[1]) {
+        fileName = matches[1];
+      }
+    }
+
+    return { blob: response.body as Blob, fileName, totalErrors: totalErrors ?? '' };
   }
 
   showNotification(message: string, options: any) {

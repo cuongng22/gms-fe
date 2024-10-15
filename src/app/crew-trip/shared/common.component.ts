@@ -1,15 +1,15 @@
-import {Component, inject, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from "@angular/material/table";
-import {SelectionModel} from "@angular/cdk/collections";
-import {MatPaginator, PageEvent} from "@angular/material/paginator";
-import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {ToggleService} from "src/app/common/header/toggle.service";
-import {BaseService} from "src/app/crew-trip/core/services/base-service";
-import {FormGroup} from "@angular/forms";
-import {Constant, MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
-import {HttpClient, HttpStatusCode} from "@angular/common/http";
-import {saveAs} from 'file-saver';
+import { Component, inject, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from "@angular/material/table";
+import { SelectionModel } from "@angular/cdk/collections";
+import { MatPaginator, PageEvent } from "@angular/material/paginator";
+import { CustomizerSettingsService } from "src/app/customizer-settings/customizer-settings.service";
+import { NgxSpinnerService } from "ngx-spinner";
+import { ToggleService } from "src/app/common/header/toggle.service";
+import { BaseService } from "src/app/crew-trip/core/services/base-service";
+import { FormGroup } from "@angular/forms";
+import { Constant, MESSAGE, removeNullValues } from "src/app/crew-trip/shared/utils/constant";
+import { HttpClient, HttpStatusCode } from "@angular/common/http";
+import { saveAs } from 'file-saver';
 
 
 @Component({
@@ -165,12 +165,13 @@ export class CommonComponent implements OnInit {
       let res = await this.baseService.delete(this.formGroupDetail.value.id);
       this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
       await this.search();
-      await this.closeConfirmDelete();
       return res;
     } catch (e: any) {
-      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
+      console.log(e);
+      this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
+      await this.closeConfirmDelete();
     }
   }
 
@@ -206,7 +207,7 @@ export class CommonComponent implements OnInit {
   }
 
   async showConfirmDelete(id: any) {
-    this.formGroupDetail.patchValue({id: id});
+    this.formGroupDetail.patchValue({ id: id });
     this.toggleDialogDelete();
   }
 
@@ -227,9 +228,23 @@ export class CommonComponent implements OnInit {
   async exportFile(body?: any, filename?: string) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.exportData({...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)});
+      let res = await this.baseService.exportData({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) });
       console.log(res)
-      this.downloadFile(res, filename ?? 'export.xlsx');
+      this.downloadFile(res.blob, filename ?? res.fileName);
+    } catch (e: any) {
+      console.log(e);
+      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async downloadTemplate(filename?: string) {
+    try {
+      await this.spinner.show();
+      let res = await this.baseService.exportData(null, 'download-template');
+      console.log(res)
+      this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       console.log(e);
       this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
@@ -237,5 +252,7 @@ export class CommonComponent implements OnInit {
       await this.spinner.hide();
     }
   }
+
+
 
 }

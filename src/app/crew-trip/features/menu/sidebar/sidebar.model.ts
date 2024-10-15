@@ -54,7 +54,7 @@ export const menu: Menu[] = [
                 path: 'category/vehicle', title: $localize`:@@carRentalCompany:Car rental`, icon: 'ri-car-line'
             },
             {
-                path: 'category/users', title: $localize`:@@flightMarket:Thị trường bay`, icon: 'ri-store-line'
+                path: 'category/flight-market', title: $localize`:@@flightMarket:Flight market`, icon: 'ri-store-line'
             },
             {
                 path: 'category/rate', title: $localize`:@@exchangeRate:Exchange rate`, icon: 'ri-exchange-cny-line'
