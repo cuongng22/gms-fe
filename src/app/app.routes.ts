@@ -1,14 +1,13 @@
-import { Routes } from '@angular/router';
-import { KeHoachComponent } from 'src/app/crew-trip/features/ke-hoach/ke-hoach.component';
-import { FirstPageComponent } from "src/app/crew-trip/features/first-page/first-page.component";
-import { UsersComponent } from "src/app/crew-trip/features/users/users.component";
-import { SignInComponent } from "src/app/crew-trip/core/auth/sign-in/sign-in.component";
-import { RolesComponent } from "src/app/crew-trip/features/roles/roles.component";
-import { AuthGuard } from "src/app/crew-trip/core/guards/menu.guard";
-import { VehicleComponent } from "src/app/crew-trip/features/category/vehicle/vehicle.component";
-import { RateComponent } from "src/app/crew-trip/features/category/rate/rate.component";
-import { HotelComponent } from "src/app/crew-trip/features/category/hotel/hotel.component";
-import { NationComponent } from "src/app/crew-trip/features/category/nation/nation.component";
+import {Routes} from '@angular/router';
+import {KeHoachComponent} from 'src/app/crew-trip/features/ke-hoach/ke-hoach.component';
+import {FirstPageComponent} from "src/app/crew-trip/features/first-page/first-page.component";
+import {UsersComponent} from "src/app/crew-trip/features/users/users.component";
+import {SignInComponent} from "src/app/crew-trip/core/auth/sign-in/sign-in.component";
+import {RolesComponent} from "src/app/crew-trip/features/roles/roles.component";
+import {AuthGuard} from "src/app/crew-trip/core/guards/menu.guard";
+import {VehicleComponent} from "src/app/crew-trip/features/category/vehicle/vehicle.component";
+import {HotelComponent} from "src/app/crew-trip/features/category/hotel/hotel.component";
+import {NationComponent} from "src/app/crew-trip/features/category/nation/nation.component";
 import { ServiceFeeComponent } from 'src/app/crew-trip/features/category/service-fee/service-fee.component';
 import { CrewsComponent } from "src/app/crew-trip/features/category/crews/crews.component";
 import { NotFoundComponent } from "src/app/not-found/not-found.component";
@@ -20,6 +19,7 @@ import { ResetPasswordComponent } from "src/app/crew-trip/core/auth/reset-passwo
 import { FlightMarketComponent } from './crew-trip/features/category/flight-market/flight-market.component';
 import { FlightMarketDetailComponent } from './crew-trip/features/category/flight-market/flight-market-detail/flight-market-detail.component';
 import { FlightMarketListComponent } from './crew-trip/features/category/flight-market/flight-market-list/flight-market-list.component';
+import {ActRateComponent} from "src/app/crew-trip/features/category/act-rate/act-rate.component";
 
 
 export const routes: Routes = [
@@ -44,9 +44,15 @@ export const routes: Routes = [
       },
       {
         path: 'category', children: [
+          {path: 'vehicle', component: VehicleComponent},
+          {path: 'contract', component: ContractComponent},
+          {path: 'act-rate', component: ActRateComponent},
+          {path: 'hotel', component: HotelComponent},
+          {path: 'nation', component: NationComponent},
+          {path: 'service-fee', component: ServiceFeeComponent},
+          {path: 'crews', component: CrewsComponent},
           { path: 'vehicle', component: VehicleComponent },
           { path: 'contract', component: ContractComponent },
-          { path: 'rate', component: RateComponent },
           { path: 'hotel', component: HotelComponent },
           { path: 'nation', component: NationComponent },
           { path: 'service-fee', component: ServiceFeeComponent },
