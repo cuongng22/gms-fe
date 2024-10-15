@@ -19,17 +19,17 @@
     <mat-card-content>
         <form [formGroup]="formGroupSearch" (ngSubmit)="search()" autocomplete="off">
             <div class="row">
-                <div class="col-xs-11 col-sm-11 col-md-11 col-lg-11">
+                <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11">
                     <div class="row">
                         <div class="col" sizeInput="md">
-                            <mat-form-field>
+                            <mat-form-field class="mb-1">
                                 <mat-label i18n="@@keywords">Keywords</mat-label>
                                 <input matInput formControlName="s">
                             </mat-form-field>
                         </div>
 
                         <div class="col" sizeInput="md">
-                            <mat-form-field>
+                            <mat-form-field class="mb-1">
                                 <mat-label i18n="@@airport">Airport</mat-label>
                                 <input type="text" matInput formControlName="code" [matAutocomplete]="marketComplete">
                                 <mat-autocomplete autoActiveFirstOption requireSelection
@@ -41,7 +41,7 @@
                             </mat-form-field>
                         </div>
                         <div class="col" sizeInput="md">
-                            <mat-form-field class="mb-25">
+                            <mat-form-field class="mb-1">
                                 <mat-label i18n="@@airportCode:category">Category</mat-label>
                                 <mat-select formControlName="type">
                                     <mat-option [value]="null" i18n="@@allCategory">-- All Category --</mat-option>
@@ -52,7 +52,7 @@
                         </div>
 
                         <div class="col" sizeInput="md">
-                            <mat-form-field class="mb-25">
+                            <mat-form-field class="mb-1">
                                 <mat-label i18n="@@airportCode:status">Status</mat-label>
                                 <mat-select formControlName="status">
                                     <mat-option [value]="null" i18n="@@allStatus">-- All Status --</mat-option>
@@ -65,7 +65,7 @@
                         </div>
 
                         <div class="col" sizeInput="md">
-                            <mat-form-field>
+                            <mat-form-field class="mb-1">
                                 <mat-date-range-input [rangePicker]="contractRangePicker">
                                     <input matStartDate i18n-placeholder="@@startDate" placeholder="Start date"
                                         formControlName="contractStartDate">
@@ -87,7 +87,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-1 d-flex flex-row">
+                <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 d-flex justify-content-center">
                     <mat-card-header class="mb-0 search">
                         <mat-card-title>
                             <button class="search-btn" type="submit" mat-button>
