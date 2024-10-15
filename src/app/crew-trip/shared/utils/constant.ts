@@ -21,6 +21,7 @@ export class MESSAGE {
   static DATA_EMPTY = $localize`:@@noDataFound:No data found`
   static DELETE_SUCCESS = $localize`:@@deleteSuccess:Delete success`
   static DELETE_FAIL = $localize`:@@deleteFail:Delete fail`
+  static UPLOAD_SUCCESS = $localize`:@@uploadSuccess:Upload success`
   static REQUIRED = $localize`:@@required:is required`
   static FORMAT_INVALID = $localize`:@@formatInvalid:is not in correct format.`
   static MIN_LENGTH_INVALID = $localize`:@@minLengthInvalid:must be greater than %d characters`

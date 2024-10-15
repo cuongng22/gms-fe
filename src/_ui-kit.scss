@@ -3,19 +3,6 @@ button.btn {
     display: flex;
 }
 
-// .mat-mdc-form-field.read-only {
-//     cursor: not-allowed;
-//     pointer-events: none;
-
-//     div.mat-mdc-text-field-wrapper {
-//         background-color: #f3f3f3;
-//     }
-
-//     mat-label {
-//         cursor: not-allowed;
-//         pointer-events: none;
-//     }
-// }
 .mdc-text-field--filled.mdc-text-field--disabled {
     background-color: #f3f3f396 !important;
 }
@@ -24,7 +11,8 @@ button.btn {
     color: rgb(59 66 82) !important;
 }
 
-.mdc-text-field--filled.mdc-text-field--disabled .mdc-text-field__input, .mat-mdc-select-disabled {
+.mdc-text-field--filled.mdc-text-field--disabled .mdc-text-field__input,
+.mat-mdc-select-disabled {
     color: rgb(59 66 82) !important;
 }
 
@@ -53,57 +41,57 @@ button.btn {
 }
 
 .add-btn {
-    height: auto;
-    min-width: auto;
-    font-weight: 500;
+    height: auto !important;
+    min-width: auto !important;
+    font-weight: 500 !important;
     padding: 8px 13px !important;
-    border-radius: 7px;
-    display: inline-block;
-    color: var(--whiteColor);
-    border: 1px solid var(--vnaXanhColor);
-    background-color: var(--vnaXanhColor);
+    border-radius: 7px !important;
+    display: inline-block !important;
+    color: var(--whiteColor) !important;
+    border: 1px solid var(--vnaXanhColor) !important;
+    background-color: var(--vnaXanhColor) !important;
 
     &:hover {
-        transition: 0.3s;
-        color: var(--vnaXanhColor);
-        border: 1px solid var(--vnaXanhColor);
-        background-color: var(--lightColor);
+        transition: 0.3s !important;
+        color: var(--vnaXanhColor) !important;
+        border: 1px solid var(--vnaXanhColor) !important;
+        background-color: var(--lightColor) !important;
     }
 
     .mdc-button__label {
-        display: inline-block;
-        padding-left: 22px;
+        display: inline-block !important;
+        padding-left: 22px !important;
 
         i {
-            top: 50%;
-            left: -4px;
-            font-size: 22px;
-            position: absolute;
-            transform: translateY(-50%);
+            top: 50% !important;
+            left: -4px !important;
+            font-size: 22px !important;
+            position: absolute !important;
+            transform: translateY(-50%) !important;
         }
     }
 }
 
 .back-btn {
-    height: auto;
-    min-width: auto;
-    font-weight: 500;
-    padding: 8px 13px;
-    border-radius: 7px;
-    display: inline-block;
-    color: var(--warningColor);
-    border: 1px solid var(--warningColor);
+    height: auto !important;
+    min-width: auto !important;
+    font-weight: 500 !important;
+    padding: 8px 13px !important;
+    border-radius: 7px !important;
+    display: inline-block !important;
+    color: var(--warningColor) !important;
+    border: 1px solid var(--warningColor) !important;
 
     .mdc-button__label {
-        display: inline-block;
-        padding-left: 22px;
+        display: inline-block !important;
+        padding-left: 22px !important;
 
         i {
-            top: 50%;
-            left: -4px;
-            font-size: 22px;
-            position: absolute;
-            transform: translateY(-50%);
+            top: 50% !important;
+            left: -4px !important;
+            font-size: 22px !important;
+            position: absolute !important;
+            transform: translateY(-50%) !important;
         }
     }
 }
@@ -113,11 +101,29 @@ button.btn {
     min-width: 100px !important;
 }
 
+.dialog-with {
+    max-width: 700px !important;
+    min-width: 400px !important;
+}
+
+.font-size-5rem {
+    font-size: 5rem !important;
+}
 
 
+.width-percent-100 {
+    width: 100% !important;
+}
 
+// .invalid {
+//     color: var(--mdc-filled-text-field-error-label-text-color);
+//     border: 1px solid var(--mdc-filled-text-field-error-label-text-color)
+// }
 
-
+.file-uploader.invalid{
+    color: rgb(255, 64, 35)    ;
+    border: 1px solid rgb(255, 64, 35)
+}
 
 
 
@@ -2744,7 +2750,7 @@ apx-chart {
     border-radius: 7px;
     outline: 0 !important;
     min-height: 220px !important;
-    border: 1px solid #D5D9E2 !important;
+    border: 1px solid #D5D9E2;
     background-color: transparent !important;
 
     .upload-input {

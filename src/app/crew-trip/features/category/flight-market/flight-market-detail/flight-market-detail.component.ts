@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, AfterViewInit, Component, effect, ElementRef, inject, input, model, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -75,14 +75,14 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
 
   override formGroupDetail = this.formBuilder.group({
     id: [],
-    marketCode: [''],
+    marketCode: ['', Validators.required],
     marketName: [''],
-    nationId: [''],
+    nationId: ['', Validators.required],
     nationName: [''],
-    marketType: [''],
-    flightGroup: [''],
+    marketType: ['', Validators.required],
+    flightGroup: ['', Validators.required],
     serviceFeeCode: [''],
-    statusUsage: [''],
+    statusUsage: ['', Validators.required],
     notes: [''],
 
   });

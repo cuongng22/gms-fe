@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, OnInit, viewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -20,10 +20,12 @@ import { FlightMarketService } from 'src/app/crew-trip/core/services/ flight-mar
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import { Constant, MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
 import { CustomMatPaginatorIntl } from 'src/app/customizer-settings/paginator-intl.service';
 import { CarRentalDetailComponent } from '../car-rental-detail/car-rental-detail.component';
 import { HotelDetailComponent } from '../hotel-detail/hotel-detail.component';
+import { FileUploadComponent, FileUploadModule, FileUploadValidators } from '@iplab/ngx-file-upload';
+import { File } from 'buffer';
 
 @Component({
   selector: 'app-flight-market-list',
@@ -31,7 +33,7 @@ import { HotelDetailComponent } from '../hotel-detail/hotel-detail.component';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule],
+    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, FileUploadModule],
   providers: [DataTransformPipe, { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }],
   templateUrl: './flight-market-list.component.html',
   styleUrl: './flight-market-list.component.scss'
@@ -45,6 +47,10 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
   markets: any[] = [];
   filteredOptionsMarket: Observable<any[]>;
 
+  showDialogUpload: boolean = false;
+
+  uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
+
   override formGroupDetail = this.formBuilder.group({
     id: ['']
   })
@@ -56,6 +62,8 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
     contractStartDate: [''], // Ngày hợp đồng từ
     contractEndDate: [''], // Ngày hợp đồng đến
   });
+
+  fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
 
   constructor(public dataTransformPipe: DataTransformPipe, public dialog: MatDialog) {
     super();
@@ -132,5 +140,36 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
     }
   }
 
+  async uploadFile() {
+    try {
+      this.fileUpload.markAllAsTouched();
+      if (this.fileUpload.valid && this.fileUpload.value) {
+        const form = new FormData();
+        const file: File = this.fileUpload.value[0];
+        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
+        await this.spinner.show();
+        const res = await this.baseService.uploadFile(form);
+        this.uploadFileError = res;
+        if (!res.totalErrors) {
+          this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
+          this.search();
+        }
+      }
+    } catch (e: any) {
+      this.baseService.showError(e.error?.error ?? e.error?.error?.code ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async downloadFileError() {
+    if (this.uploadFileError.blob) {
+      this.downloadFile(this.uploadFileError.blob, this.uploadFileError.fileName ?? 'file-error.xlsx');
+    }
+  }
+
+  toggleDialogUpload() {
+    this.showDialogUpload = !this.showDialogUpload;
+  }
 }
 

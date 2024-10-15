@@ -61,7 +61,13 @@
                         <div class="col" sizeInput="sm">
                             <mat-form-field>
                                 <mat-label i18n="@@airportCode">Airport Code</mat-label>
-                                <input matInput formControlName="marketCode">
+                                <input required matInput formControlName="marketCode">
+                                @if (
+                                formGroupDetail.controls.marketCode.hasError('required') &&
+                                formGroupDetail.controls.marketCode.touched) {
+                                <mat-error i18n="@@marketCodeRequired">Airport Code
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
                             </mat-form-field>
                         </div>
                         <div class="col" sizeInput="sm">
@@ -73,7 +79,7 @@
                         <div class="col" sizeInput="sm">
                             <mat-form-field>
                                 <mat-label i18n="@@country">Country</mat-label>
-                                <input type="text" #nationName matInput formControlName="nationName"
+                                <input type="text" required #nationName matInput formControlName="nationName"
                                     [matAutocomplete]="countryComplete" (input)="filterCountry()"
                                     (focus)="filterCountry()">
                                 <mat-autocomplete autoActiveFirstOption requireSelection
@@ -83,16 +89,28 @@
                                         {{locale == LOCALE.VN ? country.vniName:country.engName}}</mat-option>
                                     }
                                 </mat-autocomplete>
+                                @if (
+                                formGroupDetail.controls.nationId.hasError('required') &&
+                                formGroupDetail.controls.nationId.touched) {
+                                <mat-error i18n="@@countryRequired">Country
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
                             </mat-form-field>
                         </div>
                         <div class="col" sizeInput="sm">
                             <mat-form-field>
                                 <mat-label matInput i18n="@@category">Category</mat-label>
-                                <mat-select formControlName="marketType">
+                                <mat-select required formControlName="marketType">
                                     <mat-option [value]="null" i18n="@@allCategory">-- All Category --</mat-option>
                                     <mat-option value="International" i18n="@@international">International</mat-option>
                                     <mat-option value="Domestic" i18n="@@domestic">Domestic</mat-option>
                                 </mat-select>
+                                @if (
+                                formGroupDetail.controls.marketType.hasError('required') &&
+                                formGroupDetail.controls.marketType.touched) {
+                                <mat-error i18n="@@categoryRequired">Category
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
                             </mat-form-field>
                         </div>
                     </div>
@@ -104,11 +122,17 @@
                         <div class="col mt-15" sizeInput="sm">
                             <mat-form-field>
                                 <mat-label i18n="@@flightGroup">Flight Group</mat-label>
-                                <mat-select formControlName="flightGroup">
+                                <mat-select required formControlName="flightGroup">
                                     @for (flightGroup of flightGroupData; track $index) {
                                     <mat-option [value]="flightGroup">{{flightGroup}}</mat-option>
                                     }
                                 </mat-select>
+                                @if (
+                                formGroupDetail.controls.flightGroup.hasError('required') &&
+                                formGroupDetail.controls.flightGroup.touched) {
+                                <mat-error i18n="@@flightGroupRequired">Flight Group
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
                             </mat-form-field>
                         </div>
                         <div class="col mt-15" sizeInput="sm">
@@ -134,18 +158,30 @@
                                     <mat-option [value]="costCategory.code">{{costCategory.name}}</mat-option>
                                     }
                                 </mat-select>
+                                @if (
+                                formGroupDetail.controls.serviceFeeCode.hasError('required') &&
+                                formGroupDetail.controls.serviceFeeCode.touched) {
+                                <mat-error i18n="@@costCategoryRequired">Cost Category
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
                             </mat-form-field>
                         </div>
                         <div class="col mt-15" sizeInput="sm">
                             <mat-form-field>
                                 <mat-label i18n="@@airportCode:status">Status</mat-label>
-                                <mat-select formControlName="statusUsage">
+                                <mat-select required formControlName="statusUsage">
                                     <mat-option [value]="null" i18n="@@allStatus">-- All Status --</mat-option>
                                     <mat-option value="Not operational" i18n="@@notOperational">Not
                                         operational</mat-option>
                                     <mat-option value="Operational" i18n="@@operational">Operational</mat-option>
                                     <mat-option value="Suspended" i18n="@@suspended">Suspended</mat-option>
                                 </mat-select>
+                                @if (
+                                formGroupDetail.controls.statusUsage.hasError('required') &&
+                                formGroupDetail.controls.statusUsage.touched) {
+                                <mat-error i18n="@@airportCode:statusRequired">Status
+                                    {{MESSAGE.REQUIRED}}</mat-error>
+                                }
                             </mat-form-field>
                         </div>
                     </div>
@@ -364,7 +400,7 @@
                         i18n="@@action">
                         Action
                     </th>
-                    <td mat-cell *matCellDef="let carRental">
+                    <td mat-cell *matCellDef="let carRental; let i = dataIndex">
                         <div class="action-buttons d-flex align-items-center">
                             <button type="button" mat-button (click)="carRentalDetail(false, carRental)">
                                 <i class="material-symbols-outlined text-warning" title="Edit Car rental"
@@ -373,7 +409,8 @@
                                 </i>
                             </button>
 
-                            <button type="button" mat-button title="Delete hotel" i18n-title="@@deleteHotel">
+                            <button type="button" mat-button title="Delete hotel" i18n-title="@@deleteHotel"
+                                (click)="indexDeleteCarRental = i ;toggleDialogDeleteCarRental()">
                                 <span class="material-symbols-outlined text-danger">
                                     delete
                                 </span>
@@ -384,9 +421,8 @@
                 </ng-container>
                 }
 
-
                 <tr mat-header-row *matHeaderRowDef="carRentalColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: carRentalColumns;"></tr>
+                <tr mat-row *matRowDef="let row; columns: carRentalColumns;" [hidden]="row.isDelete === true"></tr>
             </table>
         </div>
     </mat-card-content>
@@ -433,11 +469,11 @@
 
 <!-- Dialog delete hotel -->
 <div class="add-new-popup" [class.active]="dialogDeleteHotel">
-    <div class="popup-dialog" style="max-width: 700px; min-width: 400px;">
-        <mat-card class="border-radius d-block bg-white border-0 shadow-none" style="width: 100%;">
+    <div class="popup-dialog dialog-with">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
             <mat-card-content>
                 <div class="text-warning text-center">
-                    <span class="material-symbols-outlined" style="font-size: 5rem;">
+                    <span class="material-symbols-outlined font-size-5rem">
                         error
                     </span>
                 </div>
@@ -467,11 +503,11 @@
 
 <!-- Dialog delete CarRental -->
 <div class="add-new-popup" [class.active]="dialogDeleteCarRental">
-    <div class="popup-dialog" style="max-width: 700px; min-width: 400px;">
-        <mat-card class="border-radius d-block bg-white border-0 shadow-none" style="width: 100%;">
+    <div class="popup-dialog dialog-with">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
             <mat-card-content>
                 <div class="text-warning text-center">
-                    <span class="material-symbols-outlined" style="font-size: 5rem;">
+                    <span class="material-symbols-outlined font-size-5rem">
                         error
                     </span>
                 </div>
