@@ -113,7 +113,7 @@
             <h5 i18n="@@airportList">Airport list</h5>
         </mat-card-title>
         <mat-card-subtitle>
-            <button class="add-btn mr-10" type="button" mat-button (click)="exportFile(null,'Airport.xlsx')">
+            <button class="add-btn mr-10" type="button" mat-button (click)="exportFile()">
                 <i class="material-symbols-outlined">
                     download
                 </i>
@@ -320,7 +320,7 @@
                 <div class="row">
                     <span i18n="@@downloadTemplate">Download template</span>
                     <button mat-button type="button" class="search-btn min-with-100 mlr-5" style="width: 250px;"
-                        (click)="downloadTemplate('airport-code-template.xlsx')">
+                        (click)="downloadTemplate()">
                         <i class="material-symbols-outlined">
                             download
                         </i>
