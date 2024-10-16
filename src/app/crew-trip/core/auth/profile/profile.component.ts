@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
 import {MatFormField, MatFormFieldControl, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
 import {MatSelect, MatSelectModule} from "@angular/material/select";
 import { FileUploadModule} from "@iplab/ngx-file-upload";
@@ -32,6 +32,11 @@ export class ProfileComponent implements OnInit{
   isEditMode = false;
   spinner = inject(NgxSpinnerService);
   userCurrent = this.userService.getUserLogin();
+  // multiple: any;
+  avatarUrl: string | ArrayBuffer | null = null;
+  fileError: string | null = null;
+  @Output() fileUploaded = new EventEmitter<string>();
+
   constructor() {
     console.log("this.userCurrentthis.userCurrent:",this.userCurrent)
     this.formGroup = this.fb.group({
@@ -95,6 +100,36 @@ updateEditMode() {
         await this.spinner.hide();
       }
     }
+  }
+
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    if (input.files?.length) {
+      const file = input.files[0];
+      const validExtensions = ['image/jpeg', 'image/png'];
+      // Validate file type
+      if (!validExtensions.includes(file.type)) {
+        this.fileError =  $localize`Invalid file type. Only JPG and PNG files are allowed.`;
+        return;
+      }
+      const maxSize = 2 * 1024 * 1024; // 2MB
+      if (file.size > maxSize) {
+        this.fileError = $localize`File is too large. Maximum size is 2MB.`;
+        return;
+      }
+      this.fileError = null;
+      const reader = new FileReader();
+      reader.onload = () => {
+        this.avatarUrl = reader.result;
+      };
+      reader.readAsDataURL(file);
+      this.uploadFile(file);
+    }
+  }
+
+  uploadFile(file: File) {
+    const formData = new FormData();
+    formData.append('avatar', file);
   }
 
 }

@@ -22,9 +22,14 @@
       </div>
     </div>
     <div class="row mt-10">
-      <!--    <div class="col-md-2 mb-10">-->
-      <!--    <file-upload class="file-uploader" [multiple]="multiple"></file-upload>-->
-      <!--  </div>-->
+      <div class="col-md-2 mb-10">
+        <div class="file-upload-container">
+          <img *ngIf="avatarUrl" [src]="avatarUrl" alt="User avatar" class="avatar-preview"/>
+          <input type="file" (change)="onFileSelected($event)" accept="image/*" />
+          <mat-error *ngIf="fileError">{{ fileError }}</mat-error>
+        </div>
+        </div>
+      <div class="col-md-8 mb-10">
       <form ngForm [formGroup]="formGroup" autocomplete="off">
         <div class="row col-md-8">
           <div class="col-sm-12 mb-10">
@@ -100,22 +105,8 @@
             </div>
           </div>
         </div>
-        <!--      <div class="btn-box text-center mt-10">-->
-        <!--        <button type="button" mat-button color="warn">-->
-        <!--          <i class="material-symbols-outlined">-->
-        <!--            close-->
-        <!--          </i>-->
-        <!--          <span i18n="@@cancel">Cancel</span>-->
-        <!--        </button>-->
-        <!--        <button mat-button color="primary" type="submit">-->
-        <!--          <i class="material-symbols-outlined">-->
-        <!--            check_circle-->
-        <!--          </i>-->
-        <!--          <span i18n="@@confirm">Confirm</span>-->
-        <!--        </button>-->
-        <!--      </div>-->
       </form>
-
+      </div>
     </div>
   </div>
 </mat-card>
