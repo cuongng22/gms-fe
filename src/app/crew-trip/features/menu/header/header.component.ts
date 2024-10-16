@@ -21,7 +21,7 @@ import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
+import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
 import {Constant, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
@@ -30,6 +30,7 @@ import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.comp
 import {NgxSpinnerService} from "ngx-spinner";
 import {LanguageService} from "src/app/crew-trip/core/services/language.service";
 import {Observable} from "rxjs";
+import {BaseService} from "src/app/crew-trip/core/services/base-service";
 
 
 @Component({
@@ -43,6 +44,7 @@ export class HeaderComponent implements OnInit {
   currentLanguage!: Observable<string>;
   fb = inject(FormBuilder);
   toggleService = inject(ToggleService);
+  // baseService = inject(BaseService);
   themeService = inject(CustomizerSettingsService);
   userService = inject(UsersService);
   router = inject(Router);
@@ -199,20 +201,31 @@ export class HeaderComponent implements OnInit {
       this.formGroup.markAllAsTouched();
       return;
     }
-    if(this.formGroup.get("newPassword")?.value !== this.formGroup.get("confirmNewPassword")?.value){
+    if (!this.passwordsMatch()) {
       this.formGroup.get('confirmNewPassword')?.setErrors({ incorrect: true });
       this.errorMessage = $localize`Confirm new password does not match new password`;
       return;
     }
     try {
-      this.spinner.show();
-      await this.userService.changePassword(this.formGroup.value);
-      this.userService.showSuccess(MESSAGE.UPDATE_SUCCESS);
-    } catch (error) {
-      console.log(error);
+      if (this.formGroup.valid) {
+        this.spinner.show();
+        await this.userService.changePassword(this.formGroup.value);
+        this.userService.showSuccess(MESSAGE.UPDATE_SUCCESS);
+      }
+    } catch (error: any) {
+      if (error?.status === 400 && error?.error?.error) {
+        this.formGroup.get('oldPassword')?.setErrors({ mismatch: true });
+        this.errorMessage = error?.error?.error;
+      } else {
+        this.errorMessage = $localize`An unexpected error occurred. Please try again.`;
+      }
     } finally {
       this.spinner.hide();
       this.dialogResetPassword = false;
     }
+  }
+
+  private passwordsMatch(): boolean {
+    return this.formGroup.get("newPassword")?.value === this.formGroup.get("confirmNewPassword")?.value;
   }
 }

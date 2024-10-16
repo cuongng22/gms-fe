@@ -18,7 +18,7 @@ import {NgxSpinnerModule, NgxSpinnerService} from "ngx-spinner";
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
-  imports: [CommonModule,FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
+  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
     TranslateModule, MatIconModule,NgxSpinnerModule
   ],
   templateUrl: './forgot-password.component.html',
@@ -57,7 +57,7 @@ export class ForgotPasswordComponent {
         this.formGroup.reset();
       }
     } catch (error: any) {
-      if (error?.status === 404 && error.error?.error) {
+      if (error?.status === 400 && error.error?.error) {
         this.formGroup.get('email')?.setErrors({ incorrect: true });
         this.errorMessage = error?.error?.error;
       } else {

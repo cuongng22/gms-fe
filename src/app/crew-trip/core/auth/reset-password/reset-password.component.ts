@@ -17,7 +17,7 @@ import {BaseService} from "src/app/crew-trip/core/services/base-service";
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule,FormsModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
+  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
     TranslateModule, MatIconModule,NgxSpinnerModule
   ],
   templateUrl: './reset-password.component.html',

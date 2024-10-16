@@ -18,18 +18,17 @@ import {LanguageService} from "src/app/crew-trip/core/services/language.service"
 
 
 export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
-  const locale = inject(LOCALE_ID);
   const router = inject(Router);
   const baseService = inject(BaseService);
   const languageService = inject(LanguageService);
   const token = localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN);
+  let headers = new HttpHeaders({
+    'Accept-Language': languageService.getLanguage(),
+  });
   if (token) {
-    const authReq = req.clone({
-      headers: new HttpHeaders({
-        'Accept-Language':  languageService.getLanguage(),
-        'Authorization': `Bearer ${token}`
-      })
-    });
+    headers = headers.set('Authorization', `Bearer ${token}`);
+  }
+  const authReq = req.clone({ headers });
     return next(authReq).pipe(
       timeout(10000),
       tap(event => {
@@ -49,9 +48,4 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
         return throwError(() => new Error(error.message));
       })
     );
-  } else {
-    return next(req);
-  }
-
-
 }
