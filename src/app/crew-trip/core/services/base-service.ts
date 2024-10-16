@@ -59,7 +59,7 @@ export class BaseService {
     const contentDisposition = response.headers.get('Content-Disposition');
     let fileName = 'downloaded-file.xlsx';
     if (contentDisposition) {
-      const matches = /filename="([^"]*)"/.exec(contentDisposition);
+      const matches = /filename=([^"]*)/.exec(contentDisposition);
       if (matches != null && matches[1]) {
         fileName = matches[1];
       }
@@ -94,7 +94,7 @@ export class BaseService {
     const totalErrors = response.headers.get('totalErrors');
     let fileName = 'error-file.xlsx';
     if (contentDisposition) {
-      const matches = /filename="([^"]*)"/.exec(contentDisposition);
+      const matches = /filename=([^"]*)/.exec(contentDisposition);
       if (matches != null && matches[1]) {
         fileName = matches[1];
       }
