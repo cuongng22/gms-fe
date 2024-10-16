@@ -50,14 +50,6 @@ export class ProfileComponent implements OnInit{
 
 
 updateEditMode() {
-    if (!this.isEditMode) {
-      if (this.formGroup.invalid) {
-        this.formGroup.markAllAsTouched();
-        return;
-      }else{
-        this.saveProfile();
-      }
-    }
     this.isEditMode = !this.isEditMode;
     if(this.isEditMode){
       this.formGroup.get('id')?.enable();
