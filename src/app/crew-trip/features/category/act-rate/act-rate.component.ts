@@ -1,9 +1,21 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
-import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
-import {MatButton} from "@angular/material/button";
-import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
+import {
+  MatAutocomplete,
+  MatAutocompleteModule,
+  MatAutocompleteTrigger,
+  MatOption
+} from "@angular/material/autocomplete";
+import {MatButton, MatButtonModule} from "@angular/material/button";
+import {
+  MatCard,
+  MatCardContent,
+  MatCardHeader,
+  MatCardModule,
+  MatCardSubtitle,
+  MatCardTitle
+} from "@angular/material/card";
 import {
   MatCell,
   MatCellDef,
@@ -11,7 +23,7 @@ import {
   MatHeaderCell,
   MatHeaderRow,
   MatHeaderRowDef,
-  MatRow, MatRowDef, MatTable, MatTableDataSource
+  MatRow, MatRowDef, MatTable, MatTableDataSource, MatTableModule
 } from "@angular/material/table";
 import {
   MatDatepicker,
@@ -19,10 +31,10 @@ import {
   MatDatepickerModule,
   MatDatepickerToggle
 } from "@angular/material/datepicker";
-import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
-import {MatPaginator} from "@angular/material/paginator";
-import {MatSelect} from "@angular/material/select";
+import {MatFormField, MatFormFieldModule, MatLabel, MatSuffix} from "@angular/material/form-field";
+import {MatInput, MatInputModule} from "@angular/material/input";
+import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
+import {MatSelect, MatSelectModule} from "@angular/material/select";
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
 import {ExchangeRateService} from "src/app/crew-trip/core/services/exchange-rate.service";
@@ -30,42 +42,17 @@ import {MatNativeDateModule} from "@angular/material/core";
 import {Constant, MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
 import {HttpStatusCode} from "@angular/common/http";
 import {SelectionModel} from "@angular/cdk/collections";
+import {CommonModule} from "@angular/common";
+import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 
 @Component({
   selector: 'app-act-rate',
   standalone: true,
     imports: [
-        MatDatepickerModule,
-      MatNativeDateModule,
-      InputSizeComponent,
-        MatAutocomplete,
-        MatAutocompleteTrigger,
-        MatButton,
-        MatCard,
-        MatCardContent,
-        MatCardHeader,
-        MatCardSubtitle,
-        MatCardTitle,
-        MatCell,
-        MatCellDef,
-        MatColumnDef,
-        MatDatepicker,
-        MatDatepickerInput,
-        MatDatepickerToggle,
-        MatFormField,
-        MatHeaderCell,
-        MatHeaderRow,
-        MatHeaderRowDef,
-        MatInput,
-        MatLabel,
-        MatOption,
-        MatPaginator,
-        MatRow,
-        MatRowDef,
-        MatSelect,
-        MatSuffix,
-        MatTable,
-        ReactiveFormsModule
+      MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+      MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
+      MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
+      MatTableModule, MatPaginatorModule
     ],
   templateUrl: './act-rate.component.html',
   styleUrl: './act-rate.component.scss'
@@ -74,23 +61,16 @@ import {SelectionModel} from "@angular/cdk/collections";
 export class ActRateComponent extends CommonComponent implements OnInit{
   override baseService = inject(ExchangeRateService);
   formBuilder = inject(FormBuilder);
-
-  override displayedColumns: string[] = [];
-  override dataSource = new MatTableDataSource();
-  override selection = new SelectionModel<any>(true, []);
-  override pageSize = Constant.PAGE_SIZE;
-  override pageIndex = Constant.PAGE;
-  override pageSizeOptions = [10, 50, 100]
-  override totalElement = 0;
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
-    active: [''],
+    currDate: [''],
+    export: [false],
   });
 
 
   override async ngOnInit() {
     super.ngOnInit();
-    this.displayedColumns = ['stt','code'];
+    this.displayedColumns = ['stt','code','price','type','currDate','updatedDate'];
     this.search();
   }
 
@@ -111,7 +91,6 @@ export class ActRateComponent extends CommonComponent implements OnInit{
             isActiveLabel: !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
             activeLabel: !!s.active || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
           }))
-          console.log("this.dataSourcethis.dataSource:",this.dataSource)
           this.totalElement = res.data.totalElements;
         }
         return res;

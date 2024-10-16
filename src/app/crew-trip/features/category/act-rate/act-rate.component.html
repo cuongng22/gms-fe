@@ -27,14 +27,14 @@
                 <input matInput formControlName="s">
               </mat-form-field>
             </div>
-<!--            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" sizeInput="md">-->
-<!--              <mat-form-field appearance="fill">-->
-<!--                <mat-label i18n="@@contractEndDate">Contract end date</mat-label>-->
-<!--                <input formControlName="contractEndDate" matInput [matDatepicker]="pickerContractEndDate">-->
-<!--                <mat-datepicker-toggle matIconSuffix [for]="pickerContractEndDate"></mat-datepicker-toggle>-->
-<!--                <mat-datepicker #pickerContractEndDate></mat-datepicker>-->
-<!--              </mat-form-field>-->
-<!--            </div>-->
+            <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" sizeInput="md">
+              <mat-form-field appearance="fill">
+                <mat-label i18n="@@effectiveDate">Effective date</mat-label>
+                <input formControlName="currDate" matInput [matDatepicker]="pickerContractEndDate">
+                <mat-datepicker-toggle matIconSuffix [for]="pickerContractEndDate"></mat-datepicker-toggle>
+                <mat-datepicker #pickerContractEndDate></mat-datepicker>
+              </mat-form-field>
+            </div>
           </div>
         </div>
         <div class="col-1 d-flex flex-row">
@@ -53,16 +53,12 @@
     </form>
   </mat-card-content>
 </mat-card>
-
-
-<!-- Start Danh sách Nhà xe -->
-
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
   <mat-card-header class="mb-10">
     <mat-card-title>
     </mat-card-title>
     <mat-card-subtitle>
-      <button class="add-btn" type="button" mat-button (click)="exportFile(null,'Actual_exchange_rate.xlsx')">
+      <button class="add-btn" type="button" mat-button (click)="exportFileOptions(null,'Actual_exchange_rate.xlsx','actual')">
         <i class="material-symbols-outlined">
           download
         </i>
@@ -77,50 +73,26 @@
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
           <td mat-cell *matCellDef="let element; let i = dataIndex">{{ i + 1 }}</td>
         </ng-container>
-
         <ng-container matColumnDef="code">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@code">Code</th>
           <td mat-cell *matCellDef="let element">{{element.code}}</td>
         </ng-container>
-<!--        <ng-container matColumnDef="carRentalCompany">-->
-<!--          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@carRentalCompany">Car-->
-<!--            Rental Company</th>-->
-<!--          <td mat-cell *matCellDef="let element">-->
-<!--            <span><span class="text-secondary-bootstrap" i18n="@@code">Code</span>: {{element.code}}</span> <br>-->
-<!--            <span><span class="text-secondary-bootstrap" i18n="@@Name">Name</span>: {{element.name}}</span>-->
-
-<!--          </td>-->
-<!--        </ng-container>-->
-<!--        <ng-container matColumnDef="address">-->
-<!--          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@address">Address</th>-->
-<!--          <td mat-cell *matCellDef="let element">{{element.address}}</td>-->
-<!--        </ng-container>-->
-<!--        <ng-container matColumnDef="contactDetails">-->
-<!--          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@contactDetails">Contact-->
-<!--            Details</th>-->
-<!--          <td mat-cell *matCellDef="let element">-->
-<!--            <span><span class="text-secondary-bootstrap" i18n="@@fullName">Full name</span>: {{element.fullName}}</span>-->
-<!--            <br>-->
-<!--            <span><span class="text-secondary-bootstrap" i18n="@@bookingEmail">Booking email</span>:-->
-<!--              {{element.email}}</span><br>-->
-<!--            <span><span class="text-secondary-bootstrap" i18n="@@phoneNumber">Phone number</span>:-->
-<!--              {{element.phone}}</span>-->
-<!--          </td>-->
-<!--        </ng-container>-->
-<!--        <ng-container matColumnDef="active">-->
-<!--          <th mat-header-cell *matHeaderCellDef class="font-weight-bold" mat-sort-header i18n="@@status">Status</th>-->
-<!--          <td mat-cell *matCellDef="let element;">-->
-<!--            <span class="badge" [ngClass]="{-->
-<!--              'text-soft-primary':  element['active'] == true,-->
-<!--              'text-soft-danger':  element['active'] == false}">-->
-<!--              {{ element.activeLabel}}-->
-<!--            </span>-->
-<!--          </td>-->
-<!--        </ng-container>-->
-<!--        <ng-container matColumnDef="notes">-->
-<!--          <th mat-header-cell *matHeaderCellDef mat-sort-header>Notes</th>-->
-<!--          <td mat-cell *matCellDef="let element">{{ element.notes}}</td>-->
-<!--        </ng-container>-->
+        <ng-container matColumnDef="price">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@price">Price</th>
+          <td mat-cell *matCellDef="let element">{{element.price}}</td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@type">Type</th>
+          <td mat-cell *matCellDef="let element">{{element.type}}</td>
+        </ng-container>
+        <ng-container matColumnDef="currDate">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@effectiveDate">Effective date</th>
+          <td mat-cell *matCellDef="let element">{{element.currDate | date: 'dd/MM/yyyy'}}</td>
+        </ng-container>
+        <ng-container matColumnDef="updatedDate">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@updatedOn">Updated on</th>
+          <td mat-cell *matCellDef="let element">{{element.updatedDate | date: 'dd/MM/yyyy'}}</td>
+        </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
 

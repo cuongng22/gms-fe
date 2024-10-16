@@ -239,6 +239,23 @@ export class CommonComponent implements OnInit {
     }
   }
 
+  async exportFileOptions(body?: any, filename?: string, sourcePath?:string) {
+    try {
+      await this.spinner.show();
+      this.formGroupSearch.patchValue({
+        "export":true
+      })
+      let res = await this.baseService.exportDataOptions({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) },sourcePath);
+      console.log(res)
+      this.downloadFile(res.blob, filename ?? res.fileName);
+    } catch (e: any) {
+      console.log(e);
+      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
   async downloadTemplate(filename?: string) {
     try {
       await this.spinner.show();
