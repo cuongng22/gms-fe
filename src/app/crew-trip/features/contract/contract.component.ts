@@ -19,20 +19,21 @@ import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
 import {NoDataRowOutlet} from "@angular/cdk/table";
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
+import {ContractService} from "src/app/crew-trip/core/services/contract-service";
+import {ContractDetailComponent} from "src/app/crew-trip/features/contract/contract-detail/contract-detail.component";
 
 
 @Component({
   selector: 'app-contract',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent],
   templateUrl: './contract.component.html',
   styleUrl: './contract.component.scss',
 })
 
 
 export class ContractComponent extends CommonComponent implements OnInit {
-  override baseService = inject(RolesService);
-  usersService = inject(UsersService);
+  override baseService = inject(ContractService);
   fb = inject(FormBuilder);
 
   //variable
@@ -46,6 +47,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   ];
   @Input() contractId: any;
 
+  showPopupAnnex = false;
 
   constructor() {
     super();
@@ -67,14 +69,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
     this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }
 
-  override async save() {
-    this.formGroupDetail.patchValue({
-      name: this.formGroupDetail.value.roleName,
-      active: this.formGroupDetail.value.isActive
-    });
-    await super.save();
-  }
-
   async nextStep(index: number) {
     this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
     this.step = 2;
@@ -85,8 +79,13 @@ export class ContractComponent extends CommonComponent implements OnInit {
       this.step = 1;
   }
 
-  override async search(body?: any) {
-    await super.search({});
-    this.dataSource.data.forEach((s: any) => s.id = s.roleId)
+  async showAnnex(id:any){
+    /**
+     * todo: api chi tiet hop dong
+     * gan vao formDetail
+     *
+     *
+     */
+    this.showPopupAnnex = true;
   }
 }

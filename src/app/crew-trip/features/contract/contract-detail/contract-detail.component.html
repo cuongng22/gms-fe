@@ -1,5 +1,5 @@
-<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between" (scroll)="onScroll()"
-  [ngClass]="isSticky ? 'fixed' : 'notfixed' ">
+<!--<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between" (scroll)="onScroll()"
+     [ngClass]="isSticky ? 'fixed' : 'notfixed' ">
   @if (!isSticky) {
   <h5 class="mb-0" i18n>
     Grant access
@@ -21,94 +21,383 @@
   </div>
 
 
-</div>
-<div class="row">
-  <div class="col-lg-4 col-md-12">
-    <mat-card [class.component-rtl-enabled]="themeService.isRTLEnabled()"
-      class="scroll email-compose-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table">
-      <mat-card-header>
-        <mat-card-title>
-          <h5 class="mb-0 fw-semibold" i18n>
-            List Accounts
-          </h5>
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="table-responsive">
-          <table [dataSource]="listUser" mat-table>
-            <ng-container matColumnDef="stt">
-              <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
-              <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
-            </ng-container>
-            @for (innerColumn of _displayedColumnsUser; track innerColumn.value) {
-            <ng-container matColumnDef="{{innerColumn.value}}">
-              <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
-              <td mat-cell *matCellDef="let element">
-                <span [ngClass]="{
-            'badge rounded-pill': innerColumn.value === 'isActiveLabel',
-            'text-soft-primary': innerColumn.value === 'isActiveLabel' && element['active'] == 1,
-            'text-soft-danger': innerColumn.value === 'isActiveLabel' && element['active'] == 0
-            }">{{
-                  element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-                  }}
-                </span>
-              </td>
-            </ng-container>
-            }
+</div>-->
 
-            <tr *matHeaderRowDef="displayedColumnsUser" mat-header-row></tr>
-            <tr *matRowDef="let row; columns: displayedColumnsUser;" mat-row></tr>
-          </table>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-  <div class="col-lg-8 col-md-12">
-    <mat-card [class.component-rtl-enabled]="themeService.isRTLEnabled()"
-      class="scroll tables-of-content-card mb-25 border-radius d-block bg-white border-0 shadow-none d-table">
-      <mat-card-header>
-        <mat-card-title>
-          <h5 class="mb-0 fw-semibold" i18n>
-            List Functions
-          </h5>
-          <mat-checkbox (change)="checkBoxChange()" [(ngModel)]="selectAllChecked" i18n>Select all
-          </mat-checkbox>
-        </mat-card-title>
-      </mat-card-header>
-      <mat-card-content>
-        <div class="tables-of-content-list p-0">
-          <mat-accordion [multi]="true">
-            @for (item of listFunction; track item.name) {
-            <mat-expansion-panel disabled expanded>
-              <mat-expansion-panel-header class="p-0">
-                <mat-panel-title>
-                  <mat-checkbox [checked]="item.active" (change)="checkBoxChange(item)"
-                    [indeterminate]="item.indeterminate">
-                    <strong>{{ item.label }}</strong></mat-checkbox>
-                </mat-panel-title>
-              </mat-expansion-panel-header>
-              <ul class="p-0 m-0 list-unstyled bg-white">
-                @for (itemChild of item['child']; track itemChild.name) {
-                <ng-container>
-                  <li class="d-sm-flex align-items-center justify-content-between">
-                    <span class="d-block text-body">
-                      <mat-checkbox [checked]="itemChild.active" (change)="checkBoxChange(itemChild,item)">{{
-                        itemChild.name }}</mat-checkbox>
-                    </span>
-                    <span class="d-block text-body">
-                      {{ itemChild.alias }}
-                    </span>
-                  </li>
-                </ng-container>
-                }
+<mat-accordion multi>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header i18n>1.General information</mat-expansion-panel-header>
+    <mat-panel-description>
+      <table>
+        <thead>
+        <tr>
+          <th class="fw-medium" scope="col">
+            Description
+          </th>
+          <th class="fw-medium text-end" scope="col">
+            Price
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="text-body">
+            Grand Total :
+          </td>
+          <td class="text-body text-end">
+            $1,105.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Discount :
+          </td>
+          <td class="text-body text-end">
+            -$105.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Tax :
+          </td>
+          <td class="text-body text-end">
+            $75.00
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-medium">
+            Subtotal :
+          </td>
+          <td class="text-body text-end">
+            $1,000.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Shipping Charge :
+          </td>
+          <td class="text-body text-end">
+            $80.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Coupon Charge :
+          </td>
+          <td class="text-body text-end">
+            $20.00
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-medium">
+            Total :
+          </td>
+          <td class="text-body text-end">
+            $900.00
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-panel-description>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header i18n>2. Remittance Information</mat-expansion-panel-header>
+    <mat-panel-description>
+      <table>
+        <thead>
+        <tr>
+          <th class="fw-medium" scope="col">
+            Description
+          </th>
+          <th class="fw-medium text-end" scope="col">
+            Price
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="text-body">
+            Grand Total :
+          </td>
+          <td class="text-body text-end">
+            $1,105.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Discount :
+          </td>
+          <td class="text-body text-end">
+            -$105.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Tax :
+          </td>
+          <td class="text-body text-end">
+            $75.00
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-medium">
+            Subtotal :
+          </td>
+          <td class="text-body text-end">
+            $1,000.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Shipping Charge :
+          </td>
+          <td class="text-body text-end">
+            $80.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Coupon Charge :
+          </td>
+          <td class="text-body text-end">
+            $20.00
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-medium">
+            Total :
+          </td>
+          <td class="text-body text-end">
+            $900.00
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-panel-description>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header i18n>3. Attached Document Information</mat-expansion-panel-header>
+    <mat-panel-description>
+      <table>
+        <thead>
+        <tr>
+          <th class="fw-medium" scope="col">
+            Description
+          </th>
+          <th class="fw-medium text-end" scope="col">
+            Price
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="text-body">
+            Grand Total :
+          </td>
+          <td class="text-body text-end">
+            $1,105.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Discount :
+          </td>
+          <td class="text-body text-end">
+            -$105.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Tax :
+          </td>
+          <td class="text-body text-end">
+            $75.00
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-medium">
+            Subtotal :
+          </td>
+          <td class="text-body text-end">
+            $1,000.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Shipping Charge :
+          </td>
+          <td class="text-body text-end">
+            $80.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Coupon Charge :
+          </td>
+          <td class="text-body text-end">
+            $20.00
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-medium">
+            Total :
+          </td>
+          <td class="text-body text-end">
+            $900.00
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-panel-description>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header i18n>4. Additional Information</mat-expansion-panel-header>
+    <mat-panel-description>
+      <table>
+        <thead>
+        <tr>
+          <th class="fw-medium" scope="col">
+            Description
+          </th>
+          <th class="fw-medium text-end" scope="col">
+            Price
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="text-body">
+            Grand Total :
+          </td>
+          <td class="text-body text-end">
+            $1,105.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Discount :
+          </td>
+          <td class="text-body text-end">
+            -$105.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Tax :
+          </td>
+          <td class="text-body text-end">
+            $75.00
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-medium">
+            Subtotal :
+          </td>
+          <td class="text-body text-end">
+            $1,000.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Shipping Charge :
+          </td>
+          <td class="text-body text-end">
+            $80.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Coupon Charge :
+          </td>
+          <td class="text-body text-end">
+            $20.00
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-medium">
+            Total :
+          </td>
+          <td class="text-body text-end">
+            $900.00
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-panel-description>
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="true">
+    <mat-expansion-panel-header i18n>5. Unit Price Information</mat-expansion-panel-header>
+    <mat-panel-description>
+      <table>
+        <thead>
+        <tr>
+          <th class="fw-medium" scope="col">
+            Description
+          </th>
+          <th class="fw-medium text-end" scope="col">
+            Price
+          </th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+          <td class="text-body">
+            Grand Total :
+          </td>
+          <td class="text-body text-end">
+            $1,105.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Discount :
+          </td>
+          <td class="text-body text-end">
+            -$105.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Tax :
+          </td>
+          <td class="text-body text-end">
+            $75.00
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-medium">
+            Subtotal :
+          </td>
+          <td class="text-body text-end">
+            $1,000.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Shipping Charge :
+          </td>
+          <td class="text-body text-end">
+            $80.00
+          </td>
+        </tr>
+        <tr>
+          <td class="text-body">
+            Coupon Charge :
+          </td>
+          <td class="text-body text-end">
+            $20.00
+          </td>
+        </tr>
+        <tr>
+          <td class="fw-medium">
+            Total :
+          </td>
+          <td class="text-body text-end">
+            $900.00
+          </td>
+        </tr>
+        </tbody>
+      </table>
+    </mat-panel-description>
+  </mat-expansion-panel>
+</mat-accordion>
 
-              </ul>
-            </mat-expansion-panel>
-            }
-
-          </mat-accordion>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div>

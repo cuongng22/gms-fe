@@ -77,27 +77,6 @@
       <div class="table-responsive">
         <table [dataSource]="dataSource" mat-table multiTemplateDataRows="true">
 
-          <!-- Checkbox Column -->
-          <ng-container matColumnDef="select">
-            <th *matHeaderCellDef mat-header-cell>
-              <mat-checkbox
-                (change)="$event ? toggleAllRows() : null"
-                [aria-label]="checkboxLabel()"
-                [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()"
-              >
-              </mat-checkbox>
-            </th>
-            <td *matCellDef="let row" mat-cell>
-              <mat-checkbox
-                (change)="$event ? selection.toggle(row) : null"
-                (click)="$event.stopPropagation()"
-                [aria-label]="checkboxLabel(row)"
-                [checked]="selection.isSelected(row)"
-              >
-              </mat-checkbox>
-            </td>
-          </ng-container>
           <ng-container matColumnDef="stt">
             <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
             <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
@@ -138,6 +117,85 @@
                     delete
                   </i>
                 </a>
+                <a mat-button type="button" [matMenuTriggerFor]="listAnnex">
+                  <i class="material-symbols-outlined" i18n-title title="Delete">
+                    description
+                  </i>
+                </a>
+                <mat-menu #listAnnex="matMenu" xPosition="before">
+                  <div class="basic-table table-responsive">
+                    <table>
+                      <thead>
+                      <tr>
+                        <th scope="col" class="fw-medium">
+                          Description
+                        </th>
+                        <th scope="col" class="fw-medium text-end">
+                          Price
+                        </th>
+                      </tr>
+                      </thead>
+                      <tbody>
+                      <tr>
+                        <td class="text-body">
+                          Grand Total :
+                        </td>
+                        <td class="text-body text-end">
+                          $1,105.00
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-body">
+                          Discount :
+                        </td>
+                        <td class="text-body text-end">
+                          -$105.00
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-body">
+                          Tax :
+                        </td>
+                        <td class="text-body text-end">
+                          $75.00
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="fw-medium">
+                          Subtotal :
+                        </td>
+                        <td class="text-body text-end">
+                          $1,000.00
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-body">
+                          Shipping Charge :
+                        </td>
+                        <td class="text-body text-end">
+                          $80.00
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="text-body">
+                          Coupon Charge :
+                        </td>
+                        <td class="text-body text-end">
+                          $20.00
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="fw-medium">
+                          Total :
+                        </td>
+                        <td class="text-body text-end">
+                          $900.00
+                        </td>
+                      </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </mat-menu>
               </div>
             </td>
           </ng-container>
@@ -163,8 +221,11 @@
     </mat-card-content>
   </mat-card>
 </ng-container>
-<!-- Add Function Popup -->
+
+<!--ds phu luc-->
+
+<!-- Detail -->
 <ng-container *ngIf="step==2">
-  <app-role-function (backStep)="backStep()" [id]="formGroupDetail.value.roleId"
-                     [roleObject]="formGroupDetail.value"></app-role-function>
+  <app-contract-detail (backStep)="backStep()" [id]="formGroupDetail.value.id"
+                     [dataObject]="formGroupDetail.value"></app-contract-detail>
 </ng-container>
