@@ -33,13 +33,14 @@ export class ProfileComponent implements OnInit{
   spinner = inject(NgxSpinnerService);
   userCurrent = this.userService.getUserLogin();
   constructor() {
+    console.log("this.userCurrentthis.userCurrent:",this.userCurrent)
     this.formGroup = this.fb.group({
       id:[this.userCurrent?.id, Validators.required],
       fullName: [this.userCurrent?.fullName,Validators.required],
       department: [this.userCurrent?.department,Validators.required],
       email: [this.userCurrent?.email, [Validators.required,Validators.email]],
       phone: [this.userCurrent?.phone],
-      gender: [this.userCurrent?.gender,Validators.required],
+      gender: [this.userCurrent?.gender ? 1 : 0,Validators.required],
       avatar_url: [this.userCurrent?.avatar_url]
     });
   }
