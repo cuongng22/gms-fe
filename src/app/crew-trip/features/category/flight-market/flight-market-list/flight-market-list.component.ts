@@ -153,6 +153,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
         if (!res.totalErrors) {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
           this.search();
+          this.toggleDialogUpload();
         }
       }
     } catch (e: any) {
