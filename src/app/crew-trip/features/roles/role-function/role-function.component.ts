@@ -45,7 +45,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
 
   //variable
   @Input() id: any;
-  @Input() roleObject: any;
+  @Input() dataSelected: any;
   @Output() backStep = new EventEmitter<any>();
   listUser: any = [];
   listFunction: any = [];
@@ -137,7 +137,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
       if (nextValue) {
         row.child.forEach((s: any) => {
           this.listRoleFunction = [...this.listRoleFunction, {
-            roleName: this.roleObject.roleName, functionId: s.id, functionName: s.name, functionDescription: s.alias
+            roleName: this.dataSelected.roleName, functionId: s.id, functionName: s.name, functionDescription: s.alias
           }];
           s.active = nextValue;
         });
@@ -153,7 +153,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
     } else if (row) {//cap con
       if (nextValue) {
         this.listRoleFunction = [...this.listRoleFunction, {
-          roleName: this.roleObject.roleName, functionId: row.id, functionName: row.name, functionDescription: row.alias
+          roleName: this.dataSelected.roleName, functionId: row.id, functionName: row.name, functionDescription: row.alias
         }];
       } else {
         this.listRoleFunction.pop((s: any) => s.functionId == row.id);
@@ -171,7 +171,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
         this.listFunction.forEach((item: any) => {
           item.child.forEach((s: any) => {
             this.listRoleFunction = [...this.listRoleFunction, {
-              roleName: this.roleObject.roleName, functionId: s.id, functionName: s.name, functionDescription: s.alias
+              roleName: this.dataSelected.roleName, functionId: s.id, functionName: s.name, functionDescription: s.alias
             }];
             s.active = nextValue;
           });
