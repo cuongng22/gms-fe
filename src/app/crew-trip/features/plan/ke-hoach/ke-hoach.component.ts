@@ -17,7 +17,7 @@ import {Constant} from "src/app/crew-trip/shared/utils/constant";
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {InputSizeComponent} from '../../shared/input/input-size.component';
+import {InputSizeComponent} from '../../../shared/input/input-size.component';
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 
 
