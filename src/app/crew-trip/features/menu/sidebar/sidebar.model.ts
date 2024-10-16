@@ -57,7 +57,7 @@ export const menu: Menu[] = [
                 path: 'category/flight-market', title: $localize`:@@flightMarket:Flight market`, icon: 'ri-store-line'
             },
             {
-                path: 'category/rate', title: $localize`:@@exchangeRate:Exchange rate`, icon: 'ri-exchange-cny-line'
+                path: 'category/act-rate', title: $localize`:@@ActExchangeRate:Actual exchange rate`, icon: 'ri-exchange-cny-line'
             },
             {
                 path: 'category/crews', title: $localize`:@@crewList:Crew List`, icon: 'ri-id-card-line'
