@@ -1,5 +1,5 @@
 import {Routes} from '@angular/router';
-import {KeHoachComponent} from 'src/app/crew-trip/features/ke-hoach/ke-hoach.component';
+import {KeHoachComponent} from 'src/app/crew-trip/features/plan/ke-hoach/ke-hoach.component';
 import {FirstPageComponent} from "src/app/crew-trip/features/first-page/first-page.component";
 import {UsersComponent} from "src/app/crew-trip/features/users/users.component";
 import {SignInComponent} from "src/app/crew-trip/core/auth/sign-in/sign-in.component";
@@ -20,6 +20,8 @@ import { FlightMarketComponent } from './crew-trip/features/category/flight-mark
 import { FlightMarketDetailComponent } from './crew-trip/features/category/flight-market/flight-market-detail/flight-market-detail.component';
 import { FlightMarketListComponent } from './crew-trip/features/category/flight-market/flight-market-list/flight-market-list.component';
 import {ActRateComponent} from "src/app/crew-trip/features/category/act-rate/act-rate.component";
+import {RateUthComponent} from "src/app/crew-trip/features/plan/rate-uth/rate-uth.component";
+import {RatePlannedComponent} from "src/app/crew-trip/features/plan/rate-planned/rate-planned.component";
 
 
 export const routes: Routes = [
@@ -40,6 +42,12 @@ export const routes: Routes = [
           { path: 'users', component: UsersComponent },
           { path: 'roles', component: RolesComponent },
           { path: 'functions', component: FunctionsComponent },
+        ]
+      },
+      {
+        path: 'plan', children: [
+          {path: 'rate/uth', component: RateUthComponent},
+          {path: 'rate/planned', component: RatePlannedComponent},
         ]
       },
       {

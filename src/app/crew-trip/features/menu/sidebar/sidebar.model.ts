@@ -34,6 +34,27 @@ export const menu: Menu[] = [
             }
         ]
     },
+  {
+    title: $localize`:@@plan:Plan`,
+    rootPath : 'plan',
+    subMenu: [
+      {
+        path: '', title: '', icon: 'ri-calendar-schedule-fill',
+        menu: [
+          {
+            title: $localize`:@@rates:Rates`,
+            rootPath : '',
+            subMenu: [
+              {
+                path: 'plan/rate/uth', title: $localize`:@@uth:Ước thực hiện`, icon: 'ri-exchange-cny-line'
+              },
+              {
+                path: 'plan/rate/planned', title: $localize`:@@plannedExchangeRate:Planned exchange rate`, icon: 'ri-exchange-cny-line'
+              },
+            ]
+          }]
+      }]
+  },
     {
         title: $localize`:@@category:Category`,
         rootPath : 'category',

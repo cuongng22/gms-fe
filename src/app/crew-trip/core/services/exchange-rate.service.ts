@@ -19,7 +19,7 @@ export class ExchangeRateService extends BaseService {
   }
 
   actDetail(curCode: any): Promise<any> {
-    const url = `${this.api}/${this.path}/actual/get-code/${curCode}`
+    const url = `${this.api}/${this.path}/actual/get-code?curCode=${curCode}`
     return firstValueFrom(this.http.get<any>(url, this.httpOptions));
   }
 
