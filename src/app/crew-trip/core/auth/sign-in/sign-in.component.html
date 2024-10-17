@@ -61,7 +61,7 @@
                                 <mat-error *ngIf="formGroup.get('password')?.hasError('incorrect')">
                                   {{ errorMessage }}
                                 </mat-error>
-                <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+                <button mat-icon-button matSuffix  type="button" (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
                                     <span class="material-symbols-outlined">
                                         {{hide ? 'visibility_off' : 'visibility'}}
                                     </span>
