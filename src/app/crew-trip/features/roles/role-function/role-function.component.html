@@ -2,7 +2,7 @@
   [ngClass]="isSticky ? 'fixed' : 'notfixed' ">
   @if (!isSticky) {
   <h5 class="mb-0" i18n>
-    Grant access
+    Assign Permissions to {{dataSelected.roleName}}
   </h5>
   }
   <div>
@@ -58,6 +58,9 @@
 
             <tr *matHeaderRowDef="displayedColumnsUser" mat-header-row></tr>
             <tr *matRowDef="let row; columns: displayedColumnsUser;" mat-row></tr>
+            <tr *matNoDataRow class="mat-row">
+              <td colspan="1"><span i18n class="text-danger">No account has been granted this permission</span></td>
+            </tr>
           </table>
         </div>
       </mat-card-content>

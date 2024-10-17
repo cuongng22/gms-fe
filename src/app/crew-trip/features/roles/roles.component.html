@@ -198,7 +198,7 @@
                     <input formControlName="roleName" i18n-placeholder matInput maxlength="250" placeholder="Input role name"
                            required>
                     @if (!!formGroupDetail.controls['roleName'].hasError('required')) {
-                    <mat-error><span i18n>Role name</span><span i18n> not empty</span></mat-error>
+                    <mat-error><span i18n>Role name</span><span i18n> cannot be empty</span></mat-error>
                     }
                   </mat-form-field>
                   <mat-checkbox class="mt-10" formControlName="isActive" i18n>Active</mat-checkbox>
