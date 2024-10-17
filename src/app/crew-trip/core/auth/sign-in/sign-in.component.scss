@@ -1,19 +1,70 @@
+.sign-in-banner {
+  height: 65vh;
+  position: relative;
+
+  img.banner1 {
+    width: 100%;
+    height: 100%;
+    object-fit: cover !important;
+    mask-image: linear-gradient(to right, #c0d6f6 35%, transparent 95%);
+  }
+
+  img.banner2 {
+    position: absolute;
+    top: 23vh;
+    left: 6vw;
+    z-index: 0;
+    transform: rotate(-10deg);
+    transform: translateY(0%);
+
+    animation: moveAndFade 5s linear infinite;
+  }
+}
+
+@keyframes moveAndFade {
+  0% {
+    left: 0;
+    opacity: 1;
+  }
+
+  80% {
+    opacity: 0.75;
+    left: calc(40vw - 200px);
+    top: calc(50% - (200px * 0.577));
+  }
+
+  100% {
+    opacity: 0;
+    left: calc(50vw - 200px);
+    top: calc(45% - (200px * 0.577));
+  }
+}
+
 .sign-in-area {
   background-color: var(--whiteColor);
+
   padding: {
     top: 135px;
     bottom: 135px;
-  };
+  }
+
+  ;
+
   &.dark-theme {
     background-color: #0A0E19;
   }
 }
+
 .trezo-form {
   max-width: 1255px;
+
   padding: {
     left: 12.5px;
     right: 12.5px;
-  };
+  }
+
+  ;
+
   .form-image {
     border-radius: 24px;
     margin-right: -25px;
@@ -23,6 +74,7 @@
       margin-bottom: -3px;
     }
   }
+
   .form-content {
     padding-left: 90px;
 
@@ -30,32 +82,43 @@
       margin: {
         top: 23px;
         bottom: 23px;
-      };
+      }
+
+      ;
+
       h1 {
         font-size: 28px;
         margin-bottom: 7px;
       }
+
       p {
         font-size: 16px;
         color: #445164;
       }
     }
+
     .with-socials {
       margin-bottom: 23px;
 
       div {
         flex-grow: 1;
+
         margin: {
           left: 6px;
           right: 6px;
-        };
+        }
+
+        ;
+
         &:first-child {
           margin-left: 0;
         }
+
         &:last-child {
           margin-right: 0;
         }
       }
+
       .mat-mdc-button {
         width: 100%;
         height: auto;
@@ -69,6 +132,7 @@
         box-shadow: 0px 4px 16px -2px rgba(27, 37, 51, 0.06);
       }
     }
+
     form {
       .form-group {
         margin-bottom: 15px;
@@ -77,6 +141,7 @@
           margin-bottom: 12px;
         }
       }
+
       .forgot-password {
         a {
           &:hover {
@@ -84,6 +149,7 @@
           }
         }
       }
+
       .mat-mdc-button {
         width: 100%;
         height: auto;
@@ -93,12 +159,16 @@
         padding: 12px 25px;
         border-radius: 7px;
         color: var(--whiteColor);
-        background-color:#2a6886;
+        background-color: #2a6886;
+
         font: {
           size: 16px;
           weight: 500;
-        };
+        }
+
+        ;
       }
+
       .info {
         margin-top: 20px;
 
@@ -110,6 +180,7 @@
       }
     }
   }
+
   &.component-dark-theme {
     .form-content {
       .logo {
@@ -121,11 +192,13 @@
           }
         }
       }
+
       .title {
         p {
           color: var(--bodyColor);
         }
       }
+
       .with-socials {
         .mat-mdc-button {
           background: #0A0E19;
@@ -135,37 +208,50 @@
       }
     }
   }
+
   &.component-rtl-enabled {
     .form-image {
       margin: {
         right: 0;
         left: -24px;
-      };
+      }
+
+      ;
     }
+
     .form-content {
       padding: {
         left: 0;
         right: 90px;
-      };
+      }
+
+      ;
+
       .with-socials {
         div {
           &:first-child {
             margin: {
               left: 6px;
               right: 0;
-            };
+            }
+
+            ;
           }
+
           &:last-child {
             margin: {
               right: 6px;
               left: 0;
-            };
+            }
+
+            ;
           }
         }
       }
     }
   }
 }
+
 ::ng-deep {
   .trezo-form {
     .form-content {
@@ -176,6 +262,7 @@
           }
         }
       }
+
       form {
         .mat-mdc-button {
           .mdc-button__label {
@@ -190,6 +277,7 @@
         }
       }
     }
+
     &.component-rtl-enabled {
       .form-content {
         form {
@@ -199,7 +287,9 @@
                 margin: {
                   right: 0;
                   left: 5px;
-                };
+                }
+
+                ;
               }
             }
           }
@@ -216,21 +306,29 @@
     padding: {
       top: 60px;
       bottom: 60px;
-    };
+    }
+
+    ;
   }
+
   .trezo-form {
     max-width: 100%;
 
     .form-image {
       border-radius: 15px;
+
       margin: {
         right: 0;
         top: 25px;
-      };
+      }
+
+      ;
+
       img {
         border-radius: 15px;
       }
     }
+
     .form-content {
       padding-left: 0;
 
@@ -238,14 +336,19 @@
         margin: {
           top: 17px;
           bottom: 15px;
-        };
+        }
+
+        ;
+
         h1 {
           font-size: 22px;
         }
+
         p {
           font-size: 13px;
         }
       }
+
       .with-socials {
         margin-bottom: 20px;
 
@@ -253,34 +356,44 @@
           margin: {
             left: 5px;
             right: 5px;
-          };
+          }
+
+          ;
         }
+
         .mat-mdc-button {
           padding: 8px 15px;
         }
       }
+
       form {
         .form-group {
           .main-label {
             margin-bottom: 10px;
           }
         }
+
         .mat-mdc-button {
           padding: 12px 25px;
           margin-top: 17px;
           font-size: 13px;
         }
+
         .info {
           margin-top: 15px;
         }
       }
     }
+
     &.component-rtl-enabled {
       .form-image {
         margin: {
           left: 0;
-        };
+        }
+
+        ;
       }
+
       .form-content {
         padding-right: 0;
 
@@ -289,18 +402,24 @@
             &:first-child {
               margin: {
                 left: 5px;
-              };
+              }
+
+              ;
             }
+
             &:last-child {
               margin: {
                 right: 5px;
-              };
+              }
+
+              ;
             }
           }
         }
       }
     }
   }
+
   ::ng-deep {
     .trezo-form {
       .form-content {
@@ -330,8 +449,11 @@
         margin: {
           top: 20px;
           bottom: 17px;
-        };
+        }
+
+        ;
       }
+
       form {
         .mat-mdc-button {
           margin-top: 20px;
@@ -344,13 +466,15 @@
 
 /* Min width 768px to Max width 991px */
 @media only screen and (min-width : 768px) and (max-width : 991px) {
-
   .sign-in-area {
     padding: {
       top: 80px;
       bottom: 80px;
-    };
+    }
+
+    ;
   }
+
   .trezo-form {
     max-width: 720px;
 
@@ -358,8 +482,11 @@
       margin: {
         right: 0;
         top: 25px;
-      };
+      }
+
+      ;
     }
+
     .form-content {
       padding-left: 0;
 
@@ -367,14 +494,19 @@
         margin: {
           top: 20px;
           bottom: 20px;
-        };
+        }
+
+        ;
+
         h1 {
           font-size: 24px;
         }
+
         p {
           font-size: 14px;
         }
       }
+
       .with-socials {
         margin-bottom: 20px;
 
@@ -382,26 +514,34 @@
           margin: {
             left: 5px;
             right: 5px;
-          };
+          }
+
+          ;
         }
       }
+
       form {
         .mat-mdc-button {
           font-size: 14px;
           margin-top: 20px;
           padding: 12px 25px;
         }
+
         .info {
           margin-top: 15px;
         }
       }
     }
+
     &.component-rtl-enabled {
       .form-image {
         margin: {
           left: 0;
-        };
+        }
+
+        ;
       }
+
       .form-content {
         padding-right: 0;
 
@@ -410,18 +550,24 @@
             &:first-child {
               margin: {
                 left: 5px;
-              };
+              }
+
+              ;
             }
+
             &:last-child {
               margin: {
                 right: 5px;
-              };
+              }
+
+              ;
             }
           }
         }
       }
     }
   }
+
   ::ng-deep {
     .trezo-form {
       .form-content {
@@ -447,14 +593,18 @@
     padding: {
       top: 100px;
       bottom: 100px;
-    };
+    }
+
+    ;
   }
+
   .trezo-form {
     max-width: 960px;
 
     .form-image {
       margin-right: 0;
     }
+
     .form-content {
       padding-left: 15px;
 
@@ -462,30 +612,37 @@
         h1 {
           font-size: 26px;
         }
+
         p {
           font-size: 15px;
         }
       }
+
       form {
         .mat-mdc-button {
           margin-top: 20px;
           font-size: 15px;
 
         }
+
         .info {
           margin-top: 15px;
         }
       }
     }
+
     &.component-rtl-enabled {
       .form-image {
         margin-left: 0;
       }
+
       .form-content {
         padding: {
           left: 0;
           right: 15px;
-        };
+        }
+
+        ;
       }
     }
   }
@@ -499,26 +656,34 @@
     padding: {
       top: 120px;
       bottom: 120px;
-    };
+    }
+
+    ;
   }
+
   .trezo-form {
     max-width: 1140px;
 
     .form-image {
       margin-right: 0;
     }
+
     .form-content {
       padding-left: 25px;
     }
+
     &.component-rtl-enabled {
       .form-image {
         margin-left: 0;
       }
+
       .form-content {
         padding: {
           left: 0;
           right: 25px;
-        };
+        }
+
+        ;
       }
     }
   }
@@ -532,21 +697,28 @@
     .form-image {
       margin-right: -45px;
     }
+
     .form-content {
       padding-left: 120px;
     }
+
     &.component-rtl-enabled {
       .form-image {
         margin: {
           right: 0;
           left: -45px;
-        };
+        }
+
+        ;
       }
+
       .form-content {
         padding: {
           left: 0;
           right: 120px;
-        };
+        }
+
+        ;
       }
     }
   }
