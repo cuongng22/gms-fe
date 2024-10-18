@@ -10,6 +10,7 @@ import { FormGroup } from "@angular/forms";
 import { Constant, MESSAGE, removeNullValues } from "src/app/crew-trip/shared/utils/constant";
 import { HttpClient, HttpStatusCode } from "@angular/common/http";
 import { saveAs } from 'file-saver';
+import {UltilService} from "src/app/crew-trip/core/services/ultil-service";
 
 
 @Component({
@@ -20,6 +21,7 @@ export class CommonComponent implements OnInit {
   MESSAGE = MESSAGE;
   spinner = inject(NgxSpinnerService);
   toggleService = inject(ToggleService);
+  ultilService = inject(UltilService);
   themeService = inject(CustomizerSettingsService);
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource();
@@ -270,6 +272,7 @@ export class CommonComponent implements OnInit {
     }
   }
 
-
-
+formattedNumber(value: number): string {
+    return this.ultilService.formatNumber(value);
+  }
 }

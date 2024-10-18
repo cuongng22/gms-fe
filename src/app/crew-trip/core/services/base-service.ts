@@ -67,7 +67,8 @@ export class BaseService {
   }
 
   async exportDataOptions(body?: any, sourcePath?: string): Promise<{ blob: Blob, fileName: string }> {
-    const url = `${this.api}/${this.path}/${sourcePath ?? ''}`;
+    let url = `${this.api}/${this.path}/${sourcePath ?? ''}`;
+    url = url.endsWith('/') ? url.slice(0, -1) : url;
     const httpOptionsExport = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

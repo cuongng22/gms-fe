@@ -1,1 +1,285 @@
-<p>rate-uth works!</p>
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+  <h5 class="mb-0" i18n="@@plannedExchangeRates">
+    Tỷ giá ước thực hiện
+  </h5>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
+      Kế hoạch
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" >
+     Tỷ giá
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@actualExchangeRate">
+      Tỷ giá ước thực hiện
+    </li>
+  </ol>
+</div>
+
+
+<!--Search-->
+<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-content>
+    <form [formGroup]="formGroupSearch" (ngSubmit)="search()" autocomplete="off">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11">
+          <div class="row">
+            <div class="col" sizeInput="md">
+              <mat-form-field class="mb-1">
+                <mat-label i18n="@@keywords">Keywords</mat-label>
+                <input matInput formControlName="s">
+              </mat-form-field>
+            </div>
+            <div class="col" sizeInput="md">
+              <mat-form-field class="mb-1">
+                <mat-label i18n="@@airport"> Năm</mat-label>
+                <input type="text" matInput formControlName="year" [matAutocomplete]="YearComplete">
+                <mat-autocomplete autoActiveFirstOption requireSelection
+                                  #YearComplete="matAutocomplete">
+                  @for (option of listYear | async; track option) {
+                  <mat-option [value]="option">{{option}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="col" sizeInput="md">
+              <mat-form-field class="mb-1">
+                <mat-label i18n="@@airport"> Version</mat-label>
+                <input type="text" matInput formControlName="version" [matAutocomplete]="versionComplete">
+                <mat-autocomplete autoActiveFirstOption requireSelection
+                                  #versionComplete="matAutocomplete">
+                  @for (option of listVersion | async; track option) {
+                  <mat-option [value]="option">{{option}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="col" sizeInput="md">
+              <mat-form-field class="mb-1">
+                <mat-label i18n="@@airport"> Nguồn dữ liệu</mat-label>
+                <input type="text" matInput formControlName="sourceType" [matAutocomplete]="sourceComplete">
+                <mat-autocomplete autoActiveFirstOption requireSelection
+                                  #sourceComplete="matAutocomplete">
+                  @for (option of listDatasource | async; track option) {
+                  <mat-option [value]="option">{{option}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 d-flex justify-content-center">
+          <mat-card-header class="mb-0 search">
+            <mat-card-title>
+              <button class="search-btn" type="submit" mat-button>
+                <i class="material-symbols-outlined">
+                  search
+                </i>
+                <span i18n="@@search">Search</span>
+              </button>
+            </mat-card-title>
+          </mat-card-header>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-header class="mb-10">
+    <mat-card-title>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <button class="add-btn  mr-10" type="button" mat-button (click)="exportFileOptions(null,'uth_exchange_rate.xlsx')">
+        <i class="material-symbols-outlined">
+          download
+        </i>
+        <span i18n="@@export">Export</span>
+      </button>
+      <button class="add-btn mr-10" type="button" mat-button (click)="toggleDialogUpload()">
+        <i class="material-symbols-outlined">
+          upload
+        </i>
+        <span i18n="@@upload">Upload</span>
+      </button>
+      <button class="add-btn mr-10" type="button" mat-button >
+        <i class="material-symbols-outlined">
+          sync
+        </i>
+        <span i18n="@@upload">Sync</span>
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true">
+        <ng-container matColumnDef="stt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
+          <td mat-cell *matCellDef="let element; let i = dataIndex">{{ i + 1 }}</td>
+        </ng-container>
+        <ng-container matColumnDef="currencyCode">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">CUR</th>
+          <td mat-cell *matCellDef="let element">{{element.currencyCode}}</td>
+        </ng-container>
+        <ng-container matColumnDef="uthLastYear">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">ƯTH năm </th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.uthLastYear)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="january">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T01</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.january)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="february">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T02</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.february)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="march">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T03</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.march)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="april">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T04</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.april)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="may">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T05</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.may)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="june">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T06</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.june)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="july">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T07</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.july)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="august">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T08</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.august)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="september">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T09</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.september)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="october">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T10</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.october)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="november">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T11</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.november)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="december">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">T12</th>
+          <td mat-cell *matCellDef="let element">{{formattedNumber(element.december)}}</td>
+        </ng-container>
+        <ng-container matColumnDef="average">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">Trung bình</th>
+          <td mat-cell *matCellDef="let element">{{element.average}}</td>
+        </ng-container>
+        <ng-container matColumnDef="rateUth">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">Tỷ lệ <br/>(KH/ƯTH)</th>
+          <td mat-cell *matCellDef="let element">{{element.rateUth}}</td>
+        </ng-container>
+        <ng-container matColumnDef="version">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">Version</th>
+          <td mat-cell *matCellDef="let element">{{element.version}}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <ng-container matColumnDef="action" stickyEnd>
+          <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
+            Action
+          </th>
+          <td *matCellDef="let element;let i = dataIndex" mat-cell>
+            <div class="action-buttons d-flex align-items-center justify-content-end">
+              <!--              <a mat-button type="button" (click)="viewHistory(element)">-->
+              <!--                <i class="material-symbols-outlined" title="Detail">-->
+              <!--                  visibility-->
+              <!--                </i>-->
+              <!--              </a>-->
+              <a  mat-button type="button">
+              </a>
+              <a mat-button type="button">
+              </a>
+            </div>
+          </td>
+        </ng-container>
+      </table>
+    </div>
+    <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+                   [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+                   aria-label="Select page" i18n-aria-label="@@selectPage">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>
+
+
+<!-- Dialog upload file -->
+<div class="add-new-popup" [class.active]="showDialogUpload">
+  <div class="popup-dialog dialog-with">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+      <mat-card-header class="p-15">
+        <mat-card-title>
+          <h5 class="mb-0" >
+            Tải danh sách tỷ giá uth
+          </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <button mat-button (click)="toggleDialogUpload()">
+            <i class="ri-close-fill"></i>
+          </button>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row">
+          <span i18n="@@downloadTemplate">Download template</span>
+          <button mat-button type="button" class="search-btn min-with-100 mlr-5" style="width: 250px;"
+                  (click)="downloadTemplate()">
+            <i class="material-symbols-outlined">
+              download
+            </i>
+            <span i18n="@@airportCodeTemplate">tygiaUTH-template.xlsx</span>
+          </button>
+        </div>
+        <div class="row mt-20">
+          <span i18n="@@selectFile">Select file</span>
+          <file-upload [ngClass]="{'invalid':fileUpload.hasError('required') && fileUpload.touched}"
+                       [formControl]="fileUpload" class="file-uploader" [multiple]="false"></file-upload>
+          @if (
+          fileUpload.hasError('required') &&
+          fileUpload.touched) {
+          <mat-error i18n="@@fileRequired" style="font-style: italic; font-size: 12px;">File
+          {{MESSAGE.REQUIRED}}</mat-error>
+          }
+        </div>
+        @if(!!uploadFileError.totalErrors) {
+        <div class="row mt-20">
+            <p class="text-danger" i18n="@@flightMarket.UploadError">
+                Cannot perform excel data import when there are {{uploadFileError.totalErrors}} error records
+                    </p>
+                    <span i18n="@@downloadFileError">Download file error:
+                        <button class="pt-0 pb-0" mat-raised-button (click)="downloadFileError()">Download file
+                            excel</button>
+                    </span>
+                </div>
+        }
+      </mat-card-content>
+      <mat-card-actions class="p-15" style="display: flex; justify-content: center;">
+        <button type="button" mat-button
+                (click)="uploadFileError={};fileUpload.setValue([]) ;fileUpload.reset() ;toggleDialogUpload()"
+                class="danger-btn  min-with-100 mlr-5">
+          <i class="material-symbols-outlined">
+            close
+          </i>
+          <span i18n="@@cancel">Cancel</span>
+        </button>
+        <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
+          <i class="material-symbols-outlined">
+            upload
+          </i>
+          <span i18n="@@upload">Upload</span>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+</div>
