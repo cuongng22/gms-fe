@@ -17,25 +17,25 @@
     transform: rotate(-10deg);
     transform: translateY(0%);
 
-    animation: moveAndFade 5s linear infinite;
+    animation: moveAndFade 5s cubic-bezier(0.29, 0.53, 0.43, 0.89) infinite;
   }
 }
 
 @keyframes moveAndFade {
   0% {
     left: 0;
-    opacity: 1;
-  }
+    opacity: 0;
+  }  
 
   80% {
     opacity: 0.75;
-    left: calc(40vw - 200px);
-    top: calc(50% - (200px * 0.577));
+    left: calc(30vw - 200px);
+    top: calc(47% - (200px * 0.577));
   }
 
   100% {
     opacity: 0;
-    left: calc(50vw - 200px);
+    left: calc(40vw - 200px);
     top: calc(45% - (200px * 0.577));
   }
 }
@@ -652,6 +652,25 @@
 /* Min width 1200px to Max width 1399px */
 @media only screen and (min-width: 1200px) and (max-width: 1399px) {
 
+  @keyframes moveAndFade {
+    0% {
+      left: 0;
+      opacity: 0;
+    }  
+  
+    80% {
+      opacity: 0.75;
+      left: calc(30vw - 200px);
+      top: calc(47% - (200px * 0.577));
+    }
+  
+    100% {
+      opacity: 0;
+      left: calc(40vw - 200px);
+      top: calc(45% - (200px * 0.577));
+    }
+  }
+
   .sign-in-area {
     padding: {
       top: 120px;
@@ -692,6 +711,24 @@
 
 /* Min width 1600px */
 @media only screen and (min-width: 1600px) {
+  @keyframes moveAndFade {
+    0% {
+      left: 0;
+      opacity: 0;
+    }  
+  
+    80% {
+      opacity: 0.75;
+      left: calc(20vw - 200px);
+      top: calc(47% - (200px * 0.577));
+    }
+  
+    100% {
+      opacity: 0;
+      left: calc(25vw - 200px);
+      top: calc(45% - (200px * 0.577));
+    }
+  }
 
   .trezo-form {
     .form-image {
