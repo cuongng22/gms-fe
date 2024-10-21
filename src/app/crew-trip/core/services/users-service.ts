@@ -72,4 +72,9 @@ export class UsersService extends BaseService {
     return firstValueFrom(this.http.get<any>(url, this.httpOptions));
   }
 
+  uploadAvatar(body: any): Promise<any> {
+    const url = `${this.api}/${this.path}/upload-avatar`
+    return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
+  }
+
 }

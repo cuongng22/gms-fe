@@ -26,7 +26,7 @@ import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 import {ExchangeRateService} from "src/app/crew-trip/core/services/exchange-rate.service";
-import {Observable, of} from "rxjs";
+import {Observable, of, take} from "rxjs";
 import {MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
 import {MatSelectModule} from "@angular/material/select";
 import {MatDatepickerModule} from "@angular/material/datepicker";
@@ -57,11 +57,11 @@ export class RateUthComponent extends CommonComponent implements OnInit {
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
   listDatasource: Observable<string[]> = of(['sync', 'excel']);
   listYear: Observable<number[]> = of(Array.from({ length: 10 }, (v, i) => 2024 + i));
-  listVersion: Observable<string[]> = of(['11.09.2024', '11.09.2025']);
+  listVersion: Observable<string[]> = of([]);
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
-    version: ['11.09.2024'],
-    year: [2025],
+    version: [null as string | null],
+    year: [new Date().getFullYear() + 1],
     sourceType: [],
     export: [false],
   });
@@ -71,7 +71,14 @@ export class RateUthComponent extends CommonComponent implements OnInit {
     this.displayedColumns = ['stt','currencyCode','uthLastYear','january','february','march', 'april','may'
       ,'june','july','august','september','october','november','december','average','rateUth','version'
     ];
-    this.search();
+    await  this.baseService.getListVersion({ option: 0 }).then(res => {
+      this.listVersion = of(res.data.map((it: any) => it.version));
+      this.listVersion.pipe(take(1)).subscribe(versions => {
+        const firstVersion = versions[0];
+        this.formGroupSearch.patchValue({ version: firstVersion });
+      });
+    });
+    await this.search();
   }
 
 
@@ -113,7 +120,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
         const file: File = this.fileUpload.value[0];
         form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
         await this.spinner.show();
-        const res = await this.baseService.uploadFile(form);
+        const res = await this.baseService.uploadFileUTH(form);
         this.uploadFileError = res;
         if (!res.totalErrors) {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
@@ -141,7 +148,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
   override  async downloadTemplate(filename?: string) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.exportData(null, 'template');
+      let res = await this.baseService.exportData(null, 'uth/template');
       console.log(res)
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {

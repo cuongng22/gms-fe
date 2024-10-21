@@ -38,7 +38,6 @@ export class ProfileComponent implements OnInit{
   @Output() fileUploaded = new EventEmitter<string>();
 
   constructor() {
-    console.log("this.userCurrentthis.userCurrent:",this.userCurrent)
     this.formGroup = this.fb.group({
       id:[this.userCurrent?.id, Validators.required],
       fullName: [this.userCurrent?.fullName,Validators.required],
@@ -127,9 +126,27 @@ updateEditMode() {
     }
   }
 
-  uploadFile(file: File) {
+ async uploadFile(file: File) {
+   try {
+    await this.spinner.show();
     const formData = new FormData();
-    formData.append('avatar', file);
+    const email = this.userCurrent?.email;
+     if (!email) {
+       await this.router.navigate(['auth/login'], {fragment: '401', skipLocationChange: true});
+       return;
+     }
+    formData.append('file', file);
+    formData.append('email', email);
+    let res= await  this.userService.uploadAvatar(formData);
+   } catch (error: any) {
+     if (error?.status === 401 && error.error?.error) {
+       this.baseService.showError(error?.error?.error);
+     } else {
+       console.log(error)
+     }
+   } finally {
+     await this.spinner.hide();
+   }
   }
 
 }

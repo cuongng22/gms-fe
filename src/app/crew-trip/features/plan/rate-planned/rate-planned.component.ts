@@ -38,7 +38,7 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {FileUploadComponent, FileUploadValidators} from "@iplab/ngx-file-upload";
 import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
-import {Observable, of} from "rxjs";
+import {debounceTime, map, Observable, of, startWith, take} from "rxjs";
 
 @Component({
   selector: 'app-rate-planned',
@@ -61,12 +61,12 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
   listDatasource: Observable<string[]> = of(['sync', 'excel']);
   listYear: Observable<number[]> = of(Array.from({ length: 10 }, (v, i) => 2024 + i));
-  listVersion: Observable<string[]> = of(['11.09.2024', '11.09.2025']);
+  listVersion: Observable<string[]> = of([]);
 
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
-    version: ['11.09.2024'],
-    year: [2025],
+    version: [null as string | null],
+    year: [new Date().getFullYear() + 1],
     sourceType: [],
     export: [false],
   });
@@ -76,7 +76,14 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
     this.displayedColumns = ['stt','currencyCode','uthLastYear','january','february','march', 'april','may'
       ,'june','july','august','september','october','november','december','average','rateUth','version'
     ];
-    this.search();
+    await  this.baseService.getListVersion({ option: 1 }).then(res => {
+      this.listVersion = of(res.data.map((it: any) => it.version));
+      this.listVersion.pipe(take(1)).subscribe(versions => {
+        const firstVersion = versions[0];
+        this.formGroupSearch.patchValue({ version: firstVersion });
+      });
+    });
+    await this.search();
   }
 
   async uploadFile() {

@@ -47,7 +47,8 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
     {label: $localize`Name`, value: "name"},
     {label: $localize`Unit`, value: "unit"},
     {label: $localize`Description`, value: "description"},
-    {label: $localize`Status`, value: "activeLabel"}
+    {label: $localize`Status`, value: "activeLabel"},
+    {label: $localize`DataSource`, value: "dataSource"},
   ]
   ;
 

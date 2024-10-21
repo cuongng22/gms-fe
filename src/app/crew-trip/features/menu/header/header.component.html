@@ -145,7 +145,8 @@
       </li>
       <li>
         <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-menu-btn">
-          <img src="images/admin.png" class="rounded-circle" alt="admin-image">
+          <img src="{{userInfo?.avatar_url}}" *ngIf="userInfo?.avatar_url" class="rounded-circle" alt="admin-image">
+          <img src="images/admin.png" *ngIf="!userInfo?.avatar_url" class="rounded-circle" alt="admin-image">
           <span class="fw-semibold text-black">
                         {{ userInfo?.email }}
                     </span>
