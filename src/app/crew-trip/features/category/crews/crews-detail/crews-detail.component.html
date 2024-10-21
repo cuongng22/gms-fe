@@ -1,0 +1,129 @@
+<mat-card class="border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header>
+        <mat-card-title>
+            <h5 class="mb-0" i18n="@@crewInformation">
+                Crew information
+            </h5>
+        </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="formGroupDetail" (ngSubmit)="save()" autocomplete="off">
+            <div class="row">
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@fullName">
+                                Full name
+                            </mat-label>
+                            <input matInput formControlName="fullName" required maxlength="250">
+                            @if (
+                            formGroupDetail.controls.fullName.hasError('required') &&
+                            formGroupDetail.controls.fullName.touched) {
+                            <mat-error i18n="@@fullNameRequired">Full name {{MESSAGE.REQUIRED}}</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@shortName">
+                                Short Name
+                            </mat-label>
+                            <input matInput formControlName="shortName" maxlength="150">
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@gender">
+                                Gender
+                            </mat-label>
+                            <mat-select formControlName="gender">
+                                <mat-option value="F" i18n="@@female">
+                                    Female
+                                </mat-option>
+                                <mat-option value="M" i18n="@@male">
+                                    Male
+                                </mat-option>
+                            </mat-select>
+                            @if (
+                            formGroupDetail.controls.gender.hasError('required') &&
+                            formGroupDetail.controls.gender.touched) {
+                            <mat-error i18n="@@genderRequired">Gender {{MESSAGE.REQUIRED}}</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@phone">
+                                Phone
+                            </mat-label>
+                            <input matInput formControlName="phone" maxlength="20">
+
+                        </mat-form-field>
+
+
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@function">
+                                Function
+                            </mat-label>
+                            <input matInput formControlName="function" required maxlength="250">
+                            @if (
+                            formGroupDetail.controls.function.hasError('required') &&
+                            formGroupDetail.controls.function.touched) {
+                            <mat-error i18n="@@functionRequired">Function {{MESSAGE.REQUIRED}}</mat-error>
+                            }
+                        </mat-form-field>
+                    </div>
+                </div>
+
+                <div class="col-sm-12 col-md-12">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field class="mb-1">
+                            <mat-label i18n="@@nation">Nation</mat-label>
+                            <input type="text" #nationName matInput formControlName="nationName"
+                                [matAutocomplete]="nationComplete" (input)="filterNation()">
+                            <mat-autocomplete autoActiveFirstOption requireSelection #nationComplete="matAutocomplete"
+                                (optionSelected)="nationSelected($event)">
+                                @for (country of filteredNation(); track country) {
+                                <mat-option [value]="country">
+                                    {{locale == LOCALE.VN ? country.vniName:country.engName}}</mat-option>
+                                }
+                            </mat-autocomplete>
+                        </mat-form-field>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="btn-box text-center">
+                <button type="button" mat-button (click)="close()" class="danger-btn  min-with-100 mlr-5">
+                    <i class="material-symbols-outlined">
+                        close
+                    </i>
+                    <span i18n="@@cancel">Cancel</span>
+                </button>
+                <button mat-button color="primary" type="submit" class="add-btn min-with-100 mlr-5">
+                    <i class="material-symbols-outlined">
+                        save
+                    </i>
+                    <span i18n="@@save">Save</span>
+                </button>
+
+            </div>
+        </form>
+
+    </mat-card-content>
+</mat-card>

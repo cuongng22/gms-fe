@@ -26,12 +26,13 @@ import { MatDialog } from '@angular/material/dialog';
 import { HotelDetailComponent } from '../hotel-detail/hotel-detail.component';
 import { CarRentalDetailComponent } from '../car-rental-detail/car-rental-detail.component';
 import { CreateFlightMarketDTO, CreateHotel, CreateMarketFlight, CreateVehiclePartner, InsertHotelAndCar, UpdateFlightMarket, UpdateHotelAndCar } from './flight-market.model';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 
 @Component({
   selector: 'app-flight-market-detail',
   standalone: true,
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
+    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule],
   templateUrl: './flight-market-detail.component.html',
@@ -84,6 +85,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     serviceFeeCode: [''],
     statusUsage: ['', Validators.required],
     notes: [''],
+    overnight:[]
 
   });
 

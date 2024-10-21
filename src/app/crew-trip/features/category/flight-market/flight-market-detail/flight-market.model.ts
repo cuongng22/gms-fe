@@ -7,6 +7,7 @@ export class CreateMarketFlight {
     serviceFeeCode: string[];
     statusUsage: string;
     note: string;
+    overnight: boolean;
 
     constructor(data?: any) {
         this.marketCode = data?.marketCode;
@@ -17,6 +18,7 @@ export class CreateMarketFlight {
         this.serviceFeeCode = data?.serviceFeeCode;
         this.statusUsage = data?.statusUsage;
         this.note = data?.notes;
+        this.overnight = data?.overnight;
     }
 }
 
@@ -95,6 +97,7 @@ export class UpdateFlightMarket {
     deleteItems: { id: number; type: string }[];
     updateItems: UpdateHotelAndCar[];
     insertItems: InsertHotelAndCar[];
+    overnight: boolean;
 
     constructor(data: any) {
         this.marketName = data.marketName;
@@ -107,6 +110,7 @@ export class UpdateFlightMarket {
         this.deleteItems = data.deleteItems;
         this.updateItems = data.updateItems;
         this.insertItems = data.insertItems;
+        this.overnight = data.overnight;
     }
 }
 
