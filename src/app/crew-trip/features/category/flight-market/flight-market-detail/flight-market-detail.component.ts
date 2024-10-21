@@ -27,6 +27,7 @@ import { HotelDetailComponent } from '../hotel-detail/hotel-detail.component';
 import { CarRentalDetailComponent } from '../car-rental-detail/car-rental-detail.component';
 import { CreateFlightMarketDTO, CreateHotel, CreateMarketFlight, CreateVehiclePartner, InsertHotelAndCar, UpdateFlightMarket, UpdateHotelAndCar } from './flight-market.model';
 import { MatCheckboxModule } from '@angular/material/checkbox';
+import { debounceTime, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-flight-market-detail',
@@ -62,6 +63,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   costCategorysRaw: any[] = [];
   costCategorys: any[] = [];
   countries: any[] = [];
+  keySearchNation = new Subject<string>();
   flightGroupData = FlightGroupData;
 
   hotelDataSource = new MatTableDataSource<any[]>([]);
@@ -85,7 +87,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     serviceFeeCode: [''],
     statusUsage: ['', Validators.required],
     notes: [''],
-    overnight:[]
+    overnight: []
 
   });
 
@@ -125,9 +127,8 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     });
 
     // Lấy danh sách quốc gia
-    this.nationService.search({ page: 0, size: 99999 }).then(res => {
+    this.nationService.search({ page: 0, limit: 99999 }).then(res => {
       this.countries = res.data.content;
-      this.filteredCountry.set(this.countries);
 
       // set lại nationName
       const nationName = this.countries
@@ -148,10 +149,20 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       this.hotelColumns.push("action");
       this.carRentalColumns.push("action");
     }
-    console.log('this.id(): ', this.id());
-    console.log('!!this.id(): ', !!this.id());
+
     this.isCreate.set(!!this.id());
-    console.log('this.isCreate: ', this.isCreate());
+
+    //search Nation
+    this.keySearchNation.pipe(
+      debounceTime(500)
+    ).subscribe(value => {
+      this.filteredCountry.set(this.countries.filter(country => {
+        const code = country.code.toLowerCase();
+        return code.includes(value.toLowerCase()) || (this.locale == LOCALE.VN ?
+          country.vniName.toLowerCase().includes(value.toLowerCase()) :
+          country.engName.toLowerCase().includes(value.toLowerCase()))
+      }))
+    });
   }
 
   override ngAfterViewInit(): void {
@@ -163,10 +174,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       this.filteredCountry.set(this.countries);
       return;
     }
-    this.filteredCountry.set(this.countries.filter(country => this.locale == LOCALE.VN ?
-      country.vniName.toLowerCase().includes(filterValue.toLowerCase()) :
-      country.engName.toLowerCase().includes(filterValue.toLowerCase())
-    ))
+    this.keySearchNation.next(filterValue);
   }
 
   countrySelected(country: MatAutocompleteSelectedEvent) {
