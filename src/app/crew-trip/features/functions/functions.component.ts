@@ -57,6 +57,7 @@ export class FunctionsComponent extends CommonComponent implements OnInit {
   }
 
   async _detail() {
+    await this.spinner.show();
     try {
       await this.baseService.search({}).then(res => {
         if (res.data) {
@@ -74,6 +75,8 @@ export class FunctionsComponent extends CommonComponent implements OnInit {
       })
     } catch (e) {
       this.baseService.showWarning(MESSAGE.ERROR)
+    } finally {
+      await this.spinner.hide();
     }
   }
 
