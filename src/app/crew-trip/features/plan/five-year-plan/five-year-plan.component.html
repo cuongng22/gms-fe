@@ -1,0 +1,309 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+  <h5 class="mb-0" i18n>
+    5-Year Plans
+  </h5>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+    <li class="breadcrumb-item d-inline-block position-relative">
+      <a class="d-inline-block position-relative" routerLink="/">
+        <i class="material-symbols-outlined">
+          home
+        </i>
+        Dashboard
+      </a>
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n>
+      5-Year Plans
+    </li>
+  </ol>
+</div>
+<!--Search-->
+<mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-content>
+    <form [formGroup]="formGroupSearch" autocomplete="off">
+      <div class="row">
+        <div class="col-sm-3">
+          <mat-form-field>
+            <mat-label i18n>Keyword</mat-label>
+            <input formControlName="s" matInput>
+            <i class="material-symbols-outlined mr-15" matSuffix>
+              search
+            </i>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field>
+            <mat-select formControlName="area" required>
+              <mat-option i18n value="">-- All Status --</mat-option>
+              <mat-option i18n value="Asia">Asia</mat-option>
+              <mat-option i18n value="Europe">Europe</mat-option>
+              <mat-option i18n value="Africa">Africa</mat-option>
+              <mat-option i18n value="Americas">Americas</mat-option>
+              <mat-option i18n value="Australia">Australia</mat-option>
+              <mat-option i18n value="Antarctica">Antarctica</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-form-field>
+            <mat-label i18n>All Status</mat-label>
+            <mat-select formControlName="active">
+              <mat-option i18n value="">-- All Status --</mat-option>
+              <mat-option i18n value="1">Active</mat-option>
+              <mat-option i18n value="0">Inactive</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-card-header class="mb-0">
+            <mat-card-title clas>
+              <button (click)="search()" class="search-btn" i18n mat-button>
+                <i class="material-symbols-outlined">
+                  search
+                </i>
+                Search
+              </button>
+            </mat-card-title>
+          </mat-card-header>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<!-- Content -->
+<mat-card class="mb-25 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-header>
+    <mat-card-title>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <button (click)="showDialogDetail()" class="add-btn" i18n mat-button type="button">
+        <i class="material-symbols-outlined">
+          add
+        </i>
+        Add new
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive">
+      <table [dataSource]="dataSource" mat-table multiTemplateDataRows="true">
+        <ng-container matColumnDef="stt">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header rowspan="2">#</th>
+          <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
+        </ng-container>
+        <ng-container matColumnDef="international">
+          <th *matHeaderCellDef colspan="2" mat-header-cell mat-sort-header class="text-center">International</th>
+        </ng-container>
+        <ng-container matColumnDef="domestic">
+          <th *matHeaderCellDef colspan="2" mat-header-cell mat-sort-header class="text-center">Domestic</th>
+        </ng-container>
+        <ng-container matColumnDef="totalOutput">
+          <th *matHeaderCellDef colspan="2" mat-header-cell mat-sort-header class="text-center">Total Output</th>
+        </ng-container>
+        @for (innerColumn of _displayedColumns; track innerColumn.value) {
+        <ng-container matColumnDef="{{innerColumn.value}}">
+            <th mat-sort-header mat-header-cell *matHeaderCellDef [rowSpan]=innerColumn.rowspan [colSpan]=innerColumn.colspan>
+        {{ innerColumn.label | titlecase }}</th>
+            <td mat-cell *matCellDef="let element">
+                <span [ngClass]="{
+        'badge rounded-pill': innerColumn.value === 'activeLabel',
+        'text-soft-primary': innerColumn.value === 'activeLabel' && element['active'] == 1,
+        'text-soft-danger': innerColumn.value === 'activeLabel' && element['active'] == 0
+        }">{{
+        element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+        }}</span>
+            </td>
+          </ng-container>
+        }
+        <!-- Action Column -->
+        <ng-container matColumnDef="action"  stickyEnd>
+          <th *matHeaderCellDef class="text-end" i18n mat-header-cell rowspan="2">
+            Action
+          </th>
+          <td *matCellDef="let element;let i = dataIndex" mat-cell>
+            <div class="action-buttons d-flex align-items-center justify-content-end">
+              <a mat-button type="button">
+
+              </a>
+              <a (click)="showDialogDetail(i,'index')" mat-button type="button">
+                <i class="material-symbols-outlined" i18n-title title="Edit">
+                  edit
+                </i>
+              </a>
+              <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">
+                <i class="material-symbols-outlined" title="Delete">
+                  delete
+                </i>
+              </a>
+            </div>
+          </td>
+        </ng-container>
+        <tr *matHeaderRowDef="displayedColumns1;" mat-header-row></tr>
+        <tr *matHeaderRowDef="displayedColumns2;" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+        <tr *matNoDataRow class="mat-row">
+          <td [attr.colspan]="displayedColumns.length" class="mat-cell"><span i18n>No data matching the filter</span>
+          </td>
+        </tr>
+
+
+        <!--        <tr mat-row *matRowDef="let row; columns: ['child'];"></tr>-->
+
+      </table>
+    </div>
+    <!--<mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons (page)="onPageChange($event)" ></mat-paginator>-->
+    <mat-paginator
+      (page)="onPageChange($event)"
+      [length]="totalElement"
+      [pageIndex]="pageIndex"
+      [pageSizeOptions]="pageSizeOptions"
+      [pageSize]="pageSize"
+      [showFirstLastButtons]="showFirstLastButtons"
+      aria-label="Select page">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>
+
+<!-- Add New Popup -->
+<div
+  [class.active]="showDialogCreate"
+  class="add-new-popup"
+>
+  <div class="popup-dialog">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
+      <mat-card-header>
+        <mat-card-title>
+          <h5 class="mb-0">
+            <span *ngIf="!formGroupDetail.value.id" i18n>Create Nation</span>
+            <span *ngIf="formGroupDetail.value.id" i18n>Update Nation</span>
+          </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <button
+            (click)="closeDetail()"
+            mat-button
+          >
+            <i class="ri-close-fill"></i>
+          </button>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="formGroupDetail" autocomplete="off">
+          <div class="row">
+            <div class="col-md-12">
+              <div class="form-group" sizeInput="sm">
+                <mat-form-field>
+                  <mat-select formControlName="area" required>
+                    <mat-option i18n value="">-- All Status --</mat-option>
+                    <mat-option i18n value="Asia">Asia</mat-option>
+                    <mat-option i18n value="Europe">Europe</mat-option>
+                    <mat-option i18n value="Africa">Africa</mat-option>
+                    <mat-option i18n value="Americas">Americas</mat-option>
+                    <mat-option i18n value="Australia">Australia</mat-option>
+                    <mat-option i18n value="Antarctica">Antarctica</mat-option>
+                  </mat-select>
+                  @if (!!formGroupDetail.controls['area'].hasError('required')) {
+                  <mat-error><span i18n>Area</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label i18n>Code</mat-label>
+                  <input formControlName="code" i18n-placeholder matInput placeholder="Input code" required>
+                  @if (!!formGroupDetail.controls['code'].hasError('required')) {
+                  <mat-error><span i18n>Code</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label i18n>VN Name</mat-label>
+                  <input formControlName="vniName" i18n-placeholder matInput placeholder="Input VN Name" required>
+                  @if (!!formGroupDetail.controls['vniName'].hasError('required')) {
+                  <mat-error><span i18n>VN Name</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label i18n>EN Name</mat-label>
+                  <input formControlName="engName" i18n-placeholder matInput placeholder="Input EN Name" required>
+                  @if (!!formGroupDetail.controls['engName'].hasError('required')) {
+                  <mat-error><span i18n>EN Name</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+                <mat-form-field>
+                  <mat-label i18n>Currency Code</mat-label>
+                  <input formControlName="curCode" i18n-placeholder matInput placeholder="Input Currency Code" required>
+                  @if (!!formGroupDetail.controls['curCode'].hasError('required')) {
+                  <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+                <mat-checkbox class="mt-10" formControlName="active" i18n>Active</mat-checkbox>
+              </div>
+            </div>
+          </div>
+        </form>
+        <div class="btn-box">
+          <button (click)="closeDetail()" color="warn" i18n mat-button type="button">
+            <i class="material-symbols-outlined">
+              close
+            </i>
+            Cancel
+          </button>
+          <button
+            (click)="save()"
+            color="primary"
+            i18n mat-button
+          >
+            <i class="material-symbols-outlined">
+              save
+            </i>
+            Save
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+<!-- Delete confirm Popup -->
+<div
+  [class.active]="showDialogDelete"
+  class="add-new-popup"
+>
+  <div class="popup-dialog">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
+      <mat-card-header>
+        <mat-card-title>
+          <h5 class="mb-0">
+            <span i18n>Confirm delete</span>
+          </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <button
+            (click)="closeConfirmDelete()"
+            mat-button
+          >
+            <i class="ri-close-fill"></i>
+          </button>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="btn-box">
+          <button (click)="closeConfirmDelete()" color="warn" i18n mat-button type="button">
+            <i class="material-symbols-outlined">
+              close
+            </i>
+            Cancel
+          </button>
+          <button
+            (click)="delete()"
+            color="primary"
+            i18n mat-button
+          >
+            <i class="material-symbols-outlined">
+              save
+            </i>
+            Confirm
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>

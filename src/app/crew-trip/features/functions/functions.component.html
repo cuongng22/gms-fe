@@ -51,11 +51,11 @@
                 <th *matHeaderCellDef mat-header-cell mat-sort-header></th>
                 <td *matCellDef="let element" mat-cell sizeInput="sm">
                   <mat-form-field>
-                  <input [(ngModel)]="element.alias" i18n-placeholder matInput placeholder="Alias Name" required>
-                    <mat-hint align="end">{{element.alias.length}} / 250</mat-hint>
-                     @if (!!formGroupDetail.controls['alias'].hasError('required')) {
-                       <mat-error><span i18n>Alias</span><span i18n> not empty</span></mat-error>
-                     }
+                    <input [(ngModel)]="element.alias" i18n-placeholder matInput placeholder="Alias Name" required>
+                    <mat-hint align="end">{{element.alias?.length}} / 250</mat-hint>
+                    @if (!element.alias) {
+                    <mat-error><span i18n>Alias</span><span i18n> not empty</span></mat-error>
+                    }
                   </mat-form-field>
                 </td>
               </ng-container>
@@ -67,7 +67,7 @@
                 <td *matCellDef="let element;let i = dataIndex" mat-cell>
                   <div class="action-buttons d-flex align-items-center justify-content-center">
                     <a (click)="_showDialogDetail(element)" mat-button type="button">
-                      <i class="material-symbols-outlined" style="font-size: 30px" i18n-title title="Save">
+                      <i class="material-symbols-outlined" i18n-title style="font-size: 30px" title="Save">
                         save
                       </i>
                     </a>

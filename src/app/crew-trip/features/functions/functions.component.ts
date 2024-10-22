@@ -78,10 +78,12 @@ export class FunctionsComponent extends CommonComponent implements OnInit {
   }
 
   async _showDialogDetail(data: any) {
-    this.formGroupDetail.patchValue({
-      id: data.id,
-      alias: data.alias,
-    })
-    this.toggleDialogCreate();
+    if (data.alias) {
+      this.formGroupDetail.patchValue({
+        id: data.id,
+        alias: data.alias,
+      })
+      this.toggleDialogCreate();
+    }
   }
 }
