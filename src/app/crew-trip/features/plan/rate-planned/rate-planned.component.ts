@@ -3,27 +3,13 @@ import {CommonModule, DatePipe} from "@angular/common";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 import {MatAnchor, MatButton, MatButtonModule} from "@angular/material/button";
 import {
-  MatCard,
-  MatCardContent,
-  MatCardHeader,
   MatCardModule,
-  MatCardSubtitle,
-  MatCardTitle
 } from "@angular/material/card";
 import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderRow,
-  MatHeaderRowDef,
-  MatRow, MatRowDef, MatTable, MatTableModule
+  MatTableModule
 } from "@angular/material/table";
 import {
-  MatDatepicker,
-  MatDatepickerInput,
   MatDatepickerModule,
-  MatDatepickerToggle
 } from "@angular/material/datepicker";
 import {MatFormField, MatFormFieldModule, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatInput, MatInputModule} from "@angular/material/input";

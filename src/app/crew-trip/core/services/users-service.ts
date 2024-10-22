@@ -52,6 +52,7 @@ export class UsersService extends BaseService {
 
   getUserLogin(): UserLogin | null{
     var userInfo = this.storageService.get(STORAGE_KEY.USER_INFO);
+    console.log("userInfouserInfo:",userInfo)
     return userInfo ? UserLogin.fromObject(JSON.parse(userInfo)) : null;
   }
 

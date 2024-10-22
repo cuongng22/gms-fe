@@ -45,11 +45,12 @@ export class ProfileComponent implements OnInit{
       email: [this.userCurrent?.email, [Validators.required,Validators.email]],
       phone: [this.userCurrent?.phone],
       gender: [this.userCurrent?.gender ? 1 : 0,Validators.required],
-      avatar_url: [this.userCurrent?.avatar_url]
+      avartarUrl: [this.userCurrent?.avartarUrl]
     });
   }
 
   ngOnInit(): void {
+    this.avatarUrl = this.userCurrent?.avartarUrl?? null;
     this.formGroup.disable()
   }
 

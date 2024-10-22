@@ -3,7 +3,7 @@ export class UserLogin {
   id: number;
   fullName: string;
   department: string;
-  avatar_url: string;
+  avartarUrl: string;
   phone: string;
   gender: string;
   constructor(
@@ -11,7 +11,7 @@ export class UserLogin {
     id: number = 0,
     fullName: string,
     department: string,
-    avatar_url: string,
+    avartarUrl: string,
     phone: string,
     gender: string
   ) {
@@ -19,7 +19,7 @@ export class UserLogin {
     this.id = id;
     this.fullName = fullName;
     this.department = department;
-    this.avatar_url = avatar_url;
+    this.avartarUrl = avartarUrl;
     this.phone = phone;
     this.gender = gender;
   }
@@ -29,9 +29,9 @@ export class UserLogin {
       obj.id || 0,
       obj.fullName || '',
       obj.department || '',
-      obj.avatar_url || '',
+      obj.avartarUrl || '',
       obj.phone || '',
-      obj.gender || ''
+      obj.gender || '',
     );
   }
 }

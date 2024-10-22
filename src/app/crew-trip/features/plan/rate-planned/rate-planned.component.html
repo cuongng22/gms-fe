@@ -32,6 +32,18 @@
             </div>
             <div class="col" sizeInput="md">
               <mat-form-field class="mb-1">
+                <mat-label i18n="@@airport"> Năm</mat-label>
+                <input type="text" matInput formControlName="year" [matAutocomplete]="yearComplete">
+                <mat-autocomplete autoActiveFirstOption requireSelection
+                                  #yearComplete="matAutocomplete">
+                  @for (option of listYear | async; track option) {
+                  <mat-option [value]="option">{{option}}</mat-option>
+                  }
+                </mat-autocomplete>
+              </mat-form-field>
+            </div>
+            <div class="col" sizeInput="md">
+              <mat-form-field class="mb-1">
                 <mat-label i18n="@@airport"> Version</mat-label>
                 <input type="text" matInput formControlName="version" [matAutocomplete]="versionComplete">
                 <mat-autocomplete autoActiveFirstOption requireSelection
