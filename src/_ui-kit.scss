@@ -1,4 +1,10 @@
 // Customize
+
+.table-light.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell,
+.table-light.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell {
+    border: 1px solid var(--gray-200) !important;
+}
+
 button.btn {
     display: flex;
 }

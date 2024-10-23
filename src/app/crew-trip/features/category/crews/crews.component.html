@@ -33,7 +33,7 @@
                 <mat-select formControlName="type">
                   <mat-option [value]="null" i18n="@@allStatus">-- All Type --</mat-option>
                   <mat-option value="Crew" i18n="@@crew">Crew</mat-option>
-                  <mat-option value="Extra crew" i18n="@@extraCrew">Extra crew</mat-option>
+                  <mat-option value="Extra Crew" i18n="@@extraCrew">Extra Crew</mat-option>
                 </mat-select>
               </mat-form-field>
             </div>
@@ -81,7 +81,7 @@
   </mat-card-header>
   <mat-card-content>
     <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
         <ng-container matColumnDef="stt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
           <td mat-cell *matCellDef="let element; let i = dataIndex">{{ (pageIndex * pageSize) + i + 1 }}</td>
@@ -99,21 +99,23 @@
             Action
           </th>
           <td mat-cell *matCellDef="let element">
-            <div class="action-buttons d-flex align-items-center">
-              <button type="button" mat-button (click)="crewsDetail(element)">
-                <i class="material-symbols-outlined text-warning" title="Edit airport" i18n-title="@@editAirport">
-                  edit
-                </i>
-              </button>
-
-              <button type="button" mat-button title="Delete airport" i18n-title="@@deleteAirport"
-                (click)="showConfirmDelete(element.id)">
-                <span class="material-symbols-outlined text-danger">
-                  delete
-                </span>
-              </button>
-
-            </div>
+            @if(element.sourceType === 'Extra Crew'){
+              <div class="action-buttons d-flex align-items-center">
+                <button type="button" mat-button (click)="crewsDetail(element.id)">
+                  <i class="material-symbols-outlined text-warning" title="Edit airport" i18n-title="@@editAirport">
+                    edit
+                  </i>
+                </button>
+  
+                <button type="button" mat-button title="Delete airport" i18n-title="@@deleteAirport"
+                  (click)="showConfirmDelete(element.id)">
+                  <span class="material-symbols-outlined text-danger">
+                    delete
+                  </span>
+                </button>
+              </div>
+            }
+            
           </td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

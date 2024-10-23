@@ -10,7 +10,7 @@ import { FormGroup } from "@angular/forms";
 import { Constant, MESSAGE, removeNullValues } from "src/app/crew-trip/shared/utils/constant";
 import { HttpClient, HttpStatusCode } from "@angular/common/http";
 import { saveAs } from 'file-saver';
-import {UltilService} from "src/app/crew-trip/core/services/ultil-service";
+import { UltilService } from "src/app/crew-trip/core/services/ultil-service";
 
 
 @Component({
@@ -125,7 +125,7 @@ export class CommonComponent implements OnInit {
       await this.spinner.show();
       let res = await this.baseService.detail(id);
       console.log(res)
-      this.formGroupDetail.patchValue(res);
+      this.formGroupDetail.patchValue(res?.data || res);
     } catch (e: any) {
       console.log(e);
       this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
@@ -241,13 +241,13 @@ export class CommonComponent implements OnInit {
     }
   }
 
-  async exportFileOptions(body?: any, filename?: string, sourcePath?:string) {
+  async exportFileOptions(body?: any, filename?: string, sourcePath?: string) {
     try {
       await this.spinner.show();
       this.formGroupSearch.patchValue({
-        "export":true
+        "export": true
       })
-      let res = await this.baseService.exportDataOptions({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) },sourcePath);
+      let res = await this.baseService.exportDataOptions({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) }, sourcePath);
       console.log(res)
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
@@ -272,7 +272,7 @@ export class CommonComponent implements OnInit {
     }
   }
 
-formattedNumber(value: number): string {
+  formattedNumber(value: number): string {
     return this.ultilService.formatNumber(value);
   }
 }

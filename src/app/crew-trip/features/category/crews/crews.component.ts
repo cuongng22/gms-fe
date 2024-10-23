@@ -22,6 +22,7 @@ import { Observable } from 'rxjs';
 import { RouterLink, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { CrewsDetailComponent } from './crews-detail/crews-detail.component';
+import { Validators } from 'ngx-editor';
 
 @Component({
   selector: 'app-crews',
@@ -59,7 +60,14 @@ export class CrewsComponent extends CommonComponent implements OnInit {
   });
 
   override formGroupDetail = this.formBuilder.group({
-    id: []
+    id: [],
+    fullName: ['', Validators.required],
+    shortName: [''],
+    gender: ['', Validators.required],
+    phone: [''],
+    function: ['', Validators.required],
+    nation: [''],
+    nationName: ['']
   });
 
   filteredOptionsMarket: Observable<any[]>;
@@ -75,9 +83,11 @@ export class CrewsComponent extends CommonComponent implements OnInit {
   }
 
   // detail or edit, create car rental
-  crewsDetail(crews?: any) {
+  async crewsDetail(crewId?: any) {
+    let response = await this.baseService.detail(crewId);
+    console.log(response)
     let dialogRef = this.dialog.open(CrewsDetailComponent, {
-      data: { crews: { ...crews, nation: crews?.nationality , shortName: crews?.cmsName} },
+      data: { crews: { ...response.data } },
       disableClose: true
     })
 
