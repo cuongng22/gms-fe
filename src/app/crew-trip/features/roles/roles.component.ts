@@ -70,7 +70,7 @@ export class RolesComponent extends CommonComponent implements OnInit {
       this.search(),
     ]).then(() => {
     });
-    this.displayedColumns = ['select', 'stt', ...this._displayedColumns.map(s => s.value), 'action'];
+    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }
 
   async nextStep(index: number) {
