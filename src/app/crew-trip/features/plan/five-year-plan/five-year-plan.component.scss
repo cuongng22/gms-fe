@@ -1,3 +1,11 @@
+/*.mat-column-stt,
+.mat-column-year,
+.mat-column-notes,
+.mat-column-activeLabel,
+.mat-column-action {
+  vertical-align: top !important;
+}*/
+
 .mat-column-totalInternational,
 .mat-column-rateInternationalLast,
 .mat-column-totalDomestic,
@@ -7,18 +15,28 @@
 {
   text-align: right !important;
 }
+
 .mat-column-select {
   width: 50px !important;
 }
 
-.mat-column-stt {
-  width: 70px !important;
+.mat-column-stt, .mat-column-isActiveLabel, .mat-column-action {
+  width: 80px !important;
 }
-.form-group{
-  .mat-mdc-form-field{
+
+/*.mat-column-international,
+.mat-column-domestic,
+.mat-column-totalOutput,
+{
+  background-color: #e0e0ff !important;
+}*/
+
+.form-group {
+  .mat-mdc-form-field {
     margin: 10px 0px !important;
   }
 }
+
 ::ng-deep {
   .table-responsive {
     .mat-mdc-card-content {
@@ -149,6 +167,10 @@
         }
       }
     }
+  }
+
+  .add-new-popup .popup-dialog {
+    max-width: 50vw;
   }
 }
 

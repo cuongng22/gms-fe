@@ -2,8 +2,8 @@
   width: 50px !important;
 }
 
-.mat-column-stt {
-  width: 70px !important;
+.mat-column-stt, .mat-column-isActiveLabel, .mat-column-action  {
+  width: 80px !important;
 }
 
 ::ng-deep {

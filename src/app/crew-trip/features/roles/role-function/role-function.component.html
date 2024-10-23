@@ -35,7 +35,7 @@
       </mat-card-header>
       <mat-card-content>
         <div class="table-responsive">
-          <table [dataSource]="listUser" mat-table>
+          <table [dataSource]="listUser" mat-table class="table-light">
             <ng-container matColumnDef="stt">
               <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
               <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>

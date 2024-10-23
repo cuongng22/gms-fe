@@ -23,6 +23,7 @@ import { ActRateComponent } from "src/app/crew-trip/features/category/act-rate/a
 import { RateUthComponent } from "src/app/crew-trip/features/plan/rate-uth/rate-uth.component";
 import { RatePlannedComponent } from "src/app/crew-trip/features/plan/rate-planned/rate-planned.component";
 import { CrewsDetailComponent } from './crew-trip/features/category/crews/crews-detail/crews-detail.component';
+import {FiveYearPlanComponent} from "src/app/crew-trip/features/plan/five-year-plan/five-year-plan.component";
 
 
 export const routes: Routes = [
@@ -49,6 +50,7 @@ export const routes: Routes = [
         path: 'plan', children: [
           { path: 'rate/uth', component: RateUthComponent },
           { path: 'rate/planned', component: RatePlannedComponent },
+          { path: 'five-year-plan', component: FiveYearPlanComponent },
         ]
       },
       {

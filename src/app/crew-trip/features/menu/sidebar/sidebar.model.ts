@@ -51,6 +51,9 @@ export const menu: Menu[] = [
               {
                 path: 'plan/rate/planned', title: $localize`:@@plannedExchangeRate:Planned exchange rate`, icon: 'ri-exchange-cny-line'
               },
+              {
+                path: 'plan/five-year-plan', title: $localize`:@@fiveYearPlan:5-Year Plans`, icon: 'ri-exchange-cny-line'
+              },
             ]
           }]
       }]
