@@ -50,9 +50,21 @@ export const menu: Menu[] = [
               },
               {
                 path: 'plan/rate/planned', title: $localize`:@@plannedExchangeRate:Planned exchange rate`, icon: 'ri-exchange-cny-line'
+              }
+            ]
+          },
+          {
+            title: $localize`:@@production:Production`,
+            rootPath : '',
+            subMenu: [
+              {
+                path: 'plan/production/uth', title: $localize`:@@pro:Production UTH`, icon: 'ri-folder-chart-line'
               },
               {
-                path: 'plan/five-year-plan', title: $localize`:@@fiveYearPlan:5-Year Plans`, icon: 'ri-exchange-cny-line'
+                path: 'plan/production/planned', title: $localize`:@@planedAnnualProduction:Planned Annual Production`, icon: 'ri-folder-chart-line'
+              },
+              {
+                path: 'plan/production/five-year-plan', title: $localize`:@@fiveYearPlan:5-Year Plans`, icon: 'ri-folder-chart-line'
               },
             ]
           }]
