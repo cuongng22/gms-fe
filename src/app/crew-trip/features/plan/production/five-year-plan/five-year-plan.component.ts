@@ -17,7 +17,7 @@ import {NoDataRowOutlet} from '@angular/cdk/table';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {Constant} from "src/app/crew-trip/shared/utils/constant";
+import {Constant, MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
 import {FiveYearPlanService} from "src/app/crew-trip/core/services/five-year-plan.service";
 
 
@@ -57,7 +57,7 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
     {label: $localize`Active`, value: "activeLabel", rowspan: '2'},
   ];
   listYear: any = [];
-
+  currentYear = new Date().getFullYear();
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
@@ -69,7 +69,7 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
       totalInternational: ['', [Validators.required]],
       totalDomestic: ['', [Validators.required]],
       total: ['',],
-      notes: ['',],
+      notes: ['', Validators.maxLength(500)],
       active: [true,]
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value}
@@ -77,8 +77,8 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
   }
 
   override async ngOnInit() {
-    const currentYear = new Date().getFullYear();
-    this.listYear = Array.from({length: currentYear - 2020 + 11}, (_, i) => (2020 + i).toString());
+    this.currentYear = new Date().getFullYear();
+    this.listYear = Array.from({length: this.currentYear - 2020 + 11}, (_, i) => (2020 + i).toString());
     console.log(this.listYear)
     await Promise.all([this.search(),]).then(() => {
       console.log(this.dataSource)
@@ -91,8 +91,22 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
   calculator() {
     if (this.formGroupDetail.value.totalInternational && this.formGroupDetail.value.totalDomestic) {
       this.formGroupDetail.patchValue({
-        total: this.formGroupDetail.value.totalInternational + this.formGroupDetail.value.totalDomestic
+        total: Math.round((this.formGroupDetail.value.totalInternational + this.formGroupDetail.value.totalDomestic) * 100) / 100
       })
+    }
+  }
+
+  override async exportFile(body?: any, filename?: string) {
+    try {
+      await this.spinner.show();
+      this.baseService.export({...this.formGroupSearch.value, export: true}).then(res => {
+        this.downloadFile(res, filename ?? res.fileName);
+      });
+    } catch (e: any) {
+      console.log(e);
+      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
     }
   }
 }

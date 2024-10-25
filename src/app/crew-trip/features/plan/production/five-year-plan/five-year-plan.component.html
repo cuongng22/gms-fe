@@ -24,7 +24,7 @@
       <div class="row">
         <div class="col-sm-3" sizeInput='md'>
           <mat-form-field>
-            <mat-select formControlName="active" required>
+            <mat-select formControlName="active">
               <mat-option i18n value="">-- All Status --</mat-option>
               <mat-option i18n value="true">Active</mat-option>
               <mat-option i18n value="false">Inactive</mat-option>
@@ -54,7 +54,8 @@
     <mat-card-title>
     </mat-card-title>
     <mat-card-subtitle>
-      <button (click)="exportFile(null,'five-year-plan.xlsx')" class="add-btn mr-10" i18n mat-button type="button">
+      <button (click)="exportFile({export:true},'five-year-plan.xlsx')" class="add-btn mr-10" i18n mat-button
+              type="button">
         <i class="material-symbols-outlined">
           download
         </i>
@@ -105,7 +106,7 @@
             Action
           </th>
           <td *matCellDef="let element;let i = dataIndex" mat-cell>
-            <div class="action-buttons d-flex align-items-center justify-content-end">
+            <div class="action-buttons d-flex align-items-center justify-content-end" *ngIf="element.year >= currentYear">
               <a mat-button type="button">
 
               </a>
@@ -195,7 +196,8 @@
                   <div class="col-md-6" sizeInput="sm">
                     <mat-form-field>
                       <mat-label i18n>Total International</mat-label>
-                      <input (ngModelChange)="calculator()" formControlName="totalInternational" i18n-placeholder matInput
+                      <input (ngModelChange)="calculator()" formControlName="totalInternational" i18n-placeholder
+                             matInput
                              min="0"
                              placeholder="Input Total International" required type="number">
                       @if (!!formGroupDetail.controls['totalInternational'].hasError('required')) {
@@ -222,16 +224,19 @@
                   </div>
                 </div>
                 <div class="col-md-12" sizeInput="sm">
-                <mat-form-field>
-                  <mat-label i18n>Total</mat-label>
-                  <input formControlName="total" i18n-placeholder matInput placeholder="Input Total" readonly=true>
-                </mat-form-field>
+                  <mat-form-field>
+                    <mat-label i18n>Total</mat-label>
+                    <input formControlName="total" i18n-placeholder matInput placeholder="Input Total" readonly=true>
+                  </mat-form-field>
                 </div>
                 <mat-form-field>
                   <mat-label i18n>Notes</mat-label>
                   <textarea formControlName="notes" i18n-placeholder matInput
                             placeholder="Input Notes"></textarea>
-                  <mat-hint align="end">{{formGroupDetail.value.notes.length}} / 500</mat-hint>
+                  <mat-hint align="end">{{formGroupDetail.value.notes?.length}} / 500</mat-hint>
+                  @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
+                  <mat-error><span i18n>Notes</span><span i18n> too long</span></mat-error>
+                  }
                 </mat-form-field>
                 <mat-checkbox class="mt-10" formControlName="active" i18n>Active</mat-checkbox>
               </div>
@@ -263,7 +268,7 @@
 <!-- Delete confirm Popup -->
 <div
   [class.active]="showDialogDelete"
-  class="add-new-popup"
+  class="add-new-popup delete-popup"
 >
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
