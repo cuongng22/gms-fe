@@ -154,6 +154,7 @@ export class CommonComponent implements OnInit {
       await this.closeDetail();
       return res;
     } catch (e: any) {
+      console.log("eeeeeeeeeeeeeeeeeee:",e)
       this.baseService.showError(e.error?.data ?? JSON.stringify(e.error) ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();

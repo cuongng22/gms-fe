@@ -1,0 +1,125 @@
+<mat-card class="border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-header>
+    <mat-card-title>
+      <h5 class="mb-0" i18n="@@groupMailInfomation" *ngIf="data">
+        Group mail information
+      </h5>
+      <h5 class="mb-0" i18n="@@addNew" *ngIf="!data">
+        Add new
+      </h5>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+      <span class="mb-10">
+        <span i18n="@@generalInfomation">General infomation</span>
+      </span>
+    <form [formGroup]="formGroupDetail" (ngSubmit)="save()" autocomplete="off" class="mt-10">
+      <div class="row">
+        <div class="col-sm-6 col-md-6">
+          <div class="form-group mb-20" sizeInput="md">
+            <mat-form-field>
+              <mat-label i18n="@@airportCode">
+                Airport code
+              </mat-label>
+              <input type="text" #marketCode matInput formControlName="marketCode" [matAutocomplete]="marketComplete"
+                     (input)="filterMarket()" (focus)="filterMarket()">
+              <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
+                @for (option of filteredOptionsMarket ; track option) {
+                <mat-option [value]="option">{{option}}</mat-option>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+        </div>
+        <div class="col-sm-6 col-md-6">
+          <div class="form-group mb-20" sizeInput="md">
+            <mat-form-field>
+              <mat-label i18n="@@groupName">
+                Group name
+              </mat-label>
+              <input matInput formControlName="groupName" required maxlength="250">
+              @if (
+              formGroupDetail.controls.groupName.hasError('required') &&
+              formGroupDetail.controls.groupName.touched) {
+              <mat-error i18n="@@fullNameRequired">Full name {{MESSAGE.REQUIRED}}</mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <div class="form-group">
+            <mat-form-field>
+              <mat-label i18n="@@description">
+                Description
+              </mat-label>
+              <textarea matInput matTextareaAutosize cdkTextareaAutosize #autosize="cdkTextareaAutosize"
+                        cdkAutosizeMinRows="2" cdkAutosizeMaxRows="10" formControlName="notes"
+                        maxlength="500"></textarea>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-12 col-md-12 text-right">
+          <div class="d-flex justify-content-end mb-3">
+          <button mat-icon-button type="button" (click)="addEmailRow()" class="mt-10 mb-10" *ngIf="!data?.mode || data.mode !== 'view'">
+            <i class="material-symbols-outlined text-info">
+              add
+            </i>
+          </button>
+          </div>
+          <table mat-table [dataSource]="emailList" class="mat-elevation-z8">
+            <ng-container matColumnDef="email">
+              <th mat-header-cell *matHeaderCellDef>Email</th>
+              <td mat-cell *matCellDef="let element; let i = index">
+                <input matInput [value]="element.email" [maxLength]="250" (input)="onEmailInput($event, i)" maxlength="250" [readonly]="!element.isEditing" email>
+                @if ( element.isInvalid) {
+                <mat-error i18n="@@invalidEmailFormat">Invalid email format</mat-error>
+                }
+              </td>
+            </ng-container>
+            <!-- Actions Column -->
+            <ng-container matColumnDef="actions">
+              <th mat-header-cell *matHeaderCellDef>Actions</th>
+              <td mat-cell *matCellDef="let element; let i = index" >
+                <button mat-button  type="button"  (click)="editEmail(i)" *ngIf="!element.isEditing && (!data?.mode || data.mode !== 'view')" >
+                  <i class="material-symbols-outlined" i18n-title title="Edit">
+                    edit
+                  </i>
+                </button>
+                <button mat-button type="button" (click)="saveEmail(i)" *ngIf="element.isEditing && (!data?.mode || data.mode !== 'view')" [disabled]="element.isInvalid">
+                  <i class="material-symbols-outlined" i18n-title title="save">
+                    save
+                  </i>
+                </button>
+                <button mat-button  type="button"  (click)="deleteEmail(i)" *ngIf="(!data?.mode || data.mode !== 'view')">
+                 <span class="material-symbols-outlined text-danger">
+                  delete
+                </span>
+                </button>
+              </td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+          </table>
+        </div>
+      </div>
+    </form>
+    <div class="btn-box text-center mt-15">
+      <button type="button" mat-button (click)="close()" class="danger-btn  min-with-100 mlr-5">
+        <i class="material-symbols-outlined">
+          close
+        </i>
+        <span i18n="@@cancel">Cancel</span>
+      </button>
+      <button mat-button color="primary" (click)="save()" type="submit" class="add-btn min-with-100 mlr-5"  *ngIf="!data?.mode || data.mode !== 'view'">
+        <i class="material-symbols-outlined">
+          save
+        </i>
+        <span i18n="@@save">Save</span>
+      </button>
+    </div>
+  </mat-card-content>
+</mat-card>

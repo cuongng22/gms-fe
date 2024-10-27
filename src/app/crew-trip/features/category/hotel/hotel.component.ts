@@ -1,4 +1,12 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
+import {
+  Component,
+  CUSTOM_ELEMENTS_SCHEMA,
+  ElementRef,
+  inject,
+  NO_ERRORS_SCHEMA,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 import {RouterLink} from "@angular/router";
 import {CommonModule, NgClass, NgIf, TitleCasePipe} from "@angular/common";
@@ -26,6 +34,8 @@ import {MatAutocompleteModule} from "@angular/material/autocomplete";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {map, Observable, startWith} from "rxjs";
 import {debounceTime} from "rxjs/operators";
+import {FlightMarketService} from "src/app/crew-trip/core/services/ flight-market.service";
+import {Constant} from "src/app/crew-trip/shared/utils/constant";
 
 @Component({
   selector: 'app-hotel',
@@ -35,50 +45,49 @@ import {debounceTime} from "rxjs/operators";
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule
   ],
+  providers: [DataTransformPipe],
   templateUrl: './hotel.component.html',
   styleUrl: './hotel.component.scss'
 })
 export class HotelComponent extends CommonComponent implements OnInit {
   override baseService = inject(HotelService);
+  flightMarketService = inject(FlightMarketService)
   formBuilder = inject(FormBuilder);
+  @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
+  markets: any[] = [];
+  filteredOptionsMarket: any[];
 
-  options: any[] = [{
-    key: 'HAN',
-    value: 'HAN'
-  },
-    {
-      key: 'SGN',
-      value: 'SGN'
-    }];
-
-
-
-  filteredOptionsMarket: Observable<any[]>;
 
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
     marketCode: [''],
-    contractEndDate: [''],
+    contractDate: [''],
     active: [''],
   });
-
+  constructor(public dataTransformPipe: DataTransformPipe) {
+    super();
+  }
   override async ngOnInit() {
     super.ngOnInit();
-    this.filteredOptionsMarket = this.formGroupSearch.controls.marketCode.valueChanges.pipe(
-      debounceTime(300), // Đợi 300ms sau lần nhập cuối cùng
-      startWith(''),
-      map(value => this._filterMarket(value ?? '')));
-
     this.displayedColumns = ['stt', 'market', 'hotel', 'address', 'contactDetails', 'active', 'notes'];
     this.search();
+
+    this.flightMarketService.search({ option: 1 }).then(res => {
+      this.markets = res.data;
+    });
   }
 
-  private _filterMarket(value: string): any[] {
-    if (!value) {
-      return this.options;
+  filterMarket(): void {
+    const filterValue = this.marketCode.nativeElement.value.toLowerCase();
+    if (!filterValue) {
+      this.filteredOptionsMarket = this.markets;
     }
-    const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.value.toLowerCase().includes(filterValue));
+    this.filteredOptionsMarket = this.markets.filter(market => market.toLowerCase().includes(filterValue));
   }
 
+  override search(): any {
+    const contractDate = this.formGroupSearch.controls.contractDate.value;
+    const searchValue = { ...this.formGroupSearch.value, contractDate: contractDate ? this.dataTransformPipe.transform(contractDate, ['date', Constant.DATE_FORMAT]) : null };
+    super.search(searchValue);
+  }
 }

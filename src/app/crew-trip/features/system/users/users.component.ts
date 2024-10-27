@@ -18,11 +18,11 @@ import { RolesService } from "src/app/crew-trip/core/services/roles-service";
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { InputSizeComponent } from '../../shared/input/input-size.component';
+import { InputSizeComponent } from '../../../shared/input/input-size.component';
 import { ResetPasswordRequest, Role } from './users.model';
 import { CustomMatPaginatorIntl } from 'src/app/customizer-settings/paginator-intl.service';
 import { TranslateModule } from '@ngx-translate/core';
-import { CommonComponent } from '../../shared/common.component';
+import { CommonComponent } from '../../../shared/common.component';
 
 export interface PeriodicElement {
   projectName: string;

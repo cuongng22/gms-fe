@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {BaseService} from "src/app/crew-trip/core/services/base-service";
 import {firstValueFrom} from "rxjs";
-import { ResetPasswordRequest, Response, User } from '../../features/users/users.model';
+import { ResetPasswordRequest, Response, User } from 'src/app/crew-trip/features/system/users/users.model';
 import {UserLogin} from "src/app/crew-trip/shared/models/userInfo";
 import {StorageService} from "src/app/crew-trip/core/services/storage.service";
 import {STORAGE_KEY} from "src/app/crew-trip/core/constants/config";

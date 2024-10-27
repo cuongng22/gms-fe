@@ -1,7 +1,7 @@
 import { Routes } from '@angular/router';
 import { KeHoachComponent } from 'src/app/crew-trip/features/plan/ke-hoach/ke-hoach.component';
 import { FirstPageComponent } from "src/app/crew-trip/features/first-page/first-page.component";
-import { UsersComponent } from "src/app/crew-trip/features/users/users.component";
+import { UsersComponent } from "src/app/crew-trip/features/system/users/users.component";
 import { SignInComponent } from "src/app/crew-trip/core/auth/sign-in/sign-in.component";
 import { RolesComponent } from "src/app/crew-trip/features/roles/roles.component";
 import { AuthGuard } from "src/app/crew-trip/core/guards/menu.guard";
@@ -30,6 +30,7 @@ import {
 import {
   AnnualProductionComponent
 } from "src/app/crew-trip/features/plan/production/annual-production/annual-production.component";
+import {GroupMailComponent} from "src/app/crew-trip/features/system/config/group-mail/group-mail.component";
 
 
 export const routes: Routes = [
@@ -50,7 +51,12 @@ export const routes: Routes = [
           { path: 'users', component: UsersComponent },
           { path: 'roles', component: RolesComponent },
           { path: 'functions', component: FunctionsComponent },
-        ]
+        ],
+      },
+      {
+        path: 'config', children: [
+          { path: 'group-mail', component: GroupMailComponent },
+        ],
       },
       {
         path: 'plan', children: [

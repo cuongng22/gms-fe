@@ -127,6 +127,15 @@ export const menu: Menu[] = [
                                 path: 'admin/functions', title: $localize`:@@function:Function`, icon: 'ri-calendar-schedule-fill'
                             }
                         ]
-                    }]
+                    },
+                  {
+                    title: $localize`:@@config:Config`,
+                    rootPath : '',
+                    subMenu: [
+                      {
+                        path: 'config/group-mail', title: $localize`:@@groupsMail:Groups mail`, icon: 'ri-mail-add-line'
+                      },
+                    ]
+                  }]
             }]
     }]

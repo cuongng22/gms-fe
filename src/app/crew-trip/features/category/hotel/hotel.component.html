@@ -31,10 +31,11 @@
             <div class="col" sizeInput="md">
               <mat-form-field class="mb-1">
                 <mat-label i18n="market">Market</mat-label>
-                <input type="text" matInput formControlName="marketCode" [matAutocomplete]="marketComplete">
-                <mat-autocomplete autoActiveFirstOption #marketComplete="matAutocomplete">
-                  @for (option of filteredOptionsMarket | async; track option) {
-                  <mat-option [value]="option.key">{{option.value}}</mat-option>
+                <input type="text" #marketCode matInput formControlName="marketCode" [matAutocomplete]="marketComplete"
+                       (input)="filterMarket()" (focus)="filterMarket()">
+                <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
+                  @for (option of filteredOptionsMarket ; track option) {
+                  <mat-option [value]="option">{{option}}</mat-option>
                   }
                 </mat-autocomplete>
               </mat-form-field>
