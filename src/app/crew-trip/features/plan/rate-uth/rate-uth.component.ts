@@ -56,13 +56,12 @@ export class RateUthComponent extends CommonComponent implements OnInit {
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
   listDatasource: Observable<string[]> = of(['sync', 'excel']);
-  listYear: Observable<number[]> = of(Array.from({ length: 10 }, (v, i) => 2024 + i));
   listVersion: Observable<string[]> = of([]);
+
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
-    version: [null as string | null],
-    year: [new Date().getFullYear() + 1],
-    sourceType: [],
+    version: ['', Validators.required],
+    sourceType: [''],
     export: [false],
   });
 
@@ -73,10 +72,12 @@ export class RateUthComponent extends CommonComponent implements OnInit {
     ];
     await  this.baseService.getListVersion({ option: 0 }).then(res => {
       this.listVersion = of(res.data.map((it: any) => it.version));
-      this.listVersion.pipe(take(1)).subscribe(versions => {
-        const firstVersion = versions[0];
-        this.formGroupSearch.patchValue({ version: firstVersion });
-      });
+      if(this.listVersion){
+        this.listVersion.pipe(take(1)).subscribe(versions => {
+          const firstVersion = versions[0];
+          this.formGroupSearch.patchValue({ version: firstVersion });
+        });
+      }
     });
     await this.search();
   }

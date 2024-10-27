@@ -50,10 +50,9 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
   listVersion: Observable<string[]> = of([]);
 
   override formGroupSearch = this.formBuilder.group({
-    s: [''], //Keyword Search
-    version: [null as string | null],
-    year: [new Date().getFullYear() + 1],
-    sourceType: [],
+    s: [null], //Keyword Search
+    version: ['', Validators.required],
+    sourceType: [''],
     export: [false],
   });
 
@@ -64,10 +63,12 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
     ];
     await  this.baseService.getListVersion({ option: 1 }).then(res => {
       this.listVersion = of(res.data.map((it: any) => it.version));
-      this.listVersion.pipe(take(1)).subscribe(versions => {
-        const firstVersion = versions[0];
-        this.formGroupSearch.patchValue({ version: firstVersion });
-      });
+      if(this.listVersion){
+        this.listVersion.pipe(take(1)).subscribe(versions => {
+          const firstVersion = versions[0];
+          this.formGroupSearch.patchValue({ version: firstVersion });
+        });
+      }
     });
     await this.search();
   }
