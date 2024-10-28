@@ -103,8 +103,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
     { label: $localize`:@@fullName:Full name`, value: 'fullName' },
     { label: $localize`:@@department:Department`, value: 'department' },
     { label: $localize`:@@email:Email`, value: 'email' }
-  ]
-    ;
+  ];
 
   override async ngOnInit() {
     await Promise.all([
@@ -120,7 +119,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
       await this.spinner.show();
       let res = await this.rolesService.search({
         page: this.pageIndex,
-        size: this.pageSize
+        limit: 9999
       });
       this.listRoles = res.data.content;
       this.listRolesRaw = res.data.content;

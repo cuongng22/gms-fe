@@ -58,7 +58,7 @@ export const menu: Menu[] = [
             rootPath : '',
             subMenu: [
               {
-                path: 'plan/production/uth', title: $localize`:@@pro:Production UTH`, icon: 'ri-folder-chart-line'
+                path: 'plan/production/est-annual-production', title: $localize`:@@estAnnualProduction:Estimated Annual Production`, icon: 'ri-folder-chart-line'
               },
               {
                 path: 'plan/production/planned', title: $localize`:@@planedAnnualProduction:Planned Annual Production`, icon: 'ri-folder-chart-line'

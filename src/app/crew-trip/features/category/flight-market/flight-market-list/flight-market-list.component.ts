@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, viewChild } from '@angular/core';
+import { Component, inject, OnInit, viewChild, model, ElementRef, ViewChild, DestroyRef } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +15,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink, RouterModule } from '@angular/router';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { Observable, debounceTime, startWith, map } from 'rxjs';
+import { Observable, debounceTime, startWith, map, Subject } from 'rxjs';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/ flight-market.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
@@ -26,6 +26,7 @@ import { CarRentalDetailComponent } from '../car-rental-detail/car-rental-detail
 import { HotelDetailComponent } from '../hotel-detail/hotel-detail.component';
 import { FileUploadComponent, FileUploadModule, FileUploadValidators } from '@iplab/ngx-file-upload';
 import { File } from 'buffer';
+import { subscribe } from 'diagnostics_channel';
 
 @Component({
   selector: 'app-flight-market-list',
@@ -40,12 +41,15 @@ import { File } from 'buffer';
 })
 export class FlightMarketListComponent extends CommonComponent implements OnInit {
   override baseService = inject(FlightMarketService);
+  private readonly destroyRef = inject(DestroyRef);
 
   formBuilder = inject(FormBuilder);
 
   // danh sách thị trường
   markets: any[] = [];
-  filteredOptionsMarket: Observable<any[]>;
+  filteredOptionsMarket = model<any[]>([]);
+  keySearchMarket = new Subject<string>();
+  @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
 
   showDialogUpload: boolean = false;
 
@@ -80,10 +84,14 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
     this.baseService.search({ option: 1 }).then(res => {
       this.markets = res.data;
 
-      this.filteredOptionsMarket = this.formGroupSearch.controls.code.valueChanges.pipe(
-        debounceTime(300), // Đợi 300ms sau lần nhập cuối cùng
+      this.keySearchMarket.pipe(
+        debounceTime(500), // Đợi 300ms sau lần nhập cuối cùng
         startWith(''),
-        map(value => this._filterMarket(value ?? '')));
+      ).subscribe((value: string) => this._filterMarket(value ?? ''));
+    });
+
+    this.destroyRef.onDestroy(() => {
+      this.keySearchMarket.unsubscribe();
     });
   }
 
@@ -100,12 +108,13 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
   }
 
 
-  private _filterMarket(value: string): any[] {
+  private _filterMarket(value: string): void {
     if (!value) {
-      return this.markets;
+      this.filteredOptionsMarket.set(this.markets);
+      return;
     }
     const filterValue = value.toLowerCase();
-    return this.markets.filter(market => market.value.toLowerCase().includes(filterValue));
+    this.filteredOptionsMarket.set(this.markets.filter(market => market?.toLowerCase().includes(filterValue)));
   }
 
   showHotelDetail(isViewDetail?: boolean, hotel?: any, marketCode?: string) {
@@ -171,6 +180,15 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
 
   toggleDialogUpload() {
     this.showDialogUpload = !this.showDialogUpload;
+  }
+
+  filterMarket(): void {
+    const filterdValue = this.airport.nativeElement.value;
+    if (!filterdValue) {
+      this.filteredOptionsMarket.set(this.markets);
+      return;
+    }
+    this.keySearchMarket.next(filterdValue);
   }
 }
 

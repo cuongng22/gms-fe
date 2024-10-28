@@ -31,10 +31,10 @@
                         <div class="col" sizeInput="md">
                             <mat-form-field class="mb-1">
                                 <mat-label i18n="@@airport">Airport</mat-label>
-                                <input type="text" matInput formControlName="code" [matAutocomplete]="marketComplete">
+                                <input #airport (input)="filterMarket()"  type="text" matInput formControlName="code" [matAutocomplete]="marketComplete">
                                 <mat-autocomplete autoActiveFirstOption requireSelection
                                     #marketComplete="matAutocomplete">
-                                    @for (option of filteredOptionsMarket | async; track option) {
+                                    @for (option of filteredOptionsMarket(); track option) {
                                     <mat-option [value]="option">{{option}}</mat-option>
                                     }
                                 </mat-autocomplete>
@@ -105,8 +105,7 @@
 </mat-card>
 
 
-<!-- Start Danh sách FlightMarket-->
-
+<!-- Start List FlightMarket-->
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-header class="mb-10">
         <mat-card-title>
@@ -260,7 +259,7 @@
     </mat-card-content>
 </mat-card>
 
-<!-- End Danh sách Nhà xe -->
+<!-- End List FlightMarket -->
 
 
 

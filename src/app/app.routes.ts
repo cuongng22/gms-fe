@@ -23,14 +23,11 @@ import { ActRateComponent } from "src/app/crew-trip/features/category/act-rate/a
 import { RateUthComponent } from "src/app/crew-trip/features/plan/rate-uth/rate-uth.component";
 import { RatePlannedComponent } from "src/app/crew-trip/features/plan/rate-planned/rate-planned.component";
 import { CrewsDetailComponent } from './crew-trip/features/category/crews/crews-detail/crews-detail.component';
-import {FiveYearPlanComponent} from "src/app/crew-trip/features/plan/production/five-year-plan/five-year-plan.component";
-import {
-  ProductionUthComponent
-} from "src/app/crew-trip/features/plan/production/production-uth/production-uth.component";
-import {
-  AnnualProductionComponent
-} from "src/app/crew-trip/features/plan/production/annual-production/annual-production.component";
-import {GroupMailComponent} from "src/app/crew-trip/features/system/config/group-mail/group-mail.component";
+import { GroupMailComponent } from "src/app/crew-trip/features/system/config/group-mail/group-mail.component";
+import { FiveYearPlanComponent } from "src/app/crew-trip/features/plan/production/five-year-plan/five-year-plan.component";
+import { EstAnnualProductionComponent } from "src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.component";
+import { AnnualProductionComponent } from "src/app/crew-trip/features/plan/production/annual-production/annual-production.component";
+import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.component';
 
 
 export const routes: Routes = [
@@ -63,7 +60,7 @@ export const routes: Routes = [
           { path: 'rate/uth', component: RateUthComponent },
           { path: 'rate/planned', component: RatePlannedComponent },
           { path: 'production/five-year-plan', component: FiveYearPlanComponent },
-          { path: 'production/uth', component: ProductionUthComponent },
+          { path: 'production/est-annual-production', component: EstAnnualProductionComponent },
           { path: 'production/planned', component: AnnualProductionComponent },
         ]
       },
@@ -88,6 +85,7 @@ export const routes: Routes = [
               { path: 'detail', component: CrewsDetailComponent },
             ]
           },
+          { path: 'autocomplete', component: AutocompleteComponent },
           {
             path: 'flight-market', component: FlightMarketComponent,
             children: [

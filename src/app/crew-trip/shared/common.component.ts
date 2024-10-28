@@ -11,6 +11,7 @@ import { Constant, MESSAGE, removeNullValues } from "src/app/crew-trip/shared/ut
 import { HttpClient, HttpStatusCode } from "@angular/common/http";
 import { saveAs } from 'file-saver';
 import { UltilService } from "src/app/crew-trip/core/services/ultil-service";
+import { ListResponse } from './models/common.model';
 
 
 @Component({
@@ -91,12 +92,12 @@ export class CommonComponent implements OnInit {
     this.search();
   }
 
-  async search(body?: any) {
+  async search<T>(body?: any) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.search({
+      let res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
-        size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
+        size: this.pageSize,
         limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
       });
       console.log(res)
@@ -105,8 +106,8 @@ export class CommonComponent implements OnInit {
           this.dataSource.data = res.data.content;
           this.dataSource.data = this.dataSource.data.map((s: any) => ({
             ...s,
-            isActiveLabel: !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
-            activeLabel: !!s.active || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
+            isActiveLabel: s.isActive === true || !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
+            activeLabel: s.active === true || !!s.active || s.status === true || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
           }))
           this.totalElement = res.data.totalElements;
         }

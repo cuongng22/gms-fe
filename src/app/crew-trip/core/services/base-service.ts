@@ -4,6 +4,7 @@ import { firstValueFrom, Observable } from "rxjs";
 import { MatSnackBar } from "@angular/material/snack-bar";
 import { ActionAlertComponent } from "src/app/crew-trip/shared/action-alert/action-alert.component";
 import { environment } from 'src/environments/environment';
+import { DetailResponse, ListResponse } from '../../shared/models/common.model';
 
 @Injectable({
   providedIn: 'root'
@@ -23,25 +24,25 @@ export class BaseService {
     })
   };
 
-  search(body: any): Promise<any> {
+  search<T = any>(body: any): Promise<ListResponse<T> | any> {
     const url = `${this.api}/${this.path}`
     let params = new HttpParams({ fromObject: body })
-    return firstValueFrom(this.http.get<any>(url, { params }));
+    return firstValueFrom(this.http.get<ListResponse<T>>(url, { params }));
   }
 
-  detail(id: any): Promise<any> {
+  detail<T = any>(id: any): Promise<DetailResponse<T> | any> {
     const url = `${this.api}/${this.path}/${id}`
-    return firstValueFrom(this.http.get<any>(url, this.httpOptions));
+    return firstValueFrom(this.http.get<DetailResponse<T>>(url, this.httpOptions));
   }
 
-  create(body: any): Promise<any> {
+  create<T = any>(body: any): Promise<T> {
     const url = `${this.api}/${this.path}`
-    return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
+    return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
   }
 
-  update(body: any): Promise<any> {
+  update<T = any>(body: any): Promise<T> {
     const url = `${this.api}/${this.path}/${body.id}`
-    return firstValueFrom(this.http.put<any>(url, body, this.httpOptions));
+    return firstValueFrom(this.http.put<T>(url, body, this.httpOptions));
   }
 
   async exportData(body?: any, sourcePath?: string): Promise<{ blob: Blob, fileName: string }> {
@@ -95,9 +96,9 @@ export class BaseService {
   }
 
 
-  delete(id: any): Promise<any> {
+  delete<T = any>(id: any): Promise<T> {
     const url = `${this.api}/${this.path}/${id}`
-    return firstValueFrom(this.http.delete<any>(url, this.httpOptions));
+    return firstValueFrom(this.http.delete<T>(url, this.httpOptions));
   }
 
   async uploadFile(form: FormData): Promise<{ blob: Blob, fileName: string, totalErrors: string }> {

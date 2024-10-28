@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, AfterViewInit, Component, effect, ElementRef, inject, input, model, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, DestroyRef, effect, ElementRef, inject, input, model, OnInit, ViewChild } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -41,6 +41,7 @@ import { debounceTime, Subject } from 'rxjs';
 })
 export class FlightMarketDetailComponent extends CommonComponent implements OnInit {
   formBuilder = inject(FormBuilder);
+  private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(FlightMarketService);
   serviceFeeService = inject(ServiceFeeService);
   nationService = inject(NationService);
@@ -162,6 +163,11 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
           country.vniName.toLowerCase().includes(value.toLowerCase()) :
           country.engName.toLowerCase().includes(value.toLowerCase()))
       }))
+    });
+
+
+    this.destroyRef.onDestroy(() => {
+      this.keySearchNation.unsubscribe();
     });
   }
 
