@@ -155,7 +155,7 @@ export class CommonComponent implements OnInit {
       await this.closeDetail();
       return res;
     } catch (e: any) {
-      console.log("eeeeeeeeeeeeeeeeeee:",e)
+      console.log("eeeeeeeeeeeeeeeeeee:", e)
       this.baseService.showError(e.error?.data ?? JSON.stringify(e.error) ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
@@ -260,10 +260,10 @@ export class CommonComponent implements OnInit {
     }
   }
 
-  async downloadTemplate(filename?: string) {
+  async downloadTemplate(filename?: string, body?: any, sourcePath?: string) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.exportData(null, 'download-template');
+      let res = await this.baseService.exportData(body, sourcePath ?? 'download-template');
       console.log(res)
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {

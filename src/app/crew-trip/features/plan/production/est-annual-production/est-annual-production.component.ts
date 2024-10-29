@@ -22,6 +22,8 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { EstAnnualProduction } from './est-annual-production.model';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import { FileUploadModule, FileUploadValidators } from '@iplab/ngx-file-upload';
+import { error } from 'console';
 
 @Component({
   selector: 'app-est-annual-production',
@@ -29,7 +31,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe],
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule],
   templateUrl: './est-annual-production.component.html',
   styleUrl: './est-annual-production.component.scss'
 })
@@ -68,44 +70,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
   filteredOptionsVersion = model<string[]>([]); // filtered Des
   keySearchVersion = new Subject<string>();
 
-  // "id": "4332369",
-  // "verType": "E",
-  // "network": "DOM",
-  // "route": "VKGSGN",
-  // "routeId": 9059,
-  // "route2w": "SGNVKG",
-  // "ori": "VKG",
-  // "des": "SGN",
-  // "oriCountry": "VN",
-  // "desCountry": "VN",
-  // "verId": 2567,
-  // "acId": "AT7",
-  // "acGroup": "AT7",
-  // "carrier": "0V",
-  // "fltDate": "2025-01-01T00:00:00.000+00:00",
-  // "fltMonth": 1,
-  // "fltYear": 2025,
-  // "bh": 14.08333333,
-  // "fls": 13,
-  // "rateBhFls": 1.083333333076923
 
-
-  //   - ROUTE_ID
-  // - ROUTE_2W
-  // - ORI
-  // - DES
-  // - ORI_COUNTRY
-  // - DES_COUNTRY
-  // - VER_ID
-  // - AC_ID
-  // - AC_GROUP
-  // - CARRIER
-  // - FLT_DATE
-  // - FLT_MONTH
-  // - FLT_YEAR
-  // - BH
-  // - FLS
-  // - BH/FLS
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     { label: $localize`:@@id:ID`, value: 'id' },
     { label: $localize`:@@network:NETWORK`, value: 'network' },
@@ -140,6 +105,8 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
   });
 
   showDialogUpload: boolean = false;
+  fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
+  uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
 
   constructor() {
     super();
@@ -242,19 +209,21 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
       this.keySearchAcId.unsubscribe();
       this.keySearchAcGroup.unsubscribe();
     });
-    // --------------------------------------------------------
+
 
     // -----------------List Est Annual Production-------------
-
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value)];
-
-    // --------------------------------------------------------
 
   }
 
   override search(): any {
     super.search<EstAnnualProduction>({ ...this.formGroupSearch.value, option: 0, export: false, versionId: this.formGroupSearch.controls.versionId.value });
   }
+
+  override exportFileOptions(): any {
+    super.exportFileOptions({ ...this.formGroupSearch.value, option: 0, export: true, versionId: this.formGroupSearch.controls.versionId.value });
+  }
+
 
   // ------------------------filter----------------------------
   filterOri(): void {
@@ -276,10 +245,46 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
   filterVersion(): void {
     this.keySearchVersion.next(this.version.nativeElement.value);
   }
-  // --------------------------------------------------------
 
 
   toggleDialogUpload() {
     this.showDialogUpload = !this.showDialogUpload;
+  }
+
+  async downloadFileError() {
+    if (this.uploadFileError.blob) {
+      this.downloadFile(this.uploadFileError.blob, this.uploadFileError.fileName ?? 'file-error.xlsx');
+    }
+  }
+
+  async uploadFile() {
+    try {
+      this.fileUpload.markAllAsTouched();
+      if (this.fileUpload.valid && this.fileUpload.value) {
+        const form = new FormData();
+        const file: File = this.fileUpload.value[0];
+        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
+        form.append('option', new Blob(["0"], {
+          type: "application/json"
+        }));
+        await this.spinner.show();
+        const res = await this.baseService.uploadFile(form);
+        this.uploadFileError = res;
+        if (!res.totalErrors) {
+          this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
+          this.search();
+          this.toggleDialogUpload();
+        }
+      }
+    } catch (e: any) {
+      if (e?.error instanceof Blob) {
+        const err = await e?.error.text();
+        this.baseService.showError(JSON.parse(err)?.error ?? this.MESSAGE.ERROR);
+      } else {
+        this.baseService.showError(e.error?.error ?? e.error?.error?.code ?? this.MESSAGE.ERROR);
+      }
+    } finally {
+      await this.spinner.hide();
+    }
   }
 }
