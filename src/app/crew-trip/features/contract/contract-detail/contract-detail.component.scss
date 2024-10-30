@@ -173,6 +173,14 @@
   .mat-expansion-panel-spacing{
     margin: 0px;
   }
+  .mat-expansion-panel-header{
+    color: var(--vnaXanhColor);
+    font-size: 1.2rem !important;
+    font-weight: bold;
+  }
+  .mdc-floating-label--required:not(.mdc-floating-label--hide-required-marker)::after {
+    color: red;
+  }
 }
 
 /* Max width 767px */

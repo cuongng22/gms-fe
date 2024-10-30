@@ -21,6 +21,7 @@ import {NoDataRowOutlet} from "@angular/cdk/table";
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 import {ContractService} from "src/app/crew-trip/core/services/contract-service";
 import {ContractDetailComponent} from "src/app/crew-trip/features/contract/contract-detail/contract-detail.component";
+import {Constant} from "src/app/crew-trip/shared/utils/constant";
 
 
 @Component({
@@ -37,7 +38,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   fb = inject(FormBuilder);
 
   //variable
-  step = 1;
+  step = 2;
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Role Name`, value: "roleName"},
@@ -45,6 +46,92 @@ export class ContractComponent extends CommonComponent implements OnInit {
     {label: $localize`Account`, value: "userCount"},
     {label: $localize`Status`, value: "isActiveLabel"},
   ];
+  /*_displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
+    { label: 'ID', value: 'id' },
+    { label: 'Mã hợp đồng', value: 'contractCode' },
+    { label: 'Số hợp đồng', value: 'contractNo' },
+    { label: 'Loại tiền tệ', value: 'currency' },
+    { label: 'Tỷ giá', value: 'currencyRate', type: Constant.NUMBER},
+    { label: 'Ngày ký', value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT },
+    { label: 'Ngày hiệu lực', value: 'effectiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT },
+    { label: 'Ngày hết hạn', value: 'expiryDate', type: Constant.DATE, format: Constant.DATE_FORMAT },
+    { label: 'Loại hợp đồng', value: 'contractType' },
+    { label: 'Hình thức hợp đồng', value: 'contractForm' },
+    { label: 'Root HDPL', value: 'hdPlRoot' },
+    { label: 'Tên hợp đồng', value: 'contractName' },
+    { label: 'Mã đối tác', value: 'partnerCode' },
+    { label: 'Tên đối tác', value: 'partnerName' },
+    { label: 'Địa chỉ đối tác', value: 'partnerAddress' },
+    { label: 'Thẩm quyền đàm phán', value: 'negotiateCompetence' },
+    { label: 'Thẩm quyền', value: 'competence' },
+    { label: 'Nhân viên ký', value: 'employeeSigned' },
+    { label: 'Phòng ban ký', value: 'signedDepartmentName' },
+    { label: 'Phòng ban ngân sách', value: 'budgetDepartmentName' },
+    { label: 'Phòng ban thực hiện', value: 'proceedDepartmentName' },
+    { label: 'Phòng ban thanh toán', value: 'paidDepartmentName' },
+    { label: 'ID nhân viên', value: 'employeeId' },
+    { label: 'Tên nhân viên', value: 'employeeName' },
+    { label: 'Loại thanh toán', value: 'paymentType' },
+    { label: 'Mã ngân sách', value: 'budgetCode' },
+    { label: 'Mã lĩnh vực', value: 'fieldCode2' },
+    { label: 'Số ngày đến hạn', value: 'dueDateNumber' },
+    { label: 'Ngày bàn giao', value: 'handoverDate', type: Constant.DATE, format: Constant.DATE_FORMAT },
+    { label: 'Danh sách tài liệu (JSON)', value: 'documentListJson' },
+
+    // Thông tin khách sạn
+    { label: 'ID Khách sạn', value: 'hotel.id' },
+    { label: 'Mã khách sạn', value: 'hotel.hotelCode' },
+    { label: 'Tên khách sạn', value: 'hotel.hotelName' },
+    { label: 'Tên đầy đủ khách sạn', value: 'hotel.fullName' },
+    { label: 'Email khách sạn', value: 'hotel.email' },
+    { label: 'SĐT khách sạn', value: 'hotel.phone' },
+    { label: 'Ghi chú khách sạn', value: 'hotel.notes' },
+    { label: 'Địa chỉ khách sạn', value: 'hotel.address' },
+    { label: 'Mã thị trường', value: 'hotel.marketCode' },
+    { label: 'Ngày tạo khách sạn', value: 'hotel.createdDate', type: Constant.DATE, format: Constant.DATE_FORMAT },
+    { label: 'Ngày cập nhật khách sạn', value: 'hotel.updatedDate', type: Constant.DATE, format: Constant.DATE_FORMAT },
+
+    // Thông tin thị trường trong khách sạn
+    { label: 'Mã thị trường khách sạn', value: 'hotel.market.marketCode' },
+    { label: 'Tên thị trường khách sạn', value: 'hotel.market.marketName' },
+    { label: 'Loại thị trường', value: 'hotel.market.marketType' },
+    { label: 'Trạng thái sử dụng thị trường', value: 'hotel.market.statusUsage' },
+    { label: 'Múi giờ thị trường', value: 'hotel.market.timezone' },
+    { label: 'Quốc gia thị trường', value: 'hotel.market.nation.vniName' },
+
+    // Thông tin phương tiện
+    { label: 'ID Phương tiện', value: 'vehicle.id' },
+    { label: 'Mã phương tiện', value: 'vehicle.code' },
+    { label: 'Tên phương tiện', value: 'vehicle.name' },
+    { label: 'Tên đầy đủ phương tiện', value: 'vehicle.fullName' },
+    { label: 'Email phương tiện', value: 'vehicle.email' },
+    { label: 'SĐT phương tiện', value: 'vehicle.phone' },
+    { label: 'Ghi chú phương tiện', value: 'vehicle.notes' },
+    { label: 'Địa chỉ phương tiện', value: 'vehicle.address' },
+    { label: 'Mã thị trường phương tiện', value: 'vehicle.marketCode' },
+    { label: 'Ngày tạo phương tiện', value: 'vehicle.createdDate', type: Constant.DATE, format: Constant.DATE_FORMAT },
+    { label: 'Ngày cập nhật phương tiện', value: 'vehicle.updatedDate', type: Constant.DATE, format: Constant.DATE_FORMAT },
+
+    // Thông tin tài khoản ngân hàng
+    { label: 'Số tài khoản ngân hàng B', value: 'bankAccountNoB' },
+    { label: 'Tên người liên hệ ngân hàng', value: 'peopleName' },
+    { label: 'Tên ngân hàng B', value: 'bankNameB' },
+    { label: 'Địa chỉ ngân hàng B', value: 'bankAddressB' },
+    { label: 'Thành phố B', value: 'cityB' },
+    { label: 'Tên chi nhánh ngân hàng B', value: 'bankBranchNameB' },
+    { label: 'Mã ngân hàng địa phương', value: 'bankLocalCode' },
+    { label: 'Mã SWIFT B', value: 'swiftCodeB' },
+    { label: 'IBAN', value: 'iBan' },
+    { label: 'Phí ngân hàng', value: 'bankCharge' },
+    { label: 'Phí ngân hàng 1', value: 'bankCharge1' },
+    { label: 'Số tài khoản ngân hàng B1', value: 'bankAccountNoB1' },
+    { label: 'Tên ngân hàng B1', value: 'bankNameB1' },
+    { label: 'Mã SWIFT B1', value: 'swiftCodeB1' },
+
+    // Trạng thái
+    { label: 'Là khách sạn', value: 'isHotel', type: 'boolean' },
+    { label: 'Là phương tiện', value: 'isVehicle', type: 'boolean' }
+  ];*/
   @Input() contractId: any;
 
   showPopupAnnex = false;

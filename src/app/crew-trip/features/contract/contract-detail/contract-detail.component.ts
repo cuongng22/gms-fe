@@ -9,7 +9,7 @@ import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatCheckboxModule} from "@angular/material/checkbox";
 import {UsersService} from "src/app/crew-trip/core/services/users-service";
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
+import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
@@ -26,12 +26,44 @@ import {
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 import {FunctionsService} from "src/app/crew-trip/core/services/functions-service";
+import {MatRadioModule} from "@angular/material/radio";
 
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, NgxEditorModule, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, FormsModule, MatExpansionPanelDescription],
+  imports: [DataTransformPipe,
+    FormsModule,
+    InputSizeComponent,
+    MatAccordion,
+    MatButtonModule,
+    MatCardModule,
+    MatCheckboxModule,
+    MatError,
+    MatExpansionPanel,
+    MatExpansionPanelDescription,
+    MatExpansionPanelHeader,
+    MatExpansionPanelTitle,
+    MatFormField,
+    MatInput,
+    MatLabel,
+    MatMenuModule,
+    MatOption,
+    MatPaginatorModule,
+    MatPrefix,
+    MatRadioModule,
+    MatSelect,
+    MatSuffix,
+    MatTab,
+    MatTabGroup,
+    MatTableModule,
+    NgClass,
+    NgIf,
+    NgxEditorModule,
+    ReactiveFormsModule,
+    RouterLink,
+    TitleCasePipe,
+    MatHint],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
 })
@@ -61,18 +93,24 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   selectAllChecked: boolean = false;
   selectAllIndeterminate: boolean = false;
   isSticky: boolean = false;
+  expandList = new Set<string>(['tab1', 'tab2', 'tab3', 'tab4', 'tab5']);
 
   constructor() {
     super();
+    this.formGroupDetail = this.fb.group({
+      id: [],
+      tempp: [],
+    });
   }
 
   override async ngOnInit() {
     try {
       window.scrollTo(0, 0)
       await this.spinner.show();
-      await Promise.all([]);
-      this.displayedColumnsUser = [...this._displayedColumnsUser.map(s => s.value)];
-      this.displayedColumnsFunction = ['select', ...this._displayedColumnsFunction.map(s => s.value)];
+      await Promise.all([
+        this.detail(this.id)
+      ]);
+
     } catch (e) {
       console.log(e)
     } finally {

@@ -23,7 +23,7 @@
     <mat-card-content>
       <form [formGroup]="formGroupSearch" autocomplete="off">
         <div class="row">
-          <div class="col-sm-3" sizeInput='md'>
+          <div class="col-3" sizeInput='md'>
             <mat-form-field>
               <mat-label i18n>Keyword</mat-label>
               <input formControlName="s" matInput>
@@ -32,7 +32,7 @@
               </i>
             </mat-form-field>
           </div>
-          <div class="col-sm-3" sizeInput='md'>
+          <div class="col-3" sizeInput='md'>
             <mat-form-field>
               <mat-label i18n>All Status</mat-label>
               <mat-select formControlName="a">
@@ -42,7 +42,7 @@
               </mat-select>
             </mat-form-field>
           </div>
-          <div class="col-sm-3" sizeInput='md'>
+          <div class="col-3" sizeInput='md'>
             <mat-card-header class="mb-0">
               <mat-card-title clas>
                 <button (click)="search()" class="search-btn" i18n mat-button>

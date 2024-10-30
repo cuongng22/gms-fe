@@ -22,159 +22,476 @@
 
 
 </div>-->
-
+<mat-card class="mb-10 border-radius d-block bg-white border-0">
+  <mat-card-content>
+    <form [formGroup]="formGroupDetail" autocomplete="off">
+      <div class="row">
+        <div class="col-9" sizeInput='sm'>
+          <label class="main-label fw-medium text-black pr-15" i18n>
+            Service type *
+          </label>
+          <mat-radio-group>
+            <mat-radio-button i18n value="1">
+              Hotel
+            </mat-radio-button>
+            <mat-radio-button i18n value="2">
+              Car rental
+            </mat-radio-button>
+            <mat-radio-button i18n value="3">
+              Accommodation
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+        <div class="col-3" sizeInput='sm'>
+          <mat-form-field>
+            <mat-label i18n>Contract type</mat-label>
+            <mat-select formControlName="">
+              <mat-option i18n></mat-option>
+              <mat-option i18n value="1">Thuê ướt</mat-option>
+              <mat-option i18n value="0">Charter</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
 <mat-accordion multi>
-  <mat-expansion-panel [expanded]="true">
-    <mat-expansion-panel-header i18n>1.General information</mat-expansion-panel-header>
+  <mat-expansion-panel [expanded]="expandList.has('tab1')">
+    <mat-expansion-panel-header i18n>1. General information</mat-expansion-panel-header>
     <mat-panel-description>
-      <table>
-        <thead>
-        <tr>
-          <th class="fw-medium" scope="col">
-            Description
-          </th>
-          <th class="fw-medium text-end" scope="col">
-            Price
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td class="text-body">
-            Grand Total :
-          </td>
-          <td class="text-body text-end">
-            $1,105.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Discount :
-          </td>
-          <td class="text-body text-end">
-            -$105.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Tax :
-          </td>
-          <td class="text-body text-end">
-            $75.00
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-medium">
-            Subtotal :
-          </td>
-          <td class="text-body text-end">
-            $1,000.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Shipping Charge :
-          </td>
-          <td class="text-body text-end">
-            $80.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Coupon Charge :
-          </td>
-          <td class="text-body text-end">
-            $20.00
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-medium">
-            Total :
-          </td>
-          <td class="text-body text-end">
-            $900.00
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
+        <!--        dong1-->
+        <div class="row">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Contract number</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Contract No</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <div class="row">
+              <div class="col-6" sizeInput='sm'>
+                <mat-form-field>
+                  <mat-label i18n>Currency</mat-label>
+                  <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+                  @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+                  <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="col-6" sizeInput='sm'>
+                <mat-form-field>
+                  <mat-label i18n>Exchange rate</mat-label>
+                  <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+                  @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+                  <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+        <!--        dong2-->
+        <div class="row mt-20">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Sign date</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <div class="row">
+              <div class="col-6" sizeInput='sm'>
+                <mat-form-field>
+                  <mat-label i18n>Effective date</mat-label>
+                  <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+                  @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+                  <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="col-6" sizeInput='sm'>
+                <mat-form-field>
+                  <mat-label i18n>Expiry date</mat-label>
+                  <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+                  @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+                  <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Contract type</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong3-->
+        <div class="row mt-20">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Contract form</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Original Contract No</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Contract name</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong4-->
+        <div class="row mt-20">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Supplier ID</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Supplier name</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Supplier address</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong5-->
+        <div class="row mt-20">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Contract authority</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Signatory authority</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Representative</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong6-->
+        <div class="row mt-20">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Sign department</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Budget Management Unit</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Proceed department</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong7-->
+        <div class="row mt-20">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Payment unit</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Method Payments</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Employee</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong8-->
+        <div class="row mt-20">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Contract authority</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Field</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <div class="row">
+              <div class="col-6" sizeInput='sm'>
+                <mat-form-field>
+                  <mat-label i18n>Hạn thanh toán</mat-label>
+                  <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+                  @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+                  <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="col-6" sizeInput='sm'>
+                <mat-form-field>
+                  <mat-label i18n>Ngày thanh lý</mat-label>
+                  <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+                  @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+                  <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
     </mat-panel-description>
   </mat-expansion-panel>
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel [expanded]="expandList.has('tab2')">
     <mat-expansion-panel-header i18n>2. Remittance Information</mat-expansion-panel-header>
     <mat-panel-description>
-      <table>
-        <thead>
-        <tr>
-          <th class="fw-medium" scope="col">
-            Description
-          </th>
-          <th class="fw-medium text-end" scope="col">
-            Price
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td class="text-body">
-            Grand Total :
-          </td>
-          <td class="text-body text-end">
-            $1,105.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Discount :
-          </td>
-          <td class="text-body text-end">
-            -$105.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Tax :
-          </td>
-          <td class="text-body text-end">
-            $75.00
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-medium">
-            Subtotal :
-          </td>
-          <td class="text-body text-end">
-            $1,000.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Shipping Charge :
-          </td>
-          <td class="text-body text-end">
-            $80.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Coupon Charge :
-          </td>
-          <td class="text-body text-end">
-            $20.00
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-medium">
-            Total :
-          </td>
-          <td class="text-body text-end">
-            $900.00
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
+        <!--        dong1-->
+        <div class="row">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Beneficiary</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Transfer to</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Bank Name</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong2-->
+        <div class="row mt-20">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Bank Address</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Province/City</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Branch name</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong3-->
+        <div class="row mt-20">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>IBAN</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Swift code</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Bank code#Local code</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong4-->
+        <div class="row mt-20">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Bank domestic Charge</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Bank aboard Charge</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong5-->
+        <div class="row mt-20">
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Transfer middle to</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>At intermediary bank name</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Swift code intermediary bank</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
     </mat-panel-description>
   </mat-expansion-panel>
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel [expanded]="expandList.has('tab3')">
     <mat-expansion-panel-header i18n>3. Attached Document Information</mat-expansion-panel-header>
     <mat-panel-description>
       <table>
@@ -249,82 +566,127 @@
       </table>
     </mat-panel-description>
   </mat-expansion-panel>
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel [expanded]="expandList.has('tab4')">
     <mat-expansion-panel-header i18n>4. Additional Information</mat-expansion-panel-header>
     <mat-panel-description>
-      <table>
-        <thead>
-        <tr>
-          <th class="fw-medium" scope="col">
-            Description
-          </th>
-          <th class="fw-medium text-end" scope="col">
-            Price
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td class="text-body">
-            Grand Total :
-          </td>
-          <td class="text-body text-end">
-            $1,105.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Discount :
-          </td>
-          <td class="text-body text-end">
-            -$105.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Tax :
-          </td>
-          <td class="text-body text-end">
-            $75.00
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-medium">
-            Subtotal :
-          </td>
-          <td class="text-body text-end">
-            $1,000.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Shipping Charge :
-          </td>
-          <td class="text-body text-end">
-            $80.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Coupon Charge :
-          </td>
-          <td class="text-body text-end">
-            $20.00
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-medium">
-            Total :
-          </td>
-          <td class="text-body text-end">
-            $900.00
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
+        <!--        dong1-->
+        <div class="row">
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Market Code</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Market Name</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Country</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Phân loại</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong2-->
+        <div class="row mt-20">
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Nhóm đường bay</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Trạng thái thị trường</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Supplier Name</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Supplier Phone</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong3-->
+        <div class="row mt-20">
+          <div class="col-6" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Supplier Booking Email</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-6" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Vehicle Type</mat-label>
+              <input formControlName="tempp" i18n-placeholder matInput placeholder="Input Currency Code" required>
+              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
+              <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong4-->
+        <div class="row mt-20">
+          <div class="col-12" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Notes</mat-label>
+              <textarea formControlName="tempp" i18n-placeholder matInput
+                        placeholder="Input Notes"></textarea>
+              <mat-hint align="end">{{formGroupDetail.value.tempp?.length}} / 500</mat-hint>
+              @if (!!formGroupDetail.controls['tempp'].hasError('maxlength')) {
+              <mat-error><span i18n>Notes</span><span i18n> too long</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
     </mat-panel-description>
   </mat-expansion-panel>
-  <mat-expansion-panel [expanded]="true">
+  <mat-expansion-panel [expanded]="expandList.has('tab5')">
     <mat-expansion-panel-header i18n>5. Unit Price Information</mat-expansion-panel-header>
     <mat-panel-description>
       <table>
