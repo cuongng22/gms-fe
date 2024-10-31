@@ -1,4 +1,4 @@
-import {Component, EventEmitter, HostListener, inject, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {RouterLink} from "@angular/router";
 import {NgClass, NgIf, TitleCasePipe} from "@angular/common";
 import {MatCardModule} from "@angular/material/card";
@@ -7,26 +7,26 @@ import {MatMenuModule} from "@angular/material/menu";
 import {MatTableModule} from "@angular/material/table";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatCheckboxModule} from "@angular/material/checkbox";
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatOption, MatSelect} from "@angular/material/select";
 import {MatInput} from "@angular/material/input";
 import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
-import {RolesService} from "src/app/crew-trip/core/services/roles-service";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {NgxEditorModule} from "ngx-editor";
 import {
   MatAccordion,
-  MatExpansionPanel, MatExpansionPanelDescription,
+  MatExpansionPanel,
+  MatExpansionPanelDescription,
   MatExpansionPanelHeader,
   MatExpansionPanelTitle
 } from "@angular/material/expansion";
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {FunctionsService} from "src/app/crew-trip/core/services/functions-service";
 import {MatRadioModule} from "@angular/material/radio";
+import {ContractService} from "src/app/crew-trip/core/services/contract-service";
+import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from "@angular/material/datepicker";
+import {MatNativeDateModule} from "@angular/material/core";
 
 
 @Component({
@@ -63,14 +63,18 @@ import {MatRadioModule} from "@angular/material/radio";
     ReactiveFormsModule,
     RouterLink,
     TitleCasePipe,
-    MatHint],
+    MatHint,
+    MatDatepickerModule,
+    MatDatepicker,
+    MatDatepickerToggle,
+    MatNativeDateModule ],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
 })
 
 
 export class ContractDetailComponent extends CommonComponent implements OnInit {
-  override baseService = inject(RolesService);
+  override baseService = inject(ContractService);
   fb = inject(FormBuilder);
 
   //variable
@@ -98,8 +102,56 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   constructor() {
     super();
     this.formGroupDetail = this.fb.group({
+      tempp:[],
       id: [],
-      tempp: [],
+      contractCode: [],
+      contractNo: [],
+      currency: [],
+      currencyRate: [],
+      signedDate: [],
+      effectiveDate: [],
+      expiryDate: [],
+      contractType: [],
+      contractForm: [],
+      hdPlRoot: [],
+      contractName: [],
+      partnerCode: [],
+      partnerName: [],
+      partnerAddress: [],
+      negotiateCompetence: [],
+      competence: [],
+      employeeSigned: [],
+      signedDepartmentName: [],
+      budgetDepartmentName: [],
+      proceedDepartmentName: [],
+      paidDepartmentName: [],
+      employeeId: [],
+      employeeName: [],
+      paymentType: [],
+      budgetCode: [],
+      fieldCode2: [],
+      dueDateNumber: [],
+      handoverDate: [],
+      documentsList: [],
+      bankAccountNoB: [],
+      peopleName: [],
+      bankNameB: [],
+      bankAddressB: [],
+      cityB: [],
+      bankBranchNameB: [],
+      bankLocalCode: [],
+      swiftCodeB: [],
+      bankCharge: [],
+      bankCharge1: [],
+      bankAccountNoB1: [],
+      bankNameB1: [],
+      swiftCodeB1: [],
+      isHotel: [],
+      isVehicle: [],
+      hotel: [],
+      vehicle: [],
+      priceUnitInfo: [],
+      iban: [],
     });
   }
 
@@ -108,7 +160,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       window.scrollTo(0, 0)
       await this.spinner.show();
       await Promise.all([
-        this.detail(this.id)
+        this.detail(2)
       ]);
 
     } catch (e) {
