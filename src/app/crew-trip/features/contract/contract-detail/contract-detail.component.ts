@@ -107,7 +107,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       contractCode: [],
       contractNo: [],
       currency: [],
-      currencyRate: [],
+      exchangeRate: [],
       signedDate: [],
       effectiveDate: [],
       expiryDate: [],
