@@ -106,6 +106,37 @@ button.btn {
     }
 }
 
+.success-btn {
+    height: auto !important;
+    min-width: 100px !important;//auto !important;
+    font-weight: 500 !important;
+    padding: 8px 13px !important;
+    border-radius: 7px !important;
+    display: inline-block !important;
+    color: var(--whiteColor) !important;
+    border: 1px solid #28a745 !important;
+    background-color: #28a745 !important;
+
+    &:hover {
+        transition: 0.3s !important;
+        color: #28a745 !important;
+        border: 1px solid #28a745 !important;
+        background-color: var(--lightColor) !important;
+    }
+
+    .mdc-button__label {
+        display: inline-block !important;
+        padding-left: 22px !important;
+
+        i {
+            top: 50% !important;
+            left: -4px !important;
+            font-size: 22px !important;
+            position: absolute !important;
+            transform: translateY(-50%) !important;
+        }
+    }
+}
 
 .min-with-100 {
     min-width: 100px !important;
@@ -134,7 +165,6 @@ button.btn {
     color: rgb(255, 64, 35)    ;
     border: 1px solid rgb(255, 64, 35)
 }
-
 
 
 // Heading
@@ -2373,6 +2403,9 @@ apx-chart {
 }
 
 // Breadcrumb
+.breadcrumb-item + .breadcrumb-item::before{
+    padding-right: 0 !important;
+}
 .breadcrumb-card {
     .breadcrumb {
         .breadcrumb-item {
@@ -2424,6 +2457,7 @@ apx-chart {
             &:first-child {
                 margin-left: 0;
             }
+            
 
             &:last-child {
                 margin-right: 0;

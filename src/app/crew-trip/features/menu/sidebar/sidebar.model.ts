@@ -67,7 +67,17 @@ export const menu: Menu[] = [
                 path: 'plan/production/five-year-plan', title: $localize`:@@fiveYearPlan:5-Year Plans`, icon: 'ri-folder-chart-line'
               },
             ]
-          }]
+          },
+          {
+            title: $localize`:@@etimatePlan:Estimate/Plan`,
+            rootPath : '',
+            subMenu: [
+              {
+                path: 'plan/estimate-plan/budget-procurement', title: $localize`:@@budgetProcurementPlan:Budget & Procurement plan`, icon: 'ri-shopping-cart-2-line'
+              }
+            ]
+          }
+        ]
       }]
   },
     {

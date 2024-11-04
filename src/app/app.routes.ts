@@ -28,6 +28,9 @@ import { FiveYearPlanComponent } from "src/app/crew-trip/features/plan/productio
 import { EstAnnualProductionComponent } from "src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.component";
 import { AnnualProductionComponent } from "src/app/crew-trip/features/plan/production/annual-production/annual-production.component";
 import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.component';
+import { BudgetProcurementComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement.component';
+import { BudgetProcurementListComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-list/budget-procurement-list.component';
+import { BudgetProcurementSummaryComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary.component';
 
 
 export const routes: Routes = [
@@ -62,6 +65,14 @@ export const routes: Routes = [
           { path: 'production/five-year-plan', component: FiveYearPlanComponent },
           { path: 'production/est-annual-production', component: EstAnnualProductionComponent },
           { path: 'production/planned', component: AnnualProductionComponent },
+          {
+            path: 'estimate-plan/budget-procurement', component: BudgetProcurementComponent,
+            children: [
+              { path: '', component: BudgetProcurementListComponent },
+              { path: 'summary', component: BudgetProcurementSummaryComponent },
+              // { path: 'detail/:id', component: FlightMarketDetailComponent }
+            ]
+          },
         ]
       },
       {

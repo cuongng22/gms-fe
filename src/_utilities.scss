@@ -422,8 +422,15 @@
 .bg-primary-500 {
     background-color: var(--primaryColor) !important;
 }
+.bg-success-200 {
+    background-color: #bbeea6 !important;//#93d678
+}
 
 // Text Color
+.text-disable{
+    color: #a9a9a9;
+}
+
 .text-white {
     color: var(--whiteColor) !important;
 }
