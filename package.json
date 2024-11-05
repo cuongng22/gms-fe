@@ -49,6 +49,7 @@
     "ngx-owl-carousel-o": "^18.0.0",
     "ngx-scrollbar": "^15.0.1",
     "ngx-spinner": "^17.0.0",
+    "ngxtension": "^4.1.0",
     "remixicon": "^4.3.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",

@@ -1,0 +1,28 @@
+<form [formGroup]="formGroupDetail" autocomplete="off">
+    <div class="row">
+        <mat-checkbox class="mb-1" i18n="@@budgetPlan">Budget Plan</mat-checkbox>
+    </div>
+    <div class="row">
+        <div class="col" sizeInput="sm">
+            <mat-form-field class="mb-1">
+                <mat-label i18n="@@category">Category</mat-label>
+                <mat-select formControlName="category">
+                    <mat-option value="International" i18n="@@international">International</mat-option>
+                    <mat-option value="Domestic" i18n="@@domestic">Domestic</mat-option>
+                </mat-select>
+            </mat-form-field>
+        </div>
+        <div class="col" sizeInput="sm">
+            <mat-form-field class="mb-1">
+                <mat-label i18n="@@airport">Airport</mat-label>
+                <input #airport (input)="filterAirport()" type="text" matInput formControlName="airport"
+                    [matAutocomplete]="airportComplete">
+                <mat-autocomplete autoActiveFirstOption requireSelection #airportComplete="matAutocomplete">
+                    @for (option of filteredOptionsAirport(); track option) {
+                    <mat-option [value]="option">{{option}}</mat-option>
+                    }
+                </mat-autocomplete>
+            </mat-form-field>
+        </div>
+    </div>
+</form>

@@ -8,8 +8,8 @@
             </i>
             Back
         </button>
-        <h5 class="mb-0" i18n="@@planSummary">
-            Plan summary
+        <h5 class="mb-0" i18n="@@planForAirport">
+            Plan for Airport ...
         </h5>
     </div>
 
@@ -26,25 +26,27 @@
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@summaryPlan">
             Plan Summary
         </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@planDetails">
+            Plan Details
+        </li>
     </ol>
 </div>
 
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="mb-10">
+        <mat-card-title>
+            <h5 i18n="@@generalInformation"><span>I. </span>General Information</h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button color="primary" type="button" class="add-btn">
+                <i class="material-symbols-outlined">
+                    save
+                </i>
+                <span i18n="@@save">Save</span>
+            </button>
+        </mat-card-subtitle>
+    </mat-card-header>
     <mat-card-content>
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-            <mat-tab label="All" i18n="@@all">
-                <app-budget-procurement-summary-search categoryType="ALL"
-                    (search)="searchCategoryAll($event)"></app-budget-procurement-summary-search>
-                    <app-budget-procurement-summary-list></app-budget-procurement-summary-list>
-            </mat-tab>
-            <mat-tab label="International" i18n="@@international">
-                <app-budget-procurement-summary-search
-                    (search)="searchCategoryInternational($event)"></app-budget-procurement-summary-search>
-            </mat-tab>
-            <mat-tab label="Domestic" i18n="@@domestic">
-                <app-budget-procurement-summary-search
-                    (search)="searchCategoryDomestic($event)"></app-budget-procurement-summary-search>
-            </mat-tab>
-        </mat-tab-group>
+        <app-budget-procurement-general></app-budget-procurement-general>
     </mat-card-content>
 </mat-card>

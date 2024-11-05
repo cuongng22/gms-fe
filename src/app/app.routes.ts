@@ -31,6 +31,7 @@ import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.c
 import { BudgetProcurementComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement.component';
 import { BudgetProcurementListComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-list/budget-procurement-list.component';
 import { BudgetProcurementSummaryComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary.component';
+import { BudgetProcurementSummaryDetailComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary-detail/budget-procurement-summary-detail.component';
 
 
 export const routes: Routes = [
@@ -70,7 +71,7 @@ export const routes: Routes = [
             children: [
               { path: '', component: BudgetProcurementListComponent },
               { path: 'summary', component: BudgetProcurementSummaryComponent },
-              // { path: 'detail/:id', component: FlightMarketDetailComponent }
+              { path: 'detail/:id', component: BudgetProcurementSummaryDetailComponent }
             ]
           },
         ]

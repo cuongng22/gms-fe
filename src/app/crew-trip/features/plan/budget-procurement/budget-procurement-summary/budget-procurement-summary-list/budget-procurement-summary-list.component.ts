@@ -202,44 +202,4 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
     }
     return this.selection.hasValue() && !this.isAllSelected();
   }
-
-  // toggleAllHotelRows() {
-  //   if (this.isAllHotelSelected()) {
-  //     this.selection.deselect(...this.dataSource.data.filter((row: any) => row.serviceType === this.SERVICE_TYPE_HOTEL));
-  //     return;
-  //   }
-  //   this.selection.select(...this.dataSource.data.filter((row: any) => row.serviceType === this.SERVICE_TYPE_HOTEL));
-  // }
-
-  // isAllHotelSelected() {
-  //   const numSelected = this.selection.selected.filter((row: any) => row.serviceType === this.SERVICE_TYPE_HOTEL).length;
-  //   const numRows = this.dataSource.data.filter((row: any) => row.serviceType === this.SERVICE_TYPE_HOTEL).length;
-  //   return numSelected === numRows;
-  // }
-  // indeterminateHotelSelection() {
-  //   const numSelected = this.selection.selected.filter((row: any) => row.serviceType === this.SERVICE_TYPE_HOTEL).length;
-  //   const numRows = this.dataSource.data.filter((row: any) => row.serviceType === this.SERVICE_TYPE_HOTEL).length;
-  //   return numSelected > 0 && numSelected < numRows;
-  // }
-
-  // toggleAllCarRentalRows() {
-  //   if (this.isAllCarRentalSelected()) {
-  //     this.selection.deselect(...this.dataSource.data.filter((row: any) => row.serviceType === this.SERVICE_TYPE_CAR_RENTAL));
-  //     return;
-  //   }
-  //   this.selection.select(...this.dataSource.data.filter((row: any) => row.serviceType === this.SERVICE_TYPE_CAR_RENTAL));
-  // }
-
-  // isAllCarRentalSelected() {
-  //   const numSelected = this.selection.selected.filter((row: any) => row.serviceType === this.SERVICE_TYPE_CAR_RENTAL).length;
-  //   const numRows = this.dataSource.data.filter((row: any) => row.serviceType === this.SERVICE_TYPE_CAR_RENTAL).length;
-  //   return numSelected === numRows;
-  // }
-
-  // indeterminateCarRentalSelection() {
-  //   const numSelected = this.selection.selected.filter((row: any) => row.serviceType === this.SERVICE_TYPE_CAR_RENTAL).length;
-  //   const numRows = this.dataSource.data.filter((row: any) => row.serviceType === this.SERVICE_TYPE_CAR_RENTAL).length;
-  //   return numSelected > 0 && numSelected < numRows;
-  // }
-
 }
