@@ -102,9 +102,14 @@
             </th>
             <td *matCellDef="let element;let i = dataIndex" mat-cell>
               <div class="action-buttons d-flex align-items-center justify-content-end">
+                <a style="color:red" mat-button type="button" [matMenuTriggerFor]="listAnnex">
+                  <i class="material-symbols-outlined" i18n-title title="Delete">
+                    description
+                  </i>
+                </a>
                 <a (click)="nextStep(i)" mat-button type="button">
                   <i class="material-symbols-outlined" i18n-title title="Detail">
-                    link
+                    visibility
                   </i>
                 </a>
                 <a (click)="showDialogDetail(i,'index')" mat-button type="button">
@@ -112,16 +117,12 @@
                     edit
                   </i>
                 </a>
-                <a (click)="showConfirmDelete(element.id)" mat-button type="button">
-                  <i class="material-symbols-outlined" i18n-title title="Delete">
-                    delete
-                  </i>
-                </a>
-                <a mat-button type="button" [matMenuTriggerFor]="listAnnex">
-                  <i class="material-symbols-outlined" i18n-title title="Delete">
-                    description
-                  </i>
-                </a>
+<!--                <a (click)="showConfirmDelete(element.id)" mat-button type="button">-->
+<!--                  <i class="material-symbols-outlined" i18n-title title="Delete">-->
+<!--                    delete-->
+<!--                  </i>-->
+<!--                </a>-->
+
                 <mat-menu #listAnnex="matMenu" xPosition="before">
                   <div class="basic-table table-responsive">
                     <table>

@@ -38,13 +38,20 @@ export class ContractComponent extends CommonComponent implements OnInit {
   fb = inject(FormBuilder);
 
   //variable
-  step = 2;
+  step = 1;
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Role Name`, value: "roleName"},
-    {label: $localize`Function`, value: "functionCount"},
-    {label: $localize`Account`, value: "userCount"},
-    {label: $localize`Status`, value: "isActiveLabel"},
+    {label: $localize`bizDocId`, value: "bizDocId"},
+    {label: $localize`contractCode`, value: "contractCode"},
+    {label: $localize`contractNo`, value: "contractNo"},
+    {label: $localize`contractName`, value: "contractName"},
+    {label: $localize`marketCode`, value: "marketCode"},
+    {label: $localize`partnerName`, value: "partnerName"},
+    {label: $localize`serviceObject`, value: "serviceObject"},
+    {label: $localize`signedDate`, value: "signedDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`effectiveDate`, value: "effectiveDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`expiryDate`, value: "expiryDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    //{label: $localize`appendixList`, value: "appendixList"},
   ];
   /*_displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     { label: 'ID', value: 'id' },
@@ -138,19 +145,15 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   constructor() {
     super();
-    this.formGroupSearch = this.fb.group({
-
-    });
-    this.formGroupDetail = this.fb.group({
-
-    });
+    this.formGroupSearch = this.fb.group({});
+    this.formGroupDetail = this.fb.group({});
     this.formGroupSearchInit = {...this.formGroupSearch.value}
     this.formGroupDetailInit = {...this.formGroupDetail.value}
   }
 
   override async ngOnInit() {
     await Promise.all([
-      // this.search(),
+      this.search(),
     ]).then(() => {
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
@@ -166,7 +169,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
       this.step = 1;
   }
 
-  async showAnnex(id:any){
+  async showAnnex(id: any) {
     /**
      * todo: api chi tiet hop dong
      * gan vao formDetail
