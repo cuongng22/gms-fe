@@ -92,7 +92,7 @@ export class CrewsComponent extends CommonComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Dialog result: ', result);
+      console.log('Dialog result:', result);
       if (result) {
         this.search();
       }
