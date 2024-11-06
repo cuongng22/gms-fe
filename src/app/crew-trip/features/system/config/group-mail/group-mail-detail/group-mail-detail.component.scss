@@ -3,3 +3,8 @@
   font-size: 12px;
   margin-top: 5px;
 }
+.readonly-input {
+  background-color: #f0f0f0; /* Light gray to indicate read-only */
+  color: #757575; /* Slightly dim text */
+  border: 1px solid #ccc; /* Subtle border */
+}

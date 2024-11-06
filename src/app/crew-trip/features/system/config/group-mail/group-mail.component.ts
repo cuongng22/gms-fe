@@ -2,20 +2,9 @@ import {Component, inject, OnInit} from '@angular/core';
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 import {MatButton, MatButtonModule} from "@angular/material/button";
 import {
-  MatCard,
-  MatCardContent,
-  MatCardHeader,
   MatCardModule,
-  MatCardSubtitle,
-  MatCardTitle
 } from "@angular/material/card";
 import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatHeaderCell,
-  MatHeaderRow,
-  MatHeaderRowDef,
   MatRow, MatRowDef, MatTable, MatTableModule
 } from "@angular/material/table";
 import {MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
@@ -62,7 +51,7 @@ export class GroupMailComponent extends CommonComponent implements OnInit {
     { label: $localize`:@@name:Name`, value: 'groupName' },
     { label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
     { label: $localize`:@@note:Description`, value: 'notes' },
-    { label: $localize`:@@status:Status`, value: 'status' }
+    // { label: $localize`:@@status:Status`, value: 'status' }
   ];
 
   constructor(public dialog: MatDialog) {
