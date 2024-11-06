@@ -28,6 +28,7 @@ import { FiveYearPlanComponent } from "src/app/crew-trip/features/plan/productio
 import { EstAnnualProductionComponent } from "src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.component";
 import { AnnualProductionComponent } from "src/app/crew-trip/features/plan/production/annual-production/annual-production.component";
 import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.component';
+import { InforPlaneComponent } from './crew-trip/features/system/information-plane/infor-plane/infor-plane.component';
 
 
 export const routes: Routes = [
@@ -53,7 +54,10 @@ export const routes: Routes = [
       {
         path: 'config', children: [
           { path: 'group-mail', component: GroupMailComponent },
+          { path: 'information-plane', component: InforPlaneComponent },
         ],
+        
+        
       },
       {
         path: 'plan', children: [
