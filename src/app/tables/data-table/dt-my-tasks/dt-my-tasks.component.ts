@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -17,7 +17,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
     templateUrl: './dt-my-tasks.component.html',
     styleUrl: './dt-my-tasks.component.scss'
 })
-export class DtMyTasksComponent {
+export class DtMyTasksComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['select', 'projectName', 'deadline', 'status'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

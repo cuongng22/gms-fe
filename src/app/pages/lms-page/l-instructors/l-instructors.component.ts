@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,7 +18,7 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
     templateUrl: './l-instructors.component.html',
     styleUrl: './l-instructors.component.scss'
 })
-export class LInstructorsComponent {
+export class LInstructorsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'user', 'courses', 'totalEarnings', 'email', 'ratings', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

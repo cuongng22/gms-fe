@@ -1,10 +1,10 @@
 import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from "@angular/common";
-import {MatCardModule} from "@angular/material/card";
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
+import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {MatCardModule} from '@angular/material/card';
+import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
@@ -16,9 +16,9 @@ import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.comp
 import {NoDataRowOutlet} from '@angular/cdk/table';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {Constant, MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
-import {FiveYearPlanService} from "src/app/crew-trip/core/services/five-year-plan.service";
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
+import {FiveYearPlanService} from 'src/app/crew-trip/core/services/five-year-plan.service';
 
 
 @Component({
@@ -46,16 +46,16 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
     rowspan?: string,
     colspan?: string
   }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Year`, value: 'year', rowspan: '2'},
-    {label: $localize`Total International`, value: 'totalInternational', type: Constant.NUMBER},
-    {label: $localize`Rate InternationalLast`, value: 'rateInternationalLast', type: Constant.NUMBER},
-    {label: $localize`Total Domestic`, value: 'totalDomestic', type: Constant.NUMBER},
-    {label: $localize`Rate DomesticLast`, value: 'rateDomesticLast', type: Constant.NUMBER},
-    {label: $localize`Total`, value: 'total', type: Constant.NUMBER},
-    {label: $localize`Rate Total Last`, value: 'rateTotalLast', type: Constant.NUMBER},
-    {label: $localize`Notes`, value: 'notes', rowspan: '2'},
-    {label: $localize`Active`, value: "activeLabel", rowspan: '2'},
-  ];
+      {label: $localize`Year`, value: 'year', rowspan: '2'},
+      {label: $localize`Total International`, value: 'totalInternational', type: Constant.NUMBER},
+      {label: $localize`Rate InternationalLast`, value: 'rateInternationalLast', type: Constant.NUMBER},
+      {label: $localize`Total Domestic`, value: 'totalDomestic', type: Constant.NUMBER},
+      {label: $localize`Rate DomesticLast`, value: 'rateDomesticLast', type: Constant.NUMBER},
+      {label: $localize`Total`, value: 'total', type: Constant.NUMBER},
+      {label: $localize`Rate Total Last`, value: 'rateTotalLast', type: Constant.NUMBER},
+      {label: $localize`Notes`, value: 'notes', rowspan: '2'},
+      {label: $localize`Active`, value: 'activeLabel', rowspan: '2'},
+    ];
   listYear: any = [];
   currentYear = new Date().getFullYear();
   constructor() {
@@ -72,16 +72,16 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
       notes: ['', Validators.maxLength(500)],
       active: [true,]
     });
-    this.formGroupSearchInit = {...this.formGroupSearch.value}
-    this.formGroupDetailInit = {...this.formGroupDetail.value}
+    this.formGroupSearchInit = {...this.formGroupSearch.value};
+    this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
 
   override async ngOnInit() {
     this.currentYear = new Date().getFullYear();
     this.listYear = Array.from({length: this.currentYear - 2020 + 11}, (_, i) => (2020 + i).toString());
-    console.log(this.listYear)
+    console.log(this.listYear);
     await Promise.all([this.search(),]).then(() => {
-      console.log(this.dataSource)
+      console.log(this.dataSource);
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
     this.displayedColumns1 = ['stt', 'year', 'international', 'domestic', 'totalOutput', 'notes', 'activeLabel', 'action'];
@@ -92,7 +92,7 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
     if (this.formGroupDetail.value.totalInternational && this.formGroupDetail.value.totalDomestic) {
       this.formGroupDetail.patchValue({
         total: Math.round((this.formGroupDetail.value.totalInternational + this.formGroupDetail.value.totalDomestic) * 100) / 100
-      })
+      });
     }
   }
 

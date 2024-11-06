@@ -88,7 +88,7 @@
     </mat-card-title>
     <mat-card-subtitle>
       <button class="add-btn" type="button" mat-button
-        (click)="readMode = false; passwordInputType == 'password'; showDetail()">
+        (click)="readMode = false; passwordInputType === 'password'; showDetail()">
         <i class="material-symbols-outlined">
           add
         </i>
@@ -344,7 +344,7 @@
                   <button type="button" matSuffix mat-icon-button aria-label="Clear"
                     (click)="passwordInputType = (passwordInputType == 'password' ? 'text' : 'password')">
                     <i class="material-symbols-outlined">
-                      {{passwordInputType == 'password' ? 'visibility' : 'visibility_off'}}
+                      {{passwordInputType === 'password' ? 'visibility' : 'visibility_off'}}
                     </i>
                   </button>
                   @if (
@@ -436,7 +436,7 @@
                   <button type="button" matSuffix mat-icon-button aria-label="Clear"
                     (click)="passwordInputType = (passwordInputType == 'password' ? 'text' : 'password')">
                     <i class="material-symbols-outlined">
-                      {{passwordInputType == 'password' ? 'visibility' : 'visibility_off'}}
+                      {{passwordInputType === 'password' ? 'visibility' : 'visibility_off'}}
                     </i>
                   </button>
                   @if (newPassword.hasError('required') && newPassword.touched) {

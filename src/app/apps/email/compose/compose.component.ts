@@ -1,5 +1,5 @@
 import { NgFor } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -19,7 +19,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
     templateUrl: './compose.component.html',
     styleUrl: './compose.component.scss'
 })
-export class ComposeComponent {
+export class ComposeComponent implements OnInit, OnDestroy {
 
     // Text Editor
     editor: Editor;

@@ -1,7 +1,7 @@
 import {CanActivate, Router} from '@angular/router';
-import {Injectable} from "@angular/core";
-import {StorageService} from "src/app/crew-trip/core/services/storage.service";
-import {STORAGE_KEY} from "src/app/crew-trip/core/constants/config";
+import {Injectable} from '@angular/core';
+import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
+import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 
 @Injectable({
   providedIn: 'root',

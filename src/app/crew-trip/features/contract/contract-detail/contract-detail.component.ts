@@ -1,32 +1,32 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {RouterLink} from "@angular/router";
-import {NgClass, NgIf, TitleCasePipe} from "@angular/common";
-import {MatCardModule} from "@angular/material/card";
-import {MatButtonModule} from "@angular/material/button";
-import {MatMenuModule} from "@angular/material/menu";
-import {MatTableModule} from "@angular/material/table";
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {MatInput} from "@angular/material/input";
-import {FormBuilder, FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {NgxEditorModule} from "ngx-editor";
+import {RouterLink} from '@angular/router';
+import {NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {MatInput} from '@angular/material/input';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {NgxEditorModule} from 'ngx-editor';
 import {
   MatAccordion,
   MatExpansionPanel,
   MatExpansionPanelDescription,
   MatExpansionPanelHeader,
   MatExpansionPanelTitle
-} from "@angular/material/expansion";
+} from '@angular/material/expansion';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {MatRadioModule} from "@angular/material/radio";
-import {ContractService} from "src/app/crew-trip/core/services/contract-service";
-import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {MatRadioModule} from '@angular/material/radio';
+import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
+import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
 
 
 @Component({
@@ -79,7 +79,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   //variable
   @Input() id: any;
-  @Input() readMode: boolean = false;
+  @Input() readMode = false;
   @Input() dataObject: any;
   @Output() backStep = new EventEmitter<any>();
   listUser: any = [];
@@ -89,14 +89,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   displayedColumnsUser: string[] = [];
   displayedColumnsFunction: string[] = [];
   _displayedColumnsUser: { label: string; value: string, type?: string, format?: string }[] = [{
-    label: "Full Name", value: "full-name"
-  }, {label: "Active", value: "isActiveLabel"},];
+    label: 'Full Name', value: 'full-name'
+  }, {label: 'Active', value: 'isActiveLabel'},];
   _displayedColumnsFunction: { label: string; value: string, type?: string, format?: string }[] = [{
-    label: "Active", value: "active"
-  }, {label: "ID", value: "id"}, {label: "Name", value: "name"},];
-  selectAllChecked: boolean = false;
-  selectAllIndeterminate: boolean = false;
-  isSticky: boolean = false;
+    label: 'Active', value: 'active'
+  }, {label: 'ID', value: 'id'}, {label: 'Name', value: 'name'},];
+  selectAllChecked = false;
+  selectAllIndeterminate = false;
+  isSticky = false;
   expandList = new Set<string>(['tab1', 'tab2', 'tab3', 'tab4', 'tab5']);
 
   constructor() {
@@ -157,14 +157,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   override async ngOnInit() {
     try {
-      window.scrollTo(0, 0)
+      window.scrollTo(0, 0);
       await this.spinner.show();
       await Promise.all([
         this.detail(2)
       ]);
 
     } catch (e) {
-      console.log(e)
+      console.log(e);
     } finally {
       await this.spinner.hide();
     }

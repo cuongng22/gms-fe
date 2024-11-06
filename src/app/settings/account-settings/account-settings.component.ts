@@ -25,6 +25,6 @@ export class AccountSettingsComponent {
     genderSelected = 'option1';
 
     // File Uploader
-    public multiple: boolean = false;
+    public multiple = false;
 
 }

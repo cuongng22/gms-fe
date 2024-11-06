@@ -16,7 +16,7 @@ import {
     ApexGrid
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     xaxis: ApexXAxis;
@@ -27,7 +27,7 @@ export type ChartOptions = {
     stroke: ApexStroke;
     markers: ApexMarkers;
     colors: string[];
-};
+}
 
 @Component({
     selector: 'app-brush-line-chart',
@@ -211,11 +211,11 @@ export class BrushLineChartComponent {
     }
 
     public generateDayWiseTimeSeries(baseval:any, count:any, yrange:any) {
-        var i = 0;
-        var series = [];
+        let i = 0;
+        const series = [];
         while (i < count) {
-            var x = baseval;
-            var y =
+            const x = baseval;
+            const y =
                 Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
             series.push([x, y]);
             baseval += 86400000;

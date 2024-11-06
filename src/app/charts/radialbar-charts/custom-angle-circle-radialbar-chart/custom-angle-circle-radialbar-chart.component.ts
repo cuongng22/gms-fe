@@ -11,14 +11,14 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexNonAxisChartSeries;
     chart: ApexChart;
     labels: string[];
     colors: string[];
     legend: ApexLegend;
     plotOptions: ApexPlotOptions;
-};
+}
 
 @Component({
     selector: 'app-custom-angle-circle-radialbar-chart',

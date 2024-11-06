@@ -1,12 +1,12 @@
-import { Injectable } from "@angular/core";
-import { BaseService } from "./base-service";
-import { firstValueFrom, Observable } from "rxjs";
+import { Injectable } from '@angular/core';
+import { BaseService } from './base-service';
+import { firstValueFrom, Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VehicleService extends BaseService {
-  private _isUpdate: boolean = false;
+  private _isUpdate = false;
   constructor() {
     super();
     this.path = 'vehicles';

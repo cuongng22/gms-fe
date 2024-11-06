@@ -11,26 +11,26 @@ import {Router, RouterLink} from '@angular/router';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
-import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
-import {ToggleService} from "src/app/common/header/toggle.service";
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
-import {MatDialog, MatDialogModule, MatDialogRef} from "@angular/material/dialog";
-import {UserLogin} from "src/app/crew-trip/shared/models/userInfo";
-import {MatCardModule} from "@angular/material/card";
-import {MatTableModule} from "@angular/material/table";
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {MatInput} from "@angular/material/input";
-import {Constant, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
-import {NgxSpinnerService} from "ngx-spinner";
-import {LanguageService} from "src/app/crew-trip/core/services/language.service";
-import {Observable} from "rxjs";
-import {BaseService} from "src/app/crew-trip/core/services/base-service";
+import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
+import {ToggleService} from 'src/app/common/header/toggle.service';
+import {UsersService} from 'src/app/crew-trip/core/services/users-service';
+import {MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
+import {UserLogin} from 'src/app/crew-trip/shared/models/userInfo';
+import {MatCardModule} from '@angular/material/card';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {MatInput} from '@angular/material/input';
+import {Constant, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {LanguageService} from 'src/app/crew-trip/core/services/language.service';
+import {Observable} from 'rxjs';
+import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 
 
 @Component({
@@ -95,7 +95,7 @@ export class HeaderComponent implements OnInit {
   }
 
   // Header Sticky
-  isSticky: boolean = false;
+  isSticky = false;
 
   @HostListener('window:scroll', ['$event'])
   checkScroll() {
@@ -108,7 +108,7 @@ export class HeaderComponent implements OnInit {
   }
 
   // Fullscreen
-  isFullscreen: boolean = false;
+  isFullscreen = false;
 
   ngOnInit() {
     // Listen for fullscreen change events to update the button text
@@ -226,6 +226,6 @@ export class HeaderComponent implements OnInit {
   }
 
   private passwordsMatch(): boolean {
-    return this.formGroup.get("newPassword")?.value === this.formGroup.get("confirmNewPassword")?.value;
+    return this.formGroup.get('newPassword')?.value === this.formGroup.get('confirmNewPassword')?.value;
   }
 }

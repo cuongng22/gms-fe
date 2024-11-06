@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -12,7 +12,7 @@ import { CustomizerSettingsService } from '../customizer-settings/customizer-set
     templateUrl: './coming-soon.component.html',
     styleUrl: './coming-soon.component.scss'
 })
-export class ComingSoonComponent {
+export class ComingSoonComponent implements OnInit, OnDestroy {
 
     private countdownInterval: any;
     public countdown: { days: number, hours: number, minutes: number, seconds: number };

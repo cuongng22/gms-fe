@@ -1,27 +1,27 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
-import {RouterLink} from "@angular/router";
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from "@angular/common";
-import {MatCardModule} from "@angular/material/card";
-import {MatButtonModule} from "@angular/material/button";
-import {MatMenuModule} from "@angular/material/menu";
-import {MatTableModule} from "@angular/material/table";
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {MatInput} from "@angular/material/input";
-import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
-import {RolesService} from "src/app/crew-trip/core/services/roles-service";
-import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
-import {NoDataRowOutlet} from "@angular/cdk/table";
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {ContractService} from "src/app/crew-trip/core/services/contract-service";
-import {ContractDetailComponent} from "src/app/crew-trip/features/contract/contract-detail/contract-detail.component";
-import {Constant} from "src/app/crew-trip/shared/utils/constant";
+import {RouterLink} from '@angular/router';
+import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {UsersService} from 'src/app/crew-trip/core/services/users-service';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {MatInput} from '@angular/material/input';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {RolesService} from 'src/app/crew-trip/core/services/roles-service';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
+import {NoDataRowOutlet} from '@angular/cdk/table';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
+import {ContractDetailComponent} from 'src/app/crew-trip/features/contract/contract-detail/contract-detail.component';
+import {Constant} from 'src/app/crew-trip/shared/utils/constant';
 
 
 @Component({
@@ -41,16 +41,16 @@ export class ContractComponent extends CommonComponent implements OnInit {
   step = 1;
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`bizDocId`, value: "bizDocId"},
-    {label: $localize`contractCode`, value: "contractCode"},
-    {label: $localize`contractNo`, value: "contractNo"},
-    {label: $localize`contractName`, value: "contractName"},
-    {label: $localize`marketCode`, value: "marketCode"},
-    {label: $localize`partnerName`, value: "partnerName"},
-    {label: $localize`serviceObject`, value: "serviceObject"},
-    {label: $localize`signedDate`, value: "signedDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`effectiveDate`, value: "effectiveDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`expiryDate`, value: "expiryDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`bizDocId`, value: 'bizDocId'},
+    {label: $localize`contractCode`, value: 'contractCode'},
+    {label: $localize`contractNo`, value: 'contractNo'},
+    {label: $localize`contractName`, value: 'contractName'},
+    {label: $localize`marketCode`, value: 'marketCode'},
+    {label: $localize`partnerName`, value: 'partnerName'},
+    {label: $localize`serviceObject`, value: 'serviceObject'},
+    {label: $localize`signedDate`, value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`effectiveDate`, value: 'effectiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`expiryDate`, value: 'expiryDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
     //{label: $localize`appendixList`, value: "appendixList"},
   ];
   /*_displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
@@ -147,8 +147,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
     super();
     this.formGroupSearch = this.fb.group({});
     this.formGroupDetail = this.fb.group({});
-    this.formGroupSearchInit = {...this.formGroupSearch.value}
-    this.formGroupDetailInit = {...this.formGroupDetail.value}
+    this.formGroupSearchInit = {...this.formGroupSearch.value};
+    this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
 
   override async ngOnInit() {
@@ -166,7 +166,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   async backStep() {
     await this.search(),
-      this.step = 1;
+    this.step = 1;
   }
 
   async showAnnex(id: any) {

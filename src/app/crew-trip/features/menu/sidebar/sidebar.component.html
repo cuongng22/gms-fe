@@ -32,7 +32,7 @@
             @if(menu1.subMenu.length > 0) {
               <ul class="sidebar-sub-menu">
                 @for (subMenu1 of menu1.subMenu; track $index) {
-                @if (subMenu1.path  != null && subMenu1.path != '') {
+                @if (subMenu1.path  != null && subMenu1.path !== '') {
                   <li class="sidemenu-item">
                     <a [routerLink]="subMenu1.path" class="sidemenu-link" [ngClass]="subMenu1.icon"  [class.active]="isActive(subMenu1.path)">
                       <span class="title text-white" style="font-family: 'Aperto', sans-serif;">

@@ -13,14 +13,14 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     dataLabels: ApexDataLabels;
     title: ApexTitleSubtitle;
     plotOptions: ApexPlotOptions;
     legend: ApexLegend;
-};
+}
 
 @Component({
     selector: 'app-basic-treemap-chart',
@@ -115,11 +115,11 @@ export class BasicTreemapChartComponent {
     }
 
     public generateData(count:any, yrange:any) {
-        var i = 0;
-        var series = [];
+        let i = 0;
+        const series = [];
         while (i < count) {
-            var x = "w" + (i + 1).toString();
-            var y =
+            const x = "w" + (i + 1).toString();
+            const y =
                 Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
             series.push({
                 x: x,

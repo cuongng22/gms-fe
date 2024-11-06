@@ -35,7 +35,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 })
 export class VehicleComponent extends CommonComponent implements OnInit {
   override baseService = inject(VehicleService);
-  flightMarketService = inject(FlightMarketService)
+  flightMarketService = inject(FlightMarketService);
   formBuilder = inject(FormBuilder);
 
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
@@ -58,7 +58,7 @@ export class VehicleComponent extends CommonComponent implements OnInit {
     gender: [true],
     email: ['', [Validators.required, Validators.email]],
     phone: [''],
-    roles: [<any>[], Validators.required],
+    roles: [([] as any), Validators.required],
     active: [true, [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(8), Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')]],
     description: ['']

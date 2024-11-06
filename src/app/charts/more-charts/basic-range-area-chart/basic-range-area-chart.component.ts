@@ -16,7 +16,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     dataLabels: ApexDataLabels;
@@ -27,7 +27,7 @@ export type ChartOptions = {
     title: ApexTitleSubtitle;
     colors: any;
     markers: ApexMarkers;
-};
+}
 
 @Component({
     selector: 'app-basic-range-area-chart',

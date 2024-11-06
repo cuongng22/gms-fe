@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     templateUrl: './hd-agents.component.html',
     styleUrl: './hd-agents.component.scss'
 })
-export class HdAgentsComponent {
+export class HdAgentsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'agentName', 'totalTickets', 'openTickets', 'resolvedTickets', 'avgResolutionTime', 'satisfactionRate', 'availability', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

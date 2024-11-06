@@ -11,14 +11,14 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexNonAxisChartSeries;
     chart: ApexChart;
     colors: any;
     labels: string[];
     plotOptions: ApexPlotOptions;
     fill: ApexFill;
-};
+}
 
 @Component({
     selector: 'app-semi-circular-gauge-radialbar-chart',

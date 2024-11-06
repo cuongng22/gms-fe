@@ -11,7 +11,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "serve:ssr:trezo": "node dist/trezo/server/server.mjs",
-    "i18n:extract": "ng extract-i18n --format=json --output-path src/locale --out-file message.bvhien.json"
+    "i18n:extract": "ng extract-i18n --format=json --output-path src/locale --out-file message.bvhien.json",
+    "lint": "ng lint"
   },
   "private": true,
   "dependencies": {
@@ -57,6 +58,7 @@
   },
   "devDependencies": {
     "@angular-devkit/build-angular": "^18.0.0",
+    "@angular-eslint/eslint-plugin": "^18.4.0",
     "@angular/cli": "^18.0.0",
     "@angular/compiler-cli": "^18.0.0",
     "@angular/localize": "18.2.5",
@@ -65,12 +67,17 @@
     "@types/jasmine": "~5.1.0",
     "@types/node": "^18.18.0",
     "@types/uuid": "^10.0.0",
+    "@typescript-eslint/eslint-plugin": "^8.13.0",
+    "@typescript-eslint/parser": "^8.13.0",
+    "angular-eslint": "18.4.0",
+    "eslint": "^9.14.0",
     "jasmine-core": "~5.1.0",
     "karma": "~6.4.0",
     "karma-chrome-launcher": "~3.2.0",
     "karma-coverage": "~2.2.0",
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
-    "typescript": "~5.4.2"
+    "typescript": "~5.4.2",
+    "typescript-eslint": "8.10.0"
   }
 }

@@ -16,7 +16,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     markers: ApexMarkers;
@@ -27,7 +27,7 @@ export type ChartOptions = {
     xaxis: ApexXAxis;
     dataLabels: ApexDataLabels;
     title: ApexTitleSubtitle;
-};
+}
 
 @Component({
     selector: 'app-stepline-line-chart',

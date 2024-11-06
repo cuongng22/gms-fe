@@ -1,8 +1,8 @@
 import {Component, inject} from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
-import {NgClass} from "@angular/common";
-import {ToggleService} from "src/app/common/header/toggle.service";
+import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
+import {NgClass} from '@angular/common';
+import {ToggleService} from 'src/app/common/header/toggle.service';
 
 @Component({
   selector: 'app-footer',

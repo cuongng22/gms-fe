@@ -19,7 +19,7 @@ import {
 } from "ng-apexcharts";
 import { CustomizerSettingsService } from '../../customizer-settings/customizer-settings.service';
 
-export type ChartOptions = {
+export interface ChartOptions {
     fill: ApexFill;
     grid: ApexGrid;
     chart: ApexChart;
@@ -33,7 +33,7 @@ export type ChartOptions = {
     dataLabels: ApexDataLabels;
     series: ApexAxisChartSeries;
     subtitle: ApexTitleSubtitle;
-};
+}
 
 @Component({
     selector: 'app-courses-sales:not(1)',

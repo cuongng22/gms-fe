@@ -13,12 +13,12 @@ export class InputSizeComponent implements OnInit {
   inputField = inject(ElementRef);
 
   ngOnInit(): void {
-    let form = Array.from(this.inputField.nativeElement.children);
+    const form = Array.from(this.inputField.nativeElement.children);
     form.forEach((s: any) => {
       if (s.localName === 'mat-form-field') {
         s.classList.add(`size-input-${this.sizeInput()}`);
       }
-    })
+    });
   }
 
 

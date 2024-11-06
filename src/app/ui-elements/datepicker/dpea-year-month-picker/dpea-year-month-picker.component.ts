@@ -7,7 +7,7 @@ import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker
 // syntax. However, rollup creates a synthetic default module and we thus need to import it using
 // the `default as` syntax.
 import * as _moment from 'moment';
-// tslint:disable-next-line:no-duplicate-imports
+
 import { default as _rollupMoment, Moment } from 'moment';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';

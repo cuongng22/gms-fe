@@ -1,5 +1,5 @@
 export class Response<T> {
-    data: {
+  data: {
         totalPages: number;
         totalElements: number;
         pageable: {
@@ -27,37 +27,37 @@ export class Response<T> {
         last: boolean;
         empty: boolean;
     };
-    status: number;
+  status: number;
 }
 
 
 export class Role {
-    userCount: number;
-    roleId: number;
-    roleName: string;
-    functionCount: number;
-    isActive: number;
+  userCount: number;
+  roleId: number;
+  roleName: string;
+  functionCount: number;
+  isActive: number;
 }
 
 
 export class User {
-    email: string;
-    fullName: string;
-    active: boolean;
-    department: string;
-    avartar_url: string;
-    phone: string;
-    gender: boolean
-    description: string;
-    roles: {
+  email: string;
+  fullName: string;
+  active: boolean;
+  department: string;
+  avartar_url: string;
+  phone: string;
+  gender: boolean;
+  description: string;
+  roles: {
         id: number;
         name: string;
         active: boolean;
     }[];
-    password: string;
+  password: string;
 }
 
 export class ResetPasswordRequest {
-    constructor(public newPassword: string, public email: string) { }
+  constructor(public newPassword: string, public email: string) { }
 }
 

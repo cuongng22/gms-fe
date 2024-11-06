@@ -11,7 +11,7 @@ import {
     ApexNonAxisChartSeries,
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexNonAxisChartSeries;
     dataLabels: ApexDataLabels;
     legend: ApexLegend;
@@ -19,7 +19,7 @@ export type ChartOptions = {
     chart: ApexChart;
     colors: string[];
     labels: any;
-};
+}
 
 @Component({
     selector: 'app-pie-monochrome-chart',

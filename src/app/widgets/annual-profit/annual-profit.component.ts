@@ -16,7 +16,7 @@ import {
 } from "ng-apexcharts";
 import { CustomizerSettingsService } from '../../customizer-settings/customizer-settings.service';
 
-export type ChartOptions = {
+export interface ChartOptions {
     grid: ApexGrid;
     yaxis: ApexYAxis;
     labels: string[];
@@ -29,7 +29,7 @@ export type ChartOptions = {
     dataLabels: ApexDataLabels;
     subtitle: ApexTitleSubtitle;
     series: ApexAxisChartSeries;
-};
+}
 
 @Component({
     selector: 'app-annual-profit:not(1)',

@@ -12,7 +12,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexNonAxisChartSeries;
     chart: ApexChart;
     labels: string[];
@@ -20,7 +20,7 @@ export type ChartOptions = {
     fill: ApexFill;
     colors: any;
     stroke: ApexStroke;
-};
+}
 
 @Component({
     selector: 'app-strocked-circular-gauge-radialbar-chart',

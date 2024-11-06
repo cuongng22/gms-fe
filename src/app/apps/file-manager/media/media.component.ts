@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -15,7 +15,7 @@ import { RouterLink } from '@angular/router';
     templateUrl: './media.component.html',
     styleUrl: './media.component.scss'
 })
-export class MediaComponent {
+export class MediaComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['fileName', 'owner', 'listedDate', 'fileType', 'fileSize', 'fileItems', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

@@ -7,35 +7,35 @@ import {
   OnInit,
   ViewChild
 } from '@angular/core';
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {RouterLink} from "@angular/router";
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from "@angular/common";
-import {MatCardModule} from "@angular/material/card";
-import {MatButtonModule} from "@angular/material/button";
-import {MatMenuModule} from "@angular/material/menu";
-import {MatTableModule} from "@angular/material/table";
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
-import {MatOption, MatSelect, MatSelectModule} from "@angular/material/select";
-import {MatInput, MatInputModule} from "@angular/material/input";
-import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
-import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
-import {NoDataRowOutlet} from "@angular/cdk/table";
-import {NationService} from "src/app/crew-trip/core/services/nation-service";
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
-import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
-import {MatAutocompleteModule} from "@angular/material/autocomplete";
-import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
-import {map, Observable, startWith} from "rxjs";
-import {debounceTime} from "rxjs/operators";
-import {FlightMarketService} from "src/app/crew-trip/core/services/ flight-market.service";
-import {Constant} from "src/app/crew-trip/shared/utils/constant";
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {RouterLink} from '@angular/router';
+import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatOption, MatSelect, MatSelectModule} from '@angular/material/select';
+import {MatInput, MatInputModule} from '@angular/material/input';
+import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
+import {NoDataRowOutlet} from '@angular/cdk/table';
+import {NationService} from 'src/app/crew-trip/core/services/nation-service';
+import {UsersService} from 'src/app/crew-trip/core/services/users-service';
+import {HotelService} from 'src/app/crew-trip/core/services/hotel-service';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {map, Observable, startWith} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
+import {Constant} from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-hotel',
@@ -51,7 +51,7 @@ import {Constant} from "src/app/crew-trip/shared/utils/constant";
 })
 export class HotelComponent extends CommonComponent implements OnInit {
   override baseService = inject(HotelService);
-  flightMarketService = inject(FlightMarketService)
+  flightMarketService = inject(FlightMarketService);
   formBuilder = inject(FormBuilder);
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   markets: any[] = [];

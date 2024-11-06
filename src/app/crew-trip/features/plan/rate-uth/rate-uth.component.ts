@@ -1,8 +1,8 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {FileUploadComponent, FileUploadValidators} from "@iplab/ngx-file-upload";
-import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
-import {MatAnchor, MatButton, MatButtonModule} from "@angular/material/button";
-import {MatAutocomplete, MatAutocompleteModule, MatAutocompleteTrigger} from "@angular/material/autocomplete";
+import {FileUploadComponent, FileUploadValidators} from '@iplab/ngx-file-upload';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {MatAnchor, MatButton, MatButtonModule} from '@angular/material/button';
+import {MatAutocomplete, MatAutocompleteModule, MatAutocompleteTrigger} from '@angular/material/autocomplete';
 import {
   MatCard,
   MatCardActions,
@@ -10,7 +10,7 @@ import {
   MatCardHeader, MatCardModule,
   MatCardSubtitle,
   MatCardTitle
-} from "@angular/material/card";
+} from '@angular/material/card';
 import {
   MatCell,
   MatCellDef,
@@ -19,32 +19,32 @@ import {
   MatHeaderRow,
   MatHeaderRowDef,
   MatRow, MatRowDef, MatTable, MatTableModule
-} from "@angular/material/table";
-import {MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
-import {MatInput, MatInputModule} from "@angular/material/input";
-import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {ExchangeRateService} from "src/app/crew-trip/core/services/exchange-rate.service";
-import {Observable, of, take} from "rxjs";
-import {MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
-import {MatSelectModule} from "@angular/material/select";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
-import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
-import {CommonModule} from "@angular/common";
-import {MatCheckbox} from "@angular/material/checkbox";
-import {HttpStatusCode} from "@angular/common/http";
+} from '@angular/material/table';
+import {MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import {MatInput, MatInputModule} from '@angular/material/input';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {ExchangeRateService} from 'src/app/crew-trip/core/services/exchange-rate.service';
+import {Observable, of, take} from 'rxjs';
+import {MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
+import {MatSelectModule} from '@angular/material/select';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {CommonModule} from '@angular/common';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {HttpStatusCode} from '@angular/common/http';
 
 @Component({
   selector: 'app-rate-uth',
   standalone: true,
-    imports: [
-      MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-      MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
-      MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-      MatTableModule, MatPaginatorModule, MatCheckbox, FileUploadComponent
-    ],
+  imports: [
+    MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
+    MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
+    MatTableModule, MatPaginatorModule, MatCheckbox, FileUploadComponent
+  ],
   templateUrl: './rate-uth.component.html',
   styleUrl: './rate-uth.component.scss'
 })
@@ -52,7 +52,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
   override baseService = inject(ExchangeRateService);
 
   formBuilder = inject(FormBuilder);
-  showDialogUpload: boolean = false;
+  showDialogUpload = false;
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
   listDatasource: Observable<string[]> = of(['sync', 'excel']);
@@ -86,20 +86,20 @@ export class RateUthComponent extends CommonComponent implements OnInit {
   override async search(body?: any) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.uthSearch({
+      const res = await this.baseService.uthSearch({
         page: this.pageIndex,
         size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
         limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
       });
-      console.log(res)
+      console.log(res);
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;
           this.dataSource.data = this.dataSource.data.map((s: any) => ({
             ...s,
-            isActiveLabel: !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
+            isActiveLabel: s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
             activeLabel: !!s.active || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
-          }))
+          }));
           this.totalElement = res.data.totalElements;
         }
         return res;
@@ -149,8 +149,8 @@ export class RateUthComponent extends CommonComponent implements OnInit {
   override  async downloadTemplate(filename?: string) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.exportData(null, 'uth/template');
-      console.log(res)
+      const res = await this.baseService.exportData(null, 'uth/template');
+      console.log(res);
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       console.log(e);

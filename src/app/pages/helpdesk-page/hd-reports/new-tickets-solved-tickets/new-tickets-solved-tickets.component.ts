@@ -20,7 +20,7 @@ import {
     ApexAxisChartSeries
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     subtitle: ApexTitleSubtitle;
     series: ApexAxisChartSeries;
     dataLabels: ApexDataLabels;
@@ -35,7 +35,7 @@ export type ChartOptions = {
     colors: string[];
     grid: ApexGrid;
     fill: ApexFill;
-};
+}
 
 @Component({
     selector: 'app-new-tickets-solved-tickets',

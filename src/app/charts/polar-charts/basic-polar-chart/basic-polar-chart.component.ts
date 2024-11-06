@@ -14,7 +14,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexNonAxisChartSeries;
     chart: ApexChart;
     responsive: ApexResponsive[];
@@ -23,7 +23,7 @@ export type ChartOptions = {
     grid: ApexGrid;
     stroke: ApexStroke;
     fill: ApexFill;
-};
+}
 
 @Component({
     selector: 'app-basic-polar-chart',

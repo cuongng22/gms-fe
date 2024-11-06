@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +14,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     templateUrl: './top-selling-products.component.html',
     styleUrl: './top-selling-products.component.scss'
 })
-export class TopSellingProductsComponent {
+export class TopSellingProductsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['product', 'price', 'order', 'stock', 'amount'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

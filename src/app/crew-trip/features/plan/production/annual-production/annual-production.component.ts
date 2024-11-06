@@ -1,13 +1,13 @@
 import {Component, DestroyRef, ElementRef, inject, model, OnInit, ViewChild} from '@angular/core';
-import {FileUploadComponent, FileUploadModule, FileUploadValidators} from "@iplab/ngx-file-upload";
-import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
+import {FileUploadComponent, FileUploadModule, FileUploadValidators} from '@iplab/ngx-file-upload';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {
   MatAutocomplete,
   MatAutocompleteModule,
   MatAutocompleteTrigger,
   MatOption
-} from "@angular/material/autocomplete";
-import {MatButton, MatButtonModule} from "@angular/material/button";
+} from '@angular/material/autocomplete';
+import {MatButton, MatButtonModule} from '@angular/material/button';
 import {
   MatCard,
   MatCardActions,
@@ -15,7 +15,7 @@ import {
   MatCardHeader, MatCardModule,
   MatCardSubtitle,
   MatCardTitle
-} from "@angular/material/card";
+} from '@angular/material/card';
 import {
   MatCell,
   MatCellDef,
@@ -24,35 +24,35 @@ import {
   MatHeaderRow,
   MatHeaderRowDef,
   MatRow, MatRowDef, MatTable, MatTableModule
-} from "@angular/material/table";
-import {MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
-import {MatInput, MatInputModule} from "@angular/material/input";
-import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {MatSelect, MatSelectModule} from "@angular/material/select";
-import {AsyncPipe, CommonModule, NgForOf} from "@angular/common";
-import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
-import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {RouterLink, RouterModule} from "@angular/router";
-import {EstimatedAnnualProductionService} from "src/app/crew-trip/core/services/estimated-annual-production";
-import {FlightMarketService} from "src/app/crew-trip/core/services/ flight-market.service";
-import {AirplaneService} from "src/app/crew-trip/core/services/airplane-service";
-import {debounceTime, startWith, Subject} from "rxjs";
-import {Constant} from "src/app/crew-trip/shared/utils/constant";
+} from '@angular/material/table';
+import {MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import {MatInput, MatInputModule} from '@angular/material/input';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatSelect, MatSelectModule} from '@angular/material/select';
+import {AsyncPipe, CommonModule, NgForOf} from '@angular/common';
+import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {RouterLink, RouterModule} from '@angular/router';
+import {EstimatedAnnualProductionService} from 'src/app/crew-trip/core/services/estimated-annual-production';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
+import {AirplaneService} from 'src/app/crew-trip/core/services/airplane-service';
+import {debounceTime, startWith, Subject} from 'rxjs';
+import {Constant} from 'src/app/crew-trip/shared/utils/constant';
 import {
   EstAnnualProduction
-} from "src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.model";
+} from 'src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.model';
 
 @Component({
   selector: 'app-annual-production',
   standalone: true,
-    imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-      MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
-      MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-      MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule],
+  imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
+    MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule],
   templateUrl: './annual-production.component.html',
   styleUrl: './annual-production.component.scss'
 })
@@ -126,7 +126,7 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
     myControl: new FormControl('')
   });
 
-  showDialogUpload: boolean = false;
+  showDialogUpload = false;
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
 
@@ -168,7 +168,7 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
       debounceTime(500),
       startWith(''))
       .subscribe(value => {
-        console.log(value)
+        console.log(value);
         if (!value) {
           this.filteredOptionsOri.set(this.oriList);
           return;
@@ -286,8 +286,8 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
         const form = new FormData();
         const file: File = this.fileUpload.value[0];
         form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
-        form.append('option', new Blob(["1"], {
-          type: "application/json"
+        form.append('option', new Blob(['1'], {
+          type: 'application/json'
         }));
         await this.spinner.show();
         const res = await this.baseService.uploadFile(form);

@@ -14,14 +14,14 @@ import {
 } from "ng-apexcharts";
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexNonAxisChartSeries;
     dataLabels: ApexDataLabels;
     legend: ApexLegend;
     chart: ApexChart;
     colors: string[];
     labels: any;
-};
+}
 
 @Component({
     selector: 'app-order-summary',

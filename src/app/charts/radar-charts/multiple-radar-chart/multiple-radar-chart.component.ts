@@ -15,7 +15,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     title: ApexTitleSubtitle;
@@ -24,7 +24,7 @@ export type ChartOptions = {
     fill: ApexFill;
     markers: ApexMarkers;
     xaxis: ApexXAxis;
-};
+}
 
 @Component({
     selector: 'app-multiple-radar-chart',

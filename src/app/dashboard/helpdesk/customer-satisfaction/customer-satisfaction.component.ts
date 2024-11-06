@@ -17,7 +17,7 @@ import {
     ApexNonAxisChartSeries
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     labels: any;
     chart: ApexChart;
     colors: string[];
@@ -27,7 +27,7 @@ export type ChartOptions = {
     dataLabels: ApexDataLabels;
     plotOptions: ApexPlotOptions;
     series: ApexNonAxisChartSeries;
-};
+}
 
 @Component({
     selector: 'app-customer-satisfaction',

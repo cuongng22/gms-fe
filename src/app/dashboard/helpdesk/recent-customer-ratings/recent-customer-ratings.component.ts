@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +14,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     templateUrl: './recent-customer-ratings.component.html',
     styleUrl: './recent-customer-ratings.component.scss'
 })
-export class RecentCustomerRatingsComponent {
+export class RecentCustomerRatingsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['user', 'date', 'ratings'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

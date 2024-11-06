@@ -75,7 +75,7 @@ export class CrewsDetailComponent extends CommonComponent implements OnInit {
         .filter(country => country.code === this.formGroupDetail.controls.nation.value)
         .map(country => LOCALE.VN ? country.vniName : country.engName)[0];
       this.formGroupDetail.patchValue({ nationName: nationName });
-      console.log("this.formGroupDetail.value:", this.formGroupDetail.value);
+      console.log('this.formGroupDetail.value:', this.formGroupDetail.value);
     });
 
     //search Nation
@@ -86,8 +86,8 @@ export class CrewsDetailComponent extends CommonComponent implements OnInit {
         const code = country.code.toLowerCase();
         return code.includes(value.toLowerCase()) || (this.locale == LOCALE.VN ?
           country.vniName.toLowerCase().includes(value.toLowerCase()) :
-          country.engName.toLowerCase().includes(value.toLowerCase()))
-      }))
+          country.engName.toLowerCase().includes(value.toLowerCase()));
+      }));
     });
   }
 
@@ -109,7 +109,7 @@ export class CrewsDetailComponent extends CommonComponent implements OnInit {
   override async save() {
     const res = await super.save();
     if (res) {
-      this.dialogRef.close("Update Success");
+      this.dialogRef.close('Update Success');
     }
   }
   close(): void {

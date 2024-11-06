@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -18,7 +18,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
     templateUrl: './e-products-list.component.html',
     styleUrl: './e-products-list.component.scss'
 })
-export class EProductsListComponent {
+export class EProductsListComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'product', 'category', 'price', 'order', 'stock', 'amount', 'rating', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

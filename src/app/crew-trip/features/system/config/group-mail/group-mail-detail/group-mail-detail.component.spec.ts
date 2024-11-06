@@ -10,7 +10,7 @@ describe('GroupMailDetailComponent', () => {
     await TestBed.configureTestingModule({
       imports: [GroupMailDetailComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(GroupMailDetailComponent);
     component = fixture.componentInstance;

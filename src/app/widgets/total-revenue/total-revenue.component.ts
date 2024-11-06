@@ -18,7 +18,7 @@ import {
 } from "ng-apexcharts";
 import { CustomizerSettingsService } from '../../customizer-settings/customizer-settings.service';
 
-export type ChartOptions = {
+export interface ChartOptions {
     responsive: ApexResponsive[];
     plotOptions: ApexPlotOptions;
     series: ApexAxisChartSeries;
@@ -31,7 +31,7 @@ export type ChartOptions = {
     yaxis: ApexYAxis;
     grid: ApexGrid;
     fill: ApexFill;
-};
+}
 
 @Component({
     selector: 'app-total-revenue:not(1)',

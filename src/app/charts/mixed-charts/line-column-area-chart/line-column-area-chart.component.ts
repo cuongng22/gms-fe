@@ -17,7 +17,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     grid: ApexGrid;
@@ -31,7 +31,7 @@ export type ChartOptions = {
     fill: ApexFill;
     colors: any;
     tooltip: ApexTooltip;
-};
+}
 
 @Component({
     selector: 'app-line-column-area-chart',
@@ -194,11 +194,11 @@ export class LineColumnAreaChartComponent {
     }
 
     public generateData(count:any, yrange:any) {
-        var i = 0;
-        var series = [];
+        let i = 0;
+        const series = [];
         while (i < count) {
-            var x = "w" + (i + 1).toString();
-            var y =
+            const x = "w" + (i + 1).toString();
+            const y =
                 Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
             series.push({
                 x: x,

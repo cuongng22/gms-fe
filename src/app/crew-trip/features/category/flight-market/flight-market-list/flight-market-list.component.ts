@@ -51,13 +51,13 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
   keySearchMarket = new Subject<string>();
   @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
 
-  showDialogUpload: boolean = false;
+  showDialogUpload = false;
 
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
 
   override formGroupDetail = this.formBuilder.group({
     id: ['']
-  })
+  });
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
     code: [''], // Mã thị trường
@@ -96,7 +96,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
   }
 
   override search(): any {
-    console.log(this.formGroupSearch.value)
+    console.log(this.formGroupSearch.value);
     const contractStartDate = this.formGroupSearch.controls.contractStartDate.value;
     const contractEndDate = this.formGroupSearch.controls.contractEndDate.value;
     const searchValue = {
@@ -122,11 +122,11 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
       hotel = {
         ...hotel, activeLable: hotel.active ? this.MESSAGE.ACTIVE : this.MESSAGE.INACTIVE,
         marketCode: marketCode
-      }
+      };
     }
     this.dialog.open(HotelDetailComponent, {
       data: { hotel: hotel, isViewDetail: isViewDetail },
-    })
+    });
   }
 
 
@@ -135,11 +135,11 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
       carRental = {
         ...carRental, activeLable: carRental.active ? this.MESSAGE.ACTIVE : this.MESSAGE.INACTIVE,
         marketCode: marketCode
-      }
+      };
     }
     this.dialog.open(CarRentalDetailComponent, {
       data: { carRental: carRental, isViewDetail: isViewDetail },
-    })
+    });
   }
 
 

@@ -20,7 +20,7 @@ import { MatCardModule } from '@angular/material/card';
         {provide: MAT_DATE_LOCALE, useValue: 'ja-JP'},
     ],
 })
-export class DpwDifferentLocaleComponent {
+export class DpwDifferentLocaleComponent implements OnInit {
 
     // Datepicker with Different Locale
     constructor(

@@ -17,7 +17,7 @@ import {
 
 import { githubData } from "./github-data";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     dataLabels: ApexDataLabels;
@@ -28,7 +28,7 @@ export type ChartOptions = {
     grid: ApexGrid;
     stroke: ApexStroke;
     colors: any;
-};
+}
 
 @Component({
     selector: 'app-github-style-area-chart',

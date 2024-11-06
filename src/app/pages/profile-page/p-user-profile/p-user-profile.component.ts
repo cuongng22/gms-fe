@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
@@ -15,7 +15,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
     templateUrl: './p-user-profile.component.html',
     styleUrl: './p-user-profile.component.scss'
 })
-export class PUserProfileComponent {
+export class PUserProfileComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'projectName', 'client', 'assignees', 'budget', 'startDate', 'endDate', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

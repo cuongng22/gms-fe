@@ -1,4 +1,4 @@
-import { Component, HostListener } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatButtonModule } from '@angular/material/button';
@@ -13,7 +13,7 @@ import { CustomizerSettingsService } from '../../customizer-settings/customizer-
     templateUrl: './header.component.html',
     styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
 
     // isSidebarToggled
     isSidebarToggled = false;
@@ -49,7 +49,7 @@ export class HeaderComponent {
     }
 
     // Header Sticky
-    isSticky: boolean = false;
+    isSticky = false;
     @HostListener('window:scroll', ['$event'])
     checkScroll() {
         const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
@@ -61,7 +61,7 @@ export class HeaderComponent {
     }
 
     // Fullscreen
-    isFullscreen: boolean = false;
+    isFullscreen = false;
     ngOnInit() {
         // Listen for fullscreen change events to update the button text
         document.addEventListener('fullscreenchange', this.onFullscreenChange.bind(this));

@@ -1,6 +1,6 @@
 import { RouterLink } from '@angular/router';
 import { NgClass, NgIf } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -16,7 +16,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     templateUrl: './e-reviews.component.html',
     styleUrl: './e-reviews.component.scss'
 })
-export class EReviewsComponent {
+export class EReviewsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'reviewer', 'ratings', 'product', 'date', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

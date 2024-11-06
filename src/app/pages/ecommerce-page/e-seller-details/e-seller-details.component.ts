@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SellerOverviewComponent } from './seller-overview/seller-overview.component';
 import { RevenueComponent } from './revenue/revenue.component';
@@ -18,7 +18,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
     templateUrl: './e-seller-details.component.html',
     styleUrl: './e-seller-details.component.scss'
 })
-export class ESellerDetailsComponent {
+export class ESellerDetailsComponent implements OnInit, OnDestroy {
 
     // Text Editor
     editor: Editor;

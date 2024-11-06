@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,7 +17,7 @@ import { CustomizerSettingsService } from '../../../../customizer-settings/custo
     templateUrl: './reviews.component.html',
     styleUrl: './reviews.component.scss'
 })
-export class ReviewsComponent {
+export class ReviewsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['reviewer', 'ratings', 'date', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

@@ -18,7 +18,7 @@ import {
 
 import { series } from "./data";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     xaxis: ApexXAxis;
@@ -31,7 +31,7 @@ export type ChartOptions = {
     labels: string[];
     legend: ApexLegend;
     subtitle: ApexTitleSubtitle;
-};
+}
 
 @Component({
     selector: 'app-basic-area-chart',

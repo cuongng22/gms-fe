@@ -16,7 +16,7 @@ import {
 })
 export class DdCustomPreviewComponent {
 
-    // tslint:disable:max-line-length
+   
     movies = [
         {
             title: 'Episode I - The Phantom Menace',
@@ -55,7 +55,7 @@ export class DdCustomPreviewComponent {
             poster: 'https://upload.wikimedia.org/wikipedia/en/a/af/Star_Wars_The_Rise_of_Skywalker_poster.jpg',
         },
     ];
-    // tslint:enable:max-line-length
+   
 
     drop(event: CdkDragDrop<{title: string; poster: string}[]>) {
         moveItemInArray(this.movies, event.previousIndex, event.currentIndex);

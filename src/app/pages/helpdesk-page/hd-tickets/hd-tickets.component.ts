@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TicketsResolvedComponent } from '../../../dashboard/helpdesk/tickets-resolved/tickets-resolved.component';
 import { TicketsInProgressComponent } from '../../../dashboard/helpdesk/tickets-in-progress/tickets-in-progress.component';
@@ -23,7 +23,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     templateUrl: './hd-tickets.component.html',
     styleUrl: './hd-tickets.component.scss'
 })
-export class HdTicketsComponent {
+export class HdTicketsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'ticketTitle', 'requester', 'assignedTo', 'createdDate', 'dueDate', 'priority', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

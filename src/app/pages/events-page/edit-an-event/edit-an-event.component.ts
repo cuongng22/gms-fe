@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,7 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
     templateUrl: './edit-an-event.component.html',
     styleUrl: './edit-an-event.component.scss'
 })
-export class EditAnEventComponent {
+export class EditAnEventComponent implements OnInit, OnDestroy {
 
     // Text Editor
     editor: Editor;
@@ -42,7 +42,7 @@ export class EditAnEventComponent {
     }
 
     // File Uploader
-    public multiple: boolean = false;
+    public multiple = false;
 
     // Select Value
     ticketTypeSelected = 'option1';

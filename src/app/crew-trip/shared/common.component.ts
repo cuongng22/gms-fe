@@ -1,23 +1,23 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core';
-import { MatTableDataSource } from "@angular/material/table";
-import { SelectionModel } from "@angular/cdk/collections";
-import { MatPaginator, PageEvent } from "@angular/material/paginator";
-import { CustomizerSettingsService } from "src/app/customizer-settings/customizer-settings.service";
-import { NgxSpinnerService } from "ngx-spinner";
-import { ToggleService } from "src/app/common/header/toggle.service";
-import { BaseService } from "src/app/crew-trip/core/services/base-service";
-import { FormGroup } from "@angular/forms";
-import { Constant, MESSAGE, removeNullValues } from "src/app/crew-trip/shared/utils/constant";
-import { HttpClient, HttpStatusCode } from "@angular/common/http";
+import { Component, inject, OnInit, ViewChild, AfterViewInit } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { CustomizerSettingsService } from 'src/app/customizer-settings/customizer-settings.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToggleService } from 'src/app/common/header/toggle.service';
+import { BaseService } from 'src/app/crew-trip/core/services/base-service';
+import { FormGroup } from '@angular/forms';
+import { Constant, MESSAGE, removeNullValues } from 'src/app/crew-trip/shared/utils/constant';
+import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { saveAs } from 'file-saver';
-import { UltilService } from "src/app/crew-trip/core/services/ultil-service";
+import { UltilService } from 'src/app/crew-trip/core/services/ultil-service';
 import { ListResponse } from './models/common.model';
 
 
 @Component({
-  selector: 'app-common', standalone: true, imports: [], template: ``
+  selector: 'app-common', standalone: true, imports: [], template: ''
 })
-export class CommonComponent implements OnInit {
+export class CommonComponent implements OnInit, AfterViewInit {
   Constant = Constant;
   MESSAGE = MESSAGE;
   spinner = inject(NgxSpinnerService);
@@ -29,7 +29,7 @@ export class CommonComponent implements OnInit {
   selection = new SelectionModel<any>(true, []);
   pageSize = Constant.PAGE_SIZE;
   pageIndex = Constant.PAGE;
-  pageSizeOptions = [10, 50, 100]
+  pageSizeOptions = [10, 50, 100];
   totalElement = 0;
   showFirstLastButtons = true;
   // isSidebarToggled
@@ -87,20 +87,20 @@ export class CommonComponent implements OnInit {
   }
 
   onPageChange(event: PageEvent) {
-    this.pageSize = event.pageSize
-    this.pageIndex = event.pageIndex
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
     this.search();
   }
 
   async search<T>(body?: any) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.search<ListResponse<T>>({
+      const res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,
         limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
       });
-      console.log(res)
+      console.log(res);
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;
@@ -108,7 +108,7 @@ export class CommonComponent implements OnInit {
             ...s,
             isActiveLabel: s.isActive === true || !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
             activeLabel: s.active === true || !!s.active || s.status === true || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
-          }))
+          }));
           this.totalElement = res.data.totalElements;
         }
         return res;
@@ -124,8 +124,8 @@ export class CommonComponent implements OnInit {
   async detail(id: any) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.detail(id);
-      console.log(res)
+      const res = await this.baseService.detail(id);
+      console.log(res);
       this.formGroupDetail.patchValue(res?.data || res);
     } catch (e: any) {
       console.log(e);
@@ -141,7 +141,7 @@ export class CommonComponent implements OnInit {
       if (this.formGroupDetail.invalid) {
         return;
       }
-      let update = !!this.formGroupDetail.value.id;
+      const update = !!this.formGroupDetail.value.id;
       await this.spinner.show();
       let res;
       if (update) {
@@ -149,13 +149,13 @@ export class CommonComponent implements OnInit {
       } else {
         res = await this.baseService.create(this.formGroupDetail.value);
       }
-      console.log(res)
+      console.log(res);
       await this.search();
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
       await this.closeDetail();
       return res;
     } catch (e: any) {
-      console.log("eeeeeeeeeeeeeeeeeee:", e)
+      console.log('eeeeeeeeeeeeeeeeeee:', e);
       this.baseService.showError(e.error?.data ?? JSON.stringify(e.error) ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
@@ -166,7 +166,7 @@ export class CommonComponent implements OnInit {
   async delete() {
     try {
       await this.spinner.show();
-      let res = await this.baseService.delete(this.formGroupDetail.value.id);
+      const res = await this.baseService.delete(this.formGroupDetail.value.id);
       this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
       await this.search();
       return res;
@@ -207,7 +207,7 @@ export class CommonComponent implements OnInit {
     this.formGroupDetail.updateValueAndValidity();
 
     this.toggleDialogCreate();
-    console.log(this.formGroupDetail.value)
+    console.log(this.formGroupDetail.value);
   }
 
   async showConfirmDelete(id: any) {
@@ -222,7 +222,7 @@ export class CommonComponent implements OnInit {
     this.formGroupDetail.updateValueAndValidity();
 
     this.toggleDialogDelete();
-    console.log(this.formGroupDetail.value)
+    console.log(this.formGroupDetail.value);
   }
 
   downloadFile(blob: Blob, filename: string) {
@@ -232,8 +232,8 @@ export class CommonComponent implements OnInit {
   async exportFile(body?: any, filename?: string) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.exportData({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) });
-      console.log(res)
+      const res = await this.baseService.exportData({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) });
+      console.log(res);
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       console.log(e);
@@ -247,10 +247,10 @@ export class CommonComponent implements OnInit {
     try {
       await this.spinner.show();
       this.formGroupSearch.patchValue({
-        "export": true
-      })
-      let res = await this.baseService.exportDataOptions({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) }, sourcePath);
-      console.log(res)
+        'export': true
+      });
+      const res = await this.baseService.exportDataOptions({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) }, sourcePath);
+      console.log(res);
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       console.log(e);
@@ -263,8 +263,8 @@ export class CommonComponent implements OnInit {
   async downloadTemplate(filename?: string, body?: any, sourcePath?: string) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.exportData(body, sourcePath ?? 'download-template');
-      console.log(res)
+      const res = await this.baseService.exportData(body, sourcePath ?? 'download-template');
+      console.log(res);
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       console.log(e);

@@ -17,7 +17,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     xaxis: ApexXAxis;
@@ -28,7 +28,7 @@ export type ChartOptions = {
     yaxis: ApexYAxis;
     stroke: ApexStroke;
     title: ApexTitleSubtitle;
-};
+}
 
 @Component({
     selector: 'app-gradient-line-chart',

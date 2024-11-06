@@ -1,19 +1,19 @@
 import {Component, inject} from '@angular/core';
-import {CommonModule} from "@angular/common";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {MatButtonModule} from "@angular/material/button";
-import { MatFormFieldModule} from "@angular/material/form-field";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import { MatInputModule} from "@angular/material/input";
-import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from "@angular/material/card";
-import {MatCheckbox} from "@angular/material/checkbox";
-import {TranslateModule, TranslateService} from "@ngx-translate/core";
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
-import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
-import {HelperService} from "src/app/crew-trip/core/services/helper.service";
-import {StorageService} from "src/app/crew-trip/core/services/storage.service";
-import {MatIconModule} from "@angular/material/icon";
-import {NgxSpinnerModule, NgxSpinnerService} from "ngx-spinner";
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {MatButtonModule} from '@angular/material/button';
+import { MatFormFieldModule} from '@angular/material/form-field';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import { MatInputModule} from '@angular/material/input';
+import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from '@angular/material/card';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import {UsersService} from 'src/app/crew-trip/core/services/users-service';
+import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
+import {HelperService} from 'src/app/crew-trip/core/services/helper.service';
+import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
+import {MatIconModule} from '@angular/material/icon';
+import {NgxSpinnerModule, NgxSpinnerService} from 'ngx-spinner';
 
 @Component({
   selector: 'app-forgot-password',
@@ -42,7 +42,7 @@ export class ForgotPasswordComponent {
     });
   }
 
- async requestForgotPassword() {
+  async requestForgotPassword() {
     if (this.formGroup.invalid) {
       this.formGroup.markAllAsTouched();
       return;

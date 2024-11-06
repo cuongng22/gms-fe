@@ -16,7 +16,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     dataLabels: ApexDataLabels;
@@ -27,7 +27,7 @@ export type ChartOptions = {
     xaxis: ApexXAxis;
     fill: ApexFill;
     title: ApexTitleSubtitle;
-};
+}
 
 @Component({
     selector: 'app-data-labels-column-chart',

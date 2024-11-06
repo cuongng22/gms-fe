@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { RouterLink } from '@angular/router';
 import { NgxEditorModule, Editor, Toolbar } from 'ngx-editor';
@@ -10,7 +10,7 @@ import { NgxEditorModule, Editor, Toolbar } from 'ngx-editor';
     templateUrl: './editors.component.html',
     styleUrl: './editors.component.scss'
 })
-export class EditorsComponent {
+export class EditorsComponent implements OnInit, OnDestroy {
 
     // Text Editor
     editor: Editor;

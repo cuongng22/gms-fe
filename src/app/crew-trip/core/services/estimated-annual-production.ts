@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import { firstValueFrom } from 'rxjs';
-import {BaseService} from "src/app/crew-trip/core/services/base-service";
+import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 
 @Injectable({
   providedIn: 'root'
@@ -17,7 +17,7 @@ export class EstimatedAnnualProductionService extends BaseService {
    * @returns any
    */
   getVersion(type: number): Promise<any> {
-    const url = `${this.api}/${this.path}/versions?type=${type}`
+    const url = `${this.api}/${this.path}/versions?type=${type}`;
     return firstValueFrom(this.http.get<any>(url));
-}
+  }
 }

@@ -2,7 +2,7 @@ import {HttpClient} from '@angular/common/http';
 import {Injectable} from '@angular/core';
 import {FormControl, FormGroup, Validators} from '@angular/forms';
 import * as moment from 'moment';
-import {BaseService} from "src/app/crew-trip/core/services/base-service";
+import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 
 
 @Injectable({
@@ -19,7 +19,7 @@ export class HelperService {
     this.mywindow = window;
   }
 
-  async markFormGroupTouched(formGroup: FormGroup, ignoreFields: Array<string> = []): Promise<void> {
+  async markFormGroupTouched(formGroup: FormGroup, ignoreFields: string[] = []): Promise<void> {
     Object.keys(formGroup.controls).forEach(field => {
       if (!ignoreFields.includes(field)) {
         const control = formGroup.get(field);
@@ -46,7 +46,7 @@ export class HelperService {
     if (array && array.length > 0) {
       array.forEach((item, index) => {
         item.idx = index;
-      })
+      });
     }
   }
 
@@ -60,7 +60,7 @@ export class HelperService {
     if (!ignore) {
       ignore = [];
     }
-    for (let controlsKey in formGroup.controls) {
+    for (const controlsKey in formGroup.controls) {
       const control = formGroup.controls[controlsKey];
       if (control.validator && !ignore.includes(controlsKey)) {
         control.setValidators(Validators.nullValidator);
@@ -69,7 +69,7 @@ export class HelperService {
   }
 
   async restoreRequiredForm(formGroup: FormGroup) {
-    for (let controlsKey in formGroup.controls) {
+    for (const controlsKey in formGroup.controls) {
       const control = formGroup.controls[controlsKey];
       if (control.validator) {
         control.setValidators(Validators.required);
@@ -77,7 +77,7 @@ export class HelperService {
     }
   }
 
-  bidingDataInFormGroupAndIgnore(formGroup: FormGroup, dataBinding: any, ignoreFields: Array<string> = []) {
+  bidingDataInFormGroupAndIgnore(formGroup: FormGroup, dataBinding: any, ignoreFields: string[] = []) {
     if (dataBinding) {
       for (const name in dataBinding) {
         if (formGroup.controls.hasOwnProperty(name) && !ignoreFields.includes(name)) {
@@ -87,7 +87,7 @@ export class HelperService {
     }
   }
 
-  bidingDataInFormGroupAndNotTrigger(formGroup: FormGroup, dataBinding: any, fiedlNotTrigger: Array<string> = []) {
+  bidingDataInFormGroupAndNotTrigger(formGroup: FormGroup, dataBinding: any, fiedlNotTrigger: string[] = []) {
     if (dataBinding) {
       for (const name in dataBinding) {
         if (formGroup.controls.hasOwnProperty(name)) {
@@ -110,7 +110,7 @@ export class HelperService {
       }
     }
     if (invalid.length > 0) {
-      this.baseService.showNotification("Vui lòng điền đầy đủ thông tin","right");
+      this.baseService.showNotification('Vui lòng điền đầy đủ thông tin','right');
       console.log(invalid, ' invalid');
     }
   }

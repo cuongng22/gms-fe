@@ -13,14 +13,14 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     xaxis: ApexXAxis;
     grid: ApexGrid;
     yaxis: ApexYAxis;
     title: ApexTitleSubtitle;
-};
+}
 
 @Component({
     selector: 'app-basic-candlestick-chart',
@@ -346,10 +346,10 @@ export class BasicCandlestickChartComponent {
     }
 
     public generateDayWiseTimeSeries(baseval:any, count:any, yrange:any) {
-        var i = 0;
-        var series = [];
+        let i = 0;
+        const series = [];
         while (i < count) {
-        var y =
+        const y =
             Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
             series.push([baseval, y]);
             baseval += 86400000;

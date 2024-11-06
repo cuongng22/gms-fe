@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +15,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     templateUrl: './published.component.html',
     styleUrl: './published.component.scss'
 })
-export class PublishedComponent {
+export class PublishedComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'product', 'category', 'price', 'order', 'stock', 'amount', 'rating', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
