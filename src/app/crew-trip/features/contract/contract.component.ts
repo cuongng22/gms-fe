@@ -7,14 +7,12 @@ import {MatMenuModule} from '@angular/material/menu';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {RolesService} from 'src/app/crew-trip/core/services/roles-service';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
 import {NoDataRowOutlet} from '@angular/cdk/table';
@@ -22,6 +20,9 @@ import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
 import {ContractDetailComponent} from 'src/app/crew-trip/features/contract/contract-detail/contract-detail.component';
 import {Constant} from 'src/app/crew-trip/shared/utils/constant';
+import {FlightMarketService} from "src/app/crew-trip/core/services/flight-market.service";
+import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
+import {VehicleService} from "src/app/crew-trip/core/services/vehicle.service";
 
 
 @Component({
@@ -35,10 +36,17 @@ import {Constant} from 'src/app/crew-trip/shared/utils/constant';
 
 export class ContractComponent extends CommonComponent implements OnInit {
   override baseService = inject(ContractService);
+  flightMarketService = inject(FlightMarketService);
+  hotelService = inject(HotelService);
+  vehicleService = inject(VehicleService);
   fb = inject(FormBuilder);
 
   //variable
   step = 1;
+  listFlightMarket = [];
+  listPartner: any[] = [];
+  listHotel = [];
+  listVehicle = [];
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`bizDocId`, value: 'bizDocId'},
@@ -145,7 +153,15 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   constructor() {
     super();
-    this.formGroupSearch = this.fb.group({});
+    this.formGroupSearch = this.fb.group({
+      s: [],
+      marketCodes: [],
+      partnerCode: [],
+      startDate: [],
+      endDate: [],
+      export: [false],
+      active: [false],
+    });
     this.formGroupDetail = this.fb.group({});
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
@@ -153,8 +169,16 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   override async ngOnInit() {
     await Promise.all([
+      this.getListFlightMarket(),
+      this.getListHotel(),
+      this.getListVehiclesPartner(),
       this.search(),
     ]).then(() => {
+      let listCombine = [...this.listVehicle, ...this.listHotel];
+      this.listPartner = listCombine.map((s: any) => ({
+        code: s.code ?? s.hotelCode,
+        name: s.name ?? s.hotelName,
+      }))
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }
@@ -166,7 +190,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   async backStep() {
     await this.search(),
-    this.step = 1;
+      this.step = 1;
   }
 
   async showAnnex(id: any) {
@@ -177,5 +201,29 @@ export class ContractComponent extends CommonComponent implements OnInit {
      *
      */
     this.showPopupAnnex = true;
+  }
+
+  async getListFlightMarket() {
+    await this.flightMarketService.search({option: 1}).then(res => {
+      if (res.data) {
+        this.listFlightMarket = res.data;
+      }
+    });
+  }
+
+  async getListHotel() {
+    await this.hotelService.search({}).then(res => {
+      if (res.data) {
+        this.listHotel = res.data.content;
+      }
+    });
+  }
+
+  async getListVehiclesPartner() {
+    await this.vehicleService.search({}).then(res => {
+      if (res.data) {
+        this.listVehicle = res.data.content;
+      }
+    });
   }
 }
