@@ -67,7 +67,7 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatDatepickerModule,
     MatDatepicker,
     MatDatepickerToggle,
-    MatNativeDateModule ],
+    MatNativeDateModule],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
 })
@@ -102,8 +102,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   constructor() {
     super();
     this.formGroupDetail = this.fb.group({
-      tempp:[],
+      tempp: [],
       id: [],
+      bizDocId: [],
       contractCode: [],
       contractNo: [],
       currency: [],
@@ -160,7 +161,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       window.scrollTo(0, 0);
       await this.spinner.show();
       await Promise.all([
-        this.detail(2)
+        this.detail(this.id)
       ]);
 
     } catch (e) {

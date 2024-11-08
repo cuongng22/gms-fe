@@ -8,7 +8,7 @@ import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
@@ -23,12 +23,13 @@ import {Constant} from 'src/app/crew-trip/shared/utils/constant';
 import {FlightMarketService} from "src/app/crew-trip/core/services/flight-market.service";
 import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
 import {VehicleService} from "src/app/crew-trip/core/services/vehicle.service";
+import {MatDatepickerModule} from "@angular/material/datepicker";
 
 
 @Component({
   selector: 'app-contract',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint],
   templateUrl: './contract.component.html',
   styleUrl: './contract.component.scss',
 })
@@ -162,16 +163,16 @@ export class ContractComponent extends CommonComponent implements OnInit {
       export: [false],
       active: [false],
     });
-    this.formGroupDetail = this.fb.group({});
+    this.formGroupDetail = this.fb.group({bizDocId: []});
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
 
   override async ngOnInit() {
     await Promise.all([
-      this.getListFlightMarket(),
-      this.getListHotel(),
-      this.getListVehiclesPartner(),
+      this.loadListFlightMarket(),
+      this.loadListHotel(),
+      this.loadListVehiclesPartner(),
       this.search(),
     ]).then(() => {
       let listCombine = [...this.listVehicle, ...this.listHotel];
@@ -203,7 +204,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
     this.showPopupAnnex = true;
   }
 
-  async getListFlightMarket() {
+  async loadListFlightMarket() {
     await this.flightMarketService.search({option: 1}).then(res => {
       if (res.data) {
         this.listFlightMarket = res.data;
@@ -211,7 +212,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
     });
   }
 
-  async getListHotel() {
+  async loadListHotel() {
     await this.hotelService.search({}).then(res => {
       if (res.data) {
         this.listHotel = res.data.content;
@@ -219,11 +220,25 @@ export class ContractComponent extends CommonComponent implements OnInit {
     });
   }
 
-  async getListVehiclesPartner() {
+  async loadListVehiclesPartner() {
     await this.vehicleService.search({}).then(res => {
       if (res.data) {
         this.listVehicle = res.data.content;
       }
+    });
+  }
+
+  async getPartnerInfo() {
+    await this.baseService.getPartnerInfo().then(res => {
+      console.log(res)
+    });
+  }
+
+  async getMarket() {
+    await this.baseService.getMarket().then(res => {
+
+      console.log(res)
+
     });
   }
 }
