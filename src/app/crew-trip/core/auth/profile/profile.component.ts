@@ -15,6 +15,8 @@ import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import {StorageService} from "src/app/crew-trip/core/services/storage.service";
+import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 
 @Component({
   selector: 'app-profile',
@@ -37,7 +39,7 @@ export class ProfileComponent implements OnInit{
   fileError: string | null = null;
   @Output() fileUploaded = new EventEmitter<string>();
 
-  constructor() {
+  constructor(private storageService: StorageService) {
     this.formGroup = this.fb.group({
       id:[this.userCurrent?.id, Validators.required],
       fullName: [this.userCurrent?.fullName,Validators.required],
@@ -139,6 +141,12 @@ export class ProfileComponent implements OnInit{
       formData.append('file', file);
       formData.append('email', email);
       const res= await  this.userService.uploadAvatar(formData);
+      if(res){
+        let userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
+        let oldUrlavatar =  userInfo.avartarUrl;
+        userInfo.avartarUrl = oldUrlavatar?.replace(/[^/]+$/, file.name);
+        this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(userInfo));
+      }
     } catch (error: any) {
       if (error?.status === 401 && error.error?.error) {
         this.baseService.showError(error?.error?.error);

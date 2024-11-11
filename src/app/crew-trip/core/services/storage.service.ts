@@ -24,7 +24,6 @@ export class StorageService {
     if (item) {
       return JSON.parse(item);
     }
-
     return item;
   }
 
