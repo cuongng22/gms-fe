@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -17,7 +17,7 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
     templateUrl: './e-edit-product.component.html',
     styleUrl: './e-edit-product.component.scss'
 })
-export class EEditProductComponent {
+export class EEditProductComponent implements OnInit, OnDestroy {
 
     // Text Editor
     editor: Editor;
@@ -42,7 +42,7 @@ export class EEditProductComponent {
     }
 
     // File Uploader
-    public multiple: boolean = true;
+    public multiple = true;
 
     // Select Value
     productTypeSelected = 'option1';

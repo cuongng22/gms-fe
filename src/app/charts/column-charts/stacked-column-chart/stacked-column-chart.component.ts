@@ -17,7 +17,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     dataLabels: ApexDataLabels;
@@ -29,7 +29,7 @@ export type ChartOptions = {
     legend: ApexLegend;
     yaxis: ApexYAxis;
     fill: ApexFill;
-};
+}
 
 @Component({
     selector: 'app-stacked-column-chart',

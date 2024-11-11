@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,7 +17,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     templateUrl: './events-list.component.html',
     styleUrl: './events-list.component.scss'
 })
-export class EventsListComponent {
+export class EventsListComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['eventID', 'event', 'dateAndTime', 'location', 'organizer', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

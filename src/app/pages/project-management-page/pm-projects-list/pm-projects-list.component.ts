@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +14,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     templateUrl: './pm-projects-list.component.html',
     styleUrl: './pm-projects-list.component.scss'
 })
-export class PmProjectsListComponent {
+export class PmProjectsListComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'projectName', 'client', 'assignees', 'budget', 'startDate', 'endDate', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

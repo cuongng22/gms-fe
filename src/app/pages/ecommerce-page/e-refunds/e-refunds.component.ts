@@ -1,6 +1,6 @@
 import { RouterLink } from '@angular/router';
 import { NgClass, NgIf } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { SelectionModel } from '@angular/cdk/collections';
@@ -15,7 +15,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     templateUrl: './e-refunds.component.html',
     styleUrl: './e-refunds.component.scss'
 })
-export class ERefundsComponent {
+export class ERefundsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'customer', 'date', 'noOrderReturned', 'noOrderRefunded', 'noOrderReplaced', 'totalRefunded', 'totalReplaced'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

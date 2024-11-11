@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -33,7 +33,7 @@ export const _filter = (opt: string[], value: string): string[] => {
     templateUrl: './option-groups.component.html',
     styleUrl: './option-groups.component.scss'
 })
-export class OptionGroupsComponent {
+export class OptionGroupsComponent implements OnInit {
 
     // Option Groups Autocomplete
     stateForm = this._formBuilder.group({

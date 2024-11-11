@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,7 +16,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
     templateUrl: './hd-ticket-details.component.html',
     styleUrl: './hd-ticket-details.component.scss'
 })
-export class HdTicketDetailsComponent {
+export class HdTicketDetailsComponent implements OnInit, OnDestroy {
 
     displayedColumns: string[] = ['id', 'ticketTitle', 'requester', 'assignedTo', 'createdDate', 'dueDate', 'priority', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

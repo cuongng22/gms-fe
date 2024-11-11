@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -27,7 +27,7 @@ export interface User {
     templateUrl: './display-value.component.html',
     styleUrl: './display-value.component.scss'
 })
-export class DisplayValueComponent {
+export class DisplayValueComponent implements OnInit {
 
     // Display Value
     myControl = new FormControl<string | User>('');

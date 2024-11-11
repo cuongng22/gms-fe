@@ -2,7 +2,7 @@ import {
     Component,
     ViewChild,
     TemplateRef,
-    ViewContainerRef
+    ViewContainerRef, AfterViewInit, OnDestroy
 } from '@angular/core';
 import { Overlay, OverlayRef } from '@angular/cdk/overlay';
 import { TemplatePortal } from '@angular/cdk/portal';
@@ -16,7 +16,7 @@ import { MatButtonModule } from '@angular/material/button';
     templateUrl: './dd-open-draggable-dialog.component.html',
     styleUrl: './dd-open-draggable-dialog.component.scss'
 })
-export class DdOpenDraggableDialogComponent {
+export class DdOpenDraggableDialogComponent implements AfterViewInit, OnDestroy {
 
     @ViewChild(TemplateRef) _dialogTemplate: TemplateRef<any>;
     private _overlayRef: OverlayRef;

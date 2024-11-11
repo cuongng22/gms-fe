@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +15,7 @@ import { MatProgressBarModule } from '@angular/material/progress-bar';
     templateUrl: './dt-students-progress.component.html',
     styleUrl: './dt-students-progress.component.scss'
 })
-export class DtStudentsProgressComponent {
+export class DtStudentsProgressComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['name', 'courseName', 'status'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

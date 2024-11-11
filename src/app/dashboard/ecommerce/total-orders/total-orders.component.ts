@@ -17,7 +17,7 @@ import {
 } from "ng-apexcharts";
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 
-export type ChartOptions = {
+export interface ChartOptions {
     plotOptions: ApexPlotOptions;
     series: ApexAxisChartSeries;
     dataLabels: ApexDataLabels;
@@ -29,7 +29,7 @@ export type ChartOptions = {
     xaxis: ApexXAxis;
     colors: string[];
     grid: ApexGrid;
-};
+}
 
 @Component({
     selector: 'app-total-orders',

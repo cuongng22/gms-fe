@@ -37,8 +37,8 @@ export class EProductDetailsComponent {
     }
 
     // Product Types
-    typeText: string = 'Apple M1 Pro Chip';
-    typeActiveButton: string = 'second';
+    typeText = 'Apple M1 Pro Chip';
+    typeActiveButton = 'second';
     setTypeTextToFirst() {
         this.typeText = 'Apple M1 Max Chip';
         this.typeActiveButton = 'first';
@@ -49,8 +49,8 @@ export class EProductDetailsComponent {
     }
 
     // Capacity
-    capacityText: string = '1 TB';
-    capacityActiveButton: string = 'second';
+    capacityText = '1 TB';
+    capacityActiveButton = 'second';
     setCapacityTextToFirst() {
         this.capacityText = '512 GB';
         this.capacityActiveButton = 'first';
@@ -61,8 +61,8 @@ export class EProductDetailsComponent {
     }
 
     // Color
-    colorText: string = 'Silver';
-    colorActiveButton: string = 'first';
+    colorText = 'Silver';
+    colorActiveButton = 'first';
     setColorTextToFirst() {
         this.colorText = 'Silver';
         this.colorActiveButton = 'first';

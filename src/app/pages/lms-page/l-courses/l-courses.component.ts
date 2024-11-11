@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +14,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     templateUrl: './l-courses.component.html',
     styleUrl: './l-courses.component.scss'
 })
-export class LCoursesComponent {
+export class LCoursesComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'courseName', 'category', 'instructor', 'enrolled', 'startDate', 'endDate', 'price', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

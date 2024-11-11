@@ -1,9 +1,9 @@
 import {Injectable} from '@angular/core';
-import {BaseService} from "src/app/crew-trip/core/services/base-service";
-import {firstValueFrom} from "rxjs";
+import {BaseService} from 'src/app/crew-trip/core/services/base-service';
+import {firstValueFrom} from 'rxjs';
 import { HttpParams } from '@angular/common/http';
 import { Response, Role } from 'src/app/crew-trip/features/system/users/users.model';
-import {response} from "express";
+import {response} from 'express';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +14,7 @@ export class RolesService extends BaseService {
     this.path = 'roles';
   }
 
-/*  override search(body: any): Promise<Response<Role>> {
+  /*  override search(body: any): Promise<Response<Role>> {
     const url = `${this.api}/${this.path}`
     let params = new HttpParams({fromObject: body})
     return firstValueFrom(this.http.get<Response<Role>>(url, {params}));
@@ -31,12 +31,12 @@ export class RolesService extends BaseService {
   }*/
 
   detailRoleFunction(id: any): Promise<any> {
-    const url = `${this.api}/${this.path}/roles-function-view/${id}`
+    const url = `${this.api}/${this.path}/roles-function-view/${id}`;
     return firstValueFrom(this.http.get<any>(url, this.httpOptions));
   }
 
   addRoleFunction(id: any, body: any): Promise<any> {
-    const url = `${this.api}/${this.path}/roles-function-add/${id}`
+    const url = `${this.api}/${this.path}/roles-function-add/${id}`;
     return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
   }
 }

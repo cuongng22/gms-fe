@@ -15,7 +15,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     grid: ApexGrid;
@@ -25,7 +25,7 @@ export type ChartOptions = {
     dataLabels: ApexDataLabels;
     legend: ApexLegend;
     plotOptions: ApexPlotOptions;
-};
+}
 
 @Component({
     selector: 'app-range-column-chart',

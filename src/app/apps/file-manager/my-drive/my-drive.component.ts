@@ -1,5 +1,5 @@
 import { NgClass } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -22,7 +22,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
     templateUrl: './my-drive.component.html',
     styleUrl: './my-drive.component.scss'
 })
-export class MyDriveComponent {
+export class MyDriveComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['fileName', 'owner', 'listedDate', 'fileType', 'fileSize', 'fileItems', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

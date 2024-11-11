@@ -13,7 +13,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     legend: ApexLegend;
@@ -21,7 +21,7 @@ export type ChartOptions = {
     grid: ApexGrid;
     colors: any;
     yaxis: ApexYAxis;
-};
+}
 
 @Component({
     selector: 'app-basic-scatter-chart',

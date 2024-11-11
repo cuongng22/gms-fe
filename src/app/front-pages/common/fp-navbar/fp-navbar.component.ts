@@ -20,7 +20,7 @@ export class FpNavbarComponent {
     }
 
     // Navbar Sticky
-    isSticky: boolean = false;
+    isSticky = false;
     @HostListener('window:scroll', ['$event'])
     checkScroll() {
         const scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;

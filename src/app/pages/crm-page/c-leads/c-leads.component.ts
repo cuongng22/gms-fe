@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { RevenueGrowthComponent } from '../../../dashboard/crm/revenue-growth/revenue-growth.component';
 import { LeadConversionComponent } from '../../../dashboard/crm/lead-conversion/lead-conversion.component';
@@ -26,7 +26,7 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
     templateUrl: './c-leads.component.html',
     styleUrl: './c-leads.component.scss'
 })
-export class CLeadsComponent {
+export class CLeadsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['select', 'id', 'customer', 'email', 'phone', 'createdDate', 'company', 'leadSource', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

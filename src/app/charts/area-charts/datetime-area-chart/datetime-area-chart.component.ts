@@ -22,7 +22,7 @@ import {
 import { data } from "./series-data";
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     dataLabels: ApexDataLabels;
@@ -37,7 +37,7 @@ export type ChartOptions = {
     annotations: ApexAnnotations;
     colors: any;
     toolbar: any;
-};
+}
 
 @Component({
     selector: 'app-datetime-area-chart',

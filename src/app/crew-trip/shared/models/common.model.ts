@@ -1,5 +1,5 @@
 export class ListResponse<T> {
-    data: {
+  data: {
         totalPages: number;
         totalElements: number;
         pageable: {
@@ -27,9 +27,9 @@ export class ListResponse<T> {
         last: boolean;
         empty: boolean;
     };
-    status: number;
+  status: number;
 
-    constructor(data: {
+  constructor(data: {
         totalPages: number;
         totalElements: number;
         pageable: {
@@ -57,18 +57,18 @@ export class ListResponse<T> {
         last: boolean;
         empty: boolean;
     }, status: number) {
-        this.data = data;
-        this.status = status;
-    }
+    this.data = data;
+    this.status = status;
+  }
 }
 
 
 export class DetailResponse<T> {
-    data: T;
-    status: number;
+  data: T;
+  status: number;
 
-    constructor(data: T, status: number) {
-        this.data = data;
-        this.status = status;
-    }
+  constructor(data: T, status: number) {
+    this.data = data;
+    this.status = status;
+  }
 }

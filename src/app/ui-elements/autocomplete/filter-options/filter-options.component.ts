@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -23,7 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     templateUrl: './filter-options.component.html',
     styleUrl: './filter-options.component.scss'
 })
-export class FilterOptionsComponent {
+export class FilterOptionsComponent implements OnInit {
 
     // Filter Autocomplete
     myControl = new FormControl('');

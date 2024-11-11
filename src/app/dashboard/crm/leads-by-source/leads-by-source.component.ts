@@ -17,7 +17,7 @@ import {
 } from "ng-apexcharts";
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 
-export type ChartOptions = {
+export interface ChartOptions {
     labels: any;
     chart: ApexChart;
     colors: string[];
@@ -27,7 +27,7 @@ export type ChartOptions = {
     dataLabels: ApexDataLabels;
     plotOptions: ApexPlotOptions;
     series: ApexNonAxisChartSeries;
-};
+}
 
 @Component({
     selector: 'app-leads-by-source',

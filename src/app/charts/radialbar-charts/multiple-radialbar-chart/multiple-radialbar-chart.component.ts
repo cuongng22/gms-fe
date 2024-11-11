@@ -10,13 +10,13 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexNonAxisChartSeries;
     chart: ApexChart;
     labels: string[];
     plotOptions: ApexPlotOptions;
     colors: any;
-};
+}
 
 @Component({
     selector: 'app-multiple-radialbar-chart',

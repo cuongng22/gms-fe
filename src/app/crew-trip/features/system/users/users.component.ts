@@ -1,20 +1,20 @@
 import { Component, effect, inject, model, OnInit, ViewChild } from '@angular/core';
-import { RouterLink } from "@angular/router";
-import { NgClass, NgIf, TitleCasePipe } from "@angular/common";
-import { MatCardModule } from "@angular/material/card";
-import { MatButtonModule } from "@angular/material/button";
-import { MatMenuModule } from "@angular/material/menu";
-import { MatTableModule } from "@angular/material/table";
-import { MatPaginatorIntl, MatPaginatorModule } from "@angular/material/paginator";
-import { MatCheckboxModule } from "@angular/material/checkbox";
-import { UsersService } from "src/app/crew-trip/core/services/users-service";
-import { DataTransformPipe } from "src/app/crew-trip/shared/data-transform.pipe";
-import { MatFormField, MatFormFieldModule, MatLabel } from "@angular/material/form-field";
-import { MatOption, MatSelect, MatSelectModule } from "@angular/material/select";
-import { MatInput, MatInputModule } from "@angular/material/input";
-import { FormBuilder, FormControl, FormsModule, NgModel, ReactiveFormsModule, Validators } from "@angular/forms";
-import { MESSAGE } from "src/app/crew-trip/shared/utils/constant";
-import { RolesService } from "src/app/crew-trip/core/services/roles-service";
+import { RouterLink } from '@angular/router';
+import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { UsersService } from 'src/app/crew-trip/core/services/users-service';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatOption, MatSelect, MatSelectModule } from '@angular/material/select';
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { FormBuilder, FormControl, FormsModule, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
+import { RolesService } from 'src/app/crew-trip/core/services/roles-service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
@@ -71,7 +71,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
     gender: [true],
     email: ['', [Validators.required, Validators.email]],
     phone: [''],
-    roles: [<any>[], Validators.required],
+    roles: [([] as any), Validators.required],
     active: [true, [Validators.required]],
     password: ['', [Validators.required, Validators.minLength(8), Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')]],
     description: ['']
@@ -117,7 +117,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
   async getRoles() {
     try {
       await this.spinner.show();
-      let res = await this.rolesService.search({
+      const res = await this.rolesService.search({
         page: this.pageIndex,
         limit: 9999
       });
@@ -133,8 +133,8 @@ export class UsersComponent extends CommonComponent implements OnInit {
     if (id) {
       try {
         await this.spinner.show();
-        let res = await this.baseService.detail(id);
-        console.log(res)
+        const res = await this.baseService.detail(id);
+        console.log(res);
         this.formGroupDetail.reset({ ...res.data, roles: res.data?.roles?.map((role: any) => role.id) });
         console.log(this.formGroupDetail.value);
         this.toggleDialogCreate();
@@ -162,7 +162,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
 
     if (this.formGroupDetail.valid) {
       try {
-        let selectedRoles: number[] = [];
+        const selectedRoles: number[] = [];
         this.formGroupDetail.value.roles.forEach((roleId: any) => {
           const selectedRole = this.listRolesForCreate.filter(role => role.roleId == roleId)[0];
           selectedRoles.push(selectedRole.roleId);

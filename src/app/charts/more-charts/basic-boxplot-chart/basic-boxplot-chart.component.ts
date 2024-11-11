@@ -16,7 +16,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     title: ApexTitleSubtitle;
@@ -27,7 +27,7 @@ export type ChartOptions = {
     tooltip: ApexTooltip,
     plotOptions: ApexPlotOptions;
     colors: string[]
-};
+}
 
 @Component({
     selector: 'app-basic-boxplot-chart',

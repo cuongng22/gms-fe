@@ -15,7 +15,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: any; //ApexChart;
     dataLabels: ApexDataLabels;
@@ -29,7 +29,7 @@ export type ChartOptions = {
     grid: any; //ApexGrid;
     colors: any;
     toolbar: any;
-};
+}
 
 @Component({
     selector: 'app-syncing-line-chart',
@@ -293,10 +293,10 @@ export class SyncingLineChartComponent {
 
     public generateDayWiseTimeSeries(baseval:any, count:any, yrange:any): any[] {
         let i = 0;
-        let series = [];
+        const series = [];
         while (i < count) {
-            var x = baseval;
-            var y =
+            const x = baseval;
+            const y =
                 Math.floor(Math.random() * (yrange.max - yrange.min + 1)) + yrange.min;
             series.push([x, y]);
             baseval += 86400000;

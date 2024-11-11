@@ -17,7 +17,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     xaxis: ApexXAxis;
@@ -30,7 +30,7 @@ export type ChartOptions = {
     grid: ApexGrid;
     legend: ApexLegend;
     title: ApexTitleSubtitle;
-};
+}
 
 @Component({
     selector: 'app-dashed-line-chart',

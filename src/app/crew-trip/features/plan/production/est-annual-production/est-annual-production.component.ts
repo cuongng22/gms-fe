@@ -104,7 +104,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
     myControl: new FormControl('')
   });
 
-  showDialogUpload: boolean = false;
+  showDialogUpload = false;
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
 
@@ -146,7 +146,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
       debounceTime(500),
       startWith(''))
       .subscribe(value => {
-        console.log(value)
+        console.log(value);
         if (!value) {
           this.filteredOptionsOri.set(this.oriList);
           return;
@@ -264,8 +264,8 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
         const form = new FormData();
         const file: File = this.fileUpload.value[0];
         form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
-        form.append('option', new Blob(["0"], {
-          type: "application/json"
+        form.append('option', new Blob(['0'], {
+          type: 'application/json'
         }));
         await this.spinner.show();
         const res = await this.baseService.uploadFile(form);

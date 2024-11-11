@@ -1,8 +1,8 @@
 import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from "@angular/common/http";
-import { firstValueFrom, Observable } from "rxjs";
-import { MatSnackBar } from "@angular/material/snack-bar";
-import { ActionAlertComponent } from "src/app/crew-trip/shared/action-alert/action-alert.component";
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
+import { firstValueFrom, Observable } from 'rxjs';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { ActionAlertComponent } from 'src/app/crew-trip/shared/action-alert/action-alert.component';
 import { environment } from 'src/environments/environment';
 import { DetailResponse, ListResponse } from '../../shared/models/common.model';
 
@@ -25,23 +25,23 @@ export class BaseService {
   };
 
   search<T = any>(body: any): Promise<ListResponse<T> | any> {
-    const url = `${this.api}/${this.path}`
-    let params = new HttpParams({ fromObject: body })
+    const url = `${this.api}/${this.path}`;
+    const params = new HttpParams({ fromObject: body });
     return firstValueFrom(this.http.get<ListResponse<T>>(url, { params }));
   }
 
   detail<T = any>(id: any): Promise<DetailResponse<T> | any> {
-    const url = `${this.api}/${this.path}/${id}`
+    const url = `${this.api}/${this.path}/${id}`;
     return firstValueFrom(this.http.get<DetailResponse<T>>(url, this.httpOptions));
   }
 
   create<T = any>(body: any): Promise<T> {
-    const url = `${this.api}/${this.path}`
+    const url = `${this.api}/${this.path}`;
     return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
   }
 
   update<T = any>(body: any): Promise<T> {
-    const url = `${this.api}/${this.path}/${body.id}`
+    const url = `${this.api}/${this.path}/${body.id}`;
     return firstValueFrom(this.http.put<T>(url, body, this.httpOptions));
   }
 
@@ -97,7 +97,7 @@ export class BaseService {
 
 
   delete<T = any>(id: any): Promise<T> {
-    const url = `${this.api}/${this.path}/${id}`
+    const url = `${this.api}/${this.path}/${id}`;
     return firstValueFrom(this.http.delete<T>(url, this.httpOptions));
   }
 
@@ -137,7 +137,7 @@ export class BaseService {
         horizontalPosition: 'right',
         verticalPosition: 'top',
         data: { type: 'success', message: message }
-      })
+      });
     }
   }
 
@@ -148,7 +148,7 @@ export class BaseService {
         horizontalPosition: 'right',
         verticalPosition: 'top',
         data: { type: 'error', message: message }
-      })
+      });
     }
   }
 
@@ -159,7 +159,7 @@ export class BaseService {
         horizontalPosition: 'right',
         verticalPosition: 'top',
         data: { type: 'warning', message: message }
-      })
+      });
     }
   }
 
@@ -170,7 +170,7 @@ export class BaseService {
         horizontalPosition: 'right',
         verticalPosition: 'top',
         data: { type: 'info', message: message }
-      })
+      });
     }
   }
 }

@@ -12,14 +12,14 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexNonAxisChartSeries;
     chart: ApexChart;
     labels: string[];
     plotOptions: ApexPlotOptions;
     fill: ApexFill;
     stroke: ApexStroke;
-};
+}
 
 @Component({
     selector: 'app-gradient-radialbar-chart',

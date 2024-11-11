@@ -31,7 +31,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 })
 export class HotelDetailComponent extends CommonComponent implements OnInit {
   formBuilder = inject(FormBuilder);
-  hotelService = inject(HotelService)
+  hotelService = inject(HotelService);
 
   readonlyDetail = model<boolean>(false);
 
@@ -66,8 +66,8 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
 
       if (this.readonlyDetail()) {
         Object.keys(this.formGroupDetail.controls).forEach(control => {
-            this.formGroupDetail.get(control)?.disable()
-        })
+          this.formGroupDetail.get(control)?.disable();
+        });
       }
     }
     this.hotelService.isUpdate = this.data.isViewDetail || !!this.formGroupDetail.controls.id.value;

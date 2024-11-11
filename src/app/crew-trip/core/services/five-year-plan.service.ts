@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
-import {BaseService} from "src/app/crew-trip/core/services/base-service";
-import {HttpHeaders, HttpParams} from "@angular/common/http";
-import {firstValueFrom} from "rxjs";
+import {BaseService} from 'src/app/crew-trip/core/services/base-service';
+import {HttpHeaders, HttpParams} from '@angular/common/http';
+import {firstValueFrom} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class FiveYearPlanService extends BaseService {
   }
 
   export(body: any) {
-    const url = `${this.api}/${this.path}`
+    const url = `${this.api}/${this.path}`;
     const httpOptionsExport = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',

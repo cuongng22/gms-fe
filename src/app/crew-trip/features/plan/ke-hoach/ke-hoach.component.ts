@@ -1,24 +1,24 @@
 import {Component, Inject, inject, LOCALE_ID, OnInit} from '@angular/core';
-import {RouterLink} from "@angular/router";
-import {NgClass, NgIf, TitleCasePipe} from "@angular/common";
-import {MatCardModule} from "@angular/material/card";
-import {MatButtonModule} from "@angular/material/button";
-import {MatMenuModule} from "@angular/material/menu";
-import {MatTableModule} from "@angular/material/table";
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {KeHoachService} from "src/app/crew-trip/core/services/ke-hoach-service";
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatOption, MatSelect, MatSelectModule} from "@angular/material/select";
-import {MatInput} from "@angular/material/input";
-import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {Constant} from "src/app/crew-trip/shared/utils/constant";
+import {RouterLink} from '@angular/router';
+import {NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {KeHoachService} from 'src/app/crew-trip/core/services/ke-hoach-service';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatOption, MatSelect, MatSelectModule} from '@angular/material/select';
+import {MatInput} from '@angular/material/input';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Constant} from 'src/app/crew-trip/shared/utils/constant';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {InputSizeComponent} from '../../../shared/input/input-size.component';
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 
 
 export interface PeriodicElement {
@@ -87,7 +87,7 @@ export class KeHoachComponent extends CommonComponent implements OnInit {
     {label: 'Tên trạng thái quyết định', value: 'tenTrangThaiQd'},
     {label: 'Căn cứ', value: 'canCu'}
   ]
-  ;
+    ;
 
   constructor(
     @Inject(LOCALE_ID) public locale: string

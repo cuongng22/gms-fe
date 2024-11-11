@@ -1,11 +1,11 @@
 import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from "@angular/common";
-import {MatCardModule} from "@angular/material/card";
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
+import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {MatCardModule} from '@angular/material/card';
+import {UsersService} from 'src/app/crew-trip/core/services/users-service';
+import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
@@ -18,7 +18,7 @@ import {NoDataRowOutlet} from '@angular/cdk/table';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 
 
 @Component({
@@ -43,14 +43,14 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
     type?: string,
     format?: string
   }[] = [
-    {label: $localize`Code`, value: "code"},
-    {label: $localize`Name`, value: "name"},
-    {label: $localize`Unit`, value: "unit"},
-    {label: $localize`Description`, value: "description"},
-    {label: $localize`Status`, value: "activeLabel"},
-    {label: $localize`DataSource`, value: "dataSource"},
-  ]
-  ;
+      {label: $localize`Code`, value: 'code'},
+      {label: $localize`Name`, value: 'name'},
+      {label: $localize`Unit`, value: 'unit'},
+      {label: $localize`Description`, value: 'description'},
+      {label: $localize`Status`, value: 'activeLabel'},
+      {label: $localize`DataSource`, value: 'dataSource'},
+    ]
+      ;
 
   constructor() {
     super();
@@ -65,13 +65,13 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
       description: ['',],
       active: [true,]
     });
-    this.formGroupSearchInit = {...this.formGroupSearch.value}
-    this.formGroupDetailInit = {...this.formGroupDetail.value}
+    this.formGroupSearchInit = {...this.formGroupSearch.value};
+    this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
 
   override async ngOnInit() {
     await Promise.all([this.search(),]).then(() => {
-      console.log(this.dataSource)
+      console.log(this.dataSource);
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }

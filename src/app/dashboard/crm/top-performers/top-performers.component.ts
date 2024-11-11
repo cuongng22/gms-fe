@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +15,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
     templateUrl: './top-performers.component.html',
     styleUrl: './top-performers.component.scss'
 })
-export class TopPerformersComponent {
+export class TopPerformersComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['user', 'link'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

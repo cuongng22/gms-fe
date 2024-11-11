@@ -1,8 +1,8 @@
 import { Component, inject, OnInit } from '@angular/core';
-import { CommonComponent } from "src/app/crew-trip/shared/common.component";
-import { UsersService } from "src/app/crew-trip/core/services/users-service";
-import { FormBuilder, FormsModule, ReactiveFormsModule } from "@angular/forms";
-import { CrewsService } from "src/app/crew-trip/core/services/crews-service";
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { UsersService } from 'src/app/crew-trip/core/services/users-service';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { CrewsService } from 'src/app/crew-trip/core/services/crews-service';
 import { CommonModule } from '@angular/common';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -84,15 +84,15 @@ export class CrewsComponent extends CommonComponent implements OnInit {
 
   // detail or edit, create car rental
   async crewsDetail(crewId?: any) {
-    let response = await this.baseService.detail(crewId);
-    console.log(response)
-    let dialogRef = this.dialog.open(CrewsDetailComponent, {
+    const response = await this.baseService.detail(crewId);
+    console.log(response);
+    const dialogRef = this.dialog.open(CrewsDetailComponent, {
       data: { crews: { ...response.data } },
       disableClose: true
-    })
+    });
 
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Dialog result: ', result);
+      console.log('Dialog result:', result);
       if (result) {
         this.search();
       }

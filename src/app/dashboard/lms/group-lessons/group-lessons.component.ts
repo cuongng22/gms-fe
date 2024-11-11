@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +15,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
     templateUrl: './group-lessons.component.html',
     styleUrl: './group-lessons.component.scss'
 })
-export class GroupLessonsComponent {
+export class GroupLessonsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['group', 'link'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

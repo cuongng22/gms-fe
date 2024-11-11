@@ -3,8 +3,8 @@ import {NgScrollbarModule} from 'ngx-scrollbar';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {CommonModule, NgClass} from '@angular/common';
-import {CustomizerSettingsService} from "src/app/customizer-settings/customizer-settings.service";
-import {ToggleService} from "src/app/common/header/toggle.service";
+import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
+import {ToggleService} from 'src/app/common/header/toggle.service';
 import { TranslateModule } from '@ngx-translate/core';
 import { menu } from './sidebar.model';
 

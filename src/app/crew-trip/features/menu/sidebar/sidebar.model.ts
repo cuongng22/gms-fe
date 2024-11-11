@@ -1,39 +1,112 @@
-export type Menu = {
+export interface Menu {
     title: string;rootPath:string; subMenu: subMenu[];
 }
-export type subMenu = {
+export interface subMenu {
     path: string; title: string; icon: string; menu?: Menu[];
 }
 
 
 export const menu: Menu[] = [
-    {
-        title: $localize`:@@Data Management:Quản lý dữ liệu`,
-        rootPath : 'data',
-        subMenu: [
-            {
-                path: 'data/users', title: $localize`:@@budgetPlan:Kế hoạch ngân sách`, icon: 'ri-calendar-line'
-            },
-            {
-                path: 'data/users', title: $localize`:@@dailyFlight schedule:Lịch bay ngày`, icon: 'ri-folder-chart-line'
-            },
-            {
-                path: 'data/users', title: $localize`:@@manageBookingsVehicles:Quản lý đặt phòng/xe`, icon: 'ri-shopping-cart-line'
-            },
-            {
-                path: 'data/users', title: $localize`:@@invoiceDocuments:Chứng từ hóa đơn`, icon: 'ri-bill-line'
-            }
-        ]
-    },
-    {
-        title: $localize`:@@reportManagement:Quản lý báo cáo`,
-        rootPath : 'report',
-        subMenu: [
-            {
-                path: 'report/report1', title: $localize`:@@budgetReport:Báo cáo ngân sách theo thị trường`, icon: 'ri-folder-chart-line', menu: []
-            }
-        ]
-    },
+  {
+    title: $localize`:@@Dashboard:DASHBOARD`,
+    rootPath : 'dashboard',
+    subMenu: [
+    ]
+  },
+  {
+    title: $localize`:@@category:CATEGORY`,
+    rootPath : 'category',
+    subMenu: [
+      {
+        path: 'category/flight-market', title: $localize`:@@airPort:Airport`, icon: 'ri-store-line'
+      },
+      {
+        path: 'category/hotel', title: $localize`:@@hotel:Hotels`, icon: 'ri-hotel-bed-fill'
+      },
+      {
+        path: 'category/vehicle', title: $localize`:@@carRentalCompany:Car rental`, icon: 'ri-car-line'
+      },
+      {
+        path: 'category/service-fee', title: $localize`:@@costCategory:Cost category`, icon: 'ri-money-dollar-box-fill'
+      },
+      {
+        path: 'category/contract', title: $localize`:@@contract:Contract`, icon: 'ri-contract-line'
+      },
+      {
+        path: 'category/act-rate', title: $localize`:@@ActExchangeRate:Actual exchange rate`, icon: 'ri-exchange-cny-line'
+      },
+      {
+        path: 'category/crews', title: $localize`:@@flightCrew:Flight Crew`, icon: 'ri-id-card-line'
+      },
+      {
+        path: 'category/crews', title: $localize`:@@crewList:Crew List`, icon: 'ri-id-card-line'
+      },
+      {
+        path: 'category/nation', title: $localize`:@@country:Country`, icon: 'ri-global-fill'
+      }
+    ]
+  },
+  {
+    title: $localize`:@@flightSchedules:FLIGHT SCHEDULES`,
+    rootPath : 'flight-schedules',
+    subMenu: [
+      {
+        path: 'flight-schedules/seasonal', title: $localize`:@@seasonalFlightSchedule:Seasonal Flight Schedule`, icon: 'ri-calendar-schedule-fill'
+      },
+      {
+        path: 'flight-schedules/daily', title: $localize`:@@dailyFlightSchedule:Daily Flight Schedule`, icon: 'ri-calendar-schedule-fill'
+      }
+    ]
+  },
+  {
+    title: $localize`:@@hotelCarService:HOTEL & CAR SERVICE`,
+    rootPath : 'service',
+    subMenu: [
+      {
+        path: '', title: '', icon: 'ri-calendar-schedule-fill',
+        menu: [
+          {
+            title: $localize`:@@hotelRoom:Hotel room`,
+            rootPath : '',
+            subMenu: [
+              {
+                path: 'service/hotel/room-booking', title: $localize`:@@roomBooking:Room booking`, icon: 'ri-exchange-cny-line'
+              },
+              {
+                path: 'service/hotel/cost-tracking', title: $localize`:@@plannedExchangeRate:Hotel cost tracking(AVES)`, icon: 'ri-exchange-cny-line'
+              }
+            ]
+          },
+          {
+            title: $localize`:@@carRental:Car rental`,
+            rootPath : '',
+            subMenu: [
+              {
+                path: 'service/car/car-booking', title: $localize`:@@carBooking:Car booking`, icon: 'ri-folder-chart-line'
+              },
+              {
+                path: 'service/car/cost-tracking', title: $localize`:@@carCostTracking:Car cost tracking(AVES)`, icon: 'ri-folder-chart-line'
+              }
+            ]
+          }]
+      }
+    ]
+  },
+  {
+    title: $localize`:@@invoice:INVOICE`,
+    rootPath : 'invoice',
+    subMenu: [
+      {
+        path: 'invoice/detailed', title: $localize`:@@detailedStatment:Detailed statement`, icon: 'ri-calendar-line'
+      },
+      {
+        path: 'invoice/e-invoice', title: $localize`:@@invoice:Invoice`, icon: 'ri-folder-chart-line'
+      },
+      {
+        path: 'invoice/actual-expense-tracking', title: $localize`:@@actualExpenseTracking:Actual expense tracking`, icon: 'ri-shopping-cart-line'
+      },
+    ]
+  },
   {
     title: $localize`:@@plan:Plan`,
     rootPath : 'plan',
@@ -43,7 +116,7 @@ export const menu: Menu[] = [
         menu: [
           {
             title: $localize`:@@rates:Rates`,
-            rootPath : '',
+            rootPath : 'plan/rate',
             subMenu: [
               {
                 path: 'plan/rate/uth', title: $localize`:@@uth:Ước thực hiện`, icon: 'ri-exchange-cny-line'
@@ -55,7 +128,7 @@ export const menu: Menu[] = [
           },
           {
             title: $localize`:@@production:Production`,
-            rootPath : '',
+            rootPath : 'plan/production',
             subMenu: [
               {
                 path: 'plan/production/est-annual-production', title: $localize`:@@estAnnualProduction:Estimated Annual Production`, icon: 'ri-folder-chart-line'
@@ -69,83 +142,90 @@ export const menu: Menu[] = [
             ]
           },
           {
-            title: $localize`:@@etimatePlan:Estimate/Plan`,
-            rootPath : '',
+            title: $localize`:@@estimatePlan:Estimate/Plan`,
+            rootPath : 'plan/est-plan',
             subMenu: [
               {
-                path: 'plan/estimate-plan/budget-procurement', title: $localize`:@@budgetProcurementPlan:Budget & Procurement plan`, icon: 'ri-shopping-cart-2-line'
-              }
+                path: 'plan/est-plan/est-cost', title: $localize`:@@estimateCost:Estimated cost`, icon: 'ri-folder-chart-line'
+              },
+              {
+                path: 'plan/est-plan/budget-procurement', title: $localize`:@@budgetProcurementPlan:Budget & Procurement plan`, icon: 'ri-shopping-cart-2-line'
+              },
+              {
+                path: 'plan/est-plan/five-year-plan', title: $localize`:@@fiveYearPlan:Wet lease & Charter plan`, icon: 'ri-folder-chart-line'
+              },
+              {
+                path: 'plan/est-plan/five-year-plan', title: $localize`:@@fiveYearPlan:Procurement tracking`, icon: 'ri-folder-chart-line'
+              },
             ]
           }
         ]
       }]
   },
-    {
-        title: $localize`:@@category:Category`,
-        rootPath : 'category',
-        subMenu: [
-            {
-                path: 'category/users', title: $localize`:@@annualFlightSchedule:Lịch bay năm`, icon: 'ri-calendar-schedule-fill'
-            },
-            {
-                path: 'category/users', title: $localize`:@@seasonalFlightSchedule:Lịch bay mùa`, icon: 'ri-calendar-schedule-fill'
-            },
-            {
-                path: 'category/contract', title: $localize`:@@contract:Contract`, icon: 'ri-contract-line'
-            },
-            {
-                path: 'category/hotel', title: $localize`:@@hotel:Hotels`, icon: 'ri-hotel-bed-fill'
-            },
-            {
-                path: 'category/vehicle', title: $localize`:@@carRentalCompany:Car rental`, icon: 'ri-car-line'
-            },
-            {
-                path: 'category/flight-market', title: $localize`:@@flightMarket:Flight market`, icon: 'ri-store-line'
-            },
-            {
-                path: 'category/act-rate', title: $localize`:@@ActExchangeRate:Actual exchange rate`, icon: 'ri-exchange-cny-line'
-            },
-            {
-                path: 'category/crews', title: $localize`:@@crewList:Crew List`, icon: 'ri-id-card-line'
-            },
-            {
-                path: 'category/nation', title: $localize`:@@country:Country`, icon: 'ri-global-fill'
-            },
-            {
-                path: 'category/service-fee', title: $localize`:@@serviceFee:Service Fee`, icon: 'ri-money-dollar-box-fill'
-            }
+  {
+    title: $localize`:@@reportManagement:Quản lý báo cáo`,
+    rootPath : 'report',
+    subMenu: [
+      {
+        path: 'report/report1', title: $localize`:@@budgetReport:Báo cáo ngân sách theo thị trường`, icon: 'ri-folder-chart-line', menu: []
+      }
+    ]
+  },
 
-        ]
-    }, {
-        title: $localize`:@@system:System`,
-        rootPath : 'system',
-        subMenu: [
-            {
-                path: '', title: '', icon: 'ri-calendar-schedule-fill',
-                menu: [
-                    {
-                        title: $localize`:@@rolesAccounts:Roles & Accounts`,
-                        rootPath : '',
-                        subMenu: [
-                            {
-                                path: 'admin/users', title: $localize`:@@account:Account`, icon: 'ri-group-fill'
-                            },
-                            {
-                                path: 'admin/roles', title: $localize`:@@role:Role`, icon: 'ri-calendar-schedule-fill'
-                            },
-                            {
-                                path: 'admin/functions', title: $localize`:@@function:Function`, icon: 'ri-calendar-schedule-fill'
-                            }
-                        ]
-                    },
-                  {
-                    title: $localize`:@@config:Config`,
-                    rootPath : '',
-                    subMenu: [
-                      {
-                        path: 'config/group-mail', title: $localize`:@@groupsMail:Groups mail`, icon: 'ri-mail-add-line'
-                      },
-                    ]
-                  }]
-            }]
-    }]
+  {
+    title: $localize`:@@system:System`,
+    rootPath : 'system',
+    subMenu: [
+      {
+        path: '', title: '', icon: 'ri-calendar-schedule-fill',
+        menu: [
+          {
+            title: $localize`:@@rolesAccounts:Roles & Accounts`,
+            rootPath : 'system/admin',
+            subMenu: [
+              {
+                path: 'system/admin/users', title: $localize`:@@account:Account`, icon: 'ri-group-fill'
+              },
+              {
+                path: 'system/admin/roles', title: $localize`:@@role:Role`, icon: 'ri-calendar-schedule-fill'
+              },
+              {
+                path: 'system/admin/functions', title: $localize`:@@function:Function`, icon: 'ri-calendar-schedule-fill'
+              }
+            ]
+          },
+          {
+            title: $localize`:@@config:Config`,
+            rootPath : 'system/config',
+            subMenu: [
+              {
+                path: 'system/config/group-mail', title: $localize`:@@groupsMail:Groups mail`, icon: 'ri-mail-add-line'
+              },
+              {
+                path: 'system/config/email-supplier', title: $localize`:@@emailSupplier:Email to Supplier`, icon: 'ri-mail-add-line'
+              },
+              {
+                path: 'system/config/noti-warning', title: $localize`:@@noti:Notification/Warning`, icon: 'ri-mail-add-line'
+              },
+              {
+                path: 'system/config/aircraft-data', title: $localize`:@@aircaft:Aircraft data`, icon: 'ri-mail-add-line'
+              },
+            ]
+          },
+          {
+            title: $localize`:@@historyLog:History Log`,
+            rootPath : 'system/history',
+            subMenu: [
+              {
+                path: 'system/history/login', title: $localize`:@@loginHistory:Login History`, icon: 'ri-mail-add-line'
+              },
+              {
+                path: 'system/history/email-noti', title: $localize`:@@emailNoti:Email & Notification History`, icon: 'ri-mail-add-line'
+              },
+              {
+                path: 'system/history/data-sync', title: $localize`:@@dataSync:Data Sync History`, icon: 'ri-mail-add-line'
+              },
+            ]
+          }]
+      }]
+  }];

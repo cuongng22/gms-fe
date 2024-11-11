@@ -1,4 +1,4 @@
-import { effect, Signal, signal } from "@angular/core";
+import { effect, Signal, signal } from '@angular/core';
 
 export class Constant {
   static DATE_FORMAT = 'DD/MM/YYYY';

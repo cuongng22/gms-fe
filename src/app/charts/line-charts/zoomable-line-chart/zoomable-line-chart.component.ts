@@ -44,7 +44,7 @@ export class ZoomableLineChartComponent {
 
     public initChartData(): void {
         let ts2 = 1484418600000;
-        let dates = [];
+        const dates = [];
         for (let i = 0; i < 120; i++) {
             ts2 = ts2 + 86400000;
             dates.push([ts2, dataSeries[1][i].value]);

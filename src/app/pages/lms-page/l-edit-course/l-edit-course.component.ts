@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit, OnDestroy } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -17,7 +17,7 @@ import { MatButtonModule } from '@angular/material/button';
     templateUrl: './l-edit-course.component.html',
     styleUrl: './l-edit-course.component.scss'
 })
-export class LEditCourseComponent {
+export class LEditCourseComponent implements OnInit, OnDestroy {
 
     // Text Editor
     editor: Editor;

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { Observable } from 'rxjs';
@@ -23,7 +23,7 @@ import { MatFormFieldModule } from '@angular/material/form-field';
     templateUrl: './highlight-first-option.component.html',
     styleUrl: './highlight-first-option.component.scss'
 })
-export class HighlightFirstOptionComponent {
+export class HighlightFirstOptionComponent implements OnInit {
 
     // Highlight first option
     myControl = new FormControl('');

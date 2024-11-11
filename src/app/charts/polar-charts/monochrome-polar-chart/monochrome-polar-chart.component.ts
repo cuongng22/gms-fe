@@ -17,7 +17,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexNonAxisChartSeries;
     chart: ApexChart;
     responsive: ApexResponsive[];
@@ -29,7 +29,7 @@ export type ChartOptions = {
     stroke: ApexStroke,
     legend: ApexLegend,
     plotOptions: ApexPlotOptions
-};
+}
 
 @Component({
     selector: 'app-monochrome-polar-chart',

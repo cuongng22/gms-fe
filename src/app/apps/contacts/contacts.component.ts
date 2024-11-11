@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -16,7 +16,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     templateUrl: './contacts.component.html',
     styleUrl: './contacts.component.scss'
 })
-export class ContactsComponent {
+export class ContactsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['select', 'id', 'user', 'email', 'phone', 'lastContacted', 'company', 'leadScore', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -14,7 +14,7 @@ import { RouterLink } from '@angular/router';
     templateUrl: './recents.component.html',
     styleUrl: './recents.component.scss'
 })
-export class RecentsComponent {
+export class RecentsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['fileName', 'owner', 'listedDate', 'fileType', 'fileSize', 'fileItems', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

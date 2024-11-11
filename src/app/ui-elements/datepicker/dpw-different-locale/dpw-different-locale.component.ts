@@ -39,7 +39,7 @@ registerLocaleData(localeEn, LOCALE.EN);
         provideMomentDateAdapter(MY_FORMATS),
     ],
 })
-export class DpwDifferentLocaleComponent {
+export class DpwDifferentLocaleComponent implements OnInit {
 
     // Datepicker with Different Locale
     constructor(

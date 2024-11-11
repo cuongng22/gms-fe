@@ -13,7 +13,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     xaxis: ApexXAxis;
@@ -21,7 +21,7 @@ export type ChartOptions = {
     grid: ApexGrid;
     colors: any;
     plotOptions: ApexPlotOptions;
-};
+}
 
 @Component({
     selector: 'app-basic-timeline-chart',

@@ -18,7 +18,7 @@ import {
     ApexAxisChartSeries
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     dataLabels: ApexDataLabels;
     markers: ApexMarkers;
@@ -30,7 +30,7 @@ export type ChartOptions = {
     colors: string[];
     grid: ApexGrid;
     fill: ApexFill;
-};
+}
 
 @Component({
     selector: 'app-returning-customer-rate',

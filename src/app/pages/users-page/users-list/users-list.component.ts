@@ -1,5 +1,5 @@
 import { NgIf } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
     templateUrl: './users-list.component.html',
     styleUrl: './users-list.component.scss'
 })
-export class UsersListComponent {
+export class UsersListComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['userID', 'user', 'email', 'location', 'phone', 'projects', 'joinDate', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

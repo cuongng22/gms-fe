@@ -39,7 +39,7 @@ import { debounceTime, Subject } from 'rxjs';
   templateUrl: './flight-market-detail.component.html',
   styleUrl: './flight-market-detail.component.scss'
 })
-export class FlightMarketDetailComponent extends CommonComponent implements OnInit {
+export class FlightMarketDetailComponent extends CommonComponent implements OnInit, AfterViewInit {
   formBuilder = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(FlightMarketService);
@@ -68,12 +68,12 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   flightGroupData = FlightGroupData;
 
   hotelDataSource = new MatTableDataSource<any[]>([]);
-  hotelColumns = ["hotelCode", "hotelName", "address", "fullName", "email", "phone", "active", "notes"];
+  hotelColumns = ['hotelCode', 'hotelName', 'address', 'fullName', 'email', 'phone', 'active', 'notes'];
   dialogDeleteHotel = false;
   indexDeleteHotel: number;
 
   carRentalDataSource = new MatTableDataSource<any[]>([]);
-  carRentalColumns = ["code", "name", "address", "fullName", "email", "phone", "active", "notes"];
+  carRentalColumns = ['code', 'name', 'address', 'fullName', 'email', 'phone', 'active', 'notes'];
   dialogDeleteCarRental = false;
   indexDeleteCarRental: number;
 
@@ -143,12 +143,12 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     this.readonlyDetail.set(_isViewDetail === 'true');
     if (this.readonlyDetail()) {
       Object.keys(this.formGroupDetail.controls).forEach(control => {
-        this.formGroupDetail.get(control)?.disable()
+        this.formGroupDetail.get(control)?.disable();
       });
     } else {
       // thêm cột action cho table carRental and hotel
-      this.hotelColumns.push("action");
-      this.carRentalColumns.push("action");
+      this.hotelColumns.push('action');
+      this.carRentalColumns.push('action');
     }
 
     this.isCreate.set(!!this.id());
@@ -161,8 +161,8 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
         const code = country.code.toLowerCase();
         return code.includes(value.toLowerCase()) || (this.locale == LOCALE.VN ?
           country.vniName.toLowerCase().includes(value.toLowerCase()) :
-          country.engName.toLowerCase().includes(value.toLowerCase()))
-      }))
+          country.engName.toLowerCase().includes(value.toLowerCase()));
+      }));
     });
 
 
@@ -196,10 +196,10 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
         ...hotel, marketCode: this.formGroupDetail.controls.marketCode.value
       };
     }
-    let dialogRef = this.dialog.open(HotelDetailComponent, {
+    const dialogRef = this.dialog.open(HotelDetailComponent, {
       data: { hotel: hotel, isViewDetail: isViewDetail },
       disableClose: true
-    })
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       const hotelDatas = this.hotelDataSource.data as any[] || [];
@@ -222,10 +222,10 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
         ...carRental, marketCode: this.formGroupDetail.controls.marketCode.value
       };
     }
-    let dialogRef = this.dialog.open(CarRentalDetailComponent, {
+    const dialogRef = this.dialog.open(CarRentalDetailComponent, {
       data: { carRental: carRental, isViewDetail: isViewDetail },
       disableClose: true
-    })
+    });
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Dialog result: ', result);
@@ -249,17 +249,17 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       if (this.formGroupDetail.invalid) {
         return;
       }
-      let isUpdate = !!this.formGroupDetail.value.id;
+      const isUpdate = !!this.formGroupDetail.value.id;
       this.spinner.show();
       let res;
       if (isUpdate) {
-        const body = this.updateBody(this.formGroupDetail.value, this.hotelDataSource.data, this.carRentalDataSource.data)
+        const body = this.updateBody(this.formGroupDetail.value, this.hotelDataSource.data, this.carRentalDataSource.data);
         res = await this.baseService.update(body);
       } else {
         const body = this.createBody(this.formGroupDetail.value, this.hotelDataSource.data, this.carRentalDataSource.data);
         res = await this.baseService.create(body);
       }
-      console.log(res)
+      console.log(res);
       this.baseService.showSuccess(isUpdate ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
       this.router.navigate(['/category/flight-market']);
     } catch (e: any) {
@@ -271,9 +271,9 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   }
 
   createBody(flightMarketData: any, hotelDatas: any[], carRentalDatas: any[]): any {
-    let marketFlight: CreateMarketFlight = new CreateMarketFlight(flightMarketData);
-    let hotels: CreateHotel[] = [];
-    let carRentals: CreateVehiclePartner[] = [];
+    const marketFlight: CreateMarketFlight = new CreateMarketFlight(flightMarketData);
+    const hotels: CreateHotel[] = [];
+    const carRentals: CreateVehiclePartner[] = [];
 
     hotelDatas.forEach(hotel => {
       hotels.push(new CreateHotel(hotel));
@@ -288,10 +288,10 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   }
 
   updateBody(flightMarketData: any, hotelDatas: any[], carRentalDatas: any[]) {
-    let deleteItems: { id: number; type: string }[] = [];
-    let updateItems: UpdateHotelAndCar[] = [];
-    let insertItems: InsertHotelAndCar[] = [];
-    let updateFlightMarket: UpdateFlightMarket = new UpdateFlightMarket(flightMarketData);
+    const deleteItems: { id: number; type: string }[] = [];
+    const updateItems: UpdateHotelAndCar[] = [];
+    const insertItems: InsertHotelAndCar[] = [];
+    const updateFlightMarket: UpdateFlightMarket = new UpdateFlightMarket(flightMarketData);
 
     hotelDatas.forEach(hotel => {
       if (hotel.isDelete) {
@@ -301,7 +301,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       } else {
         insertItems.push(new InsertHotelAndCar({ ...hotel, type: 'HOTEL' }));
       }
-    })
+    });
 
     carRentalDatas.forEach(carRental => {
       if (carRental.isDelete) {
@@ -311,9 +311,9 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       } else {
         insertItems.push(new InsertHotelAndCar({ ...carRental, type: 'VEHICLE' }));
       }
-    })
+    });
 
-    return { id: flightMarketData.id, ...updateFlightMarket, insertItems: insertItems, updateItems: updateItems, deleteItems: deleteItems }
+    return { id: flightMarketData.id, ...updateFlightMarket, insertItems: insertItems, updateItems: updateItems, deleteItems: deleteItems };
   }
 
 

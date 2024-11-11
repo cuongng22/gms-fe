@@ -18,7 +18,7 @@ import {
     ApexAxisChartSeries
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     fill: ApexFill;
     grid: ApexGrid;
     chart: ApexChart;
@@ -32,7 +32,7 @@ export type ChartOptions = {
     dataLabels: ApexDataLabels;
     series: ApexAxisChartSeries;
     subtitle: ApexTitleSubtitle;
-};
+}
 
 @Component({
     selector: 'app-response-time',

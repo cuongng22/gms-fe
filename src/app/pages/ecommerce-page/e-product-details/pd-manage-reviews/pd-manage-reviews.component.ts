@@ -1,5 +1,5 @@
 import { NgFor, NgIf } from '@angular/common';
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
@@ -16,7 +16,7 @@ import { RouterLink } from '@angular/router';
     templateUrl: './pd-manage-reviews.component.html',
     styleUrl: './pd-manage-reviews.component.scss'
 })
-export class PdManageReviewsComponent {
+export class PdManageReviewsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['reviewer', 'ratings', 'date', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

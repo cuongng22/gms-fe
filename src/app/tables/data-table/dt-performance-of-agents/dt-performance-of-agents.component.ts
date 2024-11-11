@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +15,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     templateUrl: './dt-performance-of-agents.component.html',
     styleUrl: './dt-performance-of-agents.component.scss'
 })
-export class DtPerformanceOfAgentsComponent {
+export class DtPerformanceOfAgentsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'agentName', 'totalTickets', 'openTickets', 'resolvedTickets', 'avgResolutionTime', 'satisfactionRate', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
@@ -13,7 +13,7 @@ import { CustomizerSettingsService } from '../../../../customizer-settings/custo
     templateUrl: './primary-emails.component.html',
     styleUrl: './primary-emails.component.scss'
 })
-export class PrimaryEmailsComponent {
+export class PrimaryEmailsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['select', 'title', 'description', 'date'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

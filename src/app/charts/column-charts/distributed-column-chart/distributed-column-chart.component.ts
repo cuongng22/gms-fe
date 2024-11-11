@@ -15,7 +15,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     dataLabels: ApexDataLabels;
@@ -25,7 +25,7 @@ export type ChartOptions = {
     grid: ApexGrid;
     colors: string[];
     legend: ApexLegend;
-};
+}
 
 @Component({
     selector: 'app-distributed-column-chart',

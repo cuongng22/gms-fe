@@ -17,7 +17,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     title: ApexTitleSubtitle;
@@ -30,7 +30,7 @@ export type ChartOptions = {
     yaxis: ApexYAxis;
     markers: ApexMarkers;
     xaxis: ApexXAxis;
-};
+}
 
 @Component({
     selector: 'app-polygon-radar-chart',

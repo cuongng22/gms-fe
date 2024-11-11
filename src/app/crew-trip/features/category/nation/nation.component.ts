@@ -1,12 +1,12 @@
 import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from "@angular/common";
-import {MatCardModule} from "@angular/material/card";
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
-import {MatOption, MatSelect} from "@angular/material/select";
-import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NationService} from "src/app/crew-trip/core/services/nation-service";
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
+import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {MatCardModule} from '@angular/material/card';
+import {UsersService} from 'src/app/crew-trip/core/services/users-service';
+import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {NationService} from 'src/app/crew-trip/core/services/nation-service';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
@@ -18,7 +18,7 @@ import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.comp
 import {NoDataRowOutlet} from '@angular/cdk/table';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 
 
 @Component({
@@ -43,13 +43,13 @@ export class NationComponent extends CommonComponent implements OnInit {
     type?: string,
     format?: string
   }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Area`, value: "area"}, {label: $localize`Code`, value: "code"}, {
-      label: $localize`English Name`,
-      value: "engName"
-    }, {label: $localize`VietNam Name`, value: "vniName"}, {
-      label: $localize`Currency Code`,
-      value: "curCode"
-    }, {label: $localize`Status`, value: "activeLabel"},];
+      {label: $localize`Area`, value: 'area'}, {label: $localize`Code`, value: 'code'}, {
+        label: $localize`English Name`,
+        value: 'engName'
+      }, {label: $localize`VietNam Name`, value: 'vniName'}, {
+        label: $localize`Currency Code`,
+        value: 'curCode'
+      }, {label: $localize`Status`, value: 'activeLabel'},];
 
   constructor() {
     super();
@@ -66,13 +66,13 @@ export class NationComponent extends CommonComponent implements OnInit {
       curCode: ['', [Validators.required]],
       active: [true,]
     });
-    this.formGroupSearchInit = {...this.formGroupSearch.value}
-    this.formGroupDetailInit = {...this.formGroupDetail.value}
+    this.formGroupSearchInit = {...this.formGroupSearch.value};
+    this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
 
   override async ngOnInit() {
     await Promise.all([this.search(),]).then(() => {
-      console.log(this.dataSource)
+      console.log(this.dataSource);
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }

@@ -1,20 +1,20 @@
 import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
-import {MatFormField, MatFormFieldControl, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
-import {MatSelect, MatSelectModule} from "@angular/material/select";
-import { FileUploadModule} from "@iplab/ngx-file-upload";
-import { MatDatepickerModule} from "@angular/material/datepicker";
-import {ActivatedRoute, Router, RouterLink} from "@angular/router";
-import {MatCardModule} from "@angular/material/card";
-import {MatInputModule} from "@angular/material/input";
-import {MatNativeDateModule} from "@angular/material/core";
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {CommonModule, NgClass} from "@angular/common";
-import {MatButtonModule} from "@angular/material/button";
-import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
-import {NgxSpinnerService} from "ngx-spinner";
-import {BaseService} from "src/app/crew-trip/core/services/base-service";
-import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {MatFormField, MatFormFieldControl, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import {MatSelect, MatSelectModule} from '@angular/material/select';
+import { FileUploadModule} from '@iplab/ngx-file-upload';
+import { MatDatepickerModule} from '@angular/material/datepicker';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {MatCardModule} from '@angular/material/card';
+import {MatInputModule} from '@angular/material/input';
+import {MatNativeDateModule} from '@angular/material/core';
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommonModule, NgClass} from '@angular/common';
+import {MatButtonModule} from '@angular/material/button';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {UsersService} from 'src/app/crew-trip/core/services/users-service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {BaseService} from 'src/app/crew-trip/core/services/base-service';
+import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-profile',
@@ -51,11 +51,11 @@ export class ProfileComponent implements OnInit{
 
   ngOnInit(): void {
     this.avatarUrl = this.userCurrent?.avartarUrl?? null;
-    this.formGroup.disable()
+    this.formGroup.disable();
   }
 
 
-updateEditMode() {
+  updateEditMode() {
     this.isEditMode = !this.isEditMode;
     if(this.isEditMode){
       this.formGroup.get('id')?.enable();
@@ -78,7 +78,7 @@ updateEditMode() {
   }
 
 
- async saveProfile() {
+  async saveProfile() {
     this.formGroup.markAllAsTouched();
     Object.keys(this.formGroup.controls).forEach(key => {
       (this.formGroup.get(key) as FormControl).markAsTouched();
@@ -94,7 +94,7 @@ updateEditMode() {
         if (error?.status === 401 && error.error?.error) {
           this.baseService.showError(error?.error?.error);
         } else {
-          console.log(error)
+          console.log(error);
         }
       } finally {
         await this.spinner.hide();
@@ -127,27 +127,27 @@ updateEditMode() {
     }
   }
 
- async uploadFile(file: File) {
-   try {
-    await this.spinner.show();
-    const formData = new FormData();
-    const email = this.userCurrent?.email;
-     if (!email) {
-       await this.router.navigate(['auth/login'], {fragment: '401', skipLocationChange: true});
-       return;
-     }
-    formData.append('file', file);
-    formData.append('email', email);
-    let res= await  this.userService.uploadAvatar(formData);
-   } catch (error: any) {
-     if (error?.status === 401 && error.error?.error) {
-       this.baseService.showError(error?.error?.error);
-     } else {
-       console.log(error)
-     }
-   } finally {
-     await this.spinner.hide();
-   }
+  async uploadFile(file: File) {
+    try {
+      await this.spinner.show();
+      const formData = new FormData();
+      const email = this.userCurrent?.email;
+      if (!email) {
+        await this.router.navigate(['auth/login'], {fragment: '401', skipLocationChange: true});
+        return;
+      }
+      formData.append('file', file);
+      formData.append('email', email);
+      const res= await  this.userService.uploadAvatar(formData);
+    } catch (error: any) {
+      if (error?.status === 401 && error.error?.error) {
+        this.baseService.showError(error?.error?.error);
+      } else {
+        console.log(error);
+      }
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
 }

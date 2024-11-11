@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import { CustomizerSettingsService } from '../../../../customizer-settings/customizer-settings.service';
@@ -10,7 +10,7 @@ import { CustomizerSettingsService } from '../../../../customizer-settings/custo
     templateUrl: './quantity-counter.component.html',
     styleUrl: './quantity-counter.component.scss'
 })
-export class QuantityCounterComponent {
+export class QuantityCounterComponent implements OnInit {
 
     @Input() initialValue = 1;
     value = 1;

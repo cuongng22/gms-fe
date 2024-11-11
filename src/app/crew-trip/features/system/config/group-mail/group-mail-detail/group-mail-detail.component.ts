@@ -1,23 +1,23 @@
 import {Component, ElementRef, Inject, inject, LOCALE_ID, model, OnInit, ViewChild} from '@angular/core';
-import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {
   MatAutocompleteModule,
-} from "@angular/material/autocomplete";
-import {MatButton, MatButtonModule} from "@angular/material/button";
-import {MatCard, MatCardContent, MatCardHeader, MatCardModule, MatCardTitle} from "@angular/material/card";
-import {MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
-import {MatInput, MatInputModule} from "@angular/material/input";
-import {MatSelect, MatSelectModule} from "@angular/material/select";
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {GroupMailService} from "src/app/crew-trip/core/services/group-mail.service";
-import {AsyncPipe, CommonModule} from "@angular/common";
-import {MatChipsModule} from "@angular/material/chips";
-import {RouterLink, RouterModule} from "@angular/router";
-import {FlightMarketService} from "src/app/crew-trip/core/services/flight-market.service";
-import {BehaviorSubject, map, Observable, of, startWith} from "rxjs";
-import {debounceTime} from "rxjs/operators";
+} from '@angular/material/autocomplete';
+import {MatButton, MatButtonModule} from '@angular/material/button';
+import {MatCard, MatCardContent, MatCardHeader, MatCardModule, MatCardTitle} from '@angular/material/card';
+import {MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import {MatInput, MatInputModule} from '@angular/material/input';
+import {MatSelect, MatSelectModule} from '@angular/material/select';
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {GroupMailService} from 'src/app/crew-trip/core/services/group-mail.service';
+import {AsyncPipe, CommonModule} from '@angular/common';
+import {MatChipsModule} from '@angular/material/chips';
+import {RouterLink, RouterModule} from '@angular/router';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
+import {BehaviorSubject, map, Observable, of, startWith} from 'rxjs';
+import {debounceTime} from 'rxjs/operators';
 import {
   MatCell,
   MatCellDef,
@@ -26,14 +26,14 @@ import {
   MatHeaderRow,
   MatHeaderRowDef,
   MatRow, MatRowDef, MatTable, MatTableModule
-} from "@angular/material/table";
-import {MatIcon} from "@angular/material/icon";
-import {CdkTextareaAutosize} from "@angular/cdk/text-field";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {MatNativeDateModule} from "@angular/material/core";
-import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
-import {MatPaginatorModule} from "@angular/material/paginator";
-import {MatCheckbox} from "@angular/material/checkbox";
+} from '@angular/material/table';
+import {MatIcon} from '@angular/material/icon';
+import {CdkTextareaAutosize} from '@angular/cdk/text-field';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatNativeDateModule} from '@angular/material/core';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatCheckbox} from '@angular/material/checkbox';
 
 interface EmailObj {
   email: string;
@@ -140,23 +140,23 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit{
     this.emailList = [...this.emailList];
   }
 
- override async save() {
-   this.emailListStr = this.emailList.filter(emailObj => !emailObj.isEditing) .map(emailObj => emailObj.email);
+  override async save() {
+    this.emailListStr = this.emailList.filter(emailObj => !emailObj.isEditing) .map(emailObj => emailObj.email);
     if(!this.emailListStr || this.emailListStr.length <=0){
-        this.baseService.showError("List email is required!");
-        return;
+      this.baseService.showError('List email is required!');
+      return;
     }
     this.formGroupDetail.patchValue({ groupEmail: this.emailListStr });
-   try {
-    const res = await  super.save();
-     if (res) {
-       this.dialogRef.close("Update Success");
-       await super.search();
-     }
-   } catch (e: any) {
-   } finally {
-     await this.spinner.hide();
-   }
+    try {
+      const res = await  super.save();
+      if (res) {
+        this.dialogRef.close('Update Success');
+        await super.search();
+      }
+    } catch (e: any) {
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
 }

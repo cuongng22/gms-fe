@@ -29,7 +29,7 @@ export class ProfileSettingsComponent {
     professionSelected = 'option3';
 
     // File Uploader
-    public multiple: boolean = false;
+    public multiple = false;
 
     // isToggled
     isToggled = false;

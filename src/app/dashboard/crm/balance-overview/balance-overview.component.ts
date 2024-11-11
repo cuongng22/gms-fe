@@ -19,7 +19,7 @@ import {
 } from "ng-apexcharts";
 import { CustomizerSettingsService } from '../../../customizer-settings/customizer-settings.service';
 
-export type ChartOptions = {
+export interface ChartOptions {
     fill: ApexFill;
     grid: ApexGrid;
     yaxis: ApexYAxis;
@@ -33,7 +33,7 @@ export type ChartOptions = {
     dataLabels: ApexDataLabels;
     subtitle: ApexTitleSubtitle;
     series: ApexAxisChartSeries;
-};
+}
 
 @Component({
     selector: 'app-balance-overview',

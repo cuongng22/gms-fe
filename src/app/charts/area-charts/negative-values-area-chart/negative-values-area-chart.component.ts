@@ -18,7 +18,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     xaxis: ApexXAxis;
@@ -31,7 +31,7 @@ export type ChartOptions = {
     fill: ApexFill;
     title: ApexTitleSubtitle;
     grid: ApexGrid;
-};
+}
 
 @Component({
     selector: 'app-negative-values-area-chart',

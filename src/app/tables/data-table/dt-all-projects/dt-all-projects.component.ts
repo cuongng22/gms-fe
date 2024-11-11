@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,7 +14,7 @@ import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
     templateUrl: './dt-all-projects.component.html',
     styleUrl: './dt-all-projects.component.scss'
 })
-export class DtAllProjectsComponent {
+export class DtAllProjectsComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['id', 'projectName', 'client', 'assignees', 'budget', 'startDate', 'endDate', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

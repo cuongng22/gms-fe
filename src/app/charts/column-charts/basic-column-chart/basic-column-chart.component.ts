@@ -18,7 +18,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     dataLabels: ApexDataLabels;
@@ -31,7 +31,7 @@ export type ChartOptions = {
     stroke: ApexStroke;
     colors: any;
     legend: ApexLegend;
-};
+}
 
 @Component({
     selector: 'app-basic-column-chart',

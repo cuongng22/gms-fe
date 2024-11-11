@@ -1,6 +1,6 @@
 import {Component, Inject, inject, TemplateRef, ViewChild, ViewContainerRef} from '@angular/core';
-import {MAT_SNACK_BAR_DATA, MatSnackBar} from "@angular/material/snack-bar";
-import {NgClass} from "@angular/common";
+import {MAT_SNACK_BAR_DATA, MatSnackBar} from '@angular/material/snack-bar';
+import {NgClass} from '@angular/common';
 
 @Component({
   selector: 'app-action-alert',

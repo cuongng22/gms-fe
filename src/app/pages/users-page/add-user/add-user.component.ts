@@ -22,7 +22,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
 export class AddUserComponent {
 
     // File Uploader
-    public multiple: boolean = false;
+    public multiple = false;
 
     // isToggled
     isToggled = false;

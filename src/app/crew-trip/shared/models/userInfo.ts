@@ -8,7 +8,7 @@ export class UserLogin {
   gender: string;
   constructor(
     email: string,
-    id: number = 0,
+    id = 0,
     fullName: string,
     department: string,
     avartarUrl: string,

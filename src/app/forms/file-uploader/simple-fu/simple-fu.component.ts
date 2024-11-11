@@ -11,6 +11,6 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
 export class SimpleFuComponent {
 
     // File Uploader
-    public multiple: boolean = false;
+    public multiple = false;
 
 }

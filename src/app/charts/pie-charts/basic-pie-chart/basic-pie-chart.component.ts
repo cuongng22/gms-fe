@@ -10,14 +10,14 @@ import {
     ApexNonAxisChartSeries,
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexNonAxisChartSeries;
     dataLabels: ApexDataLabels;
     legend: ApexLegend;
     chart: ApexChart;
     colors: string[];
     labels: any;
-};
+}
 
 @Component({
     selector: 'app-basic-pie-chart',

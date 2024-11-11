@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,7 +22,7 @@ import { FileUploadModule } from '@iplab/ngx-file-upload';
     templateUrl: './c-customers.component.html',
     styleUrl: './c-customers.component.scss'
 })
-export class CCustomersComponent {
+export class CCustomersComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['select', 'id', 'customer', 'email', 'phone', 'lastLogin', 'received', 'due', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

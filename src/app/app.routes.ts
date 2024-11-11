@@ -48,7 +48,7 @@ export const routes: Routes = [
       { path: 'ke-hoach', component: KeHoachComponent },
       { path: 'contract', component: ContractComponent },
       {
-        path: 'admin', children: [
+        path: 'system/admin', children: [
           { path: 'users', component: UsersComponent },
           { path: 'roles', component: RolesComponent },
           { path: 'functions', component: FunctionsComponent },
@@ -67,7 +67,7 @@ export const routes: Routes = [
           { path: 'production/est-annual-production', component: EstAnnualProductionComponent },
           { path: 'production/planned', component: AnnualProductionComponent },
           {
-            path: 'estimate-plan/budget-procurement', component: BudgetProcurementComponent,
+            path: 'est-plan/budget-procurement', component: BudgetProcurementComponent,
             children: [
               { path: '', component: BudgetProcurementListComponent },
               { path: 'summary', component: BudgetProcurementSummaryComponent },

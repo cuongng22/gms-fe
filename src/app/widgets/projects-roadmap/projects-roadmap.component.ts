@@ -15,7 +15,7 @@ import {
     ApexAxisChartSeries
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     plotOptions: ApexPlotOptions;
     series: ApexAxisChartSeries;
     dataLabels: ApexDataLabels;
@@ -24,7 +24,7 @@ export type ChartOptions = {
     xaxis: ApexXAxis;
     yaxis: ApexYAxis;
     grid: ApexGrid;
-};
+}
 
 @Component({
     selector: 'app-projects-roadmap:not(1)',

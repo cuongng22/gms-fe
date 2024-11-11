@@ -15,7 +15,7 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     yaxis: ApexYAxis;
@@ -26,7 +26,7 @@ export type ChartOptions = {
     colors: any;
     stroke: ApexStroke;
     title: ApexTitleSubtitle;
-};
+}
 
 @Component({
     selector: 'app-basic-line-chart',

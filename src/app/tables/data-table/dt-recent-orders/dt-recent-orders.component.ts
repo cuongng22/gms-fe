@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,7 +15,7 @@ import { CustomizerSettingsService } from '../../../customizer-settings/customiz
     templateUrl: './dt-recent-orders.component.html',
     styleUrl: './dt-recent-orders.component.scss'
 })
-export class DtRecentOrdersComponent {
+export class DtRecentOrdersComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['orderID', 'customer', 'created', 'total', 'status'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);

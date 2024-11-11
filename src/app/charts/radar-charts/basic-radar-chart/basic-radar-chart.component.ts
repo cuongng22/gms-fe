@@ -12,14 +12,14 @@ import {
     NgApexchartsModule
 } from "ng-apexcharts";
 
-export type ChartOptions = {
+export interface ChartOptions {
     series: ApexAxisChartSeries;
     chart: ApexChart;
     title: ApexTitleSubtitle;
     xaxis: ApexXAxis;
     yaxis: ApexYAxis;
     colors: any;
-};
+}
 
 @Component({
     selector: 'app-basic-radar-chart',

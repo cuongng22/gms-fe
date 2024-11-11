@@ -1,4 +1,4 @@
-import { Component, ViewChild } from '@angular/core';
+import { Component, ViewChild, AfterViewInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { MatCardModule } from '@angular/material/card';
 import { MatButtonModule } from '@angular/material/button';
@@ -21,7 +21,7 @@ import { MatNativeDateModule } from '@angular/material/core';
     templateUrl: './pm-users.component.html',
     styleUrl: './pm-users.component.scss'
 })
-export class PmUsersComponent {
+export class PmUsersComponent implements AfterViewInit {
 
     displayedColumns: string[] = ['select', 'id', 'user', 'email', 'role', 'projectAccess', 'status', 'action'];
     dataSource = new MatTableDataSource<PeriodicElement>(ELEMENT_DATA);
