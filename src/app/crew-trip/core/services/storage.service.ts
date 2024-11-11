@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {STORAGE_KEY} from "src/app/crew-trip/core/constants/config";
+import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 
 @Injectable({
   providedIn: 'root',
