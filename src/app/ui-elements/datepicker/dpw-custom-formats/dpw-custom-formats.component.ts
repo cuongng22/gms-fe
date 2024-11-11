@@ -20,15 +20,15 @@ const moment = _rollupMoment || _moment;
 // https://momentjs.com/docs/#/displaying/format/
 export const MY_FORMATS = {
     parse: {
-        dateInput: 'LL',
+      dateInput: 'LL',
     },
     display: {
-        dateInput: 'LL',
-        monthYearLabel: 'MMM YYYY',
-        dateA11yLabel: 'LL',
-        monthYearA11yLabel: 'MMMM YYYY',
+      dateInput: 'LL',
+      monthYearLabel: 'MMM YYYY',
+      dateA11yLabel: 'LL',
+      monthYearA11yLabel: 'MMMM YYYY',
     },
-};
+  };
 
 @Component({
     selector: 'app-dpw-custom-formats',
@@ -42,7 +42,7 @@ export const MY_FORMATS = {
         MatCardModule, MatNativeDateModule
     ],
     templateUrl: './dpw-custom-formats.component.html',
-    styleUrl: './dpw-custom-formats.component.scss'
+    styleUrl: './dpw-custom-formats.component.scss',
 })
 export class DpwCustomFormatsComponent {
 

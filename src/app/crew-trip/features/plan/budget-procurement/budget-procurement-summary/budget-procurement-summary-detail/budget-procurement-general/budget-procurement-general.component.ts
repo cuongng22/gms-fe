@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, DestroyRef, ElementRef, inject, model, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -16,13 +16,21 @@ import { debounceTime, startWith, Subject } from 'rxjs';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { NgxControlError } from 'ngxtension/control-error';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { DatepickerComponent } from 'src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component';
+import { DpwDifferentLocaleComponent } from 'src/app/ui-elements/datepicker/dpw-different-locale/dpw-different-locale.component';
+import { DpeaYearMonthPickerComponent } from 'src/app/ui-elements/datepicker/dpea-year-month-picker/dpea-year-month-picker.component';
 
 @Component({
   selector: 'app-budget-procurement-general',
   standalone: true,
-  imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
-    CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule],
+  imports: [MatCardModule, FormsModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+    MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
+    CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
+    NgxControlError, MatDatepickerModule, MatNativeDateModule, NgxMaterialTimepickerModule, DatepickerComponent,
+    DpwDifferentLocaleComponent, DpeaYearMonthPickerComponent],
   templateUrl: './budget-procurement-general.component.html',
   styleUrl: './budget-procurement-general.component.scss'
 })
@@ -39,11 +47,27 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   airports: any[] = ['HAN', 'SGN'];
 
 
-  
+
 
   override formGroupDetail = this.formBuilder.group({
-    category: new FormControl(''),
-    airport: new FormControl('')
+    budgetPlanFlag: new FormControl(''),
+    category: new FormControl({ value: '', disabled: true }, Validators.required),
+    airport: new FormControl('', Validators.required),
+    division: new FormControl(''),
+    unitPrice: new FormControl(''),
+    unitPriceDouble: new FormControl(''),
+    rateForSingle: new FormControl(''),
+    procurementPlanFlag: new FormControl(''),
+    procStartDate: new FormControl('', Validators.required),
+    procEndDate: new FormControl('', Validators.required),
+    totalTime: new FormControl(''),
+    estimatedTime: new FormControl(''),
+    time: new FormControl(''),
+    num: new FormControl(''),
+    unit: new FormControl(''),
+    supplierMethod: new FormControl('Chào giá/ Đàm phán'),
+    earlyCheckinFlag: new FormControl(''),
+    lateCheckoutFlag: new FormControl(''),
   });
 
 
@@ -72,5 +96,9 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
       return;
     }
     this.keySearchAirport.next(filterdValue);
+  }
+
+  submit(): void {
+    console.log(this.formGroupDetail.value);
   }
 }

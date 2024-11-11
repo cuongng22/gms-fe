@@ -7,7 +7,25 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import 'moment/locale/ja';
 import 'moment/locale/fr';
 import { MatCardModule } from '@angular/material/card';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import { registerLocaleData } from '@angular/common';
+import localeVi from '@angular/common/locales/vi';
+import localeEn from '@angular/common/locales/en';
+import { LOCALE } from 'src/app/crew-trip/shared/utils/constant';
 
+export const MY_FORMATS = {
+    parse: {
+        dateInput: 'MM/YYYY',
+    },
+    display: {
+        dateInput: 'MM/YYYY',
+        monthYearLabel: 'MMM YYYY',
+        dateA11yLabel: 'LL',
+        monthYearA11yLabel: 'MMMM YYYY',
+    },
+};
+registerLocaleData(localeVi, LOCALE.VN);
+registerLocaleData(localeEn, LOCALE.EN);
 @Component({
     selector: 'app-dpw-different-locale',
     standalone: true,
@@ -18,6 +36,7 @@ import { MatCardModule } from '@angular/material/card';
         // The locale would typically be provided on the root module of your application. We do it at
         // the component level here, due to limitations of our example generation script.
         {provide: MAT_DATE_LOCALE, useValue: 'ja-JP'},
+        provideMomentDateAdapter(MY_FORMATS),
     ],
 })
 export class DpwDifferentLocaleComponent {
@@ -34,7 +53,7 @@ export class DpwDifferentLocaleComponent {
     }
 
     french() {
-        this._locale = 'fr';
+        this._locale = LOCALE.VN;
         this._adapter.setLocale(this._locale);
         this.updateCloseButtonLabel('Fermer le calendrier');
     }
@@ -47,7 +66,7 @@ export class DpwDifferentLocaleComponent {
     getDateFormatString(): string {
         if (this._locale === 'ja-JP') {
             return 'YYYY/MM/DD';
-        } else if (this._locale === 'fr') {
+        } else if (this._locale === LOCALE.VN) {
             return 'DD/MM/YYYY';
         }
         return '';
