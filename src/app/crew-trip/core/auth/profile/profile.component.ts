@@ -145,6 +145,7 @@ export class ProfileComponent implements OnInit{
         let userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
         userInfo.avartarUrl = res.data;
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(userInfo));
+        this.userService.userInfoSubject.next(userInfo);
       }
     } catch (error: any) {
       if (error?.status === 401 && error.error?.error) {

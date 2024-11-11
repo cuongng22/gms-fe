@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
-import {firstValueFrom} from 'rxjs';
+import {BehaviorSubject, firstValueFrom} from 'rxjs';
 import { ResetPasswordRequest, Response, User } from 'src/app/crew-trip/features/system/users/users.model';
 import {UserLogin} from 'src/app/crew-trip/shared/models/userInfo';
 import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
@@ -11,6 +11,8 @@ import { HttpParams } from '@angular/common/http';
   providedIn: 'root'
 })
 export class UsersService extends BaseService {
+  userInfoSubject = new BehaviorSubject<any>(this.getUserLogin());
+  userInfo$ = this.userInfoSubject.asObservable();
   constructor(private storageService: StorageService) {
     super();
     this.path = 'user';

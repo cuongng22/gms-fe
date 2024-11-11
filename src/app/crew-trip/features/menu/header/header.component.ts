@@ -61,6 +61,9 @@ export class HeaderComponent implements OnInit {
   formGroup: FormGroup;
   errorMessage: string | null = null;
   constructor(private languageService: LanguageService) {
+    this.userService.userInfo$.subscribe(user => {
+      this.userInfo = user;
+    });
     this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
       this.isSidebarToggled = isSidebarToggled;
     });
