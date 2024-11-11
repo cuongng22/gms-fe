@@ -143,8 +143,7 @@ export class ProfileComponent implements OnInit{
       const res= await  this.userService.uploadAvatar(formData);
       if(res){
         let userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
-        let oldUrlavatar =  userInfo.avartarUrl;
-        userInfo.avartarUrl = oldUrlavatar?.replace(/[^/]+$/, file.name);
+        userInfo.avartarUrl = res.data;
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(userInfo));
       }
     } catch (error: any) {
