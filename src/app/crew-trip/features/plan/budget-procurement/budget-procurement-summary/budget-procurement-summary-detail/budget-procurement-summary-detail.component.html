@@ -123,12 +123,33 @@
                         </div>
                     </mat-expansion-panel>
                 </mat-accordion>
+            </mat-expansion-panel>
+        </mat-accordion>
 
-
+        <mat-accordion multi>
+            <mat-expansion-panel class="remove-mat-expansion-panel-padding" (opened)="panelCalBasisOpenState.set(true)"
+                (closed)="panelCalBasisOpenState.set(false)" [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h5>III. <span i18n="@@budgetPlan">Budget Plan</span></h5>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
                 <mat-accordion multi>
-
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6>3.1
+                                    <span i18n="@@flightFrequencyStatisticsByNumberOfOvernightStays">
+                                        Flight Frequency Statistics by Number of Overnight Stays (Weekly)
+                                    </span>
+                                </h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="ml-15 mr-15">
+                            <app-budget-procurement-hotel />
+                        </div>
+                    </mat-expansion-panel>
                 </mat-accordion>
-
             </mat-expansion-panel>
         </mat-accordion>
     </mat-card-content>

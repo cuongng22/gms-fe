@@ -6,7 +6,7 @@ import { firstValueFrom, Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class BudgetProcurementPlanService extends BaseService {
-  private _isUpdate: boolean = false;
+  private _isUpdate = false;
   set isUpdate(value: boolean) {
     this._isUpdate = value;
   }
@@ -21,7 +21,7 @@ export class BudgetProcurementPlanService extends BaseService {
   }
 
   reject<T = any>(id: any): Promise<T> {
-    const url = `${this.api}/${this.path}/${id}`
+    const url = `${this.api}/${this.path}/${id}`;
     return firstValueFrom(this.http.put<T>(url, this.httpOptions));
   }
 

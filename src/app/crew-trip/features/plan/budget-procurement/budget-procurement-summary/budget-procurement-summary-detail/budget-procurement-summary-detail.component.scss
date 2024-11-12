@@ -2,8 +2,18 @@
     box-shadow: none;
 }
 
-::ng-deep {
+:host::ng-deep {
     .remove-mat-expansion-panel-padding .mat-expansion-panel-content .mat-expansion-panel-body {
-        padding: 0 !important;
+        padding: 0 10px !important;
+
+        mat-expansion-panel-header {
+            padding: 0 10px !important;
+        }
+    }
+
+    .remove-mat-expansion-panel-padding {
+        mat-expansion-panel-header {
+            padding: 0 10px !important;
+        }
     }
 }

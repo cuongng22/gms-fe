@@ -18,6 +18,7 @@ import { MatExpansionModule, MatExpansionPanelContent } from '@angular/material/
 import { BudgetProcurementFlightRateComponent } from './budget-procurement-flight-rate/budget-procurement-flight-rate.component';
 import { BudgetProcurementFlightPeriodComponent } from './budget-procurement-flight-period/budget-procurement-flight-period.component';
 import { BudgetProcurementFlightOvernightComponent } from './budget-procurement-flight-overnight/budget-procurement-flight-overnight.component';
+import { BudgetProcurementHotelComponent } from './budget-procurement-hotel/budget-procurement-hotel.component';
 
 @Component({
   selector: 'app-budget-procurement-summary-detail',
@@ -26,7 +27,8 @@ import { BudgetProcurementFlightOvernightComponent } from './budget-procurement-
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule,
     BudgetProcurementGeneralComponent, MatExpansionModule, MatExpansionPanelContent,
-    BudgetProcurementFlightRateComponent, BudgetProcurementFlightPeriodComponent, BudgetProcurementFlightOvernightComponent],
+    BudgetProcurementFlightRateComponent, BudgetProcurementFlightPeriodComponent, BudgetProcurementFlightOvernightComponent,
+    BudgetProcurementHotelComponent],
   templateUrl: './budget-procurement-summary-detail.component.html',
   styleUrl: './budget-procurement-summary-detail.component.scss'
 })

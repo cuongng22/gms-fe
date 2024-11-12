@@ -3,15 +3,17 @@
         <div class="table-responsive">
             <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
                 <ng-container matColumnDef="period">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@period">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@period">
                         Period
                     </th>
-                    <td mat-cell *matCellDef="let element">
-                        T{{element.periodStart | date: 'MM/YYYY'}} - T{{element.periodEnd|date: 'MM/YYYY'}}
+                    <td mat-cell *matCellDef="let element" [attr.rowspan]="periodRowspan"
+                        [style.display]="!!element.period?'':'none'">
+                        {{element.period}}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="aircraftType">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@aircraftType">
                         Aircraft Type
                     </th>
@@ -20,7 +22,7 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="numberOfFlight">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@numberOfFlights">
                         Number of Flights
                     </th>

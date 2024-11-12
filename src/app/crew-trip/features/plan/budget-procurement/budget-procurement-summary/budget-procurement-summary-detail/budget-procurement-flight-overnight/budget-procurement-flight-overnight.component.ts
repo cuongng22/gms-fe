@@ -37,7 +37,9 @@ export class BudgetProcurementFlightOvernightComponent {
 
 
   clickEdit(data: any) {
+    console.log(data);
     data.editing = true;
+    console.log(data);
   }
   clickOutside(data: any) {
     data.editing = false;
