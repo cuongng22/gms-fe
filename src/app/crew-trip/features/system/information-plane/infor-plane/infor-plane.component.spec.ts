@@ -10,7 +10,7 @@ describe('InforPlaneComponent', () => {
     await TestBed.configureTestingModule({
       imports: [InforPlaneComponent]
     })
-    .compileComponents();
+      .compileComponents();
 
     fixture = TestBed.createComponent(InforPlaneComponent);
     component = fixture.componentInstance;
