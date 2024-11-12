@@ -1,34 +1,44 @@
-import { Routes } from '@angular/router';
-import { KeHoachComponent } from 'src/app/crew-trip/features/plan/ke-hoach/ke-hoach.component';
-import { FirstPageComponent } from "src/app/crew-trip/features/first-page/first-page.component";
-import { UsersComponent } from "src/app/crew-trip/features/system/users/users.component";
-import { SignInComponent } from "src/app/crew-trip/core/auth/sign-in/sign-in.component";
-import { RolesComponent } from "src/app/crew-trip/features/roles/roles.component";
-import { AuthGuard } from "src/app/crew-trip/core/guards/menu.guard";
-import { VehicleComponent } from "src/app/crew-trip/features/category/vehicle/vehicle.component";
-import { HotelComponent } from "src/app/crew-trip/features/category/hotel/hotel.component";
-import { NationComponent } from "src/app/crew-trip/features/category/nation/nation.component";
-import { ServiceFeeComponent } from 'src/app/crew-trip/features/category/service-fee/service-fee.component';
-import { CrewsComponent } from "src/app/crew-trip/features/category/crews/crews.component";
-import { NotFoundComponent } from "src/app/not-found/not-found.component";
-import { ForgotPasswordComponent } from "src/app/crew-trip/core/auth/forgot-password/forgot-password.component";
-import { FunctionsComponent } from "src/app/crew-trip/features/functions/functions.component";
-import { ContractComponent } from "src/app/crew-trip/features/contract/contract.component";
-import { ProfileComponent } from "src/app/crew-trip/core/auth/profile/profile.component";
-import { ResetPasswordComponent } from "src/app/crew-trip/core/auth/reset-password/reset-password.component";
-import { FlightMarketComponent } from './crew-trip/features/category/flight-market/flight-market.component';
-import { FlightMarketDetailComponent } from './crew-trip/features/category/flight-market/flight-market-detail/flight-market-detail.component';
-import { FlightMarketListComponent } from './crew-trip/features/category/flight-market/flight-market-list/flight-market-list.component';
-import { ActRateComponent } from "src/app/crew-trip/features/category/act-rate/act-rate.component";
-import { RateUthComponent } from "src/app/crew-trip/features/plan/rate-uth/rate-uth.component";
-import { RatePlannedComponent } from "src/app/crew-trip/features/plan/rate-planned/rate-planned.component";
-import { CrewsDetailComponent } from './crew-trip/features/category/crews/crews-detail/crews-detail.component';
-import { GroupMailComponent } from "src/app/crew-trip/features/system/config/group-mail/group-mail.component";
-import { FiveYearPlanComponent } from "src/app/crew-trip/features/plan/production/five-year-plan/five-year-plan.component";
-import { EstAnnualProductionComponent } from "src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.component";
-import { AnnualProductionComponent } from "src/app/crew-trip/features/plan/production/annual-production/annual-production.component";
-import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.component';
-import { InforPlaneComponent } from './crew-trip/features/system/information-plane/infor-plane/infor-plane.component';
+import {Routes} from '@angular/router';
+import {KeHoachComponent} from 'src/app/crew-trip/features/plan/ke-hoach/ke-hoach.component';
+import {FirstPageComponent} from "src/app/crew-trip/features/first-page/first-page.component";
+import {UsersComponent} from "src/app/crew-trip/features/system/users/users.component";
+import {SignInComponent} from "src/app/crew-trip/core/auth/sign-in/sign-in.component";
+import {RolesComponent} from "src/app/crew-trip/features/roles/roles.component";
+import {AuthGuard} from "src/app/crew-trip/core/guards/menu.guard";
+import {VehicleComponent} from "src/app/crew-trip/features/category/vehicle/vehicle.component";
+import {HotelComponent} from "src/app/crew-trip/features/category/hotel/hotel.component";
+import {NationComponent} from "src/app/crew-trip/features/category/nation/nation.component";
+import {ServiceFeeComponent} from 'src/app/crew-trip/features/category/service-fee/service-fee.component';
+import {CrewsComponent} from "src/app/crew-trip/features/category/crews/crews.component";
+import {NotFoundComponent} from "src/app/not-found/not-found.component";
+import {ForgotPasswordComponent} from "src/app/crew-trip/core/auth/forgot-password/forgot-password.component";
+import {FunctionsComponent} from "src/app/crew-trip/features/functions/functions.component";
+import {ContractComponent} from "src/app/crew-trip/features/contract/contract.component";
+import {ProfileComponent} from "src/app/crew-trip/core/auth/profile/profile.component";
+import {ResetPasswordComponent} from "src/app/crew-trip/core/auth/reset-password/reset-password.component";
+import {FlightMarketComponent} from './crew-trip/features/category/flight-market/flight-market.component';
+import {
+  FlightMarketDetailComponent
+} from './crew-trip/features/category/flight-market/flight-market-detail/flight-market-detail.component';
+import {
+  FlightMarketListComponent
+} from './crew-trip/features/category/flight-market/flight-market-list/flight-market-list.component';
+import {ActRateComponent} from "src/app/crew-trip/features/category/act-rate/act-rate.component";
+import {RateUthComponent} from "src/app/crew-trip/features/plan/rate-uth/rate-uth.component";
+import {RatePlannedComponent} from "src/app/crew-trip/features/plan/rate-planned/rate-planned.component";
+import {CrewsDetailComponent} from './crew-trip/features/category/crews/crews-detail/crews-detail.component';
+import {GroupMailComponent} from "src/app/crew-trip/features/system/config/group-mail/group-mail.component";
+import {
+  FiveYearPlanComponent
+} from "src/app/crew-trip/features/plan/production/five-year-plan/five-year-plan.component";
+import {
+  EstAnnualProductionComponent
+} from "src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.component";
+import {
+  AnnualProductionComponent
+} from "src/app/crew-trip/features/plan/production/annual-production/annual-production.component";
+import {AutocompleteComponent} from './ui-elements/autocomplete/autocomplete.component';
+import {InforPlaneComponent} from './crew-trip/features/system/information-plane/infor-plane/infor-plane.component';
 
 
 export const routes: Routes = [
@@ -42,76 +52,76 @@ export const routes: Routes = [
     component: FirstPageComponent,
     canActivate: [AuthGuard],
     children: [
-      { path: 'ke-hoach', component: KeHoachComponent },
-      { path: 'contract', component: ContractComponent },
+      {path: 'ke-hoach', component: KeHoachComponent},
+      {path: 'contract', component: ContractComponent},
       {
         path: 'system/admin', children: [
-          { path: 'users', component: UsersComponent },
-          { path: 'roles', component: RolesComponent },
-          { path: 'functions', component: FunctionsComponent },
+          {path: 'users', component: UsersComponent},
+          {path: 'roles', component: RolesComponent},
+          {path: 'functions', component: FunctionsComponent},
         ],
       },
       {
-        path: 'config', children: [
-          { path: 'group-mail', component: GroupMailComponent },
-          { path: 'information-plane', component: InforPlaneComponent },
+        path: 'system/config', children: [
+          {path: 'group-mail', component: GroupMailComponent},
+          {path: 'information-plane', component: InforPlaneComponent},
         ],
-        
-        
+
+
       },
       {
         path: 'plan', children: [
-          { path: 'rate/uth', component: RateUthComponent },
-          { path: 'rate/planned', component: RatePlannedComponent },
-          { path: 'production/five-year-plan', component: FiveYearPlanComponent },
-          { path: 'production/est-annual-production', component: EstAnnualProductionComponent },
-          { path: 'production/planned', component: AnnualProductionComponent },
+          {path: 'rate/uth', component: RateUthComponent},
+          {path: 'rate/planned', component: RatePlannedComponent},
+          {path: 'production/five-year-plan', component: FiveYearPlanComponent},
+          {path: 'production/est-annual-production', component: EstAnnualProductionComponent},
+          {path: 'production/planned', component: AnnualProductionComponent},
         ]
       },
       {
         path: 'category', children: [
-          { path: 'vehicle', component: VehicleComponent },
-          { path: 'contract', component: ContractComponent },
-          { path: 'act-rate', component: ActRateComponent },
-          { path: 'hotel', component: HotelComponent },
-          { path: 'nation', component: NationComponent },
-          { path: 'service-fee', component: ServiceFeeComponent },
-          { path: 'crews', component: CrewsComponent },
-          { path: 'vehicle', component: VehicleComponent },
-          { path: 'contract', component: ContractComponent },
-          { path: 'hotel', component: HotelComponent },
-          { path: 'nation', component: NationComponent },
-          { path: 'service-fee', component: ServiceFeeComponent },
+          {path: 'vehicle', component: VehicleComponent},
+          {path: 'contract', component: ContractComponent},
+          {path: 'act-rate', component: ActRateComponent},
+          {path: 'hotel', component: HotelComponent},
+          {path: 'nation', component: NationComponent},
+          {path: 'service-fee', component: ServiceFeeComponent},
+          {path: 'crews', component: CrewsComponent},
+          {path: 'vehicle', component: VehicleComponent},
+          {path: 'contract', component: ContractComponent},
+          {path: 'hotel', component: HotelComponent},
+          {path: 'nation', component: NationComponent},
+          {path: 'service-fee', component: ServiceFeeComponent},
           {
             path: 'crews', component: CrewsComponent,
             children: [
-              { path: '', component: CrewsComponent },
-              { path: 'detail', component: CrewsDetailComponent },
+              {path: '', component: CrewsComponent},
+              {path: 'detail', component: CrewsDetailComponent},
             ]
           },
-          { path: 'autocomplete', component: AutocompleteComponent },
+          {path: 'autocomplete', component: AutocompleteComponent},
           {
             path: 'flight-market', component: FlightMarketComponent,
             children: [
-              { path: '', component: FlightMarketListComponent },
-              { path: 'detail', component: FlightMarketDetailComponent },
-              { path: 'detail/:id', component: FlightMarketDetailComponent }
+              {path: '', component: FlightMarketListComponent},
+              {path: 'detail', component: FlightMarketDetailComponent},
+              {path: 'detail/:id', component: FlightMarketDetailComponent}
             ]
           },
         ]
       },
-      { path: 'profile', component: ProfileComponent },
+      {path: 'profile', component: ProfileComponent},
     ]
   },
   {
     path: 'auth',
     children: [
-      { path: 'login', component: SignInComponent },
-      { path: 'forgot-password', component: ForgotPasswordComponent },
-      { path: 'reset-password', component: ResetPasswordComponent }
+      {path: 'login', component: SignInComponent},
+      {path: 'forgot-password', component: ForgotPasswordComponent},
+      {path: 'reset-password', component: ResetPasswordComponent}
     ]
   },
-  { path: '**', component: NotFoundComponent }
+  {path: '**', component: NotFoundComponent}
 
   /*,
   {
