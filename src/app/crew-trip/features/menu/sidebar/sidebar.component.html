@@ -19,7 +19,7 @@
         <mat-accordion [multi]="true">
           @for (menu1 of menu; track $index) {
           <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
-            (closed)="panelOpenState.set(false)"  [expanded]="true" [class.active]="isActive(menu1.rootPath)">
+            (closed)="panelOpenState.set(false)"  [expanded]="isActive(menu1.rootPath)" [class.active]="isActive(menu1.rootPath)">
             <!-- Menu -->
             <mat-expansion-panel-header>
               <mat-panel-title>

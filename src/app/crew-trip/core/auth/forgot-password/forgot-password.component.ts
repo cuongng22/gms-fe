@@ -54,6 +54,7 @@ export class ForgotPasswordComponent {
         await this.usersService.forgotPassword(this.formGroup.value);
         this.successMessage = $localize`A password reset link has been sent to your email. Please check your email.`;
         this.formGroup.get('email')?.setErrors(null);
+        this.formGroup.get('email')?.setValidators(null);
         this.errorMessage = null;
         this.formGroup.reset();
       }

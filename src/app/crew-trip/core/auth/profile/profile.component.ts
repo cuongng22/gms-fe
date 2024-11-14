@@ -75,7 +75,6 @@ export class ProfileComponent implements OnInit {
 
 
   onCancel(): void {
-    console.log("dasdasdasdasdasdas:", this.userCurrent)
     this.formGroup.reset(this.userCurrent);
     this.updateEditMode();
   }
@@ -87,7 +86,6 @@ export class ProfileComponent implements OnInit {
       (this.formGroup.get(key) as FormControl).markAsTouched();
     });
     if (this.formGroup.valid) {
-      // Thực hiện logic lưu dữ liệu ở đây
       try {
         await this.spinner.show();
         await this.userService.update(this.formGroup.value, 'update');

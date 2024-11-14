@@ -148,7 +148,7 @@
           <img src="{{userInfo?.avartarUrl}}" *ngIf="userInfo?.avartarUrl" class="rounded-circle" alt="admin-image">
           <img src="images/admin.png" *ngIf="!userInfo?.avartarUrl" class="rounded-circle" alt="admin-image">
           <span class="fw-semibold text-black">
-                        {{ userInfo?.email }}
+                        {{ userInfo?.fullName }}
                     </span>
         </button>
         <mat-menu class="profile-menu-dropdown" #profileMenu="matMenu" xPosition="before">
