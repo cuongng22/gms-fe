@@ -40,6 +40,7 @@ export const appConfig: ApplicationConfig = {
       }
     })),
     importProvidersFrom(NgxSpinnerModule.forRoot()),
+    // [{provide: LOCALE_ID, useValue: 'en-US'}],
     [{provide: LOCALE_ID, useValue: 'vi-VN'}],
   ]
 };

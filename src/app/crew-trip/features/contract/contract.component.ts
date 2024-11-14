@@ -4,7 +4,7 @@ import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatTableModule} from '@angular/material/table';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
@@ -24,6 +24,7 @@ import {FlightMarketService} from "src/app/crew-trip/core/services/flight-market
 import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
 import {VehicleService} from "src/app/crew-trip/core/services/vehicle.service";
 import {MatDatepickerModule} from "@angular/material/datepicker";
+import {log} from "util";
 
 
 @Component({
@@ -48,6 +49,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   listPartner: any[] = [];
   listHotel = [];
   listVehicle = [];
+  annexData= new  MatTableDataSource();
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`bizDocId`, value: 'bizDocId'},
@@ -160,7 +162,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
       partnerCode: [],
       startDate: [],
       endDate: [],
-      export: [false],
+      export: [null],
       active: [false],
     });
     this.formGroupDetail = this.fb.group({bizDocId: []});
@@ -194,13 +196,9 @@ export class ContractComponent extends CommonComponent implements OnInit {
       this.step = 1;
   }
 
-  async showAnnex(id: any) {
-    /**
-     * todo: api chi tiet hop dong
-     * gan vao formDetail
-     *
-     *
-     */
+  async showAnnex(index: any) {
+    let cur: any = this.dataSource.data[index];
+    this.annexData.data = cur.appendixList;
     this.showPopupAnnex = true;
   }
 

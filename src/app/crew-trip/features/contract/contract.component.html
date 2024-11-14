@@ -130,9 +130,9 @@
             </th>
             <td *matCellDef="let element;let i = dataIndex" mat-cell>
               <div class="action-buttons d-flex align-items-center justify-content-end">
-                <a [matMenuTriggerFor]="listAnnex" mat-button style="" type="button">
+                <a (click)="showAnnex(i)" [matMenuTriggerFor]="listAnnex" mat-button style="" type="button">
                   <i class="material-symbols-outlined" i18n-title title="Delete">
-                    description
+                    contract
                   </i>
                 </a>
                 <a (click)="nextStep(i)" mat-button type="button">
@@ -153,75 +153,25 @@
 
                 <mat-menu #listAnnex="matMenu" xPosition="before">
                   <div class="basic-table table-responsive">
-                    <table>
-                      <thead>
-                      <tr>
-                        <th class="fw-medium" scope="col">
-                          Description
-                        </th>
-                        <th class="fw-medium text-end" scope="col">
-                          Price
-                        </th>
-                      </tr>
-                      </thead>
-                      <tbody>
-                      <tr>
-                        <td class="text-body">
-                          Grand Total :
+                    <table [dataSource]="annexData" class="table-light" mat-table>
+                      <ng-container matColumnDef="stt">
+                        <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
+                        <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
+                      </ng-container>
+                      <ng-container matColumnDef="bizDocId">
+                        <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>bizDocId</th>
+                        <td *matCellDef="let element" mat-cell>
+                          {{element.bizDocId}}
                         </td>
-                        <td class="text-body text-end">
-                          $1,105.00
+                      </ng-container>
+                      <ng-container matColumnDef="description">
+                        <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>description</th>
+                        <td *matCellDef="let element" class="text-body text-end" mat-cell>
+                          {{element.description}}
                         </td>
-                      </tr>
-                      <tr>
-                        <td class="text-body">
-                          Discount :
-                        </td>
-                        <td class="text-body text-end">
-                          -$105.00
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-body">
-                          Tax :
-                        </td>
-                        <td class="text-body text-end">
-                          $75.00
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="fw-medium">
-                          Subtotal :
-                        </td>
-                        <td class="text-body text-end">
-                          $1,000.00
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-body">
-                          Shipping Charge :
-                        </td>
-                        <td class="text-body text-end">
-                          $80.00
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="text-body">
-                          Coupon Charge :
-                        </td>
-                        <td class="text-body text-end">
-                          $20.00
-                        </td>
-                      </tr>
-                      <tr>
-                        <td class="fw-medium">
-                          Total :
-                        </td>
-                        <td class="text-body text-end">
-                          $900.00
-                        </td>
-                      </tr>
-                      </tbody>
+                      </ng-container>
+                      <tr *matHeaderRowDef="['stt','bizDocId','description']" mat-header-row></tr>
+                      <tr *matRowDef="let row; columns: ['stt','bizDocId','description'];" mat-row></tr>
                     </table>
                   </div>
                 </mat-menu>
