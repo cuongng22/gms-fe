@@ -2,9 +2,9 @@ import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
-import { MatFormFieldModule} from '@angular/material/form-field';
+import {MatFormFieldModule} from '@angular/material/form-field';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import { MatInputModule} from '@angular/material/input';
+import {MatInputModule} from '@angular/material/input';
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from '@angular/material/card';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
@@ -14,12 +14,13 @@ import {HelperService} from 'src/app/crew-trip/core/services/helper.service';
 import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
 import {MatIconModule} from '@angular/material/icon';
 import {NgxSpinnerModule, NgxSpinnerService} from 'ngx-spinner';
+import {HttpErrorResponse} from "@angular/common/http";
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
   imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
-    TranslateModule, MatIconModule,NgxSpinnerModule
+    TranslateModule, MatIconModule, NgxSpinnerModule
   ],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'
@@ -38,7 +39,7 @@ export class ForgotPasswordComponent {
     public themeService: CustomizerSettingsService,
   ) {
     this.formGroup = this.fb.group({
-      email: ['',  [Validators.required, Validators.email]],
+      email: ['', [Validators.required, Validators.email]],
     });
   }
 
@@ -57,8 +58,11 @@ export class ForgotPasswordComponent {
         this.formGroup.reset();
       }
     } catch (error: any) {
-      if (error?.status === 400 && error.error?.error) {
-        this.formGroup.get('email')?.setErrors({ incorrect: true });
+      if (error.status === 404) {
+        this.formGroup.get('email')?.setErrors({incorrect: true});
+        this.errorMessage = error?.error?.error;
+      } else if (error?.status === 400 && error.error?.error) {
+        this.formGroup.get('email')?.setErrors({incorrect: true});
         this.errorMessage = error?.error?.error;
       } else {
         this.errorMessage = $localize`An unexpected error occurred. Please try again.`;
