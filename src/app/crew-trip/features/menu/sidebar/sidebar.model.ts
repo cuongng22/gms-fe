@@ -26,13 +26,13 @@ export const menu: Menu[] = [
         path: 'category/flight-market', title: $localize`:@@airPort:Airport`, icon: 'ri-store-line'
       },
       {
-        path: 'category/hotel', title: $localize`:@@hotel:Hotels`, icon: 'ri-hotel-bed-fill'
+        path: 'category/hotel', title: $localize`:@@hotel:Hotels`, icon: 'ri-hotel-bed-line'
       },
       {
         path: 'category/vehicle', title: $localize`:@@carRentalCompany:Car rental`, icon: 'ri-car-line'
       },
       {
-        path: 'category/service-fee', title: $localize`:@@costCategory:Cost category`, icon: 'ri-money-dollar-box-fill'
+        path: 'category/service-fee', title: $localize`:@@costCategory:Cost category`, icon: 'ri-server-line'
       },
       {
         path: 'category/contract', title: $localize`:@@contract:Contract`, icon: 'ri-contract-line'
@@ -49,7 +49,7 @@ export const menu: Menu[] = [
         path: 'category/crews', title: $localize`:@@crewList:Crew List`, icon: 'ri-id-card-line'
       },
       {
-        path: 'category/nation', title: $localize`:@@country:Country`, icon: 'ri-global-fill'
+        path: 'category/nation', title: $localize`:@@country:Country`, icon: 'ri-global-line'
       }
     ]
   },
@@ -60,12 +60,12 @@ export const menu: Menu[] = [
       {
         path: 'flight-schedules/seasonal',
         title: $localize`:@@seasonalFlightSchedule:Seasonal Flight Schedule`,
-        icon: 'ri-calendar-schedule-fill'
+        icon: 'ri-calendar-schedule-line'
       },
       {
         path: 'flight-schedules/daily',
         title: $localize`:@@dailyFlightSchedule:Daily Flight Schedule`,
-        icon: 'ri-calendar-schedule-fill'
+        icon: 'ri-calendar-schedule-line'
       }
     ]
   },
@@ -74,7 +74,7 @@ export const menu: Menu[] = [
     rootPath: 'service',
     subMenu: [
       {
-        path: '', title: '', icon: 'ri-calendar-schedule-fill',
+        path: '', title: '', icon: 'ri-calendar-schedule-line',
         menu: [
           {
             title: $localize`:@@hotelRoom:Hotel room`,
@@ -133,7 +133,7 @@ export const menu: Menu[] = [
     rootPath: 'plan',
     subMenu: [
       {
-        path: '', title: '', icon: 'ri-calendar-schedule-fill',
+        path: '', title: '', icon: 'ri-calendar-schedule-line',
         menu: [
           {
             title: $localize`:@@rates:Rates`,
@@ -217,22 +217,22 @@ export const menu: Menu[] = [
     rootPath: 'system',
     subMenu: [
       {
-        path: '', title: '', icon: 'ri-calendar-schedule-fill',
+        path: '', title: '', icon: 'ri-calendar-schedule-line',
         menu: [
           {
             title: $localize`:@@rolesAccounts:Roles & Accounts`,
             rootPath: 'system/admin',
             subMenu: [
               {
-                path: 'system/admin/users', title: $localize`:@@account:Account`, icon: 'ri-group-fill'
+                path: 'system/admin/users', title: $localize`:@@account:Account`, icon: 'ri-group-line'
               },
               {
-                path: 'system/admin/roles', title: $localize`:@@role:Role`, icon: 'ri-calendar-schedule-fill'
+                path: 'system/admin/roles', title: $localize`:@@role:Role`, icon: 'ri-calendar-schedule-line'
               },
               {
                 path: 'system/admin/functions',
                 title: $localize`:@@function:Function`,
-                icon: 'ri-calendar-schedule-fill'
+                icon: 'ri-calendar-schedule-line'
               }
             ]
           },
