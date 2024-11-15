@@ -52,7 +52,7 @@
           <mat-form-field>
             <mat-label i18n>Contract category</mat-label>
             <mat-select formControlName="tempp">
-              <mat-option i18n></mat-option>
+              <mat-option i18n>-- Contract category --</mat-option>
               <mat-option i18n value="1">Thuê ướt</mat-option>
               <mat-option i18n value="0">Charter</mat-option>
             </mat-select>
@@ -531,76 +531,57 @@
   <mat-expansion-panel [expanded]="expandList.has('tab3')">
     <mat-expansion-panel-header i18n>3. Attached Document Information</mat-expansion-panel-header>
     <mat-panel-description>
-      <table>
-        <thead>
-        <tr>
-          <th class="fw-medium" scope="col">
-            Description
-          </th>
-          <th class="fw-medium text-end" scope="col">
-            Price
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td class="text-body">
-            Grand Total :
-          </td>
-          <td class="text-body text-end">
-            $1,105.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Discount :
-          </td>
-          <td class="text-body text-end">
-            -$105.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Tax :
-          </td>
-          <td class="text-body text-end">
-            $75.00
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-medium">
-            Subtotal :
-          </td>
-          <td class="text-body text-end">
-            $1,000.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Shipping Charge :
-          </td>
-          <td class="text-body text-end">
-            $80.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Coupon Charge :
-          </td>
-          <td class="text-body text-end">
-            $20.00
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-medium">
-            Total :
-          </td>
-          <td class="text-body text-end">
-            $900.00
-          </td>
-        </tr>
-        </tbody>
-      </table>
+      <form [formGroup]="formGroupFileUpload" autocomplete="off" class="w-100">
+        <div class="row">
+          <div class="col-12">
+            <table [dataSource]="tblAttachedDocument" class="table-light" mat-table>
+              <ng-container matColumnDef="stt">
+                <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
+                <td *matCellDef="let element; let i = index" mat-cell>{{ i + 1 }}</td>
+              </ng-container>
+              <ng-container matColumnDef="documentType">
+                <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Document Type</th>
+                <td *matCellDef="let element" mat-cell>
+                  {{element.documentType}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fileName">
+                <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
+                <td *matCellDef="let element" mat-cell>
+                  {{element.fileName}}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="action">
+                <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
+                <td *matCellDef="let element; let i = dataIndex" class="text-body text-end" mat-cell>
+                  <div class="action-buttons d-flex align-items-center justify-content-end">
+                    <a (click)="deleteFile(i)" mat-button style="" type="button">
+                      <i class="material-symbols-outlined" i18n-title title="Delete">
+                        delete
+                      </i>
+                    </a>
+                  </div>
+                </td>
+              </ng-container>
+              <tr *matHeaderRowDef="['stt','documentType','fileName','action']" mat-header-row></tr>
+              <tr *matRowDef="let row; columns: ['stt','documentType','fileName','action']" mat-row></tr>
+            </table>
+          </div>
+          <div class="col-4 mt-20" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Contract category</mat-label>
+              <mat-select formControlName="contractCategory">
+                <mat-option i18n value="1">Hợp đồng/phụ lục hoặc các tài liệu khác</mat-option>
+                <mat-option i18n value="0">Các tài liệu khác của hợp đồng</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+          <div class="col-4 mt-20" sizeInput='sm'>
+            <file-upload (ngModelChange)="actionUpload()" [multiple]="false" class="file-uploader"
+                         formControlName="fileUpload"></file-upload>
+          </div>
+        </div>
+      </form>
     </mat-panel-description>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab4')">
@@ -726,75 +707,64 @@
   <mat-expansion-panel [expanded]="expandList.has('tab5')">
     <mat-expansion-panel-header i18n>5. Unit Price Information</mat-expansion-panel-header>
     <mat-panel-description>
-      <table>
-        <thead>
-        <tr>
-          <th class="fw-medium" scope="col">
-            Description
+      <table [dataSource]="tblUnitPrice" class="table-light" mat-table>
+        <ng-container matColumnDef="stt">
+          <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
+          <td *matCellDef="let element; let i = index" mat-cell>{{ i + 1 }}</td>
+        </ng-container>
+        <ng-container matColumnDef="type">
+          <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Document Type</th>
+          <td *matCellDef="let element" mat-cell>
+            {{element.type}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
+          <td *matCellDef="let element" class="text-body text-end" mat-cell>
+            {{element.name}}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="action" stickyEnd>
+          <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
+            Action
           </th>
-          <th class="fw-medium text-end" scope="col">
-            Price
-          </th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr>
-          <td class="text-body">
-            Grand Total :
+          <td *matCellDef="let element;let i = dataIndex" mat-cell>
+            @if(element.isEdit){
+            <div class="action-buttons d-flex align-items-center justify-content-end">
+              <a (click)="editUnitPrice(i)" mat-button style="" type="button">
+                <i class="material-symbols-outlined" i18n-title title="Edit">
+                  edit
+                </i>
+              </a>
+            </div>
+              <div class="action-buttons d-flex align-items-center justify-content-end">
+              <a (click)="deleteUnitPrice(i)" mat-button style="" type="button">
+                <i class="material-symbols-outlined" i18n-title title="Delete">
+                  delete
+                </i>
+              </a>
+            </div>
+            }
+            @else{
+            <div class="action-buttons d-flex align-items-center justify-content-end">
+              <a (click)="saveUnitPrice(i)" mat-button style="" type="button">
+                <i class="material-symbols-outlined" i18n-title title="Edit">
+                  save
+                </i>
+              </a>
+            </div>
+              <div class="action-buttons d-flex align-items-center justify-content-end">
+              <a (click)="cancelUnitPrice(i)" mat-button style="" type="button">
+                <i class="material-symbols-outlined" i18n-title title="Delete">
+                  cancel
+                </i>
+              </a>
+            </div>
+            }
           </td>
-          <td class="text-body text-end">
-            $1,105.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Discount :
-          </td>
-          <td class="text-body text-end">
-            -$105.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Tax :
-          </td>
-          <td class="text-body text-end">
-            $75.00
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-medium">
-            Subtotal :
-          </td>
-          <td class="text-body text-end">
-            $1,000.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Shipping Charge :
-          </td>
-          <td class="text-body text-end">
-            $80.00
-          </td>
-        </tr>
-        <tr>
-          <td class="text-body">
-            Coupon Charge :
-          </td>
-          <td class="text-body text-end">
-            $20.00
-          </td>
-        </tr>
-        <tr>
-          <td class="fw-medium">
-            Total :
-          </td>
-          <td class="text-body text-end">
-            $900.00
-          </td>
-        </tr>
-        </tbody>
+        </ng-container>
+        <tr *matHeaderRowDef="['stt','type','name']" mat-header-row></tr>
+        <tr *matRowDef="let row; columns: ['stt','type','name'];" mat-row></tr>
       </table>
     </mat-panel-description>
   </mat-expansion-panel>

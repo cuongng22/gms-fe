@@ -5,14 +5,14 @@ import {Router, RouterLink, RouterLinkActive} from '@angular/router';
 import {CommonModule, NgClass} from '@angular/common';
 import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
 import {ToggleService} from 'src/app/common/header/toggle.service';
-import { TranslateModule } from '@ngx-translate/core';
-import { menu } from './sidebar.model';
+import {TranslateModule} from '@ngx-translate/core';
+import {menu} from './sidebar.model';
 
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule ,NgScrollbarModule, MatExpansionModule,RouterLinkActive, RouterLink, NgClass, TranslateModule],
+  imports: [CommonModule, NgScrollbarModule, MatExpansionModule, RouterLinkActive, RouterLink, NgClass, TranslateModule],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss'
 })
@@ -45,11 +45,14 @@ export class SidebarComponent implements OnInit {
   ngOnInit(): void {
     console.log(this.router);
   }
+
   // Burger Menu Toggle
   toggle() {
     this.toggleService.toggle();
   }
+
   isActive(path: string): boolean {
-    return this.router.url.includes(path);
+    // return this.router.url.includes(path);
+    return this.router.url === '/' + path;
   }
 }
