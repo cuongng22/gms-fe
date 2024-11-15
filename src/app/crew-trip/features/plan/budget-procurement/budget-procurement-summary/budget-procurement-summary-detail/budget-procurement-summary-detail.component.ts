@@ -19,6 +19,7 @@ import { BudgetProcurementFlightRateComponent } from './budget-procurement-fligh
 import { BudgetProcurementFlightPeriodComponent } from './budget-procurement-flight-period/budget-procurement-flight-period.component';
 import { BudgetProcurementFlightOvernightComponent } from './budget-procurement-flight-overnight/budget-procurement-flight-overnight.component';
 import { BudgetProcurementHotelComponent } from './budget-procurement-hotel/budget-procurement-hotel.component';
+import { BudgetProcurementCarRentalComponent } from './budget-procurement-car-rental/budget-procurement-car-rental.component';
 
 @Component({
   selector: 'app-budget-procurement-summary-detail',
@@ -28,7 +29,7 @@ import { BudgetProcurementHotelComponent } from './budget-procurement-hotel/budg
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule,
     BudgetProcurementGeneralComponent, MatExpansionModule, MatExpansionPanelContent,
     BudgetProcurementFlightRateComponent, BudgetProcurementFlightPeriodComponent, BudgetProcurementFlightOvernightComponent,
-    BudgetProcurementHotelComponent],
+    BudgetProcurementHotelComponent, BudgetProcurementCarRentalComponent],
   templateUrl: './budget-procurement-summary-detail.component.html',
   styleUrl: './budget-procurement-summary-detail.component.scss'
 })

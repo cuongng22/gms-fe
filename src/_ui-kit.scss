@@ -7,10 +7,13 @@
 }
 
 .table-light.mdc-data-table__table .mat-mdc-header-row .mat-mdc-header-cell,
-.table-light.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell {
+.table-light.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell,
+.table-light.mdc-data-table__table .mat-mdc-footer-row .mat-mdc-footer-cell {
     border: 1px solid var(--gray-200) !important;
 }
-.mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell{
+
+.mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-cell,
+.mat-mdc-table.mdc-data-table__table .mat-mdc-footer-row .mat-mdc-footer-cell {
     padding: 9px 10px !important;
 }
 
@@ -39,7 +42,7 @@
 .edit-inline-table.mat-mdc-form-field .mdc-text-field {
     border: 0px !important;
     padding: 0px 10px !important;
-    
+
 }
 
 .edit-inline-table.mat-mdc-form-field .mdc-text-field--disabled .mdc-line-ripple::before {
@@ -49,6 +52,7 @@
 button.btn {
     display: flex;
 }
+
 .danger-btn {
     height: auto !important;
     min-width: 100px !important;
@@ -75,7 +79,7 @@ button.btn {
 
 .add-btn {
     height: auto !important;
-    min-width: 100px !important;//auto !important;
+    min-width: 100px !important; //auto !important;
     font-weight: 500 !important;
     padding: 8px 13px !important;
     border-radius: 7px !important;
@@ -131,7 +135,7 @@ button.btn {
 
 .success-btn {
     height: auto !important;
-    min-width: 100px !important;//auto !important;
+    min-width: 100px !important; //auto !important;
     font-weight: 500 !important;
     padding: 8px 13px !important;
     border-radius: 7px !important;
@@ -215,8 +219,8 @@ button.btn {
 //     border: 1px solid var(--mdc-filled-text-field-error-label-text-color)
 // }
 
-.file-uploader.invalid{
-    color: rgb(255, 64, 35)    ;
+.file-uploader.invalid {
+    color: rgb(255, 64, 35);
     border: 1px solid rgb(255, 64, 35)
 }
 
@@ -389,7 +393,7 @@ input {
             .mat-mdc-button {
                 &.add-btn {
                     height: auto;
-                    min-width: 100px;//auto;
+                    min-width: 100px; //auto;
                     font-weight: 500;
                     padding: 8px 13px;
                     border-radius: 7px;
@@ -421,7 +425,7 @@ input {
 
                 &.search-btn {
                     height: auto;
-                    min-width: 100px;//auto;
+                    min-width: 100px; //auto;
                     font-weight: 500;
                     padding: 8px 13px;
                     border-radius: 7px;
@@ -445,7 +449,7 @@ input {
 
                 &.reset-btn {
                     height: auto;
-                    min-width: 100px;//auto;
+                    min-width: 100px; //auto;
                     font-weight: 500;
                     padding: 8px 13px;
                     border-radius: 7px;
@@ -469,7 +473,7 @@ input {
 
                 &.back-btn {
                     height: auto;
-                    min-width: 100px;//auto;
+                    min-width: 100px; //auto;
                     font-weight: 500;
                     padding: 8px 13px;
                     border-radius: 7px;
@@ -493,7 +497,7 @@ input {
 
                 &.danger-btn {
                     height: auto !important;
-                    min-width: 100px;//auto !important;
+                    min-width: 100px; //auto !important;
                     font-weight: 500 !important;
                     padding: 8px 13px !important;
                     border-radius: 7px !important;
@@ -637,7 +641,7 @@ input {
         .mat-mdc-button {
             &.add-btn {
                 height: auto;
-                min-width: 100px;//auto;
+                min-width: 100px; //auto;
                 font-weight: 500;
                 padding: 8px 13px;
                 border-radius: 7px;
@@ -669,7 +673,7 @@ input {
 
             &.search-btn {
                 height: auto;
-                min-width: 100px;//auto;
+                min-width: 100px; //auto;
                 font-weight: 500;
                 padding: 8px 13px;
                 border-radius: 7px;
@@ -693,7 +697,7 @@ input {
 
             &.reset-btn {
                 height: auto;
-                min-width: 100px;//auto;
+                min-width: 100px; //auto;
                 font-weight: 500;
                 padding: 8px 13px;
                 border-radius: 7px;
@@ -717,7 +721,7 @@ input {
 
             &.back-btn {
                 height: auto;
-                min-width: 100px;//auto;
+                min-width: 100px; //auto;
                 font-weight: 500;
                 padding: 8px 13px;
                 border-radius: 7px;
@@ -741,7 +745,7 @@ input {
 
             &.danger-btn {
                 height: auto !important;
-                min-width: 100px;//auto !important;
+                min-width: 100px; //auto !important;
                 font-weight: 500 !important;
                 padding: 8px 13px !important;
                 border-radius: 7px !important;
@@ -894,7 +898,9 @@ input {
                                     left: 25px;
                                     right: 25px;
                                     background: rgb(0 0 0 / 7%);
-                                };
+                                }
+
+                                ;
                             }
                         }
                     }
@@ -2457,9 +2463,10 @@ apx-chart {
 }
 
 // Breadcrumb
-.breadcrumb-item + .breadcrumb-item::before{
+.breadcrumb-item+.breadcrumb-item::before {
     padding-right: 0 !important;
 }
+
 .breadcrumb-card {
     .breadcrumb {
         .breadcrumb-item {
@@ -2511,7 +2518,7 @@ apx-chart {
             &:first-child {
                 margin-left: 0;
             }
-            
+
 
             &:last-child {
                 margin-right: 0;
