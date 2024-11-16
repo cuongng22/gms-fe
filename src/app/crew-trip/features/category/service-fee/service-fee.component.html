@@ -36,9 +36,9 @@
           <mat-form-field>
             <mat-label i18n>Status</mat-label>
             <mat-select formControlName="active">
-              <mat-option i18n [value]="">-- All Status --</mat-option>
-              <mat-option i18n [value]="1">Active</mat-option>
-              <mat-option i18n [value]="0">Inactive</mat-option>
+              <mat-option [value]="" i18n>-- All Status --</mat-option>
+              <mat-option [value]="1" i18n>Active</mat-option>
+              <mat-option [value]="0" i18n>Inactive</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -75,7 +75,7 @@
   </mat-card-header>
   <mat-card-content>
     <div class="table-responsive">
-      <table [dataSource]="dataSource" mat-table multiTemplateDataRows="true" class="table-light">
+      <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true">
 
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
@@ -99,26 +99,28 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="stt">
-          <th *matHeaderCellDef mat-header-cell mat-sort-header class="text-center">#</th>
+          <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
           <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
         </ng-container>
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
-        <ng-container matColumnDef="{{innerColumn.value}}">
-            <th class="text-center" mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
+          <ng-container matColumnDef="{{innerColumn.value}}">
+            <th class="text-center" mat-sort-header mat-header-cell
+                *matHeaderCellDef>{{ innerColumn.label | titlecase }}
+            </th>
             <td [ngClass]="{'text-center': innerColumn.value === 'activeLabel',}" mat-cell *matCellDef="let element">
                 <span [ngClass]="{
         'badge rounded-pill': innerColumn.value === 'activeLabel',
         'text-soft-primary': innerColumn.value === 'activeLabel' && element['active'] == 1,
         'text-soft-danger': innerColumn.value === 'activeLabel' && element['active'] == 0
         }">{{
-        element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-        }}</span>
+                    element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+                  }}</span>
             </td>
           </ng-container>
         }
         <!-- Action Column -->
         <ng-container matColumnDef="action" stickyEnd>
-          <th  class="text-center" *matHeaderCellDef i18n mat-header-cell>
+          <th *matHeaderCellDef class="text-center" i18n mat-header-cell>
             Actions
           </th>
           <td *matCellDef="let element;let i = dataIndex" mat-cell>
@@ -126,7 +128,7 @@
               <a mat-button type="button">
 
               </a>
-              <a (click)="showDialogDetail(i,'index')" mat-button type="button">
+              <a (click)="showDialogDetail(i,'index')" class="text-warning" mat-button type="button">
                 <i class="material-symbols-outlined" i18n-title title="Edit">
                   edit
                 </i>
@@ -142,7 +144,7 @@
         <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
         <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
         <tr *matNoDataRow class="mat-row">
-          <td [attr.colspan]="displayedColumns.length" class="mat-cell"><span i18n>No data matching the filter</span>
+          <td [attr.colspan]="displayedColumns.length" class="mat-cell text-center"><span i18n>No data!</span>
           </td>
         </tr>
 
@@ -173,8 +175,8 @@
       <mat-card-header>
         <mat-card-title>
           <h5 class="mb-0">
-            <span *ngIf="!formGroupDetail.value.id" i18n>Create Service fee</span>
-            <span *ngIf="formGroupDetail.value.id" i18n>Update Service fee</span>
+            <span *ngIf="!formGroupDetail.value.id" i18n>Add new</span>
+            <span *ngIf="formGroupDetail.value.id" i18n>Edit</span>
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
@@ -193,20 +195,26 @@
               <div class="form-group">
                 <mat-form-field>
                   <mat-label i18n>Code</mat-label>
-                  <input formControlName="code" i18n-placeholder matInput placeholder="Input code" required>
+                  <input [readonly]="!!formGroupDetail.value.id" formControlName="code" i18n-placeholder matInput
+                         required>
                   @if (!!formGroupDetail.controls['code'].hasError('required')) {
-                  <mat-error><span i18n>Code</span><span i18n> not empty</span></mat-error>
+                    <mat-error><span i18n>Code</span><span i18n> is required</span></mat-error>
+                  } @else if (!!formGroupDetail.controls['code'].hasError('maxlength')) {
+                    <mat-error><span i18n>Code</span><span i18n>  must be less than 20 characters</span></mat-error>
                   }
                 </mat-form-field>
                 <mat-form-field>
-                  <mat-label i18n>Name</mat-label>
-                  <input formControlName="name" i18n-placeholder matInput placeholder="Input Name" required>
+                  <mat-label i18n>Cost category name</mat-label>
+                  <input formControlName="name" i18n-placeholder matInput required>
                   @if (!!formGroupDetail.controls['name'].hasError('required')) {
-                  <mat-error><span i18n>Name</span><span i18n> not empty</span></mat-error>
+                    <mat-error><span i18n>Cost category name</span><span i18n> is required</span></mat-error>
+                  } @else if (!!formGroupDetail.controls['name'].hasError('maxlength')) {
+                    <mat-error><span i18n>Cost category name</span><span i18n>  must be less than 250 characters</span>
+                    </mat-error>
                   }
                 </mat-form-field>
                 <mat-form-field>
-                  <mat-label i18n>Choose unit</mat-label>
+                  <mat-label i18n>Unit</mat-label>
                   <mat-select formControlName="unit" required>
                     <mat-option i18n value="AC">AC</mat-option>
                     <mat-option i18n value="Session">Session</mat-option>
@@ -219,20 +227,25 @@
                     <mat-option i18n value="Room">Room</mat-option>
                     <mat-option i18n value="Month">Month</mat-option>
                   </mat-select>
+                  @if (!!formGroupDetail.controls['unit'].hasError('required')) {
+                    <mat-error><span i18n>Unit</span><span i18n> is required</span></mat-error>
+                  }
                 </mat-form-field>
                 <mat-form-field>
-                  <mat-label i18n>Description</mat-label>
-                  <textarea formControlName="description" i18n-placeholder matInput
-                            placeholder="Input Description"></textarea>
-                  <mat-hint align="end">{{formGroupDetail.value.description.length}} / 500</mat-hint>
+                  <mat-label i18n>Note</mat-label>
+                  <textarea formControlName="description" i18n-placeholder matInput></textarea>
+                  @if (!!formGroupDetail.controls['description'].hasError('maxlength')) {
+                    <mat-error><span i18n>Note</span><span i18n>  must be less than 500 characters</span></mat-error>
+                  }
+                  <mat-hint align="end">{{ formGroupDetail.value.description?.length }} / 500</mat-hint>
                 </mat-form-field>
-                <mat-checkbox class="mt-10" formControlName="active" i18n>Active</mat-checkbox>
+                <mat-checkbox class="mt-0" formControlName="active" i18n>Active</mat-checkbox>
               </div>
             </div>
           </div>
         </form>
         <div class="btn-box">
-          <button (click)="closeDetail()" color="warn" i18n mat-button type="button">
+          <button (click)="closeDetail()" class="close-btn" i18n mat-button type="button">
             <i class="material-symbols-outlined">
               close
             </i>
@@ -240,7 +253,7 @@
           </button>
           <button
             (click)="save()"
-            color="primary"
+            class="add-btn"
             i18n mat-button
           >
             <i class="material-symbols-outlined">
@@ -263,7 +276,9 @@
       <mat-card-header>
         <mat-card-title>
           <h5 class="mb-0">
-            <span i18n>Confirm delete</span>
+            <span i18n>Are you sure you want to delete this account?</span>
+            <br>
+            <span i18n>This action cannot be undone!</span>
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
@@ -277,17 +292,16 @@
       </mat-card-header>
       <mat-card-content>
         <div class="btn-box">
-          <button (click)="closeConfirmDelete()" color="warn" i18n mat-button type="button">
+          <button (click)="closeConfirmDelete()" class="close-btn" i18n mat-button type="button">
             <i class="material-symbols-outlined">
               close
             </i>
-            Cancel
+            Close
           </button>
           <button
             (click)="delete()"
-            color="primary"
-            i18n mat-button
-          >
+            class="add-btn"
+            i18n mat-button>
             <i class="material-symbols-outlined">
               save
             </i>
