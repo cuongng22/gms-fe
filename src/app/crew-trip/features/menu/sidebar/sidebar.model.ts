@@ -32,7 +32,7 @@ export const menu: Menu[] = [
         path: 'category/vehicle', title: $localize`:@@carRentalCompany:Car rental`, icon: 'ri-car-line'
       },
       {
-        path: 'category/service-fee', title: $localize`:@@costCategory:Cost category`, icon: 'ri-server-line'
+        path: 'category/cost', title: $localize`:@@costCategory:Cost category`, icon: 'ri-server-line'
       },
       {
         path: 'category/contract', title: $localize`:@@contract:Contract`, icon: 'ri-contract-line'
@@ -78,7 +78,7 @@ export const menu: Menu[] = [
         menu: [
           {
             title: $localize`:@@hotelRoom:Hotel room`,
-            rootPath: '',
+            rootPath: 'service/hotel',
             subMenu: [
               {
                 path: 'service/hotel/room-booking',
@@ -94,7 +94,7 @@ export const menu: Menu[] = [
           },
           {
             title: $localize`:@@carRental:Car rental`,
-            rootPath: '',
+            rootPath: 'service/car',
             subMenu: [
               {
                 path: 'service/car/car-booking',

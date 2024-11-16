@@ -85,13 +85,12 @@ export const routes: Routes = [
           {path: 'act-rate', component: ActRateComponent},
           {path: 'hotel', component: HotelComponent},
           {path: 'nation', component: NationComponent},
-          {path: 'service-fee', component: ServiceFeeComponent},
+          {path: 'cost', component: ServiceFeeComponent},
           {path: 'crews', component: CrewsComponent},
           {path: 'vehicle', component: VehicleComponent},
           {path: 'contract', component: ContractComponent},
           {path: 'hotel', component: HotelComponent},
           {path: 'nation', component: NationComponent},
-          {path: 'service-fee', component: ServiceFeeComponent},
           {
             path: 'crews', component: CrewsComponent,
             children: [

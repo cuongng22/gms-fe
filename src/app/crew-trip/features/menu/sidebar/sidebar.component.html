@@ -45,7 +45,7 @@
                 @if (subMenu1.menu) {
                   @for (menu2 of subMenu1.menu; track $index) {
                     <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
-                      (closed)="panelOpenState.set(false)">
+                      (closed)="panelOpenState.set(false)"  [expanded]="isActive(menu2.rootPath)" >
                       <!-- Menu -->
                       <mat-expansion-panel-header>
                         <mat-panel-title>
