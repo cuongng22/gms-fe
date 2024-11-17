@@ -2408,6 +2408,17 @@ apx-chart {
 }
 
 // Breadcrumb
+
+// Breadcrumb
+.breadcrumb-item+.breadcrumb-item::before {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+.breadcrumb-item+.breadcrumb-item {
+    padding-left: 0 !important;
+}
+
 .breadcrumb-card {
     .breadcrumb {
         .breadcrumb-item {
@@ -2459,6 +2470,7 @@ apx-chart {
             &:first-child {
                 margin-left: 0;
             }
+
 
             &:last-child {
                 margin-right: 0;

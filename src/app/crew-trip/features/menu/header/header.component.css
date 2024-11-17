@@ -170,7 +170,7 @@
   margin-right: 0;
 }
 ::ng-deep .header-area.active, ::ng-deep .header-area.hide-sidebar {
-  left: 85px;
+  left: 60px;//85px;
 }
 ::ng-deep .header-area.hide-sidebar .header-left-side .burger-menu {
   display: none;
