@@ -1,4 +1,7 @@
 ::ng-deep {
+    .system-name{
+        color: var(--blackColor);
+    }
     .header-area {
         padding: 13px 25px;
         position: fixed;
