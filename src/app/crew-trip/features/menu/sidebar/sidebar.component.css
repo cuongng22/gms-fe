@@ -1059,8 +1059,8 @@
 
   ::ng-deep .sidebar-area.active .logo,
   ::ng-deep .sidebar-area.hide-sidebar .logo {
-    padding-left: 12px;
-    padding-right: 12px;
+    padding-left: 0px;/*12px;*/
+    padding-right: 5px;/*12px;*/
   }
 
   ::ng-deep .sidebar-area.active .logo a,

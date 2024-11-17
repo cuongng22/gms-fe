@@ -201,7 +201,7 @@
             }
         }
         &.active, &.hide-sidebar {
-            left: 85px;
+            left: 60px;//85px;
         }
         &.hide-sidebar {
             .header-left-side {
@@ -1249,7 +1249,7 @@
             left: 265px;
 
             &.active, &.hide-sidebar {
-                left: 85px;
+                left: 60px;//85px;
             }
             &.right-sidebar {
                 left: 25px;
