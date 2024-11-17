@@ -2465,6 +2465,7 @@ apx-chart {
 // Breadcrumb
 .breadcrumb-item+.breadcrumb-item::before {
     padding-right: 0 !important;
+    padding-left: 0 !important;
 }
 
 .breadcrumb-card {
