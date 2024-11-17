@@ -3,9 +3,9 @@
   overflow: hidden;
   min-height: 100vh;
   padding: {
-    top: 95px;
-    left: 285px;
-    right: 25px;
+    top: 80px; //95px;
+    left: 270px; //285px;
+    right: 10px; //25px;
   };
 
   &.active, &.hide-sidebar {
