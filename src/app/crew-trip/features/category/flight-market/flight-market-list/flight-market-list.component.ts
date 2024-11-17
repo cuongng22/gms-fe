@@ -61,7 +61,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
     code: [''], // Mã thị trường
-    type: [''], // Phân Loại 
+    type: [''], // Phân Loại
     status: [''], // Trạng thái thị trường
     contractStartDate: [''], // Ngày hợp đồng từ
     contractEndDate: [''], // Ngày hợp đồng đến
