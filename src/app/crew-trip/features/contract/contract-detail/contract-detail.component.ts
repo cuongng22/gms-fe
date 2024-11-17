@@ -90,6 +90,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   tblUnitPrice = new MatTableDataSource();
   expandList = new Set<string>(['tab1', 'tab2', 'tab3', 'tab4', 'tab5']);
   formGroupFileUpload!: FormGroup;
+  curFile: any;
+  showDialogDeleteFile = false;
 
   // private filesControl = new FormControl(null, );
   constructor() {
@@ -163,6 +165,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.loadListMaNghiepVu(),
       ]).then(() => {
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList);
+        this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.value.priceUnitInfo);
       });
 
     } catch (e) {
@@ -181,18 +184,26 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       try {
         let formUpload = new FormData();
         let fileUpload = this.formGroupFileUpload.value.fileUpload[0];
-        console.log(fileUpload, 'haha', fileUpload.name)
-        // form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
-
+        let optionBlob = new Blob([this.formGroupFileUpload.value.contractCategory], {type: 'application/json'});
+        let bizDocIdBlob = new Blob([this.formGroupDetail.value.bizDocId], {type: 'application/json'});
         formUpload.append('file', fileUpload, fileUpload.name);
-        formUpload.append('option', this.formGroupFileUpload.value.contractCategory);
-        formUpload.append('bizDocId', this.id);
+        formUpload.append('option', optionBlob);
+        formUpload.append('bizDocId', bizDocIdBlob);
         await this.baseService.uploadFile(formUpload);
+        this.tblAttachedDocument.data = [...this.tblAttachedDocument.data, {
+          documentType: '',
+          fileName: fileUpload.name,
+          isManual: true
+        }];
       } catch (e) {
         console.log(e);
         this.baseService.showError(MESSAGE.ERROR);
       }
     }
+  }
+
+  async addUnitPrice() {
+    this.tblUnitPrice.data = [...this.tblUnitPrice.data, {}];
   }
 
   async editUnitPrice(index: any) {
@@ -207,7 +218,19 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   async cancelUnitPrice(index: any) {
   }
 
-  async deleteFile(index: any) {
+  async confirmDeleteFile(element: any) {
+    this.curFile = element;
+    this.showDialogDeleteFile = true;
+  }
+
+  async deleteFile() {
+    await this.baseService.deleteFile(this.curFile.fileName, this.id);
+    this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter((item: any) => item.fileName !== this.curFile.fileName);
+    this.showDialogDeleteFile = false;
+  }
+
+  async closeConfirmDeleteFile() {
+    this.showDialogDeleteFile = false;
   }
 
   listMaNghiepVu = [];

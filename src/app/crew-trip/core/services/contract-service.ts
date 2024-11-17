@@ -51,5 +51,9 @@ export class ContractService extends BaseService {
     return firstValueFrom(this.http.post(url, form, headers));
   }
 
-
+  deleteFile(fileName: any, bizDocId: any): Promise<any> {
+    const url = `${this.api}/${this.path}/delete-attachment`;
+    const params = new HttpParams({fromObject: {fileName: fileName, bizDocId: bizDocId}});
+    return firstValueFrom(this.http.delete(url, {params}));
+  }
 }
