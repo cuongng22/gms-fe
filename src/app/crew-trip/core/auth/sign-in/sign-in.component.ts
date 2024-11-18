@@ -12,12 +12,11 @@ import {HelperService} from 'src/app/crew-trip/core/services/helper.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
-import {CommonModule} from '@angular/common';
+import {CommonModule, Location} from '@angular/common';
 import {NgxSpinnerComponent, NgxSpinnerService} from 'ngx-spinner';
 import {response} from 'express';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -32,6 +31,7 @@ export class SignInComponent implements OnInit {
   usersService = inject(UsersService);
   baseService = inject(BaseService);
   router = inject(Router);
+  location = inject(Location);
   spinner = inject(NgxSpinnerService);
   // Password Hide
   hide = true;
@@ -87,7 +87,7 @@ export class SignInComponent implements OnInit {
 
         this.route.fragment.subscribe(fragment => {
           if (fragment === '401') {
-            this.router.navigate([this.router.url]);
+            this.router.navigate([this.location.path()]);
           } else {
             this.router.navigate(['category/crews']);
           }
