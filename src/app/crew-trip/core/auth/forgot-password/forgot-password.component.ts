@@ -15,12 +15,13 @@ import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
 import {MatIconModule} from '@angular/material/icon';
 import {NgxSpinnerModule, NgxSpinnerService} from 'ngx-spinner';
 import {HttpErrorResponse} from "@angular/common/http";
+import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 
 @Component({
   selector: 'app-forgot-password',
   standalone: true,
   imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
-    TranslateModule, MatIconModule, NgxSpinnerModule
+    TranslateModule, MatIconModule, NgxSpinnerModule, NgxTrimDirectiveModule
   ],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'

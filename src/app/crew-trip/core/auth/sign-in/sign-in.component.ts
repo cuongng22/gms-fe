@@ -16,12 +16,13 @@ import {CommonModule} from '@angular/common';
 import {NgxSpinnerComponent, NgxSpinnerService} from 'ngx-spinner';
 import {response} from 'express';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
+import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
   imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
-    TranslateModule, NgxSpinnerComponent
+    TranslateModule, NgxSpinnerComponent, NgxTrimDirectiveModule
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss'

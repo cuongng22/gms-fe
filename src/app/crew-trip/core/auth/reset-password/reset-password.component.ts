@@ -13,17 +13,18 @@ import {NgxSpinnerModule, NgxSpinnerService} from 'ngx-spinner';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
+import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
   imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
-    TranslateModule, MatIconModule,NgxSpinnerModule
+    TranslateModule, MatIconModule, NgxSpinnerModule, NgxTrimDirectiveModule
   ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss'
 })
-export class ResetPasswordComponent{
+export class ResetPasswordComponent {
   fb = inject(FormBuilder);
   usersService = inject(UsersService);
   baseService = inject(BaseService);
@@ -35,6 +36,7 @@ export class ResetPasswordComponent{
   successMessage: string | null = null;
   errorMessage: string | null = null;
   hide = true;
+
   constructor(
     public themeService: CustomizerSettingsService,
   ) {
@@ -57,7 +59,7 @@ export class ResetPasswordComponent{
     const password = form.get('newPassword');
     const confirmPassword = form.get('confirmPassword');
     if (password?.value !== confirmPassword?.value) {
-      confirmPassword?.setErrors({ mismatch: true });
+      confirmPassword?.setErrors({mismatch: true});
     } else {
       confirmPassword?.setErrors(null);
     }
@@ -71,7 +73,7 @@ export class ResetPasswordComponent{
     }
     try {
       await this.spinner.show();
-      await this.usersService.forgotResetPassword({token:this.token,newPassword: this.formGroup.value.newPassword});
+      await this.usersService.forgotResetPassword({token: this.token, newPassword: this.formGroup.value.newPassword});
       this.successMessage = 'Your password has been reset successfully!';
       this.errorMessage = null;
       setTimeout(() => {
