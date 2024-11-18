@@ -1,9 +1,25 @@
 <!-- Breadcrumb -->
 <ng-container *ngIf="step==1">
   <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+    @if(viewType == 'HD'){
     <h5 class="mb-0" i18n>
       Contract
     </h5>
+    }
+    @else{
+    <div class="d-md-flex align-items-center">
+      <button (click)="showListContract()" class="step-2-menu-button btn-slot-2" extended i18n mat-fab>
+        <i class="material-symbols-outlined">
+          undo
+        </i>
+        Back
+      </button>
+      <h5 class="mb-0 ml-10" i18n>
+      Annex
+    </h5>
+  </div>
+    }
+
     <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
       <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
         Category
@@ -11,6 +27,11 @@
       <li class="breadcrumb-item d-inline-block position-relative" i18n="@@contract">
         Contract
       </li>
+      @if(viewType == 'PL'){
+      <li class="breadcrumb-item d-inline-block position-relative" i18n="@@contract">
+        Annex
+      </li>
+      }
     </ol>
   </div>
   <!--Search-->
@@ -119,8 +140,8 @@
           'text-bg-vna': innerColumn.value === 'isActiveLabel' && element['isActive'] == 1,
           'text-bg-vna-danger': innerColumn.value === 'isActiveLabel' && element['isActive'] == 0
           }">{{
-                element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-                }}</span>
+          element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+          }}</span>
             </td>
           </ng-container>
           }
@@ -137,17 +158,19 @@
             </th>
             <td *matCellDef="let element;let i = dataIndex" mat-cell>
               <div class="action-buttons d-flex align-items-center justify-content-end">
-                <a (click)="showAnnex(i)" [matMenuTriggerFor]="listAnnex" mat-button style="" type="button">
-                  <i class="material-symbols-outlined" i18n-title title="Delete">
+                <a #trigger="matMenuTrigger" (click)="showListAnnex(element.bizDocId)"
+                    [matMenuTriggerFor]="listAnnex" class="text-secondary"
+                   mat-button type="button">
+                  <i class="material-symbols-outlined" i18n-title title="Show Annex">
                     contract
                   </i>
                 </a>
-                <a (click)="nextStep(i)" mat-button type="button">
+                <a (click)="nextStep(i)" class="text-secondary" mat-button type="button">
                   <i class="material-symbols-outlined" i18n-title title="Detail">
                     visibility
                   </i>
                 </a>
-                <a (click)="showDialogDetail(i,'index')" mat-button type="button">
+                <a (click)="showDialogDetail(i,'index')" class="text-warning" mat-button type="button">
                   <i class="material-symbols-outlined" i18n-title title="Edit">
                     edit
                   </i>
@@ -163,22 +186,18 @@
                     <table [dataSource]="tblAnnexData" class="table-light" mat-table>
                       <ng-container matColumnDef="stt">
                         <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
-                        <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
+                        <td *matCellDef="let element; let i = index" mat-cell>{{ i + 1 }}</td>
                       </ng-container>
                       <ng-container matColumnDef="bizDocId">
                         <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>bizDocId</th>
                         <td *matCellDef="let element" mat-cell>
-                          {{element.bizDocId}}
+                          <a style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;" (click)="detail(element.bizDocId)">
+                            [{{element.appendixCode}}] {{element.appendixName}}
+                          </a>
                         </td>
                       </ng-container>
-                      <ng-container matColumnDef="description">
-                        <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>description</th>
-                        <td *matCellDef="let element" class="text-body text-end" mat-cell>
-                          {{element.description}}
-                        </td>
-                      </ng-container>
-                      <tr *matHeaderRowDef="['stt','bizDocId','description']" mat-header-row></tr>
-                      <tr *matRowDef="let row; columns: ['stt','bizDocId','description'];" mat-row></tr>
+                      <tr *matHeaderRowDef="['stt','bizDocId']" mat-header-row></tr>
+                      <tr *matRowDef="let row; columns: ['stt','bizDocId'];" mat-row></tr>
                     </table>
                   </div>
                 </mat-menu>
@@ -196,8 +215,9 @@
       </div>
       <!--<mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons (page)="onPageChange($event)" ></mat-paginator>-->
       <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageIndex]="pageIndex"
-        [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [showFirstLastButtons]="showFirstLastButtons"
-        aria-label="Select page">
+                     [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize"
+                     [showFirstLastButtons]="showFirstLastButtons"
+                     aria-label="Select page">
       </mat-paginator>
     </mat-card-content>
   </mat-card>
@@ -208,5 +228,5 @@
 <!-- Detail -->
 <ng-container *ngIf="step==2">
   <app-contract-detail (backStep)="backStep()" [dataObject]="formGroupDetail.value"
-    [id]="formGroupDetail.value.bizDocId"></app-contract-detail>
+                       [id]="formGroupDetail.value.bizDocId"></app-contract-detail>
 </ng-container>
