@@ -38,19 +38,14 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
 
   //variable
   _displayedColumns: {
-    label: string;
-    value: string,
-    type?: string,
-    format?: string
-  }[] = [
-      {label: $localize`Code`, value: 'code'},
-      {label: $localize`Name`, value: 'name'},
-      {label: $localize`Unit`, value: 'unit'},
-      {label: $localize`Description`, value: 'description'},
-      {label: $localize`Status`, value: 'activeLabel'},
-      {label: $localize`DataSource`, value: 'dataSource'},
-    ]
-      ;
+    label: string; value: string, type?: string, format?: string
+  }[] = [{label: $localize`Code`, value: 'code'}, {
+    label: $localize`Cost category name`,
+    value: 'name'
+  }, {label: $localize`Unit`, value: 'unit'}, {label: $localize`Note`, value: 'description'}, {
+    label: $localize`Status`,
+    value: 'activeLabel'
+  }, {label: $localize`DataSource`, value: 'dataSource'},];
 
   constructor() {
     super();
@@ -59,10 +54,10 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
     });
     this.formGroupDetail = this.fb.group({
       id: ['',],
-      code: ['', [Validators.required]],
-      name: ['', [Validators.required]],
+      code: ['', [Validators.required, Validators.maxLength(20)]],
+      name: ['', [Validators.required, Validators.maxLength(250)]],
       unit: ['', [Validators.required]],
-      description: ['',],
+      description: ['', [Validators.maxLength(500)]],
       active: [true,]
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
@@ -90,5 +85,7 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
       });*/
     return super.save();
   }
-
+  ok(){
+    console.log(this.formGroupDetail)
+  }
 }

@@ -83,7 +83,7 @@ export class SignInComponent implements OnInit {
         const resp = await this.usersService.login(this.formGroup.value);
         this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, resp.data.token);
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(resp.data.userInfo));
-        this.router.navigate(['/ke-hoach']);
+        this.router.navigate(['category/crews']);
         this.spinner.hide();
       }
     } catch (error: any) {

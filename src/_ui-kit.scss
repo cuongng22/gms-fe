@@ -21,6 +21,9 @@
     color: rgb(59 66 82) !important;
 }
 
+.mdc-floating-label--required:not(.mdc-floating-label--hide-required-marker)::after {
+  color: red;
+}
 
 
 button.btn {
@@ -104,6 +107,38 @@ button.btn {
             transform: translateY(-50%) !important;
         }
     }
+}
+
+.close-btn {
+  height: auto !important;
+  min-width: 100px !important;//auto !important;
+  font-weight: 500 !important;
+  padding: 8px 13px !important;
+  border-radius: 7px !important;
+  display: inline-block !important;
+  color: var(--vnaXanhColor) !important;
+  border: 1px solid var(--borderColor) !important;
+  background-color: var(--borderColor) !important;
+
+  &:hover {
+    transition: 0.3s !important;
+    color: var(--vnaXanhColor) !important;
+    border: 1px solid var(--vnaXanhColor) !important;
+    background-color: var(--lightColor) !important;
+  }
+
+  .mdc-button__label {
+    display: inline-block !important;
+    padding-left: 22px !important;
+
+    i {
+      top: 50% !important;
+      left: -4px !important;
+      font-size: 22px !important;
+      position: absolute !important;
+      transform: translateY(-50%) !important;
+    }
+  }
 }
 
 
@@ -295,7 +330,7 @@ input {
     .mat-mdc-card-header {
         padding: 0;
         display: block;
-        margin-bottom: 25px;
+        margin-bottom: 5px;
 
         .mat-mdc-card-header-text {
             display: flex;
@@ -706,7 +741,7 @@ input {
 
                 &.mat-warn {
                     color: var(--whiteColor);
-                    background-color: var(--dangerColor);
+                    background-color: var(--whiteColor);
                 }
 
                 &.mat-primary {
@@ -1887,7 +1922,7 @@ input {
 
             .mat-mdc-paginator-navigation-last,
             .mat-mdc-paginator-navigation-first {
-                display: none;
+                display: block;
             }
 
             .mat-mdc-paginator-page-size-label {
@@ -2373,6 +2408,17 @@ apx-chart {
 }
 
 // Breadcrumb
+
+// Breadcrumb
+.breadcrumb-item+.breadcrumb-item::before {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+}
+
+.breadcrumb-item+.breadcrumb-item {
+    padding-left: 0 !important;
+}
+
 .breadcrumb-card {
     .breadcrumb {
         .breadcrumb-item {
@@ -2424,6 +2470,7 @@ apx-chart {
             &:first-child {
                 margin-left: 0;
             }
+
 
             &:last-child {
                 margin-right: 0;
