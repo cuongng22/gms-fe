@@ -94,7 +94,7 @@
         </ng-container>
         <ng-container matColumnDef="stt">
           <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
-          <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
+          <td *matCellDef="let element; let i = dataIndex" mat-cell class="text-center">{{ (pageIndex * pageSize) + i + 1}}</td>
         </ng-container>
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
           <ng-container matColumnDef="{{innerColumn.value}}">

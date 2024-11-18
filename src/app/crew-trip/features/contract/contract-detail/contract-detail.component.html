@@ -536,7 +536,7 @@
             <table [dataSource]="tblAttachedDocument" class="table-light" mat-table>
               <ng-container matColumnDef="stt">
                 <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
-                <td *matCellDef="let element; let i = index" mat-cell>{{ i + 1 }}</td>
+                <td *matCellDef="let element; let i = index" mat-cell class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
               </ng-container>
               <ng-container matColumnDef="documentType">
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Document Type</th>
@@ -719,7 +719,7 @@
       <table [dataSource]="tblUnitPrice" class="table-light" mat-table>
         <ng-container matColumnDef="stt">
           <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
-          <td *matCellDef="let element; let i = index" mat-cell>{{ i + 1 }}</td>
+          <td *matCellDef="let element; let i = index" mat-cell class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
         </ng-container>
         <ng-container matColumnDef="type">
           <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Service Code</th>

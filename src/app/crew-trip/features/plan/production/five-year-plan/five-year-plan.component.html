@@ -72,7 +72,7 @@
       <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true">
         <ng-container matColumnDef="stt">
           <th *matHeaderCellDef mat-header-cell mat-sort-header rowspan="2">#</th>
-          <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
+          <td *matCellDef="let element; let i = dataIndex" mat-cell class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
         </ng-container>
         <ng-container matColumnDef="international">
           <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>International</th>
