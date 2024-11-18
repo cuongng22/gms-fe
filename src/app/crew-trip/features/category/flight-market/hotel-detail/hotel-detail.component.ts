@@ -13,6 +13,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { debounce, debounceTime } from 'rxjs';
 import { HotelService } from 'src/app/crew-trip/core/services/hotel-service';
 import { AlreadyExistsValidator } from 'src/app/crew-trip/core/validator/already-exists';
@@ -25,7 +26,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
   imports: [MatCardModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule,],
+    MatTableModule, MatPaginatorModule, NgxTrimDirectiveModule],
   templateUrl: './hotel-detail.component.html',
   styleUrl: './hotel-detail.component.scss'
 })

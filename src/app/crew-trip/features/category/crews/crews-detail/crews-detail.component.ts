@@ -10,6 +10,7 @@ import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink, RouterModule } from '@angular/router';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { debounceTime, Observable, Subject } from 'rxjs';
 import { CrewsService } from 'src/app/crew-trip/core/services/crews-service';
 import { NationService } from 'src/app/crew-trip/core/services/nation-service';
@@ -23,7 +24,7 @@ import { LOCALE } from 'src/app/crew-trip/shared/utils/constant';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent,
     MatAutocompleteModule, CommonModule, AsyncPipe,
-    MatChipsModule, RouterLink, RouterModule],
+    MatChipsModule, RouterLink, RouterModule, NgxTrimDirectiveModule],
   templateUrl: './crews-detail.component.html',
   styleUrl: './crews-detail.component.scss'
 })

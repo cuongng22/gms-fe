@@ -217,7 +217,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
   }
 
   override search(body?: any, isNextPage?: boolean): any {
-    super.search<EstAnnualProduction>({ ...this.formGroupSearch.value, option: 0, export: false, versionId: this.formGroupSearch.controls.versionId.value });
+    super.search<EstAnnualProduction>({ ...this.formGroupSearch.value, option: 0, export: false, versionId: this.formGroupSearch.controls.versionId.value }, isNextPage);
   }
 
   override exportFileOptions(): any {

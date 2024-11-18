@@ -23,15 +23,16 @@
                     <div class="row">
                         <div class="col" sizeInput="md">
                             <mat-form-field class="mb-1">
-                                <mat-label i18n="@@keywords">Keywords</mat-label>
-                                <input matInput formControlName="s">
+                                <mat-label i18n="@@keyword">Keyword</mat-label>
+                                <input trim="blur" matInput formControlName="s">
                             </mat-form-field>
                         </div>
 
                         <div class="col" sizeInput="md">
                             <mat-form-field class="mb-1">
                                 <mat-label i18n="@@airport">Airport</mat-label>
-                                <input #airport (input)="filterMarket()"  type="text" matInput formControlName="code" [matAutocomplete]="marketComplete">
+                                <input trim="blur" #airport (input)="filterMarket()" type="text" matInput
+                                    formControlName="code" [matAutocomplete]="marketComplete">
                                 <mat-autocomplete autoActiveFirstOption requireSelection
                                     #marketComplete="matAutocomplete">
                                     @for (option of filteredOptionsMarket(); track option) {
@@ -67,9 +68,9 @@
                         <div class="col" sizeInput="md">
                             <mat-form-field class="mb-1">
                                 <mat-date-range-input [rangePicker]="contractRangePicker">
-                                    <input matStartDate i18n-placeholder="@@startDate" placeholder="Start date"
-                                        formControlName="contractStartDate">
-                                    <input matEndDate i18n-placeholder="@@endDate" placeholder="End date"
+                                    <input trim="blur" matStartDate i18n-placeholder="@@startDate"
+                                        placeholder="Start date" formControlName="contractStartDate">
+                                    <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="End date"
                                         formControlName="contractEndDate">
                                 </mat-date-range-input>
                                 <mat-label i18n="@@contractEndDate">Contract end date</mat-label>
@@ -87,7 +88,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-1 d-sm-flex flex-row  justify-content-lg-start justify-content-md-center">
+                <div
+                    class="col-xs-12 col-sm-12 col-md-12 col-lg-1 d-sm-flex flex-row  justify-content-lg-start justify-content-md-center">
                     <mat-card-header class="mb-0 search">
                         <mat-card-title>
                             <button class="search-btn" type="submit" mat-button>
@@ -136,12 +138,13 @@
         <div class="table-responsive">
             <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
                 <ng-container matColumnDef="stt">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center">#</th>
                     <td mat-cell *matCellDef="let element; let i = dataIndex">{{ i + 1 }}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="airport">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@airport">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@airport">
                         Airport
                     </th>
                     <td mat-cell *matCellDef="let element">
@@ -153,7 +156,8 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="hotelName">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@hotelName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@hotelName">
                         Hotel name
                     </th>
                     <td mat-cell *matCellDef="let element">
@@ -168,7 +172,7 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="carRentalCompany">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@carRentalCompany">
                         Car rental company
                     </th>
@@ -184,24 +188,27 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="country">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@country">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@country">
                         Country
                     </th>
                     <td mat-cell *matCellDef="let element">{{element.nation}}</td>
                 </ng-container>
                 <ng-container matColumnDef="category">
-                    <th mat-header-cell *matHeaderCellDef class="font-weight-bold" mat-sort-header
+                    <th mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" mat-sort-header
                         i18n="@@airportCode:category">
                         Category
                     </th>
                     <td mat-cell *matCellDef="let element;">{{element.marketType}}</td>
                 </ng-container>
                 <ng-container matColumnDef="flightGroup">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@flightGroup">Flight group</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@flightGroup"
+                        class="font-weight-bold text-center">Flight group</th>
                     <td mat-cell *matCellDef="let element">{{ element.flightGroup}}</td>
                 </ng-container>
                 <ng-container matColumnDef="costCategory">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@costCategory">Cost category</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@costCategory" font-weight-bold
+                        text-center>Cost category</th>
                     <td mat-cell *matCellDef="let element">
                         @if (element.serviceFeeName) {
                         <mat-chip-set aria-label="Fish selection">
@@ -213,11 +220,12 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@airportCode:status">Status</th>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@airportCode:status" font-weight-bold
+                        text-center>Status</th>
                     <td mat-cell *matCellDef="let element">{{ element.statusUsage}}</td>
                 </ng-container>
                 <ng-container matColumnDef="action" stickyEnd>
-                    <th mat-header-cell *matHeaderCellDef i18n="@@action">
+                    <th mat-header-cell *matHeaderCellDef i18n="@@action" font-weight-bold text-center>
                         Action
                     </th>
                     <td mat-cell *matCellDef="let element">
@@ -249,7 +257,9 @@
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="10">No data!</td>
+                </tr>
             </table>
         </div>
         <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"

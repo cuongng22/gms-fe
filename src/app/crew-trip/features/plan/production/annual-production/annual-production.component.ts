@@ -45,6 +45,7 @@ import {Constant} from 'src/app/crew-trip/shared/utils/constant';
 import {
   EstAnnualProduction
 } from 'src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.model';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 
 @Component({
   selector: 'app-annual-production',
@@ -52,7 +53,8 @@ import {
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule],
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule,
+    NgxTrimDirectiveModule],
   templateUrl: './annual-production.component.html',
   styleUrl: './annual-production.component.scss'
 })
@@ -239,7 +241,7 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
   }
 
   override search(body?: any, isNextPage?: boolean): any {
-    super.search<EstAnnualProduction>({ ...this.formGroupSearch.value, option: 1, export: false, versionId: this.formGroupSearch.controls.versionId.value });
+    super.search<EstAnnualProduction>({ ...this.formGroupSearch.value, option: 1, export: false, versionId: this.formGroupSearch.controls.versionId.value }, isNextPage);
   }
 
   override exportFileOptions(): any {

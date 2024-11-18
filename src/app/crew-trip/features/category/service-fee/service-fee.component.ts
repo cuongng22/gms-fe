@@ -4,7 +4,7 @@ import {MatCardModule} from '@angular/material/card';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
@@ -19,6 +19,7 @@ import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {HttpStatusCode} from "@angular/common/http";
 
 
 @Component({
@@ -40,12 +41,11 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
   _displayedColumns: {
     label: string; value: string, type?: string, format?: string
   }[] = [{label: $localize`Code`, value: 'code'}, {
-    label: $localize`Cost category name`,
-    value: 'name'
+    label: $localize`Cost category name`, value: 'name'
   }, {label: $localize`Unit`, value: 'unit'}, {label: $localize`Note`, value: 'description'}, {
-    label: $localize`Status`,
-    value: 'activeLabel'
+    label: $localize`Status`, value: 'activeLabel'
   }, {label: $localize`DataSource`, value: 'dataSource'},];
+  existCode: boolean = false;
 
   constructor() {
     super();
@@ -54,7 +54,7 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
     });
     this.formGroupDetail = this.fb.group({
       id: ['',],
-      code: ['', [Validators.required, Validators.maxLength(20)]],
+      code: ['', [Validators.required, Validators.maxLength(20), this.existCodeValidator.bind(this)]],
       name: ['', [Validators.required, Validators.maxLength(250)]],
       unit: ['', [Validators.required]],
       description: ['', [Validators.maxLength(500)]],
@@ -80,12 +80,16 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
   }
 
   override async save(): Promise<any> {
-    /*  this.formGroupDetail.patchValue({
-        currencyCode: this.formGroupDetail.value.curCode
-      });*/
-    return super.save();
+    super.save().then(value => {
+      if (value.status == HttpStatusCode.Conflict) {
+        this.existCode = true;
+        this.formGroupDetail.controls['code'].updateValueAndValidity();
+        this.existCode = false;
+      }
+    });
   }
-  ok(){
-    console.log(this.formGroupDetail)
+
+  existCodeValidator(control: AbstractControl): ValidationErrors | null {
+    return this.existCode ? {existCode: true} : null
   }
 }

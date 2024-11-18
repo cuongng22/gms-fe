@@ -92,7 +92,7 @@ export class VehicleComponent extends CommonComponent implements OnInit {
   override search(body?: any, isNextPage?: boolean): any {
     const contractDate = this.formGroupSearch.controls.contractDate.value;
     const searchValue = { ...this.formGroupSearch.value, contractDate: contractDate ? this.dataTransformPipe.transform(contractDate, ['date', Constant.DATE_FORMAT]) : null };
-    super.search(searchValue);
+    super.search(searchValue, isNextPage);
   }
 }
 
