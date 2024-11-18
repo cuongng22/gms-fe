@@ -161,8 +161,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       await this.spinner.show();
       await Promise.all([
         this.detail(this.id),
-        this.loadListKhoanMucKhns(),
-        this.loadListMaNghiepVu(),
+        // this.loadListKhoanMucKhns(),
+        // this.loadListMaNghiepVu(),
       ]).then(() => {
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList);
         this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.value.priceUnitInfo);
@@ -172,6 +172,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       console.log(e);
     } finally {
       await this.spinner.hide();
+      console.log(this.tblAttachedDocument,'tblAttachedDocument')
     }
   }
 

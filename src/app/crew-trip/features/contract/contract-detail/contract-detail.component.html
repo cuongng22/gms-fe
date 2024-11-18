@@ -554,11 +554,13 @@
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
                 <td *matCellDef="let element; let i = dataIndex" class="text-body text-end" mat-cell>
                   <div class="action-buttons align-items-center text-center">
-                    <a (click)="confirmDeleteFile(element)" mat-button class="text-danger" type="button">
-                      <i class="material-symbols-outlined" i18n-title title="Delete">
-                        delete
-                      </i>
-                    </a>
+                    @if(!!element.isManual) {
+                      <a (click)="confirmDeleteFile(element)" mat-button class="text-danger" type="button">
+                        <i class="material-symbols-outlined" i18n-title title="Delete">
+                          delete
+                        </i>
+                      </a>
+                    }
                   </div>
                 </td>
               </ng-container>
@@ -707,12 +709,12 @@
     <mat-expansion-panel-header i18n>5. Unit Price Information</mat-expansion-panel-header>
     <mat-panel-description class="d-block">
       <div class="w-100 text-end">
-      <button (click)="addUnitPrice()" class="add-btn right-0 mb-10" i18n mat-button type="button">
-        <i class="material-symbols-outlined">
-          add
-        </i>
-        Add
-      </button>
+        <button (click)="addUnitPrice()" class="add-btn right-0 mb-10" i18n mat-button type="button">
+          <i class="material-symbols-outlined">
+            add
+          </i>
+          Add
+        </button>
       </div>
       <table [dataSource]="tblUnitPrice" class="table-light" mat-table>
         <ng-container matColumnDef="stt">
@@ -722,10 +724,9 @@
         <ng-container matColumnDef="type">
           <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Service Code</th>
           <td *matCellDef="let element" mat-cell>
-            @if(!!element.isEditing){
+            @if (!!element.isEditing) {
               {{ element.serviceCode }}
-            }
-            @else{
+            } @else {
               <input [(ngModel)]="element.serviceCode" i18n-placeholder matInput required>
             }
           </td>

@@ -53,17 +53,27 @@ export class ContractComponent extends CommonComponent implements OnInit {
   listHotel = [];
   listVehicle = [];
   tblAnnexData = new MatTableDataSource();
-  _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
-    // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Market`, value: 'marketCode'},
-    {label: $localize`bizDocId`, value: 'bizDocId'},
-    {label: $localize`Contract Code`, value: 'contractCode'},
-    {label: $localize`Contract No`, value: 'contractNo'},
-    {label: $localize`Contract Name`, value: 'contractName'},
-    {label: $localize`Partner Name`, value: 'partnerName'},
-    {label: $localize`Service Object`, value: 'serviceObject'},
-    {label: $localize`Signed Date`, value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    // {label: $localize`Effective Date`, value: 'effectiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
+  _displayedColumns: {
+    label: string;
+    value: string,
+    type?: string,
+    format?: string
+  }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`Market`, value: 'marketCode'}, {
+      label: $localize`bizDocId`,
+      value: 'bizDocId'
+    }, {label: $localize`Contract Code`, value: 'contractCode'}, {
+      label: $localize`Contract No`,
+      value: 'contractNo'
+    }, {label: $localize`Contract Name`, value: 'contractName'}, {
+      label: $localize`Partner Name`,
+      value: 'partnerName'
+    }, {label: $localize`Service Object`, value: 'serviceObject'}, {
+      label: $localize`Signed Date`,
+      value: 'signedDate',
+      type: Constant.DATE,
+      format: Constant.DATE_FORMAT
+    }, // {label: $localize`Effective Date`, value: 'effectiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
     // {label: $localize`Expiry Date`, value: 'expiryDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
   ];
   /*_displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
@@ -174,20 +184,14 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }
 
   override async ngOnInit() {
-    await Promise.all([
-      this.loadListFlightMarket(),
-      this.loadListHotel(),
-      this.loadListVehiclesPartner(),
-      this.search(),
-    ]).then(() => {
+    await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(), this.search(),]).then(() => {
       let listCombine = [...this.listVehicle, ...this.listHotel];
       this.listPartner = listCombine.map((s: any) => ({
-        code: s.code ?? s.hotelCode,
-        name: s.name ?? s.hotelName,
+        code: s.code ?? s.hotelCode, name: s.name ?? s.hotelName,
       }));
 
     });
-    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'effectiveDate', 'action'];
+    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'effectiveDate', 'appendixCount', 'action'];
   }
 
   async nextStep(index: number) {
@@ -196,15 +200,16 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }
 
   async backStep() {
-    await this.search(),
-      this.step = 1;
+    await this.search(), this.step = 1;
   }
 
-  async showAnnex(id: any) {
-    await this.baseService.getListAnnex({contractId: id}).then(res => {
-      this.tblAnnexData.data = res.data.content;
-      this.showPopupAnnex = true;
-    });
+  async showAnnex(index: any) {
+    // await this.baseService.getListAnnex({contractId: id}).then(res => {
+    //   this.tblAnnexData.data = res.data.content;
+    console.log(this.dataSource.data[index], 'this.dataSource.data[index]');
+    this.tblAnnexData.data = (this.dataSource.data[index] as any).appendixList;
+    this.showPopupAnnex = true;
+
   }
 
   async loadListFlightMarket() {
@@ -293,6 +298,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
             contractCode: s.appendixCode ? s.appendixCode : s.contractCode,
             contractName: s.appendixName ? s.appendixName : s.contractName,
             contractNo: s.appendixNo ? s.appendixNo : s.contractNo,
+            appendixCount: s.appendixList?.length ?? 0,
             isActiveLabel: s.isActive === true || !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
             activeLabel: s.active === true || !!s.active || s.status === true || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
           }));
@@ -306,4 +312,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
       await this.spinner.hide();
     }
   }
+
+  async showConfirmDeleteAnnex(id: any) {
+  }
+
 }
