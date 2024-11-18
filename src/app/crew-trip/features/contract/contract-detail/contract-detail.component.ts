@@ -158,7 +158,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       window.scrollTo(0, 0);
       await this.spinner.show();
       await Promise.all([
-        this.detail(this.id)
+        this.detail(this.id),
+        this.loadListKhoanMucKhns(),
+        this.loadListMaNghiepVu(),
       ]).then(() => {
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList);
       });
@@ -204,6 +206,26 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   async cancelUnitPrice(index: any) {
   }
+
   async deleteFile(index: any) {
+  }
+
+  listMaNghiepVu = [];
+  listKhoanMucKhns = [];
+
+  async loadListMaNghiepVu() {
+    await this.baseService.listMaNghiepVu().then(res => {
+      if (res.data) {
+        this.listMaNghiepVu = res.data;
+      }
+    });
+  }
+
+  async loadListKhoanMucKhns() {
+    await this.baseService.listKhoanMucKhns().then(res => {
+      if (res.data) {
+        this.listKhoanMucKhns = res.data;
+      }
+    });
   }
 }

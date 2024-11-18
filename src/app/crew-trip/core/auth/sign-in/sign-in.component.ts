@@ -60,11 +60,11 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.route.fragment.subscribe(fragment => {
+   /* this.route.fragment.subscribe(fragment => {
       if (fragment === '401') {
         this.router.navigate(['auth/login'], {fragment: '401', skipLocationChange: true});
       }
-    });
+    });*/
   }
 
   async login() {
@@ -84,7 +84,14 @@ export class SignInComponent implements OnInit {
         const resp = await this.usersService.login(this.formGroup.value);
         this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, resp.data.token);
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(resp.data.userInfo));
-        this.router.navigate(['category/crews']);
+
+        this.route.fragment.subscribe(fragment => {
+          if (fragment === '401') {
+            this.router.navigate([this.router.url]);
+          } else {
+            this.router.navigate(['category/crews']);
+          }
+        });
         this.spinner.hide();
       }
     } catch (error: any) {
