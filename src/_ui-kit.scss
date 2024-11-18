@@ -25,6 +25,10 @@
   color: red;
 }
 
+.input-suggest .mat-mdc-text-field-wrapper{
+    border: none !important;
+}
+
 
 button.btn {
     display: flex;
@@ -54,6 +58,39 @@ button.btn {
 }
 
 .add-btn {
+    height: auto !important;
+    min-width: 100px !important;//auto !important;
+    font-weight: 500 !important;
+    padding: 8px 13px !important;
+    border-radius: 7px !important;
+    display: inline-block !important;
+    color: var(--whiteColor) !important;
+    border: 1px solid var(--vnaXanhColor) !important;
+    background-color: var(--vnaXanhColor) !important;
+
+    &:hover {
+        transition: 0.3s !important;
+        color: var(--vnaXanhColor) !important;
+        border: 1px solid var(--vnaXanhColor) !important;
+        background-color: var(--lightColor) !important;
+    }
+
+    .mdc-button__label {
+        display: inline-block !important;
+        padding-left: 22px !important;
+
+        i {
+            top: 50% !important;
+            left: -4px !important;
+            font-size: 22px !important;
+            position: absolute !important;
+            transform: translateY(-50%) !important;
+        }
+    }
+}
+
+
+.search-btn {
     height: auto !important;
     min-width: 100px !important;//auto !important;
     font-weight: 500 !important;
@@ -3707,8 +3744,13 @@ blockquote {
 }
 
 .text-bg-primary {
-    color: #ffffff !important;
+    color: var(--whiteColor) !important;
     background-color: RGBA(96, 93, 255, var(--bg-opacity, 1)) !important;
+}
+
+.text-bg-vna {
+    color: #094b6a !important;
+    background-color: #b3ccd9 !important;
 }
 
 .text-bg-secondary {
@@ -3724,6 +3766,11 @@ blockquote {
 .text-bg-danger {
     color: #ffffff !important;
     background-color: RGBA(255, 64, 35, var(--bg-opacity, 1)) !important;
+}
+
+.text-bg-vna-danger {
+    color: RGBA(255, 64, 35, var(--bg-opacity, 1)) !important;
+    background-color: #f8d7da !important;
 }
 
 .text-bg-warning {
@@ -3804,6 +3851,10 @@ blockquote {
 .text-soft-danger {
     color: RGBA(255, 64, 35, var(--bg-opacity, 1)) !important;
     background-color: #f8d7da !important;
+}
+.text-soft-vna-danger {
+    color: var(--whiteColor) !important;
+    background-color: var(--danger-text)red !important;
 }
 
 .text-soft-warning {

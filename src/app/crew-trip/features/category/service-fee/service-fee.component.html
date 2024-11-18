@@ -104,8 +104,8 @@
             <td [ngClass]="{'text-center': innerColumn.value === 'activeLabel',}" mat-cell *matCellDef="let element">
                 <span [ngClass]="{
         'badge rounded-pill': innerColumn.value === 'activeLabel',
-        'text-soft-primary': innerColumn.value === 'activeLabel' && element['active'] == 1,
-        'text-soft-danger': innerColumn.value === 'activeLabel' && element['active'] == 0
+        'text-bg-vna': innerColumn.value === 'activeLabel' && element['active'] == 1,
+        'text-bg-vna-danger': innerColumn.value === 'activeLabel' && element['active'] == 0
         }">{{
                     element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
                   }}</span>

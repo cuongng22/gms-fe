@@ -357,4 +357,17 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       this.baseService.showError(MESSAGE.DELETE_FAIL);
     }
   }
+
+  getSelectedCostCategoryDetail(): string {
+    const selected = this.formGroupDetail.get('serviceFeeCode')?.value || [];
+    if (Array.isArray(selected)) {
+      return selected
+        .map((code: any) => this.costCategorys.find(costCategory => costCategory.code === code)?.name)
+        .filter((name: any) => name)
+        .join('; ') || 'Select roles';
+    }
+    return 'Select roles';
+  }
+
+  
 }

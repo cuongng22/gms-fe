@@ -89,12 +89,15 @@ export class CommonComponent implements OnInit, AfterViewInit {
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    this.search();
+    this.search(null, true);
   }
 
-  async search<T>(body?: any) {
+  async search<T>(body?: any, isNextPage?: boolean) {
     try {
       await this.spinner.show();
+      if (!isNextPage) {
+        this.pageIndex = Constant.PAGE;
+      }
       const res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,

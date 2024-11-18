@@ -85,7 +85,7 @@ export class HotelComponent extends CommonComponent implements OnInit {
     this.filteredOptionsMarket = this.markets.filter(market => market.toLowerCase().includes(filterValue));
   }
 
-  override search(): any {
+  override search(body?: any, isNextPage?: boolean): any {
     const contractDate = this.formGroupSearch.controls.contractDate.value;
     const searchValue = { ...this.formGroupSearch.value, contractDate: contractDate ? this.dataTransformPipe.transform(contractDate, ['date', Constant.DATE_FORMAT]) : null };
     super.search(searchValue);

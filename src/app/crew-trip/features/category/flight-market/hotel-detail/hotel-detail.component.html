@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title>
             <h5 class="mb-0" i18n="@@hotelInformation">
-                Hotel information
+                {{readonlyDetail()?'View Hotel':(this.data?.hotel?.id?'Update Hotel':'Add new Hotel')}}
             </h5>
         </mat-card-title>
     </mat-card-header>
@@ -138,8 +138,8 @@
                 </div>
             </div>
 
-            <div class="btn-box text-center">
-                <button type="button" mat-button (click)="close()" class="danger-btn mlr-5 min-with-100">
+            <div class="btn-box d-flex justify-content-end">
+                <button type="button" mat-button (click)="close()" class="close-btn mlr-5 min-with-100">
                     <i class="material-symbols-outlined">
                         close
                     </i>

@@ -14,9 +14,9 @@ export class Constant {
 export class MESSAGE {
   static ERROR = $localize`:@@error:Something wrong`;
   static ERROR_CONNECT = $localize`:@@errorConnect:Unable to connect to server`;
-  static CREATE_SUCCESS = $localize`:@@createSuccess:Create success`;
+  static CREATE_SUCCESS = $localize`:@@createSuccess:Created successfully`;
   static CREATE_FAIL = $localize`:@@createFail:Create fail`;
-  static UPDATE_SUCCESS = $localize`:@@updateSuccess:Update success`;
+  static UPDATE_SUCCESS = $localize`:@@updateSuccess:Updated successfully`;
   static UPDATE_FAIL = $localize`:@@updateFail:Update fail`;
   static DATA_EMPTY = $localize`:@@noDataFound:No data found`;
   static DELETE_SUCCESS = $localize`:@@deleteSuccess:Delete success`;

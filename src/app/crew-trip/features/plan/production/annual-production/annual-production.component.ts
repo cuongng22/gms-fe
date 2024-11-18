@@ -238,7 +238,7 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
 
   }
 
-  override search(): any {
+  override search(body?: any, isNextPage?: boolean): any {
     super.search<EstAnnualProduction>({ ...this.formGroupSearch.value, option: 1, export: false, versionId: this.formGroupSearch.controls.versionId.value });
   }
 

@@ -46,8 +46,8 @@
               <td mat-cell *matCellDef="let element">
                 <span [ngClass]="{
             'badge rounded-pill': innerColumn.value === 'isActiveLabel',
-            'text-soft-primary': innerColumn.value === 'isActiveLabel' && element['active'] == 1,
-            'text-soft-danger': innerColumn.value === 'isActiveLabel' && element['active'] == 0
+            'text-bg-vna': innerColumn.value === 'isActiveLabel' && element['active'] == 1,
+            'text-bg-vna-danger': innerColumn.value === 'isActiveLabel' && element['active'] == 0
             }">{{
                   element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
                   }}

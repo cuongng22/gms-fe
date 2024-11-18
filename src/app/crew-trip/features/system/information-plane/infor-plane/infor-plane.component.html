@@ -104,8 +104,8 @@
           <th mat-header-cell *matHeaderCellDef> Status </th>
           <td mat-cell *matCellDef="let element"> {{element.status}}
             <span class="badge" [ngClass]="{
-                'text-soft-primary':  element['active'] == true,
-                'text-soft-danger':  element['active'] == false}">
+                'text-bg-vna':  element['active'] == true,
+                'text-bg-vna-danger':  element['active'] == false}">
                 {{ element.activeLabel}}
               </span>
           </td>

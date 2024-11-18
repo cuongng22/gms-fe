@@ -95,7 +95,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
     });
   }
 
-  override search(): any {
+  override search(body?: any, isNextPage?: boolean): any {
     console.log(this.formGroupSearch.value);
     const contractStartDate = this.formGroupSearch.controls.contractStartDate.value;
     const contractEndDate = this.formGroupSearch.controls.contractEndDate.value;
