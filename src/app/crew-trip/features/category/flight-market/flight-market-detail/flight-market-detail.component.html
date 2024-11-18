@@ -229,55 +229,55 @@
         <div class="table-responsive">
             <table mat-table [dataSource]="hotelDataSource" multiTemplateDataRows="true" class="table-light">
                 <ng-container matColumnDef="hotelCode">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@hotelCode">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@hotelCode">
                         Hotel Code
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.hotelCode}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="hotelName">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@hotelName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@hotelName">
                         Hotel Name
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.hotelName}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="address">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@address">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@address">
                         Address
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.address}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="fullName">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@contactName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@contactName">
                         Contact name
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.fullName}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="email">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@emailBooking:email">Email</th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.email}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="phone">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@phoneNumber">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@phoneNumber">
                         Phone number
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.phone}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="active">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@status">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@status">
                         Status
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.active?MESSAGE.ACTIVE:MESSAGE.INACTIVE}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="notes">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@notes">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@notes">
                         Notes
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.notes}}</td>
@@ -285,7 +285,7 @@
 
                 @if(!readonlyDetail()){
                 <ng-container matColumnDef="action" stickyEnd>
-                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@action">
                         Action
                     </th>
@@ -312,6 +312,9 @@
 
                 <tr mat-header-row *matHeaderRowDef="hotelColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: hotelColumns;" [hidden]="row.isDelete === true"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="9">No data!</td>
+                </tr>
             </table>
         </div>
     </mat-card-content>
@@ -339,9 +342,9 @@
     </mat-card-header>
     <mat-card-content>
         <div class="table-responsive">
-            <table mat-table [dataSource]="carRentalDataSource" multiTemplateDataRows="true">
+            <table mat-table [dataSource]="carRentalDataSource" multiTemplateDataRows="true" class="table-light">
                 <ng-container matColumnDef="code">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@carRentalCode">
                         Car rental code
                     </th>
@@ -349,7 +352,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="name">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@carRentalCompany">
                         Car rental company
                     </th>
@@ -357,41 +360,41 @@
                 </ng-container>
 
                 <ng-container matColumnDef="address">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@address">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@address">
                         Address
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.address}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="fullName">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@contactName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@contactName">
                         Contact name
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.fullName}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="email">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@emailBooking:email">Email</th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.email}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="phone">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@phoneNumber">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@phoneNumber">
                         Phone number
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.phone}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="active">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@status">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@status">
                         Status
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.active?MESSAGE.ACTIVE:MESSAGE.INACTIVE}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="notes">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@notes">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@notes">
                         Notes
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.notes}}</td>
@@ -399,7 +402,7 @@
 
                 @if(!readonlyDetail()){
                 <ng-container matColumnDef="action" stickyEnd>
-                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@action">
                         Action
                     </th>
@@ -426,6 +429,9 @@
 
                 <tr mat-header-row *matHeaderRowDef="carRentalColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: carRentalColumns;" [hidden]="row.isDelete === true"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="9">No data!</td>
+                </tr>
             </table>
         </div>
     </mat-card-content>

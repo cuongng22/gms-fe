@@ -105,7 +105,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
       contractStartDate: contractStartDate ? this.dataTransformPipe.transform(contractStartDate, ['date', Constant.DATE_FORMAT]) : null,
       contractEndDate: contractEndDate ? this.dataTransformPipe.transform(contractEndDate, ['date', Constant.DATE_FORMAT]) : null,
     };
-    super.search(searchValue);
+    super.search(searchValue, isNextPage);
   }
 
 
