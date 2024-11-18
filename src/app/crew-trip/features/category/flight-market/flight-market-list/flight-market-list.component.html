@@ -23,15 +23,15 @@
                     <div class="row">
                         <div class="col" sizeInput="md">
                             <mat-form-field class="mb-1">
-                                <mat-label i18n="@@keywords">Keywords</mat-label>
-                                <input matInput formControlName="s">
+                                <mat-label i18n="@@keyword">Keyword</mat-label>
+                                <input trim="blur" matInput formControlName="s">
                             </mat-form-field>
                         </div>
 
                         <div class="col" sizeInput="md">
                             <mat-form-field class="mb-1">
                                 <mat-label i18n="@@airport">Airport</mat-label>
-                                <input #airport (input)="filterMarket()"  type="text" matInput formControlName="code" [matAutocomplete]="marketComplete">
+                                <input trim="blur" #airport (input)="filterMarket()"  type="text" matInput formControlName="code" [matAutocomplete]="marketComplete">
                                 <mat-autocomplete autoActiveFirstOption requireSelection
                                     #marketComplete="matAutocomplete">
                                     @for (option of filteredOptionsMarket(); track option) {
@@ -67,9 +67,9 @@
                         <div class="col" sizeInput="md">
                             <mat-form-field class="mb-1">
                                 <mat-date-range-input [rangePicker]="contractRangePicker">
-                                    <input matStartDate i18n-placeholder="@@startDate" placeholder="Start date"
+                                    <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="Start date"
                                         formControlName="contractStartDate">
-                                    <input matEndDate i18n-placeholder="@@endDate" placeholder="End date"
+                                    <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="End date"
                                         formControlName="contractEndDate">
                                 </mat-date-range-input>
                                 <mat-label i18n="@@contractEndDate">Contract end date</mat-label>

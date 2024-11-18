@@ -14,7 +14,7 @@
                     <div class="form-group mb-20" sizeInput="md">
                         <mat-form-field>
                             <mat-label i18n="@@airport">Airport</mat-label>
-                            <input matInput formControlName="marketCode">
+                            <input trim="blur" matInput formControlName="marketCode">
                         </mat-form-field>
                     </div>
                 </div>
@@ -25,7 +25,7 @@
                             <mat-label i18n="@@carRentalCode">
                                 Car rental code
                             </mat-label>
-                            <input matInput formControlName="code" required maxlength="250" class="text-uppercase">
+                            <input trim="blur" matInput formControlName="code" required maxlength="250" class="text-uppercase">
                             @if (
                             formGroupDetail.controls.code.hasError('required') &&
                             formGroupDetail.controls.code.touched) {
@@ -48,7 +48,7 @@
                             <mat-label i18n="@@carRentalCompany">
                                 Car rental company
                             </mat-label>
-                            <input matInput formControlName="name" required maxlength="250">
+                            <input trim="blur" matInput formControlName="name" required maxlength="250">
                             @if (
                             formGroupDetail.controls.name.hasError('required') &&
                             formGroupDetail.controls.name.touched) {
@@ -65,7 +65,7 @@
                             <mat-label i18n="@@address">
                                 Address
                             </mat-label>
-                            <input matInput formControlName="address" maxlength="500">
+                            <input trim="blur" matInput formControlName="address" maxlength="500">
                         </mat-form-field>
                     </div>
                 </div>
@@ -76,7 +76,7 @@
                             <mat-label i18n="@@contactName">
                                 Contact name
                             </mat-label>
-                            <input matInput formControlName="fullName" maxlength="250">
+                            <input trim="blur" matInput formControlName="fullName" maxlength="250">
                         </mat-form-field>
                     </div>
                 </div>
@@ -85,7 +85,7 @@
                     <div class="form-group mb-20" sizeInput="md">
                         <mat-form-field>
                             <mat-label i18n="@@emailBooking">Email</mat-label>
-                            <input type="email" matInput formControlName="email" required maxlength="250">
+                            <input trim="blur" type="email" matInput formControlName="email" required maxlength="250">
                             @if (
                             formGroupDetail.controls.email.hasError('required') &&
                             formGroupDetail.controls.email.touched) {
@@ -107,7 +107,7 @@
                             <mat-label i18n="@@phoneNumber">
                                 Phone number
                             </mat-label>
-                            <input matInput formControlName="phone" maxlength="20">
+                            <input trim="blur" matInput formControlName="phone" maxlength="20">
                         </mat-form-field>
                     </div>
                 </div>

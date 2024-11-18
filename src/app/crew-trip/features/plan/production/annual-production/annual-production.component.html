@@ -25,13 +25,13 @@
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>Keywords</mat-label>
-                <input matInput formControlName="s">
+                <input trim="blur" matInput formControlName="s">
               </mat-form-field>
             </div>
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>ORI</mat-label>
-                <input type="text" matInput formControlName="ori" #ori [matAutocomplete]="oriComplete"
+                <input trim="blur" type="text" matInput formControlName="ori" #ori [matAutocomplete]="oriComplete"
                        (input)="filterOri()">
                 <mat-autocomplete autoActiveFirstOption requireSelection #oriComplete="matAutocomplete">
                   @for (option of filteredOptionsOri(); track option) {
@@ -43,7 +43,7 @@
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>DES</mat-label>
-                <input type="text" matInput formControlName="des" #des [matAutocomplete]="desComplete"
+                <input trim="blur" type="text" matInput formControlName="des" #des [matAutocomplete]="desComplete"
                        (input)="filterDes()">
                 <mat-autocomplete autoActiveFirstOption requireSelection #desComplete="matAutocomplete">
                   @for (option of filteredOptionsDes(); track option) {
@@ -67,7 +67,7 @@
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>AC_ID</mat-label>
-                <input type="text" matInput formControlName="acId" #acId
+                <input trim="blur" type="text" matInput formControlName="acId" #acId
                        [matAutocomplete]="acIdComplete" (input)="filterAcId()">
                 <mat-autocomplete autoActiveFirstOption requireSelection
                                   #acIdComplete="matAutocomplete">
@@ -80,7 +80,7 @@
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>AC_Group</mat-label>
-                <input type="text" matInput formControlName="acGroup" #acGroup
+                <input trim="blur" type="text" matInput formControlName="acGroup" #acGroup
                        [matAutocomplete]="acGroupComplete" (input)="filterAcGroup()">
                 <mat-autocomplete autoActiveFirstOption requireSelection
                                   #acGroupComplete="matAutocomplete">
@@ -93,7 +93,7 @@
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>Version</mat-label>
-                <input type="text" matInput formControlName="versionId" #version
+                <input trim="blur" type="text" matInput formControlName="versionId" #version
                        [matAutocomplete]="versionComplete" (input)="filterVersion()">
                 <mat-autocomplete autoActiveFirstOption requireSelection
                                   #versionComplete="matAutocomplete">

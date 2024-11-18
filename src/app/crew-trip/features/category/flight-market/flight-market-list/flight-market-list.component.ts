@@ -27,6 +27,7 @@ import { HotelDetailComponent } from '../hotel-detail/hotel-detail.component';
 import { FileUploadComponent, FileUploadModule, FileUploadValidators } from '@iplab/ngx-file-upload';
 import { File } from 'buffer';
 import { subscribe } from 'diagnostics_channel';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 
 @Component({
   selector: 'app-flight-market-list',
@@ -34,7 +35,7 @@ import { subscribe } from 'diagnostics_channel';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, FileUploadModule],
+    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, FileUploadModule, NgxTrimDirectiveModule],
   providers: [DataTransformPipe, { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }],
   templateUrl: './flight-market-list.component.html',
   styleUrl: './flight-market-list.component.scss'

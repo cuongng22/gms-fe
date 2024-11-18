@@ -61,7 +61,7 @@
                         <div class="col" sizeInput="sm">
                             <mat-form-field class="mb-1">
                                 <mat-label i18n="@@airportCode">Airport Code</mat-label>
-                                <input required matInput formControlName="marketCode">
+                                <input trim="blur" required matInput formControlName="marketCode">
                                 @if (
                                 formGroupDetail.controls.marketCode.hasError('required') &&
                                 formGroupDetail.controls.marketCode.touched) {
@@ -73,13 +73,13 @@
                         <div class="col" sizeInput="sm">
                             <mat-form-field class="mb-1">
                                 <mat-label i18n="@@airportName">Airport Name</mat-label>
-                                <input matInput formControlName="marketName">
+                                <input trim="blur" matInput formControlName="marketName">
                             </mat-form-field>
                         </div>
                         <div class="col" sizeInput="sm">
                             <mat-form-field class="mb-1">
                                 <mat-label i18n="@@country">Country</mat-label>
-                                <input type="text" required #nationName matInput formControlName="nationName"
+                                <input trim="blur" type="text" required #nationName matInput formControlName="nationName"
                                     [matAutocomplete]="countryComplete" (input)="filterCountry()"
                                     (focus)="filterCountry()">
                                 <mat-autocomplete autoActiveFirstOption requireSelection
@@ -144,7 +144,7 @@
                                       </mat-select-trigger>
                                     <form class="mb-1" sizeInput="sm">
                                         <mat-form-field class="input-suggest">
-                                            <input matInput type="text" name="clearable-input"
+                                            <input trim="blur" matInput type="text" name="clearable-input"
                                                 [(ngModel)]="searchCostCategory" i18n-placeholder="@@search"
                                                 placeholder="Search">
                                             @if (searchCostCategory()) {
