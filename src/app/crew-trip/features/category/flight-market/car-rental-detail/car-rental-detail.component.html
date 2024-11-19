@@ -2,7 +2,7 @@
     <mat-card-header>
         <mat-card-title>
             <h5 class="mb-0" i18n="@@carRentalInformation">
-                {{readonlyDetail()?'View Car rental':(this.data?.carRental?.id?'Edit Car rental':'Add new Car rental')}}
+                {{readonlyDetail()?'View':(this.data?.carRental?.id?'Edit':'Add new')}}
             </h5>
         </mat-card-title>
     </mat-card-header>
