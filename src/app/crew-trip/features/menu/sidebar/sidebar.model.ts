@@ -224,7 +224,7 @@ export const menu: Menu[] = [
             rootPath: 'system/admin',
             subMenu: [
               {
-                path: 'system/admin/users', title: $localize`:@@account:Account`, icon: 'ri-group-line'
+                path: 'system/admin/users', title: $localize`:@@accounts:Accounts`, icon: 'ri-group-line'
               },
               {
                 path: 'system/admin/roles', title: $localize`:@@role:Role`, icon: 'ri-calendar-schedule-line'

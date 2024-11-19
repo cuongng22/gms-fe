@@ -23,8 +23,9 @@ export class MESSAGE {
   static DELETE_FAIL = $localize`:@@deleteFail:Delete fail`;
   static UPLOAD_SUCCESS = $localize`:@@uploadSuccess:Upload success`;
   static REQUIRED = $localize`:@@required:is required`;
-  static FORMAT_INVALID = $localize`:@@formatInvalid:is not in correct format.`;
-  static MIN_LENGTH_INVALID = $localize`:@@minLengthInvalid:must be greater than %d characters`;
+  static FORMAT_INVALID = $localize`:@@formatInvalid:invalid format.`;
+  static MIN_LENGTH_INVALID = $localize`:@@minLengthInvalid:requires a minimum of %d characters`;
+  static MAX_LENGTH_INVALID = $localize`:@@maxLengthInvalid:must be less than %d characters`;
   static PASSWORD_FORMAT_INVALID = $localize`:@@passwordFormat:must include number, letter and special character`;
   static ALREADY_EXISTS = $localize`:@@alreadyExists:already exists`;
   static ACTIVE = $localize`:@@active:Active`;
@@ -32,6 +33,7 @@ export class MESSAGE {
   static ITEMS_PER_PAGE = $localize`:@@itemsPerPage:Items per page`;
   static NEXT_PAGE = $localize`:@@nextPage:Next page`;
   static PRIVIOUS_PAGE = $localize`:@@priviousPage:Privious page`;
+  static PHONE_NUMBER_INVALID = $localize`:@@phoneNumberFormatInvalid:Phone number must be numeric and the characters + ( )`;
 }
 
 export class LOCALE {

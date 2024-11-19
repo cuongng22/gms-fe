@@ -6,16 +6,16 @@ import {
   HttpHeaders,
   HttpRequest
 } from '@angular/common/http';
-import {Observable, tap, throwError, timeout} from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {inject, LOCALE_ID} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {Router} from '@angular/router';
-import {BaseService} from '../services/base-service';
-import {MESSAGE} from '../../shared/utils/constant';
-import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
-import {LanguageService} from 'src/app/crew-trip/core/services/language.service';
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
+import { Observable, tap, throwError, timeout } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { inject, LOCALE_ID } from '@angular/core';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { Router } from '@angular/router';
+import { BaseService } from '../services/base-service';
+import { MESSAGE } from '../../shared/utils/constant';
+import { STORAGE_KEY } from 'src/app/crew-trip/core/constants/config';
+import { LanguageService } from 'src/app/crew-trip/core/services/language.service';
+import { UsersService } from "src/app/crew-trip/core/services/users-service";
 
 
 export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
@@ -34,7 +34,7 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
   if (token) {
     headers = headers.set('Authorization', `Bearer ${token}`);
   }
-  const authReq = req.clone({headers});
+  const authReq = req.clone({ headers });
   return next(authReq).pipe(
     timeout(10000),
     tap(event => {
@@ -48,9 +48,11 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
       } else if (error instanceof HttpErrorResponse) {
         if (error.status === 401) {
           usersService.logout();
-          router.navigate(['auth/login'], {fragment: '401', skipLocationChange: true});
+          router.navigate(['auth/login'], { fragment: '401', skipLocationChange: true });
         } else if (error.status === 503 || (error.status === 0 && error.statusText === 'Unknown Error')) {
           baseService.showError(MESSAGE.ERROR_CONNECT);
+        } else if (error.status === 409) {
+          baseService.showError(error?.error?.error);
         }
       }
       return throwError(() => error);
