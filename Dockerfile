@@ -1,9 +1,11 @@
 # Stage 1: Build Angular app
-FROM node:18 AS build
+FROM node:20 AS build
+
 
 # Thiết lập thư mục làm việc
 WORKDIR /app
-
+# Chuyển quyền thư mục
+RUN chown -R 0:0 /app
 # Copy các file package và cài đặt dependencies
 COPY package*.json ./
 RUN npm install
@@ -12,16 +14,17 @@ RUN npm install
 # Ở đây chúng ta sử dụng môi trường staging
 # Để build ứng dụng với môi trường production, thay staging bằng production
 COPY . .
-RUN npm run build:staging
+# Build Angular ứng dụng
+RUN npm run build:production
 
 # Stage 2: Setup Nginx để serve app
-FROM nginx:alpine
+#FROM nginx:alpine
 
 # Copy các file build từ image trước sang Nginx
-COPY --from=build /fe/dist/crew-trip /usr/share/nginx/html/crew-trip/fe
+#COPY --from=build /fe/dist/crew-trip /usr/share/nginx/html/crew-trip/fe
 
 # Expose port 80 để Nginx phục vụ ứng dụng
-EXPOSE 80
+#EXPOSE 80
 
 # Khởi động Nginx
-CMD ["nginx", "-g", "daemon off;"]
+#CMD ["nginx", "-g", "daemon off;"]

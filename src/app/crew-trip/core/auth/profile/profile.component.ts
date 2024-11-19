@@ -88,9 +88,18 @@ export class ProfileComponent implements OnInit {
     if (this.formGroup.valid) {
       try {
         await this.spinner.show();
-        await this.userService.update(this.formGroup.value, 'update');
+        let res = await this.userService.update(this.formGroup.value, 'update');
         this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
         this.updateEditMode();
+        let userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
+        Object.keys(this.formGroup.controls).forEach(key => {
+          const value = this.formGroup.get(key)?.value;
+          if (value !== null && value !== undefined && value !== '') {
+            userInfo[key] = value;
+          }
+        });
+        this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(userInfo));
+        this.userService.userInfoSubject.next(userInfo);
       } catch (error: any) {
         if (error?.status === 401 && error.error?.error) {
           this.baseService.showError(error?.error?.error);

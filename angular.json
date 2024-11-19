@@ -71,7 +71,15 @@
                 "vi"
               ]
             },
+            "en": {
+              "localize": [
+                "en"
+              ]
+            },
             "production": {
+              "localize": [
+                "en"
+              ],
               "budgets": [
                 {
                   "type": "initial",
