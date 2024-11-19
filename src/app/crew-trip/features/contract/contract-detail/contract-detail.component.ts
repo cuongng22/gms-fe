@@ -82,7 +82,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   //variable
   @Input() id: any;
-  @Input() readMode = false;
+  @Input() viewType: any;
+  @Input() readMode: any;
   @Input() dataObject: any;
   @Output() backStep = new EventEmitter<any>();
 
@@ -172,7 +173,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       console.log(e);
     } finally {
       await this.spinner.hide();
-      console.log(this.tblAttachedDocument,'tblAttachedDocument')
+      console.log(this.tblAttachedDocument, 'tblAttachedDocument')
     }
   }
 
@@ -192,7 +193,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         formUpload.append('bizDocId', bizDocIdBlob);
         await this.baseService.uploadFile(formUpload);
         this.tblAttachedDocument.data = [...this.tblAttachedDocument.data, {
-          documentType: '',
+          documentType: this.formGroupFileUpload.value.documentType == 1 ? 'Contract/annex or appendix' : 'Other documents of contract',
           fileName: fileUpload.name,
           isManual: true
         }];

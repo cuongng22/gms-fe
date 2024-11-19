@@ -61,7 +61,6 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   }, {label: 'ID', value: 'id'}, {label: 'Name', value: 'name'},];
   selectAllChecked = false;
   selectAllIndeterminate = false;
-  isSticky = false;
 
   constructor() {
     super();
@@ -206,11 +205,11 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
     });
   }
 
-  @HostListener('window:scroll', ['$event']) onScroll() {
-    if (window.scrollY > 60) {
-      this.isSticky = true;
-    } else {
-      this.isSticky = false;
-    }
-  }
+  // @HostListener('window:scroll', ['$event']) onScroll() {
+  //   if (window.scrollY > 60) {
+  //     this.isSticky = true;
+  //   } else {
+  //     this.isSticky = false;
+  //   }
+  // }
 }

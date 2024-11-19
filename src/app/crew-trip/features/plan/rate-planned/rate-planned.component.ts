@@ -114,7 +114,7 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       console.log(e);
-      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
+      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }

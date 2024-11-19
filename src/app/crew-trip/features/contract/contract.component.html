@@ -7,14 +7,17 @@
     </h5>
     } @else {
     <div class="d-md-flex align-items-center">
-      <button (click)="showListContract()" class="step-2-menu-button btn-slot-2" extended i18n mat-fab>
+      <button (click)="showListContract()" class="step-2-menu-button btn-slot-3" extended i18n mat-fab>
         <i class="material-symbols-outlined">
           undo
         </i>
         Back
       </button>
+
       <h5 class="mb-0 ml-10" i18n>
-        Annex
+        <span>Annex </span>
+        <span class="text-vna">{{'['+contractObj.contractCode+'] '}}</span>
+        <span class="text-warning">{{contractObj.contractName}}</span>
       </h5>
     </div>
     }
@@ -156,7 +159,7 @@
           </ng-container>
           <ng-container matColumnDef="appendixCount" stickyEnd>
             <th *matHeaderCellDef mat-header-cell mat-sort-header>Appendix</th>
-            <td *matCellDef="let element;let i = dataIndex" mat-cell>
+            <td *matCellDef="let element;let i = dataIndex" mat-cell class="text-end">
               <a (click)="showAnnex(i)" [matMenuTriggerFor]="listAnnex"
                  style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                 {{ element.appendixCount }}
@@ -260,5 +263,5 @@
 <!-- Detail -->
 <ng-container *ngIf="step==2">
   <app-contract-detail (backStep)="backStep()" [dataObject]="formGroupDetail.value"
-                       [id]="bizDocId" [readMode]="readMode"></app-contract-detail>
+                       [id]="bizDocId" [readMode]="readMode" [viewType]="viewType"></app-contract-detail>
 </ng-container>

@@ -50,6 +50,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   step = 1;
   readMode = true;
   bizDocId: any;
+  contractObj: any;
   listFlightMarket = [];
   listPartner: any[] = [];
   listHotel = [];
@@ -196,7 +197,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'effectiveDate', 'appendixCount', 'action'];
   }
 
-  async nextStep(id?: any,readMode?:any) {
+  async nextStep(id?: any, readMode?: any) {
     this.bizDocId = id;
     this.step = 2;
     this.readMode = readMode;
@@ -210,7 +211,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
   async showAnnex(index: any) {
     // await this.baseService.getListAnnex({contractId: id}).then(res => {
     //   this.tblAnnexData.data = res.data.content;
-    console.log(this.dataSource.data[index], 'this.dataSource.data[index]');
     this.tblAnnexData.data = (this.dataSource.data[index] as any).appendixList;
     this.showPopupAnnex = true;
 
@@ -264,7 +264,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   async showListAnnex(id: any) {
     this.viewType = 'PL';
-    this.formGroupSearch.patchValue({contractId: id})
+    this.formGroupSearch.patchValue({contractId: id});
+    this.contractObj = this.dataSource.data.find((value:any) => value.bizDocId == id);
     await this.search();
   }
 
@@ -311,7 +312,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
         return res;
       }
     } catch (e: any) {
-      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
+      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
