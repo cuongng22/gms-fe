@@ -101,7 +101,7 @@
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
         <ng-container matColumnDef="stt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
-          <td mat-cell *matCellDef="let element; let i = dataIndex">{{ i + 1 }}</td>
+          <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
         </ng-container>
 
         <ng-container matColumnDef="market">

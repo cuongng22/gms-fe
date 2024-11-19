@@ -38,7 +38,7 @@
           <table [dataSource]="listUser" mat-table class="table-light">
             <ng-container matColumnDef="stt">
               <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
-              <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
+              <td *matCellDef="let element; let i = dataIndex" mat-cell class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
             </ng-container>
             @for (innerColumn of _displayedColumnsUser; track innerColumn.value) {
             <ng-container matColumnDef="{{innerColumn.value}}">

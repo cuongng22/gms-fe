@@ -72,7 +72,7 @@
       <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true">
         <ng-container matColumnDef="stt">
           <th *matHeaderCellDef mat-header-cell mat-sort-header rowspan="2">#</th>
-          <td *matCellDef="let element; let i = dataIndex" mat-cell>{{ i + 1 }}</td>
+          <td *matCellDef="let element; let i = dataIndex" mat-cell class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
         </ng-container>
         <ng-container matColumnDef="international">
           <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>International</th>
@@ -125,7 +125,7 @@
         <tr *matHeaderRowDef="displayedColumns2;" mat-header-row></tr>
         <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
         <tr *matNoDataRow class="mat-row">
-          <td [attr.colspan]="displayedColumns.length" class="mat-cell"><span i18n>No data matching the filter</span>
+          <td [attr.colspan]="displayedColumns.length" class="mat-cell text-center"><span i18n>No data!</span>
           </td>
         </tr>
 

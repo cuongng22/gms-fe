@@ -28,9 +28,9 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
   let headers = new HttpHeaders({
     'Accept-Language': languageService.getLanguage(),
   });
-  if (req.body instanceof FormData) {
+  /*if (req.body instanceof FormData) {
     headers = headers.set('Accept', 'application/octet-stream');
-  }
+  }*/
   if (token) {
     headers = headers.set('Authorization', `Bearer ${token}`);
   }
