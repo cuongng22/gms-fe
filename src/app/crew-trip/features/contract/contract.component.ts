@@ -48,6 +48,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   //variable
   step = 1;
+  readMode = true;
+  bizDocId: any;
   listFlightMarket = [];
   listPartner: any[] = [];
   listHotel = [];
@@ -194,13 +196,15 @@ export class ContractComponent extends CommonComponent implements OnInit {
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'effectiveDate', 'appendixCount', 'action'];
   }
 
-  async nextStep(index: number) {
-    this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
+  async nextStep(id?: any,readMode?:any) {
+    this.bizDocId = id;
     this.step = 2;
+    this.readMode = readMode;
   }
 
   async backStep() {
-    await this.search(), this.step = 1;
+    await this.search();
+    this.step = 1;
   }
 
   async showAnnex(index: any) {

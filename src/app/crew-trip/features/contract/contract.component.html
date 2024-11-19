@@ -2,21 +2,21 @@
 <ng-container *ngIf="step==1">
   <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
     @if (viewType == 'HD') {
-      <h5 class="mb-0" i18n>
-        Contract
-      </h5>
+    <h5 class="mb-0" i18n>
+      Contract
+    </h5>
     } @else {
-      <div class="d-md-flex align-items-center">
-        <button (click)="showListContract()" class="step-2-menu-button btn-slot-2" extended i18n mat-fab>
-          <i class="material-symbols-outlined">
-            undo
-          </i>
-          Back
-        </button>
-        <h5 class="mb-0 ml-10" i18n>
-          Annex
-        </h5>
-      </div>
+    <div class="d-md-flex align-items-center">
+      <button (click)="showListContract()" class="step-2-menu-button btn-slot-2" extended i18n mat-fab>
+        <i class="material-symbols-outlined">
+          undo
+        </i>
+        Back
+      </button>
+      <h5 class="mb-0 ml-10" i18n>
+        Annex
+      </h5>
+    </div>
     }
 
     <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
@@ -27,9 +27,9 @@
         Contract
       </li>
       @if (viewType == 'PL') {
-        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@contract">
-          Annex
-        </li>
+      <li class="breadcrumb-item d-inline-block position-relative" i18n="@@contract">
+        Annex
+      </li>
       }
     </ol>
   </div>
@@ -52,7 +52,7 @@
               <mat-label i18n>Flight Market</mat-label>
               <mat-select formControlName="marketCodes" multiple>
                 @for (item of listFlightMarket; track item) {
-                  <mat-option [value]="item">{{ item }}</mat-option>
+                <mat-option [value]="item">{{ item }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -62,7 +62,7 @@
               <mat-label i18n>Supplier</mat-label>
               <mat-select formControlName="partnerCode" multiple>
                 @for (item of listPartner; track item) {
-                  <mat-option [value]="item.code">[{{ item.code }}] - {{ item.name }}</mat-option>
+                <mat-option [value]="item.code">[{{ item.code }}] - {{ item.name }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -78,10 +78,10 @@
               <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
               @if (!!formGroupSearch.controls['startDate'].hasError('matStartDateInvalid')) {
-                <mat-error>Invalid start date</mat-error>
+              <mat-error>Invalid start date</mat-error>
               }
               @if (!!formGroupSearch.controls['endDate'].hasError('matEndDateInvalid')) {
-                <mat-error>Invalid end date</mat-error>
+              <mat-error>Invalid end date</mat-error>
               }
             </mat-form-field>
           </div>
@@ -128,10 +128,11 @@
 
           <ng-container matColumnDef="stt">
             <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
-            <td *matCellDef="let element; let i = dataIndex" mat-cell  class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
+            <td *matCellDef="let element; let i = dataIndex" class="text-center"
+                mat-cell>{{ (pageIndex * pageSize) + i + 1 }}</td>
           </ng-container>
           @for (innerColumn of _displayedColumns; track innerColumn.value) {
-            <ng-container matColumnDef="{{innerColumn.value}}">
+          <ng-container matColumnDef="{{innerColumn.value}}">
               <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
               <td mat-cell *matCellDef="let element">
               <span [ngClass]="{
@@ -139,21 +140,21 @@
           'text-bg-vna': innerColumn.value === 'isActiveLabel' && element['isActive'] == 1,
           'text-bg-vna-danger': innerColumn.value === 'isActiveLabel' && element['isActive'] == 0
           }">{{
-                  element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-                }}</span>
+          element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+          }}</span>
               </td>
             </ng-container>
           }
           <ng-container matColumnDef="effectiveDate">
             <th *matHeaderCellDef mat-header-cell mat-sort-header>Effective Date</th>
             <td *matCellDef="let element" mat-cell>{{
-                element.effectiveDate | dataTransformPipe:[Constant.DATE,
-                  Constant.DATE_FORMAT]
+              element.effectiveDate | dataTransformPipe:[Constant.DATE,
+                Constant.DATE_FORMAT]
               }}
               - {{ element.expiryDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
             </td>
           </ng-container>
-          <ng-container matColumnDef="appendixCount">
+          <ng-container matColumnDef="appendixCount" stickyEnd>
             <th *matHeaderCellDef mat-header-cell mat-sort-header>Appendix</th>
             <td *matCellDef="let element;let i = dataIndex" mat-cell>
               <a (click)="showAnnex(i)" [matMenuTriggerFor]="listAnnex"
@@ -171,7 +172,7 @@
                   <ng-container matColumnDef="bizDocId">
                     <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>bizDocId</th>
                     <td *matCellDef="let element" mat-cell>
-                      <a (click)="detail(element.bizDocId)"
+                      <a (click)="nextStep(element.bizDocId,true)"
                          style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                         {{ element.bizDocId }}
                       </a>
@@ -180,7 +181,7 @@
                   <ng-container matColumnDef="description">
                     <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Description</th>
                     <td *matCellDef="let element" mat-cell>
-                      <a (click)="detail(element.bizDocId)"
+                      <a (click)="nextStep(element.bizDocId,true)"
                          style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                         {{ element.description }}
                       </a>
@@ -199,48 +200,38 @@
             </th>
             <td *matCellDef="let element;let i = index" mat-cell>
               @if (viewType == 'HD') {
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <a (click)="showListAnnex(element.bizDocId)"
-                     class="text-secondary"
-                     mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Show Annex">
-                      contract
-                    </i>
-                  </a>
-                  <a (click)="nextStep(i)" class="text-secondary" mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Detail">
-                      visibility
-                    </i>
-                  </a>
-                  <a (click)="showDialogDetail(i,'index')" class="text-warning" mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Edit">
-                      edit
-                    </i>
-                  </a>
-                  <!--                <a (click)="showConfirmDelete(element.id)" mat-button type="button">-->
-                  <!--                  <i class="material-symbols-outlined" i18n-title title="Delete">-->
-                  <!--                    delete-->
-                  <!--                  </i>-->
-                  <!--                </a>-->
-                </div>
+              <div class="action-buttons d-flex align-items-center justify-content-end">
+                <a (click)="showListAnnex(element.bizDocId)"
+                   class="text-secondary"
+                   mat-button type="button">
+                  <i class="material-symbols-outlined" i18n-title title="Show Annex">
+                    contract
+                  </i>
+                </a>
+                <a (click)="nextStep(element.bizDocId,true)" class="text-secondary" mat-button type="button">
+                  <i class="material-symbols-outlined" i18n-title title="Detail">
+                    visibility
+                  </i>
+                </a>
+                <a (click)="nextStep(element.bizDocId,false)" class="text-warning" mat-button type="button">
+                  <i class="material-symbols-outlined" i18n-title title="Edit">
+                    edit
+                  </i>
+                </a>
+              </div>
               } @else if (viewType == 'PL') {
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <!--                  <a (click)="nextStep(i)" class="text-secondary" mat-button type="button">-->
-                  <!--                    <i class="material-symbols-outlined" i18n-title title="Detail">-->
-                  <!--                      visibility-->
-                  <!--                    </i>-->
-                  <!--                  </a>-->
-                  <a (click)="nextStep(i)" class="text-warning" mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Edit">
-                      edit
-                    </i>
-                  </a>
-                  <a (click)="showConfirmDeleteAnnex(element.id)" class="text-danger" mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Delete">
-                      delete
-                    </i>
-                  </a>
-                </div>
+              <div class="action-buttons d-flex align-items-center justify-content-end">
+                <a (click)="nextStep(element.bizDocId,false)" class="text-warning" mat-button type="button">
+                  <i class="material-symbols-outlined" i18n-title title="Edit">
+                    edit
+                  </i>
+                </a>
+                <a (click)="showConfirmDeleteAnnex(element.id)" class="text-danger" mat-button type="button">
+                  <i class="material-symbols-outlined" i18n-title title="Delete">
+                    delete
+                  </i>
+                </a>
+              </div>
               }
             </td>
           </ng-container>
@@ -269,5 +260,5 @@
 <!-- Detail -->
 <ng-container *ngIf="step==2">
   <app-contract-detail (backStep)="backStep()" [dataObject]="formGroupDetail.value"
-                       [id]="formGroupDetail.value.bizDocId"></app-contract-detail>
+                       [id]="bizDocId" [readMode]="readMode"></app-contract-detail>
 </ng-container>
