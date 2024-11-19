@@ -1,13 +1,13 @@
-<footer
-  [class.card-without-border-radius]="themeService.isCardWithoutBorderRadius()"
+<footer [class.card-without-border-radius]="themeService.isCardWithoutBorderRadius()"
   [class.card-with-box-shadow]="themeService.isCardWithBoxShadow()"
-  class="footer-area text-center bg-white border-top-radius transition"
-  [class.card-borderd]="themeService.isCardBordered()"
-  [ngClass]="{'active': isSidebarToggled}"
->
+  class="footer-area text-center bg-white border-top-radius toggle-switch transition"
+  [class.card-borderd]="themeService.isCardBordered()" [ngClass]="{'active': isSidebarToggled}">
   <div>
-    <p>
-     VNA Crew Trip | Version 1.1 © <span>2024</span><a href="https://www.vietnamairlines.com/vn/vi/home" target="_blank"> Vietnam Airlines SJC</a>
-    </p>
+    <span>
+      <img src="images/logo_vna8.png" alt="logo-icon"> VNA Crew Trip | Version 1.1
+    </span>
+    <span>
+      © 2024 Vietnam Airlines SJC
+    </span>
   </div>
 </footer>

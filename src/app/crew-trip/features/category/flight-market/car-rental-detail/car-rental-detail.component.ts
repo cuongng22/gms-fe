@@ -17,6 +17,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
 import { AlreadyExistsValidator } from 'src/app/crew-trip/core/validator/already-exists';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 
 @Component({
   selector: 'app-car-rental-detail',
@@ -24,7 +25,7 @@ import { AlreadyExistsValidator } from 'src/app/crew-trip/core/validator/already
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule,],
+    MatTableModule, MatPaginatorModule, NgxTrimDirectiveModule],
   templateUrl: './car-rental-detail.component.html',
   styleUrl: './car-rental-detail.component.scss'
 })
@@ -64,7 +65,7 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
       this.formGroupDetail.patchValue(this.data.carRental);
       this.readonlyDetail.set(this.data.isViewDetail);
     }
-    
+
     if (this.readonlyDetail()) {
       Object.keys(this.formGroupDetail.controls).forEach(control => {
         this.formGroupDetail.get(control)?.disable();

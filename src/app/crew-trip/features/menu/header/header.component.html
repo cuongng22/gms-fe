@@ -1,24 +1,22 @@
-<div
-  [class.card-without-border-radius]="themeService.isCardWithoutBorderRadius()"
+<div [class.card-without-border-radius]="themeService.isCardWithoutBorderRadius()"
   [class.card-with-box-shadow]="themeService.isCardWithBoxShadow()"
   class="header-area bg-white border-bottom-radius transition"
   [ngClass]="{'active': isSidebarToggled, 'sticky': isSticky}"
-  [class.component-rtl-enabled]="themeService.isRTLEnabled()"
-  [class.right-sidebar]="themeService.isRightSidebar()"
-  [class.hide-sidebar]="themeService.isHideSidebar()"
-  [class.card-borderd]="themeService.isCardBordered()"
-  [class.dark-header]="themeService.isHeaderDark()"
->
+  [class.component-rtl-enabled]="themeService.isRTLEnabled()" [class.right-sidebar]="themeService.isRightSidebar()"
+  [class.hide-sidebar]="themeService.isHideSidebar()" [class.card-borderd]="themeService.isCardBordered()"
+  [class.dark-header]="themeService.isHeaderDark()">
   <div class="d-md-flex align-items-center justify-content-between">
     <div class="header-left-side d-flex align-items-center">
-      <div
-        class="burger-menu transition position-relative lh-1"
-        [ngClass]="{'active': isSidebarToggled}"
-        (click)="toggle()"
-      >
+      <div class="burger-menu transition position-relative lh-1" [ngClass]="{'active': isSidebarToggled}"
+        (click)="toggle()">
         <i class="material-symbols-outlined">
           menu
         </i>
+      </div>
+      <div>
+        <h4 class="m-0">
+          <span class="system-name">Hotel & Flight Crew Management System</span>
+        </h4>
       </div>
 
 
@@ -36,35 +34,35 @@
         </button>
       </li> -->
 
-<!--     comment language lại, đừng bỏ đi nhé ae -->
+      <!--     comment language lại, đừng bỏ đi nhé ae -->
 
-<!--      <li>-->
-<!--        <button type="button" mat-button [matMenuTriggerFor]="languageMenu" class="language-menu-btn">-->
-<!--          <i class="material-symbols-outlined">-->
-<!--            translate-->
-<!--          </i>-->
-<!--          <span>{{ currentLanguage | async }}</span> &lt;!&ndash; Hiển thị ngôn ngữ hiện tại &ndash;&gt;-->
-<!--        </button>-->
-<!--        <mat-menu class="language-menu-dropdown" #languageMenu="matMenu" xPosition="before">-->
-<!--                    <span class="title fw-semibold text-black d-block" i18n>-->
-<!--                        Choose Language-->
-<!--                    </span>-->
-<!--          <ul class="menu-body p-0 mb-0 mt-0 list-unstyled">-->
-<!--            <li>-->
-<!--              <button mat-button (click)="changeLanguage('en')">-->
-<!--                <img src="images/flags/usa.svg" alt="usa">-->
-<!--                English-->
-<!--              </button>-->
-<!--            </li>-->
-<!--            <li>-->
-<!--              <button mat-button (click)="changeLanguage('vi')">-->
-<!--                <img src="" alt="vietnam">-->
-<!--                VietNam-->
-<!--              </button>-->
-<!--            </li>-->
-<!--          </ul>-->
-<!--        </mat-menu>-->
-<!--      </li>-->
+      <!--      <li>-->
+      <!--        <button type="button" mat-button [matMenuTriggerFor]="languageMenu" class="language-menu-btn">-->
+      <!--          <i class="material-symbols-outlined">-->
+      <!--            translate-->
+      <!--          </i>-->
+      <!--          <span>{{ currentLanguage | async }}</span> &lt;!&ndash; Hiển thị ngôn ngữ hiện tại &ndash;&gt;-->
+      <!--        </button>-->
+      <!--        <mat-menu class="language-menu-dropdown" #languageMenu="matMenu" xPosition="before">-->
+      <!--                    <span class="title fw-semibold text-black d-block" i18n>-->
+      <!--                        Choose Language-->
+      <!--                    </span>-->
+      <!--          <ul class="menu-body p-0 mb-0 mt-0 list-unstyled">-->
+      <!--            <li>-->
+      <!--              <button mat-button (click)="changeLanguage('en')">-->
+      <!--                <img src="images/flags/usa.svg" alt="usa">-->
+      <!--                English-->
+      <!--              </button>-->
+      <!--            </li>-->
+      <!--            <li>-->
+      <!--              <button mat-button (click)="changeLanguage('vi')">-->
+      <!--                <img src="" alt="vietnam">-->
+      <!--                VietNam-->
+      <!--              </button>-->
+      <!--            </li>-->
+      <!--          </ul>-->
+      <!--        </mat-menu>-->
+      <!--      </li>-->
 
       <li>
         <button mat-button [matMenuTriggerFor]="notificationsMenu" class="notifications-menu-btn">
@@ -75,12 +73,12 @@
         </button>
         <mat-menu class="notifications-menu-dropdown" #notificationsMenu="matMenu" xPosition="before">
           <div class="title d-flex align-items-center justify-content-between">
-                        <span class="fw-semibold text-black">
-                            Notifications
-                            <span class="text-body fw-normal">
-                                (03)
-                            </span>
-                        </span>
+            <span class="fw-semibold text-black">
+              Notifications
+              <span class="text-body fw-normal">
+                (03)
+              </span>
+            </span>
             <a href="javascript:void(0);" class="text-primary">
               Clear All
             </a>
@@ -94,13 +92,13 @@
                 </i>
               </div>
               <span class="sub-title d-block text-black">
-                                You have requested to <strong class="fw-semibold">withdrawal</strong>
-                            </span>
+                You have requested to <strong class="fw-semibold">withdrawal</strong>
+              </span>
               <span class="time d-block">
-                                2 hrs ago
-                            </span>
+                2 hrs ago
+              </span>
               <a routerLink="/dashboard/notifications"
-                 class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
+                class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
             </li>
             <li class="position-relative">
               <div
@@ -110,13 +108,13 @@
                 </i>
               </div>
               <span class="sub-title d-block text-black">
-                                <strong class="fw-semibold">A new user</strong> added in Trezo
-                            </span>
+                <strong class="fw-semibold">A new user</strong> added in Trezo
+              </span>
               <span class="time d-block">
-                                3 hrs ago
-                            </span>
+                3 hrs ago
+              </span>
               <a routerLink="/dashboard/notifications"
-                 class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
+                class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
               <span class="unread d-inline-block rounded-circle bg-primary position-absolute"></span>
             </li>
             <li class="position-relative">
@@ -127,13 +125,13 @@
                 </i>
               </div>
               <span class="sub-title d-block text-black">
-                                You have requested to <strong class="fw-semibold">withdrawal</strong>
-                            </span>
+                You have requested to <strong class="fw-semibold">withdrawal</strong>
+              </span>
               <span class="time d-block">
-                                1 day ago
-                            </span>
+                1 day ago
+              </span>
               <a routerLink="/dashboard/notifications"
-                 class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
+                class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
             </li>
           </ul>
           <div class="menu-footer text-center">
@@ -145,23 +143,23 @@
       </li>
       <li>
         <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-menu-btn">
-          <img src="{{userInfo?.avartarUrl}}" *ngIf="userInfo?.avartarUrl" class="rounded-circle" alt="admin-image">
-          <img src="images/admin.png" *ngIf="!userInfo?.avartarUrl" class="rounded-circle" alt="admin-image">
+          <img [src]="!!userInfo?.avartarUrl?userInfo?.avartarUrl:'images/default_avatar.png'" class="rounded-circle"
+            alt="admin-image">
           <span class="fw-semibold text-black">
-                        {{ userInfo?.email }}
-                    </span>
+            {{ userInfo?.fullName }}
+          </span>
         </button>
         <mat-menu class="profile-menu-dropdown" #profileMenu="matMenu" xPosition="before">
           <div class="admin d-flex align-items-center">
-            <img src="{{userInfo?.avartarUrl}}" *ngIf="userInfo?.avartarUrl" class="rounded-circle" alt="admin-image">
-            <img src="images/admin.png" *ngIf="!userInfo?.avartarUrl" class="rounded-circle" alt="admin-image">
+            <img [src]="!!userInfo?.avartarUrl?userInfo?.avartarUrl:'images/default_avatar.png'" class="rounded-circle"
+              alt="admin-image">
             <div>
-                            <span class="d-block text-black fw-medium">
-                                  {{ userInfo?.email }}
-                            </span>
+              <span class="d-block text-black fw-medium">
+                {{ userInfo?.email }}
+              </span>
               <span class="d-block">
-                               {{ userInfo?.department }}
-                            </span>
+                {{ userInfo?.department }}
+              </span>
             </div>
           </div>
           <ul class="list p-0 mt-0 mb-0 list-unstyled">
@@ -173,16 +171,17 @@
                 My Profile
               </a>
             </li>
-            <li  *ngIf="userInfo && userInfo.email" style="cursor: pointer">
-              <a   (click)="passwordInputType = 'password';openDialogResetPassword(userInfo.email)" class="d-block position-relative" i18n>
+            <li *ngIf="userInfo && userInfo.email" style="cursor: pointer">
+              <a (click)="passwordInputType = 'password';openDialogResetPassword(userInfo.email)"
+                class="d-block position-relative" i18n>
                 <i class="material-symbols-outlined">
                   settings
                 </i>
                 Change password
               </a>
             </li>
-            <li (click)="logOut()">
-              <a  class="d-block position-relative cursor-pointer" i18n>
+            <li (click)="onConfirm()">
+              <a class="d-block position-relative cursor-pointer" i18n>
                 <i class="material-symbols-outlined">
                   logout
                 </i>
@@ -195,10 +194,7 @@
     </ul>
   </div>
 </div>
-<div
-  [class.active]="showDialogConfirm"
-  class="add-new-popup"
->
+<div [class.active]="showDialogConfirm" class="add-new-popup">
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
       <mat-card-header>
@@ -208,10 +204,7 @@
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
-          <button
-            (click)="onCancel()"
-            mat-button
-          >
+          <button (click)="onCancel()" mat-button>
             <i class="ri-close-fill"></i>
           </button>
         </mat-card-subtitle>
@@ -224,11 +217,7 @@
             </i>
             Cancel
           </button>
-          <button
-            (click)="onConfirm()"
-            color="primary"
-            i18n mat-button
-          >
+          <button (click)="onConfirm()" color="primary" i18n mat-button>
             <i class="material-symbols-outlined">
               save
             </i>
@@ -244,92 +233,94 @@
 
 
 @if (dialogResetPassword) {
-    <div class="add-new-popup" [class.active]="dialogResetPassword">
-    <div class="popup-dialog" style="max-width: 700px; min-width: 400px;">
+<div class="add-new-popup" [class.active]="dialogResetPassword">
+  <div class="popup-dialog" style="max-width: 700px; min-width: 400px;">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none" style="width: 100%;">
-    <mat-card-header class="p-15">
-    <mat-card-title>
-    <h5 class="mb-0" i18n="@@changePassword">Change password</h5>
-    </mat-card-title>
-    <mat-card-subtitle>
-    <button mat-button (click)="dialogResetPassword = !dialogResetPassword">
-    <i class="ri-close-fill"></i>
-    </button>
-    </mat-card-subtitle>
+      <mat-card-header class="p-15">
+        <mat-card-title>
+          <h5 class="mb-0" i18n="@@changePassword">Change password</h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <button mat-button (click)="dialogResetPassword = !dialogResetPassword">
+            <i class="ri-close-fill"></i>
+          </button>
+        </mat-card-subtitle>
       </mat-card-header>
-        <mat-card-content>
-          <form  ngForm  [formGroup]="formGroup"  (ngSubmit)="confirmChangePassword()" autocomplete="off">
-            <div class="row">
-              <div class="col-sm-12 col-md-12">
-              <div class="form-group mb-20" sizeInput="md">
-                  <mat-form-field>
-                    <mat-label i18n="@@oldPassword">
-                        Old password
-                    </mat-label>
-                    <input matInput formControlName="oldPassword" required minlength="8" [type]="passwordInputType">
-                  </mat-form-field>
-                  </div>
-                </div>
-                </div>
-                  <mat-error *ngIf="formGroup.get('oldPassword')?.invalid && formGroup.get('oldPassword')?.touched">
-                  <span *ngIf="formGroup.get('oldPassword')?.hasError('incorrect')">
-                  {{errorMessage}}
-                  </span>
-                  </mat-error>
-                    <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                    <div class="form-group mb-20" sizeInput="md">
-                    <mat-form-field>
-                    <mat-label i18n="@@newPassword">
-                    New password
-                    </mat-label>
-                    <input matInput formControlName="newPassword" required minlength="8" [type]="passwordInputType">
-                    </mat-form-field>
-                    </div>
-                    </div>
-                      <mat-error *ngIf="formGroup.get('newPassword')?.invalid && formGroup.get('newPassword')?.touched">
-                      <span *ngIf="formGroup.get('newPassword')?.hasError('incorrect')">
-                      {{errorMessage}}
-                      </span>
-                      </mat-error>
-            </div>
-        <div class="row">
+      <mat-card-content>
+        <form ngForm [formGroup]="formGroup" (ngSubmit)="confirmChangePassword()" autocomplete="off">
+          <div class="row">
             <div class="col-sm-12 col-md-12">
-            <div class="form-group mb-20" sizeInput="md">
-            <mat-form-field>
-            <mat-label i18n="@@confirmNewPassword">
-            Confirm new password
-            </mat-label>
-            <input matInput formControlName="confirmNewPassword" required minlength="8" [type]="passwordInputType">
-            </mat-form-field>
+              <div class="form-group mb-20" sizeInput="md">
+                <mat-form-field>
+                  <mat-label i18n="@@oldPassword">
+                    Old password
+                  </mat-label>
+                  <input matInput formControlName="oldPassword" required minlength="8" [type]="passwordInputType">
+                </mat-form-field>
+              </div>
             </div>
-            </div>
-        </div>
-
-            <mat-error *ngIf="formGroup.get('confirmNewPassword')?.invalid && formGroup.get('confirmNewPassword')?.touched">
-            <span *ngIf="formGroup.get('confirmNewPassword')?.hasError('incorrect')">
-            {{errorMessage}}
+          </div>
+          <mat-error *ngIf="formGroup.get('oldPassword')?.invalid && formGroup.get('oldPassword')?.touched">
+            <span *ngIf="formGroup.get('oldPassword')?.hasError('incorrect')">
+              {{ errorMessage }}
             </span>
+          </mat-error>
+          <div class="row">
+            <div class="col-sm-12 col-md-12">
+              <div class="form-group mb-20" sizeInput="md">
+                <mat-form-field>
+                  <mat-label i18n="@@newPassword">
+                    New password
+                  </mat-label>
+                  <input matInput formControlName="newPassword" required minlength="8" [type]="passwordInputType">
+                </mat-form-field>
+              </div>
+            </div>
+            <mat-error *ngIf="formGroup.get('newPassword')?.invalid && formGroup.get('newPassword')?.touched">
+              <span *ngIf="formGroup.get('newPassword')?.hasError('incorrect')">
+                {{ errorMessage }}
+              </span>
             </mat-error>
+          </div>
+          <div class="row">
+            <div class="col-sm-12 col-md-12">
+              <div class="form-group mb-20" sizeInput="md">
+                <mat-form-field>
+                  <mat-label i18n="@@confirmNewPassword">
+                    Confirm new password
+                  </mat-label>
+                  <input matInput formControlName="confirmNewPassword" required minlength="8"
+                    [type]="passwordInputType">
+                </mat-form-field>
+              </div>
+            </div>
+          </div>
+
+          <mat-error
+            *ngIf="formGroup.get('confirmNewPassword')?.invalid && formGroup.get('confirmNewPassword')?.touched">
+            <span *ngIf="formGroup.get('confirmNewPassword')?.hasError('incorrect')">
+              {{ errorMessage }}
+            </span>
+          </mat-error>
 
 
-      <div class="btn-box text-center mt-10">
-        <button type="button" mat-button (click)="dialogResetPassword = !dialogResetPassword" color="warn">
-        <i class="material-symbols-outlined">
-        close
-        </i>
-        <span i18n="@@cancel">Cancel</span>
-        </button>
-        <button mat-button color="primary" type="submit">
-          <i class="material-symbols-outlined">
-          check_circle
-          </i>
-          <span i18n="@@confirm">Save</span>
-        </button>
-      </div>
-      </form>
+          <div class="btn-box text-center mt-10">
+            <button type="button" mat-button (click)="dialogResetPassword = !dialogResetPassword" color="warn">
+              <i class="material-symbols-outlined">
+                close
+              </i>
+              <span i18n="@@cancel">Cancel</span>
+            </button>
+            <button mat-button color="primary" type="submit">
+              <i class="material-symbols-outlined">
+                check_circle
+              </i>
+              <span i18n="@@confirm">Save</span>
+            </button>
+          </div>
+        </form>
       </mat-card-content>
-      </mat-card>
-    </div>
-    </div>
+    </mat-card>
+  </div>
+</div>
 }

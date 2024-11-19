@@ -61,7 +61,7 @@
                         <div class="col" sizeInput="sm">
                             <mat-form-field class="mb-1">
                                 <mat-label i18n="@@airportCode">Airport Code</mat-label>
-                                <input required matInput formControlName="marketCode">
+                                <input trim="blur" required matInput formControlName="marketCode">
                                 @if (
                                 formGroupDetail.controls.marketCode.hasError('required') &&
                                 formGroupDetail.controls.marketCode.touched) {
@@ -73,13 +73,13 @@
                         <div class="col" sizeInput="sm">
                             <mat-form-field class="mb-1">
                                 <mat-label i18n="@@airportName">Airport Name</mat-label>
-                                <input matInput formControlName="marketName">
+                                <input trim="blur" matInput formControlName="marketName">
                             </mat-form-field>
                         </div>
                         <div class="col" sizeInput="sm">
                             <mat-form-field class="mb-1">
                                 <mat-label i18n="@@country">Country</mat-label>
-                                <input type="text" required #nationName matInput formControlName="nationName"
+                                <input trim="blur" type="text" required #nationName matInput formControlName="nationName"
                                     [matAutocomplete]="countryComplete" (input)="filterCountry()"
                                     (focus)="filterCountry()">
                                 <mat-autocomplete autoActiveFirstOption requireSelection
@@ -139,9 +139,12 @@
                             <mat-form-field>
                                 <mat-label i18n="@@costCategory">Cost Category</mat-label>
                                 <mat-select formControlName="serviceFeeCode" multiple>
+                                    <mat-select-trigger>
+                                        {{ getSelectedCostCategoryDetail() }}
+                                      </mat-select-trigger>
                                     <form class="mb-1" sizeInput="sm">
-                                        <mat-form-field>
-                                            <input matInput type="text" name="clearable-input"
+                                        <mat-form-field class="input-suggest">
+                                            <input trim="blur" matInput type="text" name="clearable-input"
                                                 [(ngModel)]="searchCostCategory" i18n-placeholder="@@search"
                                                 placeholder="Search">
                                             @if (searchCostCategory()) {
@@ -226,55 +229,55 @@
         <div class="table-responsive">
             <table mat-table [dataSource]="hotelDataSource" multiTemplateDataRows="true" class="table-light">
                 <ng-container matColumnDef="hotelCode">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@hotelCode">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@hotelCode">
                         Hotel Code
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.hotelCode}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="hotelName">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@hotelName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@hotelName">
                         Hotel Name
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.hotelName}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="address">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@address">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@address">
                         Address
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.address}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="fullName">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@contactName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@contactName">
                         Contact name
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.fullName}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="email">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@emailBooking:email">Email</th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.email}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="phone">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@phoneNumber">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@phoneNumber">
                         Phone number
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.phone}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="active">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@status">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@status">
                         Status
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.active?MESSAGE.ACTIVE:MESSAGE.INACTIVE}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="notes">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@notes">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@notes">
                         Notes
                     </th>
                     <td mat-cell *matCellDef="let hotel">{{hotel.notes}}</td>
@@ -282,12 +285,12 @@
 
                 @if(!readonlyDetail()){
                 <ng-container matColumnDef="action" stickyEnd>
-                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@action">
                         Action
                     </th>
                     <td mat-cell *matCellDef="let hotel; let i = dataIndex">
-                        <div class="action-buttons d-flex align-items-center">
+                        <div class="action-buttons d-flex align-items-center justify-content-end">
                             <button type="button" mat-button (click)="hotelDetail(false, hotel)">
                                 <i class="material-symbols-outlined text-warning" title="Edit hotel"
                                     i18n-title="@@editHotel">
@@ -309,6 +312,9 @@
 
                 <tr mat-header-row *matHeaderRowDef="hotelColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: hotelColumns;" [hidden]="row.isDelete === true"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="9">No data!</td>
+                </tr>
             </table>
         </div>
     </mat-card-content>
@@ -336,9 +342,9 @@
     </mat-card-header>
     <mat-card-content>
         <div class="table-responsive">
-            <table mat-table [dataSource]="carRentalDataSource" multiTemplateDataRows="true">
+            <table mat-table [dataSource]="carRentalDataSource" multiTemplateDataRows="true" class="table-light">
                 <ng-container matColumnDef="code">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@carRentalCode">
                         Car rental code
                     </th>
@@ -346,7 +352,7 @@
                 </ng-container>
 
                 <ng-container matColumnDef="name">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@carRentalCompany">
                         Car rental company
                     </th>
@@ -354,41 +360,41 @@
                 </ng-container>
 
                 <ng-container matColumnDef="address">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@address">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@address">
                         Address
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.address}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="fullName">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@contactName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@contactName">
                         Contact name
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.fullName}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="email">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@emailBooking:email">Email</th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.email}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="phone">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@phoneNumber">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@phoneNumber">
                         Phone number
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.phone}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="active">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@status">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@status">
                         Status
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.active?MESSAGE.ACTIVE:MESSAGE.INACTIVE}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="notes">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@notes">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@notes">
                         Notes
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.notes}}</td>
@@ -396,12 +402,12 @@
 
                 @if(!readonlyDetail()){
                 <ng-container matColumnDef="action" stickyEnd>
-                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold"
+                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@action">
                         Action
                     </th>
                     <td mat-cell *matCellDef="let carRental; let i = dataIndex">
-                        <div class="action-buttons d-flex align-items-center">
+                        <div class="action-buttons d-flex align-items-center justify-content-end">
                             <button type="button" mat-button (click)="carRentalDetail(false, carRental)">
                                 <i class="material-symbols-outlined text-warning" title="Edit Car rental"
                                     i18n-title="@@editCarRental">
@@ -423,6 +429,9 @@
 
                 <tr mat-header-row *matHeaderRowDef="carRentalColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: carRentalColumns;" [hidden]="row.isDelete === true"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="9">No data!</td>
+                </tr>
             </table>
         </div>
     </mat-card-content>
@@ -436,7 +445,7 @@
     <mat-card-header class="mb-0" style="display: flex;flex-direction: row-reverse;">
         <mat-card-subtitle>
 
-            <button type="button" mat-button class="danger-btn  min-with-100 mlr-5"
+            <button type="button" mat-button class="close-btn  min-with-100 mlr-5"
                 routerLink="/category/flight-market">
                 <i class="material-symbols-outlined">
                     close
@@ -482,7 +491,7 @@
                 </div>
                 <div class="btn-box text-center">
                     <button type="button" mat-button (click)="toggleDialogDeleteHotel()"
-                        class="danger-btn  min-with-100 mlr-5">
+                        class="close-btn  min-with-100 mlr-5">
                         <i class="material-symbols-outlined">
                             close
                         </i>
@@ -516,7 +525,7 @@
                 </div>
                 <div class="btn-box text-center">
                     <button type="button" mat-button (click)="toggleDialogDeleteCarRental()"
-                        class="danger-btn  min-with-100 mlr-5">
+                        class="close-btn  min-with-100 mlr-5">
                         <i class="material-symbols-outlined">
                             close
                         </i>

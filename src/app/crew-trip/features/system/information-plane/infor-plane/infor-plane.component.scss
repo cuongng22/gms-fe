@@ -1,0 +1,36 @@
+table.mat-elevation-z8 {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+table.mat-elevation-z8 th,
+table.mat-elevation-z8 td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+
+table.mat-elevation-z8 th {
+  background-color: #f1f1f1;
+  font-weight: bold;
+}
+
+table.mat-elevation-z8 tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+table.mat-elevation-z8 tr:hover {
+  background-color: #f1f1f1;
+}
+
+/* Tạo đường kẻ dọc và ngang cho cả tiêu đề và nội dung */
+table.mat-elevation-z8,
+table.mat-elevation-z8 th,
+table.mat-elevation-z8 td {
+  border: 1px solid #ccc;
+}
+table.mat-elevation-z8 th {
+  border: 1px solid #ccc !important;
+  background-color: #f1f1f1;
+  font-weight: bold;
+}

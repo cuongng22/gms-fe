@@ -71,7 +71,7 @@
                     <th mat-header-cell *matHeaderCellDef>
                         Status
                     </th>
-                    <td mat-cell *matCellDef="let element">
+                    <td mat-cell *matCellDef="let element" class="text-center">
                         <span class="trezo-badge" *ngIf="element.status.pending">
                             Pending
                         </span>
@@ -87,7 +87,7 @@
                         Action
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        <div class="action-buttons d-flex align-items-center">
+                        <div class="action-buttons d-flex align-items-center justify-content-end">
                             <button type="button" mat-button matTooltip="Approved">
                                 <i class="material-symbols-outlined">
                                     {{element.action.approved}}

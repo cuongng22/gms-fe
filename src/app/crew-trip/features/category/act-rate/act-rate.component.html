@@ -23,7 +23,7 @@
           <div class="row">
             <div class="col-xs-3 col-sm-3 col-md-3 col-lg-3" sizeInput="md">
               <mat-form-field>
-                <mat-label i18n="@@keywords">Keywords</mat-label>
+                <mat-label i18n="@@keyword">Keyword</mat-label>
                 <input matInput formControlName="s">
               </mat-form-field>
             </div>
@@ -71,7 +71,7 @@
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true">
         <ng-container matColumnDef="stt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
-          <td mat-cell *matCellDef="let element; let i = dataIndex">{{ i + 1 }}</td>
+          <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
         </ng-container>
         <ng-container matColumnDef="code">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@code">Code</th>
@@ -149,7 +149,7 @@
         <table mat-table [dataSource]="listHistoryData" class="mat-elevation-z8 mb-20" multiTemplateDataRows="true">
           <ng-container matColumnDef="stt">
             <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
-            <td mat-cell *matCellDef="let element; let j = dataIndex">{{ j + 1 }}</td>
+            <td mat-cell *matCellDef="let element; let j = dataIndex" class="text-center">{{ (pageIndex * pageSize) + j + 1 }}</td>
           </ng-container>
           <ng-container matColumnDef="updatedDate">
             <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@updatedOn">Updated At</th>

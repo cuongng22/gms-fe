@@ -479,6 +479,9 @@
 .text-orange {
     color: var(--orangeColor) !important;
 }
+.text-vna {
+    color: var(--vnaXanhColor) !important;
+}
 
 // Border
 .border {
@@ -508,7 +511,8 @@
     border-radius: 7px 7px 0 0 !important;
 }
 .border-bottom-radius {
-    border-radius: 0 0 7px 7px !important;
+    // border-radius: 0 0 7px 7px !important;
+    border-radius: 0 0 7px 0px !important;
 }
 .border-right-radius {
     border-radius: 0 7px 7px 0 !important;

@@ -10,6 +10,14 @@
   top: 0px;
 }
 
+.mat-column-action {
+  width: 50px !important;
+}
+
+.mat-column-stt {
+  width: 70px !important;
+}
+
 .tables-of-content-card {
   .mat-mdc-card-content {
     .unlock-library-box {
@@ -40,6 +48,62 @@
   }
 }
 ::ng-deep {
+  .file-uploader {
+    border-radius: 7px;
+    outline: 0 !important;
+    min-height: 90px !important;
+    border: 1px solid #D5D9E2;
+    background-color: transparent !important;
+
+    .upload-input {
+      color: var(--bodyColor) !important;
+      transition: var(--transition);
+
+      .icon {
+        border-color: #D5D9E2 !important;
+        margin-top: 5px;
+        svg {
+          fill: var(--primaryColor) !important;
+        }
+      }
+
+      .upload-text {
+        padding-left: 12px;
+
+        b {
+          font-weight: 600;
+          color: var(--blackColor);
+        }
+      }
+
+      &:hover {
+        color: var(--primaryColor) !important;
+      }
+    }
+
+    .file-info {
+      font-size: 13px;
+      margin-bottom: 5px;
+      color: var(--blackColor);
+    }
+
+    file-upload-icon {
+      padding: 3px;
+      width: 35px !important;
+      height: 35px !important;
+      border-color: #D5D9E2;
+    }
+
+    .remove-btn {
+      color: var(--bodyColor);
+
+      svg {
+        top: 1px;
+        margin-right: 2px;
+        position: relative;
+      }
+    }
+  }
   .tables-of-content-card {
     .mat-mdc-card-content {
       .tables-of-content-list {

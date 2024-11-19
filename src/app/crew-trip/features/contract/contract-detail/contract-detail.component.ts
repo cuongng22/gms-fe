@@ -4,14 +4,14 @@ import {NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatTableModule} from '@angular/material/table';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {
@@ -27,6 +27,8 @@ import {MatRadioModule} from '@angular/material/radio';
 import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
+import {FileUploadModule} from "@iplab/ngx-file-upload";
+import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 
 
 @Component({
@@ -67,7 +69,8 @@ import {MatNativeDateModule} from '@angular/material/core';
     MatDatepickerModule,
     MatDatepicker,
     MatDatepickerToggle,
-    MatNativeDateModule],
+    MatNativeDateModule,
+    FileUploadModule],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
 })
@@ -82,23 +85,15 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   @Input() readMode = false;
   @Input() dataObject: any;
   @Output() backStep = new EventEmitter<any>();
-  listUser: any = [];
-  listFunction: any = [];
-  listFunctionView: any;
-  listRoleFunction: any = [];
-  displayedColumnsUser: string[] = [];
-  displayedColumnsFunction: string[] = [];
-  _displayedColumnsUser: { label: string; value: string, type?: string, format?: string }[] = [{
-    label: 'Full Name', value: 'full-name'
-  }, {label: 'Active', value: 'isActiveLabel'},];
-  _displayedColumnsFunction: { label: string; value: string, type?: string, format?: string }[] = [{
-    label: 'Active', value: 'active'
-  }, {label: 'ID', value: 'id'}, {label: 'Name', value: 'name'},];
-  selectAllChecked = false;
-  selectAllIndeterminate = false;
-  isSticky = false;
-  expandList = new Set<string>(['tab1', 'tab2', 'tab3', 'tab4', 'tab5']);
 
+  tblAttachedDocument = new MatTableDataSource();
+  tblUnitPrice = new MatTableDataSource();
+  expandList = new Set<string>(['tab1', 'tab2', 'tab3', 'tab4', 'tab5']);
+  formGroupFileUpload!: FormGroup;
+  curFile: any;
+  showDialogDeleteFile = false;
+
+  // private filesControl = new FormControl(null, );
   constructor() {
     super();
     this.formGroupDetail = this.fb.group({
@@ -154,6 +149,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       priceUnitInfo: [],
       iban: [],
     });
+    this.formGroupFileUpload = this.fb.group({
+      contractCategory: ['1'],
+      fileUpload: []
+    });
   }
 
   override async ngOnInit() {
@@ -161,17 +160,96 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       window.scrollTo(0, 0);
       await this.spinner.show();
       await Promise.all([
-        this.detail(this.id)
-      ]);
+        this.detail(this.id),
+        // this.loadListKhoanMucKhns(),
+        // this.loadListMaNghiepVu(),
+      ]).then(() => {
+        this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList);
+        this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.value.priceUnitInfo);
+      });
 
     } catch (e) {
       console.log(e);
     } finally {
       await this.spinner.hide();
+      console.log(this.tblAttachedDocument,'tblAttachedDocument')
     }
   }
 
   goBack() {
     this.backStep.emit();
+  }
+
+  async actionUpload() {
+    if (this.formGroupFileUpload.value.contractCategory) {
+      try {
+        let formUpload = new FormData();
+        let fileUpload = this.formGroupFileUpload.value.fileUpload[0];
+        let optionBlob = new Blob([this.formGroupFileUpload.value.contractCategory], {type: 'application/json'});
+        let bizDocIdBlob = new Blob([this.formGroupDetail.value.bizDocId], {type: 'application/json'});
+        formUpload.append('file', fileUpload, fileUpload.name);
+        formUpload.append('option', optionBlob);
+        formUpload.append('bizDocId', bizDocIdBlob);
+        await this.baseService.uploadFile(formUpload);
+        this.tblAttachedDocument.data = [...this.tblAttachedDocument.data, {
+          documentType: '',
+          fileName: fileUpload.name,
+          isManual: true
+        }];
+      } catch (e) {
+        console.log(e);
+        this.baseService.showError(MESSAGE.ERROR);
+      }
+    }
+  }
+
+  async addUnitPrice() {
+    this.tblUnitPrice.data = [...this.tblUnitPrice.data, {}];
+  }
+
+  async editUnitPrice(index: any) {
+  }
+
+  async saveUnitPrice(index: any) {
+  }
+
+  async deleteUnitPrice(index: any) {
+  }
+
+  async cancelUnitPrice(index: any) {
+  }
+
+  async confirmDeleteFile(element: any) {
+    this.curFile = element;
+    this.showDialogDeleteFile = true;
+  }
+
+  async deleteFile() {
+    await this.baseService.deleteFile(this.curFile.fileName, this.id);
+    this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter((item: any) => item.fileName !== this.curFile.fileName);
+    this.showDialogDeleteFile = false;
+  }
+
+  async closeConfirmDeleteFile() {
+    this.showDialogDeleteFile = false;
+  }
+
+  listMaNghiepVu = [];
+  listKhoanMucKhns = [];
+
+  async loadListMaNghiepVu() {
+    await this.baseService.listMaNghiepVu().then(res => {
+      if (res.data) {
+        this.listMaNghiepVu = res.data;
+      }
+    });
+  }
+
+  async loadListKhoanMucKhns() {
+    await this.baseService.listKhoanMucKhns().then(res => {
+      if (res.data) {
+        this.listKhoanMucKhns = res.data;
+      }
+    });
   }
 }

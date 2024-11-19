@@ -1,9 +1,12 @@
 ::ng-deep {
+    .system-name{
+        color: var(--blackColor);
+    }
     .header-area {
         padding: 13px 25px;
         position: fixed;
-        left: 285px;
-        right: 25px;
+        left: 260px;//285px;
+        right: 10px;//25px;
         z-index: 5;
         top: 0;
 
@@ -201,7 +204,7 @@
             }
         }
         &.active, &.hide-sidebar {
-            left: 85px;
+            left: 60px;//85px;
         }
         &.hide-sidebar {
             .header-left-side {
@@ -1249,7 +1252,7 @@
             left: 265px;
 
             &.active, &.hide-sidebar {
-                left: 85px;
+                left: 60px;//85px;
             }
             &.right-sidebar {
                 left: 25px;

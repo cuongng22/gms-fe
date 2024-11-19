@@ -15,9 +15,9 @@ export class Constant {
 export class MESSAGE {
   static ERROR = $localize`:@@error:Something wrong`;
   static ERROR_CONNECT = $localize`:@@errorConnect:Unable to connect to server`;
-  static CREATE_SUCCESS = $localize`:@@createSuccess:Create success`;
+  static CREATE_SUCCESS = $localize`:@@createSuccess:Created successfully`;
   static CREATE_FAIL = $localize`:@@createFail:Create fail`;
-  static UPDATE_SUCCESS = $localize`:@@updateSuccess:Update success`;
+  static UPDATE_SUCCESS = $localize`:@@updateSuccess:Updated successfully`;
   static UPDATE_FAIL = $localize`:@@updateFail:Update fail`;
   static DATA_EMPTY = $localize`:@@noDataFound:No data found`;
   static DELETE_SUCCESS = $localize`:@@deleteSuccess:Delete success`;
@@ -26,8 +26,9 @@ export class MESSAGE {
   static REJECT_SUCCESS = $localize`:@@rejectSuccess:Reject success`;
   static REJECT_FAIL = $localize`:@@rejectFail:Reject fail`;
   static REQUIRED = $localize`:@@required:is required`;
-  static FORMAT_INVALID = $localize`:@@formatInvalid:is not in correct format.`;
-  static MIN_LENGTH_INVALID = $localize`:@@minLengthInvalid:must be greater than %d characters`;
+  static FORMAT_INVALID = $localize`:@@formatInvalid:invalid format.`;
+  static MIN_LENGTH_INVALID = $localize`:@@minLengthInvalid:requires a minimum of %d characters`;
+  static MAX_LENGTH_INVALID = $localize`:@@maxLengthInvalid:must be less than %d characters`;
   static PASSWORD_FORMAT_INVALID = $localize`:@@passwordFormat:must include number, letter and special character`;
   static ALREADY_EXISTS = $localize`:@@alreadyExists:already exists`;
   static ACTIVE = $localize`:@@active:Active`;
@@ -44,6 +45,8 @@ export class MESSAGE {
 
   static LABEL_ESTIMATED_TIME = $localize`:@@estimatedTime:Estimated Time`;
   static MESSAGE_ESTIMATED_TIME_REQUIRED = $localize`:@@estimatedTimeRequired:Estimated Time is required`;
+  
+  static PHONE_NUMBER_INVALID = $localize`:@@phoneNumberFormatInvalid:Phone number must be numeric and the characters + ( )`;
 }
 
 export class LOCALE {

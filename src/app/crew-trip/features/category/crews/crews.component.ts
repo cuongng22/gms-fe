@@ -23,6 +23,7 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { MatDialog } from '@angular/material/dialog';
 import { CrewsDetailComponent } from './crews-detail/crews-detail.component';
 import { Validators } from 'ngx-editor';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 
 @Component({
   selector: 'app-crews',
@@ -30,7 +31,7 @@ import { Validators } from 'ngx-editor';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule],
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, NgxTrimDirectiveModule],
   templateUrl: './crews.component.html',
   styleUrl: './crews.component.scss'
 })
@@ -84,10 +85,14 @@ export class CrewsComponent extends CommonComponent implements OnInit {
 
   // detail or edit, create car rental
   async crewsDetail(crewId?: any) {
-    const response = await this.baseService.detail(crewId);
-    console.log(response);
+    let crews = {};
+    if (!!crewId) {
+      const response = await this.baseService.detail(crewId);
+      crews = { ...response.data }
+    }
+
     const dialogRef = this.dialog.open(CrewsDetailComponent, {
-      data: { crews: { ...response.data } },
+      data: { crews },
       disableClose: true
     });
 

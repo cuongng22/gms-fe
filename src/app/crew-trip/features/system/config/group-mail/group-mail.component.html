@@ -26,7 +26,7 @@
           <div class="row mb-3">
             <div class="col" sizeInput="md">
               <mat-form-field class="mb-1">
-                <mat-label i18n="@@keywords">Keywords</mat-label>
+                <mat-label i18n="@@keyword">Keyword</mat-label>
                 <input matInput formControlName="s">
               </mat-form-field>
             </div>
@@ -69,7 +69,7 @@
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
         <ng-container matColumnDef="stt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
-          <td mat-cell *matCellDef="let element; let i = dataIndex">{{ (pageIndex * pageSize) + i + 1 }}</td>
+          <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
         </ng-container>
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
         <ng-container matColumnDef="{{innerColumn.value}}">
@@ -81,10 +81,10 @@
         }
         <ng-container matColumnDef="action" stickyEnd>
           <th mat-header-cell *matHeaderCellDef i18n="@@action">
-            Action
+            Actions
           </th>
           <td mat-cell *matCellDef="let element">
-            <div class="action-buttons d-flex align-items-center">
+            <div class="action-buttons d-flex align-items-center justify-content-end">
               <button type="button" mat-button (click)="grMailDetail(element.id,'view')">
                 <i class="material-symbols-outlined" title="Edit" i18n-title="@@edit">
                   visibility

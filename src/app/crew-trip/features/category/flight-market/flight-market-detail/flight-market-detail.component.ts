@@ -28,6 +28,7 @@ import { CarRentalDetailComponent } from '../car-rental-detail/car-rental-detail
 import { CreateFlightMarketDTO, CreateHotel, CreateMarketFlight, CreateVehiclePartner, InsertHotelAndCar, UpdateFlightMarket, UpdateHotelAndCar } from './flight-market.model';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { debounceTime, Subject } from 'rxjs';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 
 @Component({
   selector: 'app-flight-market-detail',
@@ -35,7 +36,7 @@ import { debounceTime, Subject } from 'rxjs';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule],
+    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, NgxTrimDirectiveModule],
   templateUrl: './flight-market-detail.component.html',
   styleUrl: './flight-market-detail.component.scss'
 })
@@ -357,4 +358,17 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       this.baseService.showError(MESSAGE.DELETE_FAIL);
     }
   }
+
+  getSelectedCostCategoryDetail(): string {
+    const selected = this.formGroupDetail.get('serviceFeeCode')?.value || [];
+    if (Array.isArray(selected)) {
+      return selected
+        .map((code: any) => this.costCategorys.find(costCategory => costCategory.code === code)?.name)
+        .filter((name: any) => name)
+        .join('; ') || 'Select roles';
+    }
+    return 'Select roles';
+  }
+
+  
 }

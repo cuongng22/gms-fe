@@ -5,21 +5,22 @@
   [class.card-with-box-shadow]="themeService.isCardWithBoxShadow()">
   <div class="logo bg-white-static">
     <a routerLink="/" class="d-flex align-items-center position-relative">
-      <img src="images/vietnam-airline-logo.svg" alt="logo-icon">
+      <img src="images/logo_vna8.png" alt="logo-icon">
+      <span>VNA CREW TRIP</span>
     </a>
   </div>
-  <div (click)="toggle()" class="burger-menu transition" [ngClass]="{'active': isSidebarToggled}">
+  <!-- <div (click)="toggle()" class="burger-menu transition" [ngClass]="{'active': isSidebarToggled}">
     <span class="top-bar transition d-block bg-black"></span>
     <span class="middle-bar transition d-block bg-black"></span>
     <span class="bottom-bar transition d-block bg-black"></span>
-  </div>
+  </div> -->
   <ng-scrollbar visibility="hover">
     <div class="sidebar-inner">
       <div class="sidebar-menu">
         <mat-accordion [multi]="true">
           @for (menu1 of menu; track $index) {
           <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
-            (closed)="panelOpenState.set(false)"  [expanded]="true" [class.active]="isActive(menu1.rootPath)">
+            (closed)="panelOpenState.set(false)"  [expanded]="isActive(menu1.rootPath)" [class.active]="isActive(menu1.rootPath)">
             <!-- Menu -->
             <mat-expansion-panel-header>
               <mat-panel-title>
@@ -45,7 +46,7 @@
                 @if (subMenu1.menu) {
                   @for (menu2 of subMenu1.menu; track $index) {
                     <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
-                      (closed)="panelOpenState.set(false)">
+                      (closed)="panelOpenState.set(false)"  [expanded]="isActive(menu2.rootPath)" >
                       <!-- Menu -->
                       <mat-expansion-panel-header>
                         <mat-panel-title>

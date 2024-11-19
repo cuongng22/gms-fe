@@ -89,18 +89,20 @@ export class CommonComponent implements OnInit, AfterViewInit {
   onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    this.search();
+    this.search(null, true);
   }
 
-  async search<T>(body?: any) {
+  async search<T>(body?: any, isNextPage?: boolean) {
     try {
       await this.spinner.show();
+      if (!isNextPage) {
+        this.pageIndex = Constant.PAGE;
+      }
       const res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,
         limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
       });
-      console.log(res);
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;
@@ -114,7 +116,6 @@ export class CommonComponent implements OnInit, AfterViewInit {
         return res;
       }
     } catch (e: any) {
-      console.log(e);
       this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
@@ -125,10 +126,8 @@ export class CommonComponent implements OnInit, AfterViewInit {
     try {
       await this.spinner.show();
       const res = await this.baseService.detail(id);
-      console.log(res);
       this.formGroupDetail.patchValue(res?.data || res);
     } catch (e: any) {
-      console.log(e);
       this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
@@ -149,14 +148,13 @@ export class CommonComponent implements OnInit, AfterViewInit {
       } else {
         res = await this.baseService.create(this.formGroupDetail.value);
       }
-      console.log(res);
       await this.search();
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
       await this.closeDetail();
       return res;
     } catch (e: any) {
-      console.log('eeeeeeeeeeeeeeeeeee:', e);
       this.baseService.showError(e.error?.data ?? JSON.stringify(e.error) ?? MESSAGE.ERROR);
+      return e;
     } finally {
       await this.spinner.hide();
     }
@@ -171,7 +169,6 @@ export class CommonComponent implements OnInit, AfterViewInit {
       await this.search();
       return res;
     } catch (e: any) {
-      console.log(e);
       this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
@@ -207,7 +204,6 @@ export class CommonComponent implements OnInit, AfterViewInit {
     this.formGroupDetail.updateValueAndValidity();
 
     this.toggleDialogCreate();
-    console.log(this.formGroupDetail.value);
   }
 
   async showConfirmDelete(id: any) {
@@ -222,7 +218,6 @@ export class CommonComponent implements OnInit, AfterViewInit {
     this.formGroupDetail.updateValueAndValidity();
 
     this.toggleDialogDelete();
-    console.log(this.formGroupDetail.value);
   }
 
   downloadFile(blob: Blob, filename: string) {
@@ -233,10 +228,8 @@ export class CommonComponent implements OnInit, AfterViewInit {
     try {
       await this.spinner.show();
       const res = await this.baseService.exportData({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) });
-      console.log(res);
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
-      console.log(e);
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
@@ -250,10 +243,8 @@ export class CommonComponent implements OnInit, AfterViewInit {
         'export': true
       });
       const res = await this.baseService.exportDataOptions({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) }, sourcePath);
-      console.log(res);
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
-      console.log(e);
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
@@ -264,10 +255,8 @@ export class CommonComponent implements OnInit, AfterViewInit {
     try {
       await this.spinner.show();
       const res = await this.baseService.exportData(body, sourcePath ?? 'download-template');
-      console.log(res);
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
-      console.log(e);
       this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();

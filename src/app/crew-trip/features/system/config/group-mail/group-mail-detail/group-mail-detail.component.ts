@@ -47,7 +47,7 @@ interface EmailObj {
     MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatCheckbox
+    MatTableModule, MatPaginatorModule
   ],
   templateUrl: './group-mail-detail.component.html',
   styleUrl: './group-mail-detail.component.scss'
@@ -59,7 +59,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit{
   flightMarketSv = inject(FlightMarketService);
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   markets: any[] = [];
-  filteredOptionsMarket: any[];
+  filteredOptionsMarket = model<any[]>([]);
   override displayedColumns: string[] = ['email', 'actions'];
   emailList: EmailObj[] = [];
   emailForm: FormGroup;
@@ -94,14 +94,15 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit{
     }
     this.flightMarketSv.search({ option: 1 }).then(res => {
       this.markets = res.data;
+
     });
   }
   filterMarket(): void {
     const filterValue = this.marketCode.nativeElement.value.toLowerCase();
     if (!filterValue) {
-      this.filteredOptionsMarket = this.markets;
+      this.filteredOptionsMarket.set(this.markets);
     }
-    this.filteredOptionsMarket = this.markets.filter(market => market.toLowerCase().includes(filterValue));
+    this.filteredOptionsMarket.set(this.markets.filter(market => market?.toLowerCase().includes(filterValue)));
   }
 
   close(): void {

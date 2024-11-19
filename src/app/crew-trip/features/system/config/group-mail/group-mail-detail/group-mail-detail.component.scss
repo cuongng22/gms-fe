@@ -8,3 +8,8 @@
   color: #757575; /* Slightly dim text */
   border: 1px solid #ccc; /* Subtle border */
 }
+.table-container {
+  max-height: 400px; /* Chiều cao tối đa */
+  overflow-y: auto; /* Bật cuộn dọc */
+  border: 1px solid #ccc; /* Tùy chỉnh đường viền nếu cần */
+}

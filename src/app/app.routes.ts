@@ -28,10 +28,12 @@ import { FiveYearPlanComponent } from "src/app/crew-trip/features/plan/productio
 import { EstAnnualProductionComponent } from "src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.component";
 import { AnnualProductionComponent } from "src/app/crew-trip/features/plan/production/annual-production/annual-production.component";
 import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.component';
+import { InforPlaneComponent } from './crew-trip/features/system/information-plane/infor-plane/infor-plane.component';
 import { BudgetProcurementComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement.component';
 import { BudgetProcurementListComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-list/budget-procurement-list.component';
 import { BudgetProcurementSummaryComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary.component';
 import { BudgetProcurementSummaryDetailComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary-detail/budget-procurement-summary-detail.component';
+
 
 
 export const routes: Routes = [
@@ -55,9 +57,12 @@ export const routes: Routes = [
         ],
       },
       {
-        path: 'config', children: [
+        path: 'system/config', children: [
           { path: 'group-mail', component: GroupMailComponent },
+          { path: 'information-plane', component: InforPlaneComponent },
         ],
+
+
       },
       {
         path: 'plan', children: [
@@ -83,13 +88,12 @@ export const routes: Routes = [
           { path: 'act-rate', component: ActRateComponent },
           { path: 'hotel', component: HotelComponent },
           { path: 'nation', component: NationComponent },
-          { path: 'service-fee', component: ServiceFeeComponent },
+          { path: 'cost', component: ServiceFeeComponent },
           { path: 'crews', component: CrewsComponent },
           { path: 'vehicle', component: VehicleComponent },
           { path: 'contract', component: ContractComponent },
           { path: 'hotel', component: HotelComponent },
           { path: 'nation', component: NationComponent },
-          { path: 'service-fee', component: ServiceFeeComponent },
           {
             path: 'crews', component: CrewsComponent,
             children: [

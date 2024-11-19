@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 
 @Injectable({
   providedIn: 'root',
@@ -8,7 +9,11 @@ export class StorageService {
 
   set(key: string, value: any) {
     if (value) {
-      localStorage.setItem(key, JSON.stringify(value));
+      if(key === STORAGE_KEY.ACCESS_TOKEN){
+        localStorage.setItem(key, value);
+      }else{
+        localStorage.setItem(key, JSON.stringify(value));
+      }
     } else {
       localStorage.setItem(key, value);
     }
@@ -19,7 +24,6 @@ export class StorageService {
     if (item) {
       return JSON.parse(item);
     }
-
     return item;
   }
 
