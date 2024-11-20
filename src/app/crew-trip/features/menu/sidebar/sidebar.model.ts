@@ -221,7 +221,7 @@ export const menu: Menu[] = [
         menu: [
           {
             title: $localize`:@@rolesAccounts:Roles & Accounts`,
-            rootPath: 'system/admin',
+            rootPath: '',
             subMenu: [
               {
                 path: 'system/admin/users', title: $localize`:@@account:Account`, icon: 'ri-group-line'
