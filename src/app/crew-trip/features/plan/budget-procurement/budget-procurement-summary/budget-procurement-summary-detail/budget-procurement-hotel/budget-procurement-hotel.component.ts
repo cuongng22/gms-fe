@@ -36,6 +36,8 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
   headerRowDef2: string[] = [];
   rowDef: string[] = [];
 
+  
+
 
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) { }
