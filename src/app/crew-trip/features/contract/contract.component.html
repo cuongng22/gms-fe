@@ -159,7 +159,8 @@
           </ng-container>
           <ng-container matColumnDef="appendixCount" stickyEnd>
             <th *matHeaderCellDef mat-header-cell mat-sort-header>Appendix</th>
-            <td *matCellDef="let element;let i = dataIndex" mat-cell class="text-end">
+            <td *matCellDef="let element;let i = dataIndex" [class]="{'status-color-1':element.optionOutput == 1,'status-color-2':element.optionOutput == 2,'status-color-3':element.optionOutput == 3}" class="text-end"
+                mat-cell>
               <a (click)="showAnnex(i)" [matMenuTriggerFor]="listAnnex"
                  style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                 {{ element.appendixCount }}
@@ -201,7 +202,9 @@
             <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
               Action
             </th>
-            <td *matCellDef="let element;let i = index" mat-cell>
+            <td
+              *matCellDef="let element;let i = index"
+              [class]="{'status-color-1':element.optionOutput == 1,'status-color-2':element.optionOutput == 2,'status-color-3':element.optionOutput == 3}" mat-cell>
               @if (viewType == 'HD') {
               <div class="action-buttons d-flex align-items-center justify-content-end">
                 <a (click)="showListAnnex(element.bizDocId)"
@@ -239,7 +242,9 @@
             </td>
           </ng-container>
           <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
-          <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
+          <tr
+            *matRowDef="let row; columns: displayedColumns;"
+            [class]="{'status-color-1':row.optionOutput == 1,'status-color-2':row.optionOutput == 2,'status-color-3':row.optionOutput == 3}" mat-row></tr>
           <tr *matNoDataRow class="mat-row">
             <td [attr.colspan]="displayedColumns.length" class="mat-cell border-none text-center"><span
               i18n>No data!</span></td>
@@ -254,6 +259,18 @@
                      [showFirstLastButtons]="showFirstLastButtons"
                      aria-label="Select page">
       </mat-paginator>
+      <div class="caption-panel">
+        <div>Status:</div>
+        <div class="caption-item">
+          <div class="status-color status-color-1"></div>
+          <span i18n>Expiring contract</span></div>
+        <div class="caption-item">
+          <div class="status-color status-color-2"></div>
+          <span i18n>Expired contract</span></div>
+        <div class="caption-item">
+          <div class="status-color status-color-3"></div>
+          <span i18n>Contract to be renewed</span></div>
+      </div>
     </mat-card-content>
   </mat-card>
 </ng-container>

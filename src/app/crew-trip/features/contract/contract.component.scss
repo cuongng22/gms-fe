@@ -137,9 +137,10 @@
       }
     }
   }
+
   .mat-mdc-menu-panel {
-      max-width: 100%;
-    }
+    max-width: 100%;
+  }
 }
 
 /* Max width 767px */
@@ -279,6 +280,15 @@
       }
     }
   }
+  //.mat-mdc-table {
+  //  &.mdc-data-table__table {
+  //    .mdc-data-table__content {
+  //      .mat-mdc-row {
+  //        // Thêm các thuộc tính CSS mong muốn ở đây
+  //      }
+  //    }
+  //  }
+  //}
 
 }
 
@@ -303,4 +313,36 @@
   --alert-bg: red !important;
   --alert-border-color: red !important;
   --alert-link-color: red !important;
+}
+
+.status-color-1 {
+  background-color: #fde9d9 !important;
+}
+
+.status-color-2 {
+  background-color: #e4dfec !important;
+}
+
+.status-color-3 {
+  background-color: #daeef3 !important;
+}
+
+.caption-panel {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 50px;
+  background-color: #f6f7f9;
+
+  .caption-item {
+    display: flex;
+    align-items: center;
+    margin-left: 20px;
+
+    .status-color {
+      width: 70px;
+      height: 25px;
+      margin-right: 10px;
+    }
+  }
 }
