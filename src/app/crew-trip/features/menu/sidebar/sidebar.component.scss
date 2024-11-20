@@ -10,7 +10,7 @@
 
     .logo {
       border-bottom: 1px solid var(--borderColor);
-      padding: 10px;//22px 25px 19px;
+      padding: 10px; //22px 25px 19px;
       position: absolute;
       z-index: 2;
       right: 0;
@@ -23,15 +23,16 @@
         align-items: center;
         justify-content: space-evenly;
         align-content: center;
-    
+
         span {
           color: var(--vnaXanhColor);
           font-weight: 550;;
           // margin-left: 8px;
-          font-size: 20px;//24px;
+          font-size: 20px; //24px;
           // top: 1px;
         }
-        img{
+
+        img {
           height: 50px;
         }
       }
@@ -796,7 +797,7 @@
 
                 &.mat-expanded {
                   color: var(--warningColor);
-                  background-color: #d3a023;
+                  //background-color: red;
 
                   i {
                     color: var(--warningColor);
@@ -840,7 +841,7 @@
                   }
 
                   &.mat-expanded {
-                    background-color: #d3a023 !important;
+                    //background-color: #d3a023 !important;
                   }
 
                   &:hover {
@@ -927,9 +928,10 @@
 
       .sidebar-inner {
         .sidebar-menu {
-          .sub-title{
+          .sub-title {
             color: var(--whiteColor);
           }
+
           .mat-accordion {
             .mat-expansion-panel {
               color: var(--warningColor);
@@ -989,7 +991,8 @@
                   }
 
                   &.mat-expanded {
-                    background-color: #d3a023 !important;
+                    background-color: #2a6886 !important;
+                    color: white;
                   }
 
                   &:hover {
@@ -1548,8 +1551,8 @@
 
         .logo {
           padding: {
-            left: 0px;//12px;
-            right: 10px;//12px;
+            left: 0px; //12px;
+            right: 10px; //12px;
           };
 
           a {
@@ -1674,7 +1677,7 @@
                     padding: {
                       bottom: 8px;
                       right: 30px;
-                      left: 10px;//41px;
+                      left: 10px; //41px;
                       top: 8px;
                     };
 
@@ -1807,9 +1810,11 @@
   }
 
 }
+
 .uppercase-text {
   text-transform: uppercase;
 }
+
 /* Min width 1600px */
 @media only screen and (min-width: 1600px) {
 }

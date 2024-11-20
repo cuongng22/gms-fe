@@ -180,8 +180,8 @@ export const menu: Menu[] = [
                 icon: 'ri-folder-chart-line'
               },
               {
-                path: 'plan/est-plan/budget-procurement', 
-                title: $localize`:@@budgetProcurementPlan:Budget & Procurement plan`, 
+                path: 'plan/est-plan/budget-procurement',
+                title: $localize`:@@budgetProcurementPlan:Budget & Procurement plan`,
                 icon: 'ri-folder-chart-line'
               },
               {
@@ -238,7 +238,7 @@ export const menu: Menu[] = [
           },
           {
             title: $localize`:@@config:Config`,
-            rootPath: 'system/config',
+            rootPath: '',
             subMenu: [
               {
                 path: 'system/config/group-mail', title: $localize`:@@groupsMail:Groups mail`, icon: 'ri-mail-add-line'
@@ -262,7 +262,7 @@ export const menu: Menu[] = [
           },
           {
             title: $localize`:@@historyLog:History Log`,
-            rootPath: 'system/history',
+            rootPath: '',
             subMenu: [
               {
                 path: 'system/history/login', title: $localize`:@@loginHistory:Login History`, icon: 'ri-mail-add-line'
