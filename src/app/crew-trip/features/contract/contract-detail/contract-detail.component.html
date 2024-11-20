@@ -22,7 +22,7 @@
     </li>
   </ol>
 </div>
-<div class="w-100 text-end mb-10" (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'">
+<div (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'" class="w-100 text-end mb-10">
   <button (click)="goBack()" class="step-2-menu-button btn-slot-3" extended i18n mat-fab>
     <i class="material-symbols-outlined">
       undo
@@ -727,6 +727,12 @@
           </i>
           Add
         </button>
+        <button (click)="test()" class="add-btn right-0 mb-10" i18n mat-button type="button">
+          <i class="material-symbols-outlined">
+            add
+          </i>
+          TEST
+        </button>
       </div>
       <table [dataSource]="tblUnitPrice" class="table-light" mat-table>
         <ng-container matColumnDef="stt">
@@ -736,11 +742,17 @@
         </ng-container>
         <ng-container matColumnDef="type">
           <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Service Code</th>
-          <td *matCellDef="let element" mat-cell>
-            @if (!!element.isEditing) {
-            {{ element.serviceCode }}
+          <td (click)="editCellUP(element,'type')" *matCellDef="let element" mat-cell>
+            @if (checkCellUP(element,'type')) {
+
+            <div sizeInput="xs">
+                        <mat-form-field
+                            class="edit-inline-table">
+                                       <input [(ngModel)]="element.serviceCode" i18n-placeholder matInput required (clickOutside)="readCellUP(element,'type')">
+                        </mat-form-field>
+                    </div>
             } @else {
-            <input [(ngModel)]="element.serviceCode" i18n-placeholder matInput required>
+            {{ element.serviceCode }}
             }
           </td>
         </ng-container>
