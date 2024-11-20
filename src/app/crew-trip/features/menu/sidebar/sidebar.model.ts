@@ -180,8 +180,8 @@ export const menu: Menu[] = [
                 icon: 'ri-folder-chart-line'
               },
               {
-                path: 'plan/est-plan/planned',
-                title: $localize`:@@planedAnnualProduction:Budget & Procurement plan`,
+                path: 'plan/est-plan/budget-procurement', 
+                title: $localize`:@@budgetProcurementPlan:Budget & Procurement plan`, 
                 icon: 'ri-folder-chart-line'
               },
               {

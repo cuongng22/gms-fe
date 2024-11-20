@@ -18,6 +18,15 @@
         height: 2.8rem;
     }
 
+    .size-input-xs .mat-mdc-text-field-wrapper {
+        height: 39px !important;
+    }
+
+    .size-input-xs .mat-mdc-form-field-flex {
+        align-items: center;
+        height: 39px;
+    }
+
     .mb-1 {
         margin-bottom: .25rem;
     }
