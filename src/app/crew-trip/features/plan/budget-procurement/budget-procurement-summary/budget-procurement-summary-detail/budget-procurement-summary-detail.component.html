@@ -1,0 +1,170 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-between mt-2">
+        <button type="button" class="btn btn-outline-secondary mr-20" i18n="@@back"
+            [routerLink]="['/plan/estimate-plan/budget-procurement']">
+            <i class="material-symbols-outlined">
+                undo
+            </i>
+            Back
+        </button>
+        <h5 class="mb-0" i18n="@@planForAirport">
+            Plan for Airport ...
+        </h5>
+    </div>
+
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@plan">
+            Plan
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@estimatedPlan">
+            Estimated/Plan
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@budgetProcurementPlan">
+            Budget & Procurement plan
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@summaryPlan">
+            Plan Summary
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@planDetails">
+            Plan Details
+        </li>
+    </ol>
+</div>
+
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="mb-10">
+        <mat-card-title>
+            <h5>I. <span i18n="@@generalInformation">General Information</span></h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button color="primary" type="button" class="add-btn">
+                <i class="material-symbols-outlined">
+                    save
+                </i>
+                <span i18n="@@save">Save</span>
+            </button>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <app-budget-procurement-general></app-budget-procurement-general>
+    </mat-card-content>
+</mat-card>
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+        <mat-accordion multi>
+            <mat-expansion-panel class="remove-mat-expansion-panel-padding" (opened)="panelCalBasisOpenState.set(true)"
+                (closed)="panelCalBasisOpenState.set(false)" [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h5>II. <span i18n="@@generalInformation">Calculation basis</span></h5>
+                    </mat-panel-title>
+                    <!-- @if(panelCalBasisOpenState()){
+                    <mat-panel-title class="d-flex justify-content-end">
+                        <button mat-button color="primary" type="button" class="add-btn">
+                            <i class="material-symbols-outlined">
+                                save
+                            </i>
+                            <span i18n="@@save">Save</span>
+                        </button>
+                    </mat-panel-title>
+                    } -->
+                </mat-expansion-panel-header>
+                <div class="d-flex justify-content-end">
+                    <button mat-button color="primary" type="button" class="add-btn">
+                        <i class="material-symbols-outlined">
+                            save
+                        </i>
+                        <span i18n="@@save">Save</span>
+                    </button>
+                </div>
+                <mat-accordion multi>
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6>2.1 <span i18n="@@flightRateOverTheYears">Flight Rate Over the Years</span></h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="ml-15 mr-15">
+                            <app-budget-procurement-flight-rate />
+                        </div>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6>2.2 <span i18n="@@numberOfFlightsByPeriod">Number of Flights by Period</span></h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="ml-15 mr-15">
+                            <app-budget-procurement-flight-period />
+                        </div>
+                    </mat-expansion-panel>
+
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6>2.3
+                                    <span i18n="@@flightFrequencyStatisticsByNumberOfOvernightStays">
+                                        Flight Frequency Statistics by Number of Overnight Stays (Weekly)
+                                    </span>
+                                </h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="ml-15 mr-15">
+                            <div class="d-flex justify-content-end">
+                                <button mat-button class="mini-vna-btn">
+                                    <i class="material-symbols-outlined">
+                                        add
+                                    </i>
+                                </button>
+                            </div>
+                            <app-budget-procurement-flight-overnight />
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </mat-expansion-panel>
+        </mat-accordion>
+
+        <mat-accordion multi>
+            <mat-expansion-panel class="remove-mat-expansion-panel-padding" (opened)="panelCalBasisOpenState.set(true)"
+                (closed)="panelCalBasisOpenState.set(false)" [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h5>III. <span i18n="@@budgetPlan">Budget Plan</span></h5>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-accordion multi>
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6>3.1
+                                    <span i18n="@@flightFrequencyStatisticsByNumberOfOvernightStays">
+                                        Flight Frequency Statistics by Number of Overnight Stays (Weekly)
+                                    </span>
+                                </h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="ml-15 mr-15">
+                            <app-budget-procurement-hotel />
+                        </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6>3.2
+                                    <span i18n="@@procurementPlanForCarRental">
+                                        Procurement Plan for Car Rental
+                                    </span>
+                                </h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div class="ml-15 mr-15">
+                            <app-budget-procurement-car-rental />
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-card-content>
+</mat-card>

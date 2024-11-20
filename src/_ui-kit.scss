@@ -30,6 +30,11 @@
   border: none !important;
 }
 
+.edit-inline-table.mat-mdc-form-field .mdc-text-field{
+  border-radius: 0 !important;
+  border: none !important;
+}
+
 
 button.btn {
   display: flex;
@@ -180,6 +185,37 @@ button.btn {
   }
 }
 
+.success-btn {
+  height: auto !important;
+  min-width: 100px !important; //auto !important;
+  font-weight: 500 !important;
+  padding: 8px 13px !important;
+  border-radius: 7px !important;
+  display: inline-block !important;
+  color: var(--whiteColor) !important;
+  border: 1px solid #28a745 !important;
+  background-color: #28a745 !important;
+
+  &:hover {
+    transition: 0.3s !important;
+    color: #28a745 !important;
+    border: 1px solid #28a745 !important;
+    background-color: var(--lightColor) !important;
+  }
+
+  .mdc-button__label {
+    display: inline-block !important;
+    padding-left: 22px !important;
+
+    i {
+      top: 50% !important;
+      left: -4px !important;
+      font-size: 22px !important;
+      position: absolute !important;
+      transform: translateY(-50%) !important;
+    }
+  }
+}
 
 .min-with-100 {
   min-width: 100px !important;
@@ -220,12 +256,16 @@ h1,
   font: {
     size: 30px;
     weight: 700;
-  };
+  }
+
+  ;
 
   margin: {
     top: 0;
     bottom: 10px;
-  };
+  }
+
+  ;
 }
 
 .h2,
@@ -237,12 +277,16 @@ h2,
   font: {
     size: 27px;
     weight: 700;
-  };
+  }
+
+  ;
 
   margin: {
     top: 0;
     bottom: 10px;
-  };
+  }
+
+  ;
 }
 
 .h3,
@@ -254,12 +298,16 @@ h3,
   font: {
     size: 24px;
     weight: 700;
-  };
+  }
+
+  ;
 
   margin: {
     top: 0;
     bottom: 10px;
-  };
+  }
+
+  ;
 }
 
 .h4,
@@ -271,12 +319,16 @@ h4,
   font: {
     size: 21px;
     weight: 700;
-  };
+  }
+
+  ;
 
   margin: {
     top: 0;
     bottom: 10px;
-  };
+  }
+
+  ;
 }
 
 .h5,
@@ -288,12 +340,16 @@ h5,
   font: {
     size: 18px;
     weight: 700;
-  };
+  }
+
+  ;
 
   margin: {
     top: 0;
     bottom: 10px;
-  };
+  }
+
+  ;
 }
 
 .h6,
@@ -305,12 +361,16 @@ h6,
   font: {
     size: 15px;
     weight: 700;
-  };
+  }
+
+  ;
 
   margin: {
     top: 0;
     bottom: 10px;
-  };
+  }
+
+  ;
 }
 
 // Input
@@ -327,7 +387,9 @@ input {
   font: {
     size: var(--fontSize);
     family: var(--fontFamily);
-  };
+  }
+
+  ;
 
   &::placeholder {
     color: var(--bodyColor);
@@ -524,7 +586,9 @@ input {
                 font: {
                   size: 18px;
                   family: remixicon;
-                };
+                }
+
+                ;
               }
             }
 
@@ -745,7 +809,9 @@ input {
         font: {
           size: 16px;
           weight: 500;
-        };
+        }
+
+        ;
 
         &.mat-warn {
           color: var(--whiteColor);
@@ -804,7 +870,9 @@ input {
       margin: {
         left: -25px;
         right: -25px;
-      };
+      }
+
+      ;
 
       .mat-mdc-table {
         &.mdc-data-table__table {
@@ -851,7 +919,9 @@ input {
                   left: 25px;
                   right: 25px;
                   background: rgb(0 0 0 / 7%);
-                };
+                }
+
+                ;
               }
             }
           }
@@ -866,7 +936,9 @@ input {
           left-width: 0;
           right-width: 0;
           bottom-width: 0;
-        };
+        }
+
+        ;
       }
     }
   }
@@ -933,7 +1005,9 @@ input {
                 padding: {
                   left: 47px;
                   right: 20px;
-                };
+                }
+
+                ;
               }
             }
 
@@ -1041,7 +1115,9 @@ input {
     font: {
       style: italic;
       size: 12px;
-    };
+    }
+
+    ;
   }
 
   .mat-mdc-form-field-text-prefix {
@@ -1064,7 +1140,9 @@ input {
       font: {
         family: var(--fontFamily);
         size: var(--fontSize);
-      };
+      }
+
+      ;
 
       .mat-mdc-header-cell {
         border: 0;
@@ -1110,7 +1188,9 @@ input {
       font: {
         family: var(--fontFamily);
         size: var(--fontSize);
-      };
+      }
+
+      ;
     }
 
     .mdc-data-table__content {
@@ -1428,7 +1508,9 @@ input {
           padding: {
             top: 0;
             bottom: 0;
-          };
+          }
+
+          ;
         }
       }
 
@@ -1902,7 +1984,9 @@ input {
     left: 1px solid var(--borderColor);
     right: 1px solid var(--borderColor);
     bottom: 1px solid var(--borderColor);
-  };
+  }
+
+  ;
 
   .mat-mdc-paginator-outer-container {
     display: block;
@@ -1942,7 +2026,9 @@ input {
         padding: {
           left: 0;
           right: 0;
-        };
+        }
+
+        ;
       }
 
       .mat-mdc-form-field {
@@ -1963,7 +2049,9 @@ input {
         padding: {
           top: 0;
           bottom: 0;
-        };
+        }
+
+        ;
       }
 
       .mat-mdc-paginator-page-size-value {
@@ -2034,7 +2122,9 @@ input {
       margin: {
         left: 3px;
         right: 3px;
-      };
+      }
+
+      ;
 
       .mat-mdc-button {
         padding: 0;
@@ -2165,7 +2255,9 @@ apx-chart {
     padding: {
       left: 12px;
       right: 12px;
-    };
+    }
+
+    ;
 
     &.apexcharts-active {
       padding-bottom: 0;
@@ -2198,7 +2290,9 @@ apx-chart {
         font: {
           size: 13px !important;
           weight: 600;
-        };
+        }
+
+        ;
       }
     }
 
@@ -2243,7 +2337,9 @@ apx-chart {
         weight: 600;
         size: 13px !important;
         family: var(--fontFamily) !important;
-      };
+      }
+
+      ;
     }
 
     &::before,
@@ -2311,7 +2407,9 @@ apx-chart {
   padding: {
     top: 5px !important;
     bottom: 5px !important;
-  };
+  }
+
+  ;
 
   .mat-mdc-option {
     height: auto;
@@ -2328,7 +2426,9 @@ apx-chart {
         family: var(--fontFamily);
         size: var(--fontSize);
         weight: 500;
-      };
+      }
+
+      ;
     }
 
     &:focus,
@@ -2384,14 +2484,25 @@ apx-chart {
 }
 
 // Breadcrumb
+.breadcrumb-item+.breadcrumb-item::before {
+  padding-right: 0 !important;
+}
+
+.breadcrumb-card {
+  .breadcrumb {
+    .breadcrumb-item {
+      font-size: 13px;
+    }
+  }
+}
 
 // Breadcrumb
-.breadcrumb-item + .breadcrumb-item::before {
+.breadcrumb-item+.breadcrumb-item::before {
   padding-right: 0 !important;
   padding-left: 0 !important;
 }
 
-.breadcrumb-item + .breadcrumb-item {
+.breadcrumb-item+.breadcrumb-item {
   padding-left: 0 !important;
 }
 
@@ -2403,7 +2514,9 @@ apx-chart {
       margin: {
         left: 13px;
         right: 13px;
-      };
+      }
+
+      ;
 
       a {
         color: var(--bodyColor);
@@ -2436,8 +2549,15 @@ apx-chart {
           size: 18px;
           weight: normal;
           family: remixicon;
-        };
+        }
+
+        ;
       }
+
+      &:first-child {
+        margin-left: 0;
+      }
+
 
       &:first-child {
         margin-left: 0;
@@ -2481,7 +2601,7 @@ apx-chart {
     color: var(--breadcrumb-item-active-color);
   }
 
-  & + .t-breadcrumb-item {
+  &+.t-breadcrumb-item {
     padding-left: var(--breadcrumb-item-padding-x);
 
     &::before {
@@ -2635,7 +2755,9 @@ apx-chart {
           margin: {
             left: 5px;
             top: 3px;
-          };
+          }
+
+          ;
         }
       }
 
@@ -2695,7 +2817,9 @@ apx-chart {
           padding: {
             left: 12px;
             right: 12px;
-          };
+          }
+
+          ;
         }
 
         .NgxEditor__Popup--Col {
@@ -2843,7 +2967,9 @@ apx-chart {
   overflow: {
     x: hidden;
     y: auto;
-  };
+  }
+
+  ;
 
   .popup-dialog {
     display: flex;
@@ -2856,7 +2982,9 @@ apx-chart {
     margin: {
       left: auto;
       right: auto;
-    };
+    }
+
+    ;
 
     .mat-mdc-card {
       .mat-mdc-card-header {
@@ -2868,7 +2996,9 @@ apx-chart {
           top: -25px;
           left: -25px;
           right: -25px;
-        };
+        }
+
+        ;
 
         .mat-mdc-card-header-text {
           .mat-mdc-card-subtitle {
@@ -2993,7 +3123,9 @@ apx-chart {
       margin: {
         top: 0;
         bottom: 0;
-      };
+      }
+
+      ;
 
       &:hover {
         color: var(--whiteColor);
@@ -3001,7 +3133,7 @@ apx-chart {
       }
     }
 
-    &.disabled + .owl-dots {
+    &.disabled+.owl-dots {
       margin-top: 15px;
     }
   }
@@ -3030,7 +3162,9 @@ apx-chart {
   .display-6 {
     font: {
       family: var(--fontFamily);
-    };
+    }
+
+    ;
   }
 
   &.mat-mdc-dialog-container-with-actions {
@@ -3038,7 +3172,7 @@ apx-chart {
       padding: 25px;
     }
 
-    .mat-mdc-dialog-title + .mat-mdc-dialog-content {
+    .mat-mdc-dialog-title+.mat-mdc-dialog-content {
       padding-top: 25px;
     }
   }
@@ -3075,7 +3209,7 @@ apx-chart {
   }
 }
 
-.ratio > * {
+.ratio>* {
   top: 0;
   left: 0;
   width: 100%;
@@ -3104,7 +3238,7 @@ apx-chart {
   .mat-mdc-radio-button {
     margin-right: 10px;
 
-    .mdc-form-field > label {
+    .mdc-form-field>label {
       padding-left: 0;
       margin-left: -2px;
     }
@@ -3117,7 +3251,7 @@ apx-chart {
 
 // Slide Toggle
 .mat-mdc-slide-toggle {
-  .mdc-form-field > label {
+  .mdc-form-field>label {
     padding-left: 10px;
   }
 }
@@ -3134,7 +3268,9 @@ apx-chart {
     padding: {
       left: 0;
       right: 12px;
-    };
+    }
+
+    ;
   }
 
   .mat-step-icon {
@@ -3170,7 +3306,9 @@ apx-chart {
       left: 0;
       top: 2px;
       right: 0;
-    };
+    }
+
+    ;
   }
 }
 
@@ -3219,7 +3357,9 @@ apx-chart {
     margin: {
       bottom: 0;
       top: 20px;
-    };
+    }
+
+    ;
   }
 }
 
@@ -3266,7 +3406,9 @@ apx-chart {
       margin: {
         top: 20px;
         bottom: 0;
-      };
+      }
+
+      ;
     }
   }
 }
@@ -3330,7 +3472,7 @@ blockquote {
 
 // Checkbox
 .mat-mdc-checkbox {
-  .mdc-form-field > label {
+  .mdc-form-field>label {
     padding-left: 0;
     margin-left: -2px;
   }
@@ -3603,7 +3745,9 @@ blockquote {
   font: {
     weight: 500;
     size: 12px;
-  };
+  }
+
+  ;
 
   &.pending {
     background-color: rgba(255, 193, 7, .15);
@@ -3948,7 +4092,9 @@ blockquote {
         margin: {
           left: -17px;
           right: -17px;
-        };
+        }
+
+        ;
 
         .mat-mdc-table {
           &.mdc-data-table__table {
@@ -3982,7 +4128,9 @@ blockquote {
                   padding: {
                     left: 17px;
                     right: 17px;
-                  };
+                  }
+
+                  ;
                 }
               }
             }
@@ -4023,7 +4171,9 @@ blockquote {
                   padding: {
                     left: 38px;
                     right: 15px;
-                  };
+                  }
+
+                  ;
                 }
               }
             }
@@ -4249,7 +4399,9 @@ blockquote {
             top: -17px;
             left: -17px;
             right: -17px;
-          };
+          }
+
+          ;
 
           .mat-mdc-card-header-text {
             .mat-mdc-card-subtitle {
@@ -4274,7 +4426,9 @@ blockquote {
               padding: {
                 top: 13px;
                 bottom: 13px;
-              };
+              }
+
+              ;
             }
           }
         }
@@ -4289,7 +4443,7 @@ blockquote {
         padding: 17px;
       }
 
-      .mat-mdc-dialog-title + .mat-mdc-dialog-content {
+      .mat-mdc-dialog-title+.mat-mdc-dialog-content {
         padding-top: 17px;
       }
     }
@@ -4357,7 +4511,9 @@ blockquote {
         margin: {
           left: -20px;
           right: -20px;
-        };
+        }
+
+        ;
 
         .mat-mdc-table {
           &.mdc-data-table__table {
@@ -4391,7 +4547,9 @@ blockquote {
                   padding: {
                     left: 20px;
                     right: 20px;
-                  };
+                  }
+
+                  ;
                 }
               }
             }
@@ -4413,7 +4571,9 @@ blockquote {
           padding: {
             left: 20px;
             right: 20px;
-          };
+          }
+
+          ;
         }
       }
 
@@ -4423,7 +4583,9 @@ blockquote {
             padding: {
               left: 20px;
               right: 20px;
-            };
+            }
+
+            ;
           }
         }
 
@@ -4432,7 +4594,9 @@ blockquote {
             padding: {
               width: 20px;
               right: 20px;
-            };
+            }
+
+            ;
           }
         }
       }
@@ -4449,7 +4613,9 @@ blockquote {
             padding: {
               left: 20px;
               right: 20px;
-            };
+            }
+
+            ;
           }
         }
       }
@@ -4460,7 +4626,9 @@ blockquote {
             padding: {
               left: 20px;
               right: 20px;
-            };
+            }
+
+            ;
           }
         }
       }
@@ -4472,7 +4640,9 @@ blockquote {
     padding: {
       left: 20px;
       right: 20px;
-    };
+    }
+
+    ;
 
     .mat-mdc-paginator-outer-container {
       .mat-mdc-paginator-container {
@@ -4496,7 +4666,9 @@ blockquote {
             top: -20px;
             left: -20px;
             right: -20px;
-          };
+          }
+
+          ;
         }
 
         .mat-mdc-card-content {
@@ -4515,7 +4687,7 @@ blockquote {
         padding: 20px;
       }
 
-      .mat-mdc-dialog-title + .mat-mdc-dialog-content {
+      .mat-mdc-dialog-title+.mat-mdc-dialog-content {
         padding-top: 20px;
       }
     }
@@ -4666,5 +4838,4 @@ blockquote {
 }
 
 /* Min width 1600px */
-@media only screen and (min-width: 1600px) {
-}
+@media only screen and (min-width: 1600px) {}

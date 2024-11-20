@@ -1,15 +1,3 @@
-.fixed {
-  position: fixed;
-  z-index: 2;
-  right: 25px;
-  top: 75px;
-  transition: top 0.7s ease;
-}
-.notfixed {
-  position: static;
-  top: 0px;
-}
-
 .tables-of-content-card {
   .mat-mdc-card-content {
     .unlock-library-box {

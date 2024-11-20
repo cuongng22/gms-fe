@@ -422,8 +422,18 @@
 .bg-primary-500 {
     background-color: var(--primaryColor) !important;
 }
+.bg-success-200 {
+    background-color: #bbeea6 !important;//#93d678
+}
+.bg-vna {
+    background-color: var(--vnaXanhColor) !important;
+}
 
 // Text Color
+.text-disable{
+    color: #a9a9a9;
+}
+
 .text-white {
     color: var(--whiteColor) !important;
 }
@@ -711,6 +721,14 @@
 }
 .w-50 {
     width: 50px !important;
+}
+
+.wp-25 {
+    width: 25% !important;
+}
+
+.wp-20 {
+    width: 20% !important;
 }
 
 // Height

@@ -81,7 +81,7 @@ export class ActRateComponent extends CommonComponent implements OnInit{
         return res;
       }
     } catch (e: any) {
-      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
+      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -102,7 +102,7 @@ export class ActRateComponent extends CommonComponent implements OnInit{
         return res;
       }
     }catch (e: any) {
-      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
+      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
     }finally {
       await this.spinner.hide();
     }

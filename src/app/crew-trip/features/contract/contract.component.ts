@@ -48,6 +48,9 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   //variable
   step = 1;
+  readMode = true;
+  bizDocId: any;
+  contractObj: any;
   listFlightMarket = [];
   listPartner: any[] = [];
   listHotel = [];
@@ -189,24 +192,114 @@ export class ContractComponent extends CommonComponent implements OnInit {
       this.listPartner = listCombine.map((s: any) => ({
         code: s.code ?? s.hotelCode, name: s.name ?? s.hotelName,
       }));
-
+this.dataSource.data =
+  [
+    {
+      "bizDocId": "14463221C1",
+      "contractCode": "HD.TTDHKT.2024-134",
+      "contractNo": "XE TB MUC T10.2024",
+      "contractName": "HĐ XE TB tại MUC 10.2024 - 12.2026",
+      "marketCode": "HAN",
+      "partnerName": "Khách sạn Sheraton",
+      "serviceObject": "Accommodation",
+      "signedDate": "2024-09-25T00:00:00.000+00:00",
+      "effectiveDate": "2024-10-04T00:00:00.000+00:00",
+      "expiryDate": "2025-12-31T00:00:00.000+00:00",
+      "appendixList": [
+        {
+          "bizDocId": "14463221C1-1",
+          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
+        },
+        {
+          "bizDocId": "14463221C1-2",
+          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
+        },{
+          "bizDocId": "14463221C1-3",
+          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
+        }
+      ],
+      appendixCount: 3,
+      "optionOutput": null
+    },
+    {
+      "bizDocId": "14463221C2",
+      "contractCode": "HD.TTDHKT.2024-134",
+      "contractNo": "XE TB MUC T10.2024",
+      "contractName": "HĐ XE TB tại MUC 10.2024 - 12.2026",
+      "marketCode": "HAN",
+      "partnerName": "Khách sạn Sheraton",
+      "serviceObject": "Accommodation",
+      "signedDate": "2024-09-25T00:00:00.000+00:00",
+      "effectiveDate": "2024-10-04T00:00:00.000+00:00",
+      "expiryDate": "2025-12-31T00:00:00.000+00:00",
+      appendixCount: 1,
+      "appendixList": [
+        {
+          "bizDocId": "14463221C1-1",
+          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
+        }
+      ],
+      "optionOutput": 1
+    },
+    {
+      "bizDocId": "14463221C3",
+      "contractCode": "HD.TTDHKT.2024-134",
+      "contractNo": "XE TB MUC T10.2024",
+      "contractName": "HĐ XE TB tại MUC 10.2024 - 12.2026",
+      "marketCode": "HAN",
+      "partnerName": "Khách sạn Sheraton",
+      "serviceObject": "Accommodation",
+      "signedDate": "2024-09-25T00:00:00.000+00:00",
+      "effectiveDate": "2024-10-04T00:00:00.000+00:00",
+      "expiryDate": "2025-12-31T00:00:00.000+00:00",
+      appendixCount: 1,
+      "appendixList": [
+        {
+          "bizDocId": "14463221C1-1",
+          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
+        }
+      ],
+      "optionOutput": 2
+    },
+    {
+      "bizDocId": "14463221C4",
+      "contractCode": "HD.TTDHKT.2024-134",
+      "contractNo": "XE TB MUC T10.2024",
+      "contractName": "HĐ XE TB tại MUC 10.2024 - 12.2026",
+      "marketCode": "HAN",
+      "partnerName": "Khách sạn Sheraton",
+      "serviceObject": "Accommodation",
+      "signedDate": "2024-09-25T00:00:00.000+00:00",
+      "effectiveDate": "2024-10-04T00:00:00.000+00:00",
+      "expiryDate": "2025-12-31T00:00:00.000+00:00",
+      appendixCount: 1,
+      "appendixList": [
+        {
+          "bizDocId": "14463221C1-1",
+          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
+        }
+      ],
+      "optionOutput": 3
+    }
+  ]
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'effectiveDate', 'appendixCount', 'action'];
   }
 
-  async nextStep(index: number) {
-    this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
+  async nextStep(id?: any, readMode?: any) {
+    this.bizDocId = id;
     this.step = 2;
+    this.readMode = readMode;
   }
 
   async backStep() {
-    await this.search(), this.step = 1;
+    await this.search();
+    this.step = 1;
   }
 
   async showAnnex(index: any) {
     // await this.baseService.getListAnnex({contractId: id}).then(res => {
     //   this.tblAnnexData.data = res.data.content;
-    console.log(this.dataSource.data[index], 'this.dataSource.data[index]');
     this.tblAnnexData.data = (this.dataSource.data[index] as any).appendixList;
     this.showPopupAnnex = true;
 
@@ -260,7 +353,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   async showListAnnex(id: any) {
     this.viewType = 'PL';
-    this.formGroupSearch.patchValue({contractId: id})
+    this.formGroupSearch.patchValue({contractId: id});
+    this.contractObj = this.dataSource.data.find((value:any) => value.bizDocId == id);
     await this.search();
   }
 
@@ -307,7 +401,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
         return res;
       }
     } catch (e: any) {
-      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
+      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }

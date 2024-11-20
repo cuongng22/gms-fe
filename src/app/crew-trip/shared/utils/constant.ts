@@ -3,6 +3,7 @@ import { effect, Signal, signal } from '@angular/core';
 export class Constant {
   static DATE_FORMAT = 'DD/MM/YYYY';
   static DATE_TIME_FORMAT = 'DD/MM/YYYY HH:mm';
+  static MONTH_FORMAT = 'MM/YYYY';
   static TIME_FORMAT = 'HH:mm';
   static NUMBER = 'number';
   static DATE = 'date';
@@ -22,9 +23,12 @@ export class MESSAGE {
   static DELETE_SUCCESS = $localize`:@@deleteSuccess:Delete success`;
   static DELETE_FAIL = $localize`:@@deleteFail:Delete fail`;
   static UPLOAD_SUCCESS = $localize`:@@uploadSuccess:Upload success`;
+  static REJECT_SUCCESS = $localize`:@@rejectSuccess:Reject success`;
+  static REJECT_FAIL = $localize`:@@rejectFail:Reject fail`;
   static REQUIRED = $localize`:@@required:is required`;
-  static FORMAT_INVALID = $localize`:@@formatInvalid:is not in correct format.`;
-  static MIN_LENGTH_INVALID = $localize`:@@minLengthInvalid:must be greater than %d characters`;
+  static FORMAT_INVALID = $localize`:@@formatInvalid:invalid format.`;
+  static MIN_LENGTH_INVALID = $localize`:@@minLengthInvalid:requires a minimum of %d characters`;
+  static MAX_LENGTH_INVALID = $localize`:@@maxLengthInvalid:must be less than %d characters`;
   static PASSWORD_FORMAT_INVALID = $localize`:@@passwordFormat:must include number, letter and special character`;
   static ALREADY_EXISTS = $localize`:@@alreadyExists:already exists`;
   static ACTIVE = $localize`:@@active:Active`;
@@ -32,6 +36,17 @@ export class MESSAGE {
   static ITEMS_PER_PAGE = $localize`:@@itemsPerPage:Items per page`;
   static NEXT_PAGE = $localize`:@@nextPage:Next page`;
   static PRIVIOUS_PAGE = $localize`:@@priviousPage:Privious page`;
+
+  static LABEL_START_DATE = $localize`:@@startDate:Start Date`;
+  static MESSAGE_START_DATE_REQUIRED = $localize`:@@startDateRequired:Start Date is required`;
+
+  static LABEL_END_DATE = $localize`:@@endDate:End Date`;
+  static MESSAGE_END_DATE_REQUIRED = $localize`:@@endDateRequired:End Date is required`;
+
+  static LABEL_ESTIMATED_TIME = $localize`:@@estimatedTime:Estimated Time`;
+  static MESSAGE_ESTIMATED_TIME_REQUIRED = $localize`:@@estimatedTimeRequired:Estimated Time is required`;
+  
+  static PHONE_NUMBER_INVALID = $localize`:@@phoneNumberFormatInvalid:Phone number must be numeric and the characters + ( )`;
 }
 
 export class LOCALE {

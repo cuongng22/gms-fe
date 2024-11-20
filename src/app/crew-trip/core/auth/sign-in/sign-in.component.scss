@@ -11,13 +11,13 @@
 
   img.banner2 {
     position: absolute;
-    top: 23vh;
-    left: 6vw;
+    top: 30vh;
+    left: 5vw;
     z-index: 0;
     transform: rotate(-10deg);
     transform: translateY(0%);
 
-    animation: moveAndFade 5s cubic-bezier(0.29, 0.53, 0.43, 0.89) infinite;
+    // animation: moveAndFade 5s cubic-bezier(0.29, 0.53, 0.43, 0.89) infinite;
   }
 }
 

@@ -180,8 +180,8 @@ export const menu: Menu[] = [
                 icon: 'ri-folder-chart-line'
               },
               {
-                path: 'plan/est-plan/planned',
-                title: $localize`:@@planedAnnualProduction:Budget & Procurement plan`,
+                path: 'plan/est-plan/budget-procurement', 
+                title: $localize`:@@budgetProcurementPlan:Budget & Procurement plan`, 
                 icon: 'ri-folder-chart-line'
               },
               {
@@ -224,7 +224,7 @@ export const menu: Menu[] = [
             rootPath: '',
             subMenu: [
               {
-                path: 'system/admin/users', title: $localize`:@@account:Account`, icon: 'ri-group-line'
+                path: 'system/admin/users', title: $localize`:@@accounts:Accounts`, icon: 'ri-group-line'
               },
               {
                 path: 'system/admin/roles', title: $localize`:@@role:Role`, icon: 'ri-calendar-schedule-line'
