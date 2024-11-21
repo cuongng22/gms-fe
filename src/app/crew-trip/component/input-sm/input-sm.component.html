@@ -11,10 +11,11 @@
     (input)="onInput($event)"
     (blur)="onTouched()"
   />
-  <mat-error *ngIf="formControl.hasError('required')">
+  <mat-error *ngxControlError="formControl; track: 'required'">
     {{ label }} is required.
   </mat-error>
-  <mat-error *ngIf="formControl.hasError('maxlength')">
+  <mat-error *ngxControlError="formControl; track: 'maxlength'">
     {{ label }} maximum {{ maxLength }} characters allowed.
   </mat-error>
+  <ng-content select="[mess-error]"></ng-content>
 </mat-form-field>

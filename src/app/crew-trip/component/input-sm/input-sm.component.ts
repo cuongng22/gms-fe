@@ -12,6 +12,7 @@ import {MatInput, MatInputModule} from "@angular/material/input";
 import {NgIf} from "@angular/common";
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {Validators} from "ngx-editor";
+import {NgxControlError} from "ngxtension/control-error";
 
 @Component({
   selector: 'app-input-sm',
@@ -23,7 +24,8 @@ import {Validators} from "ngx-editor";
     NgIf,
     NgxTrimDirectiveModule,
     MatFormFieldModule,
-    MatInputModule
+    MatInputModule,
+    NgxControlError
   ],
   templateUrl: './input-sm.component.html',
   styleUrl: './input-sm.component.scss',
