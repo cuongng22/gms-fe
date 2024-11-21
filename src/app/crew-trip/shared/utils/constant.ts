@@ -86,7 +86,7 @@ export const DATE_FORMAT_DD_MM_YYYY = {
   display: {
     dateInput: 'DD/MM/YYYY',
     monthYearLabel: 'MMMM YYYY',
-    dateA11yLabel: 'LL',
+    dateA11yLabel: 'DD/MM/YYYY',
     monthYearA11yLabel: 'MMMM YYYY'
 
   },

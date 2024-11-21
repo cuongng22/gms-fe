@@ -26,7 +26,7 @@ export const menu: Menu[] = [
         path: 'category/flight-market', title: $localize`:@@airportCode:Airport code`, icon: 'ri-store-line'
       },
       {
-        path: 'category/hotel', title: $localize`:@@hotel:Hotels`, icon: 'ri-hotel-bed-line'
+        path: 'category/hotel', title: $localize`:@@hotel:Hotel`, icon: 'ri-hotel-bed-line'
       },
       {
         path: 'category/vehicle', title: $localize`:@@carRentalCompany:Car Rental company`, icon: 'ri-car-line'
