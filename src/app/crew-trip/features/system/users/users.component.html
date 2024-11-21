@@ -143,20 +143,14 @@
             Role
           </th>
           <td mat-cell *matCellDef="let element">
-            <ng-container *ngIf="element.roles; else noRoles">
-              <ng-container *ngFor="let role of element.roles.split(',')">
+            @if(element.roles){
+              @for (role of element.roles.split(';'); track $index) {
                 <span class="badge text-bg-label-badge">
                   {{ role.trim() }}
                 </span>
-              </ng-container>
-            </ng-container>
-            <ng-template #noRoles>
-              <!--              <span>No role</span>-->
-            </ng-template>
+              }
+            }
           </td>
-          <!--          <td mat-cell *matCellDef="let element">-->
-          <!--            {{ element.roles }}-->
-          <!--          </td>-->
         </ng-container>
         <!-- Action Column -->
         <ng-container matColumnDef="action" stickyEnd>
@@ -243,7 +237,7 @@
                   <mat-label i18n="@@fullname">
                     Fullname
                   </mat-label>
-                  <input trim="blur" matInput formControlName="fullName" required maxlength="250">
+                  <input trim="blur" matInput formControlName="fullName" required>
                   <mat-error i18n="@@fullnameRequired"
                     *ngxControlError="formGroupDetail.controls.fullName; track: 'required'">
                     Fullname {{ MESSAGE.REQUIRED }}

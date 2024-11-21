@@ -53,6 +53,8 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
           baseService.showError(MESSAGE.ERROR_CONNECT);
         } else if (error.status === 409 || error.status === 400) {
           baseService.showError(error?.error?.error);
+        } else if (error.status === 400) {
+          baseService.showError(error?.error?.error);
         } else {
           baseService.showError(MESSAGE.ERROR);
         }

@@ -26,6 +26,7 @@ import { CommonComponent } from '../../../shared/common.component';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { NgxControlError } from 'ngxtension/control-error';
 import { ifValidator } from 'ngxtension/if-validator';
+import { error } from 'console';
 
 export interface PeriodicElement {
   projectName: string;
@@ -80,7 +81,9 @@ export class UsersComponent extends CommonComponent implements OnInit {
     password: [new FormControl('',
       ifValidator(
         () => this.isValidatePassword,
-        [Validators.required, Validators.minLength(8), Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')]))],
+        [Validators.required, Validators.minLength(8),
+        Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')
+        ]))],
     description: ['', Validators.maxLength(500)]
   });
 
@@ -179,6 +182,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
   }
 
   async saveUser() {
+    await this.spinner.show();
     console.log(this.formGroupDetail.controls.department);
     this.formGroupDetail.markAllAsTouched();
     Object.keys(this.formGroupDetail.controls).forEach(key => {
@@ -206,7 +210,12 @@ export class UsersComponent extends CommonComponent implements OnInit {
         }
 
         this.search();
+      } catch (err: any) {
+        if (err.status === 400 && err?.error?.error?.password) {
+          this.baseService.showError(err?.error?.error?.password);
+        }
       } finally {
+        this.spinner.hide();
         this.toggleDialogCreate();
       }
 

@@ -217,6 +217,39 @@ button.btn {
   }
 }
 
+.mini-vna-btn {
+  height: auto !important;
+  font-weight: 500 !important;
+  padding: 8px 13px !important;
+  border-radius: 7px !important;
+  display: inline-block !important;
+  color: var(--whiteColor) !important;
+  border: 1px solid var(--vnaXanhColor) !important;
+  background-color: var(--vnaXanhColor) !important;
+
+  &:hover {
+      transition: 0.3s !important;
+      color: var(--vnaXanhColor) !important;
+      border: 1px solid var(--vnaXanhColor) !important;
+      background-color: var(--lightColor) !important;
+  }
+
+  .mdc-button__label {
+      display: inline-block !important;
+      padding-left: 22px !important;
+
+      i {
+          top: -5px !important;
+          left: 0px !important;
+          font-size: 22px !important;
+          position: absolute !important;
+          transform: translateY(-50%) !important;
+      }
+  }
+}
+
+
+
 .min-with-100 {
   min-width: 100px !important;
 }

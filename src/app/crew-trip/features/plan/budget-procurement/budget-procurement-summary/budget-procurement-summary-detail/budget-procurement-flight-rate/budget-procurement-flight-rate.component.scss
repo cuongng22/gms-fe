@@ -2,3 +2,8 @@ table {
     max-width: 500px;
 }
 
+:host::ng-deep{
+    .mat-column-rateOrTotal{
+        width: 430px;
+    }
+}
