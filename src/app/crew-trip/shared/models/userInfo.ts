@@ -6,6 +6,7 @@ export class UserLogin {
   avartarUrl: string;
   phone: string;
   gender: number;
+  description: string;
 
   constructor(
     email: string,
@@ -14,7 +15,8 @@ export class UserLogin {
     department: string,
     avartarUrl: string,
     phone: string,
-    gender: number
+    gender: number,
+    description: string
   ) {
     this.email = email;
     this.id = id;
@@ -23,6 +25,7 @@ export class UserLogin {
     this.avartarUrl = avartarUrl;
     this.phone = phone;
     this.gender = !gender ? 0 : 1;
+    this.description = description;
   }
 
   static fromObject(obj: any): UserLogin {
@@ -34,6 +37,7 @@ export class UserLogin {
       obj.avartarUrl || '',
       obj.phone || '',
       obj.gender || null,
+      obj.description || '',
     );
   }
 }

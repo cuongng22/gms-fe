@@ -17,11 +17,13 @@ import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 import {StorageService} from "src/app/crew-trip/core/services/storage.service";
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
+import {NgxTrimDirectiveModule} from "ngx-trim-directive";
+import {InputSmComponent} from "src/app/crew-trip/component/input-sm/input-sm.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [RouterLink, MatCardModule, FormsModule, MatButtonModule, ReactiveFormsModule, CommonModule, NgClass, MatFormField, MatSelectModule, InputSizeComponent, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, FileUploadModule],
+  imports: [RouterLink, MatCardModule, FormsModule, MatButtonModule, ReactiveFormsModule, CommonModule, NgClass, MatFormField, MatSelectModule, InputSizeComponent, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, FileUploadModule, NgxTrimDirectiveModule, InputSmComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -42,10 +44,11 @@ export class ProfileComponent implements OnInit {
   constructor(private storageService: StorageService) {
     this.formGroup = this.fb.group({
       id: [this.userCurrent?.id, Validators.required],
-      fullName: [this.userCurrent?.fullName, Validators.required],
-      department: [this.userCurrent?.department, Validators.required],
-      email: [this.userCurrent?.email, [Validators.required, Validators.email]],
-      phone: [this.userCurrent?.phone],
+      fullName: [this.userCurrent?.fullName, [Validators.required, Validators.maxLength(250)]],
+      department: [this.userCurrent?.department, [Validators.required, Validators.maxLength(250)]],
+      email: [this.userCurrent?.email, [Validators.required, Validators.email, Validators.maxLength(250)]],
+      phone: [this.userCurrent?.phone, [Validators.maxLength(20)]],
+      description: [this.userCurrent?.description],
       gender: [this.userCurrent?.gender ? 1 : 0, Validators.required],
       avartarUrl: [this.userCurrent?.avartarUrl]
     });
@@ -65,11 +68,13 @@ export class ProfileComponent implements OnInit {
       this.formGroup.get('fullName')?.enable();
       this.formGroup.get('phone')?.enable();
       this.formGroup.get('gender')?.enable();
+      this.formGroup.get('description')?.enable();
     } else {
       this.formGroup.get('department')?.disable();
       this.formGroup.get('fullName')?.disable();
       this.formGroup.get('phone')?.disable();
       this.formGroup.get('gender')?.disable();
+      this.formGroup.get('description')?.disable();
     }
   }
 
@@ -89,7 +94,7 @@ export class ProfileComponent implements OnInit {
       try {
         await this.spinner.show();
         let res = await this.userService.update(this.formGroup.value, 'update');
-        this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
+        this.baseService.showSuccess("Profile " + MESSAGE.UPDATE_SUCCESS);
         this.updateEditMode();
         let userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
         Object.keys(this.formGroup.controls).forEach(key => {

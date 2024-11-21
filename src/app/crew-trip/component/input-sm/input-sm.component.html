@@ -1,0 +1,20 @@
+<mat-form-field>
+  <mat-label>
+    {{ label }}
+  </mat-label>
+  <input
+    matInput trim="blur"
+    [formControl]="formControl"
+    [placeholder]="placeholder"
+    [type]="type"
+    [required]="required"
+    (input)="onInput($event)"
+    (blur)="onTouched()"
+  />
+  <mat-error *ngIf="formControl.hasError('required')">
+    {{ label }} is required.
+  </mat-error>
+  <mat-error *ngIf="formControl.hasError('maxlength')">
+    {{ label }} maximum {{ maxLength }} characters allowed.
+  </mat-error>
+</mat-form-field>
