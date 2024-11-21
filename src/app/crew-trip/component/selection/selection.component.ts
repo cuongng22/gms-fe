@@ -1,12 +1,79 @@
-import { Component } from '@angular/core';
+import {Component, Input, Optional, Self, SimpleChanges} from '@angular/core';
+import {ControlValueAccessor, FormControl, FormsModule, NgControl, ReactiveFormsModule} from "@angular/forms";
+import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
+import {MatOption} from "@angular/material/core";
+import {MatSelect} from "@angular/material/select";
+import {CommonModule, NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-selection',
   standalone: true,
-  imports: [],
+    imports: [
+        FormsModule,
+        MatError,
+        MatFormField,
+        MatLabel,
+        MatOption,
+        MatSelect,
+        NgIf,
+        ReactiveFormsModule,
+        CommonModule
+    ],
   templateUrl: './selection.component.html',
   styleUrl: './selection.component.scss'
 })
-export class SelectionComponent {
+export class SelectionComponent  implements ControlValueAccessor {
+  @Input() placeholder: string = '';
+  @Input() label: string = '';
+  @Input() readonly : boolean = false;
+  @Input() hint = '';
+  @Input() required: boolean = false;
+  @Input() options: { value: any; display: string }[] = [];
 
+
+  get formControl(): FormControl {
+    return (this.ngControl?.control as FormControl) ?? new FormControl();
+  }
+
+  constructor(
+    @Optional() @Self() public ngControl: NgControl
+  ) {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
+  onChange = (value: any) => {};
+  onTouched = () => {};
+
+  registerOnChange(fn: any): void {
+    this.onChange = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  writeValue(value: any): void {
+    if (this.formControl?.value !== value) {
+      this.formControl.setValue(value, { emitEvent: false });
+    }
+  }
+
+  validate() {
+    return this.formControl?.valid ? null : { invalid: true };
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['readonly']) {
+      this.updateEnableState();
+    }
+  }
+
+  private updateEnableState() {
+    if (!this.readonly) {
+      this.formControl.enable({emitEvent: false});
+    } else {
+      this.formControl.disable({emitEvent: false});
+    }
+  }
 }

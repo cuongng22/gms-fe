@@ -23,7 +23,6 @@ import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.comp
     NgxTrimDirectiveModule,
     MatFormFieldModule,
     MatInputModule,
-    NgxControlError,
     InputSizeComponent
   ],
   templateUrl: './input-sm.component.html',
@@ -32,7 +31,7 @@ import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.comp
 export class InputSmComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() label: string = '';
-  @Input() enable: boolean = true;
+  @Input() readonly : boolean = false;
   @Input() hint = '';
   @Input() maxLength: number = 100;
   @Input() required: boolean = false;
@@ -48,29 +47,12 @@ export class InputSmComponent implements ControlValueAccessor {
     if (this.ngControl) {
       this.ngControl.valueAccessor = this;
     }
+    if (this.readonly) {
+      this.formControl.disable();
+    } else {
+      this.formControl.enable();
+    }
   }
-
-
-  // ngOnInit() {
-  //   const validators = [];
-  //   if (this.required) {
-  //     validators.push(Validators.required);
-  //   }
-  //   if (this.maxLength > 0) {
-  //     validators.push(Validators.maxLength(this.maxLength));
-  //   }
-  //   if (this.type && this.type === 'email') {
-  //     validators.push(Validators.maxLength(this.maxLength));
-  //   }
-  //   // this.formControl.setValidators(validators as ValidatorFn[]);
-  //   // if (!this.enable) {
-  //   //   this.formControl.disable();
-  //   // } else {
-  //   //   this.formControl.enable();
-  //   // }
-  //   this.updateEnableState();
-  //   // this.formControl.updateValueAndValidity();
-  // }
 
   onChange = (value: any) => {
   };
@@ -93,7 +75,6 @@ export class InputSmComponent implements ControlValueAccessor {
   }
 
   writeValue(value: any): void {
-    console.log("valuevaluevalue:",value)
     if (this.formControl?.value !== value) {
       this.formControl.setValue(value, { emitEvent: false });
     }
@@ -102,14 +83,15 @@ export class InputSmComponent implements ControlValueAccessor {
   validate() {
     return this.formControl?.valid ? null : { invalid: true };
   }
+
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['enable']) {
+    if (changes['readonly']) {
       this.updateEnableState();
     }
   }
 
   private updateEnableState() {
-    if (this.enable) {
+    if (!this.readonly) {
       this.formControl.enable({emitEvent: false});
     } else {
       this.formControl.disable({emitEvent: false});

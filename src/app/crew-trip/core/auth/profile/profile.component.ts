@@ -20,11 +20,12 @@ import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {InputSmComponent} from "src/app/crew-trip/component/input-sm/input-sm.component";
 import {SharedModule} from "src/app/crew-trip/component/shared.module";
+import {SelectionComponent} from "src/app/crew-trip/component/selection/selection.component";
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [MatCardModule, FormsModule, MatButtonModule, ReactiveFormsModule, CommonModule, NgClass, MatFormField, MatSelectModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, FileUploadModule, NgxTrimDirectiveModule, InputSmComponent,SharedModule],
+  imports: [MatCardModule, FormsModule, MatButtonModule, ReactiveFormsModule, CommonModule, NgClass, MatFormField, MatSelectModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, FileUploadModule, NgxTrimDirectiveModule, InputSmComponent, SharedModule, SelectionComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -34,13 +35,18 @@ export class ProfileComponent implements OnInit {
   baseService = inject(BaseService);
   formGroup: FormGroup;
   router = inject(Router);
-  isEditMode = false;
+  readonly = true;
   spinner = inject(NgxSpinnerService);
   userCurrent = this.userService.getUserLogin();
   // multiple: any;
   avatarUrl: string | ArrayBuffer | null = null;
   fileError: string | null = null;
   @Output() fileUploaded = new EventEmitter<string>();
+  genderOptions = [
+    { value: null, display: 'Select gender' },
+    { value: 0, display: 'Female' },
+    { value: 1, display: 'Male' },
+  ];
 
   constructor(private storageService: StorageService) {
     this.formGroup = this.fb.group({
@@ -51,7 +57,8 @@ export class ProfileComponent implements OnInit {
       phone: [this.userCurrent?.phone, [Validators.maxLength(20)]],
       description: [this.userCurrent?.description],
       gender: [this.userCurrent?.gender ? 1 : 0, Validators.required],
-      avartarUrl: [this.userCurrent?.avartarUrl]
+      avartarUrl: [this.userCurrent?.avartarUrl],
+      testF: ['']
     });
   }
 
@@ -62,13 +69,8 @@ export class ProfileComponent implements OnInit {
 
 
   updateEditMode() {
-    this.isEditMode = !this.isEditMode;
-    if (this.isEditMode) {
-      this.formGroup.get('id')?.enable();
-      this.formGroup.get('gender')?.enable();
-    } else {
-      this.formGroup.get('gender')?.disable();
-    }
+    this.formGroup.get('id')?.enable();
+    this.readonly = !this.readonly;
   }
 
 

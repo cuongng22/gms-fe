@@ -5,11 +5,11 @@
         Profile
       </h5>
       <div>
-        <button class="add-btn" mat-button color="primary" *ngIf="!isEditMode" (click)="updateEditMode()">
+        <button class="add-btn" mat-button color="primary" *ngIf="readonly" (click)="updateEditMode()">
           <i class="material-symbols-outlined">edit</i>
           <span i18n="@@edit">Edit</span>
         </button>
-        <div *ngIf="isEditMode">
+        <div *ngIf="!readonly">
           <button class="add-btn  mlr-5" mat-button color="primary" (click)="saveProfile()">
             <i class="material-symbols-outlined">save</i>
             <span i18n="@@save">Save</span>
@@ -26,7 +26,7 @@
         <div class="file-upload-container">
           <img *ngIf="avatarUrl" [src]="avatarUrl" alt="User avatar" class="avatar-preview"/>
           <img *ngIf="!avatarUrl" src="images/admin.png" alt="User avatar" class="avatar-preview"/>
-          <input type="file" *ngIf="isEditMode" (change)="onFileSelected($event)" accept="image/*"/>
+          <input type="file" *ngIf="!readonly" (change)="onFileSelected($event)" accept="image/*"/>
           <mat-error *ngIf="fileError">{{ fileError }}</mat-error>
         </div>
       </div>
@@ -39,7 +39,7 @@
                   formControlName="department"
                   placeholder="Enter department"
                   label="Department"
-                  [enable]="isEditMode"
+                  [readonly]="readonly"
                   [required]="true"
                   [maxLength]="200"
                 ></app-input-sm>
@@ -51,7 +51,7 @@
                   formControlName="fullName"
                   placeholder="Enter fullName"
                   label="Full name"
-                  [enable]="isEditMode"
+                  [readonly]="readonly"
                   [required]="true"
                   [maxLength]="200"
                 ></app-input-sm>
@@ -59,24 +59,13 @@
             </div>
             <div class="col-sm-12 mb-10">
               <div class="form-group">
-                <mat-form-field>
-                  <mat-label i18n="@@gender">
-                    Gender
-                  </mat-label>
-                  <mat-select formControlName="gender">
-                    <mat-option [value]="0" i18n="@@female">
-                      Female
-                    </mat-option>
-                    <mat-option [value]="1" i18n="@@male">
-                      Male
-                    </mat-option>
-                  </mat-select>
-                  <mat-error *ngIf="formGroup.get('gender')?.invalid && formGroup.get('gender')?.touched">
-                  <span *ngIf="formGroup.get('gender')?.hasError('required')">
-                    Gender is required
-                  </span>
-                  </mat-error>
-                </mat-form-field>
+                  <app-selection
+                    formControlName="gender"
+                    [label]="'Gender'"
+                    [required]="true"
+                    [readonly]="readonly"
+                    [options]="genderOptions"
+                  ></app-selection>
               </div>
             </div>
             <div class="col-sm-12 mb-10">
@@ -86,7 +75,7 @@
                   placeholder="Enter email"
                   label="Email"
                   type="email"
-                  [enable]="false"
+                  [readonly]="true"
                   [required]="true"
                   [maxLength]="200"
                 ></app-input-sm>
@@ -98,7 +87,7 @@
                   formControlName="phone"
                   placeholder="Enter phone number"
                   label="Phone"
-                  [enable]="isEditMode"
+                  [readonly]="readonly"
                   [required]="false"
                   [maxLength]="20"
                 ></app-input-sm>
@@ -110,7 +99,7 @@
                   formControlName="description"
                   placeholder="Enter description"
                   label="Description"
-                  [enable]="isEditMode"
+                  [readonly]="readonly"
                   [required]="false"
                   [maxLength]="500"
                 ></app-input-sm>
