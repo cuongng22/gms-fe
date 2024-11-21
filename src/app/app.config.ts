@@ -13,7 +13,10 @@ import localeEn from '@angular/common/locales/en';
 import {TranslateHttpLoader} from "@ngx-translate/http-loader";
 import {TranslateLoader, TranslateModule} from "@ngx-translate/core";
 import { LOCALE } from './crew-trip/shared/utils/constant';
-
+import 'moment/locale/es'
+import moment from "moment";
+import  "moment/locale/vi";
+moment.locale('vi')
 registerLocaleData(localeVi, LOCALE.VN);
 registerLocaleData(localeEn, LOCALE.EN);
 

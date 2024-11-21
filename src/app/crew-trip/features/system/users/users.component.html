@@ -131,9 +131,7 @@
             Status
           </th>
           <td mat-cell *matCellDef="let element;" class="text-center">
-            <span class="badge" [ngClass]="{
-              'text-bg-vna':  element['active'] == true,
-              'text-bg-vna-danger':  element['active'] == false}">
+            <span class="badge" [ngClass]="!!element.active?'text-bg-label-badge':'text-soft-dark'">
               {{ element.activeLabel }}
             </span>
           </td>
@@ -144,11 +142,11 @@
           </th>
           <td mat-cell *matCellDef="let element">
             @if(element.roles){
-              @for (role of element.roles.split(';'); track $index) {
-                <span class="badge text-bg-label-badge">
-                  {{ role.trim() }}
-                </span>
-              }
+            @for (role of element.roles.split(';'); track $index) {
+            <span class="badge text-bg-label-badge">
+              {{ role.trim() }}
+            </span>
+            }
             }
           </td>
         </ng-container>
@@ -168,9 +166,9 @@
               <button type="button" mat-button
                 (click)="passwordInputType = 'password'; dialogResetPassword = !dialogResetPassword; openDialogResetPassword(element.email)"
                 title="Change password" i18n-title="@@changePassword">
-                <span class="material-symbols-outlined text-vna">
+                <i class="material-symbols-outlined text-vna">
                   vpn_key
-                </span>
+                </i>
               </button>
 
             </div>
@@ -225,7 +223,8 @@
                   <mat-error *ngxControlError="formGroupDetail.controls.department; track: 'maxlength'"
                     i18n="@@departmentMaxlength">
                     Department {{ MESSAGE.MAX_LENGTH_INVALID | dataTransformPipe:[Constant.STRING_FORMAT, 250]
-                    }}</mat-error>
+                    }}
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -467,8 +466,7 @@
                   </mat-label>
                   <input trim="blur" matInput [(ngModel)]="changePassword.newPassword" name="newPassword"
                     #newPassword="ngModel" required minlength="8" [type]="passwordInputType"
-                    pattern="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$"
-                    >
+                    pattern="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$">
                   <button type="button" matSuffix mat-icon-button aria-label="Clear"
                     (click)="passwordInputType = (passwordInputType == 'password' ? 'text' : 'password')">
                     <i class="material-symbols-outlined">

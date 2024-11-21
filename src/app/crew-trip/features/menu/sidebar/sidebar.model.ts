@@ -23,13 +23,13 @@ export const menu: Menu[] = [
     rootPath: 'category',
     subMenu: [
       {
-        path: 'category/flight-market', title: $localize`:@@airPort:Airport`, icon: 'ri-store-line'
+        path: 'category/flight-market', title: $localize`:@@airportCode:Airport code`, icon: 'ri-store-line'
       },
       {
-        path: 'category/hotel', title: $localize`:@@hotel:Hotels`, icon: 'ri-hotel-bed-line'
+        path: 'category/hotel', title: $localize`:@@hotel:Hotel`, icon: 'ri-hotel-bed-line'
       },
       {
-        path: 'category/vehicle', title: $localize`:@@carRentalCompany:Car rental`, icon: 'ri-car-line'
+        path: 'category/vehicle', title: $localize`:@@carRentalCompany:Car Rental company`, icon: 'ri-car-line'
       },
       {
         path: 'category/cost', title: $localize`:@@costCategory:Cost category`, icon: 'ri-server-line'
@@ -49,7 +49,7 @@ export const menu: Menu[] = [
         path: 'category/crews', title: $localize`:@@crewList:Crew List`, icon: 'ri-id-card-line'
       },
       {
-        path: 'category/nation', title: $localize`:@@country:Country`, icon: 'ri-global-line'
+        path: 'category/nation', title: $localize`:@@country:Countríes`, icon: 'ri-global-line'
       }
     ]
   },

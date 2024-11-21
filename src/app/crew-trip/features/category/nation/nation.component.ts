@@ -39,18 +39,13 @@ export class NationComponent extends CommonComponent implements OnInit {
 
   //variable
   _displayedColumns: {
-    label: string;
-    value: string,
-    type?: string,
-    format?: string
+    label: string; value: string, type?: string, format?: string
   }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-      {label: $localize`Area`, value: 'area'}, {label: $localize`Code`, value: 'code'}, {
-        label: $localize`English Name`,
-        value: 'engName'
-      }, {label: $localize`VietNam Name`, value: 'vniName'}, {
-        label: $localize`Currency Code`,
-        value: 'curCode'
-      }, {label: $localize`Status`, value: 'activeLabel'},];
+    {label: $localize`Area`, value: 'area'},
+    {label: $localize`Code`, value: 'code'},
+    {label: $localize`English Name`, value: 'engName'},
+    {label: $localize`VietNam Name`, value: 'vniName'},
+    {label: $localize`Status`, value: 'activeLabel'},];
 
   constructor() {
     super();
@@ -63,7 +58,6 @@ export class NationComponent extends CommonComponent implements OnInit {
       code: ['', [Validators.required]],
       vniName: ['', [Validators.required]],
       engName: ['', [Validators.required]],
-      currencyCode: ['', [Validators.required]],
       curCode: ['', [Validators.required]],
       active: [true,]
     });
@@ -80,17 +74,7 @@ export class NationComponent extends CommonComponent implements OnInit {
 
   async _detail(index: number) {
     this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
-    this.formGroupDetail.patchValue({
-      currencyCode: this.formGroupDetail.value.curCode
-    });
     this.toggleDialogCreate();
-  }
-
-  override async save(): Promise<any> {
-    this.formGroupDetail.patchValue({
-      currencyCode: this.formGroupDetail.value.curCode
-    });
-    return super.save();
   }
 
 }

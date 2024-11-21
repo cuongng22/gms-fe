@@ -779,6 +779,11 @@
 .cursor-pointer {
     cursor: pointer !important;
 }
+
+.cursor-default {
+  cursor: default !important;
+}
+
 .pointer-none {
     pointer-events: none !important;
 }
@@ -859,7 +864,7 @@
 
 /* Min width 576px */
 @media (min-width: 576px) {
-    
+
     // Display
     .d-sm-none {
         display: none !important;
@@ -1007,7 +1012,7 @@
 
 /* Min width 768px */
 @media (min-width: 768px) {
-    
+
     // Display
     .d-md-none {
         display: none !important;
