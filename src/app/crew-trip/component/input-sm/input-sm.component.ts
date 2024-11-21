@@ -1,18 +1,16 @@
-import {Component, forwardRef, Input, SimpleChanges} from '@angular/core';
+import {Component, Input, Optional, Self, SimpleChanges} from '@angular/core';
 import {
   ControlValueAccessor,
-  FormControl,
-  NG_VALIDATORS,
-  NG_VALUE_ACCESSOR,
+  NgControl,
   ReactiveFormsModule,
-  ValidatorFn
+  FormControl
 } from "@angular/forms";
 import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
 import {MatInput, MatInputModule} from "@angular/material/input";
 import {NgIf} from "@angular/common";
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {Validators} from "ngx-editor";
 import {NgxControlError} from "ngxtension/control-error";
+import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 
 @Component({
   selector: 'app-input-sm',
@@ -25,49 +23,54 @@ import {NgxControlError} from "ngxtension/control-error";
     NgxTrimDirectiveModule,
     MatFormFieldModule,
     MatInputModule,
-    NgxControlError
+    NgxControlError,
+    InputSizeComponent
   ],
   templateUrl: './input-sm.component.html',
   styleUrl: './input-sm.component.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => InputSmComponent),
-      multi: true,
-    },
-    {
-      provide: NG_VALIDATORS,
-      useExisting: forwardRef(() => InputSmComponent),
-      multi: true,
-    },
-  ],
 })
 export class InputSmComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() label: string = '';
   @Input() enable: boolean = true;
-  @Input() formControl: FormControl = new FormControl('');
+  @Input() hint = '';
   @Input() maxLength: number = 100;
   @Input() required: boolean = false;
   @Input() type: string = 'text';
 
-  ngOnInit() {
-    const validators = [];
-    if (this.required) {
-      validators.push(Validators.required);
-    }
-    if (this.maxLength > 0) {
-      validators.push(Validators.maxLength(this.maxLength));
-    }
-    this.formControl.setValidators(validators as ValidatorFn[]);
-    if (!this.enable) {
-      this.formControl.disable();
-    } else {
-      this.formControl.enable();
-    }
-    this.updateEnableState();
-    this.formControl.updateValueAndValidity();
+  get formControl(): FormControl {
+    return (this.ngControl?.control as FormControl) ?? new FormControl();
   }
+
+  constructor(
+    @Optional() @Self() public ngControl: NgControl
+  ) {
+    if (this.ngControl) {
+      this.ngControl.valueAccessor = this;
+    }
+  }
+
+
+  // ngOnInit() {
+  //   const validators = [];
+  //   if (this.required) {
+  //     validators.push(Validators.required);
+  //   }
+  //   if (this.maxLength > 0) {
+  //     validators.push(Validators.maxLength(this.maxLength));
+  //   }
+  //   if (this.type && this.type === 'email') {
+  //     validators.push(Validators.maxLength(this.maxLength));
+  //   }
+  //   // this.formControl.setValidators(validators as ValidatorFn[]);
+  //   // if (!this.enable) {
+  //   //   this.formControl.disable();
+  //   // } else {
+  //   //   this.formControl.enable();
+  //   // }
+  //   this.updateEnableState();
+  //   // this.formControl.updateValueAndValidity();
+  // }
 
   onChange = (value: any) => {
   };
@@ -90,13 +93,15 @@ export class InputSmComponent implements ControlValueAccessor {
   }
 
   writeValue(value: any): void {
-    this.formControl.setValue(value);
+    console.log("valuevaluevalue:",value)
+    if (this.formControl?.value !== value) {
+      this.formControl.setValue(value, { emitEvent: false });
+    }
   }
 
   validate() {
-    return this.formControl.valid ? null : {invalid: true};
+    return this.formControl?.valid ? null : { invalid: true };
   }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['enable']) {
       this.updateEnableState();
@@ -110,6 +115,4 @@ export class InputSmComponent implements ControlValueAccessor {
       this.formControl.disable({emitEvent: false});
     }
   }
-
-  protected readonly HTMLInputElement = HTMLInputElement;
 }
