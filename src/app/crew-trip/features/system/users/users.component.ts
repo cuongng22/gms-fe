@@ -182,8 +182,6 @@ export class UsersComponent extends CommonComponent implements OnInit {
   }
 
   async saveUser() {
-    await this.spinner.show();
-    console.log(this.formGroupDetail.controls.department);
     this.formGroupDetail.markAllAsTouched();
     Object.keys(this.formGroupDetail.controls).forEach(key => {
       (this.formGroupDetail.get(key) as FormControl).markAsTouched();
@@ -194,12 +192,15 @@ export class UsersComponent extends CommonComponent implements OnInit {
     }
 
     if (this.formGroupDetail.valid) {
+      await this.spinner.show();
       try {
         const selectedRoles: number[] = [];
-        this.formGroupDetail.value.roles.forEach((roleId: any) => {
-          const selectedRole = this.listRolesForCreate.filter(role => role.roleId == roleId)[0];
-          selectedRoles.push(selectedRole.roleId);
-        });
+        if (this.formGroupDetail.value.roles) {
+          this.formGroupDetail.value.roles.forEach((roleId: any) => {
+            const selectedRole = this.listRolesForCreate.filter(role => role.roleId == roleId)[0];
+            selectedRoles.push(selectedRole.roleId);
+          });
+        }
         const dataSave = { ...this.formGroupDetail.value, roles: selectedRoles };
         if (dataSave.id) {
           await this.baseService.update(dataSave, 'update');
@@ -218,8 +219,6 @@ export class UsersComponent extends CommonComponent implements OnInit {
         this.spinner.hide();
         this.toggleDialogCreate();
       }
-
-
     }
   }
 
