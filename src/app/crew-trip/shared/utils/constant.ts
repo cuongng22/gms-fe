@@ -20,7 +20,7 @@ export class MESSAGE {
   static UPDATE_SUCCESS = $localize`:@@updateSuccess:Updated successfully`;
   static UPDATE_FAIL = $localize`:@@updateFail:Update fail`;
   static DATA_EMPTY = $localize`:@@noDataFound:No data found`;
-  static DELETE_SUCCESS = $localize`:@@deleteSuccess:Delete success`;
+  static DELETE_SUCCESS = $localize`:@@deletedSuccessfully:Deleted successfully`;
   static DELETE_FAIL = $localize`:@@deleteFail:Delete fail`;
   static UPLOAD_SUCCESS = $localize`:@@uploadSuccess:Upload success`;
   static REJECT_SUCCESS = $localize`:@@rejectSuccess:Reject success`;
@@ -45,7 +45,7 @@ export class MESSAGE {
 
   static LABEL_ESTIMATED_TIME = $localize`:@@estimatedTime:Estimated Time`;
   static MESSAGE_ESTIMATED_TIME_REQUIRED = $localize`:@@estimatedTimeRequired:Estimated Time is required`;
-  
+
   static PHONE_NUMBER_INVALID = $localize`:@@phoneNumberFormatInvalid:Phone number must be numeric and the characters + ( )`;
 }
 
@@ -76,3 +76,19 @@ export function debouncedSignal<T>(input: Signal<T>, timeOutMs = 0): Signal<T> {
   });
   return debounceSignal;
 }
+
+
+export const DATE_FORMAT_DD_MM_YYYY = {
+  parse: {
+    dateInput: 'DD/MM/YYYY',
+  },
+
+  display: {
+    dateInput: 'DD/MM/YYYY',
+    monthYearLabel: 'MMMM YYYY',
+    dateA11yLabel: 'LL',
+    monthYearA11yLabel: 'MMMM YYYY'
+
+  },
+
+};

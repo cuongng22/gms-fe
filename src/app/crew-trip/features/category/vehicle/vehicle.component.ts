@@ -3,7 +3,7 @@ import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angu
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,7 +19,8 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/ flight-market.service';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
-import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import { Constant, DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-vehicle',
@@ -29,7 +30,12 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule
   ],
-  providers: [DataTransformPipe],
+  providers: [DataTransformPipe,
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
+    { provide: MAT_NATIVE_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
+    provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+
+  ],
   templateUrl: './vehicle.component.html',
   styleUrl: './vehicle.component.scss'
 })
@@ -47,7 +53,8 @@ export class VehicleComponent extends CommonComponent implements OnInit {
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
     marketCode: [''],
-    contractDate: [''],
+    contractStartDate: [''],
+    contractEndDate: [''],
     active: [''],
   });
 
@@ -90,8 +97,13 @@ export class VehicleComponent extends CommonComponent implements OnInit {
   }
 
   override search(body?: any, isNextPage?: boolean): any {
-    const contractDate = this.formGroupSearch.controls.contractDate.value;
-    const searchValue = { ...this.formGroupSearch.value, contractDate: contractDate ? this.dataTransformPipe.transform(contractDate, ['date', Constant.DATE_FORMAT]) : null };
+    const contractStartDate = this.formGroupSearch.controls.contractStartDate.value;
+    const contractEndDate = this.formGroupSearch.controls.contractEndDate.value;
+    const searchValue = {
+      ...this.formGroupSearch.value,
+      contractStartDate: contractStartDate ? this.dataTransformPipe.transform(contractStartDate, ['date', Constant.DATE_FORMAT]) : null,
+      contractEndDate: contractEndDate ? this.dataTransformPipe.transform(contractEndDate, ['date', Constant.DATE_FORMAT]) : null,
+    };
     super.search(searchValue, isNextPage);
   }
 }

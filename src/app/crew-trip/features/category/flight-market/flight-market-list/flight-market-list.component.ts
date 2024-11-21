@@ -5,7 +5,7 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatChipsModule } from '@angular/material/chips';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -20,7 +20,7 @@ import { FlightMarketService } from 'src/app/crew-trip/core/services/ flight-mar
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { Constant, MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
+import { Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
 import { CustomMatPaginatorIntl } from 'src/app/customizer-settings/paginator-intl.service';
 import { CarRentalDetailComponent } from '../car-rental-detail/car-rental-detail.component';
 import { HotelDetailComponent } from '../hotel-detail/hotel-detail.component';
@@ -28,6 +28,7 @@ import { FileUploadComponent, FileUploadModule, FileUploadValidators } from '@ip
 import { File } from 'buffer';
 import { subscribe } from 'diagnostics_channel';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-flight-market-list',
@@ -36,7 +37,10 @@ import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, FileUploadModule, NgxTrimDirectiveModule],
-  providers: [DataTransformPipe, { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }],
+  providers: [DataTransformPipe, { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl },
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
+    provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY)
+  ],
   templateUrl: './flight-market-list.component.html',
   styleUrl: './flight-market-list.component.scss'
 })

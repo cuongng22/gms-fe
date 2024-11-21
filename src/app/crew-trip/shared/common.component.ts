@@ -29,7 +29,7 @@ export class CommonComponent implements OnInit, AfterViewInit {
   selection = new SelectionModel<any>(true, []);
   pageSize = Constant.PAGE_SIZE;
   pageIndex = Constant.PAGE;
-  pageSizeOptions = [10, 50, 100];
+  pageSizeOptions = [10, 20, 50, 100];
   totalElement = 0;
   showFirstLastButtons = true;
   // isSidebarToggled
