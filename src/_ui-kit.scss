@@ -4044,6 +4044,17 @@ blockquote {
   }
 }
 
+.mat-column-action {
+  width: 50px !important;
+}
+
+.mat-column-select {
+  width: 50px !important;
+}
+
+.mat-column-stt {
+  width: 70px !important;
+}
 /* Max width 767px */
 @media only screen and (max-width: 767px) {
 

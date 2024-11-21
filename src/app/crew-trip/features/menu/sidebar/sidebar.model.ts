@@ -49,7 +49,7 @@ export const menu: Menu[] = [
         path: 'category/crews', title: $localize`:@@crewList:Crew List`, icon: 'ri-id-card-line'
       },
       {
-        path: 'category/nation', title: $localize`:@@country:Country`, icon: 'ri-global-line'
+        path: 'category/nation', title: $localize`:@@country:Countríes`, icon: 'ri-global-line'
       }
     ]
   },
