@@ -29,6 +29,7 @@ import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/
 import {MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {ClickOutside} from "ngxtension/click-outside";
 
 
 @Component({
@@ -70,7 +71,8 @@ import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
     MatDatepicker,
     MatDatepickerToggle,
     MatNativeDateModule,
-    FileUploadModule],
+    FileUploadModule,
+    ClickOutside],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
 })
@@ -252,5 +254,25 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.listKhoanMucKhns = res.data;
       }
     });
+  }
+
+  editCellUP(row: any, cell: any) {
+    console.log('aaaa')
+    let cur = new Set(row.cellEdit);
+    cur.add(cell);
+    row.cellEdit = Array.from(cur);
+    console.log(row)
+  }
+
+  readCellUP(row: any, cell: any) {
+    let cur = new Set(row.cellEdit);
+    cur.delete(cell);
+    row.cellEdit = Array.from(cur);
+  }
+  checkCellUP(row: any, cell: any) {
+    return row.cellEdit?.some((s: any) => s == cell) ?? false;
+  }
+  test(){
+    console.log(this.tblUnitPrice.data)
   }
 }
