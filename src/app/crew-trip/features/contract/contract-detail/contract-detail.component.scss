@@ -1908,3 +1908,11 @@
 /* Min width 1600px */
 @media only screen and (min-width: 1600px) {
 }
+
+.title-no-event{
+  height: 100% !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  cursor: default !important;
+}

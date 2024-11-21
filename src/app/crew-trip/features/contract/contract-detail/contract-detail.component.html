@@ -76,7 +76,9 @@
 </mat-card>
 <mat-accordion multi>
   <mat-expansion-panel [expanded]="expandList.has('tab1')">
-    <mat-expansion-panel-header i18n>1. General information</mat-expansion-panel-header>
+    <mat-expansion-panel-header i18n>
+      <div (click)="$event.stopPropagation();" class="title-no-event">1. General information</div>
+    </mat-expansion-panel-header>
     <mat-panel-description>
       <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
         <!--        dong1-->
@@ -370,7 +372,9 @@
     </mat-panel-description>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab2')">
-    <mat-expansion-panel-header i18n>2. Remittance Information</mat-expansion-panel-header>
+    <mat-expansion-panel-header i18n>
+      <div (click)="$event.stopPropagation();" class="title-no-event">2. Remittance Information</div>
+    </mat-expansion-panel-header>
     <mat-panel-description>
       <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
         <!--        dong1-->
@@ -519,7 +523,9 @@
     </mat-panel-description>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab3')">
-    <mat-expansion-panel-header i18n>3. Attached Document Information</mat-expansion-panel-header>
+    <mat-expansion-panel-header i18n>
+      <div (click)="$event.stopPropagation();" class="title-no-event">3. Attached Document Information</div>
+    </mat-expansion-panel-header>
     <mat-panel-description>
       <form [formGroup]="formGroupFileUpload" autocomplete="off" class="w-100">
         <div class="row">
@@ -582,7 +588,9 @@
     </mat-panel-description>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab4')">
-    <mat-expansion-panel-header i18n>4. Additional Information</mat-expansion-panel-header>
+    <mat-expansion-panel-header i18n>
+      <div (click)="$event.stopPropagation();" class="title-no-event">4. Additional Information</div>
+    </mat-expansion-panel-header>
     <mat-panel-description>
       <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
         <!--        dong1-->
@@ -722,7 +730,9 @@
     </mat-panel-description>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab5')">
-    <mat-expansion-panel-header i18n>5. Unit Price Information</mat-expansion-panel-header>
+    <mat-expansion-panel-header i18n>
+      <div (click)="$event.stopPropagation();" class="title-no-event">5. Unit Price Information</div>
+    </mat-expansion-panel-header>
     <mat-panel-description class="d-block">
       <div class="w-100 text-end">
         <mat-checkbox>
@@ -816,7 +826,9 @@
     </mat-panel-description>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab6')">
-    <mat-expansion-panel-header i18n>6. Unit Price Information</mat-expansion-panel-header>
+    <mat-expansion-panel-header i18n>
+      <div (click)="$event.stopPropagation();" class="title-no-event">6. Unit Price Information</div>
+    </mat-expansion-panel-header>
     <mat-panel-description class="d-block">
       <div>
         <div class="w-100 mb-10 d-flex justify-content-between">

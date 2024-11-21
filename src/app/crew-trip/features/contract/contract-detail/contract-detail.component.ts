@@ -170,7 +170,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         // this.loadListKhoanMucKhns(),
         // this.loadListMaNghiepVu(),
       ]).then(() => {
-        this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList);
+        this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList??[]);
         this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.value.priceUnitInfo);
         this.tblUnitPrice = new MatTableDataSource<any>([
           {
@@ -302,7 +302,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   editCellUP(row: any, cell: any) {
-    console.log('aaaa')
     let cur = new Set(row.cellEdit);
     cur.add(cell);
     row.cellEdit = Array.from(cur);
