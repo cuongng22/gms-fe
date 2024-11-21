@@ -10,4 +10,5 @@
   <mat-error *ngIf="ngControl?.control?.hasError('required')">
     {{ label }} is required.
   </mat-error>
+  <ng-content select="[mess-error]"></ng-content>
 </mat-form-field>
