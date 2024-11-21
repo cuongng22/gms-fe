@@ -91,7 +91,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   tblAttachedDocument = new MatTableDataSource();
   tblUnitPrice = new MatTableDataSource();
-  expandList = new Set<string>(['tab1', 'tab2', 'tab3', 'tab4', 'tab5']);
+  tbl61 = new MatTableDataSource();
+  tbl62 = new MatTableDataSource();
+  tbl63 = new MatTableDataSource();
+  expandList = new Set<string>(['tab1', 'tab2', 'tab3', 'tab4', 'tab5','tab6']);
   formGroupFileUpload!: FormGroup;
   curFile: any;
   showDialogDeleteFile = false;
@@ -169,6 +172,48 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       ]).then(() => {
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList);
         this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.value.priceUnitInfo);
+        this.tblUnitPrice = new MatTableDataSource<any>([
+          {
+            "id": 10001,
+            "serviceCode": "SVC12345",
+            "vnaTransId": 20002,
+            "priceNoTax": 1500.5,
+            "taxCode": "TAX24",
+            "taxRate": 1.1,
+            "originalAmount3": 1650.55,
+            "priceWithTax": 1650.55,
+            "notes": "Sample transaction",
+            "bizDocId": "14463221C1",
+            "expenseCatgId": 30003
+          },
+          {
+            "id": 10001,
+            "serviceCode": "SVC12345",
+            "vnaTransId": 20002,
+            "priceNoTax": 1500.5,
+            "taxCode": "TAX24",
+            "taxRate": 1.1,
+            "originalAmount3": 1650.55,
+            "priceWithTax": 1650.55,
+            "notes": "Sample transaction",
+            "bizDocId": "14463221C1",
+            "expenseCatgId": 30003
+          },
+          {
+            "id": 10001,
+            "serviceCode": "SVC12345",
+            "vnaTransId": 20002,
+            "priceNoTax": 1500.5,
+            "taxCode": "TAX24",
+            "taxRate": 1.1,
+            "originalAmount3": 1650.55,
+            "priceWithTax": 1650.55,
+            "notes": "Sample transaction",
+            "bizDocId": "14463221C1",
+            "expenseCatgId": 30003
+          }
+        ]);
+
       });
 
     } catch (e) {

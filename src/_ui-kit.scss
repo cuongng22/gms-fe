@@ -23,9 +23,9 @@
 }
 
 .mdc-floating-label--required:not(.mdc-floating-label--hide-required-marker)::after {
-  color: red;
+  color: red !important;
+  content: " *" !important;
 }
-
 .input-suggest .mat-mdc-text-field-wrapper {
   border: none !important;
 }

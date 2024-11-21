@@ -130,7 +130,7 @@
         <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true">
 
           <ng-container matColumnDef="stt">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
+            <th *matHeaderCellDef mat-header-cell mat-sort-header class="text-center">#</th>
             <td *matCellDef="let element; let i = dataIndex" class="text-center"
                 mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
             </td>
@@ -173,7 +173,7 @@
               <div class="basic-table table-responsive">
                 <table [dataSource]="tblAnnexData" class="table-light" mat-table>
                   <ng-container matColumnDef="stt">
-                    <th *matHeaderCellDef mat-header-cell mat-sort-header>#</th>
+                    <th *matHeaderCellDef mat-header-cell mat-sort-header class="text-center">#</th>
                     <td *matCellDef="let element; let i = index" mat-cell>{{ i + 1 }}</td>
                   </ng-container>
                   <ng-container matColumnDef="bizDocId">
