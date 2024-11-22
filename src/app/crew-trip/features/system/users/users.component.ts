@@ -73,11 +73,11 @@ export class UsersComponent extends CommonComponent implements OnInit {
     id: [''],
     department: ['', [Validators.required, Validators.maxLength(250)]],
     fullName: ['', [Validators.required, Validators.maxLength(250)]],
-    gender: [true],
+    gender: [],
     email: ['', [Validators.required, Validators.maxLength(250), Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
     phone: ['', [Validators.maxLength(20), Validators.pattern('^[0-9()+ ]+$')]],
     roles: [([] as any)],
-    active: [true, [Validators.required]],
+    active: ['', [Validators.required]],
     password: [new FormControl('',
       ifValidator(
         () => this.isValidatePassword,
