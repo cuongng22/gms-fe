@@ -269,6 +269,7 @@ export class CommonComponent implements OnInit, AfterViewInit {
 
   isSticky = false;
   configScrollY = 60;
+
   @HostListener('window:scroll', ['$event']) onScroll() {
     if (window.scrollY > this.configScrollY) {
       this.isSticky = true;

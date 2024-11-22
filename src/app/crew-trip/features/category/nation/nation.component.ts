@@ -58,7 +58,7 @@ export class NationComponent extends CommonComponent implements OnInit {
       code: ['', [Validators.required]],
       vniName: ['', [Validators.required]],
       engName: ['', [Validators.required]],
-      curCode: ['', [Validators.required]],
+      curCode: [''],
       active: [true,]
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
