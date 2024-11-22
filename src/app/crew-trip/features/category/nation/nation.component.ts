@@ -4,7 +4,7 @@ import {MatCardModule} from '@angular/material/card';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {RouterLink} from '@angular/router';
@@ -20,6 +20,7 @@ import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {InputComponent} from "src/app/crew-trip/component/input/input.component";
+import {HttpStatusCode} from "@angular/common/http";
 
 
 @Component({
@@ -41,11 +42,10 @@ export class NationComponent extends CommonComponent implements OnInit {
   _displayedColumns: {
     label: string; value: string, type?: string, format?: string
   }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Area`, value: 'area'},
-    {label: $localize`Code`, value: 'code'},
-    {label: $localize`English Name`, value: 'engName'},
-    {label: $localize`VietNam Name`, value: 'vniName'},
-    {label: $localize`Status`, value: 'activeLabel'},];
+    {label: $localize`Area`, value: 'area'}, {label: $localize`Code`, value: 'code'}, {
+      label: $localize`English Name`,
+      value: 'engName'
+    }, {label: $localize`VietNam Name`, value: 'vniName'}, {label: $localize`Status`, value: 'activeLabel'},];
 
   constructor() {
     super();
@@ -55,7 +55,7 @@ export class NationComponent extends CommonComponent implements OnInit {
     this.formGroupDetail = this.fb.group({
       id: ['',],
       area: ['', [Validators.required]],
-      code: ['', [Validators.required]],
+      code: ['', [Validators.required, this.existCodeValidator.bind(this)]],
       vniName: ['', [Validators.required]],
       engName: ['', [Validators.required]],
       curCode: [''],
@@ -75,6 +75,22 @@ export class NationComponent extends CommonComponent implements OnInit {
   async _detail(index: number) {
     this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
     this.toggleDialogCreate();
+  }
+
+  existCode: boolean = false;
+
+  override async save(): Promise<any> {
+    super.save().then(value => {
+      if (value.status == HttpStatusCode.Conflict) {
+        this.existCode = true;
+        this.formGroupDetail.controls['code'].updateValueAndValidity();
+        this.existCode = false;
+      }
+    });
+  }
+
+  existCodeValidator(control: AbstractControl): ValidationErrors | null {
+    return this.existCode ? {existCode: true} : null
   }
 
 }

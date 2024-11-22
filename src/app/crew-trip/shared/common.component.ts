@@ -133,8 +133,9 @@ export class CommonComponent implements OnInit, AfterViewInit {
       await this.spinner.hide();
     }
   }
- 
+
   async save() {
+    debugger
     try {
       this.formGroupDetail.markAllAsTouched();
       if (this.formGroupDetail.invalid) {
@@ -153,7 +154,9 @@ export class CommonComponent implements OnInit, AfterViewInit {
       await this.closeDetail();
       return res;
     } catch (e: any) {
-      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
+      if(e.status != HttpStatusCode.Conflict){
+        this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
+      }
       return e;
     } finally {
       await this.spinner.hide();

@@ -220,6 +220,9 @@
                   @if (!!formGroupDetail.controls['code'].hasError('required')) {
                     <mat-error><span i18n>Country code</span><span i18n> is required</span></mat-error>
                   }
+                  @else if (!!formGroupDetail.controls['code'].hasError('existCode')) {
+                  <mat-error><span i18n>Country code</span><span i18n> already exist</span></mat-error>
+                  }
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label i18n>Country name (English)</mat-label>
