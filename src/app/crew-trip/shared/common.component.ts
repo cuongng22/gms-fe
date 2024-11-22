@@ -133,7 +133,7 @@ export class CommonComponent implements OnInit, AfterViewInit {
       await this.spinner.hide();
     }
   }
-
+ 
   async save() {
     try {
       this.formGroupDetail.markAllAsTouched();
