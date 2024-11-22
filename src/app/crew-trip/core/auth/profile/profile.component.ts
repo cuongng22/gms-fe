@@ -21,6 +21,7 @@ import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {InputSmComponent} from "src/app/crew-trip/component/input-sm/input-sm.component";
 import {SharedModule} from "src/app/crew-trip/component/shared.module";
 import {SelectionComponent} from "src/app/crew-trip/component/selection/selection.component";
+import {SelectOptions} from "src/app/crew-trip/shared/select-option";
 
 @Component({
   selector: 'app-profile',
@@ -41,12 +42,8 @@ export class ProfileComponent implements OnInit {
   // multiple: any;
   avatarUrl: string | ArrayBuffer | null = null;
   fileError: string | null = null;
+  genderOptions = SelectOptions.GENDER;
   @Output() fileUploaded = new EventEmitter<string>();
-  genderOptions = [
-    { value: null, display: 'Select gender' },
-    { value: 0, display: 'Female' },
-    { value: 1, display: 'Male' },
-  ];
 
   constructor(private storageService: StorageService) {
     this.formGroup = this.fb.group({
