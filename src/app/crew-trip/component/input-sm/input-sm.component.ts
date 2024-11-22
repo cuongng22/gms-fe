@@ -9,7 +9,6 @@ import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
 import {MatInput, MatInputModule} from "@angular/material/input";
 import {NgIf} from "@angular/common";
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {NgxControlError} from "ngxtension/control-error";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 
 @Component({
@@ -31,7 +30,7 @@ import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.comp
 export class InputSmComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() label: string = '';
-  @Input() readonly : boolean = false;
+  @Input() readonly: boolean = false;
   @Input() hint = '';
   @Input() maxLength: number = 100;
   @Input() required: boolean = false;
@@ -76,12 +75,12 @@ export class InputSmComponent implements ControlValueAccessor {
 
   writeValue(value: any): void {
     if (this.formControl?.value !== value) {
-      this.formControl.setValue(value, { emitEvent: false });
+      this.formControl.setValue(value, {emitEvent: false});
     }
   }
 
   validate() {
-    return this.formControl?.valid ? null : { invalid: true };
+    return this.formControl?.valid ? null : {invalid: true};
   }
 
   ngOnChanges(changes: SimpleChanges): void {

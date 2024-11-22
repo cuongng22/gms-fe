@@ -59,13 +59,13 @@
             </div>
             <div class="col-sm-12 mb-10">
               <div class="form-group">
-                  <app-selection
-                    formControlName="gender"
-                    [label]="'Gender'"
-                    [required]="true"
-                    [readonly]="readonly"
-                    [options]="genderOptions"
-                  ></app-selection>
+                <app-selection
+                  formControlName="gender"
+                  [label]="'Gender'"
+                  [required]="true"
+                  [readonly]="readonly"
+                  [options]="genderOptions"
+                ></app-selection>
               </div>
             </div>
             <div class="col-sm-12 mb-10">
@@ -74,7 +74,7 @@
                   formControlName="email"
                   placeholder="Enter email"
                   label="Email"
-                  type="email"
+                  type="text"
                   [readonly]="true"
                   [required]="true"
                   [maxLength]="200"
