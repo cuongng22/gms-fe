@@ -4,18 +4,18 @@
       <h5>
         Profile
       </h5>
-      <div>
+      <div class="btn-box">
         <button class="add-btn" mat-button color="primary" *ngIf="readonly" (click)="updateEditMode()">
           <i class="material-symbols-outlined">edit</i>
           <span i18n="@@edit">Edit</span>
         </button>
         <div *ngIf="!readonly">
-          <button class="add-btn  mlr-5" mat-button color="primary" (click)="saveProfile()">
+          <button class="add-btn  mlr-5" type="button" mat-button color="primary" (click)="saveProfile()">
             <i class="material-symbols-outlined">save</i>
             <span i18n="@@save">Save</span>
           </button>
-          <button class="danger-btn   mlr-5" mat-button (click)="onCancel()">
-            <i class="material-symbols-outlined">cancel</i>
+          <button class="mlr-5" color="warn" mat-button type="button" (click)="onCancel()">
+            <i class="material-symbols-outlined">close</i>
             <span i18n="@@cancel">Cancel</span>
           </button>
         </div>

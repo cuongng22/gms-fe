@@ -39,7 +39,7 @@ export class ProfileComponent implements OnInit {
   readonly = true;
   spinner = inject(NgxSpinnerService);
   userCurrent = this.userService.getUserLogin();
-  // multiple: any;
+  selectedFile: File | null = null;
   avatarUrl: string | ArrayBuffer | null = null;
   fileError: string | null = null;
   genderOptions = SelectOptions.GENDER;
@@ -73,6 +73,9 @@ export class ProfileComponent implements OnInit {
 
   onCancel(): void {
     this.formGroup.reset(this.userCurrent);
+    if (this.selectedFile) {
+      this.avatarUrl = this.userCurrent?.avartarUrl ?? null;
+    }
     this.updateEditMode();
   }
 
@@ -82,17 +85,24 @@ export class ProfileComponent implements OnInit {
       try {
         await this.spinner.show();
         await this.userService.update(this.formGroup.value, 'update');
-        this.baseService.showSuccess("Profile " + MESSAGE.UPDATE_SUCCESS);
-        this.updateEditMode();
         let userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
+        if (this.selectedFile) {
+          let resp = await this.uploadFile(this.selectedFile);
+          if (resp && resp.data) {
+            userInfo.avartarUrl = resp.data;
+          }
+          this.selectedFile = null;
+        }
         Object.keys(this.formGroup.controls).forEach(key => {
           const value = this.formGroup.get(key)?.value;
-          if (value !== null && value !== undefined && value !== '') {
+          if (value !== null && value !== undefined && value !== '' && key !== 'avartarUrl') {
             userInfo[key] = value;
           }
         });
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(userInfo));
         this.userService.userInfoSubject.next(userInfo);
+        this.updateEditMode();
+        this.baseService.showSuccess("Profile " + MESSAGE.UPDATE_SUCCESS);
       } catch (error: any) {
         if (error?.status === 401 && error.error?.error) {
           this.baseService.showError(error?.error?.error);
@@ -120,13 +130,14 @@ export class ProfileComponent implements OnInit {
         this.fileError = $localize`File is too large. Maximum size is 2MB.`;
         return;
       }
+      this.selectedFile = file;
       this.fileError = null;
       const reader = new FileReader();
       reader.onload = () => {
         this.avatarUrl = reader.result;
       };
       reader.readAsDataURL(file);
-      this.uploadFile(file);
+      // this.uploadFile(file);
     }
   }
 
@@ -141,13 +152,13 @@ export class ProfileComponent implements OnInit {
       }
       formData.append('file', file);
       formData.append('email', email);
-      const res = await this.userService.uploadAvatar(formData);
-      if (res) {
-        let userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
-        userInfo.avartarUrl = res.data;
-        this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(userInfo));
-        this.userService.userInfoSubject.next(userInfo);
-      }
+      return await this.userService.uploadAvatar(formData);
+      // if (res) {
+      //   let userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
+      //   userInfo.avartarUrl = res.data;
+      //   this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(userInfo));
+      //   this.userService.userInfoSubject.next(userInfo);
+      // }
     } catch (error: any) {
       if (error?.status === 401 && error.error?.error) {
         this.baseService.showError(error?.error?.error);
