@@ -21,10 +21,11 @@ import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-funct
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {InputComponent} from "src/app/crew-trip/component/input/input.component";
 import {HttpStatusCode} from "@angular/common/http";
+import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 
 
 @Component({
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent, NgxTrimDirectiveModule],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   selector: 'app-nation',
   standalone: true,
@@ -41,11 +42,11 @@ export class NationComponent extends CommonComponent implements OnInit {
   //variable
   _displayedColumns: {
     label: string; value: string, type?: string, format?: string
-  }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Area`, value: 'area'}, {label: $localize`Code`, value: 'code'}, {
-      label: $localize`English Name`,
+  }[] = [
+    {label: $localize`Code`, value: 'code'}, {
+      label: $localize`English name`,
       value: 'engName'
-    }, {label: $localize`VietNam Name`, value: 'vniName'}, {label: $localize`Status`, value: 'activeLabel'},];
+    }, {label: $localize`VietNam name`, value: 'vniName'}, {label: $localize`Region`, value: 'area'}, {label: $localize`Status`, value: 'activeLabel'},];
 
   constructor() {
     super();
@@ -55,9 +56,9 @@ export class NationComponent extends CommonComponent implements OnInit {
     this.formGroupDetail = this.fb.group({
       id: ['',],
       area: ['', [Validators.required]],
-      code: ['', [Validators.required, this.existCodeValidator.bind(this)]],
-      vniName: ['', [Validators.required]],
-      engName: ['', [Validators.required]],
+      code: ['', [Validators.required, this.existCodeValidator.bind(this),Validators.maxLength(3)]],
+      vniName: ['', [Validators.required,Validators.maxLength(250)]],
+      engName: ['', [Validators.required,Validators.maxLength(250)]],
       curCode: [''],
       active: [true,]
     });
