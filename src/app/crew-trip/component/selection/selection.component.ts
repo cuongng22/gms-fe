@@ -4,28 +4,31 @@ import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption} from "@angular/material/core";
 import {MatSelect} from "@angular/material/select";
 import {CommonModule, NgIf} from "@angular/common";
+import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 
 @Component({
   selector: 'app-selection',
   standalone: true,
-    imports: [
-        FormsModule,
-        MatError,
-        MatFormField,
-        MatLabel,
-        MatOption,
-        MatSelect,
-        NgIf,
-        ReactiveFormsModule,
-        CommonModule
-    ],
+  imports: [
+    FormsModule,
+    MatError,
+    MatFormField,
+    MatLabel,
+    MatOption,
+    MatSelect,
+    NgIf,
+    ReactiveFormsModule,
+    CommonModule,
+    InputSizeComponent
+  ],
   templateUrl: './selection.component.html',
   styleUrl: './selection.component.scss'
 })
-export class SelectionComponent  implements ControlValueAccessor {
+export class SelectionComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
+  @Input() sizeInput: string = 'sm';
   @Input() label: string = '';
-  @Input() readonly : boolean = false;
+  @Input() readonly: boolean = false;
   @Input() hint = '';
   @Input() required: boolean = false;
   @Input() options: { value: any; display: string }[] = [];
@@ -42,8 +45,11 @@ export class SelectionComponent  implements ControlValueAccessor {
       this.ngControl.valueAccessor = this;
     }
   }
-  onChange = (value: any) => {};
-  onTouched = () => {};
+
+  onChange = (value: any) => {
+  };
+  onTouched = () => {
+  };
 
   registerOnChange(fn: any): void {
     this.onChange = fn;
@@ -55,12 +61,12 @@ export class SelectionComponent  implements ControlValueAccessor {
 
   writeValue(value: any): void {
     if (this.formControl?.value !== value) {
-      this.formControl.setValue(value, { emitEvent: false });
+      this.formControl.setValue(value, {emitEvent: false});
     }
   }
 
   validate() {
-    return this.formControl?.valid ? null : { invalid: true };
+    return this.formControl?.valid ? null : {invalid: true};
   }
 
   ngOnChanges(changes: SimpleChanges): void {

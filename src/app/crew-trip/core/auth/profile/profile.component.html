@@ -35,31 +35,34 @@
           <div class="row col-md-8">
             <div class="col-sm-12 mb-10">
               <div class="form-group">
-                <app-input-sm
+                <app-input
+                  sizeInput="lg"
                   formControlName="department"
                   placeholder="Enter department"
                   label="Department"
                   [readonly]="readonly"
                   [required]="true"
                   [maxLength]="200"
-                ></app-input-sm>
+                ></app-input>
               </div>
             </div>
             <div class="col-sm-12 mb-10">
               <div class="form-group">
-                <app-input-sm
+                <app-input
+                  sizeInput="lg"
                   formControlName="fullName"
                   placeholder="Enter fullName"
                   label="Full name"
                   [readonly]="readonly"
                   [required]="true"
                   [maxLength]="200"
-                ></app-input-sm>
+                ></app-input>
               </div>
             </div>
             <div class="col-sm-12 mb-10">
               <div class="form-group">
                 <app-selection
+                  sizeInput="lg"
                   formControlName="gender"
                   [label]="'Gender'"
                   [required]="true"
@@ -70,7 +73,8 @@
             </div>
             <div class="col-sm-12 mb-10">
               <div class="form-group">
-                <app-input-sm
+                <app-input
+                  sizeInput="lg"
                   formControlName="email"
                   placeholder="Enter email"
                   label="Email"
@@ -78,31 +82,33 @@
                   [readonly]="true"
                   [required]="true"
                   [maxLength]="200"
-                ></app-input-sm>
+                ></app-input>
               </div>
             </div>
             <div class="col-sm-12 mb-10">
               <div class="form-group">
-                <app-input-sm
+                <app-input
+                  sizeInput="lg"
                   formControlName="phone"
                   placeholder="Enter phone number"
                   label="Phone"
                   [readonly]="readonly"
                   [required]="false"
                   [maxLength]="20"
-                ></app-input-sm>
+                ></app-input>
               </div>
             </div>
             <div class="col-sm-12 mb-10">
               <div class="form-group">
-                <app-input-sm
+                <app-input
+                  sizeInput="lg"
                   formControlName="description"
                   placeholder="Enter description"
                   label="Description"
                   [readonly]="readonly"
                   [required]="false"
                   [maxLength]="500"
-                ></app-input-sm>
+                ></app-input>
               </div>
             </div>
           </div>

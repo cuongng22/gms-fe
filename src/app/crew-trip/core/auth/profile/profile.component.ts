@@ -18,7 +18,7 @@ import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 import {StorageService} from "src/app/crew-trip/core/services/storage.service";
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {InputSmComponent} from "src/app/crew-trip/component/input-sm/input-sm.component";
+import {InputComponent} from "src/app/crew-trip/component/input/input.component";
 import {SharedModule} from "src/app/crew-trip/component/shared.module";
 import {SelectionComponent} from "src/app/crew-trip/component/selection/selection.component";
 import {SelectOptions} from "src/app/crew-trip/shared/select-option";
@@ -26,7 +26,7 @@ import {SelectOptions} from "src/app/crew-trip/shared/select-option";
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [MatCardModule, FormsModule, MatButtonModule, ReactiveFormsModule, CommonModule, NgClass, MatFormField, MatSelectModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, FileUploadModule, NgxTrimDirectiveModule, InputSmComponent, SharedModule, SelectionComponent],
+  imports: [MatCardModule, FormsModule, MatButtonModule, ReactiveFormsModule, CommonModule, NgClass, MatFormField, MatSelectModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, FileUploadModule, NgxTrimDirectiveModule, InputComponent, SharedModule, SelectionComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })

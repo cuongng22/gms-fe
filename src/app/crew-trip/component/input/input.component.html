@@ -1,0 +1,28 @@
+<div [sizeInput]="sizeInput">
+  <mat-form-field>
+    <mat-label>
+      {{ label }}
+    </mat-label>
+    <input
+      sizeInput="sm"
+      matInput trim="blur"
+      [formControl]="formControl"
+      [placeholder]="placeholder"
+      [type]="type"
+      [required]="required"
+      (input)="onInput($event)"
+      (blur)="onTouched()"
+    />
+    <mat-hint *ngIf="hint">{{ hint }}</mat-hint>
+    <mat-error *ngIf="ngControl?.control?.hasError('required')">
+      {{ label }} is required.
+    </mat-error>
+    <mat-error *ngIf="ngControl?.control?.hasError('maxlength')">
+      {{ label }} maximum {{ maxLength }} characters allowed.
+    </mat-error>
+    <mat-error *ngIf="ngControl?.control?.hasError('email')">
+      Invalid email format
+    </mat-error>
+    <ng-content select="[mess-error]"></ng-content>
+  </mat-form-field>
+</div>

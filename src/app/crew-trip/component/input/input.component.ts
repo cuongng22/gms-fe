@@ -12,7 +12,7 @@ import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 
 @Component({
-  selector: 'app-input-sm',
+  selector: 'app-input',
   standalone: true,
   imports: [
     MatFormField,
@@ -24,12 +24,13 @@ import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.comp
     MatInputModule,
     InputSizeComponent
   ],
-  templateUrl: './input-sm.component.html',
-  styleUrl: './input-sm.component.scss',
+  templateUrl: './input.component.html',
+  styleUrl: './input.component.scss',
 })
-export class InputSmComponent implements ControlValueAccessor {
+export class InputComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
   @Input() label: string = '';
+  @Input() sizeInput: string = 'sm';
   @Input() readonly: boolean = false;
   @Input() hint = '';
   @Input() maxLength: number = 100;

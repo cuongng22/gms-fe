@@ -1,29 +1,30 @@
 import {NgModule} from '@angular/core';
 import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {InputSmComponent} from "src/app/crew-trip/component/input-sm/input-sm.component";
+import {InputComponent} from "src/app/crew-trip/component/input/input.component";
 import {SelectionComponent} from "src/app/crew-trip/component/selection/selection.component";
 
 @NgModule({
   declarations: [],
   imports: [
-    InputSmComponent,
+    InputComponent,
     SelectionComponent
   ],
   exports: [
-    InputSmComponent,
+    InputComponent,
     SelectionComponent
   ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: [InputSmComponent,SelectionComponent],
+      useExisting: [InputComponent, SelectionComponent],
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: [InputSmComponent,SelectionComponent],
+      useExisting: [InputComponent, SelectionComponent],
       multi: true,
     },
   ]
 })
-export class SharedModule {}
+export class SharedModule {
+}
