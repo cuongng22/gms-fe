@@ -18,9 +18,9 @@ import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 import {StorageService} from "src/app/crew-trip/core/services/storage.service";
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {InputComponent} from "src/app/crew-trip/component/input/input.component";
-import {SharedModule} from "src/app/crew-trip/component/shared.module";
-import {SelectionComponent} from "src/app/crew-trip/component/selection/selection.component";
+import {InputComponent} from "src/app/crew-trip/shared/component/input/input.component";
+import {SharedModule} from "src/app/crew-trip/shared/component/shared.module";
+import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
 import {SelectOptions} from "src/app/crew-trip/shared/select-option";
 
 @Component({

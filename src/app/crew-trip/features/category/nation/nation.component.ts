@@ -19,7 +19,7 @@ import {NoDataRowOutlet} from '@angular/cdk/table';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {InputComponent} from "src/app/crew-trip/component/input/input.component";
+import {InputComponent} from "src/app/crew-trip/shared/component/input/input.component";
 
 
 @Component({

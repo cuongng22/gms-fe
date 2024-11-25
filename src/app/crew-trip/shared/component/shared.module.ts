@@ -1,7 +1,7 @@
 import {NgModule} from '@angular/core';
 import {NG_VALIDATORS, NG_VALUE_ACCESSOR} from "@angular/forms";
-import {InputComponent} from "src/app/crew-trip/component/input/input.component";
-import {SelectionComponent} from "src/app/crew-trip/component/selection/selection.component";
+import {InputComponent} from "src/app/crew-trip/shared/component/input/input.component";
+import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
 
 @NgModule({
   declarations: [],
