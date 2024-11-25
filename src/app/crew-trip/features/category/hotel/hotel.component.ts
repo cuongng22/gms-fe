@@ -48,7 +48,6 @@ import { MAT_MOMENT_DATE_FORMATS, provideMomentDateAdapter } from '@angular/mate
   ],
   providers: [DataTransformPipe,
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
-    { provide: MAT_DATE_LOCALE, useValue: 'vn' }
   ],
   templateUrl: './hotel.component.html',
   styleUrl: './hotel.component.scss'

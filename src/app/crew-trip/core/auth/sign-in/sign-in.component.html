@@ -24,7 +24,7 @@
               VNA CREW TRIP
             </h1>
           </div>
-          <form ngForm [formGroup]="formGroup" (ngSubmit)="login()">
+          <form ngForm [formGroup]="formGroup" (ngSubmit)="formGroup.valid &&  login()">
             <div class="form-group">
               <mat-form-field>
                 <mat-label i18n="@@email">Email</mat-label>

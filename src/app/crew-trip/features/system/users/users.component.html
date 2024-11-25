@@ -309,7 +309,7 @@
                   </mat-error>
                   <mat-error *ngxControlError="formGroupDetail.controls.phone; track: 'pattern'"
                     i18n="@@phoneNumberFormatInvalid">
-                    Phone number {{ MESSAGE.PHONE_NUMBER_INVALID }}
+                    {{ MESSAGE.PHONE_NUMBER_INVALID }}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -466,7 +466,7 @@
                   </mat-label>
                   <input trim="blur" matInput [(ngModel)]="changePassword.newPassword" name="newPassword"
                     #newPassword="ngModel" required minlength="8" [type]="passwordInputType"
-                    pattern="^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$">
+                    pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$">
                   <button type="button" matSuffix mat-icon-button aria-label="Clear"
                     (click)="passwordInputType = (passwordInputType == 'password' ? 'text' : 'password')">
                     <i class="material-symbols-outlined">

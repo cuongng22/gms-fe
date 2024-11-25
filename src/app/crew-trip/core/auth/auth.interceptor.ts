@@ -51,8 +51,8 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
           router.navigate(['auth/login'], {fragment: '401', skipLocationChange: true});
         } else if (error.status === 503 || (error.status === 0 && error.statusText === 'Unknown Error')) {
           baseService.showError(MESSAGE.ERROR_CONNECT);
-        } else if (error.status === 409 || error.status === 400) {
-          baseService.showError(error?.error?.error);
+        } else if (error.status === 409) {
+          return throwError(() => error);
         } else if (error.status === 400) {
           baseService.showError(error?.error?.error);
         } else {
