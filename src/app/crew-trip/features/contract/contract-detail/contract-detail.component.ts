@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, inject, Input, model, OnInit, Output, ViewChild} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
@@ -11,15 +11,11 @@ import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelDescription,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle
+  MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle
 } from '@angular/material/expansion';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
@@ -28,51 +24,19 @@ import {ContractService} from 'src/app/crew-trip/core/services/contract-service'
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from "@iplab/ngx-file-upload";
-import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {LOCALE, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {ClickOutside} from "ngxtension/click-outside";
+import {HttpStatusCode} from "@angular/common/http";
+import {cloneDeep} from "lodash";
+import {NationService} from "src/app/crew-trip/core/services/nation-service";
+import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
+import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [DataTransformPipe,
-    FormsModule,
-    InputSizeComponent,
-    MatAccordion,
-    MatButtonModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatError,
-    MatExpansionPanel,
-    MatExpansionPanelDescription,
-    MatExpansionPanelHeader,
-    MatExpansionPanelTitle,
-    MatFormField,
-    MatInput,
-    MatLabel,
-    MatMenuModule,
-    MatOption,
-    MatPaginatorModule,
-    MatPrefix,
-    MatRadioModule,
-    MatSelect,
-    MatSuffix,
-    MatTab,
-    MatTabGroup,
-    MatTableModule,
-    NgClass,
-    NgIf,
-    NgxEditorModule,
-    ReactiveFormsModule,
-    RouterLink,
-    TitleCasePipe,
-    MatHint,
-    MatDatepickerModule,
-    MatDatepicker,
-    MatDatepickerToggle,
-    MatNativeDateModule,
-    FileUploadModule,
-    ClickOutside],
+  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
 })
@@ -80,7 +44,12 @@ import {ClickOutside} from "ngxtension/click-outside";
 
 export class ContractDetailComponent extends CommonComponent implements OnInit {
   override baseService = inject(ContractService);
+  nationService = inject(NationService);
   fb = inject(FormBuilder);
+
+  //control
+  @ViewChild('nationName') nationName: ElementRef<HTMLInputElement>;
+  filteredNation = model<any[]>([]);
 
   //variable
   @Input() id: any;
@@ -94,15 +63,31 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   tbl61 = new MatTableDataSource();
   tbl62 = new MatTableDataSource();
   tbl63 = new MatTableDataSource();
-  expandList = new Set<string>(['tab1', 'tab2', 'tab3', 'tab4', 'tab5','tab6']);
+  expandList = new Set<string>(['tab1', 'tab2', 'tab3', 'tab4', 'tab5', 'tab6']);
   formGroupFileUpload!: FormGroup;
   curFile: any;
   showDialogDeleteFile = false;
+  listMaNghiepVu: any = [];
+  listKhoanMucKhns: any = [];
+  listQuocGia: any = [];
 
   // private filesControl = new FormControl(null, );
   constructor() {
     super();
     this.formGroupDetail = this.fb.group({
+      doiTuongDichVu: [],
+      phanLoaiHopDong: [],
+
+      //tab4
+      maThiTruong: [],
+      tenThiTruong: [],
+      quocGia: [],
+      phanLoai: [],
+      nhomDuongBay: [],
+      trangThaiThiTruong: [],
+      hoTenNguoiLienHeNcc: [],
+      dienThoaiLienHeNcc: [],
+
       tempp: [],
       id: [],
       bizDocId: [],
@@ -156,8 +141,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       iban: [],
     });
     this.formGroupFileUpload = this.fb.group({
-      contractCategory: ['1'],
-      fileUpload: []
+      contractCategory: ['1'], fileUpload: []
     });
   }
 
@@ -165,54 +149,49 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     try {
       window.scrollTo(0, 0);
       await this.spinner.show();
-      await Promise.all([
-        this.detail(this.id),
-        // this.loadListKhoanMucKhns(),
+      await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         // this.loadListMaNghiepVu(),
+        this.loadListQuocGia()
       ]).then(() => {
-        this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList??[]);
+        this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList ?? []);
         this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.value.priceUnitInfo);
-        this.tblUnitPrice = new MatTableDataSource<any>([
-          {
-            "id": 10001,
-            "serviceCode": "SVC12345",
-            "vnaTransId": 20002,
-            "priceNoTax": 1500.5,
-            "taxCode": "TAX24",
-            "taxRate": 1.1,
-            "originalAmount3": 1650.55,
-            "priceWithTax": 1650.55,
-            "notes": "Sample transaction",
-            "bizDocId": "14463221C1",
-            "expenseCatgId": 30003
-          },
-          {
-            "id": 10001,
-            "serviceCode": "SVC12345",
-            "vnaTransId": 20002,
-            "priceNoTax": 1500.5,
-            "taxCode": "TAX24",
-            "taxRate": 1.1,
-            "originalAmount3": 1650.55,
-            "priceWithTax": 1650.55,
-            "notes": "Sample transaction",
-            "bizDocId": "14463221C1",
-            "expenseCatgId": 30003
-          },
-          {
-            "id": 10001,
-            "serviceCode": "SVC12345",
-            "vnaTransId": 20002,
-            "priceNoTax": 1500.5,
-            "taxCode": "TAX24",
-            "taxRate": 1.1,
-            "originalAmount3": 1650.55,
-            "priceWithTax": 1650.55,
-            "notes": "Sample transaction",
-            "bizDocId": "14463221C1",
-            "expenseCatgId": 30003
-          }
-        ]);
+        this.tblUnitPrice = new MatTableDataSource<any>([{
+          "id": 10001,
+          "serviceCode": "SVC12345",
+          "vnaTransId": 20002,
+          "priceNoTax": 1500.5,
+          "taxCode": "TAX24",
+          "taxRate": 1.1,
+          "originalAmount3": 1650.55,
+          "priceWithTax": 1650.55,
+          "notes": "Sample transaction",
+          "bizDocId": "14463221C1",
+          "expenseCatgId": 30003
+        }, {
+          "id": 10001,
+          "serviceCode": "SVC12345",
+          "vnaTransId": 20002,
+          "priceNoTax": 1500.5,
+          "taxCode": "TAX24",
+          "taxRate": 1.1,
+          "originalAmount3": 1650.55,
+          "priceWithTax": 1650.55,
+          "notes": "Sample transaction",
+          "bizDocId": "14463221C1",
+          "expenseCatgId": 30003
+        }, {
+          "id": 10001,
+          "serviceCode": "SVC12345",
+          "vnaTransId": 20002,
+          "priceNoTax": 1500.5,
+          "taxCode": "TAX24",
+          "taxRate": 1.1,
+          "originalAmount3": 1650.55,
+          "priceWithTax": 1650.55,
+          "notes": "Sample transaction",
+          "bizDocId": "14463221C1",
+          "expenseCatgId": 30003
+        }]);
 
       });
 
@@ -244,9 +223,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           fileName: fileUpload.name,
           isManual: true
         }];
-      } catch (e) {
+      } catch (e: any) {
         console.log(e);
-        this.baseService.showError(MESSAGE.ERROR);
+        this.baseService.showError((e.error?.error?.file) ?? (e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
       }
     }
   }
@@ -273,7 +252,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async deleteFile() {
-    await this.baseService.deleteFile(this.curFile.fileName, this.id);
+    await this.baseService.deleteFile(this.curFile.fileName, this.id).then((res: any) => {
+      if (res.status == HttpStatusCode.Ok) {
+        this.baseService.showSuccess("Delete file successfully.");
+      }
+    });
     this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter((item: any) => item.fileName !== this.curFile.fileName);
     this.showDialogDeleteFile = false;
   }
@@ -282,13 +265,27 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     this.showDialogDeleteFile = false;
   }
 
-  listMaNghiepVu = [];
-  listKhoanMucKhns = [];
-
   async loadListMaNghiepVu() {
     await this.baseService.listMaNghiepVu().then(res => {
       if (res.data) {
         this.listMaNghiepVu = res.data;
+      }
+    });
+  }
+
+  async loadListQuocGia() {
+    await this.nationService.search({page: 0, limit: 99999}).then(res => {
+      if (res.data) {
+        this.listQuocGia = res.data.content;
+        /*{
+          "id": 329,
+          "area": "Asia",
+          "code": "123",
+          "engName": "q1",
+          "vniName": "r1",
+          "active": true,
+          "curCode": null
+        }*/
       }
     });
   }
@@ -313,10 +310,18 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     cur.delete(cell);
     row.cellEdit = Array.from(cur);
   }
+
   checkCellUP(row: any, cell: any) {
     return row.cellEdit?.some((s: any) => s == cell) ?? false;
   }
-  test(){
+
+  test() {
     console.log(this.tblUnitPrice.data)
   }
+
+  protected readonly LOCALE = LOCALE;
+  async filterNation(){
+
+  }
+  async nationSelected(event:any){}
 }
