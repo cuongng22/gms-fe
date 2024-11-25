@@ -18,10 +18,13 @@
       {{ label }} is required.
     </mat-error>
     <mat-error *ngIf="ngControl?.control?.hasError('maxlength')">
-      {{ label }} maximum {{ maxLength }} characters allowed.
+      {{ label }} must be less than {{ maxLength }} characters.
     </mat-error>
     <mat-error *ngIf="ngControl?.control?.hasError('email')">
       Invalid email format
+    </mat-error>
+    <mat-error *ngIf="label === 'Phone' && ngControl?.control?.hasError('pattern')">
+      Phone must be numeric and the characters + ( )
     </mat-error>
     <ng-content select="[mess-error]"></ng-content>
   </mat-form-field>

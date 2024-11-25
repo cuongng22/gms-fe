@@ -51,9 +51,9 @@ export class ProfileComponent implements OnInit {
       fullName: [this.userCurrent?.fullName, [Validators.required, Validators.maxLength(250)]],
       department: [this.userCurrent?.department, [Validators.required, Validators.maxLength(250)]],
       email: [this.userCurrent?.email, [Validators.required, Validators.email, Validators.maxLength(250)]],
-      phone: [this.userCurrent?.phone, [Validators.maxLength(20)]],
-      description: [this.userCurrent?.description],
-      gender: [this.userCurrent?.gender ? 1 : 0, Validators.required],
+      phone: [this.userCurrent?.phone, [Validators.maxLength(20), Validators.pattern('^[0-9()+ ]+$')]],
+      description: [this.userCurrent?.description, [Validators.maxLength(500)]],
+      gender: [this.userCurrent?.gender ? 1 : 0],
       avartarUrl: [this.userCurrent?.avartarUrl],
       testF: ['']
     });
@@ -75,6 +75,7 @@ export class ProfileComponent implements OnInit {
     this.formGroup.reset(this.userCurrent);
     if (this.selectedFile) {
       this.avatarUrl = this.userCurrent?.avartarUrl ?? null;
+      this.selectedFile = null;
     }
     this.updateEditMode();
   }
@@ -95,14 +96,14 @@ export class ProfileComponent implements OnInit {
         }
         Object.keys(this.formGroup.controls).forEach(key => {
           const value = this.formGroup.get(key)?.value;
-          if (value !== null && value !== undefined && value !== '' && key !== 'avartarUrl') {
+          if (key !== 'avartarUrl') {
             userInfo[key] = value;
           }
         });
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(userInfo));
         this.userService.userInfoSubject.next(userInfo);
         this.updateEditMode();
-        this.baseService.showSuccess("Profile " + MESSAGE.UPDATE_SUCCESS);
+        this.baseService.showSuccess("Profile updated successfully");
       } catch (error: any) {
         if (error?.status === 401 && error.error?.error) {
           this.baseService.showError(error?.error?.error);
