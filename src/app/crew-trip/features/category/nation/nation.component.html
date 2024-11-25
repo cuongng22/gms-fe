@@ -30,7 +30,7 @@
           <mat-form-field>
             <mat-label i18n>Region</mat-label>
             <mat-select formControlName="area">
-              <mat-option i18n value="">-- Region --</mat-option>
+              <mat-option i18n [value]="null">-- All region --</mat-option>
               <mat-option i18n value="Asia">Asia</mat-option>
               <mat-option i18n value="Europe">Europe</mat-option>
               <mat-option i18n value="Africa">Africa</mat-option>
@@ -44,7 +44,7 @@
           <mat-form-field>
             <mat-label i18n>Status</mat-label>
             <mat-select formControlName="active">
-              <mat-option i18n value="">-- Status --</mat-option>
+              <mat-option i18n [value]="null">-- All status --</mat-option>
               <mat-option i18n value="1">Active</mat-option>
               <mat-option i18n value="0">Inactive</mat-option>
             </mat-select>
@@ -114,9 +114,9 @@
         </ng-container>
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
           <ng-container matColumnDef="{{innerColumn.value}}">
-            <th class="text-center" mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label  }}</th>
+            <th class="text-center" mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label }}</th>
             <td [ngClass]="{'text-center': innerColumn.value === 'activeLabel',}" mat-cell *matCellDef="let element">
-                <span  [ngClass]="{
+                <span [ngClass]="{
         'badge': innerColumn.value === 'activeLabel',
         'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
         'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
@@ -141,11 +141,11 @@
                   edit
                 </i>
               </a>
-<!--              <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">-->
-<!--                <i class="material-symbols-outlined" title="Delete">-->
-<!--                  delete-->
-<!--                </i>-->
-<!--              </a>-->
+              <!--              <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">-->
+              <!--                <i class="material-symbols-outlined" title="Delete">-->
+              <!--                  delete-->
+              <!--                </i>-->
+              <!--              </a>-->
             </div>
           </td>
         </ng-container>
@@ -204,7 +204,7 @@
                 <mat-form-field>
                   <mat-label>Region</mat-label>
                   <mat-select formControlName="area" required>
-                    <mat-option i18n value="">-- Region --</mat-option>
+                    <mat-option i18n [value]="null">-- Region --</mat-option>
                     <mat-option i18n value="Asia">Asia</mat-option>
                     <mat-option i18n value="Europe">Europe</mat-option>
                     <mat-option i18n value="Africa">Africa</mat-option>
@@ -218,14 +218,13 @@
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label i18n>Country code</mat-label>
-                  <input formControlName="code" trim="blur" i18n-placeholder matInput required>
+                  <input formControlName="code" [readonly]="formGroupDetail.value.id" trim="blur" i18n-placeholder
+                         matInput required>
                   @if (!!formGroupDetail.controls['code'].hasError('required')) {
                     <mat-error><span i18n>Country code</span><span i18n> is required</span></mat-error>
-                  }
-                  @else if (!!formGroupDetail.controls['code'].hasError('existCode')) {
-                  <mat-error><span i18n>Country code</span><span i18n> already exist</span></mat-error>
-                  }
-                  @else if (!!formGroupDetail.controls['code'].hasError('maxlength')) {
+                  } @else if (!!formGroupDetail.controls['code'].hasError('existCode')) {
+                    <mat-error><span i18n>Country code</span><span i18n> already exist</span></mat-error>
+                  } @else if (!!formGroupDetail.controls['code'].hasError('maxlength')) {
                     <mat-error><span i18n>Country code must be less than 3 characters</span></mat-error>
                   }
                 </mat-form-field>
