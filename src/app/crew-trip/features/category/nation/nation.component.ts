@@ -19,9 +19,9 @@ import {NoDataRowOutlet} from '@angular/cdk/table';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {InputComponent} from "src/app/crew-trip/component/input/input.component";
 import {HttpStatusCode} from "@angular/common/http";
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
+import {InputComponent} from "src/app/crew-trip/shared/component/input/input.component";
 
 
 @Component({
@@ -46,7 +46,10 @@ export class NationComponent extends CommonComponent implements OnInit {
     {label: $localize`Code`, value: 'code'}, {
       label: $localize`English name`,
       value: 'engName'
-    }, {label: $localize`VietNam name`, value: 'vniName'}, {label: $localize`Region`, value: 'area'}, {label: $localize`Status`, value: 'activeLabel'},];
+    }, {label: $localize`VietNam name`, value: 'vniName'}, {
+      label: $localize`Region`,
+      value: 'area'
+    }, {label: $localize`Status`, value: 'activeLabel'},];
 
   constructor() {
     super();
@@ -56,9 +59,9 @@ export class NationComponent extends CommonComponent implements OnInit {
     this.formGroupDetail = this.fb.group({
       id: ['',],
       area: ['', [Validators.required]],
-      code: ['', [Validators.required, this.existCodeValidator.bind(this),Validators.maxLength(3)]],
-      vniName: ['', [Validators.required,Validators.maxLength(250)]],
-      engName: ['', [Validators.required,Validators.maxLength(250)]],
+      code: ['', [Validators.required, this.existCodeValidator.bind(this), Validators.maxLength(3)]],
+      vniName: ['', [Validators.required, Validators.maxLength(250)]],
+      engName: ['', [Validators.required, Validators.maxLength(250)]],
       curCode: [''],
       active: [true,]
     });
