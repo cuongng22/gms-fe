@@ -55,6 +55,8 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
           return throwError(() => error);
         } else if (error.status === 400) {
           baseService.showError(error?.error?.error);
+        } else if (error.status === 500) {
+          baseService.showError(error?.error?.error);
         } else {
           return throwError(() => error);
         }
