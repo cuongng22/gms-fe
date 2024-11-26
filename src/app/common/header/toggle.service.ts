@@ -6,7 +6,7 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class ToggleService {
 
-    private isSidebarToggled = new BehaviorSubject<boolean>(true);
+    private isSidebarToggled = new BehaviorSubject<boolean>(false);
     get isSidebarToggled$() {
         return this.isSidebarToggled.asObservable();
     }
