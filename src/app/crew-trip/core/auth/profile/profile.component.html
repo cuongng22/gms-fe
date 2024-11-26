@@ -27,6 +27,8 @@
           <img *ngIf="avatarUrl" [src]="avatarUrl" alt="User avatar" class="avatar-preview"/>
           <img *ngIf="!avatarUrl" src="images/admin.png" alt="User avatar" class="avatar-preview"/>
           <input type="file" *ngIf="!readonly" (change)="onFileSelected($event)" accept="image/*"/>
+          <!--          <file-upload *ngIf="!readonly" [multiple]="false" class="file-uploader" accept="image/*"-->
+          <!--                       (change)="onFileSelected($event)"></file-upload>-->
           <mat-error *ngIf="fileError">{{ fileError }}</mat-error>
         </div>
       </div>

@@ -1,26 +1,26 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { map, Observable, startWith } from 'rxjs';
-import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { debounceTime } from 'rxjs/operators';
-import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
-import { FlightMarketService } from 'src/app/crew-trip/core/services/ flight-market.service';
-import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
-import { Constant, DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant';
-import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatAutocomplete, MatAutocompleteModule, MatAutocompleteTrigger} from '@angular/material/autocomplete';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MAT_DATE_FORMATS, MAT_NATIVE_DATE_FORMATS, MatNativeDateModule} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatFormField, MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {map, Observable, startWith} from 'rxjs';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {debounceTime} from 'rxjs/operators';
+import {CommonModule} from '@angular/common';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {Constant, DATE_FORMAT_DD_MM_YYYY} from 'src/app/crew-trip/shared/utils/constant';
+import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-vehicle',
@@ -31,8 +31,8 @@ import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
     MatTableModule, MatPaginatorModule
   ],
   providers: [DataTransformPipe,
-    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
-    { provide: MAT_NATIVE_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
+    {provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY},
+    {provide: MAT_NATIVE_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY},
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
 
   ],
@@ -45,7 +45,7 @@ export class VehicleComponent extends CommonComponent implements OnInit {
   formBuilder = inject(FormBuilder);
 
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
-
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   // danh sách thị trường
   markets: any[] = [];
   filteredOptionsMarket: any[];
@@ -83,7 +83,7 @@ export class VehicleComponent extends CommonComponent implements OnInit {
     this.search();
 
     // Lấy danh sách thị trường
-    this.flightMarketService.search({ option: 1 }).then(res => {
+    this.flightMarketService.search({option: 1}).then(res => {
       this.markets = res.data;
     });
   }
@@ -94,6 +94,11 @@ export class VehicleComponent extends CommonComponent implements OnInit {
       this.filteredOptionsMarket = this.markets;
     }
     this.filteredOptionsMarket = this.markets.filter(market => market.toLowerCase().includes(filterValue));
+  }
+
+  onFocusMarket(): void {
+    this.filteredOptionsMarket = this.markets;
+    this.autocompleteTrigger.openPanel();
   }
 
   override search(body?: any, isNextPage?: boolean): any {
