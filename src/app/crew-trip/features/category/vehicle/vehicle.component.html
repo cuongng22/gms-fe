@@ -33,6 +33,11 @@
                    (input)="filterMarket()" (focus)="onFocusMarket()">
             <mat-autocomplete #marketComplete="matAutocomplete">
               <mat-option
+                [value]=null
+              >
+                -- All Airport code --
+              </mat-option>
+              <mat-option
                 *ngFor="let option of filteredOptionsMarket"
                 [value]="option"
               >
