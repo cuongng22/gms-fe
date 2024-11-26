@@ -1,0 +1,31 @@
+<div class="col" [sizeInput]="sizeInput">
+    <mat-form-field>
+        <mat-label i18n="@@costCategory">{{label}}</mat-label>
+        <mat-select formControlName="serviceFeeCode" multiple>
+            <mat-select-trigger>
+                {{ getSelectTrigger() }}
+            </mat-select-trigger>
+            <form class="mb-2" sizeInput="sm">
+                <mat-form-field class="input-suggest">
+                    <input trim="blur" matInput type="text" name="clearable-input" [(ngModel)]="search"
+                        i18n-placeholder="@@search" placeholder="Search">
+                    @if (search()) {
+                    <button matSuffix mat-icon-button i18n-aria-label="@@clear" aria-label="Clear"
+                        (click)="search.set('')">
+                        <i class="material-symbols-outlined">
+                            close
+                        </i>
+                    </button>
+                    }
+                </mat-form-field>
+            </form>
+            @for (option of options; track $index) {
+            <mat-option [value]="option">{{option[attrDisplay]}}</mat-option>
+            }
+        </mat-select>
+        <mat-error *ngxControlError="ngControl; track: 'required'">
+            {{ label }} {{MESSAGE.REQUIRED}}
+        </mat-error>
+        <ng-content select="[mess-error]"></ng-content>
+    </mat-form-field>
+</div>

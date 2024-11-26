@@ -250,8 +250,6 @@ button.btn {
   }
 }
 
-
-
 .min-with-100 {
   min-width: 100px !important;
 }
@@ -260,6 +258,7 @@ button.btn {
   max-width: 700px !important;
   min-width: 400px !important;
 }
+
 .dialog-delete-with {
   width: 520px !important;
 }
@@ -301,8 +300,28 @@ $font-sizes: (
 }
 
 
-.color-black{
+.color-black {
   color: var(--blackColor);
+}
+
+.mat-mdc-dialog-component-host {
+  .mat-mdc-card {
+    .mat-mdc-card-header {
+      margin-top: -25px;
+      margin-left: -25px;
+      margin-right: -25px;
+      background-color: #F6F7F9;
+
+      .mat-mdc-card-header-text .mat-mdc-card-subtitle .mat-mdc-button {
+        color: var(--blackColor);
+        border-radius: 4px;
+        font-size: 23px;
+        min-width: auto;
+        height: auto;
+        padding: 0;
+      }
+    }
+  }
 }
 
 // Heading
@@ -3204,6 +3223,7 @@ apx-chart {
 
 // Dialog
 .mat-mdc-dialog-container {
+  max-height: 100vh !important;
 
   .h1,
   h1,
@@ -3870,9 +3890,11 @@ blockquote {
   color: white !important;
   background-color: var(--vnaXanhColor) !important;
 }
-.text-bg-vna-hover{
+
+.text-bg-vna-hover {
   color: white !important;
   background-color: var(--vnaXanhColor) !important;
+
   &:hover {
     background-color: #005a75 !important;
   }
@@ -4010,9 +4032,11 @@ blockquote {
   color: RGBA(33, 37, 41, var(--bg-opacity, 1)) !important;
   background-color: #ced4da !important;
 }
+
 .text-soft-dark-hover {
   color: RGBA(33, 37, 41, var(--bg-opacity, 1)) !important;
   background-color: #ced4da !important;
+
   &:hover {
     background-color: #c2c3c5 !important;
   }
@@ -4055,6 +4079,7 @@ blockquote {
 .mat-column-stt {
   width: 70px !important;
 }
+
 /* Max width 767px */
 @media only screen and (max-width: 767px) {
 

@@ -18,6 +18,9 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
 import { AlreadyExistsValidator } from 'src/app/crew-trip/core/validator/already-exists';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { NgxControlError } from 'ngxtension/control-error';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { MatIcon } from '@angular/material/icon';
 
 @Component({
   selector: 'app-car-rental-detail',
@@ -25,7 +28,7 @@ import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, NgxTrimDirectiveModule],
+    MatTableModule, MatPaginatorModule, NgxTrimDirectiveModule, NgxControlError, DataTransformPipe, MatIcon],
   templateUrl: './car-rental-detail.component.html',
   styleUrl: './car-rental-detail.component.scss'
 })
@@ -39,16 +42,21 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
     id: [],
     marketCode: [{ value: '', disabled: true }],
     code: ['', {
-      validators: [Validators.required],
+      validators: [Validators.required, Validators.maxLength(250)],
       asyncValidators: [AlreadyExistsValidator.existsCarRentalCode(this.carRentalService)],
       updateOn: 'blur'
     }],
-    name: ['', Validators.required],
-    address: [''],
+    name: ['', [Validators.required, Validators.maxLength(250)]],
+    address: ['', Validators.maxLength(500)],
     fullName: [''],
-    email: ['', Validators.required],
-    phone: [''],
-    notes: [''],
+    email: ['',
+      [
+        Validators.required,
+        Validators.maxLength(250), Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
+      ]
+    ],
+    phone: ['', [Validators.maxLength(20), Validators.pattern('^[0-9()+ ]+$')]],
+    notes: ['', Validators.maxLength(500)],
     active: [true, Validators.required]
   });
 
@@ -62,6 +70,9 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
   override ngOnInit(): void {
     if (this.data.carRental) {
       console.log(this.data.carRental);
+      if (this.data.carRental.id) {
+        this.formGroupDetail.controls.marketCode.disable();
+      }
       this.formGroupDetail.patchValue(this.data.carRental);
       this.readonlyDetail.set(this.data.isViewDetail);
     }

@@ -1,10 +1,15 @@
 <mat-card class="border-radius d-block bg-white border-0 shadow-none">
-    <mat-card-header>
+    <mat-card-header class="p-15">
         <mat-card-title>
-            <h5 class="mb-0" i18n="@@carRentalInformation">
+            <h5 class="mb-2" i18n="@@carRentalInformation">
                 {{readonlyDetail()?'View':(this.data?.carRental?.id?'Edit':'Add new')}}
             </h5>
         </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button (click)="close()">
+                <i class="ri-close-fill"></i>
+            </button>
+        </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
         <form [formGroup]="formGroupDetail" (ngSubmit)="save()" autocomplete="off">
@@ -22,21 +27,23 @@
                 <div [ngClass]="{'col-md-12':!readonlyDetail(),'col-md-6':readonlyDetail()}">
                     <div class="form-group mb-20" sizeInput="md">
                         <mat-form-field>
-                            <mat-label i18n="@@carRentalCode">
-                                Car rental code
+                            <mat-label i18n="@@carCompanyCode">
+                                Car company code
                             </mat-label>
-                            <input trim="blur" matInput formControlName="code" required maxlength="250" class="text-uppercase">
-                            @if (
-                            formGroupDetail.controls.code.hasError('required') &&
-                            formGroupDetail.controls.code.touched) {
-                            <mat-error i18n="@@carRentalCodeRequired">Car rental code {{MESSAGE.REQUIRED}}</mat-error>
-                            }
-                            @if (
-                            formGroupDetail.controls.code.hasError('existsCarRentalCode') &&
-                            formGroupDetail.controls.code.touched) {
-                            <mat-error i18n="@@carRentalCodeAlreadyExists">Car rental code
-                                {{MESSAGE.ALREADY_EXISTS}}</mat-error>
-                            }
+                            <input trim="blur" matInput formControlName="code" required class="text-uppercase">
+                            <mat-error *ngxControlError="formGroupDetail.controls.code; track: 'required'"
+                                i18n="@@carRentalCodeRequired">
+                                Car company code {{MESSAGE.REQUIRED}}
+                            </mat-error><mat-error
+                                *ngxControlError="formGroupDetail.controls.code; track: 'existsCarRentalCode'"
+                                i18n="@@carRentalCodeAlreadyExists">
+                                Car company code {{MESSAGE.ALREADY_EXISTS}}
+                            </mat-error>
+                            <mat-error *ngxControlError="formGroupDetail.controls.code; track: 'maxlength'"
+                                i18n="@@carCompanyCodeMaxlength">
+                                Car company code {{ MESSAGE.MAX_LENGTH_INVALID |
+                                dataTransformPipe:[Constant.STRING_FORMAT,250]}}
+                            </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
@@ -45,16 +52,19 @@
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group mb-20" sizeInput="md">
                         <mat-form-field>
-                            <mat-label i18n="@@carRentalCompany">
-                                Car rental company
+                            <mat-label i18n="@@carCompanyName">
+                                Car company name
                             </mat-label>
-                            <input trim="blur" matInput formControlName="name" required maxlength="250">
-                            @if (
-                            formGroupDetail.controls.name.hasError('required') &&
-                            formGroupDetail.controls.name.touched) {
-                            <mat-error i18n="@@carRentalCompanyRequired">Car rental company
-                                {{MESSAGE.REQUIRED}}</mat-error>
-                            }
+                            <input trim="blur" matInput formControlName="name" required>
+                            <mat-error *ngxControlError="formGroupDetail.controls.name; track: 'required'"
+                                i18n="@@carRentalCompanyRequired">
+                                Car company name {{MESSAGE.REQUIRED}}
+                            </mat-error>
+                            <mat-error *ngxControlError="formGroupDetail.controls.name; track: 'maxlength'"
+                                i18n="@@carCompanyNameMaxlength">
+                                Car company name {{ MESSAGE.MAX_LENGTH_INVALID |
+                                dataTransformPipe:[Constant.STRING_FORMAT,250]}}
+                            </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
@@ -65,7 +75,12 @@
                             <mat-label i18n="@@address">
                                 Address
                             </mat-label>
-                            <input trim="blur" matInput formControlName="address" maxlength="500">
+                            <input trim="blur" matInput formControlName="address">
+                            <mat-error *ngxControlError="formGroupDetail.controls.address; track: 'maxlength'"
+                                i18n="@@addressMaxlength">
+                                Address {{ MESSAGE.MAX_LENGTH_INVALID |
+                                dataTransformPipe:[Constant.STRING_FORMAT,500]}}
+                            </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
@@ -76,7 +91,12 @@
                             <mat-label i18n="@@contactName">
                                 Contact name
                             </mat-label>
-                            <input trim="blur" matInput formControlName="fullName" maxlength="250">
+                            <input trim="blur" matInput formControlName="fullName">
+                            <mat-error *ngxControlError="formGroupDetail.controls.fullName; track: 'maxlength'"
+                                i18n="@@contactNameMaxlength">
+                                Contact name {{ MESSAGE.MAX_LENGTH_INVALID |
+                                dataTransformPipe:[Constant.STRING_FORMAT,250]}}
+                            </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
@@ -85,18 +105,19 @@
                     <div class="form-group mb-20" sizeInput="md">
                         <mat-form-field>
                             <mat-label i18n="@@emailBooking">Email</mat-label>
-                            <input trim="blur" type="email" matInput formControlName="email" required maxlength="250">
-                            @if (
-                            formGroupDetail.controls.email.hasError('required') &&
-                            formGroupDetail.controls.email.touched) {
-                            <mat-error i18n="@@emailBooking:emailRequired">Email {{MESSAGE.REQUIRED}}</mat-error>
-                            }
-                            @if (
-                            formGroupDetail.controls.email.hasError('email') &&
-                            formGroupDetail.controls.email.touched) {
-                            <mat-error i18n="@@eemailBooking:mailFormatInvalid">Email
-                                {{MESSAGE.FORMAT_INVALID}}</mat-error>
-                            }
+                            <input trim="blur" type="email" matInput formControlName="email" required>
+                            <mat-error *ngxControlError="formGroupDetail.controls.email; track: 'required'"
+                                i18n="@@emailBooking:emailRequired">
+                                Email {{MESSAGE.REQUIRED}}
+                            </mat-error>
+                            <mat-error *ngxControlError="formGroupDetail.controls.email; track: 'pattern'"
+                                i18n="@@eemailBooking:mailFormatInvalid">
+                                Email {{MESSAGE.FORMAT_INVALID}}
+                            </mat-error>
+                            <mat-error *ngxControlError="formGroupDetail.controls.email; track: 'maxlength'"
+                                i18n="@@emailMaxlength">
+                                Email {{ MESSAGE.MAX_LENGTH_INVALID | dataTransformPipe:[Constant.STRING_FORMAT, 250]}}
+                            </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
@@ -107,25 +128,38 @@
                             <mat-label i18n="@@phoneNumber">
                                 Phone number
                             </mat-label>
-                            <input trim="blur" matInput formControlName="phone" maxlength="20">
+                            <input trim="blur" matInput formControlName="phone">
+                            <mat-error *ngxControlError="formGroupDetail.controls.phone; track: 'maxlength'"
+                                i18n="@@phoneNumberMaxlength">
+                                Phone number {{ MESSAGE.MAX_LENGTH_INVALID |
+                                dataTransformPipe:[Constant.STRING_FORMAT,20]}}
+                            </mat-error>
+                            <mat-error *ngxControlError="formGroupDetail.controls.phone; track: 'pattern'"
+                                i18n="@@phoneNumberFormatInvalid">
+                                {{ MESSAGE.PHONE_NUMBER_INVALID }}
+                            </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group mb-20">
                         <mat-form-field>
-                            <mat-label i18n="@@notes">
-                                Notes
+                            <mat-label i18n="@@note">
+                                Note
                             </mat-label>
-                            <textarea matInput formControlName="notes" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="10"
-                                matTextareaAutosize cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                                maxlength="500"></textarea>
-
+                            <textarea matInput formControlName="notes" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5"
+                                matTextareaAutosize cdkTextareaAutosize #autosize="cdkTextareaAutosize">
+                            </textarea>
+                            <mat-error *ngxControlError="formGroupDetail.controls.notes; track: 'maxlength'"
+                                i18n="@@noteMaxlength">
+                                Note {{ MESSAGE.MAX_LENGTH_INVALID |
+                                dataTransformPipe:[Constant.STRING_FORMAT,500]}}
+                            </mat-error>
                         </mat-form-field>
                     </div>
                 </div>
 
-                <div class="col-sm-12 col-md-6">
+                <div class="col-sm-12">
                     <div class="form-group mb-20" sizeInput="md">
                         <mat-form-field>
                             <mat-label i18n="@@status">Status</mat-label>

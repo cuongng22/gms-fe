@@ -48,7 +48,7 @@
           <label class="main-label fw-medium text-black pr-15" i18n>
             Service type <span style="color:red">*</span>
           </label>
-          <mat-radio-group>
+          <mat-radio-group formControlName="doiTuongDichVu">
             <mat-radio-button i18n value="1">
               Hotel
             </mat-radio-button>
@@ -63,10 +63,10 @@
         <div class="col-3" sizeInput='sm'>
           <mat-form-field>
             <mat-label i18n>Contract category</mat-label>
-            <mat-select formControlName="tempp">
-              <mat-option i18n>-- Contract category --</mat-option>
-              <mat-option i18n value="1">Thuê ướt</mat-option>
-              <mat-option i18n value="0">Charter</mat-option>
+            <mat-select formControlName="phanLoaiHopDong" required>
+              <mat-option i18n value="0">Standard</mat-option>
+              <mat-option i18n value="1">Wet Lease</mat-option>
+              <mat-option i18n value="2">Charter</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -616,10 +616,19 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Country</mat-label>
-              <input formControlName="tempp" i18n-placeholder matInput required>
-              @if (!!formGroupDetail.controls['tempp'].hasError('required')) {
-                <mat-error><span i18n>Currency Code</span><span i18n> not empty</span></mat-error>
+
+              <input #nationName (input)="filterNation()" [matAutocomplete]="nationComplete" formControlName="quocGia" matInput
+                     trim="blur" type="text">
+              <mat-autocomplete #nationComplete="matAutocomplete" (optionSelected)="nationSelected($event)" autoActiveFirstOption
+                                requireSelection>
+                @for (item of listQuocGia; track item) {
+                  <mat-option [value]="item.id">{{ item.vniName }}</mat-option>
+                }
+              </mat-autocomplete>
+              @if (!!formGroupDetail.controls['quocGia'].hasError('required')) {
+                <mat-error><span i18n>Country</span><span i18n> not empty</span></mat-error>
               }
+
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
@@ -735,12 +744,14 @@
     </mat-expansion-panel-header>
     <mat-panel-description class="d-block">
       <div class="w-100 text-end">
-        <mat-checkbox>
-          Hoàn thuế khách sạn
-        </mat-checkbox>
-        <mat-checkbox class="mr-20">
-          Hoàn thuế nhà xe
-        </mat-checkbox>
+        @if (formGroupDetail.value.doiTuongDichVu == '3') {
+          <mat-checkbox>
+            Hoàn thuế khách sạn
+          </mat-checkbox>
+          <mat-checkbox class="mr-20">
+            Hoàn thuế nhà xe
+          </mat-checkbox>
+        }
         <button (click)="addUnitPrice()" class="add-btn right-0 mb-10" i18n mat-button type="button">
           <i class="material-symbols-outlined">
             add

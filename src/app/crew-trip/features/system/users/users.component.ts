@@ -12,7 +12,7 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatOption, MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatInput, MatInputModule } from '@angular/material/input';
-import { FormBuilder, FormControl, FormsModule, NgModel, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormsModule, NgModel, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
 import { RolesService } from 'src/app/crew-trip/core/services/roles-service';
 import { MatDatepickerModule } from '@angular/material/datepicker';
@@ -27,6 +27,8 @@ import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { NgxControlError } from 'ngxtension/control-error';
 import { ifValidator } from 'ngxtension/if-validator';
 import { error } from 'console';
+import { ValidationError } from 'node_modules/@iplab/ngx-file-upload/lib/helpers/validators.class';
+import { HttpStatusCode } from '@angular/common/http';
 
 export interface PeriodicElement {
   projectName: string;
@@ -68,13 +70,19 @@ export class UsersComponent extends CommonComponent implements OnInit {
   changePassword: ResetPasswordRequest = new ResetPasswordRequest('', '');
   @ViewChild('newPassword') newPassword: NgModel;
   isValidatePassword = false;
+  emailExists = false;
+  emailExistsMessage = '';
 
   override formGroupDetail = this.fb.group({
     id: [''],
     department: ['', [Validators.required, Validators.maxLength(250)]],
     fullName: ['', [Validators.required, Validators.maxLength(250)]],
     gender: [],
-    email: ['', [Validators.required, Validators.maxLength(250), Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]],
+    email: ['', [
+      Validators.required,
+      Validators.maxLength(250), Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
+      this.emailExistsValidator.bind(this)
+    ]],
     phone: ['', [Validators.maxLength(20), Validators.pattern('^[0-9()+ ]+$')]],
     roles: [([] as any)],
     active: ['', [Validators.required]],
@@ -212,8 +220,14 @@ export class UsersComponent extends CommonComponent implements OnInit {
 
         this.search();
       } catch (err: any) {
-        if (err.status === 400 && err?.error?.error?.password) {
+        if (err.status === HttpStatusCode.BadRequest && err?.error?.error?.password) {
           this.baseService.showError(err?.error?.error?.password);
+        }
+        if (err.status === HttpStatusCode.Conflict) {
+          this.emailExists = true;
+          this.formGroupDetail.controls.email.updateValueAndValidity();
+          this.emailExistsMessage = err?.error?.error ?? $localize`:@@emailAlreadyExists:Email ${MESSAGE.ALREADY_EXISTS}`
+          this.emailExists = false;
         }
       } finally {
         this.spinner.hide();
@@ -255,5 +269,9 @@ export class UsersComponent extends CommonComponent implements OnInit {
       this.dialogResetPassword = false;
 
     }
+  }
+
+  emailExistsValidator(control: AbstractControl): ValidationErrors | null {
+    return this.emailExists ? { emailExists: true } : null
   }
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterContentInit, AfterViewInit, Component, DestroyRef, effect, ElementRef, inject, input, model, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -29,6 +29,10 @@ import { CreateFlightMarketDTO, CreateHotel, CreateMarketFlight, CreateVehiclePa
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { debounceTime, Subject } from 'rxjs';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { NgxControlError } from 'ngxtension/control-error';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { HttpStatusCode } from '@angular/common/http';
+import { ValidationErrors } from '@iplab/ngx-file-upload';
 
 @Component({
   selector: 'app-flight-market-detail',
@@ -36,7 +40,7 @@ import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, NgxTrimDirectiveModule],
+    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, NgxTrimDirectiveModule, NgxControlError, DataTransformPipe],
   templateUrl: './flight-market-detail.component.html',
   styleUrl: './flight-market-detail.component.scss'
 })
@@ -78,17 +82,22 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   dialogDeleteCarRental = false;
   indexDeleteCarRental: number;
 
+  airportCodeExists = false;
+  airportCodeExistsMessage = '';
+
   override formGroupDetail = this.formBuilder.group({
     id: [],
-    marketCode: ['', Validators.required],
-    marketName: [''],
+    marketCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3),
+    this.airportCodeExistsValidator.bind(this)
+    ]],
+    marketName: ['', Validators.maxLength(250)],
     nationId: ['', Validators.required],
-    nationName: [''],
+    nationName: ['', Validators.required],
     marketType: ['', Validators.required],
-    flightGroup: ['', Validators.required],
+    flightGroup: [''],
     serviceFeeCode: [''],
     statusUsage: ['', Validators.required],
-    notes: [''],
+    notes: ['', Validators.maxLength(500)],
     overnight: []
 
   });
@@ -117,6 +126,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     if (this.id()) {
       await this.baseService.detail(this.id()).then(res => {
         this.formGroupDetail.patchValue(res.data);
+        this.formGroupDetail.controls.marketCode.disable();
         this.hotelDataSource.data = res.data.hotels;
         this.carRentalDataSource.data = res.data.vehiclesPartner;
       });
@@ -175,8 +185,12 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   override ngAfterViewInit(): void {
   }
 
-  filterCountry(): void {
-    const filterValue = this.nationName.nativeElement.value;
+  filterCountry(isClean?: boolean): void {
+    const filterValue = isClean ? null : this.nationName.nativeElement.value;
+    const value = this.nationName.nativeElement.value.startsWith('[') ? null : this.nationName.nativeElement.value;
+    if (value) {
+      this.formGroupDetail.controls.nationName.setValue(value);
+    }
     if (!filterValue) {
       this.filteredCountry.set(this.countries);
       return;
@@ -188,6 +202,12 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     const selectedCountry = country.option.value;
     this.formGroupDetail.controls.nationId.setValue(selectedCountry.id);
     this.formGroupDetail.controls.nationName.setValue(this.locale == LOCALE.VN ? selectedCountry.vniName : selectedCountry.engName);
+    // Nếu code = VN thì set marketType = International
+    if (selectedCountry.code === 'VN') {
+      this.formGroupDetail.controls.marketType.setValue('Domestic');
+    } else {
+      this.formGroupDetail.controls.marketType.setValue('International');
+    }
   }
 
   // detail or edit, create hotel
@@ -205,7 +225,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     dialogRef.afterClosed().subscribe(result => {
       const hotelDatas = this.hotelDataSource.data as any[] || [];
       if (result) {
-        const index = hotelDatas.findIndex(hotel => hotel.id === result.id);
+        const index = !result.id ? -1 : hotelDatas.findIndex(hotel => hotel.id === result.id);
         if (index !== -1) {
           hotelDatas[index] = { ...hotelDatas[index], ...result };
         } else {
@@ -233,7 +253,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       const carRentalDatas = this.carRentalDataSource.data as any[] || [];
       console.log('carRentalDatas: ', carRentalDatas);
       if (result) {
-        const index = carRentalDatas.findIndex(carRental => carRental.id === result.id);
+        const index = !result.id ? -1 : carRentalDatas.findIndex(carRental => carRental.id === result.id);
         if (index !== -1) {
           carRentalDatas[index] = { ...carRentalDatas[index], ...result };
         } else {
@@ -254,10 +274,10 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       this.spinner.show();
       let res;
       if (isUpdate) {
-        const body = this.updateBody(this.formGroupDetail.value, this.hotelDataSource.data, this.carRentalDataSource.data);
+        const body = this.updateBody({ ...this.formGroupDetail.value, marketCode: this.formGroupDetail.controls.marketCode.value?.toUpperCase() }, this.hotelDataSource.data, this.carRentalDataSource.data);
         res = await this.baseService.update(body);
       } else {
-        const body = this.createBody(this.formGroupDetail.value, this.hotelDataSource.data, this.carRentalDataSource.data);
+        const body = this.createBody({ ...this.formGroupDetail.value, marketCode: this.formGroupDetail.controls.marketCode.value?.toUpperCase() }, this.hotelDataSource.data, this.carRentalDataSource.data);
         res = await this.baseService.create(body);
       }
       console.log(res);
@@ -265,7 +285,14 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       this.router.navigate(['/category/flight-market']);
     } catch (e: any) {
       console.error(e);
-      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+      if (e.status === HttpStatusCode.Conflict) {
+        this.airportCodeExists = true;
+        this.formGroupDetail.controls.marketCode.updateValueAndValidity();
+        this.airportCodeExistsMessage = e?.error?.error ?? $localize`:@@airportCodeExistsMessage:Airport code ${MESSAGE.ALREADY_EXISTS}`
+        this.airportCodeExists = false;
+      } else {
+        this.baseService.showError((e.error?.error ?? e.error?.error?.code) ?? MESSAGE.ERROR);
+      }
     } finally {
       await this.spinner.hide();
     }
@@ -328,6 +355,10 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       console.log('indexDeleteHotel: ', this.indexDeleteHotel);
       const hotel = this.hotelDataSource.data[this.indexDeleteHotel] as any;
       if (hotel.id) {
+        if (hotel.usage) {
+          this.baseService.showError(MESSAGE.HOTEL_CANNOT_BE_DELETED);
+          return;
+        }
         hotel.isDelete = true;
       } else {
         this.hotelDataSource.data.splice(this.indexDeleteHotel, 1);
@@ -349,6 +380,10 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       console.log('indexDeleteCarRental: ', this.indexDeleteCarRental);
       const carRental = this.carRentalDataSource.data[this.indexDeleteCarRental] as any;
       if (carRental.id) {
+        if (carRental.usage) {
+          this.baseService.showError(MESSAGE.CAR_COMPANY_CANNOT_BE_DELETED);
+          return;
+        }
         carRental.isDelete = true;
       } else {
         this.carRentalDataSource.data.splice(this.indexDeleteCarRental, 1);
@@ -370,5 +405,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     return 'Select roles';
   }
 
-  
+  airportCodeExistsValidator(control: AbstractControl): ValidationErrors | null {
+    return this.airportCodeExists ? { airportCodeExists: true } : null
+  }
 }

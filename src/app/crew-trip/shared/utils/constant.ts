@@ -22,7 +22,7 @@ export class MESSAGE {
   static DATA_EMPTY = $localize`:@@noDataFound:No data found`;
   static DELETE_SUCCESS = $localize`:@@deletedSuccessfully:Deleted successfully`;
   static DELETE_FAIL = $localize`:@@deleteFail:Delete fail`;
-  static UPLOAD_SUCCESS = $localize`:@@uploadSuccess:Upload success`;
+  static UPLOAD_SUCCESS = $localize`:@@importedSuccessfully:Imported successfully`;
   static REJECT_SUCCESS = $localize`:@@rejectSuccess:Reject success`;
   static REJECT_FAIL = $localize`:@@rejectFail:Reject fail`;
   static REQUIRED = $localize`:@@required:is required`;
@@ -47,6 +47,9 @@ export class MESSAGE {
   static MESSAGE_ESTIMATED_TIME_REQUIRED = $localize`:@@estimatedTimeRequired:Estimated Time is required`;
 
   static PHONE_NUMBER_INVALID = $localize`:@@phoneNumberFormatInvalid:Phone number must be numeric and the characters + ( )`;
+
+  static HOTEL_CANNOT_BE_DELETED = $localize`:@@hotelCannotBeDeleted:Hotel cannot be deleted. It is being used in a contract.`;
+  static CAR_COMPANY_CANNOT_BE_DELETED = $localize`:@@carCompanyCannotBeDeleted:Car company cannot be deleted. It is being used in a contract.`;
 }
 
 export class LOCALE {
