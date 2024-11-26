@@ -141,6 +141,7 @@
                             <mat-form-field class="mb-2">
                                 <mat-label i18n="@@flightGroup">Flight Group</mat-label>
                                 <mat-select formControlName="flightGroup">
+                                    <mat-option [value]="" i18n="@@chooseFlightGroup">Choose flight group</mat-option>
                                     @for (flightGroup of flightGroupData; track $index) {
                                     <mat-option [value]="flightGroup">{{flightGroup}}</mat-option>
                                     }
