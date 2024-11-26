@@ -1,18 +1,23 @@
 .file-upload-container {
+  width: 150px;
+  height: 150px;
   align-items: center;
   justify-content: center;
-  margin-bottom: 10px;
+  position: relative;
+  margin: auto;
 }
 
 .avatar-preview {
-  width: 150px;
-  height: 150px;
+  max-height: 100%;
+  max-width: 100%;
   border-radius: 50%;
-  object-fit: cover;
-  margin-bottom: 10px;
-  margin-left: 45px;
+  //object-fit: cover;
+  margin: auto;
+  //margin-bottom: 10px;
+  //margin-left: 45px;
 }
 
 .form-control-file {
-  margin-left: 15px;
+  //margin-left: 15px;
+  margin: auto;
 }
