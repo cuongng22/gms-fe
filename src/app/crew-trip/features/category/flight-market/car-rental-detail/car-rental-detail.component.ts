@@ -71,7 +71,7 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
     if (this.data.carRental) {
       console.log(this.data.carRental);
       if (this.data.carRental.id) {
-        this.formGroupDetail.controls.marketCode.disable();
+        this.formGroupDetail.controls.code.disable();
       }
       this.formGroupDetail.patchValue(this.data.carRental);
       this.readonlyDetail.set(this.data.isViewDetail);
