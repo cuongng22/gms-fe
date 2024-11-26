@@ -98,6 +98,12 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
     this.destroyRef.onDestroy(() => {
       this.keySearchMarket.unsubscribe();
     });
+
+    this.fileUpload.valueChanges.subscribe(value => {
+      if (!value || value.length === 0) {
+        this.uploadFileError = {};
+      }
+    })
   }
 
   override search(body?: any, isNextPage?: boolean): any {
@@ -194,6 +200,12 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
       return;
     }
     this.keySearchMarket.next(filterdValue);
+  }
+
+  resetFileUpload() {
+    this.uploadFileError = {};
+    this.fileUpload.setValue([]);
+    this.fileUpload.reset()
   }
 }
 

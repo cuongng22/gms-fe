@@ -1,0 +1,38 @@
+:host::ng-deep {
+    table {
+        width: 100%;
+    }
+
+    .mat-column-hotelName,
+    .mat-column-name {
+        word-wrap: break-word !important;
+        white-space: unset !important;
+        width: 250px !important;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+
+        word-break: break-word;
+
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+    }
+
+    .cdk-column-hotelCode,
+    .mat-column-code {
+        word-wrap: break-word !important;
+        white-space: unset !important;
+        width: 150px !important;
+        overflow-wrap: break-word;
+        word-wrap: break-word;
+
+        word-break: break-word;
+
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+    }
+
+}
