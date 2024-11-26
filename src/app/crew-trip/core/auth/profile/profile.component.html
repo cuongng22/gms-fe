@@ -21,12 +21,14 @@
         </div>
       </div>
     </div>
-    <div class="row mt-10">
+    <div class="row mt-10 col-md-10">
       <div class="col-md-2 mb-10">
         <div class="file-upload-container">
           <img *ngIf="avatarUrl" [src]="avatarUrl" alt="User avatar" class="avatar-preview"/>
           <img *ngIf="!avatarUrl" src="images/admin.png" alt="User avatar" class="avatar-preview"/>
           <input type="file" *ngIf="!readonly" (change)="onFileSelected($event)" accept="image/*"/>
+          <!--          <file-upload *ngIf="!readonly" [multiple]="false" class="file-uploader" accept="image/*"-->
+          <!--                       (change)="onFileSelected($event)"></file-upload>-->
           <mat-error *ngIf="fileError">{{ fileError }}</mat-error>
         </div>
       </div>

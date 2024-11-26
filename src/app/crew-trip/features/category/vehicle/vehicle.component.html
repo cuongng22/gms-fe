@@ -30,11 +30,17 @@
           <mat-form-field class="mb-1">
             <mat-label i18n="@@airportCode">Airport code</mat-label>
             <input type="text" #marketCode matInput formControlName="marketCode" [matAutocomplete]="marketComplete"
-              (input)="filterMarket()" (focus)="filterMarket()">
-            <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
-              @for (option of filteredOptionsMarket ; track option) {
-              <mat-option [value]="option">{{option}}</mat-option>
-              }
+                   (input)="filterMarket()" (focus)="onFocusMarket()">
+            <mat-autocomplete #marketComplete="matAutocomplete">
+              <mat-option
+                *ngFor="let option of filteredOptionsMarket"
+                [value]="option"
+              >
+                {{ option }}
+              </mat-option>
+              <!--              @for (option of filteredOptionsMarket ; track option) {-->
+              <!--              <mat-option [value]="option">{{option}}</mat-option>-->
+              <!--              }-->
             </mat-autocomplete>
           </mat-form-field>
         </div>
@@ -54,9 +60,9 @@
           <mat-form-field class="mb-1">
             <mat-date-range-input [rangePicker]="contractRangePicker">
               <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="Start date"
-                formControlName="contractStartDate">
+                     formControlName="contractStartDate">
               <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="End date"
-                formControlName="contractEndDate">
+                     formControlName="contractEndDate">
             </mat-date-range-input>
             <mat-label i18n="@@contractPeriod">Contract period</mat-label>
             <mat-datepicker-toggle matIconSuffix [for]="contractRangePicker"></mat-datepicker-toggle>
@@ -64,7 +70,8 @@
               <mat-date-range-picker-actions>
                 <button sizeButton="sm" mat-button matDateRangePickerCancel i18n="@@cancel">Cancel</button>
                 <button sizeButton="sm" mat-raised-button color="primary" matDateRangePickerApply
-                  i18n="@@apply">Apply</button>
+                        i18n="@@apply">Apply
+                </button>
               </mat-date-range-picker-actions>
             </mat-date-range-picker>
           </mat-form-field>
@@ -110,54 +117,58 @@
         <ng-container matColumnDef="stt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center">#</th>
           <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
-            {{ (pageIndex * pageSize) + i + 1 }}</td>
+            {{ (pageIndex * pageSize) + i + 1 }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="market">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-            i18n="@@airportCode">Airport code</th>
-          <td mat-cell *matCellDef="let element">{{element.marketCode}}</td>
+              i18n="@@airportCode">Airport code
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.marketCode }}</td>
         </ng-container>
         <ng-container matColumnDef="carRentalCompany">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center "
-            i18n="@@carRentalCompany">
+              i18n="@@carRentalCompany">
             Car rental company
           </th>
           <td mat-cell *matCellDef="let element" class="wrap-text-2">
-            <span><span class="text-secondary-bootstrap font-size-14" i18n="@@code">Code</span>: {{element.code}}</span>
+            <span><span class="text-secondary-bootstrap font-size-14"
+                        i18n="@@code">Code</span>: {{ element.code }}</span>
             <br>
             <span><span class="text-secondary-bootstrap font-size-14" i18n="@@Name">Name</span>:
-              {{element.name}}</span>
+              {{ element.name }}</span>
           </td>
         </ng-container>
         <ng-container matColumnDef="address">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@address">
             Address
           </th>
-          <td mat-cell *matCellDef="let element" class="wrap-text-2">{{element.address}}</td>
+          <td mat-cell *matCellDef="let element" class="wrap-text-2">{{ element.address }}</td>
         </ng-container>
         <ng-container matColumnDef="contactDetails">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-            i18n="@@contactDetails">
+              i18n="@@contactDetails">
             Contact details
           </th>
           <td mat-cell *matCellDef="let element" class="wrap-text-2">
-            @if(!!element.fullName){
-            <span>
+            @if (!!element.fullName) {
+              <span>
               <span class="text-secondary-bootstrap font-size-14" i18n="@@fullName">Full name</span>:
-              {{element.fullName}}
+                {{ element.fullName }}
             </span>
-            <br>
+              <br>
             }
             @if (!!element.email) {
-            <span>
+              <span>
               <span class="text-secondary-bootstrap font-size-14" i18n="@@bookingEmail">Booking email</span>:
-              {{element.email}}
+                {{ element.email }}
             </span>
-            <br>
+              <br>
             }
-            @if (!!element.phone) {<span>
+            @if (!!element.phone) {
+              <span>
               <span class="text-secondary-bootstrap font-size-14" i18n="@@phoneNumber">Phone number</span>:
-              {{element.phone}}
+                {{ element.phone }}
             </span>
             }
 
@@ -165,17 +176,19 @@
         </ng-container>
         <ng-container matColumnDef="active">
           <th mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" mat-sort-header i18n="@@status">
-            Status</th>
+            Status
+          </th>
           <td mat-cell *matCellDef="let element;" class="text-center">
             <span class="badge" [ngClass]="!!element.active?'text-bg-label-badge':'text-soft-dark'">
-              {{ element.activeLabel}}
+              {{ element.activeLabel }}
             </span>
           </td>
         </ng-container>
         <ng-container matColumnDef="notes">
           <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@note" class="font-weight-bold text-center">
-            Note</th>
-          <td mat-cell *matCellDef="let element" class="wrap-text-2">{{ element.notes}}</td>
+            Note
+          </th>
+          <td mat-cell *matCellDef="let element" class="wrap-text-2">{{ element.notes }}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
@@ -185,8 +198,9 @@
       </table>
     </div>
     <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-      [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
-      aria-label="Select page" i18n-aria-label="@@selectPage">
+                   [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
+                   [pageIndex]="pageIndex"
+                   aria-label="Select page" i18n-aria-label="@@selectPage">
     </mat-paginator>
   </mat-card-content>
 </mat-card>
