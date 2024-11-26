@@ -79,14 +79,17 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       phanLoaiHopDong: [],
 
       //tab4
-      maThiTruong: [],
-      tenThiTruong: [],
-      quocGia: [],
-      phanLoai: [],
-      nhomDuongBay: [],
-      trangThaiThiTruong: [],
-      hoTenNguoiLienHeNcc: [],
-      dienThoaiLienHeNcc: [],
+      marketCode: [],
+      marketName: [],
+      nation: [],
+      classification: [],
+      flightGroup: [],
+      statusUsage: [],
+      supplierName: [],
+      supplierPhone: [],
+      supplierEmail: [],
+      carType: [],
+      notes: [],
 
       tempp: [],
       id: [],
@@ -151,8 +154,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       await this.spinner.show();
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         // this.loadListMaNghiepVu(),
-        this.loadListQuocGia()
-      ]).then(() => {
+        this.loadListQuocGia(),]).then(() => {
+        this.getPartnerInfo();
+        this.getMarket();
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList ?? []);
         this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.value.priceUnitInfo);
         this.tblUnitPrice = new MatTableDataSource<any>([{
@@ -208,7 +212,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async actionUpload() {
-    if (this.formGroupFileUpload.value.contractCategory) {
+    if (this.formGroupFileUpload.value.contractCategory && this.formGroupFileUpload.value.fileUpload.length > 0) {
       try {
         let formUpload = new FormData();
         let fileUpload = this.formGroupFileUpload.value.fileUpload[0];
@@ -223,6 +227,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           fileName: fileUpload.name,
           isManual: true
         }];
+        this.formGroupFileUpload.patchValue({fileUpload: []})
       } catch (e: any) {
         console.log(e);
         this.baseService.showError((e.error?.error?.file) ?? (e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
@@ -277,15 +282,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     await this.nationService.search({page: 0, limit: 99999}).then(res => {
       if (res.data) {
         this.listQuocGia = res.data.content;
-        /*{
-          "id": 329,
-          "area": "Asia",
-          "code": "123",
-          "engName": "q1",
-          "vniName": "r1",
-          "active": true,
-          "curCode": null
-        }*/
       }
     });
   }
@@ -320,8 +316,44 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   protected readonly LOCALE = LOCALE;
-  async filterNation(){
+
+  async filterNation() {
 
   }
-  async nationSelected(event:any){}
+
+  async nationSelected(event: any) {
+  }
+
+  async getPartnerInfo() {
+    await this.baseService.getPartnerInfo({
+      partnerCode: this.formGroupDetail.value.partnerCode,
+      isHotel: this.formGroupDetail.value.isHotel,
+      isVehicle: this.formGroupDetail.value.isVehicle
+    }).then(res => {
+      if (res.status == HttpStatusCode.Ok && res.data) {
+        let data = res.data;
+        this.formGroupDetail.patchValue({
+          marketCode: data.marketCode,
+          marketName: data.marketName,
+          nation: data.nation,
+          classification: data.classification,
+          flightGroup: data.flightGroup,
+          statusUsage: data.statusUsage,
+          supplierName: data.peopleName,
+          supplierPhone: data.phoneNumber,
+          supplierEmail: data.email,
+          carType: data.carType,
+          notes: data.notes,
+        })
+      }
+    });
+  }
+
+  async getMarket() {
+    await this.baseService.getMarket().then(res => {
+
+      console.log(res)
+
+    });
+  }
 }
