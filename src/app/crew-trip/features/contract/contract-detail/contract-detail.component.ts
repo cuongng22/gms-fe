@@ -11,11 +11,15 @@ import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {
-  MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelDescription,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle
 } from '@angular/material/expansion';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
@@ -24,19 +28,20 @@ import {ContractService} from 'src/app/crew-trip/core/services/contract-service'
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from "@iplab/ngx-file-upload";
-import {LOCALE, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {COMMON_CONFIG, LOCALE, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {ClickOutside} from "ngxtension/click-outside";
 import {HttpStatusCode} from "@angular/common/http";
-import {cloneDeep} from "lodash";
 import {NationService} from "src/app/crew-trip/core/services/nation-service";
 import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
+import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
+import {NgxMatTimepickerFieldComponent} from "ngx-mat-timepicker";
 
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule],
+  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
 })
@@ -89,6 +94,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       supplierPhone: [],
       supplierEmail: [],
       carType: [],
+      standardCheckIn:[],
+      standardCheckOut:[],
       notes: [],
 
       tempp: [],
@@ -214,23 +221,37 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   async actionUpload() {
     if (this.formGroupFileUpload.value.contractCategory && this.formGroupFileUpload.value.fileUpload.length > 0) {
       try {
+        await this.spinner.show();
         let formUpload = new FormData();
         let fileUpload = this.formGroupFileUpload.value.fileUpload[0];
         let optionBlob = new Blob([this.formGroupFileUpload.value.contractCategory], {type: 'application/json'});
         let bizDocIdBlob = new Blob([this.formGroupDetail.value.bizDocId], {type: 'application/json'});
+        //validate
+        // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
+        if(fileUpload.size > 5 * 1048576){
+          this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
+          return;
+        }
         formUpload.append('file', fileUpload, fileUpload.name);
         formUpload.append('option', optionBlob);
         formUpload.append('bizDocId', bizDocIdBlob);
-        await this.baseService.uploadFile(formUpload);
-        this.tblAttachedDocument.data = [...this.tblAttachedDocument.data, {
-          documentType: this.formGroupFileUpload.value.documentType == 1 ? 'Contract/annex or appendix' : 'Other documents of contract',
-          fileName: fileUpload.name,
-          isManual: true
-        }];
+        await this.baseService.uploadFile(formUpload).then(res => {
+          if (res.status == HttpStatusCode.Ok) {
+            this.tblAttachedDocument.data = [...this.tblAttachedDocument.data, {
+              documentType: this.formGroupFileUpload.value.documentType == 1 ? 'Contract/annex or appendix' : 'Other documents of contract',
+              fileName: fileUpload.name,
+              fileUrl: res.data,
+              isManual: true
+            }];
+          }
+        });
         this.formGroupFileUpload.patchValue({fileUpload: []})
       } catch (e: any) {
         console.log(e);
         this.baseService.showError((e.error?.error?.file) ?? (e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
+      }
+      finally {
+        await this.spinner.hide();
       }
     }
   }
@@ -311,7 +332,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     return row.cellEdit?.some((s: any) => s == cell) ?? false;
   }
 
-  test() {
+  async test() {
+    console.log(this.formGroupDetail.value,'this.formGroupDetail.value')
     console.log(this.tblUnitPrice.data)
   }
 
