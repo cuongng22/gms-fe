@@ -47,6 +47,7 @@
     "ng-apexcharts": "~1.11.0",
     "ngx-color-picker": "^16.0.0",
     "ngx-editor": "^17.5.4",
+    "ngx-mat-timepicker": "^18.0.0",
     "ngx-material-timepicker": "^13.1.1",
     "ngx-owl-carousel-o": "^18.0.0",
     "ngx-scrollbar": "^15.0.1",
