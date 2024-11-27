@@ -1,3 +1,4 @@
 export const environment = {
-  apiUrl: 'http://'
+  apiUrl: 'http://',
+  baseUrl: 'http://'
 };

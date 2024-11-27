@@ -22,6 +22,7 @@ import {InputComponent} from "src/app/crew-trip/shared/component/input/input.com
 import {SharedModule} from "src/app/crew-trip/shared/component/shared.module";
 import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
 import {SelectOptions} from "src/app/crew-trip/shared/select-option";
+import {environment} from "src/environments/environment";
 
 @Component({
   selector: 'app-profile',
@@ -60,7 +61,7 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.avatarUrl = this.userCurrent?.avartarUrl ?? null;
+    this.avatarUrl = this.userCurrent?.avartarUrl ? `${environment.baseUrl}/${this.userCurrent?.avartarUrl}` : null;
     this.formGroup.disable();
   }
 
@@ -74,7 +75,7 @@ export class ProfileComponent implements OnInit {
   onCancel(): void {
     this.formGroup.reset(this.userCurrent);
     if (this.selectedFile) {
-      this.avatarUrl = this.userCurrent?.avartarUrl ?? null;
+      this.avatarUrl = this.userCurrent?.avartarUrl ? `${environment.baseUrl}/${this.userCurrent?.avartarUrl}` : null;
       this.selectedFile = null;
     }
     this.updateEditMode();

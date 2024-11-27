@@ -1,3 +1,5 @@
+import {environment} from "src/environments/environment";
+
 export class UserLogin {
   email: string;
   id: number;
@@ -22,7 +24,7 @@ export class UserLogin {
     this.id = id;
     this.fullName = fullName;
     this.department = department;
-    this.avartarUrl = avartarUrl;
+    this.avartarUrl = `${environment.baseUrl}/${avartarUrl}`;
     this.phone = phone;
     this.gender = !gender ? 0 : 1;
     this.description = description;
