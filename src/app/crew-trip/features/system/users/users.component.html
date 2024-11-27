@@ -36,8 +36,11 @@
             </mat-select>
           </mat-form-field>
         </div>
-        <div class="col mb-2" sizeInput="md">
-          <mat-form-field>
+        <div class="col mb-2">
+          <app-select-multiple size="sm" label="Role" i18n-label="@@role" [required]="false" [selectOptions]="listRoles"
+            attrValue="roleId" attrDisplay="roleName" formControlName="role">
+          </app-select-multiple>
+          <!-- <mat-form-field>
             <mat-label i18n="@@role">Role</mat-label>
             <mat-select formControlName="role" multiple>
               <mat-select-trigger>
@@ -60,7 +63,7 @@
               <mat-option [value]="item.roleId">{{ item.roleName }}</mat-option>
               }
             </mat-select>
-          </mat-form-field>
+          </mat-form-field> -->
         </div>
         <div class="col d-sm-flex flex-row  justify-content-lg-start justify-content-md-center">
           <mat-card-header class="mb-0 search">
@@ -322,7 +325,7 @@
             <!-- ROLE -->
             <div class="col-sm-12">
               <div class="form-group mb-20" sizeInput="md">
-                <mat-form-field>
+                <mat-form-field [matTooltip]="getSelectedRolesDetail()" #tooltip="matTooltip"  matTooltipPosition="above" matTooltipClass="tooltip-with-300">
                   <mat-label i18n="@@role">Role</mat-label>
                   <mat-select formControlName="roles" multiple>
                     <mat-select-trigger>

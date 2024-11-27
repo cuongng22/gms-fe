@@ -29,6 +29,8 @@ import { ifValidator } from 'ngxtension/if-validator';
 import { error } from 'console';
 import { ValidationError } from 'node_modules/@iplab/ngx-file-upload/lib/helpers/validators.class';
 import { HttpStatusCode } from '@angular/common/http';
+import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 export interface PeriodicElement {
   projectName: string;
@@ -42,8 +44,8 @@ export interface PeriodicElement {
   imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule,
     NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption,
     MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatInputModule, MatSelectModule, MatDatepickerModule,
-    MatNativeDateModule, NgxMaterialTimepickerModule, FormsModule, MatFormFieldModule, CommonModule,
-    TranslateModule, NgxTrimDirectiveModule, NgxControlError],
+    MatNativeDateModule, NgxMaterialTimepickerModule, FormsModule, MatFormFieldModule, CommonModule,MatTooltipModule,
+    TranslateModule, NgxTrimDirectiveModule, NgxControlError, SelectMultipleComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
   providers: [
