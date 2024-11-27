@@ -96,7 +96,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     serviceFeeCode: [''],
     statusUsage: ['', Validators.required],
     notes: ['', Validators.maxLength(500)],
-    overnight: []
+    overnight: [true]
 
   });
 
