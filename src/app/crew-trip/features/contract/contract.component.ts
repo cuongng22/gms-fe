@@ -329,20 +329,6 @@ this.dataSource.data =
     });
   }
 
-  async getPartnerInfo() {
-    await this.baseService.getPartnerInfo().then(res => {
-      console.log(res)
-    });
-  }
-
-  async getMarket() {
-    await this.baseService.getMarket().then(res => {
-
-      console.log(res)
-
-    });
-  }
-
   async syncDWH() {
 
   }

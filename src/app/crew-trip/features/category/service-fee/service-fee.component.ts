@@ -80,8 +80,12 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
   }
 
   override async save(): Promise<any> {
-    super.save().then(value => {
-      if (value.status == HttpStatusCode.Conflict) {
+    super.save().then(res => {
+      if (res.status == HttpStatusCode.Conflict) {
+        this.existCode = true;
+        this.formGroupDetail.controls['code'].updateValueAndValidity();
+        this.existCode = false;
+      } else if (res.status == HttpStatusCode.InternalServerError && res.error?.error.includes('SERVICE_CODE_UNIQUE')) {
         this.existCode = true;
         this.formGroupDetail.controls['code'].updateValueAndValidity();
         this.existCode = false;

@@ -33,6 +33,7 @@ import { NgxControlError } from 'ngxtension/control-error';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { HttpStatusCode } from '@angular/common/http';
 import { ValidationErrors } from '@iplab/ngx-file-upload';
+import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 
 @Component({
   selector: 'app-flight-market-detail',
@@ -40,7 +41,8 @@ import { ValidationErrors } from '@iplab/ngx-file-upload';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, NgxTrimDirectiveModule, NgxControlError, DataTransformPipe],
+    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, NgxTrimDirectiveModule, NgxControlError, DataTransformPipe,
+    SelectMultipleComponent],
   templateUrl: './flight-market-detail.component.html',
   styleUrl: './flight-market-detail.component.scss'
 })
@@ -60,10 +62,6 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   // ẩn hiện khi view hoặc create, update
   readonlyDetail = model<boolean>(false);
   isCreate = model<boolean>(false);
-
-
-  searchCostCategory = model<string>('');
-  debounceSearchCostCategory = debouncedSignal(this.searchCostCategory, 300);
 
   filteredCountry = model<any[]>([]);
   costCategorysRaw: any[] = [];
@@ -98,7 +96,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     serviceFeeCode: [''],
     statusUsage: ['', Validators.required],
     notes: ['', Validators.maxLength(500)],
-    overnight: []
+    overnight: [true]
 
   });
 
@@ -107,17 +105,6 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     super();
     console.debug('locale: ', locale);
 
-
-    // tìm kiếm danh mục chi phí
-    effect(() => {
-      const keySearch = this.debounceSearchCostCategory();
-      if (!keySearch) {
-        this.costCategorys = this.costCategorysRaw;
-      } else {
-        this.costCategorys = this.costCategorysRaw.filter(x => (x.name.toLowerCase().includes(keySearch.toLowerCase()) || x.code.toLowerCase().includes(keySearch.toLowerCase())));
-      }
-
-    });
 
   }
   override async ngOnInit() {
@@ -392,17 +379,6 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     } else {
       this.baseService.showError(MESSAGE.DELETE_FAIL);
     }
-  }
-
-  getSelectedCostCategoryDetail(): string {
-    const selected = this.formGroupDetail.get('serviceFeeCode')?.value || [];
-    if (Array.isArray(selected)) {
-      return selected
-        .map((code: any) => this.costCategorys.find(costCategory => costCategory.code === code)?.name)
-        .filter((name: any) => name)
-        .join('; ') || 'Select roles';
-    }
-    return 'Select roles';
   }
 
   airportCodeExistsValidator(control: AbstractControl): ValidationErrors | null {

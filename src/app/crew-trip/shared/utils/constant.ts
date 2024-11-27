@@ -36,6 +36,7 @@ export class MESSAGE {
   static ITEMS_PER_PAGE = $localize`:@@itemsPerPage:Items per page`;
   static NEXT_PAGE = $localize`:@@nextPage:Next page`;
   static PRIVIOUS_PAGE = $localize`:@@priviousPage:Privious page`;
+  static MAX_FILE_SIZE = $localize`Invalid file`;
 
   static LABEL_START_DATE = $localize`:@@startDate:Start Date`;
   static MESSAGE_START_DATE_REQUIRED = $localize`:@@startDateRequired:Start Date is required`;
@@ -95,3 +96,9 @@ export const DATE_FORMAT_DD_MM_YYYY = {
   },
 
 };
+
+export class COMMON_CONFIG {
+  static TIMEOUT=10000;
+  static MAX_FILE_SIZE='5MB';
+  static FILE_ACCEPT='.doc,.docx,.pdf,.xls,.xlsx'
+}

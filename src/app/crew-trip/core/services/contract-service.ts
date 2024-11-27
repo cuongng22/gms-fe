@@ -15,9 +15,10 @@ export class ContractService extends BaseService {
     this.path = 'contract';
   }
 
-  getPartnerInfo(): Promise<any> {
+  getPartnerInfo(body: any): Promise<any> {
     const url = `${this.api}/${this.path}/get-partner-info`;
-    return firstValueFrom(this.http.get<any>(url, this.httpOptions));
+    const params = new HttpParams({fromObject: body});
+    return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
   getMarket(): Promise<any> {
@@ -39,8 +40,8 @@ export class ContractService extends BaseService {
 
   getListAnnex<T = any>(body: any): Promise<ListResponse<T> | any> {
     const url = `${this.api}/${this.path}/appendix`;
-    const params = new HttpParams({ fromObject: body });
-    return firstValueFrom(this.http.get<ListResponse<T>>(url, { params }));
+    const params = new HttpParams({fromObject: body});
+    return firstValueFrom(this.http.get<ListResponse<T>>(url, {params}));
   }
 
   override uploadFile(form: FormData): Promise<any> {

@@ -7,7 +7,7 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {ToggleService} from 'src/app/common/header/toggle.service';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {FormGroup} from '@angular/forms';
-import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, MESSAGE, removeNullValues, COMMON_CONFIG} from 'src/app/crew-trip/shared/utils/constant';
 import {HttpClient, HttpStatusCode} from '@angular/common/http';
 import {saveAs} from 'file-saver';
 import {UltilService} from 'src/app/crew-trip/core/services/ultil-service';
@@ -20,6 +20,7 @@ import {ListResponse} from './models/common.model';
 export class CommonComponent implements OnInit, AfterViewInit {
   Constant = Constant;
   MESSAGE = MESSAGE;
+  COMMON_CONFIG = COMMON_CONFIG;
   spinner = inject(NgxSpinnerService);
   toggleService = inject(ToggleService);
   ultilService = inject(UltilService);
@@ -135,7 +136,6 @@ export class CommonComponent implements OnInit, AfterViewInit {
   }
 
   async save() {
-    debugger
     try {
       this.formGroupDetail.markAllAsTouched();
       if (this.formGroupDetail.invalid) {
@@ -154,7 +154,7 @@ export class CommonComponent implements OnInit, AfterViewInit {
       await this.closeDetail();
       return res;
     } catch (e: any) {
-      if(e.status != HttpStatusCode.Conflict){
+      if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
         this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
       }
       return e;

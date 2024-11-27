@@ -1,43 +1,43 @@
-import { NgIf, CommonModule } from '@angular/common';
-import { Component, DestroyRef, forwardRef, inject, input, Input, model, OnInit, Optional, Self } from '@angular/core';
-import { ControlValueAccessor, FormControl, FormsModule, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { AfterViewInit, Component, DestroyRef, inject, Input, OnInit, Optional, Self, SimpleChanges, ViewChild } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormsModule, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { MatOption } from '@angular/material/core';
-import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatError, MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { InputSizeComponent } from '../../input/input-size.component';
 import { debounceTime, tap } from 'rxjs';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { debouncedSignal, MESSAGE } from '../../utils/constant';
+import { MESSAGE } from '../../utils/constant';
+import { MatInputModule } from '@angular/material/input';
+import { NgxControlError } from 'ngxtension/control-error';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-select-multiple',
   standalone: true,
   imports: [FormsModule, MatError, MatFormField, MatLabel,
-    MatOption, MatSelect, ReactiveFormsModule,
-    CommonModule, InputSizeComponent, MatSelectModule],
+    MatOption, MatSelect, ReactiveFormsModule, MatButtonModule, MatTooltipModule,
+    CommonModule, InputSizeComponent, MatSelectModule, MatFormFieldModule, MatInputModule, NgxControlError],
   templateUrl: './select-multiple.component.html',
   styleUrl: './select-multiple.component.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => SelectMultipleComponent),
-      multi: true
-    }
-  ]
 })
 export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
-  // @Input() placeholder: string = '';
-  @Input() sizeInput: string = 'sm';
+  @Input() placeholder: string = '';
+  @Input() size: string = 'sm';
   @Input() label: string = '';
-  // @Input() readonly: boolean = false;
-  // @Input() hint = '';
+  @Input() readonly: boolean = false;
+  @Input() hint = '';
   @Input() required: boolean = false;
-  @Input() options: [] = [];
+  @Input() selectOptions: any[] = [];
   @Input() attrValue = ''; // trường để lấy giá trị trong options
   @Input() attrDisplay = ''; // Trường để hiển thị trong options
+  selectOptionsRaw: any[] = [];
   MESSAGE = MESSAGE;
 
   destroyRef: DestroyRef = inject(DestroyRef);
+
+  search = new FormControl('');
 
   constructor(
     @Optional() @Self() public ngControl: NgControl
@@ -47,6 +47,7 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
     }
   }
   ngOnInit(): void {
+
     this.formControl.valueChanges
       .pipe(
         debounceTime(200),
@@ -54,7 +55,31 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
         takeUntilDestroyed(this.destroyRef),
       )
       .subscribe();
+
+    this.search.valueChanges.pipe(debounceTime(200)).subscribe(keySearch => {
+      if (!keySearch) {
+        this.selectOptionsRaw = [...this.selectOptions];
+      } else {
+        this.selectOptionsRaw = this.selectOptions.filter((option: any) => {
+          const attr = option[this.attrDisplay];
+          const check = (attr.toLowerCase().includes(keySearch.toLowerCase()));
+          return check;
+        });
+      }
+    })
   }
+
+  ngOnChanges(changes: SimpleChanges) {
+    const ocSelectOptions = changes?.['selectOptions'];
+    if (ocSelectOptions && ocSelectOptions.currentValue && ocSelectOptions.currentValue.length > 0 && !ocSelectOptions?.firstChange) {
+      this.selectOptionsRaw = ocSelectOptions.currentValue;
+      console.log(this.selectOptionsRaw);
+    }
+    if (changes['readonly']) {
+      this.updateEnableState();
+    }
+  }
+
   get formControl(): FormControl {
     return (this.ngControl?.control as FormControl) ?? new FormControl();
   }
@@ -86,17 +111,23 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
   };
 
 
-  search = model<string>('');
-  debounceSearch = debouncedSignal(this.search, 300);
 
   getSelectTrigger(): string {
     const selected = this.formControl?.value || [];
-    if (Array.isArray(selected)) {
+    if (Array.isArray(selected) && selected && selected.length > 0) {
       return selected
-        .map((code: any) => this.options.find((option: any) => option[this.attrValue] === code)?.[this.attrDisplay])
+        .map((select: any) => this.selectOptions.find((option: any) => option[this.attrValue] === select)?.[this.attrDisplay])
         .filter((name: any) => name)
-        .join('; ');
+        .join('; ') ?? this.placeholder;
     }
     return '';
+  }
+
+  private updateEnableState() {
+    if (!this.readonly) {
+      this.formControl.enable({ emitEvent: false });
+    } else {
+      this.formControl.disable({ emitEvent: false });
+    }
   }
 }

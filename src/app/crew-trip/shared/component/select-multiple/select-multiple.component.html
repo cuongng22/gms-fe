@@ -1,17 +1,17 @@
-<div class="col" [sizeInput]="sizeInput">
-    <mat-form-field>
+<div class="col" [sizeInput]="size">
+    <mat-form-field [matTooltip]="getSelectTrigger()" #tooltip="matTooltip"  matTooltipPosition="above" matTooltipClass="tooltip-with-300">
         <mat-label i18n="@@costCategory">{{label}}</mat-label>
-        <mat-select formControlName="serviceFeeCode" multiple>
+        <mat-select [formControl]="formControl" multiple>
             <mat-select-trigger>
                 {{ getSelectTrigger() }}
             </mat-select-trigger>
             <form class="mb-2" sizeInput="sm">
                 <mat-form-field class="input-suggest">
-                    <input trim="blur" matInput type="text" name="clearable-input" [(ngModel)]="search"
+                    <input trim="blur" matInput type="text" name="clearable-input" [formControl]="search"
                         i18n-placeholder="@@search" placeholder="Search">
-                    @if (search()) {
+                    @if (search.value) {
                     <button matSuffix mat-icon-button i18n-aria-label="@@clear" aria-label="Clear"
-                        (click)="search.set('')">
+                        (click)="search.setValue('')">
                         <i class="material-symbols-outlined">
                             close
                         </i>
@@ -19,11 +19,14 @@
                     }
                 </mat-form-field>
             </form>
-            @for (option of options; track $index) {
-            <mat-option [value]="option">{{option[attrDisplay]}}</mat-option>
+            @if (selectOptionsRaw && selectOptionsRaw.length>0) {
+            @for (option of selectOptionsRaw; track $index) {
+            <mat-option [value]="option[attrValue]">{{option[attrDisplay]}}</mat-option>
             }
+            }
+
         </mat-select>
-        <mat-error *ngxControlError="ngControl; track: 'required'">
+        <mat-error *ngxControlError="ngControl?.control ?? undefined; track: 'required'">
             {{ label }} {{MESSAGE.REQUIRED}}
         </mat-error>
         <ng-content select="[mess-error]"></ng-content>

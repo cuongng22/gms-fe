@@ -152,37 +152,11 @@
                                 </mat-error> -->
                             </mat-form-field>
                         </div>
-                        <div class="col" sizeInput="sm">
-                            <mat-form-field>
-                                <mat-label i18n="@@costCategory">Cost Category</mat-label>
-                                <mat-select formControlName="serviceFeeCode" multiple>
-                                    <mat-select-trigger>
-                                        {{ getSelectedCostCategoryDetail() }}
-                                    </mat-select-trigger>
-                                    <form class="mb-2" sizeInput="sm">
-                                        <mat-form-field class="input-suggest">
-                                            <input trim="blur" matInput type="text" name="clearable-input"
-                                                [(ngModel)]="searchCostCategory" i18n-placeholder="@@search"
-                                                placeholder="Search">
-                                            @if (searchCostCategory()) {
-                                            <button matSuffix mat-icon-button i18n-aria-label="@@clear"
-                                                aria-label="Clear" (click)="searchCostCategory.set('')">
-                                                <i class="material-symbols-outlined">
-                                                    close
-                                                </i>
-                                            </button>
-                                            }
-                                        </mat-form-field>
-                                    </form>
-                                    @for (costCategory of costCategorys; track $index) {
-                                    <mat-option [value]="costCategory.code">{{costCategory.name}}</mat-option>
-                                    }
-                                </mat-select>
-                                <mat-error *ngxControlError="formGroupDetail.controls.serviceFeeCode; track: 'required'"
-                                    i18n="@@costCategoryRequired">Cost Category
-                                    {{MESSAGE.REQUIRED}}
-                                </mat-error>
-                            </mat-form-field>
+                        <div class="col">
+                            <app-select-multiple size="sm" label="Cost Category" i18n-label="@@costCategory"
+                                [required]="false" [selectOptions]="costCategorys" attrValue="code" attrDisplay="name"
+                                formControlName="serviceFeeCode">
+                            </app-select-multiple>
                         </div>
                         <div class="col" sizeInput="sm">
                             <mat-form-field class="mb-2">
@@ -380,16 +354,16 @@
             <table mat-table [dataSource]="carRentalDataSource" multiTemplateDataRows="true" class="table-light">
                 <ng-container matColumnDef="code">
                     <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@carRentalCode">
-                        Car rental code
+                        i18n="@@carCompanyCode">
+                        Car company code
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.code}}</td>
                 </ng-container>
 
                 <ng-container matColumnDef="name">
                     <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@carRentalCompany">
-                        Car rental company
+                        i18n="@@carCompanyName">
+                        Car company name
                     </th>
                     <td mat-cell *matCellDef="let carRental">{{carRental.name}}</td>
                 </ng-container>
@@ -585,7 +559,8 @@
                         </i>
                         <span i18n="@@cancel">Cancel</span>
                     </button>
-                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="confirmDeleteCarRental()">
+                    <button mat-button type="button" class="add-btn min-with-100 mlr-5"
+                        (click)="confirmDeleteCarRental()">
                         <i class="material-symbols-outlined">
                             save
                         </i>
