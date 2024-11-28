@@ -28,7 +28,7 @@ import {ContractService} from 'src/app/crew-trip/core/services/contract-service'
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from "@iplab/ngx-file-upload";
-import {COMMON_CONFIG, LOCALE, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {LOCALE, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {ClickOutside} from "ngxtension/click-outside";
 import {HttpStatusCode} from "@angular/common/http";
 import {NationService} from "src/app/crew-trip/core/services/nation-service";
@@ -36,6 +36,7 @@ import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocom
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {NgxMatTimepickerFieldComponent} from "ngx-mat-timepicker";
+import {debounce} from 'lodash';
 
 
 @Component({
@@ -76,6 +77,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   listKhoanMucKhns: any = [];
   listQuocGia: any = [];
 
+  //debounce
+  brake: any;
+  marketCodeChangeDebounce: any;
+  protected readonly LOCALE = LOCALE;
+
   // private filesControl = new FormControl(null, );
   constructor() {
     super();
@@ -94,8 +100,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       supplierPhone: [],
       supplierEmail: [],
       carType: [],
-      standardCheckIn:[],
-      standardCheckOut:[],
+      standardCheckIn: [],
+      standardCheckOut: [],
       notes: [],
 
       tempp: [],
@@ -163,7 +169,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         // this.loadListMaNghiepVu(),
         this.loadListQuocGia(),]).then(() => {
         this.getPartnerInfo();
-        this.getMarket();
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList ?? []);
         this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.value.priceUnitInfo);
         this.tblUnitPrice = new MatTableDataSource<any>([{
@@ -204,8 +209,28 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           "expenseCatgId": 30003
         }]);
 
+        //debounce
+        this.brake = true;
+        this.marketCodeChangeDebounce = debounce(async (value: any) => {
+          console.log(value && !this.brake,value,this.brake,'value && !this.brake')
+          if (value && !this.brake) {
+            try {
+              await this.spinner.show();
+              await this.baseService.getMarket({marketCode: value.toUpperCase()}).then(res => {
+                if (res.status == HttpStatusCode.Ok) {
+                  // delete res.data.marketCode;
+                  this.formGroupDetail.patchValue(res.data);
+                  this.brake = true;
+                }
+              });
+            } catch (e) {
+              console.log(e);
+            } finally {
+              await this.spinner.hide();
+            }
+          }
+        }, 1000);
       });
-
     } catch (e) {
       console.log(e);
     } finally {
@@ -228,7 +253,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         let bizDocIdBlob = new Blob([this.formGroupDetail.value.bizDocId], {type: 'application/json'});
         //validate
         // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
-        if(fileUpload.size > 5 * 1048576){
+        if (fileUpload.size > 5 * 1048576) {
           this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
           return;
         }
@@ -249,8 +274,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       } catch (e: any) {
         console.log(e);
         this.baseService.showError((e.error?.error?.file) ?? (e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
-      }
-      finally {
+      } finally {
         await this.spinner.hide();
       }
     }
@@ -333,11 +357,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async test() {
-    console.log(this.formGroupDetail.value,'this.formGroupDetail.value')
+    console.log(this.formGroupDetail.value, 'this.formGroupDetail.value')
     console.log(this.tblUnitPrice.data)
   }
-
-  protected readonly LOCALE = LOCALE;
 
   async filterNation() {
 
@@ -368,14 +390,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           notes: data.notes,
         })
       }
-    });
-  }
-
-  async getMarket() {
-    await this.baseService.getMarket().then(res => {
-
-      console.log(res)
-
     });
   }
 }

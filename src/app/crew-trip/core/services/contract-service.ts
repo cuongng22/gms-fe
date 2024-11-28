@@ -21,9 +21,9 @@ export class ContractService extends BaseService {
     return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
-  getMarket(): Promise<any> {
+  getMarket(body: any): Promise<any> {
     const url = `${this.api}/${this.path}/load-market`;
-    const params = new HttpParams({fromObject: {marketCode: 'CBP'}});
+    const params = new HttpParams({fromObject: body});
     return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
