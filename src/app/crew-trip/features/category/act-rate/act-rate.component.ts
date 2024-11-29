@@ -71,13 +71,36 @@ export class ActRateComponent extends CommonComponent implements OnInit {
   }
 
 
-  override search(body?: any, isNextPage?: boolean): any {
+  override async search(body?: any) {
     const currDate = this.formGroupSearch.controls.currDate.value;
     const searchValue = {
       ...this.formGroupSearch.value,
       currDate: currDate ? this.dataTransformPipe.transform(currDate, ['date', Constant.DATE_FORMAT]) : null,
     };
-    super.search(searchValue, isNextPage);
+    try {
+      await this.spinner.show();
+      let res = await this.baseService.actSearch({
+        page: this.pageIndex,
+        size: this.pageSize, ...removeNullValues(body) || removeNullValues(searchValue),
+        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(searchValue)
+      });
+      if (res) {
+        if (res.status === HttpStatusCode.Ok) {
+          this.dataSource.data = res.data.content;
+          this.dataSource.data = this.dataSource.data.map((s: any) => ({
+            ...s,
+            isActiveLabel: !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
+            activeLabel: !!s.active || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
+          }))
+          this.totalElement = res.data.totalElements;
+        }
+        return res;
+      }
+    } catch (e: any) {
+      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
   async viewHistory(item?: any) {
