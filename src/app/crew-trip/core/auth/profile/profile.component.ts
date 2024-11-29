@@ -91,7 +91,7 @@ export class ProfileComponent implements OnInit {
         if (this.selectedFile) {
           let resp = await this.uploadFile(this.selectedFile);
           if (resp && resp.data) {
-            userInfo.avartarUrl = resp.data;
+            userInfo.avartarUrl = `${environment.baseUrl}/${resp.data}`;
           }
           this.selectedFile = null;
         }
