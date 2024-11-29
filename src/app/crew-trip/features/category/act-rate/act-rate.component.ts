@@ -55,7 +55,7 @@ export class ActRateComponent extends CommonComponent implements OnInit {
   displayedColumnsHis: string[] = [];
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
-    currDate: [new Date()],
+    startDate: [new Date()],
     export: [false],
   });
 
@@ -72,10 +72,10 @@ export class ActRateComponent extends CommonComponent implements OnInit {
 
 
   override async search(body?: any) {
-    const currDate = this.formGroupSearch.controls.currDate.value;
+    const startDate = this.formGroupSearch.controls.startDate.value;
     const searchValue = {
       ...this.formGroupSearch.value,
-      currDate: currDate ? this.dataTransformPipe.transform(currDate, ['date', Constant.DATE_FORMAT]) : null,
+      startDate: startDate ? this.dataTransformPipe.transform(startDate, ['date', 'YYYY-MM-DD']) : null,
     };
     try {
       await this.spinner.show();
