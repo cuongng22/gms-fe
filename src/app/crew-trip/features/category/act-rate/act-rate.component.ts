@@ -56,6 +56,7 @@ export class ActRateComponent extends CommonComponent implements OnInit {
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
     startDate: [new Date()],
+    endDate: [new Date()],
     export: [false],
   });
 
@@ -73,9 +74,11 @@ export class ActRateComponent extends CommonComponent implements OnInit {
 
   override async search(body?: any) {
     const startDate = this.formGroupSearch.controls.startDate.value;
+    const endDate = this.formGroupSearch.controls.endDate.value;
     const searchValue = {
       ...this.formGroupSearch.value,
       startDate: startDate ? this.dataTransformPipe.transform(startDate, ['date', 'YYYY-MM-DD']) : null,
+      endDate: endDate ? this.dataTransformPipe.transform(endDate, ['date', 'YYYY-MM-DD']) : null,
     };
     try {
       await this.spinner.show();
@@ -128,10 +131,12 @@ export class ActRateComponent extends CommonComponent implements OnInit {
     try {
       await this.spinner.show();
       const startDate = this.formGroupSearch.controls.startDate.value;
+      const endDate = this.formGroupSearch.controls.endDate.value;
       const searchValue = {
         ...this.formGroupSearch.value,
         'export': true,
         startDate: startDate ? this.dataTransformPipe.transform(startDate, ['date', 'YYYY-MM-DD']) : null,
+        endDate: endDate ? this.dataTransformPipe.transform(endDate, ['date', 'YYYY-MM-DD']) : null,
       };
       const res = await this.baseService.exportDataOptions({...removeNullValues(body) || removeNullValues(searchValue)}, sourcePath);
       this.downloadFile(res.blob, filename ?? res.fileName);

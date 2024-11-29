@@ -28,12 +28,30 @@
               </mat-form-field>
             </div>
             <div class="col" sizeInput="md">
-              <mat-form-field appearance="fill">
-                <mat-label i18n="@@effectiveDate">Effective date</mat-label>
-                <input formControlName="startDate" matInput [matDatepicker]="pickerStartDate">
-                <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>
-                <mat-datepicker #pickerStartDate></mat-datepicker>
+              <mat-form-field class="mb-1">
+                <mat-date-range-input [rangePicker]="effectRangePicker">
+                  <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="dd/mm/yyyy"
+                         formControlName="startDate">
+                  <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
+                         formControlName="endDate">
+                </mat-date-range-input>
+                <mat-label i18n="@@contractPeriod">Effective date</mat-label>
+                <mat-datepicker-toggle matIconSuffix [for]="effectRangePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #effectRangePicker>
+                  <mat-date-range-picker-actions>
+                    <button sizeButton="sm" mat-button matDateRangePickerCancel
+                            i18n="@@cancel">Cancel</button>
+                    <button sizeButton="sm" mat-raised-button color="primary" matDateRangePickerApply
+                            i18n="@@apply">Apply</button>
+                  </mat-date-range-picker-actions>
+                </mat-date-range-picker>
               </mat-form-field>
+<!--              <mat-form-field appearance="fill">-->
+<!--                <mat-label i18n="@@effectiveDate">Effective date</mat-label>-->
+<!--                <input formControlName="startDate" matInput [matDatepicker]="pickerStartDate">-->
+<!--                <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>-->
+<!--                <mat-datepicker #pickerStartDate></mat-datepicker>-->
+<!--              </mat-form-field>-->
             </div>
 
             <div class="col d-sm-flex flex-row  justify-content-lg-start justify-content-md-center">
