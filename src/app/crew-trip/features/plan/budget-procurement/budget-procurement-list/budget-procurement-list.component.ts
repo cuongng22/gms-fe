@@ -235,6 +235,7 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
     }),
     versionOfProduction: new FormControl(''),
     versionOfExchangeRate: new FormControl(''),
+    updateBudgetPlan: new FormControl(false)
   });
 
   isCreate = model<boolean>(false);

@@ -10,10 +10,12 @@
     }
 
     .mat-column-singleRoomOther {
-        width: 213px;
+        min-width: 140px !important;
+        max-width: 140px !important;
     }
 
     .mat-column-doubleRoomOther {
-        width: 213px;
+        min-width: 140px !important;
+        max-width: 140px !important;
     }
 }

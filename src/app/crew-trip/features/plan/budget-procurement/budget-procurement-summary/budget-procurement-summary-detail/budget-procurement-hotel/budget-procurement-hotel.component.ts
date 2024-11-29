@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { AfterViewChecked, ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -12,6 +12,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { After } from 'v8';
 import { contractData, exampleData, formula, getGeaderRowDef1, getGeaderRowDef2, getRowDef, rawData } from './budget-procurement-hotel.model';
 import { co } from 'node_modules/@fullcalendar/core/internal-common';
+import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 
 @Component({
   selector: 'app-budget-procurement-hotel',
@@ -36,7 +37,9 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
   headerRowDef2: string[] = [];
   rowDef: string[] = [];
 
-  
+  yearPlan = input<number>(2024); // năm kế hoạch
+  updateBudgetPlan = input<boolean>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
+
 
 
 
@@ -47,34 +50,10 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
 
   ngOnInit(): void {
 
-
     this.headerRowDef1 = getGeaderRowDef1(contractData);
     this.headerRowDef2 = getGeaderRowDef2(contractData);
     this.rowDef = getRowDef(contractData);
 
-    // for (let j = 0; j < 13; j++) {
-    //   for (let i = 0; i < 4; i++) {
-    //     let data = JSON.parse(JSON.stringify(rawData));
-    //     if (j > 0) {
-    //       data.periodStart = new Date(new Date(data.periodStart).setMonth(new Date(data.periodStart).getMonth() + j));
-    //     } else {
-    //       data.periodStart = new Date(data.periodStart);
-    //     }
-    //     if (i % 2 === 0) {
-    //       data.overnight = 1
-    //     } else {
-    //       data.overnight = 2
-    //     }
-
-    //     if (i < 2) {
-    //       data.aircraftType = 'B787';
-    //     } else {
-    //       data.aircraftType = 'A321';
-    //     }
-    //     this.dataSource.data.push(data);
-    //   }
-    // }
-    // console.log(JSON.stringify(this.dataSource.data));
     this.dataSource.data = exampleData;
 
 
@@ -126,14 +105,24 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
       }
       //Tổng tiền xe chở tổ bay (ngoại tệ)
       this.calculate(index, 'totalAmountForeignTransport');
-      //Tổng tiền theo loại máy bay
-      this.calculate(index, 'totalAmountAircraft');
-      // Tổng tiền ngoại tệ
+      if (!this.updateBudgetPlan()) {
+        //Tổng tiền theo loại máy bay
+        this.calculate(index, 'totalAmountAircraft');
+      }
+      // Tổng tiền ngoại tệ - Chưa bao gồm VAT
       this.calculate(index, 'totalAmountForeign');
+
+      // Tổng tiền ngoại tệ - bao gồm VAT
+      this.calculate(index, 'totalAmountForeignVat');
+
       //Tổng tiền VND - bao gồm VAT
       this.calculate(index, 'totalAmountVat');
       //Tổng tiền VND - chưa bao gồm VAT
       this.calculate(index, 'totalAmount');
+      //Tổng số phòng đơn
+      this.calculate(index, 'totalSingleRoom');
+      //Tổng số phòng đôi
+      this.calculate(index, 'totalDoubleRoom');
     });
 
     // Tính toán dòng tổng rowspan
@@ -155,13 +144,24 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
 
   // TÍnh dòng tổng 
   getTotal(control: string) {
+    //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
+    if (control === 'totalAmountVat') {
+      const startDatePlanGroup = new Date(this.yearPlan(), 11, 1);
+      const endDatePlanGroup = new Date(this.yearPlan() + 1, 10, 1);
+      return Math.round(this.dataSource.data.map((t: any) => {
+        if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup) && truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
+          return Number(t[control]);
+        }
+        return 0;
+      }).reduce((acc, value) => acc + value, 0));
+    }
     return Math.round(this.dataSource.data.map((t: any) => Number(t[control])).reduce((acc, value) => acc + value, 0));
   }
 
   // hàm công thức tính chung
   calculate(index: number, key: string) {
     let data: any = this.dataSource.data[index];
-    data[key] = this.calculateFormula(data, formula[key].formula);
+    data[key] = this.calculateFormula(data, formula[key].formula, key);
     const groupFormula = formula[key].groupFormula;
     return data[key];
   }
@@ -174,12 +174,18 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
   }
 
   // Hàm tính toán dựa trên công thức động
-  calculateFormula(data: any, formula: string): number {
+  calculateFormula(data: any, formula: string, key?: string): number {
     // Sử dụng Function để tạo hàm động từ công thức
     const dynamicFunction = new Function(
-      'data',   // Truyền tên các biến trong data
+      'data',
       `return ${formula};`    // Công thức cần tính
     );
+    //Các tháng đã thực hiện: không tính toán 
+    const currentMonth = new Date().getUTCMonth();
+    const periodMonth = new Date(data.periodStart).getUTCMonth();
+    if (this.updateBudgetPlan() && periodMonth <= currentMonth && key) {
+      return data[key];
+    }
     return Math.round(dynamicFunction(data));
   }
 

@@ -16,4 +16,7 @@
             padding: 0 10px !important;
         }
     }
+    .mat-expansion-panel-header:hover{
+        border: 1px solid var(--mat-expansion-header-hover-state-layer-color);
+    }
 }

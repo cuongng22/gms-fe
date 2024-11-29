@@ -35,7 +35,7 @@
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-header class="mb-10">
         <mat-card-title>
-            <h5>I. <span i18n="@@generalInformation">General Information</span></h5>
+            <h5 class="mb-0">I. <span i18n="@@generalInformation">General Information</span></h5>
         </mat-card-title>
         <mat-card-subtitle>
             <button mat-button color="primary" type="button" class="add-btn">
@@ -57,7 +57,7 @@
                 (closed)="panelCalBasisOpenState.set(false)" [expanded]="true">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        <h5>II. <span i18n="@@generalInformation">Calculation basis</span></h5>
+                        <h5 class="mb-0">II. <span i18n="@@generalInformation">Calculation basis</span></h5>
                     </mat-panel-title>
                     <!-- @if(panelCalBasisOpenState()){
                     <mat-panel-title class="d-flex justify-content-end">
@@ -82,7 +82,8 @@
                     <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <h6>2.1 <span i18n="@@flightRateOverTheYears">Flight Rate Over the Years</span></h6>
+                                <h6 class="mb-0">2.1 <span i18n="@@flightRateOverTheYears">Flight Rate Over the
+                                        Years</span></h6>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div class="ml-15 mr-15">
@@ -93,7 +94,8 @@
                     <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <h6>2.2 <span i18n="@@numberOfFlightsByPeriod">Number of Flights by Period</span></h6>
+                                <h6 class="mb-0">2.2 <span i18n="@@numberOfFlightsByPeriod">Number of Flights by
+                                        Period</span></h6>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div class="ml-15 mr-15">
@@ -104,7 +106,7 @@
                     <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <h6>2.3
+                                <h6 class="mb-0">2.3
                                     <span i18n="@@flightFrequencyStatisticsByNumberOfOvernightStays">
                                         Flight Frequency Statistics by Number of Overnight Stays (Weekly)
                                     </span>
@@ -131,14 +133,14 @@
                 (closed)="panelCalBasisOpenState.set(false)" [expanded]="true">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        <h5>III. <span i18n="@@budgetPlan">Budget Plan</span></h5>
+                        <h5 class="mb-0">III. <span i18n="@@budgetPlan">Budget Plan</span></h5>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-accordion multi>
                     <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <h6>3.1
+                                <h6 class="mb-0">3.1
                                     <span i18n="@@flightFrequencyStatisticsByNumberOfOvernightStays">
                                         Flight Frequency Statistics by Number of Overnight Stays (Weekly)
                                     </span>
@@ -146,13 +148,13 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div class="ml-15 mr-15">
-                            <app-budget-procurement-hotel />
+                            <app-budget-procurement-hotel [yearPlan]="2024" />
                         </div>
                     </mat-expansion-panel>
                     <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <h6>3.2
+                                <h6 class="mb-0">3.2
                                     <span i18n="@@procurementPlanForCarRental">
                                         Procurement Plan for Car Rental
                                     </span>

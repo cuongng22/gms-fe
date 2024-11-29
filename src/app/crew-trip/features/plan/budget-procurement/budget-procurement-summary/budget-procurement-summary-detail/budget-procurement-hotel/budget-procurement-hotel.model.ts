@@ -3,207 +3,227 @@ import { ex } from "node_modules/@fullcalendar/core/internal-common"
 export const formula: any = {
 
 
-    //Tổng tiền xe chở tổ bay (ngoại tệ)
-    totalAmountForeignTransport: {
-        formula: 'data.totalFlightMonth * 2 * data.carRate',
-        groupFormula: 'aircraftType && periodStart',
-    },
-    //Số phòng đơn
-    singleRoom: {
-        formula: 'data.overnight * data.totalFlightByAircraft * data.numberOfPilots + (data.numberOfFlightAttendants % 2 === 0 ? 0 : data.totalFlightByAircraft)',
-    },
-    //Số phòng đôi
-    doubleRoom: {
-        formula: 'data.overnight * data.totalFlightByAircraft * (data.numberOfFlightAttendants % 2 === 0 ? (data.numberOfFlightAttendants/2) : ((data.numberOfFlightAttendants - 1)/2)) ',
-    },
-    //Số phòng đơn dự phòng do lẻ nam nữ
-    singleRoomReserved: {
-        formula: 'data.singleRoom * data.rateForSingle'
-    },
-    //Số phòng đơn early-checkin dự kiến
-    singleRoomEarly: {
-        formula: '1 * data.numberOfEarlyFlights * data.numberOfPilots + (data.numberOfFlightAttendants % 2 === 0 ? 0 : data.totalFlightByAircraft)'
-    },
-    //Số phòng đôi early-checkin dự kiến
-    doubleRoomEarly: {
-        formula: '1 * data.numberOfEarlyFlights * (data.numberOfFlightAttendants % 2 === 0 ? (data.numberOfFlightAttendants/2) : ((data.numberOfFlightAttendants - 1)/2))'
-    },
-    //Số phòng đơn early-checkin dự kiến do lẻ nam nữ
-    singleRoomEarlyReserved: {
-        formula: 'data.singleRoomEarly * data.rateForSingle'
-    },
-    //Số phòng đơn late checkout dự kiến
-    singleRoomLate: {
-        formula: 'data.overnightLate * data.numberOfLateFlights * data.numberOfPilots + (data.numberOfFlightAttendants % 2 === 0 ? 0 : data.totalFlightByAircraft)'
-    },
-    //Số phòng đôi late checkout dự kiến
-    doubleRoomLate: {
-        formula: 'data.overnightLate * data.numberOfLateFlights * (data.numberOfFlightAttendants % 2 === 0 ? (data.numberOfFlightAttendants/2) : ((data.numberOfFlightAttendants - 1)/2))'
-    },
-    //Số phòng đơn late checkout dự kiến do lẻ nam nữ
-    singleRoomLateReserved: {
-        formula: 'data.singleRoomLate * data.rateForSingle'
-    },
-    //Thành tiền ngoại tệ, - phòng đơn 
-    totalAmountForeignSingleRoom: {
-        formula: 'data.singleRoom * data.priceSingleRoom'
-    },
-    //Thành tiền ngoại tệ,  - phòng đôi
-    totalAmountForeignDoubleRoom: {
-        formula: 'data.doubleRoom * data.priceDoubleRoom'
-    },
-    //Thành tiền ngoại tệ,  - phòng early-checkin 
-    totalAmountForeignEarly: {
-        formula: '(data.singleRoomEarly + data.singleRoomEarlyReserved) * data.priceSingleRoomEarly + data.doubleRoomEarly * data.priceDoubleRoomEarly'
-    },
-    //Thành tiền ngoại tệ, - phòng late checkout
-    totalAmountForeignLate: {
-        formula: '(data.singleRoomLate + data.singleRoomLateReserved) * data.priceSingleRoomLate + data.doubleRoomLate * data.priceDoubleRoomLate'
-    },
-    //Tổng tiền theo loại máy bay
-    totalAmountAircraft: {
-        formula: 'data.totalAmountForeignSingleRoom + data.totalAmountForeignDoubleRoom + data.totalAmountForeignEarly + data.totalAmountForeignLate + data.totalAmountForeignTransport'
-    },
-    // Tổng tiền ngoại tệ
-    totalAmountForeign: {
-        formula: 'data.totalAmountAircraft',
-        groupFormula: 'periodStart',
-    },
-    //Tổng tiền VND - bao gồm VAT
-    totalAmountVat: {
-        formula: 'data.totalAmountForeign * data.rateForeign',
-        groupFormula: 'periodStart',
-    },
-    //Tổng tiền VND - chưa bao gồm VAT
-    totalAmount: {
-        formula: 'data.totalAmountVat - (data.totalAmountVat / 100 * data.vat);',
-        groupFormula: 'periodStart',
-    },
+  //Tổng tiền xe chở tổ bay (ngoại tệ)
+  totalAmountForeignTransport: {
+    formula: 'data.totalFlightMonth * 2 * data.carRate',
+    groupFormula: 'aircraftType && periodStart',
+  },
+  //Số phòng đơn
+  singleRoom: {
+    formula: 'data.overnight * data.totalFlightByAircraft * data.numberOfPilots + (data.numberOfFlightAttendants % 2 === 0 ? 0 : data.totalFlightByAircraft)',
+  },
+  //Số phòng đôi
+  doubleRoom: {
+    formula: 'data.overnight * data.totalFlightByAircraft * (data.numberOfFlightAttendants % 2 === 0 ? (data.numberOfFlightAttendants/2) : ((data.numberOfFlightAttendants - 1)/2)) ',
+  },
+  //Số phòng đơn dự phòng do lẻ nam nữ
+  singleRoomReserved: {
+    formula: 'data.singleRoom * data.rateForSingle'
+  },
+  //Số phòng đơn early-checkin dự kiến
+  singleRoomEarly: {
+    formula: '1 * data.numberOfEarlyFlights * data.numberOfPilots + (data.numberOfFlightAttendants % 2 === 0 ? 0 : data.totalFlightByAircraft)'
+  },
+  //Số phòng đôi early-checkin dự kiến
+  doubleRoomEarly: {
+    formula: '1 * data.numberOfEarlyFlights * (data.numberOfFlightAttendants % 2 === 0 ? (data.numberOfFlightAttendants/2) : ((data.numberOfFlightAttendants - 1)/2))'
+  },
+  //Số phòng đơn early-checkin dự kiến do lẻ nam nữ
+  singleRoomEarlyReserved: {
+    formula: 'data.singleRoomEarly * data.rateForSingle'
+  },
+  //Số phòng đơn late checkout dự kiến
+  singleRoomLate: {
+    formula: 'data.overnightLate * data.numberOfLateFlights * data.numberOfPilots + (data.numberOfFlightAttendants % 2 === 0 ? 0 : data.totalFlightByAircraft)'
+  },
+  //Số phòng đôi late checkout dự kiến
+  doubleRoomLate: {
+    formula: 'data.overnightLate * data.numberOfLateFlights * (data.numberOfFlightAttendants % 2 === 0 ? (data.numberOfFlightAttendants/2) : ((data.numberOfFlightAttendants - 1)/2))'
+  },
+  //Số phòng đơn late checkout dự kiến do lẻ nam nữ
+  singleRoomLateReserved: {
+    formula: 'data.singleRoomLate * data.rateForSingle'
+  },
+  //Thành tiền ngoại tệ, - phòng đơn 
+  totalAmountForeignSingleRoom: {
+    formula: 'data.singleRoom * data.priceSingleRoom'
+  },
+  //Thành tiền ngoại tệ,  - phòng đôi
+  totalAmountForeignDoubleRoom: {
+    formula: 'data.doubleRoom * data.priceDoubleRoom'
+  },
+  //Thành tiền ngoại tệ,  - phòng early-checkin 
+  totalAmountForeignEarly: {
+    formula: '(data.singleRoomEarly + data.singleRoomEarlyReserved) * data.priceSingleRoomEarly + data.doubleRoomEarly * data.priceDoubleRoomEarly'
+  },
+  //Thành tiền ngoại tệ, - phòng late checkout
+  totalAmountForeignLate: {
+    formula: '(data.singleRoomLate + data.singleRoomLateReserved) * data.priceSingleRoomLate + data.doubleRoomLate * data.priceDoubleRoomLate'
+  },
+  //Tổng tiền theo loại máy bay
+  totalAmountAircraft: {
+    formula: 'data.totalAmountForeignSingleRoom + data.totalAmountForeignDoubleRoom + data.totalAmountForeignEarly + data.totalAmountForeignLate + data.totalAmountForeignTransport'
+  },
+  // Tổng tiền ngoại tệ - Chưa bao gồm VAT
+  totalAmountForeign: {
+    formula: '(data.singleRoom + data.singleRoomReserved + data.singleRoomOther) * data.priceSingleRoom '
+    + ' + (data.doubleRoom + data.doubleRoomOther ) * data.priceDoubleRoom '
+    + ' + (data.singleRoomEarly + data.singleRoomEarlyReserved) * data.priceSingleRoomEarly '
+    + ' + (data.doubleRoomEarly * data.priceDoubleRoomEarly) ' 
+    + ' + (data.singleRoomLate + data.singleRoomLateReserved) * data.priceSingleRoomLate ' 
+    + ' + (data.doubleRoomLate * data.priceDoubleRoomLate) ' 
+    + ' + (data.totalFlightMonth * 2 * data.carRate) ',
+    groupFormula: 'periodStart',
+  },
+  //Tổng tiền ngoại tệ - Bao gồm VAT
+  totalAmountForeignVat: {
+    formula: '(data.totalAmountForeignSingleRoom + data.totalAmountForeignDoubleRoom + data.totalAmountForeignEarly + data.totalAmountForeignLate + data.totalAmountForeignTransport)',
+    groupFormula: 'periodStart',
+  },
+  //Tổng tiền VND - bao gồm VAT
+  totalAmountVat: {
+    formula: 'data.totalAmountForeignVat * data.rateForeign',
+    groupFormula: 'periodStart',
+  },
+  //Tổng tiền VND - chưa bao gồm VAT
+  totalAmount: {
+    formula: 'data.totalAmountForeign * data.rateForeign',
+    groupFormula: 'periodStart',
+  },
+  //Tổng số phòng đơn
+  totalSingleRoom: {
+    formula: 'data.singleRoom + data.singleRoomReserved + data.singleRoomOther',
+  },
+  //Tổng số phòng đôi
+  totalDoubleRoom: {
+    formula: 'data.doubleRoom + data.doubleRoomOther',
+  },
+
 }
 
 export const rawData = {
-    id: 1,
-    planBudgetProcSummaryId: 101,
-    type: 'Hotel',
-    periodStart: new Date(2024, 11, 1),
-    aircraftType: 'Boeing 737',
+  id: 1,
+  planBudgetProcSummaryId: 101,
+  type: 'Hotel',
+  periodStart: new Date(2024, 11, 1),
+  aircraftType: 'Boeing 737',
 
-    periodEnd: '2024-12-31',
-    overnight: 5,
-    singleRoom: 10,
-    doubleRoom: 5,
-    singleRoomReserved: 2,
-    singleRoomOther: 1,
-    doubleRoomOther: 1,
-    singleRoomEarly: 1,
-    doubleRoomEarly: 1,
-    singleRoomEarlyReserved: 1,
-    singleRoomLate: 1,
-    doubleRoomLate: 1,
-    singleRoomLateReserved: 1,
-    totalAmountForeignTransport: 1000,
-    totalAmountForeign: 5000,
-    totalAmount: 6000,
-    totalAmountVat: 6600,
-    priceSingleRoom: 100,
-    priceDoubleRoom: 200,
-    priceSingleRoomEarly: 150,
-    priceDoubleRoomEarly: 250,
-    priceSingleRoomLate: 120,
-    priceDoubleRoomLate: 220,
-    priceCrewTransport: 75000,
+  periodEnd: '2024-12-31',
+  overnight: 5,
+  singleRoom: 10,
+  doubleRoom: 5,
+  singleRoomReserved: 2,
+  singleRoomOther: 1,
+  doubleRoomOther: 1,
+  singleRoomEarly: 1,
+  doubleRoomEarly: 1,
+  singleRoomEarlyReserved: 1,
+  singleRoomLate: 1,
+  doubleRoomLate: 1,
+  singleRoomLateReserved: 1,
+  totalAmountForeignTransport: 1000,
+  totalAmountForeign: 5000, //Tổng tiền ngoại tệ - Chưa bao gồm VAT
+  totalAmountForeignVat: 5000, // Tổng tiền ngoại tệ - Bao gồm VAT
+  totalAmount: 6000,
+  totalAmountVat: 6600,
+  priceSingleRoom: 100,
+  priceDoubleRoom: 200,
+  priceSingleRoomEarly: 150,
+  priceDoubleRoomEarly: 250,
+  priceSingleRoomLate: 120,
+  priceDoubleRoomLate: 220,
+  priceCrewTransport: 75000,
 
 
-    totalFlightMonth: 100, // tổng số chuyến bay trong tháng
-    carRate: 75000, // Đơn giá xe chở tổ bay/lượt
-    totalAmountForeignSingleRoom: 100, // Thành tiền ngoại tệ, - phòng đơn
-    totalAmountForeignDoubleRoom: 50, // Thành tiền ngoại tệ, - phòng đôi
-    totalAmountForeignEarly: 50, // Thành tiền ngoại tệ,  - phòng early-checkin
-    totalAmountForeignLate: 50, // Thành tiền ngoại tệ,  - phòng late-checkout
-    totalAmountAircraft: 1000, // Tổng tiền theo loại máy bay
-    rateForeign: 1.1, // Tỷ giá ngoại tệ (Tỷ giá lấy từ bảng Tỷ giá kế hoạch theo version mới nhất tại thời điểm làm kế hoạch ngân sách)
-    vat: 10, //  % VAT (lấy trong hợp đồng )  (lấy %VAT của đơn giá phòng đơn),
-    totalFlightByAircraft: 50, // Số chuyến bay theo tàu
-    numberOfPilots: 4, //Số phi công
-    numberOfFlightAttendants: 5, //Số tiếp viên	
-    rateForSingle: 1.1, // TỈ lệ dự phòng lẻ nam/nữ (dành cho khách sạn)
-    numberOfEarlyFlights: 10, // Số chuyến bay early-checkin
-    numberOfLateFlights: 5, // Số chuyến bay late-checkout
-    overnightLate: 1, // Số đêm late-checkout
+  totalFlightMonth: 100, // tổng số chuyến bay trong tháng
+  carRate: 75000, // Đơn giá xe chở tổ bay/lượt
+  totalAmountForeignSingleRoom: 100, // Thành tiền ngoại tệ, - phòng đơn
+  totalAmountForeignDoubleRoom: 50, // Thành tiền ngoại tệ, - phòng đôi
+  totalAmountForeignEarly: 50, // Thành tiền ngoại tệ,  - phòng early-checkin
+  totalAmountForeignLate: 50, // Thành tiền ngoại tệ,  - phòng late-checkout
+  totalAmountAircraft: 1000, // Tổng tiền theo loại máy bay
+  rateForeign: 1.1, // Tỷ giá ngoại tệ
+  totalFlightByAircraft: 50, // Số chuyến bay theo tàu
+  numberOfPilots: 4, //Số phi công
+  numberOfFlightAttendants: 5, //Số tiếp viên	
+  rateForSingle: 1.1, // TỈ lệ dự phòng lẻ nam/nữ (dành cho khách sạn)
+  numberOfEarlyFlights: 10, // Số chuyến bay early-checkin
+  numberOfLateFlights: 5, // Số chuyến bay late-checkout
+  overnightLate: 1, // Số đêm late-checkout
 
 
 };
 
 export const contractData = {
-    // Phí early-checkin
-    earlyCheckinFeeFlag: true,
-    //Phí late checkout
-    lateCheckoutFeeFlag: true,
-    //Phí thuê xe chở tổ bay
-    crewTransportFeeFlag: true,
+  // Phí early-checkin
+  earlyCheckinFeeFlag: true,
+  //Phí late checkout
+  lateCheckoutFeeFlag: true,
+  //Phí thuê xe chở tổ bay
+  crewTransportFeeFlag: true,
 }
 
 export function getGeaderRowDef1(contractData: any): string[] {
-    const columns = [
-        { column: "month", visible: true },
-        { column: "aircraftType", visible: true },
-        { column: "overnight", visible: true },
-        { column: "numberOfRooms", visible: true },
-        { column: "numberOfRoomsForOthers", visible: true },
-        { column: "numberOfEstimatedEarlyCheckInRooms", visible: !!contractData.earlyCheckinFeeFlag },
-        { column: "numberOfEstimatedLateCheckoutRooms", visible: !!contractData.lateCheckoutFeeFlag },
-        { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
-        { column: "totalAmountForeign", visible: true },
-        { column: "totalAmountColspan", visible: true }
-    ]
-    return columns.filter((column: any) => column.visible).map((column: any) => column.column)
+  const columns = [
+    { column: "month", visible: true },
+    { column: "aircraftType", visible: true },
+    { column: "overnight", visible: true },
+    { column: "numberOfRooms", visible: true },
+    { column: "numberOfRoomsForOthers", visible: true },
+    { column: "numberOfEstimatedEarlyCheckInRooms", visible: !!contractData.earlyCheckinFeeFlag },
+    { column: "numberOfEstimatedLateCheckoutRooms", visible: !!contractData.lateCheckoutFeeFlag },
+    { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
+    { column: "totalAmountForeign", visible: true },
+    { column: "totalAmountColspan", visible: true }
+  ]
+  return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
 
 export function getGeaderRowDef2(contractData: any): string[] {
-    const columns = [
-        { column: "singleRoom", visible: true },
-        { column: "doubleRoom", visible: true },
-        { column: "singleRoomReserved", visible: true },
-        { column: "singleRoomOther", visible: true },
-        { column: "doubleRoomOther", visible: true },
-        { column: "singleRoomEarly", visible: !!contractData.earlyCheckinFeeFlag },
-        { column: "doubleRoomEarly", visible: !!contractData.earlyCheckinFeeFlag },
-        { column: "singleRoomEarlyReserved", visible: !!contractData.earlyCheckinFeeFlag },
-        { column: "singleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
-        { column: "doubleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
-        { column: "singleRoomLateReserved", visible: !!contractData.lateCheckoutFeeFlag },
-        { column: "totalAmount", visible: true },
-        { column: "totalAmountVat", visible: true },
-    ];
-    return columns.filter((column: any) => column.visible).map((column: any) => column.column)
+  const columns = [
+    { column: "singleRoom", visible: true },
+    { column: "doubleRoom", visible: true },
+    { column: "singleRoomReserved", visible: true },
+    { column: "singleRoomOther", visible: true },
+    { column: "doubleRoomOther", visible: true },
+    { column: "singleRoomEarly", visible: !!contractData.earlyCheckinFeeFlag },
+    { column: "doubleRoomEarly", visible: !!contractData.earlyCheckinFeeFlag },
+    { column: "singleRoomEarlyReserved", visible: !!contractData.earlyCheckinFeeFlag },
+    { column: "singleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
+    { column: "doubleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
+    { column: "singleRoomLateReserved", visible: !!contractData.lateCheckoutFeeFlag },
+    { column: "totalAmount", visible: true },
+    { column: "totalAmountVat", visible: true },
+  ];
+  return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
 
 export function getRowDef(contractData: any): string[] {
-    const columns = [
-        { column: "month", visible: true },
-        { column: "aircraftType", visible: true },
-        { column: "overnight", visible: true },
-        { column: "singleRoom", visible: true },
-        { column: "doubleRoom", visible: true },
-        { column: "singleRoomReserved", visible: true },
-        { column: "singleRoomOther", visible: true },
-        { column: "doubleRoomOther", visible: true },
-        { column: "singleRoomEarly", visible: !!contractData.earlyCheckinFeeFlag },
-        { column: "doubleRoomEarly", visible: !!contractData.earlyCheckinFeeFlag },
-        { column: "singleRoomEarlyReserved", visible: !!contractData.earlyCheckinFeeFlag },
-        { column: "singleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
-        { column: "doubleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
-        { column: "singleRoomLateReserved", visible: !!contractData.lateCheckoutFeeFlag },
-        { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
-        { column: "totalAmountForeign", visible: true },
-        { column: "totalAmount", visible: true },
-        { column: "totalAmountVat", visible: true },
-    ];
-    return columns.filter((column: any) => column.visible).map((column: any) => column.column)
+  const columns = [
+    { column: "month", visible: true },
+    { column: "aircraftType", visible: true },
+    { column: "overnight", visible: true },
+    { column: "singleRoom", visible: true },
+    { column: "doubleRoom", visible: true },
+    { column: "singleRoomReserved", visible: true },
+    { column: "singleRoomOther", visible: true },
+    { column: "doubleRoomOther", visible: true },
+    { column: "singleRoomEarly", visible: !!contractData.earlyCheckinFeeFlag },
+    { column: "doubleRoomEarly", visible: !!contractData.earlyCheckinFeeFlag },
+    { column: "singleRoomEarlyReserved", visible: !!contractData.earlyCheckinFeeFlag },
+    { column: "singleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
+    { column: "doubleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
+    { column: "singleRoomLateReserved", visible: !!contractData.lateCheckoutFeeFlag },
+    { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
+    { column: "totalAmountForeign", visible: true },
+    { column: "totalAmount", visible: true },
+    { column: "totalAmountVat", visible: true },
+  ];
+  return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
 
-export const exampleData = 
-[
+export const exampleData =
+  [
     {
       "id": 1,
       "planBudgetProcSummaryId": 101,
