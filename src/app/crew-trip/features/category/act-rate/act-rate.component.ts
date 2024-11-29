@@ -123,4 +123,23 @@ export class ActRateComponent extends CommonComponent implements OnInit {
       await this.spinner.hide();
     }
   }
+
+  override async exportFileOptions(body?: any, filename?: string, sourcePath?: string) {
+    try {
+      await this.spinner.show();
+      const startDate = this.formGroupSearch.controls.startDate.value;
+      const searchValue = {
+        ...this.formGroupSearch.value,
+        'export': true,
+        startDate: startDate ? this.dataTransformPipe.transform(startDate, ['date', 'YYYY-MM-DD']) : null,
+      };
+      const res = await this.baseService.exportDataOptions({...removeNullValues(body) || removeNullValues(searchValue)}, sourcePath);
+      this.downloadFile(res.blob, filename ?? res.fileName);
+    } catch (e: any) {
+      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
 }
+
