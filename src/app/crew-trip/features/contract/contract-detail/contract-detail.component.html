@@ -601,7 +601,7 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Market Code</mat-label>
-              <input formControlName="marketCode" matInput required>
+              <input formControlName="marketCode" (ngModelChange)="marketCodeChangeDebounce($event);this.brake=false;" matInput required>
               @if (!!formGroupDetail.controls['marketCode'].hasError('required')) {
               <mat-error><span i18n>Market Code</span><span i18n> not empty</span></mat-error>
               }

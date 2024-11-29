@@ -136,11 +136,11 @@ export const menu: Menu[] = [
         path: '', title: '', icon: 'ri-calendar-schedule-line',
         menu: [
           {
-            title: $localize`:@@rates:Rates`,
+            title: $localize`:@@rates:Exchange rate`,
             rootPath: 'plan/rate',
             subMenu: [
               {
-                path: 'plan/rate/uth', title: $localize`:@@uth:Ước thực hiện`, icon: 'ri-exchange-cny-line'
+                path: 'plan/rate/uth', title: $localize`:@@estimatedExchangeRate:Estimated exchange rate`, icon: 'ri-exchange-cny-line'
               },
               {
                 path: 'plan/rate/planned',
