@@ -55,7 +55,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
   showDialogUpload = false;
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
-  listDatasource: Observable<string[]> = of(['sync', 'excel']);
+  listDatasource: Observable<string[]> = of(['Sync', 'Excel']);
   listVersion: Observable<string[]> = of([]);
 
   override formGroupSearch = this.formBuilder.group({
@@ -67,15 +67,15 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 
   override async ngOnInit() {
     super.ngOnInit();
-    this.displayedColumns = ['stt','currencyCode','uthLastYear','january','february','march', 'april','may'
-      ,'june','july','august','september','october','november','december','average','rateUth','version'
+    this.displayedColumns = ['stt', 'currencyCode', 'uthLastYear', 'january', 'february', 'march', 'april', 'may'
+      , 'june', 'july', 'august', 'september', 'october', 'november', 'december', 'average', 'rateUth', 'version'
     ];
-    await  this.baseService.getListVersion({ option: 0 }).then(res => {
+    await this.baseService.getListVersion({option: 0}).then(res => {
       this.listVersion = of(res.data.map((it: any) => it.version));
-      if(this.listVersion){
+      if (this.listVersion) {
         this.listVersion.pipe(take(1)).subscribe(versions => {
           const firstVersion = versions[0];
-          this.formGroupSearch.patchValue({ version: firstVersion });
+          this.formGroupSearch.patchValue({version: firstVersion});
         });
       }
     });
@@ -119,7 +119,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
       if (this.fileUpload.valid && this.fileUpload.value) {
         const form = new FormData();
         const file: File = this.fileUpload.value[0];
-        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
+        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], {type: file.type}));
         await this.spinner.show();
         const res = await this.baseService.uploadFileUTH(form);
         this.uploadFileError = res;
@@ -146,7 +146,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
     this.showDialogUpload = !this.showDialogUpload;
   }
 
-  override  async downloadTemplate(filename?: string) {
+  override async downloadTemplate(filename?: string) {
     try {
       await this.spinner.show();
       const res = await this.baseService.exportData(null, 'uth/template');
