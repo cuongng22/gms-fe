@@ -111,10 +111,8 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
       }
       // Tổng tiền ngoại tệ - Chưa bao gồm VAT
       this.calculate(index, 'totalAmountForeign');
-
       // Tổng tiền ngoại tệ - bao gồm VAT
       this.calculate(index, 'totalAmountForeignVat');
-
       //Tổng tiền VND - bao gồm VAT
       this.calculate(index, 'totalAmountVat');
       //Tổng tiền VND - chưa bao gồm VAT
