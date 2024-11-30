@@ -84,7 +84,7 @@ export class HotelComponent extends CommonComponent implements OnInit {
 
   override async ngOnInit() {
     super.ngOnInit();
-    this.displayedColumns = ['stt', 'market', 'hotel', 'address', 'contactDetails', 'active', 'notes'];
+    this.displayedColumns = ['stt', 'market', 'code','name', 'address', 'contactDetails', 'active', 'notes'];
     this.search();
 
     this.flightMarketService.search({option: 1}).then(res => {

@@ -206,7 +206,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     }
     if (!hotel?.id) {
       hotel = {
-        ...hotel, id: -+new Date()
+        ...hotel, id: -+new Date(), marketCode: this.formGroupDetail.controls.marketCode.value
       };
     }
     const dialogRef = this.dialog.open(HotelDetailComponent, {
@@ -236,7 +236,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     }
     if (!carRental?.id) {
       carRental = {
-        ...carRental, id: -+new Date()
+        ...carRental, id: -+new Date(), marketCode: this.formGroupDetail.controls.marketCode.value
       };
     }
     const dialogRef = this.dialog.open(CarRentalDetailComponent, {

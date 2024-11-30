@@ -43,7 +43,7 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
     marketCode: [{ value: '', disabled: true }],
     hotelCode: ['', {
       validators: [Validators.required, Validators.maxLength(50)],
-      asyncValidators: [AlreadyExistsValidator.existsHotelCode(this.hotelService)],
+      asyncValidators: [AlreadyExistsValidator.existsHotelCode(this.hotelService, this.data.hotel.marketCode)],
       updateOn: 'blur'
     }],
     hotelName: ['', [Validators.required, Validators.maxLength(250)]],
@@ -81,7 +81,7 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
         });
       }
     }
-    this.hotelService.isUpdate = this.data.isViewDetail || !!this.formGroupDetail.controls.id.value;
+    this.hotelService.isUpdate = this.data.isViewDetail || (!!this.formGroupDetail.controls.id.value && this.formGroupDetail.controls.id.value > 0);
   }
 
   override async save(): Promise<any> {

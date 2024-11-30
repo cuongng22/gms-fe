@@ -57,7 +57,10 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
           if (!errorResponse.error?.error?.includes('UNIQUE')) {
             baseService.showError(errorResponse?.error?.file ?? errorResponse?.error?.error?.file ?? errorResponse?.error?.error ?? errorResponse?.error);
           }
-        } else {
+        } if (errorResponse.status === HttpStatusCode.Conflict) { 
+          
+        } 
+        else {
           baseService.showError(errorResponse?.error?.error ?? MESSAGE.ERROR);
         }
       });

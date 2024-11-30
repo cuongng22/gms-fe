@@ -5,14 +5,14 @@ import { VehicleService } from '../services/vehicle.service';
 import { BudgetProcurementPlanService } from '../services/budget-procurement-plan.service';
 
 export class AlreadyExistsValidator {
-  static existsHotelCode(hotelService: HotelService): AsyncValidatorFn {
+  static existsHotelCode(hotelService: HotelService, marketCode: string): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       if (hotelService.isUpdate) {
         return of(null);
       }
-      if (control.value) {
+      if (!!control.value && !!marketCode) {
         try {
-          return hotelService.checkCodeExists(control.value.toUpperCase().trim()).pipe(
+          return hotelService.checkCodeExists(control.value.toUpperCase().trim(), marketCode).pipe(
             map((res: any) => {
               return res && res.status == 409 ? { existsHotelCode: true } : null;
             }),
@@ -33,14 +33,15 @@ export class AlreadyExistsValidator {
   }
 
 
-  static existsCarRentalCode(carRentalService: VehicleService): AsyncValidatorFn {
+  static existsCarRentalCode(carRentalService: VehicleService, marketCode: string): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
+      console.log('marketCode: ', marketCode);
       if (carRentalService.isUpdate) {
         return of(null);
       }
-      if (control.value) {
+      if (!!control.value && !!marketCode) {
         try {
-          return carRentalService.checkCodeExists(control.value.toUpperCase().trim()).pipe(
+          return carRentalService.checkCodeExists(control.value.toUpperCase().trim(), marketCode).pipe(
             map((res: any) => {
               return res && res.status == 409 ? { existsCarRentalCode: true } : null;
             }),
