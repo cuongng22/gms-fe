@@ -22,6 +22,7 @@ import {InputComponent} from "src/app/crew-trip/shared/component/input/input.com
 import {SharedModule} from "src/app/crew-trip/shared/component/shared.module";
 import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
 import {SelectOptions} from "src/app/crew-trip/shared/select-option";
+import {environment} from "src/environments/environment";
 
 @Component({
   selector: 'app-profile',
@@ -90,7 +91,7 @@ export class ProfileComponent implements OnInit {
         if (this.selectedFile) {
           let resp = await this.uploadFile(this.selectedFile);
           if (resp && resp.data) {
-            userInfo.avartarUrl = resp.data;
+            userInfo.avartarUrl = `${environment.baseUrl}/${resp.data}`;
           }
           this.selectedFile = null;
         }

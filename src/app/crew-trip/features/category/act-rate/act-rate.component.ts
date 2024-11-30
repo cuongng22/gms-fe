@@ -21,11 +21,14 @@ import {MatSelect, MatSelectModule} from '@angular/material/select';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {ExchangeRateService} from 'src/app/crew-trip/core/services/exchange-rate.service';
 import {MatNativeDateModule} from '@angular/material/core';
-import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {HttpStatusCode} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatCheckbox} from '@angular/material/checkbox';
+import {NgxTrimDirectiveModule} from "ngx-trim-directive";
+import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
+import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 
 @Component({
   selector: 'app-act-rate',
@@ -34,49 +37,86 @@ import {MatCheckbox} from '@angular/material/checkbox';
     MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatCheckbox
+    MatTableModule, MatPaginatorModule, MatCheckbox, NgxTrimDirectiveModule
+  ],
+  providers: [DataTransformPipe,
+    provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
   ],
   templateUrl: './act-rate.component.html',
   styleUrl: './act-rate.component.scss'
 })
 
-export class ActRateComponent extends CommonComponent implements OnInit{
+export class ActRateComponent extends CommonComponent implements OnInit {
   override baseService = inject(ExchangeRateService);
   formBuilder = inject(FormBuilder);
-  showDialogHistory= false;
+  showDialogHistory = false;
   itemDetail: any;
   listHistoryData = [];
   displayedColumnsHis: string[] = [];
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
-    currDate: [''],
+    startDate: [new Date()],
+    endDate: [new Date()],
     export: [false],
   });
 
+  constructor(public dataTransformPipe: DataTransformPipe) {
+    super();
+  }
+
+
   override async ngOnInit() {
     super.ngOnInit();
-    this.displayedColumns = ['stt','code','price','type','currDate','updatedDate', 'action'];
+    this.displayedColumns = ['stt', 'code', 'price', 'type', 'currDate', 'updatedDate', 'action'];
     this.search();
   }
 
 
   override async search(body?: any) {
+    const startDate = this.formGroupSearch.controls.startDate.value;
+    const endDate = this.formGroupSearch.controls.endDate.value;
+    const searchValue = {
+      ...this.formGroupSearch.value,
+      startDate: startDate ? this.dataTransformPipe.transform(startDate, ['date', 'YYYY-MM-DD']) : null,
+      endDate: endDate ? this.dataTransformPipe.transform(endDate, ['date', 'YYYY-MM-DD']) : null,
+    };
     try {
       await this.spinner.show();
-      const res = await this.baseService.actSearch({
+      let res = await this.baseService.actSearch({
         page: this.pageIndex,
-        size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
-        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+        size: this.pageSize, ...removeNullValues(body) || removeNullValues(searchValue),
+        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(searchValue)
       });
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;
           this.dataSource.data = this.dataSource.data.map((s: any) => ({
             ...s,
-            isActiveLabel: s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
+            isActiveLabel: !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
             activeLabel: !!s.active || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
-          }));
+          }))
           this.totalElement = res.data.totalElements;
+        }
+        return res;
+      }
+    } catch (e: any) {
+      this.baseService.showError(e.error?.data ?? e.error ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async viewHistory(item?: any) {
+    this.showDialogHistory = !this.showDialogHistory;
+    this.itemDetail = item ?? null;
+    this.listHistoryData = [];
+    try {
+      await this.spinner.show();
+      const res = await this.baseService.actDetail(item?.code);
+      if (res) {
+        if (res.status === HttpStatusCode.Ok) {
+          this.displayedColumnsHis = ['updatedDate', 'rate', 'currDate', 'type'];
+          this.listHistoryData = res.data;
         }
         return res;
       }
@@ -87,24 +127,24 @@ export class ActRateComponent extends CommonComponent implements OnInit{
     }
   }
 
-  async viewHistory(item?:any) {
-    this.showDialogHistory = !this.showDialogHistory;
-    this.itemDetail = item?? null;
-    this.listHistoryData= [];
+  override async exportFileOptions(body?: any, filename?: string, sourcePath?: string) {
     try {
       await this.spinner.show();
-      const res = await  this.baseService.actDetail(item?.code);
-      if (res) {
-        if (res.status === HttpStatusCode.Ok) {
-          this.displayedColumnsHis = ['stt','updatedDate', 'rate', 'currDate', 'type'];
-          this.listHistoryData = res.data;
-        }
-        return res;
-      }
-    }catch (e: any) {
-      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
-    }finally {
+      const startDate = this.formGroupSearch.controls.startDate.value;
+      const endDate = this.formGroupSearch.controls.endDate.value;
+      const searchValue = {
+        ...this.formGroupSearch.value,
+        'export': true,
+        startDate: startDate ? this.dataTransformPipe.transform(startDate, ['date', 'YYYY-MM-DD']) : null,
+        endDate: endDate ? this.dataTransformPipe.transform(endDate, ['date', 'YYYY-MM-DD']) : null,
+      };
+      const res = await this.baseService.exportDataOptions({...removeNullValues(body) || removeNullValues(searchValue)}, sourcePath);
+      this.downloadFile(res.blob, filename ?? res.fileName);
+    } catch (e: any) {
+      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+    } finally {
       await this.spinner.hide();
     }
   }
 }
+

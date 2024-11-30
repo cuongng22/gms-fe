@@ -3885,6 +3885,7 @@ blockquote {
   white-space: nowrap;
   vertical-align: baseline;
   border-radius: var(--badge-border-radius);
+  margin: 3px;
 }
 
 .text-bg-primary {
@@ -4036,7 +4037,7 @@ blockquote {
 
 .text-soft-dark {
   color: RGBA(33, 37, 41, var(--bg-opacity, 1)) !important;
-  background-color: #ced4da !important;
+  background-color: #adb5bd !important;
 }
 
 .text-soft-dark-hover {

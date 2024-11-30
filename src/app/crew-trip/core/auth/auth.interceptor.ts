@@ -4,18 +4,20 @@ import {
   HttpEventType,
   HttpHandlerFn,
   HttpHeaders,
-  HttpRequest
+  HttpRequest,
+  HttpStatusCode
 } from '@angular/common/http';
-import {Observable, tap, throwError, timeout} from 'rxjs';
-import {catchError} from 'rxjs/operators';
-import {inject, LOCALE_ID} from '@angular/core';
-import {MatSnackBar} from '@angular/material/snack-bar';
-import {Router} from '@angular/router';
-import {BaseService} from '../services/base-service';
-import {MESSAGE} from '../../shared/utils/constant';
-import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
-import {LanguageService} from 'src/app/crew-trip/core/services/language.service';
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
+import { from, Observable, tap, throwError, timeout } from 'rxjs';
+import { catchError } from 'rxjs/operators';
+import { inject } from '@angular/core';
+import { Router } from '@angular/router';
+import { BaseService } from '../services/base-service';
+import { MESSAGE, COMMON_CONFIG } from '../../shared/utils/constant';
+import { STORAGE_KEY } from 'src/app/crew-trip/core/constants/config';
+import { LanguageService } from 'src/app/crew-trip/core/services/language.service';
+import { UsersService } from "src/app/crew-trip/core/services/users-service";
+import { MIMEType } from 'util';
+import { el } from 'node_modules/@fullcalendar/core/internal-common';
 
 
 export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
@@ -34,37 +36,58 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
   if (token) {
     headers = headers.set('Authorization', `Bearer ${token}`);
   }
-  const authReq = req.clone({headers});
-  return next(authReq).pipe(
-    timeout(10000),
-    tap(event => {
-      if (event.type === HttpEventType.Response) {
-        console.log(req.url, 'returned a response with status', event.status);
-      }
-    }),
-    catchError((error: any) => {
-      if (error.name === 'TimeoutError') {
-        baseService.showError(MESSAGE.ERROR_CONNECT);
-      } else if (error instanceof HttpErrorResponse) {
-        if (error.status === 401) {
+  const authReq = req.clone({ headers });
+  return next(authReq).pipe(timeout(COMMON_CONFIG.TIMEOUT), tap(event => {
+    if (event.type === HttpEventType.Response) {
+      // console.log(req.url, 'returned a response with status', event.status);
+    }
+  }), catchError((error: any) => {
+    if (error.name === 'TimeoutError') {
+      baseService.showError(MESSAGE.ERROR_CONNECT);
+    } else if (error instanceof HttpErrorResponse) {
+      readError(error).then((errorResponse: HttpErrorResponse) => {
+        if (errorResponse.status === HttpStatusCode.Unauthorized) {
           usersService.logout();
-          router.navigate(['auth/login'], {fragment: '401', skipLocationChange: true});
-        } else if (error.status === 503 || (error.status === 0 && error.statusText === 'Unknown Error')) {
+          router.navigate(['auth/login'], { fragment: HttpStatusCode.Unauthorized.toString(), skipLocationChange: true });
+        } else if (errorResponse.status === HttpStatusCode.ServiceUnavailable || (errorResponse.status === 0 && errorResponse.statusText === 'Unknown Error')) {
           baseService.showError(MESSAGE.ERROR_CONNECT);
-        } else if (error.status === 409) {
-          return throwError(() => error);
-        } else if (error.status === 400) {
-          baseService.showError(error?.error?.error);
-        } else if (error.status === 500) {
-          if (error.error?.error.includes('UNIQUE')) {
-            return throwError(() => error);
+        } else if (errorResponse.status === HttpStatusCode.BadRequest) {
+          baseService.showError(errorResponse?.error?.error?.file ?? errorResponse?.error?.error ?? errorResponse?.error);
+        } else if (errorResponse.status === HttpStatusCode.InternalServerError) {
+          if (!errorResponse.error?.error?.includes('UNIQUE')) {
+            baseService.showError(errorResponse?.error?.file ?? errorResponse?.error?.error?.file ?? errorResponse?.error?.error ?? errorResponse?.error);
           }
-          baseService.showError(error?.error?.error);
-        } else {
-          return throwError(() => error);
+        } if (errorResponse.status === HttpStatusCode.Conflict) { 
+          
+        } 
+        else {
+          baseService.showError(errorResponse?.error?.error ?? MESSAGE.ERROR);
+        }
+      });
+    }
+    return throwError(() => error);
+  }));
+}
+
+export function readError(error: HttpErrorResponse): Promise<HttpErrorResponse> {
+  return new Promise((resolve, reject) => {
+    if (error.error instanceof Blob && error.error.type.includes('application/json')) {
+      const reader = new FileReader();
+      reader.onload = function () {
+        if (typeof reader.result === 'string') {
+          const jsonError = JSON.parse(reader.result);
+          resolve(new HttpErrorResponse({
+            error: jsonError,
+            status: error.status,
+            statusText: error.statusText,
+            url: error.url ?? undefined,
+            headers: error.headers,
+          }));
         }
       }
-      return throwError(() => error);
-    })
-  );
+      reader.readAsText(error.error);
+    } else {
+      resolve(error);
+    }
+  });
 }

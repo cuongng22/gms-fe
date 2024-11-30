@@ -42,13 +42,13 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
     id: [],
     marketCode: [{ value: '', disabled: true }],
     code: ['', {
-      validators: [Validators.required, Validators.maxLength(250)],
-      asyncValidators: [AlreadyExistsValidator.existsCarRentalCode(this.carRentalService)],
+      validators: [Validators.required, Validators.maxLength(50)],
+      asyncValidators: [AlreadyExistsValidator.existsCarRentalCode(this.carRentalService, this.data.carRental.marketCode)],
       updateOn: 'blur'
     }],
     name: ['', [Validators.required, Validators.maxLength(250)]],
     address: ['', Validators.maxLength(500)],
-    fullName: [''],
+    fullName: ['', Validators.maxLength(250)],
     email: ['',
       [
         Validators.required,
@@ -68,9 +68,10 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
   }
 
   override ngOnInit(): void {
+    console.log("this.data.carRental: ", this.data.carRental);
     if (this.data.carRental) {
       console.log(this.data.carRental);
-      if (this.data.carRental.id) {
+      if (this.data.carRental.id && this.data.carRental.id > 0) {
         this.formGroupDetail.controls.code.disable();
       }
       this.formGroupDetail.patchValue(this.data.carRental);
@@ -82,7 +83,7 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
         this.formGroupDetail.get(control)?.disable();
       });
     }
-    this.carRentalService.isUpdate = this.data.isViewDetail || !!this.formGroupDetail.controls.id.value;
+    this.carRentalService.isUpdate = this.data.isViewDetail || (!!this.formGroupDetail.controls.id.value && this.formGroupDetail.controls.id.value > 0);
   }
 
   override async save(): Promise<any> {

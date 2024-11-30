@@ -1,3 +1,4 @@
 export const environment = {
-  apiUrl: 'http://192.168.10.68:8081/api'
+  apiUrl: 'http://vna.gimasys.com:8081/api',
+  baseUrl: 'http://vna.gimasys.com:8081'
 };

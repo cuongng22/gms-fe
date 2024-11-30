@@ -42,7 +42,7 @@
                             <mat-error *ngxControlError="formGroupDetail.controls.hotelCode; track: 'maxlength'"
                                 i18n="@@carCompanyCodeMaxlength">
                                 Hotel code {{ MESSAGE.MAX_LENGTH_INVALID |
-                                dataTransformPipe:[Constant.STRING_FORMAT,250]}}
+                                dataTransformPipe:[Constant.STRING_FORMAT,50]}}
                             </mat-error>
                         </mat-form-field>
                     </div>
@@ -177,11 +177,7 @@
                     <i class="material-symbols-outlined">
                         close
                     </i>
-                    @if(readonlyDetail()){
                     <span i18n="@@close">Close</span>
-                    }@else {
-                    <span i18n="@@cancel">Cancel</span>
-                    }
                 </button>
                 @if(!readonlyDetail()){
                 <button mat-button color="primary" type="submit" class="add-btn mlr-5 min-with-100">

@@ -73,7 +73,6 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
     const ocSelectOptions = changes?.['selectOptions'];
     if (ocSelectOptions && ocSelectOptions.currentValue && ocSelectOptions.currentValue.length > 0 && !ocSelectOptions?.firstChange) {
       this.selectOptionsRaw = ocSelectOptions.currentValue;
-      console.log(this.selectOptionsRaw);
     }
     if (changes['readonly']) {
       this.updateEnableState();

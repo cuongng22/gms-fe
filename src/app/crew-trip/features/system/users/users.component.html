@@ -237,16 +237,16 @@
               <div class="form-group mb-20" sizeInput="md">
                 <mat-form-field>
                   <mat-label i18n="@@fullname">
-                    Fullname
+                    Full name
                   </mat-label>
                   <input trim="blur" matInput formControlName="fullName" required>
                   <mat-error i18n="@@fullnameRequired"
                     *ngxControlError="formGroupDetail.controls.fullName; track: 'required'">
-                    Fullname {{ MESSAGE.REQUIRED }}
+                    Full name {{ MESSAGE.REQUIRED }}
                   </mat-error>
                   <mat-error *ngxControlError="formGroupDetail.controls.fullName; track: 'maxlength'"
                     i18n="@@fullnameMaxlength">
-                    Fullname {{ MESSAGE.MAX_LENGTH_INVALID | dataTransformPipe:[Constant.STRING_FORMAT, 250]}}
+                    Full name {{ MESSAGE.MAX_LENGTH_INVALID | dataTransformPipe:[Constant.STRING_FORMAT, 250]}}
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -260,6 +260,9 @@
                     Gender
                   </mat-label>
                   <mat-select formControlName="gender">
+                    <mat-option [value]="null" i18n="@@chooseGender">
+                      --Choose gender--
+                    </mat-option>
                     <mat-option [value]="true" i18n="@@female">
                       Female
                     </mat-option>
@@ -426,7 +429,7 @@
               <i class="material-symbols-outlined">
                 close
               </i>
-              <span i18n="@@cancel">Cancel</span>
+              <span i18n="@@cancel">Close</span>
             </button>
 
             <button mat-button color="primary" type="submit" class="add-btn">
@@ -506,7 +509,7 @@
               <i class="material-symbols-outlined">
                 close
               </i>
-              <span i18n="@@cancel">Cancel</span>
+              <span i18n="@@cancel">Close</span>
             </button>
 
             <button mat-button class="add-btn" type="submit">

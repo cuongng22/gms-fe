@@ -204,11 +204,15 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
         ...hotel, marketCode: this.formGroupDetail.controls.marketCode.value
       };
     }
+    if (!hotel?.id) {
+      hotel = {
+        ...hotel, id: -+new Date(), marketCode: this.formGroupDetail.controls.marketCode.value
+      };
+    }
     const dialogRef = this.dialog.open(HotelDetailComponent, {
       data: { hotel: hotel, isViewDetail: isViewDetail },
       disableClose: true
     });
-
     dialogRef.afterClosed().subscribe(result => {
       const hotelDatas = this.hotelDataSource.data as any[] || [];
       if (result) {
@@ -228,6 +232,11 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     if (!isViewDetail && carRental) {
       carRental = {
         ...carRental, marketCode: this.formGroupDetail.controls.marketCode.value
+      };
+    }
+    if (!carRental?.id) {
+      carRental = {
+        ...carRental, id: -+new Date(), marketCode: this.formGroupDetail.controls.marketCode.value
       };
     }
     const dialogRef = this.dialog.open(CarRentalDetailComponent, {
@@ -291,10 +300,16 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     const carRentals: CreateVehiclePartner[] = [];
 
     hotelDatas.forEach(hotel => {
+      if (hotel.id < 0) {
+        hotel.id = null;
+      }
       hotels.push(new CreateHotel(hotel));
     });
 
     carRentalDatas.forEach(carRental => {
+      if (carRental.id < 0) {
+        carRental.id = null;
+      }
       carRentals.push(new CreateVehiclePartner(carRental));
     });
 
@@ -311,20 +326,20 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     hotelDatas.forEach(hotel => {
       if (hotel.isDelete) {
         deleteItems.push({ id: hotel.id, type: 'HOTEL' });
-      } else if (hotel.id) {
+      } else if (hotel.id && hotel.id > 0) {
         updateItems.push(new UpdateHotelAndCar({ ...hotel, type: 'HOTEL' }));
       } else {
-        insertItems.push(new InsertHotelAndCar({ ...hotel, type: 'HOTEL' }));
+        insertItems.push(new InsertHotelAndCar({ ...hotel, id: null, type: 'HOTEL' }));
       }
     });
 
     carRentalDatas.forEach(carRental => {
       if (carRental.isDelete) {
         deleteItems.push({ id: carRental.id, type: 'HOTEL' });
-      } else if (carRental.id) {
+      } else if (carRental.id && carRental.id > 0) {
         updateItems.push(new UpdateHotelAndCar({ ...carRental, type: 'VEHICLE' }));
       } else {
-        insertItems.push(new InsertHotelAndCar({ ...carRental, type: 'VEHICLE' }));
+        insertItems.push(new InsertHotelAndCar({ ...carRental, id: null, type: 'VEHICLE' }));
       }
     });
 

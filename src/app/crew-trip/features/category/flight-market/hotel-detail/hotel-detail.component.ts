@@ -42,8 +42,8 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
     id: [],
     marketCode: [{ value: '', disabled: true }],
     hotelCode: ['', {
-      validators: [Validators.required, Validators.maxLength(250)],
-      asyncValidators: [AlreadyExistsValidator.existsHotelCode(this.hotelService)],
+      validators: [Validators.required, Validators.maxLength(50)],
+      asyncValidators: [AlreadyExistsValidator.existsHotelCode(this.hotelService, this.data.hotel.marketCode)],
       updateOn: 'blur'
     }],
     hotelName: ['', [Validators.required, Validators.maxLength(250)]],
@@ -70,7 +70,7 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
   override ngOnInit(): void {
     if (this.data.hotel) {
       this.formGroupDetail.patchValue(this.data.hotel);
-      if (this.data.hotel.id) {
+      if (this.data.hotel.id && this.data.hotel.id > 0) {
         this.formGroupDetail.controls.hotelCode.disable();
       }
       this.readonlyDetail.set(this.data.isViewDetail);
@@ -81,7 +81,7 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
         });
       }
     }
-    this.hotelService.isUpdate = this.data.isViewDetail || !!this.formGroupDetail.controls.id.value;
+    this.hotelService.isUpdate = this.data.isViewDetail || (!!this.formGroupDetail.controls.id.value && this.formGroupDetail.controls.id.value > 0);
   }
 
   override async save(): Promise<any> {

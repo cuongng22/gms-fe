@@ -32,6 +32,9 @@
                         <input trim="blur" #airport (input)="filterMarket()" type="text" matInput formControlName="code"
                             [matAutocomplete]="marketComplete">
                         <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
+                            <mat-option [value]="null">
+                                -- All Airport code --
+                            </mat-option>
                             @for (option of filteredOptionsMarket(); track option) {
                             <mat-option [value]="option">{{option}}</mat-option>
                             }
@@ -242,7 +245,8 @@
                                     visibility
                                 </i>
                             </a>
-                            <a type="button" class="text-warning" mat-button [routerLink]="['/category/flight-market/detail', element.id]"
+                            <a type="button" class="text-warning" mat-button
+                                [routerLink]="['/category/flight-market/detail', element.id]"
                                 [queryParams]="{'view-detail':false}">
                                 <i class="material-symbols-outlined " text-warning title="Edit" i18n-title="@@edit">
                                     edit
@@ -328,8 +332,7 @@
                     </h5>
                 </mat-card-title>
                 <mat-card-subtitle>
-                    <button mat-button
-                        (click)="resetFileUpload();toggleDialogUpload()">
+                    <button mat-button (click)="resetFileUpload();toggleDialogUpload()">
                         <i class="ri-close-fill"></i>
                     </button>
                 </mat-card-subtitle>
@@ -371,13 +374,13 @@
                 </div>
                 }
             </mat-card-content>
-            <mat-card-actions class="p-15" style="display: flex; justify-content: center;">
+            <mat-card-actions class="p-15 d-flex justify-content-end">
                 <button type="button" mat-button (click)="resetFileUpload(); toggleDialogUpload()"
                     class="close-btn  min-with-100 mlr-5">
                     <i class="material-symbols-outlined">
                         close
                     </i>
-                    <span i18n="@@cancel">Cancel</span>
+                    <span i18n="@@cancel">Close</span>
                 </button>
                 <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
                     <i class="material-symbols-outlined">
