@@ -34,7 +34,7 @@ export class CreateHotel {
   flightMarketId: number;
 
   constructor(data?: any) {
-    this.code = data?.hotelName;
+    this.code = data?.hotelCode;
     this.name = data?.hotelName;
     this.address = data?.address;
     this.fullName = data?.fullName;

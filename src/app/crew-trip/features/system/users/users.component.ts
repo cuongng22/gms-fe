@@ -87,7 +87,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
     ]],
     phone: ['', [Validators.maxLength(20), Validators.pattern('^[0-9()+ ]+$')]],
     roles: [([] as any)],
-    active: ['', [Validators.required]],
+    active: [true, [Validators.required]],
     password: [new FormControl('',
       ifValidator(
         () => this.isValidatePassword,
@@ -184,6 +184,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
       this.formGroupDetail.controls.email.disable();
     } else {
       this.formGroupDetail.reset();
+      this.formGroupDetail.controls.active.setValue(true);
       this.formGroupDetail.markAsPristine();
       this.formGroupDetail.markAsUntouched();
       this.formGroupDetail.controls.email.enable();
@@ -220,6 +221,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
           this.baseService.showSuccess(MESSAGE.CREATE_SUCCESS);
         }
 
+        this.toggleDialogCreate();
         this.search();
       } catch (err: any) {
         if (err.status === HttpStatusCode.BadRequest && err?.error?.error?.password) {
@@ -233,7 +235,6 @@ export class UsersComponent extends CommonComponent implements OnInit {
         }
       } finally {
         this.spinner.hide();
-        this.toggleDialogCreate();
       }
     }
   }

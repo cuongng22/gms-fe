@@ -100,9 +100,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
     });
 
     this.fileUpload.valueChanges.subscribe(value => {
-      if (!value || value.length === 0) {
-        this.uploadFileError = {};
-      }
+      this.uploadFileError = {};
     })
   }
 
@@ -173,11 +171,11 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
         if (!res.totalErrors) {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
           this.search();
+          this.resetFileUpload();
           this.toggleDialogUpload();
+          
         }
       }
-    } catch (e: any) {
-      this.baseService.showError(e.error?.error ?? e.error?.error?.code ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }

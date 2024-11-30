@@ -122,7 +122,6 @@ export class BaseService {
         fileName = matches[1];
       }
     }
-
     return { blob: response.body as Blob, fileName, totalErrors: totalErrors ?? '' };
   }
 

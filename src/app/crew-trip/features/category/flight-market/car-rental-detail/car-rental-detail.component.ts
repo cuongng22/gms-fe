@@ -42,13 +42,13 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
     id: [],
     marketCode: [{ value: '', disabled: true }],
     code: ['', {
-      validators: [Validators.required, Validators.maxLength(250)],
+      validators: [Validators.required, Validators.maxLength(50)],
       asyncValidators: [AlreadyExistsValidator.existsCarRentalCode(this.carRentalService)],
       updateOn: 'blur'
     }],
     name: ['', [Validators.required, Validators.maxLength(250)]],
     address: ['', Validators.maxLength(500)],
-    fullName: [''],
+    fullName: ['', Validators.maxLength(250)],
     email: ['',
       [
         Validators.required,
@@ -70,7 +70,7 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
   override ngOnInit(): void {
     if (this.data.carRental) {
       console.log(this.data.carRental);
-      if (this.data.carRental.id) {
+      if (this.data.carRental.id && this.data.carRental.id > 0) {
         this.formGroupDetail.controls.code.disable();
       }
       this.formGroupDetail.patchValue(this.data.carRental);
