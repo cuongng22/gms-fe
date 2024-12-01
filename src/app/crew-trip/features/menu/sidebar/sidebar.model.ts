@@ -46,7 +46,7 @@ export const menu: Menu[] = [
         path: 'category/crews-flight', title: $localize`:@@flightCrew:Flight Crew`, icon: 'ri-id-card-line'
       },
       {
-        path: 'category/crews', title: $localize`:@@crewList:Crew List`, icon: 'ri-id-card-line'
+        path: 'category/crews', title: $localize`:@@crewList:Crew list`, icon: 'ri-id-card-line'
       },
       {
         path: 'category/nation', title: $localize`:@@country:Countries`, icon: 'ri-global-line'

@@ -10,6 +10,15 @@
   padding: 9px 10px !important;
 }
 
+.table-light.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-table-sticky-border-elem-left {
+  border-right: 1px solid #e0e0e0;
+}
+
+.table-light.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .mat-mdc-table-sticky-border-elem-right {
+  border-left: 1px solid #e0e0e0;
+}
+
+
 .mdc-text-field--filled.mdc-text-field--disabled {
   background-color: #f3f3f396 !important;
 }
