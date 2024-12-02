@@ -21,8 +21,8 @@
         </div>
       </div>
     </div>
-    <div class="row mt-10 col-md-10">
-      <div class="col-md-2 mb-10">
+    <div class="row mt-10 justify-content-center align-items-start">
+      <div class="col-md-2 col-sm-12 text-center">
         <div class="file-upload-container">
           <img *ngIf="avatarUrl" [src]="avatarUrl" alt="User avatar" class="avatar-preview"/>
           <img *ngIf="!avatarUrl" src="images/admin.png" alt="User avatar" class="avatar-preview"/>
@@ -32,7 +32,7 @@
           <mat-error *ngIf="fileError">{{ fileError }}</mat-error>
         </div>
       </div>
-      <div class="col-md-8 mb-10">
+      <div class="col-md-10 col-sm-12">
         <form ngForm [formGroup]="formGroup" autocomplete="off">
           <div class="row col-md-8">
             <div class="col-sm-12 mb-10">
@@ -65,7 +65,7 @@
                   sizeInput="lg"
                   formControlName="gender"
                   [label]="'Gender'"
-                  [required]="true"
+                  [required]="false"
                   [readonly]="readonly"
                   [options]="genderOptions"
                 ></app-selection>

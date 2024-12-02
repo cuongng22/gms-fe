@@ -1,19 +1,18 @@
-.file-upload-container {
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  margin: auto;
-}
-
 .avatar-preview {
-  min-width: 180px;
-  min-height: 180px;
-  border-radius: 50%;
+  width: 180px;
+  height: 180px;
   object-fit: cover;
-  margin: auto;
+  border-radius: 50%;
+  border: 2px solid #ddd;
 }
 
-.form-control-file {
-  margin: auto;
+.file-upload-container {
+  text-align: center;
 }
 
+@media (max-width: 768px) {
+  .avatar-preview {
+    width: 100px;
+    height: 100px;
+  }
+}
