@@ -27,7 +27,7 @@ import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} 
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {ExchangeRateService} from 'src/app/crew-trip/core/services/exchange-rate.service';
 import {Observable, of, take} from 'rxjs';
-import {MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {MatSelectModule} from '@angular/material/select';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
@@ -83,9 +83,12 @@ export class RateUthComponent extends CommonComponent implements OnInit {
   }
 
 
-  override async search(body?: any) {
+  override async search(body?: any,isNextPage?: boolean) {
     try {
       await this.spinner.show();
+      if (!isNextPage) {
+        this.pageIndex = Constant.PAGE;
+      }
       const res = await this.baseService.uthSearch({
         page: this.pageIndex,
         size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
