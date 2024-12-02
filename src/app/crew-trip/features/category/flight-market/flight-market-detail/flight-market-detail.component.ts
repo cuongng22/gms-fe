@@ -335,7 +335,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
 
     carRentalDatas.forEach(carRental => {
       if (carRental.isDelete) {
-        deleteItems.push({ id: carRental.id, type: 'HOTEL' });
+        deleteItems.push({ id: carRental.id, type: 'VEHICLE' });
       } else if (carRental.id && carRental.id > 0) {
         updateItems.push(new UpdateHotelAndCar({ ...carRental, type: 'VEHICLE' }));
       } else {
