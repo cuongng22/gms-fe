@@ -173,7 +173,10 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
           this.search();
           this.resetFileUpload();
           this.toggleDialogUpload();
-          
+          this.baseService.search({ option: 1 }).then(res => {
+            this.markets = res.data;
+          });
+      
         }
       }
     } finally {

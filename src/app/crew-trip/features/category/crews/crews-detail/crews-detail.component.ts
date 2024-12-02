@@ -11,10 +11,12 @@ import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink, RouterModule } from '@angular/router';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { NgxControlError } from 'ngxtension/control-error';
 import { debounceTime, Observable, Subject } from 'rxjs';
 import { CrewsService } from 'src/app/crew-trip/core/services/crews-service';
 import { NationService } from 'src/app/crew-trip/core/services/nation-service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { LOCALE } from 'src/app/crew-trip/shared/utils/constant';
 
@@ -24,7 +26,7 @@ import { LOCALE } from 'src/app/crew-trip/shared/utils/constant';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent,
     MatAutocompleteModule, CommonModule, AsyncPipe,
-    MatChipsModule, RouterLink, RouterModule, NgxTrimDirectiveModule],
+    MatChipsModule, RouterLink, RouterModule, NgxTrimDirectiveModule, NgxControlError, DataTransformPipe],
   templateUrl: './crews-detail.component.html',
   styleUrl: './crews-detail.component.scss'
 })
@@ -42,11 +44,11 @@ export class CrewsDetailComponent extends CommonComponent implements OnInit {
 
   override formGroupDetail = this.formBuilder.group({
     id: [],
-    fullName: ['', Validators.required],
-    shortName: [''],
+    fullName: ['', [Validators.required, Validators.maxLength(250)]],
+    shortName: ['', Validators.maxLength(150)],
     gender: ['', Validators.required],
-    phone: [''],
-    function: ['', Validators.required],
+    phone: ['', [Validators.maxLength(20), Validators.pattern('^[0-9()+ ]+$')]],
+    function: ['', [Validators.required, Validators.maxLength(150)]],
     nation: [''],
     nationName: ['']
   });

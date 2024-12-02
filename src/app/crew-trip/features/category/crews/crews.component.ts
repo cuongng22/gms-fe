@@ -41,15 +41,16 @@ export class CrewsComponent extends CommonComponent implements OnInit {
   flightMarketService = inject(FlightMarketService);
   formBuilder = inject(FormBuilder);
 
-  _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
+  _displayedColumns: { label: string; value: string, type?: string, format?: string, class?: string }[] = [
     // { label: $localize`:@@pid:PID`, value: 'pid' },
     { label: $localize`:@@persCode:Code`, value: 'persCode' },
-    { label: $localize`:@@fullName:Full Name`, value: 'fullName' },
-    { label: $localize`:@@cmsName:CMS Name`, value: 'cmsName' },
-    { label: $localize`:@@gender:Gender`, value: 'gender' },
-    { label: $localize`:@@function:Function`, value: 'function' },
-    { label: $localize`:@@rank:Rank`, value: 'rank' },
-    { label: $localize`:@@base:Base`, value: 'base' },
+    { label: $localize`:@@fullName:Full name`, value: 'fullName' },
+    { label: $localize`:@@cmsName:CMS name`, value: 'cmsName' },
+    { label: $localize`:@@gender:Gender`, value: 'gender', class: 'text-center' },
+    { label: $localize`:@@phone:Phone`, value: 'phone', class: 'text-center' },
+    { label: $localize`:@@rank:Rank`, value: 'rank', class: 'text-center' },
+    { label: $localize`:@@function:Function`, value: 'function', class: 'text-center' },
+    { label: $localize`:@@base:Base`, value: 'base', class: 'text-center' },
     { label: $localize`:@@type:Type`, value: 'sourceType' }
 
   ]

@@ -72,7 +72,7 @@ export class ActRateComponent extends CommonComponent implements OnInit {
   }
 
 
-  override async search(body?: any) {
+  override async search(body?: any,isNextPage?: boolean) {
     const startDate = this.formGroupSearch.controls.startDate.value;
     const endDate = this.formGroupSearch.controls.endDate.value;
     const searchValue = {
@@ -82,6 +82,9 @@ export class ActRateComponent extends CommonComponent implements OnInit {
     };
     try {
       await this.spinner.show();
+      if (!isNextPage) {
+        this.pageIndex = Constant.PAGE;
+      }
       let res = await this.baseService.actSearch({
         page: this.pageIndex,
         size: this.pageSize, ...removeNullValues(body) || removeNullValues(searchValue),
