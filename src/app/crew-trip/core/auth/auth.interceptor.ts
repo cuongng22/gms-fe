@@ -30,9 +30,6 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
   let headers = new HttpHeaders({
     'Accept-Language': languageService.getLanguage(),
   });
-  /*if (req.body instanceof FormData) {
-    headers = headers.set('Accept', 'application/octet-stream');
-  }*/
   if (token) {
     headers = headers.set('Authorization', `Bearer ${token}`);
   }
@@ -57,9 +54,9 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
           if (!errorResponse.error?.error?.includes('UNIQUE')) {
             baseService.showError(errorResponse?.error?.file ?? errorResponse?.error?.error?.file ?? errorResponse?.error?.error ?? errorResponse?.error);
           }
-        } if (errorResponse.status === HttpStatusCode.Conflict) { 
-          
-        } 
+        } if (errorResponse.status === HttpStatusCode.Conflict) {
+
+        }
         else {
           baseService.showError(errorResponse?.error?.error ?? MESSAGE.ERROR);
         }

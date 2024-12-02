@@ -23,6 +23,7 @@ import {SharedModule} from "src/app/crew-trip/shared/component/shared.module";
 import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
 import {SelectOptions} from "src/app/crew-trip/shared/select-option";
 import {environment} from "src/environments/environment";
+import {HttpStatusCode} from "@angular/common/http";
 
 @Component({
   selector: 'app-profile',
@@ -61,6 +62,11 @@ export class ProfileComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const token = localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN);
+    if (!token || !this.userCurrent) {
+      this.userService.logout();
+      this.router.navigate(['auth/login'], { fragment: HttpStatusCode.Unauthorized.toString(), skipLocationChange: true });
+    }
     this.avatarUrl = this.userCurrent?.avartarUrl ?? null;
     this.formGroup.disable();
   }
