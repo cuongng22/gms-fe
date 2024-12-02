@@ -2,7 +2,7 @@ import {Component, Input, Optional, Self, SimpleChanges} from '@angular/core';
 import {ControlValueAccessor, FormControl, FormsModule, NgControl, ReactiveFormsModule} from "@angular/forms";
 import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
 import {MatOption} from "@angular/material/core";
-import {MatSelect} from "@angular/material/select";
+import {MatSelect, MatSelectChange} from "@angular/material/select";
 import {CommonModule, NgIf} from "@angular/common";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 
