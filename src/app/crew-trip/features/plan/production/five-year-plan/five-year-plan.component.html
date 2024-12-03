@@ -99,7 +99,9 @@
         'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
         'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
         }">{{
-                    element[innerColumn.value]| number : (innerColumn.format || '1.0-10')
+                    innerColumn.type === 'number'
+                      ? (element[innerColumn.value] | number : (innerColumn.format || '1.0-10'))
+                      : element[innerColumn.value]
                   }}</span>
             </td>
           </ng-container>
