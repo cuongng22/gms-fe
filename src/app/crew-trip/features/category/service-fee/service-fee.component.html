@@ -15,7 +15,7 @@
 <!--Search-->
 <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
   <mat-card-content>
-    <form [formGroup]="formGroupSearch" autocomplete="off" >
+    <form [formGroup]="formGroupSearch" autocomplete="off">
       <div class="row">
         <div class="col-sm-3" sizeInput='sm'>
           <mat-form-field>
@@ -30,7 +30,7 @@
           <mat-form-field>
             <mat-label i18n>Status</mat-label>
             <mat-select formControlName="active">
-              <mat-option [value]="" i18n>-- Status --</mat-option>
+              <mat-option [value]="null" i18n>-- All Status --</mat-option>
               <mat-option [value]="1" i18n>Active</mat-option>
               <mat-option [value]="0" i18n>Inactive</mat-option>
             </mat-select>
@@ -94,12 +94,14 @@
         </ng-container>
         <ng-container matColumnDef="stt">
           <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
-          <td *matCellDef="let element; let i = dataIndex" mat-cell class="text-center">{{ (pageIndex * pageSize) + i + 1}}</td>
+          <td *matCellDef="let element; let i = dataIndex" mat-cell
+              class="text-center">{{ (pageIndex * pageSize) + i + 1 }}
+          </td>
         </ng-container>
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
           <ng-container matColumnDef="{{innerColumn.value}}">
             <th class="text-center" mat-sort-header mat-header-cell
-                *matHeaderCellDef>{{ innerColumn.label  }}
+                *matHeaderCellDef>{{ innerColumn.label }}
             </th>
             <td [ngClass]="{'text-center': innerColumn.value === 'activeLabel',}" mat-cell *matCellDef="let element">
                 <span [ngClass]="{
@@ -189,14 +191,13 @@
               <div class="form-group">
                 <mat-form-field>
                   <mat-label i18n>Code</mat-label>
-                  <input [readonly]="!!formGroupDetail.value.id" formControlName="code" i18n-placeholder matInput
+                  <input [readonly]="!!formGroupDetail.value.id" formControlName="code" matInput
                          required>
                   @if (!!formGroupDetail.controls['code'].hasError('required')) {
                     <mat-error><span i18n>Code</span><span i18n> is required</span></mat-error>
                   } @else if (!!formGroupDetail.controls['code'].hasError('maxlength')) {
                     <mat-error><span i18n>Code</span><span i18n>  must be less than 20 characters</span></mat-error>
-                  }
-                  @else if (!!formGroupDetail.controls['code'].hasError('existCode')) {
+                  } @else if (!!formGroupDetail.controls['code'].hasError('existCode')) {
                     <mat-error><span i18n>Code</span><span i18n> already exist</span></mat-error>
                   }
                 </mat-form-field>

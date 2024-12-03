@@ -4,7 +4,14 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
-import {FormBuilder, FormGroup, Validators, ReactiveFormsModule} from '@angular/forms';
+import {
+  FormBuilder,
+  FormGroup,
+  Validators,
+  ReactiveFormsModule,
+  AbstractControl,
+  ValidationErrors
+} from '@angular/forms';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from '@angular/material/card';
 import {MatCheckbox} from '@angular/material/checkbox';
@@ -17,6 +24,8 @@ import {NgxSpinnerComponent, NgxSpinnerService} from 'ngx-spinner';
 import {response} from 'express';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
+import {HttpStatusCode} from "@angular/common/http";
+
 @Component({
   selector: 'app-sign-in',
   standalone: true,
@@ -60,11 +69,12 @@ export class SignInComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   /* this.route.fragment.subscribe(fragment => {
-      if (fragment === '401') {
-        this.router.navigate(['auth/login'], {fragment: '401', skipLocationChange: true});
-      }
-    });*/
+    // this.emailValid = true;
+    // this.passwordValid = true;
+    // this.formGroup.controls['email'].updateValueAndValidity();
+    // this.formGroup.controls['password'].updateValueAndValidity();
+    // // this.emailValid = false;
+    // this.passwordValid = false;
   }
 
   async login() {
@@ -84,7 +94,6 @@ export class SignInComponent implements OnInit {
         const resp = await this.usersService.login(this.formGroup.value);
         this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, resp.data.token);
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(resp.data.userInfo));
-
         this.route.fragment.subscribe(fragment => {
           if (fragment === '401') {
             this.router.navigate([this.location.path()]);
@@ -96,11 +105,16 @@ export class SignInComponent implements OnInit {
       }
     } catch (error: any) {
       if (error.status === 401 && error.error?.error) {
-        this.formGroup.get('password')?.setErrors({incorrect: true});
-        this.errorMessage = error.error.error;
-      } else if (error.status === 404) {
-        this.formGroup.get('email')?.setErrors({incorrect: true});
-        this.errorMessage = error.error.error;
+        // this.formGroup.get('password')?.setErrors({incorrect: true});
+        // this.errorMessage = error.error.error;
+      } else if (error.status === 404 && error.error?.error) {
+        if (error.error.error.includes("email")) {
+          this.formGroup.get('email')?.setErrors({incorrect: true});
+          this.errorMessage = error.error.error;
+        } else {
+          this.formGroup.get('password')?.setErrors({incorrect: true});
+          this.errorMessage = error.error.error;
+        }
       } else if (error.status === 500) {
         this.baseService.showError(error.message);
         console.error('Server Error: ', error.message);
@@ -111,4 +125,5 @@ export class SignInComponent implements OnInit {
       await this.spinner.hide();
     }
   }
+
 }

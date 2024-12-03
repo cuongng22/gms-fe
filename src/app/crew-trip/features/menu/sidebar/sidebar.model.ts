@@ -140,7 +140,9 @@ export const menu: Menu[] = [
             rootPath: 'plan/rate',
             subMenu: [
               {
-                path: 'plan/rate/uth', title: $localize`:@@estimatedExchangeRate:Estimated exchange rate`, icon: 'ri-exchange-cny-line'
+                path: 'plan/rate/uth',
+                title: $localize`:@@estimatedExchangeRate:Estimated exchange rate`,
+                icon: 'ri-exchange-cny-line'
               },
               {
                 path: 'plan/rate/planned',
@@ -165,7 +167,7 @@ export const menu: Menu[] = [
               },
               {
                 path: 'plan/production/five-year-plan',
-                title: $localize`:@@fiveYearPlan:5-Year Plans`,
+                title: $localize`:@@fiveYearPlan:5-Year plans`,
                 icon: 'ri-folder-chart-line'
               },
             ]
