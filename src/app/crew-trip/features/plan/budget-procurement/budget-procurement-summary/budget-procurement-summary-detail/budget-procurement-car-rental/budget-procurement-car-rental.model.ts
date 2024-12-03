@@ -27,9 +27,54 @@ export function getRowDef(): string[] {
         { column: "extraTransfer", visible: true },
         { column: "unitPrice", visible: true },
         { column: "totalAmountForeign", visible: true },
-        { column: "totalAmountVnd", visible: true },
         { column: "totalAmountExVatVnd", visible: true },
         { column: "totalAmountVatVnd", visible: true }
     ]
     return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
+
+
+
+export const exampleData =
+    [
+        // ID,
+        // PLAN_BUDGET_PROC_SUMMARY_ID,
+        // TYPE,
+        // PERIOD_START,
+        // PERIOD_END,
+        // NUMBER_FLIGHT,
+        // NUMBER_VEHICLES,
+        // EXTRA_TRANSFER,
+        // UNIT_PRICE,
+        // TOTAL_AMOUNT_FOREIGN,
+        // TOTAL_AMOUNT,
+        // TOTAL_AMOUNT_VAT
+        {
+            id: 1,
+            planBudgetProcSummaryId: 101,
+            type: "Car Rental",
+            periodStart: "2023-01-01",
+            periodEnd: "2023-01-31",
+            numberFlight: 10,
+            numberVehicles: 5,
+            extraTransfer: 2,
+            unitPrice: 100,
+            totalAmountForeign: 500,
+            totalAmount: 550,
+            totalAmountVat: 50
+        },
+        {
+            id: 2,
+            planBudgetProcSummaryId: 102,
+            type: "Car Rental",
+            periodStart: "2023-02-01",
+            periodEnd: "2023-02-28",
+            numberFlight: 8,
+            numberVehicles: 4,
+            extraTransfer: 1,
+            unitPrice: 120,
+            totalAmountForeign: 480,
+            totalAmount: 528,
+            totalAmountVat: 48
+        }
+    ];

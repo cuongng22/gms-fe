@@ -1,9 +1,9 @@
 <div class="row">
-    <div class="table-responsive">
+    <div class="table-responsive max-height-600">
         <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
             <ng-container matColumnDef="month">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                    [attr.rowspan]=2 i18n="@@month">
+                    [attr.rowspan]="2" i18n="@@month">
                     Month
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="periodRowspan"
@@ -14,7 +14,7 @@
 
             <ng-container matColumnDef="numberOfFlights">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                    [attr.rowspan]=2 i18n="@@numberOfFlights">
+                    [attr.rowspan]="2" i18n="@@numberOfFlights">
                     Number of Flights
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -24,7 +24,7 @@
 
             <ng-container matColumnDef="numberVehicles">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center wrap-text"
-                    [attr.rowspan]=2 i18n="@@noOfTrip">
+                    [attr.rowspan]="2" i18n="@@noOfTrip">
                     No. of Trip
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -34,7 +34,7 @@
 
             <ng-container matColumnDef="extraTransfer">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                    [attr.rowspan]=2 i18n="@@extraTransfer">
+                    [attr.rowspan]="2" i18n="@@extraTransfer">
                     Extra transfer
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -43,16 +43,16 @@
             </ng-container>
             <ng-container matColumnDef="unitPrice">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                    [attr.rowspan]=2 i18n="@@unitPriceVat">
+                    [attr.rowspan]="2" i18n="@@unitPriceVat">
                     Unit Price <br /> (Including VAT)
                 </th>
                 <td mat-cell *matCellDef="let element">
-                    {{element.unitPriceVat}}
+                    {{element.unitPrice}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="totalAmountForeign">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                    [attr.rowspan]=2 i18n="@@totalAmountForeign">
+                    [attr.rowspan]="2" i18n="@@totalAmountForeign">
                     Total Amount <br /> (Foreign Currency)
                 </th>
                 <td mat-cell *matCellDef="let element">
@@ -61,7 +61,7 @@
             </ng-container>
             <ng-container matColumnDef="totalAmountVnd">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center wrap-text"
-                    [attr.colspan]=2 i18n="@@totalAmountVnd">
+                    [attr.colspan]="2" i18n="@@totalAmountVnd">
                     Total Amount (VND)
                 </th>
             </ng-container>
@@ -86,7 +86,7 @@
                     {{element.totalAmountVat}}
                 </td>
             </ng-container>
-=
+            =
             <tr mat-header-row *matHeaderRowDef="headerRowDef1"></tr>
             <tr mat-header-row *matHeaderRowDef="headerRowDef2"></tr>
             <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
