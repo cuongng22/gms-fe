@@ -145,9 +145,9 @@ export class CommonComponent implements OnInit, AfterViewInit {
       await this.spinner.show();
       let res;
       if (update) {
-        res = await this.baseService.update(this.formGroupDetail.value);
+        res = await this.baseService.update(this.formGroupDetail.getRawValue());
       } else {
-        res = await this.baseService.create(this.formGroupDetail.value);
+        res = await this.baseService.create(this.formGroupDetail.getRawValue());
       }
       await this.search();
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);

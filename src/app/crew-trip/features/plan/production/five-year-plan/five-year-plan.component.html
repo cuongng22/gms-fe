@@ -165,7 +165,7 @@
         <mat-card-title>
           <h5 class="mb-0">
             <span *ngIf="!formGroupDetail.value.id" i18n>Add new</span>
-            <span *ngIf="formGroupDetail.value.id" i18n>Update</span>
+            <span *ngIf="formGroupDetail.value.id" i18n>Edit</span>
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
@@ -229,11 +229,14 @@
                     </mat-form-field>
                   </div>
                 </div>
-                <div class="col-md-12" sizeInput="sm">
-                  <mat-form-field>
-                    <mat-label i18n>Total</mat-label>
-                    <input formControlName="total" i18n-placeholder matInput [readonly]="true">
-                  </mat-form-field>
+                <div class="col-md-12">
+                  <app-input
+                    sizeInput="lg"
+                    formControlName="total"
+                    label="Total"
+                    [readonly]="true"
+                    [required]="true"
+                  ></app-input>
                 </div>
                 <mat-form-field>
                   <mat-label i18n>Remark</mat-label>
@@ -241,7 +244,7 @@
                             placeholder="Input Notes"></textarea>
                   <mat-hint align="end">{{ formGroupDetail.value.notes?.length }} / 500</mat-hint>
                   @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
-                    <mat-error><span i18n>Notes</span><span i18n> too long</span></mat-error>
+                    <mat-error><span i18n>Remark</span><span i18n> must be less than 500characters</span></mat-error>
                   }
                 </mat-form-field>
                 <mat-checkbox formControlName="active" i18n>Active</mat-checkbox>

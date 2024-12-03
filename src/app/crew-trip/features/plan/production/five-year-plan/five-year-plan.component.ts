@@ -21,10 +21,11 @@ import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/util
 import {FiveYearPlanService} from 'src/app/crew-trip/core/services/five-year-plan.service';
 import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
 import {HttpStatusCode} from "@angular/common/http";
+import {InputComponent} from "src/app/crew-trip/shared/component/input/input.component";
 
 
 @Component({
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, SelectionComponent],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, SelectionComponent, InputComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   selector: 'app-five-year-plan',
   standalone: true,
@@ -72,7 +73,7 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
       year: ['', [Validators.required, this.existYearValidator.bind(this)]],
       totalInternational: ['', [Validators.required, Validators.min(1)]],
       totalDomestic: ['', [Validators.required, Validators.min(1)]],
-      total: [{value: '', disabled: true}],
+      total: [''],
       notes: ['', Validators.maxLength(500)],
       active: [true,]
     });
@@ -126,6 +127,17 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
         this.existYear = false;
       }
     });
+  }
+
+  override async showDialogDetail(id?: any, type?: string) {
+    this.formGroupDetail.get('year')?.enable();
+    if (id != null && type === 'index') {
+      this.formGroupDetail.get('year')?.disable();
+      this.formGroupDetail.patchValue(this.dataSource.data[id] as JSON);
+    } else if (id != null) {
+      await this.detail(id);
+    }
+    this.toggleDialogCreate();
   }
 
   existYearValidator(control: AbstractControl): ValidationErrors | null {
