@@ -113,7 +113,7 @@
         </ng-container>
         <ng-container matColumnDef="type">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@type">
-            Type
+            Exchange rate type
           </th>
           <td mat-cell *matCellDef="let element">{{ element.type }}</td>
         </ng-container>
@@ -142,7 +142,7 @@
           <td *matCellDef="let element;let i = dataIndex" mat-cell>
             <div class="action-buttons d-flex align-items-center justify-content-end">
               <a mat-button type="button" (click)="viewHistory(element)">
-                <i class="material-symbols-outlined" title="Detail">
+                <i class="material-symbols-outlined" title="View">
                   visibility
                 </i>
               </a>
@@ -169,7 +169,7 @@
   class="add-new-popup"
 >
   <div class="popup-dialog" style="max-width: 700px; min-width: 400px;">
-    <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
+    <mat-card class="d-block bg-white border-0 shadow-none container">
       <mat-card-header>
         <mat-card-title>
           <h5 class="mb-0">
@@ -183,44 +183,48 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <label class="mb-10" style="color: #d3a023" i18n="@@currencyCode">Currency code: <span
-          class="bold">{{ itemDetail?.code }}</span></label>
-        <table mat-table [dataSource]="listHistoryData" class="mat-elevation-z8 mb-20 table-light"
-               multiTemplateDataRows="true">
-          <ng-container matColumnDef="updatedDate">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@updatedOn">Updated
-              time
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element.updatedDate | date: 'dd/MM/yyyy HH:mm' }}</td>
-          </ng-container>
-          <ng-container matColumnDef="rate">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@rate">Exchange rate
-            </th>
-            <td mat-cell *matCellDef="let element" class="text-right">{{ element.price }}</td>
-          </ng-container>
-          <ng-container matColumnDef="currDate">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@effectiveDate">
-              Effective date
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element.currDate | date: 'dd/MM/yyyy' }}</td>
-          </ng-container>
-          <ng-container matColumnDef="type">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@type">Exchange rate
-              type
-            </th>
-            <td mat-cell *matCellDef="let element">{{ element.type }}</td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumnsHis"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumnsHis;"></tr>
-        </table>
-        <div class="btn-box">
-          <button (click)="this.showDialogHistory = !this.showDialogHistory" class="close-btn" i18n mat-button
-                  type="button">
-            <i class="material-symbols-outlined">
-              close
-            </i>
-            Close
-          </button>
+        <div class="table-responsive">
+          <label class="mb-10" style="color: #d3a023" i18n="@@currencyCode">Currency code: <span
+            class="bold">{{ itemDetail?.code }}</span></label>
+          <table mat-table [dataSource]="listHistoryData" class="mb-20 table-light"
+                 multiTemplateDataRows="true">
+            <ng-container matColumnDef="updatedDate">
+              <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@updatedOn">Updated
+                time
+              </th>
+              <td mat-cell *matCellDef="let element">{{ element.updatedDate | date: 'dd/MM/yyyy HH:mm' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="rate">
+              <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@rate">Exchange rate
+              </th>
+              <td mat-cell *matCellDef="let element"
+                  class="text-right">{{ element.price | number : (element.format || '1.0-10') }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="currDate">
+              <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@effectiveDate">
+                Effective date
+              </th>
+              <td mat-cell *matCellDef="let element">{{ element.currDate | date: 'dd/MM/yyyy' }}</td>
+            </ng-container>
+            <ng-container matColumnDef="type">
+              <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold" i18n="@@type">Exchange rate
+                type
+              </th>
+              <td mat-cell *matCellDef="let element">{{ element.type }}</td>
+            </ng-container>
+            <tr mat-header-row *matHeaderRowDef="displayedColumnsHis"></tr>
+            <tr mat-row *matRowDef="let row; columns: displayedColumnsHis;"></tr>
+          </table>
+          <div class="btn-box">
+            <button (click)="this.showDialogHistory = !this.showDialogHistory" class="close-btn" i18n mat-button
+                    type="button">
+              <i class="material-symbols-outlined">
+                close
+              </i>
+              Close
+            </button>
+          </div>
         </div>
       </mat-card-content>
     </mat-card>
