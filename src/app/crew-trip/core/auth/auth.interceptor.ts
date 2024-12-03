@@ -39,6 +39,10 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
       // console.log(req.url, 'returned a response with status', event.status);
     }
   }), catchError((error: any) => {
+    const silentError = req.headers.get('X-Silent-Error') === 'true';
+    if (silentError) {
+      return throwError(() => error);
+    }
     if (error.name === 'TimeoutError') {
       baseService.showError(MESSAGE.ERROR_CONNECT);
     } else if (error instanceof HttpErrorResponse) {
