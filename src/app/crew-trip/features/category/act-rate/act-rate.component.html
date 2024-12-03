@@ -40,18 +40,20 @@
                 <mat-date-range-picker #effectRangePicker>
                   <mat-date-range-picker-actions>
                     <button sizeButton="sm" mat-button matDateRangePickerCancel
-                            i18n="@@cancel">Cancel</button>
+                            i18n="@@cancel">Cancel
+                    </button>
                     <button sizeButton="sm" mat-raised-button color="primary" matDateRangePickerApply
-                            i18n="@@apply">Apply</button>
+                            i18n="@@apply">Apply
+                    </button>
                   </mat-date-range-picker-actions>
                 </mat-date-range-picker>
               </mat-form-field>
-<!--              <mat-form-field appearance="fill">-->
-<!--                <mat-label i18n="@@effectiveDate">Effective date</mat-label>-->
-<!--                <input formControlName="startDate" matInput [matDatepicker]="pickerStartDate">-->
-<!--                <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>-->
-<!--                <mat-datepicker #pickerStartDate></mat-datepicker>-->
-<!--              </mat-form-field>-->
+              <!--              <mat-form-field appearance="fill">-->
+              <!--                <mat-label i18n="@@effectiveDate">Effective date</mat-label>-->
+              <!--                <input formControlName="startDate" matInput [matDatepicker]="pickerStartDate">-->
+              <!--                <mat-datepicker-toggle matIconSuffix [for]="pickerStartDate"></mat-datepicker-toggle>-->
+              <!--                <mat-datepicker #pickerStartDate></mat-datepicker>-->
+              <!--              </mat-form-field>-->
             </div>
 
             <div class="col d-sm-flex flex-row  justify-content-lg-start justify-content-md-center">
@@ -105,7 +107,9 @@
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@price">
             Exchange rate
           </th>
-          <td mat-cell class="text-right" *matCellDef="let element">{{ element.price }}</td>
+          <td mat-cell class="text-right"
+              *matCellDef="let element">{{ element.price | number : (element.format || '1.0-10') }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="type">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@type">
