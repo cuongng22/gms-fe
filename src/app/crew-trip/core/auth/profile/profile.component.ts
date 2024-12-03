@@ -14,7 +14,7 @@ import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.comp
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
-import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import  { jwtDecode } from 'jwt-decode';
 import {StorageService} from "src/app/crew-trip/core/services/storage.service";
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
@@ -24,6 +24,7 @@ import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/s
 import {SelectOptions} from "src/app/crew-trip/shared/select-option";
 import {environment} from "src/environments/environment";
 import {HttpStatusCode} from "@angular/common/http";
+import {decodeToken} from "src/app/crew-trip/shared/utils/constant";
 
 @Component({
   selector: 'app-profile',
@@ -63,7 +64,7 @@ export class ProfileComponent implements OnInit {
 
   ngOnInit(): void {
     const token = localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN);
-    if (!token || !this.userCurrent) {
+    if (!token || !this.userCurrent || this.isTokenExpired(token)) {
       this.userService.logout();
       this.router.navigate(['auth/login'], { fragment: HttpStatusCode.Unauthorized.toString(), skipLocationChange: true });
     }
@@ -161,12 +162,6 @@ export class ProfileComponent implements OnInit {
       formData.append('file', file);
       formData.append('email', email);
       return await this.userService.uploadAvatar(formData);
-      // if (res) {
-      //   let userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
-      //   userInfo.avartarUrl = res.data;
-      //   this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(userInfo));
-      //   this.userService.userInfoSubject.next(userInfo);
-      // }
     } catch (error: any) {
       if (error?.status === 401 && error.error?.error) {
         this.baseService.showError(error?.error?.error);
@@ -178,5 +173,13 @@ export class ProfileComponent implements OnInit {
     }
   }
 
-  protected readonly FormControl = FormControl;
+  isTokenExpired(token: string): boolean {
+    const decodedToken: any = decodeToken(token);
+    if (!decodedToken || !decodedToken.exp) {
+      return true;
+    }
+    const currentTime = Math.floor(Date.now() / 1000);
+    return decodedToken.exp < currentTime;
+  }
+
 }

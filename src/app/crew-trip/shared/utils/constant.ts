@@ -1,4 +1,5 @@
 import { effect, Signal, signal } from '@angular/core';
+import {jwtDecode} from "jwt-decode";
 
 export class Constant {
   static DATE_FORMAT = 'DD/MM/YYYY';
@@ -81,6 +82,13 @@ export function debouncedSignal<T>(input: Signal<T>, timeOutMs = 0): Signal<T> {
   return debounceSignal;
 }
 
+export function decodeToken(token: string): any {
+  try {
+    return jwtDecode(token);
+  } catch (error) {
+    return null;
+  }
+}
 
 export const DATE_FORMAT_DD_MM_YYYY = {
   parse: {
