@@ -1,0 +1,29 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+  <h5 class="mb-0" i18n="@@flightCrew">
+    Flight crew
+  </h5>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
+      Category
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@flightCrew">
+      Flight crew
+    </li>
+  </ol>
+</div>
+<!--Search-->
+<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-content>
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+      <mat-tab label="Flight crew" i18n="@@flightCrew">Flight crew</mat-tab>
+      <mat-tab label="Other Crew Crewd" i18n="@@otherCrew">
+        <app-other-crew></app-other-crew>
+      </mat-tab>
+      <mat-tab label="Overnight rate configuration" i18n="@@overnightRaeConfiguration">
+        <app-config-overnight-rate></app-config-overnight-rate>
+      </mat-tab>
+    </mat-tab-group>
+  </mat-card-content>
+</mat-card>
+
