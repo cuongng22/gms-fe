@@ -3,7 +3,7 @@ import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
-import {FormBuilder, ReactiveFormsModule, Validators} from '@angular/forms';
+import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
@@ -19,10 +19,12 @@ import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-funct
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {FiveYearPlanService} from 'src/app/crew-trip/core/services/five-year-plan.service';
+import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
+import {HttpStatusCode} from "@angular/common/http";
 
 
 @Component({
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, SelectionComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   selector: 'app-five-year-plan',
   standalone: true,
@@ -46,18 +48,20 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
     rowspan?: string,
     colspan?: string
   }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-      {label: $localize`Year`, value: 'year', rowspan: '2'},
-      {label: $localize`Total International`, value: 'totalInternational', type: Constant.NUMBER},
-      {label: $localize`Rate InternationalLast`, value: 'rateInternationalLast', type: Constant.NUMBER},
-      {label: $localize`Total Domestic`, value: 'totalDomestic', type: Constant.NUMBER},
-      {label: $localize`Rate DomesticLast`, value: 'rateDomesticLast', type: Constant.NUMBER},
-      {label: $localize`Total`, value: 'total', type: Constant.NUMBER},
-      {label: $localize`Rate Total Last`, value: 'rateTotalLast', type: Constant.NUMBER},
-      {label: $localize`Notes`, value: 'notes', rowspan: '2'},
-      {label: $localize`Active`, value: 'activeLabel', rowspan: '2'},
-    ];
+    {label: $localize`Year`, value: 'year', rowspan: '2'},
+    {label: $localize`Production`, value: 'totalInternational', type: Constant.NUMBER},
+    {label: $localize`Compared to last year`, value: 'rateInternationalLast', type: Constant.NUMBER},
+    {label: $localize`Production`, value: 'totalDomestic', type: Constant.NUMBER},
+    {label: $localize`Compared to last year`, value: 'rateDomesticLast', type: Constant.NUMBER},
+    {label: $localize`Production`, value: 'total', type: Constant.NUMBER},
+    {label: $localize`Compared to last year`, value: 'rateTotalLast', type: Constant.NUMBER},
+    {label: $localize`Remark`, value: 'notes', rowspan: '2'},
+    {label: $localize`Status`, value: 'activeLabel', rowspan: '2'},
+  ];
   listYear: any = [];
   currentYear = new Date().getFullYear();
+  existYear: boolean = false;
+
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
@@ -65,10 +69,10 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
     });
     this.formGroupDetail = this.fb.group({
       id: ['',],
-      year: ['', [Validators.required]],
-      totalInternational: ['', [Validators.required]],
-      totalDomestic: ['', [Validators.required]],
-      total: ['',],
+      year: ['', [Validators.required, this.existYearValidator.bind(this)]],
+      totalInternational: ['', [Validators.required, Validators.min(1)]],
+      totalDomestic: ['', [Validators.required, Validators.min(1)]],
+      total: [{value: '', disabled: true}],
       notes: ['', Validators.maxLength(500)],
       active: [true,]
     });
@@ -91,7 +95,7 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
   calculator() {
     if (this.formGroupDetail.value.totalInternational && this.formGroupDetail.value.totalDomestic) {
       this.formGroupDetail.patchValue({
-        total: Math.round((this.formGroupDetail.value.totalInternational + this.formGroupDetail.value.totalDomestic) * 100) / 100
+        total: (this.formGroupDetail.value.totalInternational + this.formGroupDetail.value.totalDomestic * 100) / 100
       });
     }
   }
@@ -108,5 +112,23 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  override async save(): Promise<any> {
+    super.save().then(res => {
+      if (res.status == HttpStatusCode.Conflict) {
+        this.existYear = true;
+        this.formGroupDetail.controls['year'].updateValueAndValidity();
+        this.existYear = false;
+      } else if (res.status == HttpStatusCode.InternalServerError && res.error?.error.includes('SERVICE_CODE_UNIQUE')) {
+        this.existYear = true;
+        this.formGroupDetail.controls['year'].updateValueAndValidity();
+        this.existYear = false;
+      }
+    });
+  }
+
+  existYearValidator(control: AbstractControl): ValidationErrors | null {
+    return this.existYear ? {existYear: true} : null
   }
 }
