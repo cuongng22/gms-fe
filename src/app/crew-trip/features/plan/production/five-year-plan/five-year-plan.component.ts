@@ -25,7 +25,7 @@ import {InputComponent} from "src/app/crew-trip/shared/component/input/input.com
 
 
 @Component({
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, SelectionComponent, InputComponent],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, InputSizeComponent, InputComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   selector: 'app-five-year-plan',
   standalone: true,
@@ -73,7 +73,7 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
       year: ['', [Validators.required, this.existYearValidator.bind(this)]],
       totalInternational: ['', [Validators.required, Validators.min(1)]],
       totalDomestic: ['', [Validators.required, Validators.min(1)]],
-      total: [''],
+      total: [{value: '', disabled: true}],
       notes: ['', Validators.maxLength(500)],
       active: [true,]
     });
@@ -84,7 +84,6 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
   override async ngOnInit() {
     this.currentYear = new Date().getFullYear();
     this.listYear = Array.from({length: this.currentYear - 2020 + 11}, (_, i) => (2020 + i).toString());
-    console.log(this.listYear);
     await Promise.all([this.search(),]).then(() => {
       console.log(this.dataSource);
     });

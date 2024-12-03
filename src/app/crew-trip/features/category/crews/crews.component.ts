@@ -52,9 +52,7 @@ export class CrewsComponent extends CommonComponent implements OnInit {
     { label: $localize`:@@function:Function`, value: 'function', class: 'text-center' },
     { label: $localize`:@@base:Base`, value: 'base', class: 'text-center' },
     { label: $localize`:@@type:Type`, value: 'sourceType' }
-
-  ]
-    ;
+  ];
 
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search

@@ -7,6 +7,6 @@ import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 export class FlightCrewService extends BaseService {
   constructor() {
     super();
-    this.path = 'crew-flight';
+    this.path = 'crew-flights';
   }
 }

@@ -160,7 +160,7 @@ export class ProfileComponent implements OnInit {
         return;
       }
       formData.append('file', file);
-      formData.append('email', email);
+      formData.append('email',email);
       return await this.userService.uploadAvatar(formData);
     } catch (error: any) {
       if (error?.status === 401 && error.error?.error) {

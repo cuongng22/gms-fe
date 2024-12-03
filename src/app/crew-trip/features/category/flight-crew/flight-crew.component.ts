@@ -1,7 +1,12 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, ElementRef, inject, model, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
-import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
+import {
+  MatAutocomplete,
+  MatAutocompleteSelectedEvent,
+  MatAutocompleteTrigger,
+  MatOption
+} from "@angular/material/autocomplete";
 import {MatAnchor, MatButton, MatButtonModule} from "@angular/material/button";
 import {
   MatCard,
@@ -26,7 +31,7 @@ import {
   MatDateRangeInput,
   MatDateRangePicker, MatEndDate, MatStartDate
 } from "@angular/material/datepicker";
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
+import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
 import {MatInput} from "@angular/material/input";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {MatSelect} from "@angular/material/select";
@@ -48,48 +53,120 @@ import {NoDataRowOutlet} from "@angular/cdk/table";
 import {InputComponent} from "src/app/ui-elements/input/input.component";
 import {RouterLink} from "@angular/router";
 import {MatMenuModule} from "@angular/material/menu";
+import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
+import {SelectOptions} from "src/app/crew-trip/shared/select-option";
+import {FlightMarketService} from "src/app/crew-trip/core/services/ flight-market.service";
+import {CrewsDetailComponent} from "src/app/crew-trip/features/category/crews/crews-detail/crews-detail.component";
+import {MatDialog} from "@angular/material/dialog";
+import {InfoPlaneService} from "src/app/crew-trip/core/services/InfoPlaneService.service";
+import {Role} from "src/app/crew-trip/features/system/users/users.model";
+import {SelectMultipleComponent} from "src/app/crew-trip/shared/component/select-multiple/select-multiple.component";
+import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
+import {LOCALE} from "src/app/crew-trip/shared/utils/constant";
+import {Observable, Subject} from "rxjs";
+import {
+  FlightCrewDetailComponent
+} from "src/app/crew-trip/features/category/flight-crew/flight-crew-detail/flight-crew-detail.component";
 
 @Component({
   selector: 'app-flight-crew',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent, NgxTrimDirectiveModule, OtherCrewComponent, ConfigOvernightRateComponent],
+  imports: [CommonModule, MatCardModule,MatFormFieldModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent, NgxTrimDirectiveModule, OtherCrewComponent, ConfigOvernightRateComponent, MatAutocomplete, MatAutocompleteTrigger, SelectionComponent, InputSizeComponent, SelectMultipleComponent],
 
   templateUrl: './flight-crew.component.html',
   styleUrl: './flight-crew.component.scss'
 })
 export class FlightCrewComponent extends CommonComponent implements OnInit {
   override baseService = inject(FlightCrewService);
+  flightMarketService = inject(FlightMarketService);
+  infoPlaneService = inject(InfoPlaneService);
   usersService = inject(UsersService);
   fb = inject(FormBuilder);
+  statusOptions = SelectOptions.STATUS;
+  @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
+  markets: string[] = [];
 
+  override formGroupDetail = this.fb.group({
+    id: ['',],
+    airportCode: ['', [Validators.required]],
+    acType: ['', [Validators.required]],
+    pitlotNumber: ['', [Validators.required]],
+    attendantNumber: ['', [Validators.required]],
+    notes: [''],
+    active: [true]
+  });
 
-  _displayedColumns: {
-    label: string; value: string, type?: string, format?: string
-  }[] = [
-    {label: $localize`Code`, value: 'code'}, {
-      label: $localize`English name`,
-      value: 'engName'
-    }, {label: $localize`VietNam name`, value: 'vniName'}, {
-      label: $localize`Region`,
-      value: 'area'
-    }, {label: $localize`Status`, value: 'activeLabel'},];
-
-
-  constructor() {
+  filteredOptionsMarket: any[];
+  listActype: any[] = [];
+  constructor(public dialog: MatDialog) {
     super();
     this.formGroupSearch = this.fb.group({
-      s: ['',], active: ['',], area: ['',],
-    });
-    this.formGroupDetail = this.fb.group({
-      id: ['',],
-      area: ['', [Validators.required]],
-      code: ['', [Validators.required]],
-      vniName: ['', [Validators.required, Validators.maxLength(250)]],
-      engName: ['', [Validators.required, Validators.maxLength(250)]],
-      curCode: [''],
-      active: [true,]
+      marketCode: ['',], status: ['',], acType: ['',],
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
-    this.formGroupDetailInit = {...this.formGroupDetail.value};
+  }
+  override async ngOnInit() {
+    super.ngOnInit();
+    this.displayedColumns = ['stt', 'market', 'acType','pilotNumber', 'attendantNumber', 'remark', 'status','action'];
+    await Promise.all([
+      this.getActypes(),
+      this.getListAirport(),
+      this.search(),
+    ]).then(() => {
+    });
+  }
+
+
+  getListAirport(){
+    this.flightMarketService.search({ page: 0, limit: 99999 ,option: 0}).then(res => {
+      this.markets = res.data.content.map((item: any) => item.marketCode);
+    });
+  }
+
+
+  filterMarket(): void {
+    const filterValue = this.marketCode.nativeElement.value.toLowerCase();
+    if (!filterValue) {
+      this.filteredOptionsMarket = this.markets;
+    }
+    this.filteredOptionsMarket = this.markets.filter(market => market.toLowerCase().includes(filterValue));
+  }
+
+  onFocusMarket(): void {
+    this.filteredOptionsMarket = this.markets;
+    this.autocompleteTrigger.openPanel();
+  }
+
+  async getActypes() {
+    try {
+      await this.spinner.show();
+      const res = await this.infoPlaneService.search({
+        page: this.pageIndex,
+        limit: 9999
+      });
+      this.listActype = res.data.content;
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async flightCrewDetail(id?: any) {
+    console.log("aaaaaaaaaaaaaaaa",id)
+    let item = {};
+    if (!!id) {
+      const response = await this.baseService.detail(id);
+      item = { ...response.data }
+    }
+    console.log("itemitemitem:",item)
+    const dialogRef = this.dialog.open(FlightCrewDetailComponent, {
+      data: { item },
+      disableClose: true
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.search();
+      }
+    });
   }
 }
