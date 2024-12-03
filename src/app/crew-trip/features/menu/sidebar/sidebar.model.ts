@@ -43,7 +43,7 @@ export const menu: Menu[] = [
         icon: 'ri-exchange-cny-line'
       },
       {
-        path: 'category/crews-flight', title: $localize`:@@flightCrew:Flight Crew`, icon: 'ri-id-card-line'
+        path: 'category/flight-crew', title: $localize`:@@flightCrew:Flight Crew`, icon: 'ri-id-card-line'
       },
       {
         path: 'category/crews', title: $localize`:@@crewList:Crew list`, icon: 'ri-id-card-line'
