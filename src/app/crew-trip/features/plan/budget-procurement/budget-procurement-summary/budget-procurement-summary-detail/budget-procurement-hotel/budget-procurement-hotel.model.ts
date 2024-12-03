@@ -163,7 +163,7 @@ export const contractData = {
   crewTransportFeeFlag: true,
 }
 
-export function getGeaderRowDef1(contractData: any): string[] {
+export function getHeaderRowDef1(contractData: any): string[] {
   const columns = [
     { column: "month", visible: true },
     { column: "aircraftType", visible: true },
@@ -179,7 +179,7 @@ export function getGeaderRowDef1(contractData: any): string[] {
   return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
 
-export function getGeaderRowDef2(contractData: any): string[] {
+export function getHeaderRowDef2(contractData: any): string[] {
   const columns = [
     { column: "singleRoom", visible: true },
     { column: "doubleRoom", visible: true },

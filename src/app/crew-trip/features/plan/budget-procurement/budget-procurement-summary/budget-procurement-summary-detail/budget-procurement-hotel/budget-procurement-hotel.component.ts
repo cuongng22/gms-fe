@@ -10,7 +10,7 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { After } from 'v8';
-import { contractData, exampleData, formula, getGeaderRowDef1, getGeaderRowDef2, getRowDef, rawData } from './budget-procurement-hotel.model';
+import { contractData, exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, rawData } from './budget-procurement-hotel.model';
 import { co } from 'node_modules/@fullcalendar/core/internal-common';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 
@@ -50,8 +50,8 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
 
   ngOnInit(): void {
 
-    this.headerRowDef1 = getGeaderRowDef1(contractData);
-    this.headerRowDef2 = getGeaderRowDef2(contractData);
+    this.headerRowDef1 = getHeaderRowDef1(contractData);
+    this.headerRowDef2 = getHeaderRowDef2(contractData);
     this.rowDef = getRowDef(contractData);
 
     this.dataSource.data = exampleData;

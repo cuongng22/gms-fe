@@ -8,6 +8,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import { getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './budget-procurement-car-rental.model';
 
 @Component({
   selector: 'app-budget-procurement-car-rental',
@@ -24,9 +25,9 @@ export class BudgetProcurementCarRentalComponent implements OnInit {
   periodRowspan = 0;
   periods: string[] = [];
 
-  headerRowDef1: string[] = ["month", "aircraftType", "numberOfOvernightStays", "numberOfRooms", "numberOfRoomsForOthers", "numberOfEstimatedEarlyCheckInRooms", "numberOfEstimatedLateCheckoutRooms", "totalCostOfCrewTransport", "totalCost", "totalAmountColspan"];
-  headerRowDef2: string[] = ["singleRoom", "doubleRoom", "singleReservedRoom", "singleRoomOther", "doubleRoomOther", "singleRoomEarly", "doubleRoomEarly", "reservedRoomEarly", "singleRoomLate", "doubleRoomLate", "reservedRoomLate", "totalAmount", "totalAmountVat"];
-  rowDef: string[] = ["month", "aircraftType", "numberOfOvernightStays", "singleRoom", "doubleRoom", "singleReservedRoom", "singleRoomOther", "doubleRoomOther", "singleRoomEarly", "doubleRoomEarly", "reservedRoomEarly", "singleRoomLate", "doubleRoomLate", "reservedRoomLate", "totalCostOfCrewTransport", "totalCost", "totalAmount", "totalAmountVat"];
+  headerRowDef1: string[] = getHeaderRowDef1();
+  headerRowDef2: string[] = getHeaderRowDef2();
+  rowDef: string[] = getRowDef();
 
   constructor(private datePipe: DatePipe) { }
 
