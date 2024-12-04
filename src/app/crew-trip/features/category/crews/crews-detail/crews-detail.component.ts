@@ -75,7 +75,7 @@ export class CrewsDetailComponent extends CommonComponent implements OnInit {
       // set lại nationName
       const nationName = this.countries
         .filter(country => country.code === this.formGroupDetail.controls.nation.value)
-        .map(country => LOCALE.VN ? country.vniName : country.engName)[0];
+        .map(country => country.vniName)[0];
       this.formGroupDetail.patchValue({nationName: nationName});
       console.log('this.formGroupDetail.value:', this.formGroupDetail.value);
     });
@@ -86,9 +86,7 @@ export class CrewsDetailComponent extends CommonComponent implements OnInit {
     ).subscribe(value => {
       this.filteredNation.set(this.countries.filter(country => {
         const code = country.code.toLowerCase();
-        return code.includes(value.toLowerCase()) || (this.locale == LOCALE.VN ?
-          country.vniName.toLowerCase().includes(value.toLowerCase()) :
-          country.engName.toLowerCase().includes(value.toLowerCase()));
+        return code.includes(value.toLowerCase()) || country.vniName.toLowerCase().includes(value.toLowerCase());
       }));
     });
   }
@@ -105,7 +103,7 @@ export class CrewsDetailComponent extends CommonComponent implements OnInit {
   nationSelected(country: MatAutocompleteSelectedEvent) {
     const selectedCountry = country.option.value;
     this.formGroupDetail.controls.nation.setValue(selectedCountry.code);
-    this.formGroupDetail.controls.nationName.setValue(this.locale == LOCALE.VN ? selectedCountry.vniName : selectedCountry.engName);
+    this.formGroupDetail.controls.nationName.setValue(selectedCountry.vniName);
   }
 
   override async save() {
