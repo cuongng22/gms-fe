@@ -38,12 +38,13 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
 
   readonlyDetail = model<boolean>(false);
 
+  // danh sách mã code của nhà xe để check trùng khi nhập
+  carRentalCodes: string[] = [];
   override formGroupDetail = this.formBuilder.group({
     id: [],
     marketCode: [{ value: '', disabled: true }],
     code: ['', {
       validators: [Validators.required, Validators.maxLength(50)],
-      asyncValidators: [AlreadyExistsValidator.existsCarRentalCode(this.carRentalService, this.data.carRental.marketCode)],
       updateOn: 'blur'
     }],
     name: ['', [Validators.required, Validators.maxLength(250)]],
@@ -68,13 +69,15 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
   }
 
   override ngOnInit(): void {
-    console.log("this.data.carRental: ", this.data.carRental);
     if (this.data.carRental) {
       console.log(this.data.carRental);
       if (this.data.carRental.id && this.data.carRental.id > 0) {
         this.formGroupDetail.controls.code.disable();
       }
       this.formGroupDetail.patchValue(this.data.carRental);
+      this.carRentalCodes = this.data.carRentalCodes;
+      console.log("this.data.carRentalCodes: ", this.carRentalCodes);
+      this.formGroupDetail.controls.code.addAsyncValidators(AlreadyExistsValidator.existsCarRentalCode(this.carRentalService, this.data.carRental.marketCode, this.carRentalCodes));
       this.readonlyDetail.set(this.data.isViewDetail);
     }
 
@@ -91,7 +94,7 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
     if (this.formGroupDetail.invalid) {
       return;
     }
-    this.dialogRef.close({ ...this.formGroupDetail.value, hotelCode: this.formGroupDetail.controls.code.value?.toUpperCase().trim() });
+    this.dialogRef.close({ ...this.formGroupDetail.value, code: this.formGroupDetail.controls.code.value?.toUpperCase().trim() });
   }
 
   close(): void {
