@@ -24,13 +24,13 @@
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11">
           <div class="row">
-            <div class="col" sizeInput="md">
+            <div class="col-sm-3" sizeInput='sm'>
               <mat-form-field class="mb-1">
                 <mat-label i18n="@@keyword">Keyword</mat-label>
                 <input matInput formControlName="s">
               </mat-form-field>
             </div>
-            <div class="col" sizeInput="md">
+            <div class="col-sm-3" sizeInput='sm'>
               <mat-form-field class="mb-1">
                 <mat-label i18n="@@airport"> Version</mat-label>
                 <input type="text" matInput formControlName="version" [matAutocomplete]="versionComplete">
@@ -42,7 +42,7 @@
                 </mat-autocomplete>
               </mat-form-field>
             </div>
-            <div class="col" sizeInput="md">
+            <div class="col-sm-3" sizeInput='sm'>
               <mat-form-field class="mb-1">
                 <mat-label i18n="@@airport"> Nguồn dữ liệu</mat-label>
                 <input type="text" matInput formControlName="sourceType" [matAutocomplete]="sourceComplete">
@@ -55,19 +55,19 @@
                 </mat-autocomplete>
               </mat-form-field>
             </div>
+            <div class="col-sm-3">
+              <mat-card-header class="mb-0">
+                <mat-card-title>
+                  <button class="search-btn" type="submit" mat-button>
+                    <i class="material-symbols-outlined">
+                      search
+                    </i>
+                    <span i18n="@@search">Search</span>
+                  </button>
+                </mat-card-title>
+              </mat-card-header>
+            </div>
           </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-1 col-lg-1 d-flex justify-content-center">
-          <mat-card-header class="mb-0 search">
-            <mat-card-title>
-              <button class="search-btn" type="submit" mat-button>
-                <i class="material-symbols-outlined">
-                  search
-                </i>
-                <span i18n="@@search">Search</span>
-              </button>
-            </mat-card-title>
-          </mat-card-header>
         </div>
       </div>
     </form>
@@ -251,7 +251,7 @@
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
-          <button mat-button (click)="toggleDialogUpload()">
+          <button mat-button (click)="resetFileUpload();toggleDialogUpload()">
             <i class="ri-close-fill"></i>
           </button>
         </mat-card-subtitle>
@@ -293,7 +293,7 @@
       </mat-card-content>
       <mat-card-actions class="p-15" style="display: flex; justify-content: end;">
         <button type="button" mat-button
-                (click)="uploadFileError={};fileUpload.setValue([]) ;fileUpload.reset() ;toggleDialogUpload()"
+                (click)="resetFileUpload() ;toggleDialogUpload()"
                 class="close-btn  min-with-100 mlr-5">
           <i class="material-symbols-outlined">
             close

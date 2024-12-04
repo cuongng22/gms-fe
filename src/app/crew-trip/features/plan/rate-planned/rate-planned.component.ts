@@ -87,10 +87,9 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
           this.search();
           this.toggleDialogUpload();
+          this.resetFileUpload();
         }
       }
-    } catch (e: any) {
-      this.baseService.showError(e.error?.error ?? e.error?.error?.code ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -120,4 +119,9 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
     }
   }
 
+  resetFileUpload() {
+    this.uploadFileError = {};
+    this.fileUpload.setValue([]);
+    this.fileUpload.reset()
+  }
 }
