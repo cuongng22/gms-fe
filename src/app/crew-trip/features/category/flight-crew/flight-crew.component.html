@@ -15,7 +15,7 @@
 <!--Search-->
 <mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
   <mat-card-content>
-    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+    <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="onTabChange($event)">
       <mat-tab label="Flight crew">
         <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
           <mat-card-content>
@@ -225,11 +225,15 @@
 
 
       </mat-tab>
-      <mat-tab label="Other Crew Crewd">
-        <app-other-crew></app-other-crew>
+      <mat-tab label="Other Crew">
+        <ng-container *ngIf="activeTab === 1">
+          <app-other-crew></app-other-crew>
+        </ng-container>
       </mat-tab>
       <mat-tab label="Overnight rate configuration">
-        <app-config-overnight-rate></app-config-overnight-rate>
+        <ng-container *ngIf="activeTab === 2">
+          <app-config-overnight-rate></app-config-overnight-rate>
+        </ng-container>
       </mat-tab>
     </mat-tab-group>
   </mat-card-content>

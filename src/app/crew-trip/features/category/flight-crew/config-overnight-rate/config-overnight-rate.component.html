@@ -1,1 +1,36 @@
-<p>config-overnight-rate works!</p>
+<mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-content>
+    <form [formGroup]="formGroupSearch" autocomplete="off">
+      <div class="row">
+        <div class="col-sm-3" sizeInput='sm'>
+          <mat-form-field class="mb-1">
+            <mat-label i18n="@@airportCode">Airport code</mat-label>
+            <input type="text" #marketCode matInput formControlName="marketCode"
+                   [matAutocomplete]="marketComplete"
+                   (input)="filterMarket()" (focus)="onFocusMarket()">
+            <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
+              <mat-option [value]="null">
+                -- All airport code --
+              </mat-option>
+              <mat-option *ngFor="let option of filteredOptionsMarket" [value]="option">
+                {{ option }}
+              </mat-option>
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="col-sm-3">
+          <mat-card-header class="mb-0">
+            <mat-card-title>
+              <button (click)="search()" class="search-btn" mat-button>
+                <i class="material-symbols-outlined">
+                  search
+                </i>
+                Search
+              </button>
+            </mat-card-title>
+          </mat-card-header>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>

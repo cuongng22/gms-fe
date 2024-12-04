@@ -36,7 +36,7 @@ import {MatInput} from "@angular/material/input";
 import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
 import {MatSelect} from "@angular/material/select";
 import {CommonModule, NgClass, NgForOf, NgIf, TitleCasePipe} from "@angular/common";
-import {MatTab, MatTabGroup} from "@angular/material/tabs";
+import {MatTab, MatTabChangeEvent, MatTabGroup} from "@angular/material/tabs";
 import {
   ConfigOvernightRateComponent
 } from "src/app/crew-trip/features/category/flight-crew/config-overnight-rate/config-overnight-rate.component";
@@ -86,9 +86,10 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   markets: string[] = [];
-
   filteredOptionsMarket: any[];
   listActype: any[] = [];
+  activeTab: number = 0;
+
 
   override formGroupDetail = this.fb.group({
     id: ['',],
@@ -171,5 +172,10 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
         this.search();
       }
     });
+  }
+
+
+  onTabChange(event: MatTabChangeEvent): void {
+    this.activeTab = event.index;
   }
 }
