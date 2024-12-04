@@ -9,9 +9,7 @@ import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
-import { After } from 'v8';
-import { contractData, exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, rawData } from './budget-procurement-hotel.model';
-import { co } from 'node_modules/@fullcalendar/core/internal-common';
+import { contractData, exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './budget-procurement-hotel.model';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 
