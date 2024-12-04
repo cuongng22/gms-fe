@@ -25,18 +25,28 @@ import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuff
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
 import {Constant, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {LanguageService} from 'src/app/crew-trip/core/services/language.service';
 import {Observable} from 'rxjs';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
+import {NgxTrimDirectiveModule} from "ngx-trim-directive";
+import {HttpStatusCode} from "@angular/common/http";
 
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, FormsModule, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError],
+  imports: [RouterLink, FormsModule, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, NgxTrimDirectiveModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -60,6 +70,8 @@ export class HeaderComponent implements OnInit {
   dialogResetPassword = false;
   formGroup: FormGroup;
   errorMessage: string | null = null;
+  correctPassword: boolean = false;
+
   constructor(private languageService: LanguageService) {
     this.userService.userInfo$.subscribe(user => {
       this.userInfo = user;
@@ -72,12 +84,13 @@ export class HeaderComponent implements OnInit {
     });
 
     this.formGroup = this.fb.group({
-      email: ['',  [Validators.required]],
-      oldPassword: ['',  [Validators.required]],
-      newPassword: ['',  [Validators.required]],
-      confirmNewPassword: ['',  [Validators.required]],
+      email: ['', [Validators.required]],
+      oldPassword: ['', [Validators.required, this.existCodeValidator.bind(this)]],
+      newPassword: ['', [Validators.required]],
+      confirmNewPassword: ['', [Validators.required]],
     });
   }
+
   changeLanguage(language: string) {
     this.languageService.setLanguage(language);
   }
@@ -173,6 +186,7 @@ export class HeaderComponent implements OnInit {
     };
     this.isFullscreen = !!(document.fullscreenElement || doc.webkitFullscreenElement || doc.mozFullScreenElement || doc.msFullscreenElement);
   }
+
   logOut() {
     this.showDialogConfirm = true;
   }
@@ -205,30 +219,37 @@ export class HeaderComponent implements OnInit {
       return;
     }
     if (!this.passwordsMatch()) {
-      this.formGroup.get('confirmNewPassword')?.setErrors({ incorrect: true });
-      this.errorMessage = $localize`Confirm new password does not match new password`;
+      this.formGroup.get('confirmNewPassword')?.setErrors({incorrect: true});
+      this.errorMessage = $localize`Passwords do not match`;
       return;
     }
     try {
       if (this.formGroup.valid) {
         this.spinner.show();
         await this.userService.changePassword(this.formGroup.value);
-        this.userService.showSuccess(MESSAGE.UPDATE_SUCCESS);
+        this.userService.showSuccess("Change password successfully");
       }
     } catch (error: any) {
-      if (error?.status === 400 && error?.error?.error) {
-        this.formGroup.get('oldPassword')?.setErrors({ mismatch: true });
+      if (error?.status === HttpStatusCode.Conflict && error?.error?.error) {
+        this.formGroup.get('oldPassword')?.setErrors({incorrect: true});
         this.errorMessage = error?.error?.error;
       } else {
         this.errorMessage = $localize`An unexpected error occurred. Please try again.`;
       }
     } finally {
       this.spinner.hide();
-      this.dialogResetPassword = false;
+      // this.dialogResetPassword = false;
     }
   }
 
   private passwordsMatch(): boolean {
     return this.formGroup.get('newPassword')?.value === this.formGroup.get('confirmNewPassword')?.value;
   }
+
+  existCodeValidator(control: AbstractControl): ValidationErrors | null {
+    return this.correctPassword ? {correctPassword: true} : null
+  }
+
+  protected readonly MESSAGE = MESSAGE;
+  protected readonly Constant = Constant;
 }

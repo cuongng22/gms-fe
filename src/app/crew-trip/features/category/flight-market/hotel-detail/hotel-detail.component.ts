@@ -38,12 +38,15 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
 
   readonlyDetail = model<boolean>(false);
 
+  // danh sách mã code của khách sạn để check trùng khi nhập
+  hotelCodes: string[] = [];
+
   override formGroupDetail = this.formBuilder.group({
     id: [],
     marketCode: [{ value: '', disabled: true }],
     hotelCode: ['', {
       validators: [Validators.required, Validators.maxLength(50)],
-      asyncValidators: [AlreadyExistsValidator.existsHotelCode(this.hotelService, this.data.hotel.marketCode)],
+      asyncValidators: [],
       updateOn: 'blur'
     }],
     hotelName: ['', [Validators.required, Validators.maxLength(250)]],
@@ -68,8 +71,11 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
   }
 
   override ngOnInit(): void {
+    console.log("this.data.hotelCodes: ", this.data.hotelCodes);
     if (this.data.hotel) {
       this.formGroupDetail.patchValue(this.data.hotel);
+      this.hotelCodes = this.data.hotelCodes;
+      this.formGroupDetail.controls.hotelCode.setAsyncValidators(AlreadyExistsValidator.existsHotelCode(this.hotelService, this.data.hotel.marketCode, this.hotelCodes));
       if (this.data.hotel.id && this.data.hotel.id > 0) {
         this.formGroupDetail.controls.hotelCode.disable();
       }

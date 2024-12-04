@@ -110,31 +110,38 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   override async ngOnInit() {
 
     // Lấy chi tiết flight market
-    if (this.id()) {
-      await this.baseService.detail(this.id()).then(res => {
-        this.formGroupDetail.patchValue(res.data);
+    await this.spinner.show();
+    Promise.all([
+      this.id() ? this.baseService.detail(this.id()) : null,
+      this.serviceFeeService.search({ page: 0, size: 99999 }),
+      this.nationService.search({ page: 0, limit: 99999 })
+    ]).then(([resDetail, resServiceFee, resNationService]) => {
+      if (resDetail) {
+        this.formGroupDetail.patchValue(resDetail.data);
         this.formGroupDetail.controls.marketCode.disable();
-        this.hotelDataSource.data = res.data.hotels;
-        this.carRentalDataSource.data = res.data.vehiclesPartner;
+        this.hotelDataSource.data = resDetail.data.hotels;
+        this.carRentalDataSource.data = resDetail.data.vehiclesPartner;
+      }
+      // lấy danh sách dịch vụ
+      if (resServiceFee) {
+        this.costCategorysRaw = resServiceFee.data.content;
+        this.costCategorys = resServiceFee.data.content;
+      }
+      // Lấy danh sách quốc gia
+      if (resNationService) {
+        this.countries = resNationService.data.content;
+
+        // set lại nationName
+        const nationName = this.countries
+          .filter(country => country.id === this.formGroupDetail.controls.nationId.value)
+          .map(country => LOCALE.VN ? country.vniName : country.engName)[0];
+        this.formGroupDetail.patchValue({ nationName: nationName });
+      }
+    }).catch(e => { })
+      .finally(() => {
+        this.spinner.hide();
       });
-    }
 
-    // lấy danh sách dịch vụ
-    this.serviceFeeService.search({ page: 0, size: 99999 }).then(res => {
-      this.costCategorysRaw = res.data.content;
-      this.costCategorys = res.data.content;
-    });
-
-    // Lấy danh sách quốc gia
-    this.nationService.search({ page: 0, limit: 99999 }).then(res => {
-      this.countries = res.data.content;
-
-      // set lại nationName
-      const nationName = this.countries
-        .filter(country => country.id === this.formGroupDetail.controls.nationId.value)
-        .map(country => LOCALE.VN ? country.vniName : country.engName)[0];
-      this.formGroupDetail.patchValue({ nationName: nationName });
-    });
 
 
     const _isViewDetail: string = this.activeRoute.snapshot.queryParamMap.get('view-detail') ?? '';
@@ -209,8 +216,9 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
         ...hotel, id: -+new Date(), marketCode: this.formGroupDetail.controls.marketCode.value
       };
     }
+    const hotelCodes = this.hotelDataSource.data.map((hotel: any) => hotel.hotelCode);
     const dialogRef = this.dialog.open(HotelDetailComponent, {
-      data: { hotel: hotel, isViewDetail: isViewDetail },
+      data: { hotel: hotel, isViewDetail: isViewDetail, hotelCodes: hotelCodes },
       disableClose: true
     });
     dialogRef.afterClosed().subscribe(result => {
@@ -239,8 +247,9 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
         ...carRental, id: -+new Date(), marketCode: this.formGroupDetail.controls.marketCode.value
       };
     }
+    const carRentalCodes = this.carRentalDataSource.data.map((carRental: any) => carRental.code);
     const dialogRef = this.dialog.open(CarRentalDetailComponent, {
-      data: { carRental: carRental, isViewDetail: isViewDetail },
+      data: { carRental: carRental, isViewDetail: isViewDetail, carRentalCodes: carRentalCodes },
       disableClose: true
     });
 

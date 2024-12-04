@@ -155,6 +155,9 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
   override async delete() {
     if (this.formGroupDetail.value.id) {
       super.delete();
+      this.baseService.search({ option: 1 }).then(res => {
+        this.markets = res.data;
+      });
     }
   }
 
