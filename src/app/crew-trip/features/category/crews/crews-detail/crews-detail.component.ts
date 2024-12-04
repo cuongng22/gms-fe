@@ -1,24 +1,24 @@
-import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component, ElementRef, Inject, inject, input, LOCALE_ID, model, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatAutocompleteModule, MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatChipsModule } from '@angular/material/chips';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { RouterLink, RouterModule } from '@angular/router';
-import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
-import { NgxControlError } from 'ngxtension/control-error';
-import { debounceTime, Observable, Subject } from 'rxjs';
-import { CrewsService } from 'src/app/crew-trip/core/services/crews-service';
-import { NationService } from 'src/app/crew-trip/core/services/nation-service';
-import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
-import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { LOCALE } from 'src/app/crew-trip/shared/utils/constant';
+import {AsyncPipe, CommonModule} from '@angular/common';
+import {Component, ElementRef, Inject, inject, input, LOCALE_ID, model, OnInit, ViewChild} from '@angular/core';
+import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatAutocompleteModule, MatAutocompleteSelectedEvent} from '@angular/material/autocomplete';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatChipsModule} from '@angular/material/chips';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatFormFieldModule, MatFormField} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {RouterLink, RouterModule} from '@angular/router';
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {NgxControlError} from 'ngxtension/control-error';
+import {debounceTime, Observable, Subject} from 'rxjs';
+import {CrewsService} from 'src/app/crew-trip/core/services/crews-service';
+import {NationService} from 'src/app/crew-trip/core/services/nation-service';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {LOCALE} from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-crews-detail',
@@ -63,13 +63,12 @@ export class CrewsDetailComponent extends CommonComponent implements OnInit {
   override ngOnInit(): void {
 
     if (this.data.crews) {
-      console.log(this.data.crews);
       this.formGroupDetail.patchValue(this.data.crews);
     }
 
 
     // Lấy danh sách quốc gia
-    this.nationService.search({ page: 0, limit: 99999 }).then(res => {
+    this.nationService.search({page: 0, limit: 99999, active: true}).then(res => {
       this.countries = res.data.content;
       this.filteredNation.set(this.countries);
 
@@ -77,7 +76,7 @@ export class CrewsDetailComponent extends CommonComponent implements OnInit {
       const nationName = this.countries
         .filter(country => country.code === this.formGroupDetail.controls.nation.value)
         .map(country => LOCALE.VN ? country.vniName : country.engName)[0];
-      this.formGroupDetail.patchValue({ nationName: nationName });
+      this.formGroupDetail.patchValue({nationName: nationName});
       console.log('this.formGroupDetail.value:', this.formGroupDetail.value);
     });
 
@@ -115,6 +114,7 @@ export class CrewsDetailComponent extends CommonComponent implements OnInit {
       this.dialogRef.close('Update Success');
     }
   }
+
   close(): void {
     this.dialogRef.close();
   }

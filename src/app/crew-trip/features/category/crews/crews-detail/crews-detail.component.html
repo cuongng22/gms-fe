@@ -1,150 +1,159 @@
 <mat-card class="border-radius d-block bg-white border-0 shadow-none">
-    <mat-card-header class="p-15">
-        <mat-card-title>
-            <h5 class="mb-0" i18n="@@crewInformation">
-                {{(this.data.id?'Edit':'Add new')}}
-            </h5>
-        </mat-card-title>
-    </mat-card-header>
-    <mat-card-content>
-        <form [formGroup]="formGroupDetail" (ngSubmit)="save()" autocomplete="off">
-            <div class="row">
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group mb-20" sizeInput="md">
-                        <mat-form-field>
-                            <mat-label i18n="@@fullName">
-                                Full name
-                            </mat-label>
-                            <input trim="blur" matInput formControlName="fullName" required>
-                            <mat-error i18n="@@fullnameRequired"
-                                *ngxControlError="formGroupDetail.controls.fullName; track: 'required'">
-                                Full name {{ MESSAGE.REQUIRED }}
-                            </mat-error>
-                            <mat-error *ngxControlError="formGroupDetail.controls.fullName; track: 'maxlength'"
-                                i18n="@@fullnameMaxlength">
-                                Full name {{ MESSAGE.MAX_LENGTH_INVALID |
-                                dataTransformPipe:[Constant.STRING_FORMAT,250]}}
-                            </mat-error>
+  <mat-card-header class="p-15">
+    <mat-card-title>
+      <h5 class="mb-0" i18n="@@crewInformation">
+        {{ (this.data?.crews?.id ? 'Edit' : 'Add new') }}
+      </h5>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <form [formGroup]="formGroupDetail" (ngSubmit)="save()" autocomplete="off">
+      <div class="row">
+        <div class="col-sm-12 col-md-12">
+          <div class="form-group mb-20" sizeInput="md">
+            <mat-form-field>
+              <mat-label i18n="@@fullName">
+                Full name
+              </mat-label>
+              <input trim="blur" matInput formControlName="fullName" required>
+              <mat-error i18n="@@fullnameRequired"
+                         *ngxControlError="formGroupDetail.controls.fullName; track: 'required'">
+                Full name {{ MESSAGE.REQUIRED }}
+              </mat-error>
+              <mat-error *ngxControlError="formGroupDetail.controls.fullName; track: 'maxlength'"
+                         i18n="@@fullnameMaxlength">
+                Full name {{
+                  MESSAGE.MAX_LENGTH_INVALID |
+                    dataTransformPipe:[Constant.STRING_FORMAT, 250]
+                }}
+              </mat-error>
 
-                        </mat-form-field>
-                    </div>
-                </div>
+            </mat-form-field>
+          </div>
+        </div>
 
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group mb-20" sizeInput="md">
-                        <mat-form-field>
-                            <mat-label i18n="@@shortName">
-                                Short name
-                            </mat-label>
-                            <input trim="blur" matInput formControlName="shortName">
-                            <mat-error *ngxControlError="formGroupDetail.controls.shortName; track: 'maxlength'"
-                                i18n="@@shortNameMaxlength">
-                                Short name {{ MESSAGE.MAX_LENGTH_INVALID |
-                                dataTransformPipe:[Constant.STRING_FORMAT,150]}}
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
+        <div class="col-sm-12 col-md-12">
+          <div class="form-group mb-20" sizeInput="md">
+            <mat-form-field>
+              <mat-label i18n="@@shortName">
+                Short name
+              </mat-label>
+              <input trim="blur" matInput formControlName="shortName">
+              <mat-error *ngxControlError="formGroupDetail.controls.shortName; track: 'maxlength'"
+                         i18n="@@shortNameMaxlength">
+                Short name {{
+                  MESSAGE.MAX_LENGTH_INVALID |
+                    dataTransformPipe:[Constant.STRING_FORMAT, 150]
+                }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
 
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group mb-20" sizeInput="md">
-                        <mat-form-field>
-                            <mat-label i18n="@@gender">
-                                Gender
-                            </mat-label>
-                            <mat-select formControlName="gender">
-                                <mat-option value="F" i18n="@@female">
-                                    Female
-                                </mat-option>
-                                <mat-option value="M" i18n="@@male">
-                                    Male
-                                </mat-option>
-                            </mat-select>
-                            <mat-error i18n="@@genderRequired"
-                                *ngxControlError="formGroupDetail.controls.gender; track: 'required'">
-                                Gender {{MESSAGE.REQUIRED}}
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
+        <div class="col-sm-12 col-md-12">
+          <div class="form-group mb-20" sizeInput="md">
+            <mat-form-field>
+              <mat-label i18n="@@gender">
+                Gender
+              </mat-label>
+              <mat-select formControlName="gender">
+                <mat-option value="F" i18n="@@female">
+                  Female
+                </mat-option>
+                <mat-option value="M" i18n="@@male">
+                  Male
+                </mat-option>
+              </mat-select>
+              <mat-error i18n="@@genderRequired"
+                         *ngxControlError="formGroupDetail.controls.gender; track: 'required'">
+                Gender {{ MESSAGE.REQUIRED }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
 
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group mb-20" sizeInput="md">
-                        <mat-form-field>
-                            <mat-label i18n="@@phone">
-                                Phone
-                            </mat-label>
-                            <input trim="blur" matInput formControlName="phone">
-                            <mat-error *ngxControlError="formGroupDetail.controls.phone; track: 'maxlength'"
-                                i18n="@@emailMaxlength">
-                                Phone number {{ MESSAGE.MAX_LENGTH_INVALID |
-                                dataTransformPipe:[Constant.STRING_FORMAT, 20]}}
-                            </mat-error>
-                            <mat-error *ngxControlError="formGroupDetail.controls.phone; track: 'pattern'"
-                                i18n="@@phoneNumberFormatInvalid">
-                                {{ MESSAGE.PHONE_NUMBER_INVALID }}
-                            </mat-error>
-                        </mat-form-field>
+        <div class="col-sm-12 col-md-12">
+          <div class="form-group mb-20" sizeInput="md">
+            <mat-form-field>
+              <mat-label i18n="@@phone">
+                Phone
+              </mat-label>
+              <input trim="blur" matInput formControlName="phone">
+              <mat-error *ngxControlError="formGroupDetail.controls.phone; track: 'maxlength'"
+                         i18n="@@emailMaxlength">
+                Phone number {{
+                  MESSAGE.MAX_LENGTH_INVALID |
+                    dataTransformPipe:[Constant.STRING_FORMAT, 20]
+                }}
+              </mat-error>
+              <mat-error *ngxControlError="formGroupDetail.controls.phone; track: 'pattern'"
+                         i18n="@@phoneNumberFormatInvalid">
+                {{ MESSAGE.PHONE_NUMBER_INVALID }}
+              </mat-error>
+            </mat-form-field>
 
 
-                    </div>
-                </div>
+          </div>
+        </div>
 
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group mb-20" sizeInput="md">
-                        <mat-form-field>
-                            <mat-label i18n="@@function">
-                                Function
-                            </mat-label>
-                            <input trim="blur" matInput formControlName="function" required>
-                            <mat-error i18n="@@functionRequired"
-                                *ngxControlError="formGroupDetail.controls.function; track: 'required'">
-                                Function {{MESSAGE.REQUIRED}}
-                            </mat-error>
-                            <mat-error *ngxControlError="formGroupDetail.controls.function; track: 'maxlength'"
-                                i18n="@@emailMaxlength">
-                                Function {{ MESSAGE.MAX_LENGTH_INVALID |
-                                dataTransformPipe:[Constant.STRING_FORMAT, 150]}}
-                            </mat-error>
-                        </mat-form-field>
-                    </div>
-                </div>
+        <div class="col-sm-12 col-md-12">
+          <div class="form-group mb-20" sizeInput="md">
+            <mat-form-field>
+              <mat-label i18n="@@function">
+                Function
+              </mat-label>
+              <input trim="blur" matInput formControlName="function" required>
+              <mat-error i18n="@@functionRequired"
+                         *ngxControlError="formGroupDetail.controls.function; track: 'required'">
+                Function {{ MESSAGE.REQUIRED }}
+              </mat-error>
+              <mat-error *ngxControlError="formGroupDetail.controls.function; track: 'maxlength'"
+                         i18n="@@emailMaxlength">
+                Function {{
+                  MESSAGE.MAX_LENGTH_INVALID |
+                    dataTransformPipe:[Constant.STRING_FORMAT, 150]
+                }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
 
-                <div class="col-sm-12 col-md-12">
-                    <div class="form-group mb-20" sizeInput="md">
-                        <mat-form-field class="mb-1">
-                            <mat-label i18n="@@country">Country</mat-label>
-                            <input trim="blur" type="text" #nationName matInput formControlName="nationName"
-                                [matAutocomplete]="nationComplete" (input)="filterNation()">
-                            <mat-autocomplete autoActiveFirstOption requireSelection #nationComplete="matAutocomplete"
+        <div class="col-sm-12 col-md-12">
+          <div class="form-group mb-20" sizeInput="md">
+            <mat-form-field class="mb-1">
+              <mat-label i18n="@@country">Country</mat-label>
+              <input trim="blur" type="text" #nationName matInput formControlName="nationName"
+                     [matAutocomplete]="nationComplete" (input)="filterNation()">
+              <mat-autocomplete autoActiveFirstOption requireSelection #nationComplete="matAutocomplete"
                                 (optionSelected)="nationSelected($event)">
-                                @for (country of filteredNation(); track country) {
-                                <mat-option [value]="country">
-                                    {{locale == LOCALE.VN ? country.vniName:country.engName}}</mat-option>
-                                }
-                            </mat-autocomplete>
-                        </mat-form-field>
-                    </div>
-                </div>
+                @for (country of filteredNation(); track country) {
+                  <mat-option [value]="country">
+                    {{ country.vniName }}
+                  </mat-option>
+                }
+              </mat-autocomplete>
+            </mat-form-field>
+          </div>
+        </div>
 
-            </div>
+      </div>
 
-            <div class="btn-box d-flex justify-content-end">
-                <button type="button" mat-button (click)="close()" class="close-btn  min-with-100 mlr-5">
-                    <i class="material-symbols-outlined">
-                        close
-                    </i>
-                    <span i18n="@@cancel">Close</span>
-                </button>
-                <button mat-button color="primary" type="submit" class="add-btn min-with-100 mlr-5">
-                    <i class="material-symbols-outlined">
-                        save
-                    </i>
-                    <span i18n="@@save">Save</span>
-                </button>
+      <div class="btn-box d-flex justify-content-end">
+        <button type="button" mat-button (click)="close()" class="close-btn  min-with-100 mlr-5">
+          <i class="material-symbols-outlined">
+            close
+          </i>
+          <span i18n="@@cancel">Close</span>
+        </button>
+        <button mat-button color="primary" type="submit" class="add-btn min-with-100 mlr-5">
+          <i class="material-symbols-outlined">
+            save
+          </i>
+          <span i18n="@@save">Save</span>
+        </button>
 
-            </div>
-        </form>
+      </div>
+    </form>
 
-    </mat-card-content>
+  </mat-card-content>
 </mat-card>
