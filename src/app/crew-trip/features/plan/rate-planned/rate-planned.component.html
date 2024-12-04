@@ -36,6 +36,7 @@
                 <input type="text" matInput formControlName="version" [matAutocomplete]="versionComplete">
                 <mat-autocomplete autoActiveFirstOption requireSelection
                                   #versionComplete="matAutocomplete">
+                  <mat-option [value]="null">-- All version --</mat-option>
                   @for (option of listVersion | async; track option) {
                     <mat-option [value]="option">{{ option }}</mat-option>
                   }
