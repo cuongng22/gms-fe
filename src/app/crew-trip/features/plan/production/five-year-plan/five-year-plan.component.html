@@ -92,8 +92,9 @@
                 [colSpan]=innerColumn.colspan>
               {{ innerColumn.label }}
             </th>
-            <td [ngClass]="{'text-center': innerColumn.value === 'activeLabel' || innerColumn.value === 'year' ,}"
-                mat-cell *matCellDef="let element">
+            <td
+              [ngClass]="{'text-center': innerColumn.value === 'activeLabel' || innerColumn.value === 'year' ,'text-right': innerColumn.value === 'totalInternational' || innerColumn.value === 'rateInternationalLast' || innerColumn.value === 'totalDomestic' || innerColumn.value === 'rateDomesticLast' || innerColumn.value === 'total'  || innerColumn.value === 'rateTotalLast'}"
+              mat-cell *matCellDef="let element">
                 <span [ngClass]="{
         'badge': innerColumn.value === 'activeLabel',
         'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
@@ -113,7 +114,7 @@
           </th>
           <td *matCellDef="let element;let i = dataIndex" mat-cell>
             <div class="action-buttons d-flex align-items-center justify-content-end"
-                 *ngIf="element.year >= currentYear">
+                 *ngIf="element.year > currentYear">
               <a mat-button type="button">
 
               </a>
@@ -204,11 +205,11 @@
                       <input (ngModelChange)="calculator()" formControlName="totalInternational" i18n-placeholder
                              matInput
                              min="0"
-                             placeholder="Input Total International" required type="number">
+                             required type="number">
                       @if (!!formGroupDetail.controls['totalInternational'].hasError('required')) {
-                        <mat-error><span i18n>Total International</span><span i18n> is required</span></mat-error>
+                        <mat-error><span i18n>International production</span><span i18n> is required</span></mat-error>
                       } @else if (!!formGroupDetail.controls['totalInternational'].hasError('min')) {
-                        <mat-error><span i18n>Total International</span><span i18n> must be greater than 0</span>
+                        <mat-error><span i18n>International production</span><span i18n> must be greater than 0</span>
                         </mat-error>
                       }
                     </mat-form-field>
@@ -218,16 +219,17 @@
                       <mat-label i18n>Domestic production</mat-label>
                       <input (ngModelChange)="calculator()" formControlName="totalDomestic" i18n-placeholder matInput
                              min="0"
-                             placeholder="Input Total Domestic" required type="number">
+                             required type="number">
                       @if (!!formGroupDetail.controls['totalDomestic'].hasError('required')) {
-                        <mat-error><span i18n>Total Domestic</span><span i18n> is required</span></mat-error>
+                        <mat-error><span i18n>Domestic production</span><span i18n> is required</span></mat-error>
                       } @else if (!!formGroupDetail.controls['totalInternational'].hasError('min')) {
-                        <mat-error><span i18n>Total Domestic</span><span i18n> must be greater than 0</span></mat-error>
+                        <mat-error><span i18n>Domestic production</span><span i18n> must be greater than 0</span>
+                        </mat-error>
                       }
                     </mat-form-field>
                   </div>
                 </div>
-                <div class="col-md-12">
+                <div class="col-md-12" sizeInput="sm">
                   <mat-form-field>
                     <mat-label i18n>Total</mat-label>
                     <input formControlName="total" matInput [readonly]="true">
@@ -236,7 +238,7 @@
                 <mat-form-field>
                   <mat-label i18n>Remark</mat-label>
                   <textarea formControlName="notes" i18n-placeholder matInput
-                            placeholder="Input Notes"></textarea>
+                  ></textarea>
                   <mat-hint align="end">{{ formGroupDetail.value.notes?.length }} / 500</mat-hint>
                   @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
                     <mat-error><span i18n>Remark</span><span i18n> must be less than 500characters</span></mat-error>
@@ -270,44 +272,36 @@
   </div>
 </div>
 <!-- Delete confirm Popup -->
-<div
-  [class.active]="showDialogDelete"
-  class="add-new-popup delete-popup"
->
-  <div class="popup-dialog">
-    <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
-      <mat-card-header>
-        <mat-card-title>
-          <h5 class="mb-0">
-            <span i18n>Confirm delete</span>
-          </h5>
-        </mat-card-title>
-        <mat-card-subtitle>
-          <button
-            (click)="closeConfirmDelete()"
-            mat-button
-          >
-            <i class="ri-close-fill"></i>
-          </button>
-        </mat-card-subtitle>
-      </mat-card-header>
+
+<div class="add-new-popup" [class.active]="showDialogDelete">
+  <div class="popup-dialog dialog-delete-with">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
       <mat-card-content>
-        <div class="btn-box">
-          <button (click)="closeConfirmDelete()" color="warn" i18n mat-button type="button">
+        <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+        </div>
+        <div class="text-center mb-20">
+          <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
+        </div>
+        <div class="text-center mb-20">
+                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+                        You will not be able to recover the deleted data!</span>
+        </div>
+        <div class="btn-box text-center">
+          <button type="button" mat-button (click)="closeConfirmDelete()"
+                  class="close-btn  min-with-100 mlr-5">
             <i class="material-symbols-outlined">
               close
             </i>
-            CLose
+            <span i18n="@@cancel">Cancel</span>
           </button>
-          <button
-            (click)="delete()"
-            color="primary"
-            i18n mat-button
-          >
+          <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
             <i class="material-symbols-outlined">
               save
             </i>
-            Confirm
+            <span i18n="@@confirm">Confirm</span>
           </button>
         </div>
       </mat-card-content>

@@ -1,12 +1,12 @@
-import {Component, Inject, inject, LOCALE_ID, OnInit} from '@angular/core';
+import {Component, ElementRef, Inject, inject, Input, input, LOCALE_ID, OnInit, ViewChild} from '@angular/core';
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
-import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
+import {MatError, MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
+import {MatInput, MatInputModule} from "@angular/material/input";
 import {MatSelect} from "@angular/material/select";
 import {NgxControlError} from "ngxtension/control-error";
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
@@ -16,11 +16,14 @@ import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 import {FlightCrewService} from "src/app/crew-trip/core/services/flight-crew-service";
 import {FlightMarketService} from "src/app/crew-trip/core/services/ flight-market.service";
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
+import {CommonModule, NgForOf} from "@angular/common";
+import {MatCheckbox} from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-flight-crew-detail',
   standalone: true,
   imports: [
+    CommonModule,
     DataTransformPipe,
     FormsModule,
     InputSizeComponent,
@@ -39,40 +42,80 @@ import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
     MatSelect,
     NgxControlError,
     NgxTrimDirectiveModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgForOf,
+    MatCheckbox,
+    MatFormFieldModule,
+    MatInputModule,
   ],
   templateUrl: './flight-crew-detail.component.html',
   styleUrl: './flight-crew-detail.component.scss'
 })
-export class FlightCrewDetailComponent extends CommonComponent implements OnInit  {
+export class FlightCrewDetailComponent extends CommonComponent implements OnInit {
   formBuilder = inject(FormBuilder);
-  override baseService = inject(CrewsService);
+  override baseService = inject(FlightCrewService);
   flightMarketService = inject(FlightMarketService);
+  filteredOptionsMarket: any[];
+  @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
+  markets: string[] = [];
+  acTypes: any[] = [];
+
 
   override formGroupDetail = this.formBuilder.group({
-    id: [],
-    airportCode: ['', [Validators.required, Validators.maxLength(250)]],
-    acType: ['', Validators.maxLength(150)],
-    pilotnNumber: ['', Validators.required],
-    attendantNumber: ['', [Validators.maxLength(20), Validators.pattern('^[0-9()+ ]+$')]],
-    status: ['', [Validators.required, Validators.maxLength(150)]],
-    notes: [''],
+    id: ['',],
+    marketCode: ['', [Validators.required]],
+    acType: ['', [Validators.required]],
+    pilotNumber: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
+    numberAttendant: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
+    notes: ['', [Validators.maxLength(500)]],
+    status: [true,]
   });
 
   constructor(
     public dialogRef: MatDialogRef<FlightCrewDetailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     super();
+    this.markets = data.markets
+    this.acTypes = data.acTypes
   }
 
 
+  override ngOnInit(): void {
+    if (this.data.item) {
+      console.log(this.data.item);
+      this.formGroupDetail.patchValue({
+        id: this.data.item.id,
+        marketCode: this.data.item.marketCode,
+        acType: this.data.item.acType,
+        pilotNumber: this.data.item.pilotNumber,
+        numberAttendant: this.data.item.attendantNumber,
+        notes: this.data.item.notes,
+        status: this.data.item.status,
+      });
+
+    }
+  }
+
+
+  filterMarket(): void {
+    const filterValue = this.marketCode.nativeElement.value.toLowerCase();
+    if (!filterValue) {
+      this.filteredOptionsMarket = this.markets;
+    }
+    this.filteredOptionsMarket = this.markets.filter(market => market.toLowerCase().includes(filterValue));
+  }
+
+  onFocusMarket(): void {
+    this.filteredOptionsMarket = this.markets;
+    this.autocompleteTrigger.openPanel();
+  }
 
   override async save() {
     const res = await super.save();
-    if (res) {
-      this.dialogRef.close('Update Success');
-    }
+    this.dialogRef.close('Update Success');
   }
+
   close(): void {
     this.dialogRef.close();
   }

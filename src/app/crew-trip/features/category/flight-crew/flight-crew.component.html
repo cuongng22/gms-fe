@@ -16,7 +16,7 @@
 <mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
   <mat-card-content>
     <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-      <mat-tab label="Flight crew" >
+      <mat-tab label="Flight crew">
         <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
           <mat-card-content>
             <form [formGroup]="formGroupSearch" autocomplete="off">
@@ -24,7 +24,8 @@
                 <div class="col-sm-3" sizeInput='sm'>
                   <mat-form-field class="mb-1">
                     <mat-label i18n="@@airportCode">Airport code</mat-label>
-                    <input type="text" #marketCode matInput formControlName="marketCode" [matAutocomplete]="marketComplete"
+                    <input type="text" #marketCode matInput formControlName="marketCode"
+                           [matAutocomplete]="marketComplete"
                            (input)="filterMarket()" (focus)="onFocusMarket()">
                     <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
                       <mat-option [value]="null">
@@ -37,7 +38,8 @@
                   </mat-form-field>
                 </div>
                 <div class="col-sm-3" sizeInput='sm'>
-                  <app-select-multiple size="sm" label="Actype" i18n-label="@@actype" [required]="false" [selectOptions]="listActype"
+                  <app-select-multiple size="sm" label="Actype" i18n-label="@@actype" [required]="false"
+                                       [selectOptions]="listActype"
                                        attrValue="actype" attrDisplay="actype" formControlName="acType">
                   </app-select-multiple>
                 </div>
@@ -73,7 +75,8 @@
             <mat-card-title>
             </mat-card-title>
             <mat-card-subtitle>
-              <button class="add-btn mr-10" type="button" mat-button (click)="exportFileOptions(null,'FlightCrew.xlsx')">
+              <button class="add-btn mr-10" type="button" mat-button
+                      (click)="exportFileOptions(null,'FlightCrew.xlsx')">
                 <i class="material-symbols-outlined">
                   download
                 </i>
@@ -104,7 +107,8 @@
                   <td mat-cell *matCellDef="let element" class="text-center">{{ element.marketCode }}</td>
                 </ng-container>
                 <ng-container matColumnDef="acType">
-                  <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@acType">
+                  <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                      i18n="@@acType">
                     Ac type
                   </th>
                   <td mat-cell *matCellDef="let element" class="text-center">
@@ -112,7 +116,8 @@
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="pilotNumber">
-                  <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@pilotNumber">
+                  <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                      i18n="@@pilotNumber">
                     Pilot number
                   </th>
                   <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
@@ -120,22 +125,29 @@
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="attendantNumber">
-                  <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@attendantNumber">
+                  <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                      i18n="@@attendantNumber">
                     Attendant number
                   </th>
-                  <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">{{ element.attendantNumber }}</td>
+                  <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">{{ element.attendantNumber }}
+                  </td>
                 </ng-container>
                 <ng-container matColumnDef="remark">
                   <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@remark" class="text-center">Remark</th>
                   <td mat-cell *matCellDef="let element" class="wrap-text-2 text-left">{{ element.notes }}</td>
                 </ng-container>
                 <ng-container matColumnDef="status">
-                  <th mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" mat-sort-header i18n="@@status">
-                    Status</th>
+                  <th mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" mat-sort-header
+                      i18n="@@status">
+                    Status
+                  </th>
                   <td mat-cell *matCellDef="let element;" class="text-center">
-            <span class="badge" [ngClass]="!!element.status?'text-bg-label-badge':'text-soft-dark'">
-              {{ element.status }}
-            </span>
+                  <span class="badge" [ngClass]="{
+                          'text-bg-label-badge':  element['status'] == true,
+                          'text-soft-dark':   element['status'] == false
+                          }">{{
+                      element['status'] == true ? 'Active' : 'Inactive'
+                    }}</span>
                   </td>
                 </ng-container>
                 <ng-container matColumnDef="action" stickyEnd>
@@ -151,11 +163,11 @@
                           edit
                         </i>
                       </a>
-                                    <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">
-                                      <i class="material-symbols-outlined" title="Delete">
-                                        delete
-                                      </i>
-                                    </a>
+                      <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">
+                        <i class="material-symbols-outlined" title="Delete">
+                          delete
+                        </i>
+                      </a>
                     </div>
                   </td>
                 </ng-container>
@@ -167,14 +179,15 @@
               </table>
             </div>
             <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-                           [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+                           [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
+                           [pageIndex]="pageIndex"
                            aria-label="Select page" i18n-aria-label="@@selectPage">
             </mat-paginator>
           </mat-card-content>
         </mat-card>
 
       </mat-tab>
-      <mat-tab label="Other Crew Crewd" >
+      <mat-tab label="Other Crew Crewd">
         <app-other-crew></app-other-crew>
       </mat-tab>
       <mat-tab label="Overnight rate configuration">

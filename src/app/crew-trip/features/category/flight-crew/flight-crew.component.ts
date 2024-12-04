@@ -71,7 +71,7 @@ import {
 @Component({
   selector: 'app-flight-crew',
   standalone: true,
-  imports: [CommonModule, MatCardModule,MatFormFieldModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent, NgxTrimDirectiveModule, OtherCrewComponent, ConfigOvernightRateComponent, MatAutocomplete, MatAutocompleteTrigger, SelectionComponent, InputSizeComponent, SelectMultipleComponent],
+  imports: [CommonModule, MatCardModule, MatFormFieldModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent, NgxTrimDirectiveModule, OtherCrewComponent, ConfigOvernightRateComponent, MatAutocomplete, MatAutocompleteTrigger, SelectionComponent, InputSizeComponent, SelectMultipleComponent],
 
   templateUrl: './flight-crew.component.html',
   styleUrl: './flight-crew.component.scss'
@@ -87,18 +87,9 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   markets: string[] = [];
 
-  override formGroupDetail = this.fb.group({
-    id: ['',],
-    airportCode: ['', [Validators.required]],
-    acType: ['', [Validators.required]],
-    pitlotNumber: ['', [Validators.required]],
-    attendantNumber: ['', [Validators.required]],
-    notes: [''],
-    active: [true]
-  });
-
   filteredOptionsMarket: any[];
   listActype: any[] = [];
+
   constructor(public dialog: MatDialog) {
     super();
     this.formGroupSearch = this.fb.group({
@@ -106,9 +97,10 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
   }
+
   override async ngOnInit() {
     super.ngOnInit();
-    this.displayedColumns = ['stt', 'market', 'acType','pilotNumber', 'attendantNumber', 'remark', 'status','action'];
+    this.displayedColumns = ['stt', 'market', 'acType', 'pilotNumber', 'attendantNumber', 'remark', 'status', 'action'];
     await Promise.all([
       this.getActypes(),
       this.getListAirport(),
@@ -118,8 +110,8 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
   }
 
 
-  getListAirport(){
-    this.flightMarketService.search({ page: 0, limit: 99999 ,option: 0}).then(res => {
+  getListAirport() {
+    this.flightMarketService.search({page: 0, limit: 99999, option: 0}).then(res => {
       this.markets = res.data.content.map((item: any) => item.marketCode);
     });
   }
@@ -152,15 +144,15 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
   }
 
   async flightCrewDetail(id?: any) {
-    console.log("aaaaaaaaaaaaaaaa",id)
     let item = {};
     if (!!id) {
       const response = await this.baseService.detail(id);
-      item = { ...response.data }
+      item = {...response.data}
     }
-    console.log("itemitemitem:",item)
+    let markets = this.markets;
+    let acTypes = this.listActype;
     const dialogRef = this.dialog.open(FlightCrewDetailComponent, {
-      data: { item },
+      data: {item, markets, acTypes},
       disableClose: true
     });
     dialogRef.afterClosed().subscribe(result => {
