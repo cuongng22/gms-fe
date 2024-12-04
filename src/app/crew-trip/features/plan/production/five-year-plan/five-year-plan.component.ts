@@ -95,8 +95,8 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
   calculator() {
     if (this.formGroupDetail.value.totalInternational && this.formGroupDetail.value.totalDomestic) {
       this.formGroupDetail.patchValue({
-        total: (Math.round(Number(this.formGroupDetail.value.totalInternational) * 100) +
-          Math.round(Number(this.formGroupDetail.value.totalDomestic) * 100)) / 100
+        total: (Number(this.formGroupDetail.value.totalInternational) * 1 +
+          Number(this.formGroupDetail.value.totalDomestic) * 1) / 1
       });
     }
   }
