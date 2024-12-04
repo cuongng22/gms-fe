@@ -13,12 +13,13 @@ import { After } from 'v8';
 import { contractData, exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, rawData } from './budget-procurement-hotel.model';
 import { co } from 'node_modules/@fullcalendar/core/internal-common';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
+import { DigitOnlyModule } from '@uiowa/digit-only';
 
 @Component({
   selector: 'app-budget-procurement-hotel',
   standalone: true,
   imports: [MatTableModule, CommonModule, MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent,
-    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe],
+    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule],
   templateUrl: './budget-procurement-hotel.component.html',
   styleUrl: './budget-procurement-hotel.component.scss',
   providers: [DatePipe, DataTransformPipe]

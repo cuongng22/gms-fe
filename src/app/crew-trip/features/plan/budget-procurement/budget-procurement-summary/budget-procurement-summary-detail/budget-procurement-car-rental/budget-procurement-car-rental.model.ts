@@ -34,6 +34,31 @@ export function getRowDef(): string[] {
 }
 
 
+export const formula: any = {
+
+    //Số lượt xe	= số chuyến bay * 2					
+    numberVehicles: {
+      formula: 'data.numberFlight * 2',
+      // groupFormula: 'aircraftType && periodStart',
+    },
+    //Thành tiền (ngoại tệ) - Chưa bao gồm VAT	"= (Số lượt xe + extra transfer) * đơn giá trước VAT
+    totalAmountForeign: {
+      formula: '(data.numberVehicles + data.extraTransfer) * data.unitPrice',
+    },
+    //Thành tiền (ngoại tệ) - Bao gồm VAT	"= (Số lượt xe + extra transfer) * đơn giá
+    totalAmountForeignVat: {
+      formula: '(data.numberVehicles + data.extraTransfer) * data.unitPriceVat',
+    },
+    //Thành tiền VND (Chưa bao gồm VAT) = Thành tiền ngoại tệ chưa bao gồm VAT * tỷ giá theo từng tháng
+    totalAmount: {
+      formula: 'data.totalAmountForeign * data.rate'
+    },
+    //Thành tiền VND (Bao gồm VAT) = Thành tiền ngoại tệ bao gồm VAT * tỷ giá theo từng tháng
+    totalAmountVat: {
+      formula: 'data.totalAmountForeignVat * data.rate'
+    }
+  
+  }
 
 export const exampleData =
     [
@@ -61,7 +86,8 @@ export const exampleData =
             unitPrice: 100,
             totalAmountForeign: 500,
             totalAmount: 550,
-            totalAmountVat: 50
+            totalAmountVat: 50,
+            rate: 25000
         },
         {
             id: 2,
@@ -75,6 +101,7 @@ export const exampleData =
             unitPrice: 120,
             totalAmountForeign: 480,
             totalAmount: 528,
-            totalAmountVat: 48
+            totalAmountVat: 48,
+            rate: 25000
         }
     ];
