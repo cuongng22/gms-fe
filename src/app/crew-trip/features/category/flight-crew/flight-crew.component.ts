@@ -90,6 +90,17 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
   filteredOptionsMarket: any[];
   listActype: any[] = [];
 
+  override formGroupDetail = this.fb.group({
+    id: ['',],
+    marketCode: ['', [Validators.required]],
+    acType: ['', [Validators.required]],
+    pilotNumber: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
+    numberAttendant: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
+    notes: ['', [Validators.maxLength(500)]],
+    status: [true,]
+  });
+
+
   constructor(public dialog: MatDialog) {
     super();
     this.formGroupSearch = this.fb.group({

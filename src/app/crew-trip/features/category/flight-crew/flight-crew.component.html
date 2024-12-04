@@ -186,6 +186,44 @@
           </mat-card-content>
         </mat-card>
 
+
+        <div class="add-new-popup" [class.active]="showDialogDelete">
+          <div class="popup-dialog dialog-delete-with">
+            <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+              <mat-card-content>
+                <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+                </div>
+                <div class="text-center mb-20">
+                  <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
+                </div>
+                <div class="text-center mb-20">
+                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+                        You will not be able to recover the deleted data!</span>
+                </div>
+                <div class="btn-box text-center">
+                  <button type="button" mat-button (click)="closeConfirmDelete()"
+                          class="close-btn  min-with-100 mlr-5">
+                    <i class="material-symbols-outlined">
+                      close
+                    </i>
+                    <span i18n="@@cancel">Cancel</span>
+                  </button>
+                  <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
+                    <i class="material-symbols-outlined">
+                      save
+                    </i>
+                    <span i18n="@@confirm">Confirm</span>
+                  </button>
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
+        </div>
+
+
       </mat-tab>
       <mat-tab label="Other Crew Crewd">
         <app-other-crew></app-other-crew>
