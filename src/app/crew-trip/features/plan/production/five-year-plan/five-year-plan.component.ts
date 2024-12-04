@@ -94,14 +94,12 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
 
   calculator() {
     if (this.formGroupDetail.value.totalInternational && this.formGroupDetail.value.totalDomestic) {
-      const totalInternational = this.formGroupDetail.value.totalInternational.toString();
-      const totalDomestic = this.formGroupDetail.value.totalDomestic.toString();
-      const total = (parseFloat(totalInternational) + parseFloat(totalDomestic)).toString();
-      this.formGroupDetail.patchValue({total: total});
-      // this.formGroupDetail.patchValue({
-      //   total: (Number(this.formGroupDetail.value.totalInternational) * 1 +
-      //     Number(this.formGroupDetail.value.totalDomestic) * 1) / 1
-      // });
+      this.formGroupDetail.patchValue({
+        total: parseFloat(
+          (Number(this.formGroupDetail.value.totalInternational) +
+            Number(this.formGroupDetail.value.totalDomestic)).toFixed(5)
+        )
+      });
     }
   }
 
