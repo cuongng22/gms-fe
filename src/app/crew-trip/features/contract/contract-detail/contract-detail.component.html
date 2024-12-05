@@ -166,7 +166,9 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract type</mat-label>
-              <input formControlName="contractType" matInput required>
+              <mat-select formControlName="contractType" required>
+                <mat-option i18n value="Fixed price contract">Fixed price contract</mat-option>
+              </mat-select>
               @if (!!formGroupDetail.controls['contractType'].hasError('required')) {
               <mat-error><span i18n>Contract type</span><span i18n> not empty</span></mat-error>
               }
@@ -178,7 +180,9 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract form</mat-label>
-              <input formControlName="contractForm" matInput required>
+              <mat-select formControlName="contractForm" required>
+                <mat-option i18n value="Contract of sale of ordinary goods and services">Contract of sale of ordinary goods and services</mat-option>
+              </mat-select>
               @if (!!formGroupDetail.controls['contractForm'].hasError('required')) {
               <mat-error><span i18n>Contract form</span><span i18n> not empty</span></mat-error>
               }
@@ -601,7 +605,8 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Market Code</mat-label>
-              <input formControlName="marketCode" (ngModelChange)="marketCodeChangeDebounce($event);this.brake=false;" matInput required>
+              <input (ngModelChange)="marketCodeChangeDebounce($event);this.brake=false;" formControlName="marketCode"
+                     matInput required>
               @if (!!formGroupDetail.controls['marketCode'].hasError('required')) {
               <mat-error><span i18n>Market Code</span><span i18n> not empty</span></mat-error>
               }
@@ -712,7 +717,8 @@
             <mat-form-field>
               <mat-label i18n>Giờ checkin chuẩn</mat-label>
               <div class="time-picker">
-                <input formControlName="standardCheckIn" [disableClick]="true" [format]="24" [ngxTimepicker]="toggleTimepicker1" matInput required>
+                <input [disableClick]="true" [format]="24" [ngxTimepicker]="toggleTimepicker1"
+                       formControlName="standardCheckIn" matInput required>
                 <ngx-material-timepicker-toggle [for]="toggleTimepicker1"
                                                 class="time-picker-clock"></ngx-material-timepicker-toggle>
                 <ngx-material-timepicker #toggleTimepicker1 [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
@@ -728,7 +734,8 @@
             <mat-form-field>
               <mat-label i18n>Giờ checkout chuẩn</mat-label>
               <div class="time-picker">
-                <input formControlName="standardCheckOut" [disableClick]="true" [ngxTimepicker]="toggleTimepicker2" matInput required>
+                <input [disableClick]="true" [ngxTimepicker]="toggleTimepicker2" formControlName="standardCheckOut"
+                       matInput required>
                 <ngx-material-timepicker-toggle [for]="toggleTimepicker2"
                                                 class="time-picker-clock"></ngx-material-timepicker-toggle>
                 <ngx-material-timepicker #toggleTimepicker2

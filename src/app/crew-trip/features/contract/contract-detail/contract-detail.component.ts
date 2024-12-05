@@ -168,6 +168,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         // this.loadListMaNghiepVu(),
         this.loadListQuocGia(),]).then(() => {
+        if (this.formGroupDetail.value.isHotel && this.formGroupDetail.value.isVehicle) {
+          this.formGroupDetail.patchValue({doiTuongDichVu: '3'});
+        } else if (this.formGroupDetail.value.isHotel) {
+          this.formGroupDetail.patchValue({doiTuongDichVu: '1'});
+        } else if (this.formGroupDetail.value.isVehicle) {
+          this.formGroupDetail.patchValue({doiTuongDichVu: '2'});
+        }
+
         this.getPartnerInfo();
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList ?? []);
         this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.value.priceUnitInfo);
@@ -212,7 +220,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         //debounce
         this.brake = true;
         this.marketCodeChangeDebounce = debounce(async (value: any) => {
-          console.log(value && !this.brake,value,this.brake,'value && !this.brake')
+          console.log(value && !this.brake, value, this.brake, 'value && !this.brake')
           if (value && !this.brake) {
             try {
               await this.spinner.show();
