@@ -89,6 +89,7 @@ export class BudgetProcurementCarRentalComponent implements OnInit, AfterViewChe
   calculate(index: number, key: string) {
     let data: any = this.dataSource.data[index];
     data[key] = this.calculateFormula(data, formula[key].formula, key);
+    console.log(data)
     const groupFormula = formula[key].groupFormula;
     return data[key];
   }

@@ -67,12 +67,19 @@ export const formula: any = {
   // Tổng tiền ngoại tệ - Chưa bao gồm VAT
   totalAmountForeign: {
     formula: '(data.singleRoom + data.singleRoomReserved + data.singleRoomOther) * data.priceSingleRoom '
-    + ' + (data.doubleRoom + data.doubleRoomOther ) * data.priceDoubleRoom '
-    + ' + (data.singleRoomEarly + data.singleRoomEarlyReserved) * data.priceSingleRoomEarly '
-    + ' + (data.doubleRoomEarly * data.priceDoubleRoomEarly) ' 
-    + ' + (data.singleRoomLate + data.singleRoomLateReserved) * data.priceSingleRoomLate ' 
-    + ' + (data.doubleRoomLate * data.priceDoubleRoomLate) ' 
-    + ' + (data.totalFlightMonth * 2 * data.carRate) ',
+      + ' + (data.doubleRoom + data.doubleRoomOther ) * data.priceDoubleRoom '
+      + ' + (data.singleRoomEarly + data.singleRoomEarlyReserved) * data.priceSingleRoomEarly '
+      + ' + (data.doubleRoomEarly * data.priceDoubleRoomEarly) '
+      + ' + (data.singleRoomLate + data.singleRoomLateReserved) * data.priceSingleRoomLate '
+      + ' + (data.doubleRoomLate * data.priceDoubleRoomLate) '
+      + ' + (data.totalFlightMonth * 2 * data.carRate) ',
+    formulaUpdateBudgetPlan: ' data.singleRoom * data.priceSingleRoom '
+      + ' + data.doubleRoom * data.priceDoubleRoom '
+      + ' + data.singleRoomEarly * data.priceSingleRoomEarly '
+      + ' + data.doubleRoomEarly * data.priceDoubleRoomEarly '
+      + ' + data.singleRoomLate * data.priceSingleRoomLate '
+      + ' + data.doubleRoomLate * data.priceDoubleRoomLate '
+      + ' + (data.totalFlightMonth * 2 * data.carRate) ',
     groupFormula: 'periodStart',
   },
   //Tổng tiền ngoại tệ - Bao gồm VAT

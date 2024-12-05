@@ -10,7 +10,7 @@
                     [style.display]="!!element.period?'':'none'">
                     {{element.period}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="font-weight-bold"></td>
+                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">Total</td>
             </ng-container>
 
             <ng-container matColumnDef="numberOfFlights">
@@ -22,7 +22,7 @@
                     {{element.numberFlight}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
-                    <!-- {{getTotal('numberFlight') | number}} -->
+                    {{getTotal('numberFlight') | number}}
                 </td>
             </ng-container>
 
@@ -35,7 +35,7 @@
                     {{element.numberVehicles}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
-                    <!-- {{getTotal('numberVehicles') | number}} -->
+                    {{getTotal('numberVehicles') | number}}
                 </td>
             </ng-container>
 
@@ -59,7 +59,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
-                    <!-- {{getTotal('extraTransfer') | number}} -->
+                    {{getTotal('extraTransfer') | number}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="unitPrice">
@@ -81,7 +81,7 @@
                     {{element.totalAmountForeign}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
-                    <!-- {{getTotal('totalAmountForeign') | number}} -->
+                    {{getTotal('totalAmountForeign') | number}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="totalAmountVnd">
@@ -101,7 +101,7 @@
                     {{element.totalAmount}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
-                    <!-- {{getTotal('totalAmount') | number}} -->
+                    {{getTotal('totalAmount') | number}}
                 </td>
             </ng-container>
 
@@ -114,7 +114,7 @@
                     {{element.totalAmountVat}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
-                    <!-- {{getTotal('totalAmountVat') | number}} -->
+                    {{getTotal('totalAmountVat') | number}}
                 </td>
             </ng-container>
             <tr mat-header-row *matHeaderRowDef="headerRowDef1" sticky:true></tr>

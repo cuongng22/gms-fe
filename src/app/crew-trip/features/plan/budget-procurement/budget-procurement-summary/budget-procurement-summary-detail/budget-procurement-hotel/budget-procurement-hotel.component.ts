@@ -158,7 +158,16 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
   // hàm công thức tính chung
   calculate(index: number, key: string) {
     let data: any = this.dataSource.data[index];
-    data[key] = this.calculateFormula(data, formula[key].formula, key);
+    // Check lập kế hoạch sản lượng thay đổi
+    // Tháng nào đã thực hiện thì tính theo công thưc mới
+    const objFormula = formula[key];
+    let strFomular = objFormula.formula;
+    if(this.updateBudgetPlan() && data.monthIsPerform) {
+      if(objFormula.formulaUpdateBudgetPlan) {
+        strFomular = objFormula.formulaUpdateBudgetPlan;
+      }
+    }
+    data[key] = this.calculateFormula(data, strFomular);
     const groupFormula = formula[key].groupFormula;
     return data[key];
   }
@@ -171,18 +180,12 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
   }
 
   // Hàm tính toán dựa trên công thức động
-  calculateFormula(data: any, formula: string, key?: string): number {
+  calculateFormula(data: any, formula: string): number {
     // Sử dụng Function để tạo hàm động từ công thức
     const dynamicFunction = new Function(
       'data',
       `return ${formula};`    // Công thức cần tính
     );
-    //Các tháng đã thực hiện: không tính toán 
-    const currentMonth = new Date().getUTCMonth();
-    const periodMonth = new Date(data.periodStart).getUTCMonth();
-    if (this.updateBudgetPlan() && periodMonth <= currentMonth && key) {
-      return data[key];
-    }
     return Math.round(dynamicFunction(data));
   }
 
