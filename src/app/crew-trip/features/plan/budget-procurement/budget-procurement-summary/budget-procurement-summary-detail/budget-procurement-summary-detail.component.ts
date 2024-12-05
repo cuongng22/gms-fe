@@ -13,13 +13,13 @@ import { MatTableModule } from '@angular/material/table';
 import { RouterLink, RouterModule } from '@angular/router';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { BudgetProcurementGeneralComponent } from './budget-procurement-general/budget-procurement-general.component';
+import { BudgetProcurementGeneralComponent } from '../../budget-procurement-common/budget-procurement-general/budget-procurement-general.component';
 import { MatExpansionModule, MatExpansionPanelContent } from '@angular/material/expansion';
-import { BudgetProcurementFlightRateComponent } from './budget-procurement-flight-rate/budget-procurement-flight-rate.component';
-import { BudgetProcurementFlightPeriodComponent } from './budget-procurement-flight-period/budget-procurement-flight-period.component';
-import { BudgetProcurementFlightOvernightComponent } from './budget-procurement-flight-overnight/budget-procurement-flight-overnight.component';
-import { BudgetProcurementHotelComponent } from './budget-procurement-hotel/budget-procurement-hotel.component';
-import { BudgetProcurementCarRentalComponent } from './budget-procurement-car-rental/budget-procurement-car-rental.component';
+import { BudgetProcurementFlightRateComponent } from '../../budget-procurement-common/budget-procurement-flight-rate/budget-procurement-flight-rate.component';
+import { BudgetProcurementFlightPeriodComponent } from '../../budget-procurement-common/budget-procurement-flight-period/budget-procurement-flight-period.component';
+import { BudgetProcurementFlightOvernightComponent } from '../../budget-procurement-common/budget-procurement-flight-overnight/budget-procurement-flight-overnight.component';
+import { BudgetProcurementHotelComponent } from '../../budget-procurement-common/budget-procurement-hotel/budget-procurement-hotel.component';
+import { BudgetProcurementCarRentalComponent } from '../../budget-procurement-common/budget-procurement-car-rental/budget-procurement-car-rental.component';
 
 @Component({
   selector: 'app-budget-procurement-summary-detail',

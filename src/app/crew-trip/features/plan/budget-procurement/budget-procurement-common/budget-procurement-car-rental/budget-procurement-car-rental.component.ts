@@ -72,24 +72,37 @@ export class BudgetProcurementCarRentalComponent implements OnInit, AfterViewChe
   // TÍnh dòng tổng 
   getTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
+    const startDatePlanGroup = new Date(this.yearPlan() + 1, 0, 1);
     if (control === 'totalAmountVat') {
-      const startDatePlanGroup = new Date(this.yearPlan(), 11, 1);
       const endDatePlanGroup = new Date(this.yearPlan() + 1, 10, 1);
       return Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup) && truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
+        if (truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
           return Number(t[control]);
         }
         return 0;
       }).reduce((acc, value) => acc + value, 0));
     }
-    return Math.round(this.dataSource.data.map((t: any) => Number(t[control])).reduce((acc, value) => acc + value, 0));
+    return Math.round(this.dataSource.data.map((t: any) => {
+      if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup)) {
+        return Number(t[control]);
+      }
+      return 0;
+    }).reduce((acc, value) => acc + value, 0));;
   }
 
   // hàm công thức tính chung
   calculate(index: number, key: string) {
     let data: any = this.dataSource.data[index];
-    data[key] = this.calculateFormula(data, formula[key].formula, key);
-    console.log(data)
+    // Check lập kế hoạch sản lượng thay đổi
+    // Tháng nào đã thực hiện thì tính theo công thưc mới
+    const objFormula = formula[key];
+    let strFomular = objFormula.formula;
+    if (this.updateBudgetPlan() && data.monthIsPerform) {
+      if (objFormula.formulaUpdateBudgetPlan) {
+        strFomular = objFormula.formulaUpdateBudgetPlan;
+      }
+    }
+    data[key] = this.calculateFormula(data, strFomular);
     const groupFormula = formula[key].groupFormula;
     return data[key];
   }

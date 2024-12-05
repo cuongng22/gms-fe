@@ -139,20 +139,26 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
     data[control] = false;
   }
 
+
   // TÍnh dòng tổng 
   getTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
+    const startDatePlanGroup = new Date(this.yearPlan() + 1, 0, 1);
     if (control === 'totalAmountVat') {
-      const startDatePlanGroup = new Date(this.yearPlan(), 11, 1);
       const endDatePlanGroup = new Date(this.yearPlan() + 1, 10, 1);
       return Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup) && truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
+        if (truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
           return Number(t[control]);
         }
         return 0;
       }).reduce((acc, value) => acc + value, 0));
     }
-    return Math.round(this.dataSource.data.map((t: any) => Number(t[control])).reduce((acc, value) => acc + value, 0));
+    return Math.round(this.dataSource.data.map((t: any) => {
+      if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup)) {
+        return Number(t[control]);
+      }
+      return 0;
+    }).reduce((acc, value) => acc + value, 0));;
   }
 
   // hàm công thức tính chung

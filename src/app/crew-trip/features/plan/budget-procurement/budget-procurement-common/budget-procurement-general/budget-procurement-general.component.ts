@@ -5,7 +5,6 @@ import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
@@ -17,20 +16,15 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { NgxControlError } from 'ngxtension/control-error';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { MatNativeDateModule } from '@angular/material/core';
 import { DatepickerComponent } from 'src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component';
-import { DpwDifferentLocaleComponent } from 'src/app/ui-elements/datepicker/dpw-different-locale/dpw-different-locale.component';
-import { DpeaYearMonthPickerComponent } from 'src/app/ui-elements/datepicker/dpea-year-month-picker/dpea-year-month-picker.component';
 
 @Component({
   selector: 'app-budget-procurement-general',
   standalone: true,
   imports: [MatCardModule, FormsModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-    MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
+    MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
-    NgxControlError, MatDatepickerModule, MatNativeDateModule, NgxMaterialTimepickerModule, DatepickerComponent,
-    DpwDifferentLocaleComponent, DpeaYearMonthPickerComponent],
+    NgxControlError, DatepickerComponent],
   templateUrl: './budget-procurement-general.component.html',
   styleUrl: './budget-procurement-general.component.scss'
 })

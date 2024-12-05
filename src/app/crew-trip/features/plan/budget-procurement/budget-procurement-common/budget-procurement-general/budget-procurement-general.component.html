@@ -77,12 +77,12 @@
     <div class="row">
         <div class="col">
             <app-datepicker-year-month class="mb-2" [required]="true" [label]="MESSAGE.LABEL_START_DATE" size="sm"
-                formControlName="procStartDate" [messageRequired]="MESSAGE.MESSAGE_START_DATE_REQUIRED">
+                formControlName="procStartDate">
             </app-datepicker-year-month>
         </div>
         <div class="col" sizeInput="sm">
             <app-datepicker-year-month class="mb-2" [required]="true" [label]="MESSAGE.LABEL_END_DATE" size="sm"
-                formControlName="procEndDate" [messageRequired]="MESSAGE.MESSAGE_END_DATE_REQUIRED">
+                formControlName="procEndDate">
             </app-datepicker-year-month>
         </div>
         <div class="col" sizeInput="sm">
@@ -92,8 +92,9 @@
             </mat-form-field>
         </div>
         <div class="col">
+
             <app-datepicker-year-month class="mb-2" [required]="false" [label]="MESSAGE.LABEL_ESTIMATED_TIME" size="sm"
-                formControlName="estimatedTime" [messageRequired]="MESSAGE.MESSAGE_ESTIMATED_TIME_REQUIRED">
+                formControlName="estimatedTime">
             </app-datepicker-year-month>
         </div>
         <div class="col" sizeInput="sm">

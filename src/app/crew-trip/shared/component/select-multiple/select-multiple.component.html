@@ -7,7 +7,7 @@
             </mat-select-trigger>
             <form class="mb-2" sizeInput="sm">
                 <mat-form-field class="input-suggest">
-                    <input trim="blur" matInput type="text" name="clearable-input" [formControl]="search"
+                    <input trim="blur" [required]="required" matInput type="text" name="clearable-input" [formControl]="search"
                         i18n-placeholder="@@search" placeholder="Search">
                     @if (search.value) {
                     <button matSuffix mat-icon-button i18n-aria-label="@@clear" aria-label="Clear"
