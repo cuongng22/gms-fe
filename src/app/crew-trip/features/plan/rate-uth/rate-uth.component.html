@@ -1,7 +1,7 @@
 <!-- Breadcrumb -->
 <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
   <h5 class="mb-0" i18n="@@estimatedExchange">
-    Estimated exchange
+    Estimated exchange rate
   </h5>
   <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
     <li class="breadcrumb-item d-inline-block position-relative" i18n="@@plan">
@@ -20,7 +20,7 @@
 <!--Search-->
 <mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
   <mat-card-content>
-    <form [formGroup]="formGroupSearch" (ngSubmit)="search()" autocomplete="off">
+    <form [formGroup]="formGroupSearch" (ngSubmit)="formGroupSearch.valid && search()" autocomplete="off">
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11">
           <div class="row">
@@ -36,10 +36,14 @@
                 <input type="text" matInput formControlName="version" [matAutocomplete]="versionComplete">
                 <mat-autocomplete autoActiveFirstOption requireSelection
                                   #versionComplete="matAutocomplete">
+                  <mat-option [value]="null">--All Version--</mat-option>
                   @for (option of listVersion | async; track option) {
                     <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
+                @if (!!formGroupSearch.controls['version'].hasError('required')) {
+                  <mat-error><span i18n>Version</span><span i18n> is required</span></mat-error>
+                }
               </mat-form-field>
             </div>
             <div class="col-sm-3" sizeInput='sm'>
@@ -113,10 +117,10 @@
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">CUR</th>
           <td mat-cell *matCellDef="let element" class="text-center">{{ element.currencyCode }}</td>
         </ng-container>
-        <ng-container matColumnDef="uthLastYear">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">Yearly estimated</th>
+        <ng-container matColumnDef="planUth">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">Planned exchange rate</th>
           <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.uthLastYear| number : (element.format || '1.0-10') }}
+              class="text-right">{{ element.planUth| number : (element.format || '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="january">
@@ -197,10 +201,10 @@
               class="text-right">{{ element.average | number : (element.format || '1.0-10') }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="rateUth">
+        <ng-container matColumnDef="rateDtTh">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">Rate <br/>(Plan/Actual)</th>
           <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.rateUth | number : (element.format || '1.0-10') }}
+              class="text-right">{{ element.rateDtTh | number : (element.format || '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="version">
@@ -252,14 +256,14 @@
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
-          <button mat-button (click)="toggleDialogUpload()">
+          <button mat-button (click)="resetFileUpload();toggleDialogUpload()">
             <i class="ri-close-fill"></i>
           </button>
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
         <div class="row">
-          <span i18n="@@downloadTemplate">Download template</span>
+          <span i18n="@@downloadTemplate" class="text-black">Download template</span>
           <button mat-button type="button" class="search-btn min-with-100 mlr-5" style="width: 250px;"
                   (click)="downloadTemplate()">
             <i class="material-symbols-outlined">
@@ -269,7 +273,7 @@
           </button>
         </div>
         <div class="row mt-20">
-          <span i18n="@@selectFile">Select file</span>
+          <span i18n="@@selectFile" class="text-black" >Select file</span>
           <file-upload [ngClass]="{'invalid':fileUpload.hasError('required') && fileUpload.touched}"
                        [formControl]="fileUpload" class="file-uploader" [multiple]="false"></file-upload>
           @if (fileUpload.hasError('required') &&
@@ -278,23 +282,27 @@
               {{ MESSAGE.REQUIRED }}
             </mat-error>
           }
-          <mat-hint>Note:Please check the estimated exchange rate on the system before importing new data</mat-hint>
         </div>
         @if (!!uploadFileError.totalErrors) {
           <div class="row mt-20">
             <p class="text-danger" i18n="@@flightMarket.UploadError">
               Cannot perform excel data import when there are {{ uploadFileError.totalErrors }} error records
             </p>
-            <span i18n="@@downloadFileError">Download file error:
+            <span i18n="@@downloadFileError" class="text-black">Download file error:
                         <button class="pt-0 pb-0" mat-raised-button (click)="downloadFileError()">Download file
                             excel</button>
                     </span>
           </div>
         }
+        <div class="row mt-20">
+          <p class="text-primary" i18n="@@plannedAnnualProduction.NoteUpload">
+            Note:Please check the estimated exchange rate on the system before importing new data!
+          </p>
+        </div>
       </mat-card-content>
       <mat-card-actions class="p-15" style="display: flex; justify-content: end;">
         <button type="button" mat-button
-                (click)="uploadFileError={};fileUpload.setValue([]) ;fileUpload.reset() ;toggleDialogUpload()"
+                (click)="resetFileUpload() ;toggleDialogUpload()"
                 class="close-btn">
           <i class="material-symbols-outlined">
             close
