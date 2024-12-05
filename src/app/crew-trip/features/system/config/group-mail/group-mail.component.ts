@@ -28,15 +28,18 @@ import {CommonModule} from '@angular/common';
 import {
   GroupMailDetailComponent
 } from 'src/app/crew-trip/features/system/config/group-mail/group-mail-detail/group-mail-detail.component';
+import {MatTab, MatTabChangeEvent, MatTabGroup} from "@angular/material/tabs";
+import {OtherCrewComponent} from "src/app/crew-trip/features/category/flight-crew/other-crew/other-crew.component";
+import {PaymentEmailComponent} from "src/app/crew-trip/features/system/config/payment-mail/payment-mail.component";
 
 @Component({
   selector: 'app-group-mail',
   standalone: true,
   imports: [
-    MatCardModule,  MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+    MatCardModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, MatTabGroup, MatTab, OtherCrewComponent, PaymentEmailComponent
   ],
   templateUrl: './group-mail.component.html',
   styleUrl: './group-mail.component.scss'
@@ -44,10 +47,9 @@ import {
 export class GroupMailComponent extends CommonComponent implements OnInit {
   override baseService = inject(GroupMailService);
   formBuilder = inject(FormBuilder);
-
+  activeTab: number = 0;
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
-    // { label: $localize`:@@pid:PID`, value: 'pid' },
     { label: $localize`:@@name:Name`, value: 'groupName' },
     { label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
     { label: $localize`:@@note:Description`, value: 'notes' },
@@ -92,5 +94,9 @@ export class GroupMailComponent extends CommonComponent implements OnInit {
         this.search();
       }
     });
+  }
+
+  onTabChange(event: MatTabChangeEvent): void {
+    this.activeTab = event.index;
   }
 }

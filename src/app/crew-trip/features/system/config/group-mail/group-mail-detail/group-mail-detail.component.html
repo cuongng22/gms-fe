@@ -1,11 +1,8 @@
 <mat-card class="border-radius d-block bg-white border-0">
-  <mat-card-header>
+  <mat-card-header class="p-15">
     <mat-card-title>
-      <h5 class="mb-0" i18n="@@groupMailInfomation" *ngIf="data">
-        Group mail information
-      </h5>
-      <h5 class="mb-0" i18n="@@addNew" *ngIf="!data">
-        Add new  group mail
+      <h5 class="mb-0" i18n="@@crewInformation">
+        {{ (!data ? ' Add new  group mail' : 'Group mail information') }}
       </h5>
     </mat-card-title>
   </mat-card-header>
@@ -109,11 +106,11 @@
         </div>
       </div>
       <div class="btn-box mt-20 d-flex justify-content-end">
-        <button type="button" mat-button (click)="close()" class="danger-btn  min-with-100 mlr-5">
+        <button type="button" mat-button (click)="close()" class="close-btn  min-with-100 mlr-5">
           <i class="material-symbols-outlined">
             close
           </i>
-          <span i18n="@@cancel">Cancel</span>
+          <span i18n="@@cancel">Close</span>
         </button>
         <button mat-button color="primary" (click)="save()" type="submit" class="add-btn min-with-100 mlr-5" *ngIf="!data?.mode || data.mode !== 'view'">
           <i class="material-symbols-outlined">
