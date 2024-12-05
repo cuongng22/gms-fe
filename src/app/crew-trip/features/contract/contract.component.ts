@@ -192,7 +192,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
       this.listPartner = listCombine.map((s: any) => ({
         code: s.code ?? s.hotelCode, name: s.name ?? s.hotelName,
       }));
-
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'effectiveDate', 'appendixCount', 'action'];
   }

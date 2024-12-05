@@ -86,7 +86,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract number</mat-label>
-              <input formControlName="contractCode" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="contractCode" matInput required>
               @if (!!formGroupDetail.controls['contractCode'].hasError('required')) {
               <mat-error><span i18n>Contract number</span><span i18n> not empty</span></mat-error>
               }
@@ -95,7 +95,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract No</mat-label>
-              <input formControlName="contractNo" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="contractNo" matInput required>
               @if (!!formGroupDetail.controls['contractNo'].hasError('required')) {
               <mat-error><span i18n>Contract No</span><span i18n> not empty</span></mat-error>
               }
@@ -106,7 +106,7 @@
               <div class="col-6" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Currency</mat-label>
-                  <input formControlName="currency" matInput required>
+                  <input [readonly]="viewType =='HD'" formControlName="currency" matInput required>
                   @if (!!formGroupDetail.controls['currency'].hasError('required')) {
                   <mat-error><span i18n>Currency</span><span i18n> not empty</span></mat-error>
                   }
@@ -115,7 +115,7 @@
               <div class="col-6" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Exchange rate</mat-label>
-                  <input formControlName="exchangeRate" matInput min="0" type="number">
+                  <input [readonly]="viewType =='HD'" formControlName="exchangeRate" matInput min="0" type="number">
                   @if (!!formGroupDetail.controls['exchangeRate'].hasError('required')) {
                   <mat-error><span i18n>Exchange rate</span><span i18n> not empty</span></mat-error>
                   }
@@ -129,7 +129,8 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Sign date</mat-label>
-              <input [matDatepicker]="signedDate" formControlName="signedDate" matInput required>
+              <input [matDatepicker]="signedDate" [readonly]="viewType =='HD'" formControlName="signedDate" matInput
+                     required>
               <mat-datepicker-toggle [for]="signedDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #signedDate></mat-datepicker>
               @if (!!formGroupDetail.controls['signedDate'].hasError('required')) {
@@ -142,7 +143,8 @@
               <div class="col-6" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Effective date</mat-label>
-                  <input [matDatepicker]="effectiveDate" formControlName="effectiveDate" matInput required>
+                  <input [matDatepicker]="effectiveDate" [readonly]="viewType =='HD'" formControlName="effectiveDate"
+                         matInput required>
                   <mat-datepicker-toggle [for]="effectiveDate" matIconSuffix></mat-datepicker-toggle>
                   <mat-datepicker #effectiveDate></mat-datepicker>
                   @if (!!formGroupDetail.controls['effectiveDate'].hasError('required')) {
@@ -153,7 +155,8 @@
               <div class="col-6" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Expiry date</mat-label>
-                  <input [matDatepicker]="expiryDate" formControlName="expiryDate" matInput requiredt>
+                  <input [matDatepicker]="expiryDate" [readonly]="viewType =='HD'" formControlName="expiryDate" matInput
+                         requiredt>
                   <mat-datepicker-toggle [for]="expiryDate" matIconSuffix></mat-datepicker-toggle>
                   <mat-datepicker #expiryDate></mat-datepicker>
                   @if (!!formGroupDetail.controls['expiryDate'].hasError('required')) {
@@ -166,7 +169,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract type</mat-label>
-              <mat-select formControlName="contractType" required>
+              <mat-select [disabled]="viewType =='HD'" formControlName="contractType" required>
                 <mat-option i18n value="Fixed price contract">Fixed price contract</mat-option>
               </mat-select>
               @if (!!formGroupDetail.controls['contractType'].hasError('required')) {
@@ -180,8 +183,10 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract form</mat-label>
-              <mat-select formControlName="contractForm" required>
-                <mat-option i18n value="Contract of sale of ordinary goods and services">Contract of sale of ordinary goods and services</mat-option>
+              <mat-select [disabled]="viewType =='HD'" formControlName="contractForm" required>
+                <mat-option i18n value="Contract of sale of ordinary goods and services">Contract of sale of ordinary
+                  goods and services
+                </mat-option>
               </mat-select>
               @if (!!formGroupDetail.controls['contractForm'].hasError('required')) {
               <mat-error><span i18n>Contract form</span><span i18n> not empty</span></mat-error>
@@ -191,7 +196,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Original Contract No</mat-label>
-              <input formControlName="hdPlRoot" matInput>
+              <input [readonly]="viewType =='HD'" formControlName="hdPlRoot" matInput>
               @if (!!formGroupDetail.controls['hdPlRoot'].hasError('required')) {
               <mat-error><span i18n>Original Contract No</span><span i18n> not empty</span></mat-error>
               }
@@ -200,7 +205,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract name</mat-label>
-              <input formControlName="contractName" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="contractName" matInput required>
               @if (!!formGroupDetail.controls['contractName'].hasError('required')) {
               <mat-error><span i18n>Contract name</span><span i18n> not empty</span></mat-error>
               }
@@ -212,7 +217,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Supplier ID</mat-label>
-              <input formControlName="partnerCode" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="partnerCode" matInput required>
               @if (!!formGroupDetail.controls['partnerCode'].hasError('required')) {
               <mat-error><span i18n>Supplier ID</span><span i18n> not empty</span></mat-error>
               }
@@ -221,7 +226,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Supplier name</mat-label>
-              <input formControlName="partnerName" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="partnerName" matInput required>
               @if (!!formGroupDetail.controls['partnerName'].hasError('required')) {
               <mat-error><span i18n>Supplier name</span><span i18n> not empty</span></mat-error>
               }
@@ -230,7 +235,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Supplier address</mat-label>
-              <input formControlName="partnerAddress" matInput>
+              <input [readonly]="viewType =='HD'" formControlName="partnerAddress" matInput>
               @if (!!formGroupDetail.controls['partnerAddress'].hasError('required')) {
               <mat-error><span i18n>Supplier address</span><span i18n> not empty</span></mat-error>
               }
@@ -242,7 +247,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract authority</mat-label>
-              <input formControlName="negotiateCompetence" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="negotiateCompetence" matInput required>
               @if (!!formGroupDetail.controls['negotiateCompetence'].hasError('required')) {
               <mat-error><span i18n>Contract authority</span><span i18n> not empty</span></mat-error>
               }
@@ -251,7 +256,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Signatory authority</mat-label>
-              <input formControlName="competence" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="competence" matInput required>
               @if (!!formGroupDetail.controls['competence'].hasError('required')) {
               <mat-error><span i18n>Signatory authority</span><span i18n> not empty</span></mat-error>
               }
@@ -260,7 +265,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Representative</mat-label>
-              <input formControlName="employeeSigned" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="employeeSigned" matInput required>
               @if (!!formGroupDetail.controls['employeeSigned'].hasError('required')) {
               <mat-error><span i18n>Representative</span><span i18n> not empty</span></mat-error>
               }
@@ -272,7 +277,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Sign department</mat-label>
-              <input formControlName="signedDepartmentName" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="signedDepartmentName" matInput required>
               @if (!!formGroupDetail.controls['signedDepartmentName'].hasError('required')) {
               <mat-error><span i18n>Sign department</span><span i18n> not empty</span></mat-error>
               }
@@ -281,7 +286,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Budget Management Unit</mat-label>
-              <input formControlName="budgetDepartmentName" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="budgetDepartmentName" matInput required>
               @if (!!formGroupDetail.controls['budgetDepartmentName'].hasError('required')) {
               <mat-error><span i18n>Budget Management Unit</span><span i18n> not empty</span></mat-error>
               }
@@ -290,7 +295,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Proceed department</mat-label>
-              <input formControlName="proceedDepartmentName" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="proceedDepartmentName" matInput required>
               @if (!!formGroupDetail.controls['proceedDepartmentName'].hasError('required')) {
               <mat-error><span i18n>Proceed department</span><span i18n> not empty</span></mat-error>
               }
@@ -302,7 +307,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Payment unit</mat-label>
-              <input formControlName="paidDepartmentName" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="paidDepartmentName" matInput required>
               @if (!!formGroupDetail.controls['paidDepartmentName'].hasError('required')) {
               <mat-error><span i18n>Payment unit</span><span i18n> not empty</span></mat-error>
               }
@@ -311,7 +316,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Method Payments</mat-label>
-              <input formControlName="paymentType" matInput>
+              <input [readonly]="viewType =='HD'" formControlName="paymentType" matInput>
               @if (!!formGroupDetail.controls['paymentType'].hasError('required')) {
               <mat-error><span i18n>Method Payments</span><span i18n> not empty</span></mat-error>
               }
@@ -332,7 +337,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Budget Code</mat-label>
-              <input formControlName="budgetCode" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="budgetCode" matInput required>
               @if (!!formGroupDetail.controls['budgetCode'].hasError('required')) {
               <mat-error><span i18n>Budget Code</span><span i18n> not empty</span></mat-error>
               }
@@ -341,7 +346,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Field</mat-label>
-              <input formControlName="fieldCode2" matInput required>
+              <input [readonly]="viewType =='HD'" formControlName="fieldCode2" matInput required>
               @if (!!formGroupDetail.controls['fieldCode2'].hasError('required')) {
               <mat-error><span i18n>Field</span><span i18n> not empty</span></mat-error>
               }
@@ -352,7 +357,7 @@
               <div class="col-6" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Due Date</mat-label>
-                  <input formControlName="dueDateNumber" matInput>
+                  <input [readonly]="viewType =='HD'" formControlName="dueDateNumber" matInput>
                   @if (!!formGroupDetail.controls['dueDateNumber'].hasError('required')) {
                   <mat-error><span i18n>Due Date</span><span i18n> not empty</span></mat-error>
                   }
@@ -361,7 +366,8 @@
               <div class="col-6" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Handover Date</mat-label>
-                  <input [matDatepicker]="handoverDate" formControlName="handoverDate" matInput required>
+                  <input [matDatepicker]="handoverDate" [readonly]="viewType =='HD'" formControlName="handoverDate"
+                         matInput required>
                   <mat-datepicker-toggle [for]="handoverDate" matIconSuffix></mat-datepicker-toggle>
                   <mat-datepicker #handoverDate></mat-datepicker>
                   @if (!!formGroupDetail.controls['handoverDate'].hasError('required')) {
@@ -386,7 +392,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Beneficiary</mat-label>
-              <input formControlName="peopleName" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="peopleName" matInput>
               @if (!!formGroupDetail.controls['peopleName'].hasError('required')) {
               <mat-error><span i18n>Beneficiary</span><span i18n> not empty</span></mat-error>
               }
@@ -395,7 +401,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Transfer to</mat-label>
-              <input formControlName="bankAccountNoB" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="bankAccountNoB" matInput>
               @if (!!formGroupDetail.controls['bankAccountNoB'].hasError('required')) {
               <mat-error><span i18n>Transfer to</span><span i18n> not empty</span></mat-error>
               }
@@ -404,7 +410,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Bank Name</mat-label>
-              <input formControlName="bankNameB" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="bankNameB" matInput>
               @if (!!formGroupDetail.controls['bankNameB'].hasError('required')) {
               <mat-error><span i18n>Bank Name</span><span i18n> not empty</span></mat-error>
               }
@@ -416,7 +422,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Bank Address</mat-label>
-              <input formControlName="bankAddressB" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="bankAddressB" matInput>
               @if (!!formGroupDetail.controls['bankAddressB'].hasError('required')) {
               <mat-error><span i18n>Bank Address</span><span i18n> not empty</span></mat-error>
               }
@@ -425,7 +431,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Province/City</mat-label>
-              <input formControlName="cityB" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="cityB" matInput>
               @if (!!formGroupDetail.controls['cityB'].hasError('required')) {
               <mat-error><span i18n>Province/City</span><span i18n> not empty</span></mat-error>
               }
@@ -434,7 +440,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Branch name</mat-label>
-              <input formControlName="bankBranchNameB" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="bankBranchNameB" matInput>
               @if (!!formGroupDetail.controls['bankBranchNameB'].hasError('required')) {
               <mat-error><span i18n>Branch name</span><span i18n> not empty</span></mat-error>
               }
@@ -446,7 +452,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>IBAN</mat-label>
-              <input formControlName="iban" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="iban" matInput>
               @if (!!formGroupDetail.controls['iban'].hasError('required')) {
               <mat-error><span i18n>IBAN</span><span i18n> not empty</span></mat-error>
               }
@@ -455,7 +461,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Swift code</mat-label>
-              <input formControlName="swiftCodeB" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="swiftCodeB" matInput>
               @if (!!formGroupDetail.controls['swiftCodeB'].hasError('required')) {
               <mat-error><span i18n>Swift code</span><span i18n> not empty</span></mat-error>
               }
@@ -464,7 +470,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Bank code#Local code</mat-label>
-              <input formControlName="bankLocalCode" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="bankLocalCode" matInput>
               @if (!!formGroupDetail.controls['bankLocalCode'].hasError('required')) {
               <mat-error><span i18n>Bank code#Local code</span><span i18n> not empty</span></mat-error>
               }
@@ -476,7 +482,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Bank domestic Charge</mat-label>
-              <input formControlName="bankCharge" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="bankCharge" matInput>
               @if (!!formGroupDetail.controls['bankCharge'].hasError('required')) {
               <mat-error><span i18n>Bank domestic Charge</span><span i18n> not empty</span></mat-error>
               }
@@ -485,7 +491,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Bank aboard Charge</mat-label>
-              <input formControlName="bankCharge1" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="bankCharge1" matInput>
               @if (!!formGroupDetail.controls['bankCharge1'].hasError('required')) {
               <mat-error><span i18n>Bank aboard Charge</span><span i18n> not empty</span></mat-error>
               }
@@ -497,7 +503,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Transfer middle to</mat-label>
-              <input formControlName="bankAccountNoB1" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="bankAccountNoB1" matInput>
               @if (!!formGroupDetail.controls['bankAccountNoB1'].hasError('required')) {
               <mat-error><span i18n>Transfer middle to</span><span i18n> not empty</span></mat-error>
               }
@@ -506,7 +512,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>At intermediary bank name</mat-label>
-              <input formControlName="bankNameB1" matInput>
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="bankNameB1" matInput>
               @if (!!formGroupDetail.controls['bankNameB1'].hasError('required')) {
               <mat-error><span i18n>At intermediary bank name</span><span i18n> not empty</span></mat-error>
               }
@@ -515,7 +521,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Swift code intermediary bank</mat-label>
-              <input formControlName="swiftCodeB1" matInput
+              <input [readonly]="readMode==true || viewType =='HD'" formControlName="swiftCodeB1" matInput
                      required>
               @if (!!formGroupDetail.controls['swiftCodeB1'].hasError('required')) {
               <mat-error><span i18n>Swift code intermediary bank</span><span i18n> not empty</span></mat-error>
