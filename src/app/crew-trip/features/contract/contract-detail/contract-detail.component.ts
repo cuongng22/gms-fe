@@ -1,4 +1,15 @@
-import {Component, ElementRef, EventEmitter, inject, Input, model, OnInit, Output, ViewChild} from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  EventEmitter,
+  inject,
+  Input,
+  LOCALE_ID,
+  model,
+  OnInit,
+  Output,
+  ViewChild
+} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
@@ -26,9 +37,9 @@ import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
+import {DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from "@iplab/ngx-file-upload";
-import {LOCALE, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {ClickOutside} from "ngxtension/click-outside";
 import {HttpStatusCode} from "@angular/common/http";
 import {NationService} from "src/app/crew-trip/core/services/nation-service";
@@ -37,6 +48,9 @@ import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {NgxMatTimepickerFieldComponent} from "ngx-mat-timepicker";
 import {debounce} from 'lodash';
+import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
+
 
 
 @Component({
@@ -45,6 +59,12 @@ import {debounce} from 'lodash';
   imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
+  providers: [
+
+    provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+
+
+    ]
 })
 
 
@@ -86,91 +106,90 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   constructor() {
     super();
     window.scrollTo(0, 0);
+    this.formGroupDetail = this.fb.group({
+      doiTuongDichVu: [],
+      phanLoaiHopDong: [],
+
+      //tab4
+      marketCode: [],
+      marketName: [],
+      nation: [],
+      classification: [],
+      flightGroup: [],
+      statusUsage: [],
+      supplierName: [],
+      supplierPhone: [],
+      supplierEmail: [],
+      carType: [],
+      standardCheckIn: [],
+      standardCheckOut: [],
+      notes: [],
+
+      tempp: [],
+      id: [],
+      bizDocId: [],
+      contractCode: [],
+      contractNo: [],
+      currency: [],
+      exchangeRate: [],
+      signedDate: [],
+      effectiveDate: [],
+      expiryDate: [],
+      contractType: [],
+      contractForm: [],
+      hdPlRoot: [],
+      contractName: [],
+      partnerCode: [],
+      partnerName: [],
+      partnerAddress: [],
+      negotiateCompetence: [],
+      competence: [],
+      employeeSigned: [],
+      signedDepartmentName: [],
+      budgetDepartmentName: [],
+      proceedDepartmentName: [],
+      paidDepartmentName: [],
+      employeeId: [],
+      employeeName: [],
+      paymentType: [],
+      budgetCode: [],
+      fieldCode2: [],
+      dueDateNumber: [],
+      handoverDate: [],
+      documentsList: [],
+      bankAccountNoB: [],
+      peopleName: [],
+      bankNameB: [],
+      bankAddressB: [],
+      cityB: [],
+      bankBranchNameB: [],
+      bankLocalCode: [],
+      swiftCodeB: [],
+      bankCharge: [],
+      bankCharge1: [],
+      bankAccountNoB1: [],
+      bankNameB1: [],
+      swiftCodeB1: [],
+      isHotel: [],
+      isVehicle: [],
+      hotel: [],
+      vehicle: [],
+      priceUnitInfo: [],
+      iban: [],
+    });
+    this.formGroupFileUpload = this.fb.group({
+      contractCategory: ['1'], fileUpload: []
+    });
   }
 
   override async ngOnInit() {
     try {
-      //declare
-      this.formGroupDetail = this.fb.group({
-        doiTuongDichVu: [{value: '', disabled: this.readMode}],
-        phanLoaiHopDong: [{value: '', disabled: this.readMode}],
-
-        //tab4
-        marketCode: [{value: '', disabled: this.readMode}],
-        marketName: [{value: '', disabled: this.readMode}],
-        nation: [{value: '', disabled: this.readMode}],
-        classification: [{value: '', disabled: this.readMode}],
-        flightGroup: [{value: '', disabled: this.readMode}],
-        statusUsage: [{value: '', disabled: this.readMode}],
-        supplierName: [{value: '', disabled: this.readMode}],
-        supplierPhone: [{value: '', disabled: this.readMode}],
-        supplierEmail: [{value: '', disabled: this.readMode}],
-        carType: [{value: '', disabled: this.readMode}],
-        standardCheckIn: [{value: '', disabled: this.readMode}],
-        standardCheckOut: [{value: '', disabled: this.readMode}],
-        notes: [{value: '', disabled: this.readMode}],
-
-        tempp: [{value: '', disabled: this.readMode}],
-        id: [{value: '', disabled: this.readMode}],
-        bizDocId: [{value: '', disabled: this.readMode}],
-        contractCode: [{value: '', disabled: this.readMode}],
-        contractNo: [{value: '', disabled: this.readMode}],
-        currency: [{value: '', disabled: this.readMode}],
-        exchangeRate: [{value: '', disabled: this.readMode}],
-        signedDate: [{value: '', disabled: this.readMode}],
-        effectiveDate: [{value: '', disabled: this.readMode}],
-        expiryDate: [{value: '', disabled: this.readMode}],
-        contractType: [{value: '', disabled: this.readMode}],
-        contractForm: [{value: '', disabled: this.readMode}],
-        hdPlRoot: [{value: '', disabled: this.readMode}],
-        contractName: [{value: '', disabled: this.readMode}],
-        partnerCode: [{value: '', disabled: this.readMode}],
-        partnerName: [{value: '', disabled: this.readMode}],
-        partnerAddress: [{value: '', disabled: this.readMode}],
-        negotiateCompetence: [{value: '', disabled: this.readMode}],
-        competence: [{value: '', disabled: this.readMode}],
-        employeeSigned: [{value: '', disabled: this.readMode}],
-        signedDepartmentName: [{value: '', disabled: this.readMode}],
-        budgetDepartmentName: [{value: '', disabled: this.readMode}],
-        proceedDepartmentName: [{value: '', disabled: this.readMode}],
-        paidDepartmentName: [{value: '', disabled: this.readMode}],
-        employeeId: [{value: '', disabled: this.readMode}],
-        employeeName: [{value: '', disabled: this.readMode}],
-        paymentType: [{value: '', disabled: this.readMode}],
-        budgetCode: [{value: '', disabled: this.readMode}],
-        fieldCode2: [{value: '', disabled: this.readMode}],
-        dueDateNumber: [{value: '', disabled: this.readMode}],
-        handoverDate: [{value: '', disabled: this.readMode}],
-        documentsList: [{value: '', disabled: this.readMode}],
-        bankAccountNoB: [{value: '', disabled: this.readMode}],
-        peopleName: [{value: '', disabled: this.readMode}],
-        bankNameB: [{value: '', disabled: this.readMode}],
-        bankAddressB: [{value: '', disabled: this.readMode}],
-        cityB: [{value: '', disabled: this.readMode}],
-        bankBranchNameB: [{value: '', disabled: this.readMode}],
-        bankLocalCode: [{value: '', disabled: this.readMode}],
-        swiftCodeB: [{value: '', disabled: this.readMode}],
-        bankCharge: [{value: '', disabled: this.readMode}],
-        bankCharge1: [{value: '', disabled: this.readMode}],
-        bankAccountNoB1: [{value: '', disabled: this.readMode}],
-        bankNameB1: [{value: '', disabled: this.readMode}],
-        swiftCodeB1: [{value: '', disabled: this.readMode}],
-        isHotel: [{value: '', disabled: this.readMode}],
-        isVehicle: [{value: '', disabled: this.readMode}],
-        hotel: [{value: '', disabled: this.readMode}],
-        vehicle: [{value: '', disabled: this.readMode}],
-        priceUnitInfo: [{value: '', disabled: this.readMode}],
-        iban: [{value: '', disabled: this.readMode}],
-      });
-      this.formGroupFileUpload = this.fb.group({
-        contractCategory: ['1'], fileUpload: []
-      });
-
-
       await this.spinner.show();
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         // this.loadListMaNghiepVu(),
-        this.loadListQuocGia(),]).then(() => {
+        this.loadListQuocGia(),
+        this.setReadMode(this.formGroupDetail)
+      ]).then(() => {
         if (this.formGroupDetail.getRawValue().isHotel && this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({doiTuongDichVu: '3'});
         } else if (this.formGroupDetail.getRawValue().isHotel) {
@@ -363,6 +382,15 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           carType: data.carType,
           notes: data.notes,
         })
+      }
+    });
+  }
+
+  async setReadMode(form: FormGroup) {
+    let fieldAnnex = [''];
+    Object.entries(form.controls).forEach(([k, v]) => {
+      if (this.readMode || this.viewType == 'HD') {
+        // v.disable();
       }
     });
   }

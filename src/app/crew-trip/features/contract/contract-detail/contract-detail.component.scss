@@ -1,13 +1,15 @@
-.time-picker{
+.time-picker {
   display: flex;
-    .time-picker-clock{
-      pointer-events: auto;
-      position: absolute;
-      top: 20%;
-      right: 0px;
-      z-index: 1;
-    }
+
+  .time-picker-clock {
+    pointer-events: auto;
+    position: absolute;
+    top: 20%;
+    right: 0px;
+    z-index: 1;
+  }
 }
+
 .mat-column-action {
   width: 50px !important;
 }
@@ -16,59 +18,77 @@
   width: 70px !important;
 }
 
-.mat-column-type {
-  max-width: 250px !important;
-  width: 250px !important;
+.mat-column-fromDate, .mat-column-toDate {
+  max-width: 150px !important;
+  width: 150px !important;
 }
+
+.mat-column-serviceCode, .mat-column-vnaTransId, mat-column-expenseCatgId, mat-column-priceNoTax, mat-column-taxCode, mat-column-taxRate {
+  max-width: 200px !important;
+  width: 200px !important;
+}
+
 //bang 5
 .mat-column-51 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-52 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-53 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-54 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-55 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-56 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-57 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-58 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-59 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-510 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-511 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-512 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-513 {
   max-width: 250px !important;
   width: 250px !important;
@@ -79,48 +99,59 @@
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-612 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-613 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-614 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 //bang 62
 .mat-column-621 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-622 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-623 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-624 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 //bang 63
 .mat-column-631 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-632 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-633 {
   max-width: 250px !important;
   width: 250px !important;
 }
+
 .mat-column-634 {
   max-width: 250px !important;
   width: 250px !important;
@@ -160,10 +191,7 @@
 
 ::ng-deep {
   .input-row {
-    .mat-mdc-table.mdc-data-table__table .mdc-data-table__content .mat-mdc-row {
-      height: 40px !important;
-    }
-
+    height: 40px;
   }
 
   .input-cell {
@@ -1919,7 +1947,7 @@
 @media only screen and (min-width: 1600px) {
 }
 
-.title-no-event{
+.title-no-event {
   height: 100% !important;
   width: 100% !important;
   display: flex !important;
