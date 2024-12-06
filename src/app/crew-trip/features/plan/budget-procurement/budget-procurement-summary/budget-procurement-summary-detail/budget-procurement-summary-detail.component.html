@@ -151,13 +151,53 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <app-budget-procurement-hotel [yearPlan]="2024" />
+                            <app-budget-procurement-hotel [yearPlan]="2024" type="BUDGET" />
+                        </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel [expanded]="false">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6 class="mb-0">3.2
+                                    <span i18n="@@procurementPlanForCarRental">
+                                        Procurement Plan for Car Rental
+                                    </span>
+                                </h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <app-budget-procurement-car-rental [yearPlan]="2024"/>
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </mat-expansion-panel>
+        </mat-accordion>
+        <mat-accordion multi class="mt-10">
+            <mat-expansion-panel class="remove-mat-expansion-panel-padding" (opened)="panelCalBasisOpenState.set(true)"
+                (closed)="panelCalBasisOpenState.set(false)" [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h5 class="mb-0">IV. <span i18n="@@procurementPlan">Procurement Plan</span></h5>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-accordion multi>
+                    <mat-expansion-panel [expanded]="true">
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6 class="mb-0">4.1
+                                    <span i18n="@@procurementPlanForHotel">
+                                        Procurement Plan for Hotel
+                                    </span>
+                                </h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <app-budget-procurement-hotel [yearPlan]="2024" type="PROCUREMENT" />
                         </div>
                     </mat-expansion-panel>
                     <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <h6 class="mb-0">3.2
+                                <h6 class="mb-0">4.2
                                     <span i18n="@@procurementPlanForCarRental">
                                         Procurement Plan for Car Rental
                                     </span>

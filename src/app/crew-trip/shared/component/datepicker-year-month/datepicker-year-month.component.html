@@ -3,15 +3,17 @@
         @if(!!label()){
         <mat-label>{{label()}}</mat-label>
         }
-        <input [required]="required()" matInput [matDatepicker]="datePicker" [(ngModel)]='datePickerValue'>
+        <input [required]="required()"  matInput [matDatepicker]="datePicker" [formControl]="datePickerValue" placeholder="mm/yyyy">
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
         <mat-datepicker #datePicker startView="year" (monthSelected)="setMonthAndYear($event, datePicker)"
             panelClass="example-month-picker">
         </mat-datepicker>
-        @if(required()){
-        <mat-error>
-            {{messageRequired()}}
+
+        <mat-error *ngxControlError="datePickerValue ?? undefined; track: 'required'">
+            {{ label() }} {{MESSAGE.REQUIRED}}
         </mat-error>
-        }
+        <mat-error *ngxControlError="datePickerValue ?? undefined; track: 'matDatepickerParse'">
+            {{ label() }} {{MESSAGE.FORMAT_INVALID}}
+        </mat-error>
     </mat-form-field>
 </div>

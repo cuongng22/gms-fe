@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, input, LOCALE_ID, OnInit, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
+import { Component, forwardRef, input, LOCALE_ID, OnInit, Optional, Self, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormsModule, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
@@ -13,6 +13,8 @@ import { default as _rollupMoment, Moment } from 'moment';
 import { AppDateAdapter } from './datepicker-year-month-adapter';
 import { InputSizeComponent } from '../../input/input-size.component';
 import { MESSAGE } from '../../utils/constant';
+import { NgxControlError } from 'ngxtension/control-error';
+import { DatepickerYearMonthAdapter } from './datepicker-year-month-adapter.component';
 const moment = _rollupMoment || _moment;
 
 export const MONTH_MODE_FORMATS = {
@@ -32,7 +34,7 @@ export const MONTH_MODE_FORMATS = {
   selector: 'app-datepicker-year-month',
   standalone: true,
   imports: [CommonModule, FormsModule, MatDatepickerModule, MatNativeDateModule, NgxMaterialTimepickerModule,
-    MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent
+    MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, NgxControlError, ReactiveFormsModule
   ],
   templateUrl: './datepicker-year-month.component.html',
   styleUrl: './datepicker-year-month.component.scss',
@@ -43,12 +45,12 @@ export const MONTH_MODE_FORMATS = {
       multi: true
     },
     { provide: MAT_DATE_FORMATS, useValue: MONTH_MODE_FORMATS },
-    // provideMomentDateAdapter(MONTH_MODE_FORMATS),
     {
       provide: DateAdapter,
       useClass: AppDateAdapter,
       deps: [MAT_DATE_LOCALE],
     },
+    { provide: DateAdapter, useClass: DatepickerYearMonthAdapter }
   ],
 })
 export class DatepickerComponent implements OnInit, ControlValueAccessor {
@@ -56,27 +58,22 @@ export class DatepickerComponent implements OnInit, ControlValueAccessor {
   size = input<string>('');
   label = input<string>();
   required = input<boolean>(false);
-  messageRequired = input<string>('');
-  _datePickerValue: Date;
+  readonly = input<boolean>(false);
+  datePickerValue = new FormControl();
 
-  constructor() {
-  }
   ngOnInit(): void {
   }
 
 
-  get datePickerValue(): Date {
-    return this._datePickerValue;
-  }
-
-  set datePickerValue(value: Date) {
-    this._datePickerValue = value;
-    this.propagateChange(this._datePickerValue);
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['readonly']) {
+      this.updateEnableState();
+    }
   }
 
   writeValue(value: Date) {
-    if (value !== undefined) {
-      this._datePickerValue = value;
+    if (this.datePickerValue?.value !== value) {
+      this.datePickerValue.setValue(value ?? null, { emitEvent: false });
     }
   }
 
@@ -96,11 +93,18 @@ export class DatepickerComponent implements OnInit, ControlValueAccessor {
   }
 
   setMonthAndYear(normalizedMonthAndYear: any, datepicker: MatDatepicker<any>) {
-    console.log(normalizedMonthAndYear)
-    const ctrlValue = this.datePickerValue ? moment(this.datePickerValue) : moment();
+    const ctrlValue = this.datePickerValue.value ? moment(this.datePickerValue.value) : moment();
     ctrlValue.month(normalizedMonthAndYear.getMonth());
     ctrlValue.year(normalizedMonthAndYear.getFullYear());
-    this.datePickerValue = ctrlValue.toDate();
+    this.datePickerValue.setValue(ctrlValue.toDate());
     datepicker.close();
+  }
+
+  private updateEnableState() {
+    if (!this.readonly) {
+      this.datePickerValue.enable({ emitEvent: false });
+    } else {
+      this.datePickerValue.disable({ emitEvent: false });
+    }
   }
 }

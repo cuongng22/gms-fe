@@ -38,7 +38,7 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
 
   yearPlan = input<number>(2024); // năm kế hoạch
   updateBudgetPlan = input<boolean>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
-
+  type = input<string>(''); // Loại Ngân sách hoặc mua sắm (budget/procurement)
 
 
 
@@ -49,9 +49,9 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
 
   ngOnInit(): void {
 
-    this.headerRowDef1 = getHeaderRowDef1(contractData);
-    this.headerRowDef2 = getHeaderRowDef2(contractData);
-    this.rowDef = getRowDef(contractData);
+    this.headerRowDef1 = getHeaderRowDef1(contractData, this.type());
+    this.headerRowDef2 = getHeaderRowDef2(contractData, this.type());
+    this.rowDef = getRowDef(contractData, this.type());
 
     this.dataSource.data = exampleData;
 
@@ -104,10 +104,12 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
       }
       //Tổng tiền xe chở tổ bay (ngoại tệ)
       this.calculate(index, 'totalAmountForeignTransport');
+
       if (!this.updateBudgetPlan()) {
         //Tổng tiền theo loại máy bay
         this.calculate(index, 'totalAmountAircraft');
       }
+
       // Tổng tiền ngoại tệ - Chưa bao gồm VAT
       this.calculate(index, 'totalAmountForeign');
       // Tổng tiền ngoại tệ - bao gồm VAT
@@ -168,8 +170,8 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
     // Tháng nào đã thực hiện thì tính theo công thưc mới
     const objFormula = formula[key];
     let strFomular = objFormula.formula;
-    if(this.updateBudgetPlan() && data.monthIsPerform) {
-      if(objFormula.formulaUpdateBudgetPlan) {
+    if (this.updateBudgetPlan() && data.monthIsPerform) {
+      if (objFormula.formulaUpdateBudgetPlan) {
         strFomular = objFormula.formulaUpdateBudgetPlan;
       }
     }

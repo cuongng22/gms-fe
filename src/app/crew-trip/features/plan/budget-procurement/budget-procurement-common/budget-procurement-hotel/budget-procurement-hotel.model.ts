@@ -163,22 +163,28 @@ export const rawData = {
 
 export const contractData = {
   // Phí early-checkin
-  earlyCheckinFeeFlag: true,
+  earlyCheckinFeeFlag: false,
   //Phí late checkout
-  lateCheckoutFeeFlag: true,
+  lateCheckoutFeeFlag: false,
   //Phí thuê xe chở tổ bay
   crewTransportFeeFlag: true,
+  //Phí thuê xe chở tổ bay
+  priceCrewTransportFlag: true,
 }
 
-export function getHeaderRowDef1(contractData: any): string[] {
-  const columns = [
+export function getHeaderRowDef1(contractData: any, type: string): string[] {
+  const columns: { column: string, visible: boolean }[] = [
     { column: "month", visible: true },
     { column: "aircraftType", visible: true },
     { column: "overnight", visible: true },
     { column: "numberOfRooms", visible: true },
     { column: "numberOfRoomsForOthers", visible: true },
-    { column: "numberOfEstimatedEarlyCheckInRooms", visible: !!contractData.earlyCheckinFeeFlag },
+    { column: "numberOfEstimatedEarlyCheckIn Rooms", visible: !!contractData.earlyCheckinFeeFlag },
     { column: "numberOfEstimatedLateCheckoutRooms", visible: !!contractData.lateCheckoutFeeFlag },
+    //start phần kế hoạch mua sắm
+    { column: "unitPriceIncludingVat", visible: type === 'PROCUREMENT' }, // (Đơn giá bao gồm vat) 
+    { column: "priceCrewTransport", visible: type === 'PROCUREMENT' && !!contractData.priceCrewTransportFlag }, // (Đơn giá xe chở tổ bay/lượt) 
+    // end phần kế hoạch mua sắm
     { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
     { column: "totalAmountForeign", visible: true },
     { column: "totalAmountColspan", visible: true }
@@ -186,8 +192,8 @@ export function getHeaderRowDef1(contractData: any): string[] {
   return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
 
-export function getHeaderRowDef2(contractData: any): string[] {
-  const columns = [
+export function getHeaderRowDef2(contractData: any, type: string): string[] {
+  const columns: { column: string, visible: boolean }[] = [
     { column: "singleRoom", visible: true },
     { column: "doubleRoom", visible: true },
     { column: "singleRoomReserved", visible: true },
@@ -199,13 +205,21 @@ export function getHeaderRowDef2(contractData: any): string[] {
     { column: "singleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
     { column: "doubleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
     { column: "singleRoomLateReserved", visible: !!contractData.lateCheckoutFeeFlag },
+    //start phần kế hoạch mua sắm
+    { column: "priceSingleRoom", visible: type === 'PROCUREMENT' }, // (Đơn giá phòng đơn) 
+    { column: "priceDoubleRoom", visible: type === 'PROCUREMENT' }, // (Đơn giá phòng đôi) 
+    { column: "priceSingleRoomEarly", visible: type === 'PROCUREMENT' && !!contractData.earlyCheckinFeeFlag }, // (Đơn giá Early-checkin phòng đơn) 
+    { column: "priceDoubleRoomEarly", visible: type === 'PROCUREMENT' && !!contractData.earlyCheckinFeeFlag }, // (Đơn giá Early-checkin phòng đôi) 
+    { column: "priceSingleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag }, // (Đơn giá late checkout phòng đơn) 
+    { column: "priceDoubleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag }, // (Đơn giá late check out phòng đôi) 
+    // end phần kế hoạch mua sắm
     { column: "totalAmount", visible: true },
     { column: "totalAmountVat", visible: true },
   ];
   return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
 
-export function getRowDef(contractData: any): string[] {
+export function getRowDef(contractData: any, type: string): string[] {
   const columns = [
     { column: "month", visible: true },
     { column: "aircraftType", visible: true },
@@ -221,6 +235,15 @@ export function getRowDef(contractData: any): string[] {
     { column: "singleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
     { column: "doubleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
     { column: "singleRoomLateReserved", visible: !!contractData.lateCheckoutFeeFlag },
+     //start phần kế hoạch mua sắm
+    { column: "priceSingleRoom", visible: type === 'PROCUREMENT' },
+    { column: "priceDoubleRoom", visible: type === 'PROCUREMENT' },
+    { column: "priceSingleRoomEarly", visible: type === 'PROCUREMENT' && !!contractData.earlyCheckinFeeFlag },
+    { column: "priceDoubleRoomEarly", visible: type === 'PROCUREMENT' && !!contractData.earlyCheckinFeeFlag },
+    { column: "priceSingleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag },
+    { column: "priceDoubleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag },
+    { column: "priceCrewTransport", visible: type === 'PROCUREMENT'  && !!contractData.priceCrewTransportFlag },
+    // end phần kế hoạch mua sắm
     { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
     { column: "totalAmountForeign", visible: true },
     { column: "totalAmount", visible: true },
