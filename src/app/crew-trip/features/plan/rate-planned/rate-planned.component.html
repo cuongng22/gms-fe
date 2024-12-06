@@ -41,6 +41,9 @@
                     <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
+                @if (!!formGroupSearch.controls['version'].hasError('required')) {
+                  <mat-error><span i18n>Version</span><span i18n> is required</span></mat-error>
+                }
               </mat-form-field>
             </div>
             <div class="col-sm-3" sizeInput='sm'>
