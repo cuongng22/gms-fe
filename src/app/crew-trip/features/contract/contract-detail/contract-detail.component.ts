@@ -85,137 +85,103 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   // private filesControl = new FormControl(null, );
   constructor() {
     super();
-    this.formGroupDetail = this.fb.group({
-      doiTuongDichVu: [],
-      phanLoaiHopDong: [],
-
-      //tab4
-      marketCode: [],
-      marketName: [],
-      nation: [],
-      classification: [],
-      flightGroup: [],
-      statusUsage: [],
-      supplierName: [],
-      supplierPhone: [],
-      supplierEmail: [],
-      carType: [],
-      standardCheckIn: [],
-      standardCheckOut: [],
-      notes: [],
-
-      tempp: [],
-      id: [],
-      bizDocId: [],
-      contractCode: [{value:'',disabled: true}],
-      contractNo: [],
-      currency: [],
-      exchangeRate: [],
-      signedDate: [],
-      effectiveDate: [],
-      expiryDate: [],
-      contractType: [],
-      contractForm: [],
-      hdPlRoot: [],
-      contractName: [],
-      partnerCode: [],
-      partnerName: [],
-      partnerAddress: [],
-      negotiateCompetence: [],
-      competence: [],
-      employeeSigned: [],
-      signedDepartmentName: [],
-      budgetDepartmentName: [],
-      proceedDepartmentName: [],
-      paidDepartmentName: [],
-      employeeId: [],
-      employeeName: [],
-      paymentType: [],
-      budgetCode: [],
-      fieldCode2: [],
-      dueDateNumber: [],
-      handoverDate: [],
-      documentsList: [],
-      bankAccountNoB: [],
-      peopleName: [],
-      bankNameB: [],
-      bankAddressB: [],
-      cityB: [],
-      bankBranchNameB: [],
-      bankLocalCode: [],
-      swiftCodeB: [],
-      bankCharge: [],
-      bankCharge1: [],
-      bankAccountNoB1: [],
-      bankNameB1: [],
-      swiftCodeB1: [],
-      isHotel: [],
-      isVehicle: [],
-      hotel: [],
-      vehicle: [],
-      priceUnitInfo: [],
-      iban: [],
-    });
-    this.formGroupFileUpload = this.fb.group({
-      contractCategory: ['1'], fileUpload: []
-    });
+    window.scrollTo(0, 0);
   }
 
   override async ngOnInit() {
     try {
-      window.scrollTo(0, 0);
+      //declare
+      this.formGroupDetail = this.fb.group({
+        doiTuongDichVu: [{value: '', disabled: this.readMode}],
+        phanLoaiHopDong: [{value: '', disabled: this.readMode}],
+
+        //tab4
+        marketCode: [{value: '', disabled: this.readMode}],
+        marketName: [{value: '', disabled: this.readMode}],
+        nation: [{value: '', disabled: this.readMode}],
+        classification: [{value: '', disabled: this.readMode}],
+        flightGroup: [{value: '', disabled: this.readMode}],
+        statusUsage: [{value: '', disabled: this.readMode}],
+        supplierName: [{value: '', disabled: this.readMode}],
+        supplierPhone: [{value: '', disabled: this.readMode}],
+        supplierEmail: [{value: '', disabled: this.readMode}],
+        carType: [{value: '', disabled: this.readMode}],
+        standardCheckIn: [{value: '', disabled: this.readMode}],
+        standardCheckOut: [{value: '', disabled: this.readMode}],
+        notes: [{value: '', disabled: this.readMode}],
+
+        tempp: [{value: '', disabled: this.readMode}],
+        id: [{value: '', disabled: this.readMode}],
+        bizDocId: [{value: '', disabled: this.readMode}],
+        contractCode: [{value: '', disabled: this.readMode}],
+        contractNo: [{value: '', disabled: this.readMode}],
+        currency: [{value: '', disabled: this.readMode}],
+        exchangeRate: [{value: '', disabled: this.readMode}],
+        signedDate: [{value: '', disabled: this.readMode}],
+        effectiveDate: [{value: '', disabled: this.readMode}],
+        expiryDate: [{value: '', disabled: this.readMode}],
+        contractType: [{value: '', disabled: this.readMode}],
+        contractForm: [{value: '', disabled: this.readMode}],
+        hdPlRoot: [{value: '', disabled: this.readMode}],
+        contractName: [{value: '', disabled: this.readMode}],
+        partnerCode: [{value: '', disabled: this.readMode}],
+        partnerName: [{value: '', disabled: this.readMode}],
+        partnerAddress: [{value: '', disabled: this.readMode}],
+        negotiateCompetence: [{value: '', disabled: this.readMode}],
+        competence: [{value: '', disabled: this.readMode}],
+        employeeSigned: [{value: '', disabled: this.readMode}],
+        signedDepartmentName: [{value: '', disabled: this.readMode}],
+        budgetDepartmentName: [{value: '', disabled: this.readMode}],
+        proceedDepartmentName: [{value: '', disabled: this.readMode}],
+        paidDepartmentName: [{value: '', disabled: this.readMode}],
+        employeeId: [{value: '', disabled: this.readMode}],
+        employeeName: [{value: '', disabled: this.readMode}],
+        paymentType: [{value: '', disabled: this.readMode}],
+        budgetCode: [{value: '', disabled: this.readMode}],
+        fieldCode2: [{value: '', disabled: this.readMode}],
+        dueDateNumber: [{value: '', disabled: this.readMode}],
+        handoverDate: [{value: '', disabled: this.readMode}],
+        documentsList: [{value: '', disabled: this.readMode}],
+        bankAccountNoB: [{value: '', disabled: this.readMode}],
+        peopleName: [{value: '', disabled: this.readMode}],
+        bankNameB: [{value: '', disabled: this.readMode}],
+        bankAddressB: [{value: '', disabled: this.readMode}],
+        cityB: [{value: '', disabled: this.readMode}],
+        bankBranchNameB: [{value: '', disabled: this.readMode}],
+        bankLocalCode: [{value: '', disabled: this.readMode}],
+        swiftCodeB: [{value: '', disabled: this.readMode}],
+        bankCharge: [{value: '', disabled: this.readMode}],
+        bankCharge1: [{value: '', disabled: this.readMode}],
+        bankAccountNoB1: [{value: '', disabled: this.readMode}],
+        bankNameB1: [{value: '', disabled: this.readMode}],
+        swiftCodeB1: [{value: '', disabled: this.readMode}],
+        isHotel: [{value: '', disabled: this.readMode}],
+        isVehicle: [{value: '', disabled: this.readMode}],
+        hotel: [{value: '', disabled: this.readMode}],
+        vehicle: [{value: '', disabled: this.readMode}],
+        priceUnitInfo: [{value: '', disabled: this.readMode}],
+        iban: [{value: '', disabled: this.readMode}],
+      });
+      this.formGroupFileUpload = this.fb.group({
+        contractCategory: ['1'], fileUpload: []
+      });
+
+
       await this.spinner.show();
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         // this.loadListMaNghiepVu(),
         this.loadListQuocGia(),]).then(() => {
-        if (this.formGroupDetail.value.isHotel && this.formGroupDetail.value.isVehicle) {
+        if (this.formGroupDetail.getRawValue().isHotel && this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({doiTuongDichVu: '3'});
-        } else if (this.formGroupDetail.value.isHotel) {
+        } else if (this.formGroupDetail.getRawValue().isHotel) {
           this.formGroupDetail.patchValue({doiTuongDichVu: '1'});
-        } else if (this.formGroupDetail.value.isVehicle) {
+        } else if (this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({doiTuongDichVu: '2'});
         }
 
         this.getPartnerInfo();
-        this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.value.documentsList ?? []);
-        this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.value.priceUnitInfo);
-        this.tblUnitPrice = new MatTableDataSource<any>([{
-          "id": 10001,
-          "serviceCode": "SVC12345",
-          "vnaTransId": 20002,
-          "priceNoTax": 1500.5,
-          "taxCode": "TAX24",
-          "taxRate": 1.1,
-          "originalAmount3": 1650.55,
-          "priceWithTax": 1650.55,
-          "notes": "Sample transaction",
-          "bizDocId": "14463221C1",
-          "expenseCatgId": 30003
-        }, {
-          "id": 10001,
-          "serviceCode": "SVC12345",
-          "vnaTransId": 20002,
-          "priceNoTax": 1500.5,
-          "taxCode": "TAX24",
-          "taxRate": 1.1,
-          "originalAmount3": 1650.55,
-          "priceWithTax": 1650.55,
-          "notes": "Sample transaction",
-          "bizDocId": "14463221C1",
-          "expenseCatgId": 30003
-        }, {
-          "id": 10001,
-          "serviceCode": "SVC12345",
-          "vnaTransId": 20002,
-          "priceNoTax": 1500.5,
-          "taxCode": "TAX24",
-          "taxRate": 1.1,
-          "originalAmount3": 1650.55,
-          "priceWithTax": 1650.55,
-          "notes": "Sample transaction",
-          "bizDocId": "14463221C1",
-          "expenseCatgId": 30003
-        }]);
+        this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.getRawValue().documentsList ?? []);
+        this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.getRawValue().priceUnitInfo);
 
         //debounce
         this.brake = true;
@@ -258,7 +224,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         let formUpload = new FormData();
         let fileUpload = this.formGroupFileUpload.value.fileUpload[0];
         let optionBlob = new Blob([this.formGroupFileUpload.value.contractCategory], {type: 'application/json'});
-        let bizDocIdBlob = new Blob([this.formGroupDetail.value.bizDocId], {type: 'application/json'});
+        let bizDocIdBlob = new Blob([this.formGroupDetail.getRawValue().bizDocId], {type: 'application/json'});
         //validate
         // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
         if (fileUpload.size > 5 * 1048576) {
@@ -365,7 +331,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async test() {
-    console.log(this.formGroupDetail.value, 'this.formGroupDetail.value')
+    console.log(this.formGroupDetail.getRawValue(), 'this.formGroupDetail.getRawValue()')
     console.log(this.tblUnitPrice.data)
   }
 
@@ -378,9 +344,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   async getPartnerInfo() {
     await this.baseService.getPartnerInfo({
-      partnerCode: this.formGroupDetail.value.partnerCode,
-      isHotel: this.formGroupDetail.value.isHotel,
-      isVehicle: this.formGroupDetail.value.isVehicle
+      partnerCode: this.formGroupDetail.getRawValue().partnerCode,
+      isHotel: this.formGroupDetail.getRawValue().isHotel,
+      isVehicle: this.formGroupDetail.getRawValue().isVehicle
     }).then(res => {
       if (res.status == HttpStatusCode.Ok && res.data) {
         let data = res.data;
