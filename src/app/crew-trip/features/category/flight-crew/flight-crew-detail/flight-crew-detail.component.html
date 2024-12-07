@@ -37,6 +37,9 @@
                   {{ type.actype }}
                 </mat-option>
               </mat-select>
+              @if (!!formGroupDetail.controls['acType'].hasError('existActype')) {
+                <mat-error>{{messageErrorActype}}</mat-error>
+              }
             </mat-form-field>
           </div>
         </div>
