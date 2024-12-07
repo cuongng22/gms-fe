@@ -581,15 +581,15 @@
               <tr *matRowDef="let row; columns: ['stt','documentType','fileName','action']" mat-row></tr>
             </table>
           </div>
-          <div class="col-4 mt-20" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Contract category</mat-label>
-              <mat-select formControlName="contractCategory">
-                <mat-option i18n value="1">Contract/annex or appendix</mat-option>
-                <mat-option i18n value="0">Other documents of contract</mat-option>
-              </mat-select>
-            </mat-form-field>
-          </div>
+<!--          <div class="col-4 mt-20" sizeInput='sm'>-->
+<!--            <mat-form-field>-->
+<!--              <mat-label i18n>Contract category</mat-label>-->
+<!--              <mat-select formControlName="contractCategory">-->
+<!--                <mat-option i18n value="1">Contract/annex or appendix</mat-option>-->
+<!--                <mat-option i18n value="0">Other documents of contract</mat-option>-->
+<!--              </mat-select>-->
+<!--            </mat-form-field>-->
+<!--          </div>-->
 
           <div class="col-4 mt-20" sizeInput='sm'>
             <file-upload (ngModelChange)="actionUpload()" [accept]="COMMON_CONFIG.FILE_ACCEPT" [multiple]="false"

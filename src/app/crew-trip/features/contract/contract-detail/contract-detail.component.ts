@@ -178,7 +178,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       iban: [],
     });
     this.formGroupFileUpload = this.fb.group({
-      contractCategory: ['1'], fileUpload: []
+      fileUpload: []
     });
   }
 
@@ -237,12 +237,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async actionUpload() {
-    if (this.formGroupFileUpload.value.contractCategory && this.formGroupFileUpload.value.fileUpload.length > 0) {
+    if (this.formGroupFileUpload.value.fileUpload.length > 0) {
       try {
         await this.spinner.show();
         let formUpload = new FormData();
         let fileUpload = this.formGroupFileUpload.value.fileUpload[0];
-        let optionBlob = new Blob([this.formGroupFileUpload.value.contractCategory], {type: 'application/json'});
         let bizDocIdBlob = new Blob([this.formGroupDetail.getRawValue().bizDocId], {type: 'application/json'});
         //validate
         // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
@@ -251,12 +250,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           return;
         }
         formUpload.append('file', fileUpload, fileUpload.name);
-        formUpload.append('option', optionBlob);
         formUpload.append('bizDocId', bizDocIdBlob);
         await this.baseService.uploadFile(formUpload).then(res => {
           if (res.status == HttpStatusCode.Ok) {
             this.tblAttachedDocument.data = [...this.tblAttachedDocument.data, {
-              documentType: this.formGroupFileUpload.value.documentType == 1 ? 'Contract/annex or appendix' : 'Other documents of contract',
+              // documentType: this.formGroupFileUpload.value.documentType == 1 ? 'Contract/annex or appendix' : 'Other documents of contract',
               fileName: fileUpload.name,
               fileUrl: res.data,
               isManual: true
@@ -390,7 +388,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     let fieldAnnex = [''];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode || this.viewType == 'HD') {
-        // v.disable();
+        v.disable();
       }
     });
   }
