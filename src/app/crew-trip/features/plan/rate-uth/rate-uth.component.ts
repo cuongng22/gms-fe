@@ -98,7 +98,6 @@ export class RateUthComponent extends CommonComponent implements OnInit {
         size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
         limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
       });
-      console.log(res);
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;

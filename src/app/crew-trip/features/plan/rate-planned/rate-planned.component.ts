@@ -66,7 +66,7 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
   }
 
   async initSearchVersion() {
-    this.baseService.getListVersion({option: 1}).then(res => {
+    await this.baseService.getListVersion({option: 1}).then(res => {
       this.listVersion = of(res.data.map((it: any) => it.version));
       if (this.listVersion) {
         this.listVersion.pipe(take(1)).subscribe(versions => {
