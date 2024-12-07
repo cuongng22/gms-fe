@@ -58,4 +58,9 @@ export class ContractService extends BaseService {
     const params = new HttpParams({fromObject: {fileName: fileName, bizDocId: bizDocId}});
     return firstValueFrom(this.http.delete(url, {params}));
   }
+
+  override create<T = any>(body: any): Promise<T> {
+    const url = `${this.api}/${this.path}/appendix`;
+    return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
+  }
 }
