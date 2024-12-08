@@ -85,22 +85,22 @@
           </th>
           <td mat-cell *matCellDef="let element">
             <div class="action-buttons d-flex align-items-center justify-content-end">
-              <button type="button" mat-button (click)="grMailDetail(element.id,'view')">
+              <a type="button" mat-button (click)="grMailDetail(element.id,'view')">
                 <i class="material-symbols-outlined" title="Edit" i18n-title="@@edit">
                   visibility
                 </i>
-              </button>
-              <button type="button" mat-button (click)="grMailDetail(element.id,'edit')">
+              </a>
+              <a type="button" mat-button (click)="grMailDetail(element.id,'edit')">
                 <i class="material-symbols-outlined text-warning" title="Edit" i18n-title="@@edit">
                   edit
                 </i>
-              </button>
-              <button type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
+              </a>
+              <a type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
                 (click)="showConfirmDelete(element.id)">
-                <span class="material-symbols-outlined">
+                <i class="material-symbols-outlined">
                   delete
-                </span>
-              </button>
+                </i>
+              </a>
             </div>
           </td>
         </ng-container>
@@ -116,37 +116,42 @@
   </mat-card-content>
 </mat-card>
 
-<div class="add-new-popup" [class.active]="showDialogDelete">
-  <div class="popup-dialog dialog-with">
-    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
-      <mat-card-content>
-        <div class="text-warning text-center">
-          <span class="material-symbols-outlined font-size-5rem">
-            error
-          </span>
-        </div>
-        <div class="text-center mb-20">
-          <h3 class="mb-0" i18n="@@deleteHotelMessage">Are you sure you want to delete</h3>
-        </div>
-        <div class="btn-box text-center">
-          <button type="button" mat-button (click)="toggleDialogDelete()" class="danger-btn  min-with-100 mlr-5">
-            <i class="material-symbols-outlined">
-              close
-            </i>
-            <span i18n="@@cancel">Cancel</span>
-          </button>
-          <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
-            <i class="material-symbols-outlined">
-              save
-            </i>
-            <span i18n="@@confirm">Confirm</span>
-          </button>
+        <div class="add-new-popup" [class.active]="showDialogDelete">
+          <div class="popup-dialog dialog-delete-with">
+            <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+              <mat-card-content>
+                <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+                </div>
+                <div class="text-center mb-20">
+                  <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
+                </div>
+                <div class="text-center mb-20">
+                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+                        You will not be able to recover the deleted data!</span>
+                </div>
+                <div class="btn-box text-center">
+                  <button type="button" mat-button (click)="closeConfirmDelete()"
+                          class="close-btn  min-with-100 mlr-5">
+                    <i class="material-symbols-outlined">
+                      close
+                    </i>
+                    <span i18n="@@cancel">Cancel</span>
+                  </button>
+                  <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
+                    <i class="material-symbols-outlined">
+                      save
+                    </i>
+                    <span i18n="@@confirm">Confirm</span>
+                  </button>
 
+                </div>
+              </mat-card-content>
+            </mat-card>
+          </div>
         </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div>
 </mat-tab>
 <mat-tab label="Payment Email">
   <ng-container *ngIf="activeTab === 1">

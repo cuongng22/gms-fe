@@ -92,17 +92,10 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
 
   override ngOnInit(): void {
     if (this.data.item) {
-      console.log(this.data.item);
       this.formGroupDetail.patchValue({
-        id: this.data.item.id,
-        marketCode: this.data.item.marketCode,
-        acType: this.data.item.acType,
-        pilotNumber: this.data.item.pilotNumber,
-        numberAttendant: this.data.item.attendantNumber,
-        notes: this.data.item.notes,
-        status: this.data.item.status,
+        ...this.data.item,
+        numberAttendant: this.data.item.attendantNumber
       });
-
     }
   }
 
@@ -132,7 +125,6 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
         this.dialogRef.close('Update Success');
       }
     });
-
   }
 
   close(): void {

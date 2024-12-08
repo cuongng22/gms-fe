@@ -60,7 +60,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit{
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   markets: any[] = [];
   filteredOptionsMarket = model<any[]>([]);
-  override displayedColumns: string[] = ['email', 'actions'];
+  // override displayedColumns: string[] = ['email', 'actions'];
   emailList: EmailObj[] = [];
   emailForm: FormGroup;
   emailListStr: string[] = [];
@@ -82,6 +82,11 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit{
     this.emailForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]]
     });
+    if (!data?.mode || data.mode !== 'view') {
+      this.displayedColumns = ['email', 'actions'];
+    } else {
+      this.displayedColumns = ['email'];
+    }
   }
 
   override ngOnInit(): void {
