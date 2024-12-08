@@ -11,7 +11,7 @@ import {
   ViewChild
 } from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
@@ -48,23 +48,21 @@ import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {NgxMatTimepickerFieldComponent} from "ngx-mat-timepicker";
 import {debounce} from 'lodash';
-import { MomentDateAdapter } from '@angular/material-moment-adapter';
+import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
-
+import * as ContractLookup from "src/app/crew-trip/features/contract/contract-lookup";
 
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent],
+  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
   providers: [
-
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
 
-
-    ]
+  ]
 })
 
 
@@ -96,7 +94,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   listMaNghiepVu: any = [];
   listKhoanMucKhns: any = [];
   listQuocGia: any = [];
-
+  listContractType = ContractLookup.ContractType;
+  listContractForm = ContractLookup.ContractForm;
   //debounce
   brake: any;
   marketCodeChangeDebounce: any;
@@ -108,26 +107,31 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     window.scrollTo(0, 0);
     this.formGroupDetail = this.fb.group({
       doiTuongDichVu: [],
-      phanLoaiHopDong: [],
+      contractSpec: [],
 
       //tab4
       marketCode: [],
       marketName: [],
+      marketType: [],
       nation: [],
+      nationId: [],
       classification: [],
       flightGroup: [],
       statusUsage: [],
       supplierName: [],
       supplierPhone: [],
       supplierEmail: [],
+      email: [],
       carType: [],
       standardCheckIn: [],
       standardCheckOut: [],
+      standardCheckout: [],
       notes: [],
 
       tempp: [],
       id: [],
       bizDocId: [],
+      bizDocIdC1: [],
       contractCode: [],
       contractNo: [],
       currency: [],
@@ -175,7 +179,13 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       hotel: [],
       vehicle: [],
       priceUnitInfo: [],
+      insertPriceUnitInfo: [],
+      updatePriceUnitInfo: [],
+      // deletePriceUnitInfo: [],
       iban: [],
+      appendixCode: [],
+      appendixName: [],
+      appendixNo: [],
     });
     this.formGroupFileUpload = this.fb.group({
       fileUpload: []
@@ -197,15 +207,25 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         } else if (this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({doiTuongDichVu: '2'});
         }
+        this.formGroupDetail.patchValue(
+          {
+            //fix tam
+            swiftCodeB1: '123',
+            //
+            contractType: this.listContractType.find(s => s.value == this.formGroupDetail.getRawValue().contractType)?.key,
+            contractForm: this.listContractForm.find(s => s.value == this.formGroupDetail.getRawValue().contractForm)?.key,
+            standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout
+          });
 
         this.getPartnerInfo();
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.getRawValue().documentsList ?? []);
-        this.tblUnitPrice = new MatTableDataSource(this.formGroupDetail.getRawValue().priceUnitInfo);
+
+        let priceUnitInfo = this.formGroupDetail.getRawValue().priceUnitInfo.map((s: any) => ({...s, serviceFeeCode: s.serviceCode}));
+        this.tblUnitPrice = new MatTableDataSource(priceUnitInfo);
 
         //debounce
         this.brake = true;
         this.marketCodeChangeDebounce = debounce(async (value: any) => {
-          console.log(value && !this.brake, value, this.brake, 'value && !this.brake')
           if (value && !this.brake) {
             try {
               await this.spinner.show();
@@ -228,7 +248,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       console.log(e);
     } finally {
       await this.spinner.hide();
-      console.log(this.tblAttachedDocument, 'tblAttachedDocument')
     }
   }
 
@@ -272,7 +291,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async addUnitPrice() {
-    this.tblUnitPrice.data = [...this.tblUnitPrice.data, {}];
+    this.tblUnitPrice.data = [...this.tblUnitPrice.data, {action: 'ADD'}];
   }
 
   async editUnitPrice(index: any) {
@@ -334,7 +353,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     let cur = new Set(row.cellEdit);
     cur.add(cell);
     row.cellEdit = Array.from(cur);
-    console.log(row)
   }
 
   readCellUP(row: any, cell: any) {
@@ -357,6 +375,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async nationSelected(event: any) {
+    let nation = this.listQuocGia.find((s: any) => s.id === event.option.value);
+    this.formGroupDetail.patchValue({nationId: nation?.id, nation: nation?.engName});
   }
 
   async getPartnerInfo() {
@@ -385,11 +405,43 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async setReadMode(form: FormGroup) {
+    let fieldContract = ['marketCode', 'marketName', 'nation',
+      'classification', 'flightGroup', 'statusUsage', 'supplierName',
+      'supplierPhone', 'supplierEmail', 'carType', 'standardCheckIn',
+      'standardCheckOut', 'notes',
+      'doiTuongDichVu', 'contractSpec'];
     let fieldAnnex = [''];
     Object.entries(form.controls).forEach(([k, v]) => {
-      if (this.readMode || this.viewType == 'HD') {
+      if (this.readMode) {
+        v.disable();
+      } else if (!fieldContract.includes(k)) {
         v.disable();
       }
     });
+  }
+
+  override async detail(id: any): Promise<void> {
+    if (id) {
+      await super.detail(id);
+    } else {
+      this.formGroupDetail.patchValue({})
+    }
+  }
+
+  override async save() {
+    this.formGroupDetail.patchValue({
+      id: this.formGroupDetail.getRawValue().bizDocId,
+      appendixCode: this.formGroupDetail.getRawValue().contractCode,
+      appendixName: this.formGroupDetail.getRawValue().contractName,
+      appendixNo: this.formGroupDetail.getRawValue().bizDocId,
+      isHotel: (this.formGroupDetail.getRawValue().doiTuongDichVu == 1 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3),
+      isVehicle: (this.formGroupDetail.getRawValue().doiTuongDichVu == 2 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3),
+      email: this.formGroupDetail.getRawValue().supplierEmail,
+      priceUnitInfo: this.tblUnitPrice.data,
+      insertPriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action == 'ADD'),
+      updatePriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action != 'ADD'),
+      // deletePriceUnitInfo: this.tblUnitPrice.data,
+    })
+    await super.save();
   }
 }

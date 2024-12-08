@@ -144,7 +144,7 @@ export class CommonComponent implements OnInit, AfterViewInit {
         this.findInvalidControls(this.formGroupDetail)
         return;
       }
-      const update = !!this.formGroupDetail.value.id;
+      const update = !!this.formGroupDetail.getRawValue().id;
       await this.spinner.show();
       let res;
       if (update) {
@@ -169,7 +169,7 @@ export class CommonComponent implements OnInit, AfterViewInit {
   async delete() {
     try {
       await this.spinner.show();
-      const res = await this.baseService.delete(this.formGroupDetail.value.id);
+      const res = await this.baseService.delete(this.formGroupDetail.getRawValue().id);
       this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
       await this.search();
       return res;

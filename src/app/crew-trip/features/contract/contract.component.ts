@@ -57,25 +57,16 @@ export class ContractComponent extends CommonComponent implements OnInit {
   listVehicle = [];
   tblAnnexData = new MatTableDataSource();
   _displayedColumns: {
-    label: string;
-    value: string,
-    type?: string,
-    format?: string
+    label: string; value: string, type?: string, format?: string
   }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Market`, value: 'marketCode'}, {
-      label: $localize`bizDocId`,
-      value: 'bizDocId'
+      label: $localize`bizDocId`, value: 'bizDocId'
     }, {label: $localize`Contract Code`, value: 'contractCode'}, {
-      label: $localize`Contract No`,
-      value: 'contractNo'
+      label: $localize`Contract No`, value: 'contractNo'
     }, {label: $localize`Contract Name`, value: 'contractName'}, {
-      label: $localize`Partner Name`,
-      value: 'partnerName'
+      label: $localize`Partner Name`, value: 'partnerName'
     }, {label: $localize`Service Object`, value: 'serviceObject'}, {
-      label: $localize`Signed Date`,
-      value: 'signedDate',
-      type: Constant.DATE,
-      format: Constant.DATE_FORMAT
+      label: $localize`Signed Date`, value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT
     }, // {label: $localize`Effective Date`, value: 'effectiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
     // {label: $localize`Expiry Date`, value: 'expiryDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
   ];
@@ -181,7 +172,12 @@ export class ContractComponent extends CommonComponent implements OnInit {
       active: [false],
       contractId: []
     });
-    this.formGroupDetail = this.fb.group({bizDocId: []});
+    this.formGroupDetail = this.fb.group({
+      bizDocId: [],
+      bizDocIdC1: [],
+      contractName: [],
+      contractCode: []
+    });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
@@ -250,7 +246,12 @@ export class ContractComponent extends CommonComponent implements OnInit {
   async showListAnnex(id: any) {
     this.viewType = 'PL';
     this.formGroupSearch.patchValue({contractId: id});
-    this.contractObj = this.dataSource.data.find((value:any) => value.bizDocId == id);
+    this.contractObj = this.dataSource.data.find((value: any) => value.bizDocId == id);
+    this.formGroupDetail.patchValue({
+      bizDocIdC1: this.contractObj.bizDocId,
+      contractName: this.contractObj.contractName,
+      contractCode: this.contractObj.contractCode,
+    });
     await this.search();
   }
 
