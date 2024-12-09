@@ -3,6 +3,11 @@ import { ex } from "node_modules/@fullcalendar/core/internal-common"
 export const formula: any = {
 
 
+  //Số chuyến bay theo tàu (công thức của kế hoạch mua sắm)
+  totalFlightByAircraft: {
+    formula: 'data.totalFlightMonth * data.flightOvernightRate'
+  },
+
   //Tổng tiền xe chở tổ bay (ngoại tệ)
   totalAmountForeignTransport: {
     formula: 'data.totalFlightMonth * 2 * data.carRate',
@@ -235,14 +240,14 @@ export function getRowDef(contractData: any, type: string): string[] {
     { column: "singleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
     { column: "doubleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
     { column: "singleRoomLateReserved", visible: !!contractData.lateCheckoutFeeFlag },
-     //start phần kế hoạch mua sắm
+    //start phần kế hoạch mua sắm
     { column: "priceSingleRoom", visible: type === 'PROCUREMENT' },
     { column: "priceDoubleRoom", visible: type === 'PROCUREMENT' },
     { column: "priceSingleRoomEarly", visible: type === 'PROCUREMENT' && !!contractData.earlyCheckinFeeFlag },
     { column: "priceDoubleRoomEarly", visible: type === 'PROCUREMENT' && !!contractData.earlyCheckinFeeFlag },
     { column: "priceSingleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag },
     { column: "priceDoubleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag },
-    { column: "priceCrewTransport", visible: type === 'PROCUREMENT'  && !!contractData.priceCrewTransportFlag },
+    { column: "priceCrewTransport", visible: type === 'PROCUREMENT' && !!contractData.priceCrewTransportFlag },
     // end phần kế hoạch mua sắm
     { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
     { column: "totalAmountForeign", visible: true },
@@ -2699,4 +2704,20 @@ export const exampleData =
       "numberOfLateFlights": 5,
       "overnightLate": 1
     }
-  ];
+];
+
+
+export const planFlightByOvernight = [
+  {
+    numberOfOvernight: 1,
+    flightRate: 20
+  },
+  {
+    numberOfOvernight: 2,
+    flightRate: 30
+  },
+  {
+    numberOfOvernight: 3,
+    flightRate: 40
+  }
+]

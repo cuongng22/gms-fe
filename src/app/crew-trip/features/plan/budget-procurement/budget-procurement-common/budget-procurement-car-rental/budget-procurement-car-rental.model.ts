@@ -35,30 +35,36 @@ export function getRowDef(): string[] {
 
 
 export const formula: any = {
+    // số chuyên bay
+    numberFlight: {
+        formula: '',
+        formulaProcurement: 'data.noOfFlightByPeriod * flightOvernightRate / 100',
+    },
 
     //Số lượt xe	= số chuyến bay * 2					
     numberVehicles: {
-      formula: 'data.numberFlight * 2',
-      // groupFormula: 'aircraftType && periodStart',
+        formula: 'data.numberFlight * 2',
+        formulaProcurement: '',
+        // groupFormula: 'aircraftType && periodStart',
     },
     //Thành tiền (ngoại tệ) - Chưa bao gồm VAT	"= (Số lượt xe + extra transfer) * đơn giá trước VAT
     totalAmountForeign: {
-      formula: '(data.numberVehicles + data.extraTransfer) * data.unitPrice',
+        formula: '(data.numberVehicles + data.extraTransfer) * data.unitPrice',
     },
     //Thành tiền (ngoại tệ) - Bao gồm VAT	"= (Số lượt xe + extra transfer) * đơn giá
     totalAmountForeignVat: {
-      formula: '(data.numberVehicles + data.extraTransfer) * data.unitPriceVat',
+        formula: '(data.numberVehicles + data.extraTransfer) * data.unitPriceVat',
     },
     //Thành tiền VND (Chưa bao gồm VAT) = Thành tiền ngoại tệ chưa bao gồm VAT * tỷ giá theo từng tháng
     totalAmount: {
-      formula: 'data.totalAmountForeign * data.rate'
+        formula: 'data.totalAmountForeign * data.rate'
     },
     //Thành tiền VND (Bao gồm VAT) = Thành tiền ngoại tệ bao gồm VAT * tỷ giá theo từng tháng
     totalAmountVat: {
-      formula: 'data.totalAmountForeignVat * data.rate'
+        formula: 'data.totalAmountForeignVat * data.rate'
     }
-  
-  }
+
+}
 
 export const exampleData =
     [
@@ -171,3 +177,140 @@ export const exampleData =
             rate: 25000
         }
     ];
+
+export const planFlightByOvernight = [
+    {
+        numberOfOvernight: 1,
+        flightRate: 20
+    },
+    {
+        numberOfOvernight: 2,
+        flightRate: 30
+    },
+    {
+        numberOfOvernight: 3,
+        flightRate: 40
+    }
+];
+
+export const planFlightPeriodList = [
+    {
+        "id": null,
+        "periodStart": "2025-01-01",
+        "periodEnd": "2025-12-01",
+        "aircraftType": "320",
+        "numberOfFlight": 2503,
+        "planBudgetProcurementId": null,
+        "periodStartStr": "T1/2025",
+        "periodEndStr": "T12/2025"
+    },
+    {
+        "id": null,
+        "periodStart": "2025-01-01",
+        "periodEnd": "2025-12-01",
+        "aircraftType": "321",
+        "numberOfFlight": 20230,
+        "planBudgetProcurementId": null,
+        "periodStartStr": "T1/2025",
+        "periodEndStr": "T12/2025"
+    },
+    {
+        "id": null,
+        "periodStart": "2025-01-01",
+        "periodEnd": "2025-12-01",
+        "aircraftType": "350",
+        "numberOfFlight": 3242,
+        "planBudgetProcurementId": null,
+        "periodStartStr": "T1/2025",
+        "periodEndStr": "T12/2025"
+    },
+    {
+        "id": null,
+        "periodStart": "2025-01-01",
+        "periodEnd": "2025-12-01",
+        "aircraftType": "787",
+        "numberOfFlight": 6530,
+        "planBudgetProcurementId": null,
+        "periodStartStr": "T1/2025",
+        "periodEndStr": "T12/2025"
+    },
+    {
+        "id": null,
+        "periodStart": "2026-01-01",
+        "periodEnd": "2026-12-01",
+        "aircraftType": "320",
+        "numberOfFlight": 2503,
+        "planBudgetProcurementId": null,
+        "periodStartStr": "T1/2026",
+        "periodEndStr": "T12/2026"
+    },
+    {
+        "id": null,
+        "periodStart": "2026-01-01",
+        "periodEnd": "2026-12-01",
+        "aircraftType": "321",
+        "numberOfFlight": 20230,"planBudgetProcurementId": null,
+        "periodStartStr": "T1/2026",
+        "periodEndStr": "T12/2026"
+    },
+    {
+        "id": null,
+        "periodStart": "2026-01-01",
+        "periodEnd": "2026-12-01",
+        "aircraftType": "350",
+        "numberOfFlight": 3242,
+        "planBudgetProcurementId": null,
+        "periodStartStr": "T1/2026",
+        "periodEndStr": "T12/2026"
+    },
+    {
+        "id": null,
+        "periodStart": "2026-01-01",
+        "periodEnd": "2026-12-01",
+        "aircraftType": "787",
+        "numberOfFlight": 6530,
+        "planBudgetProcurementId": null,
+        "periodStartStr": "T1/2026",
+        "periodEndStr": "T12/2026"
+    },
+    {
+        "id": null,
+        "periodStart": "2027-01-01",
+        "periodEnd": "2027-04-01",
+        "aircraftType": "320",
+        "numberOfFlight": 208,
+        "planBudgetProcurementId": null,
+        "periodStartStr": "T1/2027",
+        "periodEndStr": "T4/2027"
+    },
+    {
+        "id": null,
+        "periodStart": "2027-01-01",
+        "periodEnd": "2027-04-01",
+        "aircraftType": "321",
+        "numberOfFlight": 1685,
+        "planBudgetProcurementId": null,
+        "periodStartStr": "T1/2027",
+        "periodEndStr": "T4/2027"
+    },
+    {
+        "id": null,
+        "periodStart": "2027-01-01",
+        "periodEnd": "2027-04-01",
+        "aircraftType": "350",
+        "numberOfFlight": 270,
+        "planBudgetProcurementId": null,
+        "periodStartStr": "T1/2027",
+        "periodEndStr": "T4/2027"
+    },
+    {
+        "id": null,
+        "periodStart": "2027-01-01",
+        "periodEnd": "2027-04-01",
+        "aircraftType": "787",
+        "numberOfFlight": 544,
+        "planBudgetProcurementId": null,
+        "periodStartStr": "T1/2027",
+        "periodEndStr": "T4/2027"
+    }
+]

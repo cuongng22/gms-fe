@@ -9,7 +9,7 @@ import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
-import { contractData, exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './budget-procurement-hotel.model';
+import { contractData, exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, planFlightByOvernight } from './budget-procurement-hotel.model';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 
@@ -72,6 +72,13 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
         item.aircraftTypeLabel = item.aircraftType;
       }
 
+      if (this.type() === 'PROCUREMENT') {
+        // thêm tỉ lệ chuyến bay nghỉ đêm
+        item.flightOvernightRate = planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOvernight === item.overnight).map(item => item.flightRate);
+
+        //Số chuyến bay theo tàu 
+        this.calculate(index, 'totalFlightByAircraft');
+      }
       //Số phòng đơn
       this.calculate(index, 'singleRoom');
       //Số phòng đôi

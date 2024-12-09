@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './budget-procurement-car-rental.model';
+import { exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, planFlightByOvernight, planFlightPeriodList } from './budget-procurement-car-rental.model';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
@@ -34,6 +34,7 @@ export class BudgetProcurementCarRentalComponent implements OnInit, AfterViewChe
 
   updateBudgetPlan = input<boolean>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
   yearPlan = input<number>(2024); // năm kế hoạch
+  type = input<string>(''); // Loại Ngân sách hoặc mua sắm (budget/procurement)
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) { }
 
@@ -50,6 +51,11 @@ export class BudgetProcurementCarRentalComponent implements OnInit, AfterViewChe
       if (!this.periods.includes(period)) {
         this.periods.push(period);
         item.period = period;
+      }
+
+      if (this.type() === 'PROCUREMENT') {
+        //Số lượng chuyến bay theo giai đoạn
+        item.numberFlight = planFlightPeriodList.filter((t: any) => t.periodStart === item.periodStart && t.periodEnd === item.periodEnd).map((t: any) => t.noOfFlight).reduce((acc, value) => acc + value, 0);
       }
 
       //Số lượt xe
@@ -96,7 +102,8 @@ export class BudgetProcurementCarRentalComponent implements OnInit, AfterViewChe
     // Check lập kế hoạch sản lượng thay đổi
     // Tháng nào đã thực hiện thì tính theo công thưc mới
     const objFormula = formula[key];
-    let strFomular = objFormula.formula;
+    // Nếu là mua sắm thì lấy theo công thức mua sắm
+    let strFomular = this.type() === 'PROCUREMENT' && objFormula.formulaProcurement ? objFormula.formulaProcurement : objFormula.formula;
     if (this.updateBudgetPlan() && data.monthIsPerform) {
       if (objFormula.formulaUpdateBudgetPlan) {
         strFomular = objFormula.formulaUpdateBudgetPlan;
