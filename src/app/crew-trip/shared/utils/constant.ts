@@ -10,7 +10,7 @@ export class Constant {
   static DATE = 'date';
   static STRING_FORMAT = 'string_format';
   static PAGE = 0;
-  static PAGE_SIZE = 20;
+  static PAGE_SIZE = 100;
 }
 
 export class MESSAGE {

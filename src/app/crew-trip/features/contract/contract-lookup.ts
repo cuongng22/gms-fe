@@ -25,3 +25,8 @@ export const ContractForm=
     {key:'TMMD',value: $localize`Contract to serve basic domestic ground trade`},
     {key:'XDCB',value: $localize`Basic construction`},
   ]
+
+export const CheckType =[
+  {key:1,value: $localize`Checkin sớm`},
+  {key:2,value: $localize`Checkout muộn`},
+]

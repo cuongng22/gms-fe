@@ -51,6 +51,7 @@ import {debounce} from 'lodash';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import * as ContractLookup from "src/app/crew-trip/features/contract/contract-lookup";
+import {CheckType} from "src/app/crew-trip/features/contract/contract-lookup";
 
 
 @Component({
@@ -96,6 +97,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   listQuocGia: any = [];
   listContractType = ContractLookup.ContractType;
   listContractForm = ContractLookup.ContractForm;
+  listCheckType = ContractLookup.CheckType;
   //debounce
   brake: any;
   marketCodeChangeDebounce: any;
@@ -220,7 +222,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.getPartnerInfo();
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.getRawValue().documentsList ?? []);
 
-        let priceUnitInfo = this.formGroupDetail.getRawValue().priceUnitInfo.map((s: any) => ({...s, serviceFeeCode: s.serviceCode}));
+        let priceUnitInfo = this.formGroupDetail.getRawValue().priceUnitInfo.map((s: any) => ({
+          ...s,
+          serviceFeeCode: s.serviceCode
+        }));
         this.tblUnitPrice = new MatTableDataSource(priceUnitInfo);
 
         //debounce
@@ -292,6 +297,18 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   async addUnitPrice() {
     this.tblUnitPrice.data = [...this.tblUnitPrice.data, {action: 'ADD'}];
+  }
+
+  async addTbl61() {
+    this.tbl61.data = [...this.tbl61.data, {action: 'ADD'}];
+  }
+
+  async addTbl62() {
+    this.tbl62.data = [...this.tbl62.data, {action: 'ADD'}];
+  }
+
+  async addTbl63() {
+    this.tbl63.data = [...this.tbl63.data, {action: 'ADD'}];
   }
 
   async editUnitPrice(index: any) {
