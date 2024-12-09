@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, OnInit, signal, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -20,6 +20,7 @@ import { BudgetProcurementFlightPeriodComponent } from '../../budget-procurement
 import { BudgetProcurementFlightOvernightComponent } from '../../budget-procurement-common/budget-procurement-flight-overnight/budget-procurement-flight-overnight.component';
 import { BudgetProcurementHotelComponent } from '../../budget-procurement-common/budget-procurement-hotel/budget-procurement-hotel.component';
 import { BudgetProcurementCarRentalComponent } from '../../budget-procurement-common/budget-procurement-car-rental/budget-procurement-car-rental.component';
+import { BudgetProcurementCostAnalysisComponent } from '../../budget-procurement-common/budget-procurement-cost-analysis/budget-procurement-cost-analysis.component';
 
 @Component({
   selector: 'app-budget-procurement-summary-detail',
@@ -29,11 +30,28 @@ import { BudgetProcurementCarRentalComponent } from '../../budget-procurement-co
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule,
     BudgetProcurementGeneralComponent, MatExpansionModule, MatExpansionPanelContent,
     BudgetProcurementFlightRateComponent, BudgetProcurementFlightPeriodComponent, BudgetProcurementFlightOvernightComponent,
-    BudgetProcurementHotelComponent, BudgetProcurementCarRentalComponent],
+    BudgetProcurementHotelComponent, BudgetProcurementCarRentalComponent, BudgetProcurementCostAnalysisComponent],
   templateUrl: './budget-procurement-summary-detail.component.html',
   styleUrl: './budget-procurement-summary-detail.component.scss'
 })
-export class BudgetProcurementSummaryDetailComponent {
+export class BudgetProcurementSummaryDetailComponent implements OnInit {
   readonly panelCalBasisOpenState = signal(false);
 
+  @ViewChild('budgetProcurementGeneral') budgetProcurementGeneral: BudgetProcurementGeneralComponent;
+  @ViewChild('budgetProcurementFlightRate') budgetProcurementFlightRate: BudgetProcurementFlightRateComponent;
+  @ViewChild('budgetProcurementFlightPeriod') budgetProcurementFlightPeriod: BudgetProcurementFlightPeriodComponent;
+  @ViewChild('budgetProcurementFlightOvernight') budgetProcurementFlightOvernight: BudgetProcurementFlightOvernightComponent;
+  @ViewChild('budgetHotel') budgetHotel: BudgetProcurementHotelComponent;
+  @ViewChild('budgetCarRental') budgetCarRental: BudgetProcurementCarRentalComponent;
+  @ViewChild('procurementHotel') procurementHotel: BudgetProcurementHotelComponent;
+  @ViewChild('procurementCarRental') procurementCarRental: BudgetProcurementCarRentalComponent;
+  @ViewChild('budgetProcurementCostAnalysis') budgetProcurementCostAnalysis: BudgetProcurementCostAnalysisComponent
+
+
+  ngOnInit(): void {
+  }
+
+  save(): void {
+    console.log('budgetProcurementCostAnalysis: ', this.budgetProcurementCostAnalysis.formGroupDetail.value);
+  }
 }

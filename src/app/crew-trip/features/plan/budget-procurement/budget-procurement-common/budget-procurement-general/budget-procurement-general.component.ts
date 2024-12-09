@@ -17,6 +17,7 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { NgxControlError } from 'ngxtension/control-error';
 import { DatepickerComponent } from 'src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component';
+import { DigitOnlyModule } from '@uiowa/digit-only';
 
 @Component({
   selector: 'app-budget-procurement-general',
@@ -24,7 +25,7 @@ import { DatepickerComponent } from 'src/app/crew-trip/shared/component/datepick
   imports: [MatCardModule, FormsModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
-    NgxControlError, DatepickerComponent],
+    NgxControlError, DatepickerComponent, DigitOnlyModule],
   templateUrl: './budget-procurement-general.component.html',
   styleUrl: './budget-procurement-general.component.scss'
 })

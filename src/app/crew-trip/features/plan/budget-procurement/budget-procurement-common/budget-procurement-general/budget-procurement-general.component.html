@@ -61,8 +61,9 @@
         <div class="wp-20" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@rateForSingle">Buffer rate (for single-gender)</mat-label>
-                <input type="text" matInput formControlName="rateForSingle">
-                <i class="material-symbols-outlined mr-15" matSuffix>
+                <input type="text" inputmode="numeric"  decimalSeparator="," digitOnly
+                [decimal]="true" matInput formControlName="rateForSingle">
+                <i class="material-symbols-outlined fs-18" matSuffix>
                     percent
                 </i>
             </mat-form-field>

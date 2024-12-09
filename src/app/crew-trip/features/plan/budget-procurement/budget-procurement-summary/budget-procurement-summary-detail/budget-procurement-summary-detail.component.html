@@ -38,7 +38,7 @@
             <h5 class="mb-0">I. <span i18n="@@generalInformation">General Information</span></h5>
         </mat-card-title>
         <mat-card-subtitle>
-            <button mat-button color="primary" type="button" class="add-btn">
+            <button mat-button color="primary" type="button" class="add-btn" (click)="save()">
                 <i class="material-symbols-outlined">
                     save
                 </i>
@@ -47,10 +47,10 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <app-budget-procurement-general></app-budget-procurement-general>
+        <app-budget-procurement-general #budgetProcurementGeneral></app-budget-procurement-general>
     </mat-card-content>
 </mat-card>
-<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
         <mat-accordion multi>
             <mat-expansion-panel class="remove-mat-expansion-panel-padding" (opened)="panelCalBasisOpenState.set(true)"
@@ -82,12 +82,12 @@
                     <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <h6 class="mb-0">2.1 <span i18n="@@flightRateOverTheYears">Flight Rate Over the
-                                        Years</span></h6>
+                                <h6 class="mb-0">2.1 <span i18n="@@flightRateOverTheYears">
+                                        Flight Rate Over the Years</span></h6>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <app-budget-procurement-flight-rate />
+                            <app-budget-procurement-flight-rate #budgetProcurementFlightRate />
                         </div>
                     </mat-expansion-panel>
 
@@ -99,7 +99,7 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <app-budget-procurement-flight-period />
+                            <app-budget-procurement-flight-period #budgetProcurementFlightPeriod />
                         </div>
                     </mat-expansion-panel>
 
@@ -121,7 +121,7 @@
                                     </i>
                                 </button>
                             </div>
-                            <app-budget-procurement-flight-overnight />
+                            <app-budget-procurement-flight-overnight #budgetProcurementFlightOvernight />
                         </div>
                     </mat-expansion-panel>
                 </mat-accordion>
@@ -129,7 +129,7 @@
         </mat-accordion>
     </mat-card-content>
 </mat-card>
-<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
         <mat-accordion multi class="mt-10">
             <mat-expansion-panel class="remove-mat-expansion-panel-padding" (opened)="panelCalBasisOpenState.set(true)"
@@ -151,7 +151,7 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <app-budget-procurement-hotel [yearPlan]="2024" type="BUDGET" />
+                            <app-budget-procurement-hotel #budgetHotel [yearPlan]="2024" type="BUDGET" />
                         </div>
                     </mat-expansion-panel>
                     <mat-expansion-panel [expanded]="false">
@@ -165,12 +165,16 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <app-budget-procurement-car-rental [yearPlan]="2024" type="BUDGET" />
+                            <app-budget-procurement-car-rental #budgetCarRental [yearPlan]="2024" type="BUDGET" />
                         </div>
                     </mat-expansion-panel>
                 </mat-accordion>
             </mat-expansion-panel>
         </mat-accordion>
+    </mat-card-content>
+</mat-card>
+<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
         <mat-accordion multi class="mt-10">
             <mat-expansion-panel class="remove-mat-expansion-panel-padding" (opened)="panelCalBasisOpenState.set(true)"
                 (closed)="panelCalBasisOpenState.set(false)" [expanded]="true">
@@ -191,7 +195,7 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <app-budget-procurement-hotel [yearPlan]="2024" type="PROCUREMENT" />
+                            <app-budget-procurement-hotel #procurementHotel [yearPlan]="2024" type="PROCUREMENT" />
                         </div>
                     </mat-expansion-panel>
                     <mat-expansion-panel [expanded]="true">
@@ -205,10 +209,28 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <app-budget-procurement-car-rental [yearPlan]="2024" type="PROCUREMENT" />
+                            <app-budget-procurement-car-rental #procurementCarRental [yearPlan]="2024"
+                                type="PROCUREMENT" />
                         </div>
                     </mat-expansion-panel>
                 </mat-accordion>
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-card-content>
+</mat-card>
+<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+        <mat-accordion multi class="mt-10">
+            <mat-expansion-panel class="remove-mat-expansion-panel-padding" (opened)="panelCalBasisOpenState.set(true)"
+                (closed)="panelCalBasisOpenState.set(false)" [expanded]="true">
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h5 class="mb-0">V. <span i18n="@@costAnalysis">Cost Analysis</span></h5>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div>
+                    <app-budget-procurement-cost-analysis #budgetProcurementCostAnalysis />
+                </div>
             </mat-expansion-panel>
         </mat-accordion>
     </mat-card-content>
