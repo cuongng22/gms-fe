@@ -22,7 +22,7 @@
                     {{element.numberFlight | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
-                    {{getTotal('numberFlight') | number}}
+                    @if(type() === 'BUDGET'){ {{getTotal('numberFlight') | number}} }
                 </td>
             </ng-container>
 
@@ -35,7 +35,7 @@
                     {{element.numberVehicles | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
-                    {{getTotal('numberVehicles') | number}}
+                    @if(type() === 'BUDGET'){ {{getTotal('numberVehicles') | number}} }
                 </td>
             </ng-container>
 
@@ -59,7 +59,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
-                    {{getTotal('extraTransfer') | number}}
+                    @if(type() === 'BUDGET'){ {{getTotal('extraTransfer') | number}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="unitPrice">
