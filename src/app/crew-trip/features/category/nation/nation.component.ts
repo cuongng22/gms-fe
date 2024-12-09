@@ -76,6 +76,7 @@ export class NationComponent extends CommonComponent implements OnInit {
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }
 
+
   async _detail(index: number) {
     this.formGroupDetail.patchValue(this.dataSource.data[index] as JSON);
     this.toggleDialogCreate();
@@ -91,6 +92,17 @@ export class NationComponent extends CommonComponent implements OnInit {
         this.existCode = false;
       }
     });
+  }
+
+  override async showDialogDetail(id?: any, type?: string) {
+    this.formGroupDetail.get('code')?.enable();
+    if (id != null && type === 'index') {
+      this.formGroupDetail.get('code')?.disable();
+      this.formGroupDetail.patchValue(this.dataSource.data[id] as JSON);
+    } else if (id != null) {
+      await this.detail(id);
+    }
+    this.toggleDialogCreate();
   }
 
   existCodeValidator(control: AbstractControl): ValidationErrors | null {

@@ -327,14 +327,14 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   }
 
   updateBody(flightMarketData: any, hotelDatas: any[], carRentalDatas: any[]) {
-    const deleteItems: { code: number; type: string }[] = [];
+    const deleteItems: { id: number; type: string }[] = [];
     const updateItems: UpdateHotelAndCar[] = [];
     const insertItems: InsertHotelAndCar[] = [];
     const updateFlightMarket: UpdateFlightMarket = new UpdateFlightMarket(flightMarketData);
 
     hotelDatas.forEach(hotel => {
       if (hotel.isDelete) {
-        deleteItems.push({ code: hotel.hotelCode, type: 'HOTEL' });
+        deleteItems.push({ id: hotel.id, type: 'HOTEL' });
       } else if (hotel.id && hotel.id > 0) {
         updateItems.push(new UpdateHotelAndCar({ ...hotel, type: 'HOTEL' }));
       } else {
@@ -344,7 +344,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
 
     carRentalDatas.forEach(carRental => {
       if (carRental.isDelete) {
-        deleteItems.push({ code: carRental.code, type: 'VEHICLE' });
+        deleteItems.push({ id: carRental.id, type: 'VEHICLE' });
       } else if (carRental.id && carRental.id > 0) {
         updateItems.push(new UpdateHotelAndCar({ ...carRental, type: 'VEHICLE' }));
       } else {

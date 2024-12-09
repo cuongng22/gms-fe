@@ -5,6 +5,7 @@ import {HttpHeaders, HttpParams} from '@angular/common/http';
 import {Response, Role} from 'src/app/crew-trip/features/system/users/users.model';
 import {response} from 'express';
 import {DetailResponse, ListResponse} from "src/app/crew-trip/shared/models/common.model";
+import {removeNullValues} from "src/app/crew-trip/shared/utils/constant";
 
 @Injectable({
   providedIn: 'root'
@@ -17,13 +18,13 @@ export class ContractService extends BaseService {
 
   getPartnerInfo(body: any): Promise<any> {
     const url = `${this.api}/${this.path}/get-partner-info`;
-    const params = new HttpParams({fromObject: body});
+    const params = new HttpParams({fromObject: removeNullValues(body)});
     return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
   getMarket(body: any): Promise<any> {
     const url = `${this.api}/${this.path}/load-market`;
-    const params = new HttpParams({fromObject: body});
+    const params = new HttpParams({fromObject: removeNullValues(body)});
     return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
@@ -40,7 +41,7 @@ export class ContractService extends BaseService {
 
   getListAnnex<T = any>(body: any): Promise<ListResponse<T> | any> {
     const url = `${this.api}/${this.path}/appendix`;
-    const params = new HttpParams({fromObject: body});
+    const params = new HttpParams({fromObject: removeNullValues(body)});
     return firstValueFrom(this.http.get<ListResponse<T>>(url, {params}));
   }
 
@@ -56,5 +57,10 @@ export class ContractService extends BaseService {
     const url = `${this.api}/${this.path}/delete-attachment`;
     const params = new HttpParams({fromObject: {fileName: fileName, bizDocId: bizDocId}});
     return firstValueFrom(this.http.delete(url, {params}));
+  }
+
+  override create<T = any>(body: any): Promise<T> {
+    const url = `${this.api}/${this.path}/appendix`;
+    return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
   }
 }

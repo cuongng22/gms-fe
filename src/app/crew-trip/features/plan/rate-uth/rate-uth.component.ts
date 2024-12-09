@@ -67,9 +67,14 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 
   override async ngOnInit() {
     super.ngOnInit();
-    this.displayedColumns = ['stt', 'currencyCode', 'uthLastYear', 'january', 'february', 'march', 'april', 'may'
-      , 'june', 'july', 'august', 'september', 'october', 'november', 'december', 'average', 'rateUth', 'version'
+    this.displayedColumns = ['stt', 'currencyCode', 'planUth', 'january', 'february', 'march', 'april', 'may'
+      , 'june', 'july', 'august', 'september', 'october', 'november', 'december', 'average', 'rateDtTh', 'version'
     ];
+    await this.initSearchVersion();
+    await this.search();
+  }
+
+  async initSearchVersion() {
     await this.baseService.getListVersion({option: 0}).then(res => {
       this.listVersion = of(res.data.map((it: any) => it.version));
       if (this.listVersion) {
@@ -79,9 +84,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
         });
       }
     });
-    await this.search();
   }
-
 
   override async search(body?: any,isNextPage?: boolean) {
     try {
@@ -89,12 +92,12 @@ export class RateUthComponent extends CommonComponent implements OnInit {
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
+      this.formGroupSearch.patchValue({export: false})
       const res = await this.baseService.uthSearch({
         page: this.pageIndex,
         size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
         limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
       });
-      console.log(res);
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;
@@ -128,8 +131,10 @@ export class RateUthComponent extends CommonComponent implements OnInit {
         this.uploadFileError = res;
         if (!res.totalErrors) {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
-          this.search();
           this.toggleDialogUpload();
+          this.resetFileUpload();
+          await this.initSearchVersion();
+          await this.search();
         }
       }
     } catch (e: any) {
@@ -161,5 +166,11 @@ export class RateUthComponent extends CommonComponent implements OnInit {
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  resetFileUpload() {
+    this.uploadFileError = {};
+    this.fileUpload.setValue([]);
+    this.fileUpload.reset()
   }
 }

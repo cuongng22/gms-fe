@@ -61,6 +61,11 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
     this.displayedColumns = ['stt', 'currencyCode', 'uthLastYear', 'january', 'february', 'march', 'april', 'may'
       , 'june', 'july', 'august', 'september', 'october', 'november', 'december', 'average', 'rateUth', 'version'
     ];
+    await this.initSearchVersion();
+    await this.search();
+  }
+
+  async initSearchVersion() {
     await this.baseService.getListVersion({option: 1}).then(res => {
       this.listVersion = of(res.data.map((it: any) => it.version));
       if (this.listVersion) {
@@ -70,7 +75,6 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
         });
       }
     });
-    await this.search();
   }
 
   async uploadFile() {
@@ -85,12 +89,12 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
         this.uploadFileError = res;
         if (!res.totalErrors) {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
-          this.search();
           this.toggleDialogUpload();
+          this.resetFileUpload();
+          await this.initSearchVersion();
+          await this.search();
         }
       }
-    } catch (e: any) {
-      this.baseService.showError(e.error?.error ?? e.error?.error?.code ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
@@ -120,4 +124,9 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
     }
   }
 
+  resetFileUpload() {
+    this.uploadFileError = {};
+    this.fileUpload.setValue([]);
+    this.fileUpload.reset()
+  }
 }

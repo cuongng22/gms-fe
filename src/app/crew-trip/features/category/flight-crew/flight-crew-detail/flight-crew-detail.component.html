@@ -2,7 +2,7 @@
   <mat-card-header class="p-15">
     <mat-card-title>
       <h5 class="mb-0" i18n="@@crewInformation">
-        {{ (this.data.id ? 'Edit' : 'Add new') }}
+        {{ (!this.formGroupDetail.value.id ? 'Add new' : 'Edit') }}
       </h5>
     </mat-card-title>
   </mat-card-header>
@@ -27,7 +27,6 @@
             </mat-form-field>
           </div>
         </div>
-
         <div class="col-sm-12 col-md-12">
           <div class="form-group mb-20" sizeInput="md">
             <mat-form-field>
@@ -38,6 +37,9 @@
                   {{ type.actype }}
                 </mat-option>
               </mat-select>
+              @if (!!formGroupDetail.controls['acType'].hasError('existActype')) {
+                <mat-error>{{messageErrorActype}}</mat-error>
+              }
             </mat-form-field>
           </div>
         </div>

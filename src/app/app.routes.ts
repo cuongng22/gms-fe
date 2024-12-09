@@ -38,7 +38,6 @@ import {
   AnnualProductionComponent
 } from "src/app/crew-trip/features/plan/production/annual-production/annual-production.component";
 import {AutocompleteComponent} from './ui-elements/autocomplete/autocomplete.component';
-import {InforPlaneComponent} from './crew-trip/features/system/information-plane/infor-plane/infor-plane.component';
 import {BudgetProcurementComponent} from './crew-trip/features/plan/budget-procurement/budget-procurement.component';
 import {
   BudgetProcurementListComponent
@@ -50,6 +49,7 @@ import {
   BudgetProcurementSummaryDetailComponent
 } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary-detail/budget-procurement-summary-detail.component';
 import {FlightCrewComponent} from "src/app/crew-trip/features/category/flight-crew/flight-crew.component";
+import {AircraftDataComponent} from "src/app/crew-trip/features/system/config/aircraft-data/aircraft-data.component";
 
 
 export const routes: Routes = [
@@ -75,7 +75,7 @@ export const routes: Routes = [
       {
         path: 'system/config', children: [
           {path: 'group-mail', component: GroupMailComponent},
-          {path: 'information-plane', component: InforPlaneComponent},
+          {path: 'information-plane', component: AircraftDataComponent},
         ],
 
 

@@ -14,8 +14,8 @@
           Back
         </button>
 
-        <h5 class="mb-0 ml-10" i18n>
-          <span>Annex </span>
+        <h5 class="mb-0 ml-10" >
+          <span i18n>Annex </span>
           <span class="text-vna">{{ '[' + contractObj.contractCode + '] ' }}</span>
           <span class="text-warning">{{ contractObj.contractName }}</span>
         </h5>
@@ -117,12 +117,22 @@
           </i>
           Export
         </button>
-        <button (click)="syncDWH()" class="add-btn" mat-button type="button">
-          <i class="material-symbols-outlined">
-            sync
-          </i>
-          <span i18n>Synchronize</span>
-        </button>
+        @if (viewType == 'HD') {
+          <button (click)="syncDWH()" class="add-btn" mat-button type="button">
+            <i class="material-symbols-outlined">
+              sync
+            </i>
+            <span i18n>Synchronize</span>
+          </button>
+        }
+        @if (viewType == 'PL') {
+          <button (click)="nextStep(null,false)" class="add-btn" mat-button type="button">
+            <i class="material-symbols-outlined">
+              add
+            </i>
+            <span i18n>Add new</span>
+          </button>
+        }
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
@@ -130,7 +140,7 @@
         <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true">
 
           <ng-container matColumnDef="stt">
-            <th *matHeaderCellDef mat-header-cell mat-sort-header class="text-center">#</th>
+            <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
             <td *matCellDef="let element; let i = dataIndex" class="text-center"
                 mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
             </td>
@@ -173,7 +183,7 @@
               <div class="basic-table table-responsive">
                 <table [dataSource]="tblAnnexData" class="table-light" mat-table>
                   <ng-container matColumnDef="stt">
-                    <th *matHeaderCellDef mat-header-cell mat-sort-header class="text-center">#</th>
+                    <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
                     <td *matCellDef="let element; let i = index" mat-cell>{{ i + 1 }}</td>
                   </ng-container>
                   <ng-container matColumnDef="bizDocId">

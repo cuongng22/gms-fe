@@ -179,7 +179,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
           this.baseService.search({ option: 1 }).then(res => {
             this.markets = res.data;
           });
-      
+
         }
       }
     } finally {

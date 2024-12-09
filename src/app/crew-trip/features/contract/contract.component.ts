@@ -57,25 +57,16 @@ export class ContractComponent extends CommonComponent implements OnInit {
   listVehicle = [];
   tblAnnexData = new MatTableDataSource();
   _displayedColumns: {
-    label: string;
-    value: string,
-    type?: string,
-    format?: string
+    label: string; value: string, type?: string, format?: string
   }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Market`, value: 'marketCode'}, {
-      label: $localize`bizDocId`,
-      value: 'bizDocId'
+      label: $localize`bizDocId`, value: 'bizDocId'
     }, {label: $localize`Contract Code`, value: 'contractCode'}, {
-      label: $localize`Contract No`,
-      value: 'contractNo'
+      label: $localize`Contract No`, value: 'contractNo'
     }, {label: $localize`Contract Name`, value: 'contractName'}, {
-      label: $localize`Partner Name`,
-      value: 'partnerName'
+      label: $localize`Partner Name`, value: 'partnerName'
     }, {label: $localize`Service Object`, value: 'serviceObject'}, {
-      label: $localize`Signed Date`,
-      value: 'signedDate',
-      type: Constant.DATE,
-      format: Constant.DATE_FORMAT
+      label: $localize`Signed Date`, value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT
     }, // {label: $localize`Effective Date`, value: 'effectiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
     // {label: $localize`Expiry Date`, value: 'expiryDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
   ];
@@ -181,7 +172,12 @@ export class ContractComponent extends CommonComponent implements OnInit {
       active: [false],
       contractId: []
     });
-    this.formGroupDetail = this.fb.group({bizDocId: []});
+    this.formGroupDetail = this.fb.group({
+      bizDocId: [],
+      bizDocIdC1: [],
+      contractName: [],
+      contractCode: []
+    });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
@@ -192,96 +188,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
       this.listPartner = listCombine.map((s: any) => ({
         code: s.code ?? s.hotelCode, name: s.name ?? s.hotelName,
       }));
-this.dataSource.data =
-  [
-    {
-      "bizDocId": "14463221C1",
-      "contractCode": "HD.TTDHKT.2024-134",
-      "contractNo": "XE TB MUC T10.2024",
-      "contractName": "HĐ XE TB tại MUC 10.2024 - 12.2026",
-      "marketCode": "HAN",
-      "partnerName": "Khách sạn Sheraton",
-      "serviceObject": "Accommodation",
-      "signedDate": "2024-09-25T00:00:00.000+00:00",
-      "effectiveDate": "2024-10-04T00:00:00.000+00:00",
-      "expiryDate": "2025-12-31T00:00:00.000+00:00",
-      "appendixList": [
-        {
-          "bizDocId": "14463221C1-1",
-          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
-        },
-        {
-          "bizDocId": "14463221C1-2",
-          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
-        },{
-          "bizDocId": "14463221C1-3",
-          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
-        }
-      ],
-      appendixCount: 3,
-      "optionOutput": null
-    },
-    {
-      "bizDocId": "14463221C2",
-      "contractCode": "HD.TTDHKT.2024-134",
-      "contractNo": "XE TB MUC T10.2024",
-      "contractName": "HĐ XE TB tại MUC 10.2024 - 12.2026",
-      "marketCode": "HAN",
-      "partnerName": "Khách sạn Sheraton",
-      "serviceObject": "Accommodation",
-      "signedDate": "2024-09-25T00:00:00.000+00:00",
-      "effectiveDate": "2024-10-04T00:00:00.000+00:00",
-      "expiryDate": "2025-12-31T00:00:00.000+00:00",
-      appendixCount: 1,
-      "appendixList": [
-        {
-          "bizDocId": "14463221C1-1",
-          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
-        }
-      ],
-      "optionOutput": 1
-    },
-    {
-      "bizDocId": "14463221C3",
-      "contractCode": "HD.TTDHKT.2024-134",
-      "contractNo": "XE TB MUC T10.2024",
-      "contractName": "HĐ XE TB tại MUC 10.2024 - 12.2026",
-      "marketCode": "HAN",
-      "partnerName": "Khách sạn Sheraton",
-      "serviceObject": "Accommodation",
-      "signedDate": "2024-09-25T00:00:00.000+00:00",
-      "effectiveDate": "2024-10-04T00:00:00.000+00:00",
-      "expiryDate": "2025-12-31T00:00:00.000+00:00",
-      appendixCount: 1,
-      "appendixList": [
-        {
-          "bizDocId": "14463221C1-1",
-          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
-        }
-      ],
-      "optionOutput": 2
-    },
-    {
-      "bizDocId": "14463221C4",
-      "contractCode": "HD.TTDHKT.2024-134",
-      "contractNo": "XE TB MUC T10.2024",
-      "contractName": "HĐ XE TB tại MUC 10.2024 - 12.2026",
-      "marketCode": "HAN",
-      "partnerName": "Khách sạn Sheraton",
-      "serviceObject": "Accommodation",
-      "signedDate": "2024-09-25T00:00:00.000+00:00",
-      "effectiveDate": "2024-10-04T00:00:00.000+00:00",
-      "expiryDate": "2025-12-31T00:00:00.000+00:00",
-      appendixCount: 1,
-      "appendixList": [
-        {
-          "bizDocId": "14463221C1-1",
-          "description": "HĐ XE TB tại MUC 10.2024 - 12.2026"
-        }
-      ],
-      "optionOutput": 3
-    }
-  ]
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'effectiveDate', 'appendixCount', 'action'];
   }
@@ -340,7 +246,12 @@ this.dataSource.data =
   async showListAnnex(id: any) {
     this.viewType = 'PL';
     this.formGroupSearch.patchValue({contractId: id});
-    this.contractObj = this.dataSource.data.find((value:any) => value.bizDocId == id);
+    this.contractObj = this.dataSource.data.find((value: any) => value.bizDocId == id);
+    this.formGroupDetail.patchValue({
+      bizDocIdC1: this.contractObj.bizDocId,
+      contractName: this.contractObj.contractName,
+      contractCode: this.contractObj.contractCode,
+    });
     await this.search();
   }
 

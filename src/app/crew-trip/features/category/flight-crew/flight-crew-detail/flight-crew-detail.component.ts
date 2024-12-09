@@ -1,6 +1,13 @@
 import {Component, ElementRef, Inject, inject, Input, input, LOCALE_ID, OnInit, ViewChild} from '@angular/core';
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from "@angular/forms";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
 import {MatButton} from "@angular/material/button";
@@ -18,6 +25,7 @@ import {FlightMarketService} from "src/app/crew-trip/core/services/ flight-marke
 import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
 import {CommonModule, NgForOf} from "@angular/common";
 import {MatCheckbox} from "@angular/material/checkbox";
+import {HttpStatusCode} from "@angular/common/http";
 
 @Component({
   selector: 'app-flight-crew-detail',
@@ -60,12 +68,13 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   markets: string[] = [];
   acTypes: any[] = [];
-
+  existActype: boolean = false;
+  messageErrorActype: string;
 
   override formGroupDetail = this.formBuilder.group({
     id: ['',],
     marketCode: ['', [Validators.required]],
-    acType: ['', [Validators.required]],
+    acType: ['', [Validators.required, this.existActypeValidator.bind(this)]],
     pilotNumber: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
     numberAttendant: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
     notes: ['', [Validators.maxLength(500)]],
@@ -83,17 +92,10 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
 
   override ngOnInit(): void {
     if (this.data.item) {
-      console.log(this.data.item);
       this.formGroupDetail.patchValue({
-        id: this.data.item.id,
-        marketCode: this.data.item.marketCode,
-        acType: this.data.item.acType,
-        pilotNumber: this.data.item.pilotNumber,
-        numberAttendant: this.data.item.attendantNumber,
-        notes: this.data.item.notes,
-        status: this.data.item.status,
+        ...this.data.item,
+        numberAttendant: this.data.item.attendantNumber
       });
-
     }
   }
 
@@ -112,11 +114,24 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
   }
 
   override async save() {
-    const res = await super.save();
-    this.dialogRef.close('Update Success');
+    this.messageErrorActype = "";
+    super.save().then(value => {
+      if (value.status == HttpStatusCode.Conflict) {
+        this.existActype = true;
+        this.messageErrorActype = value.error?.error;
+        this.formGroupDetail.controls['acType'].updateValueAndValidity();
+        this.existActype = false;
+      }else{
+        this.dialogRef.close('Update Success');
+      }
+    });
   }
 
   close(): void {
     this.dialogRef.close();
+  }
+
+  existActypeValidator(control: AbstractControl): ValidationErrors | null {
+    return this.existActype ? {existActype: true} : null
   }
 }

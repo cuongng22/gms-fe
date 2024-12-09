@@ -48,6 +48,8 @@ export class CommonComponent implements OnInit, AfterViewInit {
   // New Popup Trigger
   showDialogCreate = false;
   showDialogDelete = false;
+  isSticky = false;
+  configScrollY = 60;
 
   constructor() {
     this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
@@ -139,9 +141,10 @@ export class CommonComponent implements OnInit, AfterViewInit {
     try {
       this.formGroupDetail.markAllAsTouched();
       if (this.formGroupDetail.invalid) {
+        this.findInvalidControls(this.formGroupDetail)
         return;
       }
-      const update = !!this.formGroupDetail.value.id;
+      const update = !!this.formGroupDetail.getRawValue().id;
       await this.spinner.show();
       let res;
       if (update) {
@@ -163,11 +166,10 @@ export class CommonComponent implements OnInit, AfterViewInit {
     }
   }
 
-
   async delete() {
     try {
       await this.spinner.show();
-      const res = await this.baseService.delete(this.formGroupDetail.value.id);
+      const res = await this.baseService.delete(this.formGroupDetail.getRawValue().id);
       this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
       await this.search();
       return res;
@@ -270,14 +272,24 @@ export class CommonComponent implements OnInit, AfterViewInit {
     return this.ultilService.formatNumber(value);
   }
 
-  isSticky = false;
-  configScrollY = 60;
-
   @HostListener('window:scroll', ['$event']) onScroll() {
     if (window.scrollY > this.configScrollY) {
       this.isSticky = true;
     } else {
       this.isSticky = false;
+    }
+  }
+
+  findInvalidControls(formData: FormGroup) {
+    const invalid = [];
+    const controls = formData.controls;
+    for (const name in controls) {
+      if (controls[name].invalid) {
+        invalid.push(name);
+      }
+    }
+    if (invalid.length > 0) {
+      console.log(invalid, ' invalid');
     }
   }
 }
