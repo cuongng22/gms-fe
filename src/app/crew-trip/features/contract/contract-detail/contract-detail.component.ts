@@ -488,3 +488,39 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     return '';
   }
 }
+/*
+private RequestNotAllDay priceNotAllDayRequests;
+private List<DayUse> dayUses;
+
+    public static class RequestNotAllDay {
+        @Valid
+        private List<NotAllDay> type1;
+        @Valid
+        private List<NotAllDay> type2;
+    }
+
+        public static class NotAllDay {
+        private Long id;
+        @NotEmpty(message = "typeCheck is required")
+        private String typeCheck;
+        @NotEmpty(message = "fromDate is required")
+        private String fromHour;
+        @NotEmpty(message = "toDate is required")
+        private String toHour;
+        @NotNull(message = "rate is required")
+        @DecimalMin("0.0")
+        @DecimalMax("2.0")
+        private Float rate;
+    }
+
+        @Getter
+    public static class DayUse {
+        private Long id;
+        private String checkinFrom;
+        private String checkoutTo;
+        private String lengthTime;
+        @DecimalMin("0.0")
+        @DecimalMax("2.0")
+        private Float rate;
+    }
+*/
