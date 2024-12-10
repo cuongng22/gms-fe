@@ -29,32 +29,13 @@
                                 <input matInput formControlName="s">
                             </mat-form-field>
                         </div>
-                        <div class="col mb-2" sizeInput="md">
-                            <mat-form-field>
-                                <mat-label i18n="@@year">Year</mat-label>
-                                <input type="text" matInput formControlName="year" #year
-                                    [matAutocomplete]="yearComplete">
-                                <mat-autocomplete autoActiveFirstOption requireSelection
-                                    #yearComplete="matAutocomplete">
-                                    <mat-option [value]="2025">2025</mat-option>
-                                    <!-- @for (option of filteredOptionsOri(); track option) {
-                                    <mat-option [value]="option">{{option}}</mat-option>
-                                    } -->
-                                </mat-autocomplete>
-                            </mat-form-field>
+                        <div class="col mb-2">
+                            <app-selection-suggest label="Year" [options]="years()" formControlName="year"
+                                attrValue="code" attrDisplay="value" size="md" />
                         </div>
                         <div class="col mb-2" sizeInput="md">
-                            <mat-form-field>
-                                <mat-label i18n="@@version">Version</mat-label>
-                                <input type="text" matInput formControlName="versionId" #version
-                                    [matAutocomplete]="versionComplete" (input)="filterVersion()">
-                                <mat-autocomplete autoActiveFirstOption requireSelection
-                                    #versionComplete="matAutocomplete">
-                                    @for (option of filteredOptionsVersion(); let index = $index; track index) {
-                                    <mat-option [value]="option">{{option}}</mat-option>
-                                    }
-                                </mat-autocomplete>
-                            </mat-form-field>
+                            <app-selection-suggest label="Version" [options]="versions()" formControlName="version"
+                                size="md" />
                         </div>
 
                         <div class="col mb-2" sizeInput="md">
@@ -62,8 +43,8 @@
                                 <mat-label i18n="@@status">Status</mat-label>
                                 <mat-select formControlName="status">
                                     <mat-option value="">-- All Status --</mat-option>
-                                    <mat-option *ngFor="let status of statusList" [value]="status.code">{{ status.value
-                                        }}</mat-option>
+                                    <mat-option *ngFor="let status of statuses" [value]="status.code">
+                                        {{ status.value }}</mat-option>
                                 </mat-select>
                             </mat-form-field>
                         </div>
@@ -130,13 +111,15 @@
                 </ng-container>
 
                 <ng-container matColumnDef="name">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@planName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@planName">
                         Plan Name</th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">
                         {{element.name }}</td>
                 </ng-container>
                 <ng-container matColumnDef="year">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@year">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@year">
                         Year
                     </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">
@@ -144,7 +127,8 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="version">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@version">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@version">
                         Version
                     </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">
@@ -152,7 +136,8 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="versionProd">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@versionOfProduction">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@versionOfProduction">
                         Version of Production
                     </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">
@@ -160,7 +145,8 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="versionRate">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@versionOfExchangeRate">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@versionOfExchangeRate">
                         Version of Exchange Rate
                     </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">
@@ -168,24 +154,37 @@
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="time">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@time">Time
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@time">Time
                     </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">
+                        @if(element.status === 'international_completed' ||
+                        element.status === 'domestic_completed' ||
+                        element.status === 'dom_int_completed' ||
+                        element.status === 'confirmed' ||
+                        element.status === 'approved'
+                        ){
                         <span>
                             <span class="text-secondary-bootstrap" i18n="@@completionDate">Completion Date</span>:
                             {{element.completionDate | date: 'dd/MM/yyyy'}}
                         </span>
                         <br>
+                        }
+                        @if(element.status === 'confirmed' || element.status === 'approved'){
                         <span>
                             <span class="text-secondary-bootstrap" i18n="@@confirmationDate">Confirmation Date</span>:
                             {{element.confirmationDate | date: 'dd/MM/yyyy'}}
                         </span>
                         <br>
+                        }
+                        @if(element.status === 'approved'){
                         <span>
                             <span class="text-secondary-bootstrap" i18n="@@approvalDate">Approval Date</span>:
                             {{element.approvalDate | date: 'dd/MM/yyyy'}}
                         </span>
                         <br>
+                        }
+                        @if(element.status === 'rejected'){
                         <span>
                             <span class="text-secondary-bootstrap" i18n="@@rejectionDate">Rejection Date</span>:
                             {{element.rejectionDate | date: 'dd/MM/yyyy'}}
@@ -195,58 +194,76 @@
                             <span class="text-secondary-bootstrap" i18n="@@reason">Reason</span>:
                             {{element.reason}}
                         </span>
-
+                        }
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="status">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@status">
-                        Status</th>
-                    <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">{{element.status
-                        }}</td>
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@status">
+                        Status
+                    </th>
+                    <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">
+                        {{element.status }}</td>
                 </ng-container>
                 <ng-container matColumnDef="action" stickyEnd>
-                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@action">
+                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef
+                        class="font-weight-bold text-center" i18n="@@action">
                         Action
                     </th>
-                    <td mat-cell *matCellDef="let hotel; let i = dataIndex">
+                    <td mat-cell *matCellDef="let element; let i = dataIndex">
                         <div class="action-buttons d-flex align-items-center justify-content-end">
-                            <button type="button" mat-button class="text-primary" [routerLink]="['summary']"
+                            @if(element.status === 'draft' ||
+                            element.status === 'international_completed' ||
+                            element.status === 'dom_int_completed' ||
+                            element.status === 'confirmed' ||
+                            element.status === 'rejected' ||
+                            element.status === 'approved'){
+                            <button type="button" mat-button class="text-primary" [routerLink]="['summary',element.id]"
                                 routerLinkActive="router-link-active">
                                 <i class="material-symbols-outlined " title="Detail" i18n-title="@@detail">
                                     zoom_in
                                 </i>
                             </button>
+                            }
+                            @if(element.status === 'confirmed'){
                             <button type="button" mat-button class="text-primary">
                                 <i class="material-symbols-outlined " title="Approved" i18n-title="@@approved">
                                     check
                                 </i>
                             </button>
-
+                            }
+                            @if(element.status === 'dom_int_completed'){
                             <button type="button" mat-button class="text-primary">
                                 <i class="material-symbols-outlined " title="Confirm" i18n-title="@@confirm">
                                     select_check_box
                                 </i>
                             </button>
-
+                            }
+                            @if(element.status === 'dom_int_completed'){
                             <button type="button" mat-button class="text-danger" (click)="showConfirmReject(1)">
                                 <i class="material-symbols-outlined " title="Reject" i18n-title="@@reject">
                                     cancel
                                 </i>
                             </button>
+                            }
+                            @if(element.status === 'draft' ||
+                            element.status === 'rejected'){
                             <button type="button" mat-button class="text-warning" (click)="showDialogDetail(false)">
                                 <i class="material-symbols-outlined text-warning" i18n-title="@@edit" title="Edit"
-                                    i18n-title="@@editHotel">
+                                    i18n-title="@@edit">
                                     edit
                                 </i>
                             </button>
+                            }
+                            @if(element.status === 'draft' ||
+                            element.status === 'rejected'){
                             <button type="button" mat-button title="Delete" i18n-title="@@delete" class="text-danger"
                                 (click)="showConfirmDelete(1)">
                                 <i class="material-symbols-outlined text-danger">
                                     delete
                                 </i>
                             </button>
-
+                            }
                         </div>
                     </td>
                 </ng-container>
@@ -269,7 +286,7 @@
 
 <!-- Dialog delete  -->
 <div class="add-new-popup" [class.active]="showDialogDelete">
-    <div class="popup-dialog dialog-with">
+    <div class="popup-dialog dialog-delete-with">
         <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
             <mat-card-content>
                 <div class="text-warning text-center">
@@ -278,12 +295,15 @@
                     </span>
                 </div>
                 <div class="text-center mb-20">
-                    <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete? </h3>
-                    <p class="fs-5 mt-3" i18n="@@warningDeleteMessage">This action cannot be undone!</p>
+                    <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
+                </div>
+                <div class="text-center mb-20">
+                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+                        You will not be able to recover the deleted data!</span>
                 </div>
                 <div class="btn-box text-center">
-                    <button type="button" mat-button (click)="toggleDialogDelete()"
-                        class="danger-btn  min-with-100 mlr-5">
+                    <button type="button" mat-button (click)="closeConfirmDelete()"
+                        class="close-btn  min-with-100 mlr-5">
                         <i class="material-symbols-outlined">
                             close
                         </i>

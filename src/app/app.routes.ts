@@ -91,7 +91,7 @@ export const routes: Routes = [
             path: 'est-plan/budget-procurement', component: BudgetProcurementComponent,
             children: [
               {path: '', component: BudgetProcurementListComponent},
-              {path: 'summary', component: BudgetProcurementSummaryComponent},
+              {path: 'summary/:id', component: BudgetProcurementSummaryComponent},
               {path: 'detail/:id', component: BudgetProcurementSummaryDetailComponent}
             ]
           },
