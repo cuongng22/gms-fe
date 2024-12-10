@@ -51,13 +51,14 @@ import {debounce} from 'lodash';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import * as ContractLookup from "src/app/crew-trip/features/contract/contract-lookup";
+import {NegotiateCompetence} from "src/app/crew-trip/features/contract/contract-lookup";
 import {CheckType} from "src/app/crew-trip/features/contract/contract-lookup";
 
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf],
+  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
   providers: [
@@ -95,9 +96,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   listMaNghiepVu: any = [];
   listKhoanMucKhns: any = [];
   listQuocGia: any = [];
+  listContractSpec = ContractLookup.ContractSpec;
   listContractType = ContractLookup.ContractType;
   listContractForm = ContractLookup.ContractForm;
   listCheckType = ContractLookup.CheckType;
+  listCompetence = ContractLookup.Competence;
+  listNegotiateCompetence = ContractLookup.NegotiateCompetence;
   //debounce
   brake: any;
   marketCodeChangeDebounce: any;
@@ -212,10 +216,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.formGroupDetail.patchValue(
           {
             //fix tam
-            swiftCodeB1: '123',
+            swiftCodeB1: '12345',
             //
             contractType: this.listContractType.find(s => s.value == this.formGroupDetail.getRawValue().contractType)?.key,
             contractForm: this.listContractForm.find(s => s.value == this.formGroupDetail.getRawValue().contractForm)?.key,
+            negotiateCompetence: this.listNegotiateCompetence.find(s => s.value == this.formGroupDetail.getRawValue().negotiateCompetence)?.key,
+            competence: this.listCompetence.find(s => s.value == this.formGroupDetail.getRawValue().competence)?.key,
             standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout
           });
 
@@ -374,8 +380,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   readCellUP(row: any, cell: any) {
     let cur = new Set(row.cellEdit);
-    cur.delete(cell);
-    row.cellEdit = Array.from(cur);
+    if (!this.validField(row,cell)) {
+      cur.delete(cell);
+      row.cellEdit = Array.from(cur);
+    }
   }
 
   checkCellUP(row: any, cell: any) {
@@ -405,9 +413,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       if (res.status == HttpStatusCode.Ok && res.data) {
         let data = res.data;
         this.formGroupDetail.patchValue({
+          marketType: data.marketType,
           marketCode: data.marketCode,
           marketName: data.marketName,
           nation: data.nation,
+          nationId: data.nationId,
           classification: data.classification,
           flightGroup: data.flightGroup,
           statusUsage: data.statusUsage,
@@ -431,7 +441,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
-      } else if (!fieldContract.includes(k)) {
+      } else if (this.viewType == 'HD' && !fieldContract.includes(k)) {
         v.disable();
       }
     });
@@ -458,7 +468,23 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       insertPriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action == 'ADD'),
       updatePriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action != 'ADD'),
       // deletePriceUnitInfo: this.tblUnitPrice.data,
-    })
-    await super.save();
+    });
+    this.formGroupDetailInit = {...this.formGroupDetail.getRawValue()};
+    let res = await super.save();
+    if (res == null) {
+      this.goBack();
+    }
+  }
+
+  validField(row:any,cell:any){
+    console.log(row[cell],'row[cell]')
+    if(!row[cell]){
+      return 'not empty';
+    }
+    else if(cell == 'col614' && row[cell]>2){
+      console.log('okokokokok')
+      return 'must less than 2';
+    }
+    return '';
   }
 }
