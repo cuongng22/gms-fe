@@ -476,14 +476,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     }
   }
 
-  validField(row:any,cell:any){
-    console.log(row[cell],'row[cell]')
+
+  validField(row:any,cell:any,inputRef?:any){
     if(!row[cell]){
-      return 'not empty';
+      return 'Not empty';
     }
     else if(cell == 'col614' && row[cell]>2){
-      console.log('okokokokok')
-      return 'must less than 2';
+      inputRef.control.setErrors({ invalid: true });
+      return 'Must less than 2';
     }
     return '';
   }
