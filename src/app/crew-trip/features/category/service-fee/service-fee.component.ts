@@ -93,6 +93,19 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
     });
   }
 
+
+  override async showDialogDetail(id?: any, type?: string) {
+    this.formGroupDetail.get('code')?.enable();
+    if (id != null && type === 'index') {
+      this.formGroupDetail.get('code')?.disable();
+      this.formGroupDetail.patchValue(this.dataSource.data[id] as JSON);
+    } else if (id != null) {
+      await this.detail(id);
+    }
+    this.toggleDialogCreate();
+  }
+
+
   existCodeValidator(control: AbstractControl): ValidationErrors | null {
     return this.existCode ? {existCode: true} : null
   }
