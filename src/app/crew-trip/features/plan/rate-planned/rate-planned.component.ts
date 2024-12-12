@@ -23,8 +23,9 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {FileUploadComponent, FileUploadValidators} from '@iplab/ngx-file-upload';
-import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {debounceTime, map, Observable, of, startWith, take} from 'rxjs';
+import {HttpStatusCode} from "@angular/common/http";
 
 @Component({
   selector: 'app-rate-planned',
@@ -75,6 +76,39 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
         });
       }
     });
+  }
+
+
+  override async search(body?: any,isNextPage?: boolean) {
+    try {
+      await this.spinner.show();
+      if (!isNextPage) {
+        this.pageIndex = Constant.PAGE;
+      }
+      this.formGroupSearch.patchValue({export: false})
+      const res = await this.baseService.search({
+        page: this.pageIndex,
+        size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
+        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+      });
+      if (res) {
+        if (res.status === HttpStatusCode.Ok) {
+          this.dataSource.data = res.data.content;
+          this.dataSource.data = this.dataSource.data.map((s: any) => ({
+            ...s,
+            isActiveLabel: s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
+            activeLabel: !!s.active || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
+          }));
+          this.totalElement = res.data.totalElements;
+        }
+        return res;
+      }
+    } catch (e: any) {
+      console.log(e);
+      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
   async uploadFile() {

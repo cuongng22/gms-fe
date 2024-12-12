@@ -311,4 +311,10 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
       await this.spinner.hide();
     }
   }
+
+  resetFileUpload() {
+    this.uploadFileError = {};
+    this.fileUpload.setValue([]);
+    this.fileUpload.reset()
+  }
 }

@@ -244,18 +244,20 @@
 </mat-card>
 
 
-<!-- Dialog upload file -->
+
+
+
 <div class="add-new-popup" [class.active]="showDialogUpload">
   <div class="popup-dialog dialog-with">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
       <mat-card-header class="p-15">
         <mat-card-title>
-          <h5 class="mb-0">
-            Import data
+          <h5 class="mb-0" i18n="@@uploadPlannedAnnualProduction">
+            Upload Planned Annual Production
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
-          <button mat-button (click)="resetFileUpload();toggleDialogUpload()">
+          <button mat-button (click)="resetFileUpload() ;toggleDialogUpload()">
             <i class="ri-close-fill"></i>
           </button>
         </mat-card-subtitle>
@@ -263,7 +265,7 @@
       <mat-card-content>
         <div class="row">
           <span i18n="@@downloadTemplate">Download template</span>
-          <button mat-button type="button" class="search-btn min-with-100 mlr-5" style="width: 250px;"
+          <button mat-button type="button" class="search-btn min-with-100 mlr-5" style="width: auto;"
                   (click)="downloadTemplate()">
             <i class="material-symbols-outlined">
               download
@@ -275,13 +277,12 @@
           <span i18n="@@selectFile">Select file</span>
           <file-upload [ngClass]="{'invalid':fileUpload.hasError('required') && fileUpload.touched}"
                        [formControl]="fileUpload" class="file-uploader" [multiple]="false"></file-upload>
-          @if (fileUpload.hasError('required') &&
-          fileUpload.touched) {
+          @if (
+            fileUpload.hasError('required') &&
+            fileUpload.touched) {
             <mat-error i18n="@@fileRequired" style="font-style: italic; font-size: 12px;">File
-              {{ MESSAGE.REQUIRED }}
-            </mat-error>
+              {{MESSAGE.REQUIRED}}</mat-error>
           }
-          <mat-hint>Note:Please check the planned exchange rate on the system before importing new data</mat-hint>
         </div>
         @if (!!uploadFileError.totalErrors) {
           <div class="row mt-20">
@@ -294,15 +295,20 @@
                     </span>
           </div>
         }
+        <div class="row mt-20">
+          <p class="text-primary" i18n="@@plannedAnnualProduction.NoteUpload">
+            Note:Please check the planned exchange rate on the system before importing new data!
+          </p>
+        </div>
       </mat-card-content>
-      <mat-card-actions class="p-15" style="display: flex; justify-content: end;">
+      <mat-card-actions class="p-15" style="display: flex; justify-content: center;">
         <button type="button" mat-button
                 (click)="resetFileUpload() ;toggleDialogUpload()"
-                class="close-btn  min-with-100 mlr-5">
+                class="danger-btn  min-with-100 mlr-5">
           <i class="material-symbols-outlined">
             close
           </i>
-          <span i18n="@@cancel">Close</span>
+          <span i18n="@@cancel">Cancel</span>
         </button>
         <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
           <i class="material-symbols-outlined">
@@ -314,3 +320,4 @@
     </mat-card>
   </div>
 </div>
+

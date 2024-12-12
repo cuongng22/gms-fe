@@ -70,9 +70,12 @@
           <mat-form-field>
             <mat-label i18n>Contract category</mat-label>
             <mat-select formControlName="contractSpec" required>
-              <mat-option i18n value="0">Standard</mat-option>
-              <mat-option i18n value="1">Wet Lease</mat-option>
-              <mat-option i18n value="2">Charter</mat-option>
+              <mat-option *ngFor="let option of listContractSpec" [value]="option.key">
+                {{ option.value }}
+              </mat-option>
+              @if (!!formGroupDetail.controls['contractSpec'].hasError('required')) {
+                <mat-error><span i18n>Contract category</span><span i18n> not empty</span></mat-error>
+              }
             </mat-select>
           </mat-form-field>
         </div>
@@ -255,7 +258,11 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract authority</mat-label>
-              <input formControlName="negotiateCompetence" matInput required trim="blur">
+              <mat-select formControlName="negotiateCompetence" required>
+                <mat-option *ngFor="let option of listNegotiateCompetence" [value]="option.key">
+                  {{ option.value }}
+                </mat-option>
+              </mat-select>
               @if (!!formGroupDetail.controls['negotiateCompetence'].hasError('required')) {
                 <mat-error><span i18n>Contract authority</span><span i18n> not empty</span></mat-error>
               }
@@ -264,7 +271,11 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Signatory authority</mat-label>
-              <input formControlName="competence" matInput required trim="blur">
+              <mat-select formControlName="competence" required>
+                <mat-option *ngFor="let option of listCompetence" [value]="option.key">
+                  {{ option.value }}
+                </mat-option>
+              </mat-select>
               @if (!!formGroupDetail.controls['competence'].hasError('required')) {
                 <mat-error><span i18n>Signatory authority</span><span i18n> not empty</span></mat-error>
               }
@@ -659,9 +670,9 @@
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
-              <mat-label i18n>Phân loại</mat-label>
-              <input formControlName="classification" matInput required trim="blur">
-              @if (!!formGroupDetail.controls['classification'].hasError('required')) {
+              <mat-label i18n>Market Type</mat-label>
+              <input formControlName="marketType" matInput required trim="blur">
+              @if (!!formGroupDetail.controls['marketType'].hasError('required')) {
                 <mat-error><span i18n>Classification</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
@@ -1061,52 +1072,36 @@
             <td (click)="editCellUP(element,'col611')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell>
-              <!-- <mat-form-field class="edit-inline-table">
-                 <mat-select [(ngModel)]="element.col611" required>
-                   <mat-option *ngFor="let option of listCheckType" [value]="option.key">
-                     {{ option.value }}
-                   </mat-option>
-                 </mat-select>
-               </mat-form-field>-->
+              <div class="input-cell">
+                <mat-form-field class="edit-inline-table">
+                  <mat-select [(ngModel)]="element.col611" required>
+                    <mat-option *ngFor="let option of listCheckType" [value]="option.key">
+                      {{ option.value }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="col612">
             <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>From</th>
-            <td (click)="editCellUP(element,'col612')" *matCellDef="let element; let i = index"
-                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+            <td *matCellDef="let element; let i = index"
                 mat-cell>
-              <mat-form-field
-                class="edit-inline-table time-picker">
-                <input trim="blur" [(ngModel)]="element.col612" matInput required
-                       [disableClick]="true" [format]="24"
-                       [ngxTimepicker]="okok"
-                       (clickOutside)="readCellUP(element,'col612')">
-                <ngx-material-timepicker-toggle [for]="okok"
-                                                class="time-picker-clock"></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #okok [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                         [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                                         [minutesGap]="5"></ngx-material-timepicker>
-              </mat-form-field>
-              <!--@if (checkCellUP(element, 'col612')) {
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table time-picker">
-                    <input trim="blur" [(ngModel)]="element.col612" matInput required
-                           [disableClick]="true" [format]="24"
-                           [ngxTimepicker]="$any('ttt'+i)"
-                           (clickOutside)="readCellUP(element,'col612')">
-                    <ngx-material-timepicker-toggle [for]="$any('ttt'+i)"
-                                                    class="time-picker-clock"></ngx-material-timepicker-toggle>
-                    <ngx-material-timepicker #ttt{{i}} id="'ttt' + i" [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                             [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                                             [minutesGap]="5"></ngx-material-timepicker>
-                  </mat-form-field>
-                </div>
-              } @else {
-                <span class="label-text">
-            {{ element.col612 }}
-            </span>
-              }-->
+              <div class="input-cell">
+                <mat-form-field
+                  class="edit-inline-table time-picker">
+                  <input [(ngModel)]="element.col612"
+                         [disableClick]="true" [format]="24"
+                         [ngxTimepicker]="timpicker612_Tbl" matInput
+                         required trim="blur">
+                  <ngx-material-timepicker-toggle [for]="timpicker612_Tbl"
+                                                  class="time-picker-clock"></ngx-material-timepicker-toggle>
+                  <ngx-material-timepicker #timpicker612_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                           [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                           [minutesGap]="5"></ngx-material-timepicker>
+                  <mat-error>{{ validField(element, 'col613') }}</mat-error>
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="col613">
@@ -1114,19 +1109,22 @@
             <td (click)="editCellUP(element,'col613')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell>
-              @if (checkCellUP(element, 'col613')) {
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table">
-                    <input trim="blur" [(ngModel)]="element.col613" matInput required
-                           (clickOutside)="readCellUP(element,'col613')">
-                  </mat-form-field>
-                </div>
-              } @else {
-                <span class="label-text">
-            {{ element.col613 }}
-            </span>
-              }
+              <div class="input-cell">
+                <mat-form-field
+                  class="edit-inline-table time-picker">
+                  <input (clickOutside)="readCellUP(element,'col613')" [(ngModel)]="element.col613"
+                         [disableClick]="true" [format]="24"
+                         [ngxTimepicker]="timpicker613_Tbl" matInput
+                         required
+                         trim="blur">
+                  <ngx-material-timepicker-toggle [for]="timpicker613_Tbl"
+                                                  class="time-picker-clock"></ngx-material-timepicker-toggle>
+                  <ngx-material-timepicker #timpicker613_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                           [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                           [minutesGap]="5"></ngx-material-timepicker>
+                  <mat-error>{{ validField(element, 'col613') }}</mat-error>
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="col614">
@@ -1137,15 +1135,18 @@
               @if (checkCellUP(element, 'col614')) {
                 <div class="input-cell">
                   <mat-form-field
-                    class="edit-inline-table">
-                    <input trim="blur" [(ngModel)]="element.col614" matInput required
+                    class="edit-inline-table" [class.mdc-text-field--invalid]="true">
+                    <input trim="blur" [(ngModel)]="element.col614" matInput required #inputRef="ngModel"
+                           min="0" type="number" step="0.01"
+                           (blur)="true"
                            (clickOutside)="readCellUP(element,'col614')">
+                    <mat-error>{{ validField(element, 'col614', inputRef) }}</mat-error>
                   </mat-form-field>
                 </div>
               } @else {
                 <span class="label-text">
-            {{ element.col614 }}
-            </span>
+              {{ element.col614 }}
+              </span>
               }
             </td>
           </ng-container>
@@ -1172,7 +1173,7 @@
       <div class="mt-25">
         <div class="w-100 mb-10 d-flex justify-content-between">
           <span class="d-flex align-items-end fw-bold">6.2 Lưu trú qua đêm</span>
-          <button (click)="addUnitPrice()" class="add-btn right-0" i18n mat-button type="button">
+          <button (click)="addTbl62()" class="add-btn right-0" i18n mat-button type="button">
             <i class="material-symbols-outlined">
               add
             </i>
@@ -1186,31 +1187,87 @@
                 mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
             </td>
           </ng-container>
-          <ng-container matColumnDef="type">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Service Code</th>
-            <td (click)="editCellUP(element,'type')" *matCellDef="let element"
+          <ng-container matColumnDef="col621">
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Phân loại</th>
+            <td (click)="editCellUP(element,'col621')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'type')) {
+                mat-cell>
+              <div class="input-cell">
+                <mat-form-field class="edit-inline-table">
+                  <mat-select [(ngModel)]="element.col621" required>
+                    <mat-option *ngFor="let option of listCheckType" [value]="option.key">
+                      {{ option.value }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="col622">
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>From</th>
+            <td *matCellDef="let element; let i = index"
+                mat-cell>
+              <div class="input-cell">
+                <mat-form-field
+                  class="edit-inline-table time-picker">
+                  <input [(ngModel)]="element.col622"
+                         [disableClick]="true" [format]="24"
+                         [ngxTimepicker]="timpicker622_Tbl" matInput
+                         required trim="blur">
+                  <ngx-material-timepicker-toggle [for]="timpicker622_Tbl"
+                                                  class="time-picker-clock"></ngx-material-timepicker-toggle>
+                  <ngx-material-timepicker #timpicker622_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                           [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                           [minutesGap]="5"></ngx-material-timepicker>
+                  <mat-error>{{ validField(element, 'col623') }}</mat-error>
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="col623">
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>To</th>
+            <td (click)="editCellUP(element,'col623')" *matCellDef="let element"
+                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                mat-cell>
+              <div class="input-cell">
+                <mat-form-field
+                  class="edit-inline-table time-picker">
+                  <input (clickOutside)="readCellUP(element,'col623')" [(ngModel)]="element.col623"
+                         [disableClick]="true" [format]="24"
+                         [ngxTimepicker]="timpicker623_Tbl" matInput
+                         required
+                         trim="blur">
+                  <ngx-material-timepicker-toggle [for]="timpicker623_Tbl"
+                                                  class="time-picker-clock"></ngx-material-timepicker-toggle>
+                  <ngx-material-timepicker #timpicker623_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                           [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                           [minutesGap]="5"></ngx-material-timepicker>
+                  <mat-error>{{ validField(element, 'col623') }}</mat-error>
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="col624">
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tỷ lệ</th>
+            <td (click)="editCellUP(element,'col624')" *matCellDef="let element"
+                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                mat-cell>
+              @if (checkCellUP(element, 'col624')) {
                 <div class="input-cell">
                   <mat-form-field
-                    class="edit-inline-table">
-                    <input trim="blur" [(ngModel)]="element.serviceCode" matInput required
-                           (clickOutside)="readCellUP(element,'type')">
+                    class="edit-inline-table" [class.mdc-text-field--invalid]="true">
+                    <input trim="blur" [(ngModel)]="element.col624" matInput required #inputRef="ngModel"
+                           min="0" type="number" step="0.01"
+                           (blur)="true"
+                           (clickOutside)="readCellUP(element,'col624')">
+                    <mat-error>{{ validField(element, 'col624', inputRef) }}</mat-error>
                   </mat-form-field>
                 </div>
               } @else {
                 <span class="label-text">
-              {{ element.serviceCode }}
+              {{ element.col624 }}
               </span>
               }
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="name">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
-            <td *matCellDef="let element" class="text-body text-end" mat-cell>
-              {{ element.name }}
             </td>
           </ng-container>
           <ng-container matColumnDef="action" stickyEnd>
@@ -1218,47 +1275,25 @@
               Action
             </th>
             <td *matCellDef="let element;let i = dataIndex" mat-cell>
-              @if (element.isEdit) {
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <a (click)="editUnitPrice(i)" mat-button style="" type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Edit">
-                      edit
-                    </i>
-                  </a>
-                </div>
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <a (click)="deleteUnitPrice(i)" mat-button style="" type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Delete">
-                      delete
-                    </i>
-                  </a>
-                </div>
-              } @else {
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <a (click)="saveUnitPrice(i)" mat-button style="" type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Edit">
-                      save
-                    </i>
-                  </a>
-                </div>
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <a (click)="cancelUnitPrice(i)" mat-button style="" type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Delete">
-                      cancel
-                    </i>
-                  </a>
-                </div>
-              }
+              <div class="action-buttons align-items-center text-center">
+                <a (click)="confirmDeleteFile(element)" class="text-danger" mat-button type="button">
+                  <i class="material-symbols-outlined" i18n-title title="Delete">
+                    delete
+                  </i>
+                </a>
+              </div>
+
             </td>
           </ng-container>
-          <tr *matHeaderRowDef="['stt','type','name']" mat-header-row></tr>
-          <tr *matRowDef="let row; columns: ['stt','type','name'];" class="input-row" mat-row></tr>
+          <tr *matHeaderRowDef="['stt','col621','col622','col623','col624','action']" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: ['stt','col621','col622','col623','col624','action'];" class="input-row"
+              mat-row></tr>
         </table>
       </div>
       <div class="mt-25">
         <div class="w-100 mb-10 d-flex justify-content-between">
           <span class="d-flex align-items-end fw-bold">6.3 DAY USE</span>
-          <button (click)="addUnitPrice()" class="add-btn right-0" i18n mat-button type="button">
+          <button (click)="addTbl63()" class="add-btn right-0" i18n mat-button type="button">
             <i class="material-symbols-outlined">
               add
             </i>
@@ -1272,31 +1307,87 @@
                 mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
             </td>
           </ng-container>
-          <ng-container matColumnDef="type">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Service Code</th>
-            <td (click)="editCellUP(element,'type')" *matCellDef="let element"
+          <ng-container matColumnDef="col631">
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>From</th>
+            <td *matCellDef="let element; let i = index"
+                mat-cell>
+              <div class="input-cell">
+                <mat-form-field
+                  class="edit-inline-table time-picker">
+                  <input [(ngModel)]="element.col631"
+                         [disableClick]="true" [format]="24"
+                         [ngxTimepicker]="timpicker631_Tbl" matInput
+                         required trim="blur">
+                  <ngx-material-timepicker-toggle [for]="timpicker631_Tbl"
+                                                  class="time-picker-clock"></ngx-material-timepicker-toggle>
+                  <ngx-material-timepicker #timpicker631_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                           [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                           [minutesGap]="5"></ngx-material-timepicker>
+                  <mat-error>{{ validField(element, 'col631') }}</mat-error>
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="col632">
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>To</th>
+            <td (click)="editCellUP(element,'col632')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'type')) {
+                mat-cell>
+              <div class="input-cell">
+                <mat-form-field
+                  class="edit-inline-table time-picker">
+                  <input (clickOutside)="readCellUP(element,'col632')" [(ngModel)]="element.col632"
+                         [disableClick]="true" [format]="24"
+                         [ngxTimepicker]="timpicker632_Tbl" matInput
+                         required
+                         trim="blur">
+                  <ngx-material-timepicker-toggle [for]="timpicker632_Tbl"
+                                                  class="time-picker-clock"></ngx-material-timepicker-toggle>
+                  <ngx-material-timepicker #timpicker632_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                           [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                           [minutesGap]="5"></ngx-material-timepicker>
+                  <mat-error>{{ validField(element, 'col632') }}</mat-error>
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="col633">
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Phân loại</th>
+            <td (click)="editCellUP(element,'col633')" *matCellDef="let element"
+                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                mat-cell>
+              <div class="input-cell">
+                <mat-form-field class="edit-inline-table">
+                  <mat-select [(ngModel)]="element.col633" required>
+                    <mat-option *ngFor="let option of listCheckType" [value]="option.key">
+                      {{ option.value }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="col634">
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tỷ lệ</th>
+            <td (click)="editCellUP(element,'col634')" *matCellDef="let element"
+                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                mat-cell>
+              @if (checkCellUP(element, 'col634')) {
                 <div class="input-cell">
                   <mat-form-field
-                    class="edit-inline-table">
-                    <input trim="blur" [(ngModel)]="element.serviceCode" matInput required
-                           (clickOutside)="readCellUP(element,'type')">
+                    class="edit-inline-table" [class.mdc-text-field--invalid]="true">
+                    <input trim="blur" [(ngModel)]="element.col634" matInput required #inputRef="ngModel"
+                           min="0" type="number" step="0.01"
+                           (blur)="true"
+                           (clickOutside)="readCellUP(element,'col634')">
+                    <mat-error>{{ validField(element, 'col634', inputRef) }}</mat-error>
                   </mat-form-field>
                 </div>
               } @else {
                 <span class="label-text">
-              {{ element.serviceCode }}
+              {{ element.col634 }}
               </span>
               }
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="name">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
-            <td *matCellDef="let element" class="text-body text-end" mat-cell>
-              {{ element.name }}
             </td>
           </ng-container>
           <ng-container matColumnDef="action" stickyEnd>
@@ -1304,41 +1395,19 @@
               Action
             </th>
             <td *matCellDef="let element;let i = dataIndex" mat-cell>
-              @if (element.isEdit) {
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <a (click)="editUnitPrice(i)" mat-button style="" type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Edit">
-                      edit
-                    </i>
-                  </a>
-                </div>
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <a (click)="deleteUnitPrice(i)" mat-button style="" type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Delete">
-                      delete
-                    </i>
-                  </a>
-                </div>
-              } @else {
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <a (click)="saveUnitPrice(i)" mat-button style="" type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Edit">
-                      save
-                    </i>
-                  </a>
-                </div>
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <a (click)="cancelUnitPrice(i)" mat-button style="" type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Delete">
-                      cancel
-                    </i>
-                  </a>
-                </div>
-              }
+              <div class="action-buttons align-items-center text-center">
+                <a (click)="confirmDeleteFile(element)" class="text-danger" mat-button type="button">
+                  <i class="material-symbols-outlined" i18n-title title="Delete">
+                    delete
+                  </i>
+                </a>
+              </div>
+
             </td>
           </ng-container>
-          <tr *matHeaderRowDef="['stt','type','name']" mat-header-row></tr>
-          <tr *matRowDef="let row; columns: ['stt','type','name'];" class="input-row" mat-row></tr>
+          <tr *matHeaderRowDef="['stt','col631','col632','col633','col634','action']" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: ['stt','col631','col632','col633','col634','action'];" class="input-row"
+              mat-row></tr>
         </table>
       </div>
     </mat-panel-description>
