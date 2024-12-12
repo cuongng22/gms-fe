@@ -29,7 +29,7 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
   @Input() readonly: boolean = false;
   @Input() hint = '';
   @Input() required: boolean = false;
-  @Input() selectOptions: any[] = [];
+  private _options: any[] = [];
   @Input() attrValue = ''; // trường để lấy giá trị trong options
   @Input() attrDisplay = ''; // Trường để hiển thị trong options
   selectOptionsRaw: any[] = [];
@@ -46,6 +46,16 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
       this.ngControl.valueAccessor = this;
     }
   }
+
+  @Input() set options(options: any[]) {
+    this._options = options;
+    this.selectOptionsRaw = [...this._options];
+  }
+
+  get options(): any[] {
+    return this._options;
+  }
+
   ngOnInit(): void {
 
     this.formControl.valueChanges
@@ -58,10 +68,10 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
 
     this.search.valueChanges.pipe(debounceTime(200)).subscribe(keySearch => {
       if (!keySearch) {
-        this.selectOptionsRaw = [...this.selectOptions];
+        this.selectOptionsRaw = [...this.options];
       } else {
-        this.selectOptionsRaw = this.selectOptions.filter((option: any) => {
-          const attr = option[this.attrDisplay];
+        this.selectOptionsRaw = this.options.filter((option: any) => {
+          const attr = this.attrDisplay ? option[this.attrDisplay] : option;
           const check = (attr.toLowerCase().includes(keySearch.toLowerCase()));
           return check;
         });
@@ -115,7 +125,8 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
     const selected = this.formControl?.value || [];
     if (Array.isArray(selected) && selected && selected.length > 0) {
       return selected
-        .map((select: any) => this.selectOptions.find((option: any) => option[this.attrValue] === select)?.[this.attrDisplay])
+        .map((select: any) => this.options.find((option: any) => (this.attrValue ? option[this.attrValue] : option) === select))
+        .map((select: any) => this.attrDisplay ? select[this.attrDisplay] : select)
         .filter((name: any) => name)
         .join('; ') ?? this.placeholder;
     }

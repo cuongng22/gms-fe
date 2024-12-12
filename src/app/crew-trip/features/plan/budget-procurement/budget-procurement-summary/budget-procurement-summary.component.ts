@@ -1,4 +1,4 @@
-import { Component, inject, input, OnInit } from '@angular/core';
+import { Component, inject, input, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterLink } from '@angular/router';
@@ -19,21 +19,33 @@ export class BudgetProcurementSummaryComponent extends CommonComponent implement
   // id của kế hoạch
   id = input<number>();
 
-  searchCategoryAll(data: any) {
-    console.log(data)
-  }
+  @ViewChild('budgetProcurementSummaryListAll') summaryAll: BudgetProcurementSummaryListComponent;
+  @ViewChild('budgetProcurementSummaryListInternational') summaryInternational: BudgetProcurementSummaryListComponent;
+  @ViewChild('budgetProcurementSummaryListDomestic') summaryDomestic: BudgetProcurementSummaryListComponent;
 
-  searchCategoryInternational(data: any) {
-    console.log(data)
-  }
-
-  searchCategoryDomestic(data: any) {
+  searchSummary(data: any, type: string) {
+    let bodySearch: any = {
+      status: data.status,
+      airportCodes: data.airportCodes
+    }
+    switch (type) {
+      case 'All':
+        this.summaryAll.setDisplayedColumns(data.categoryOfPlan);
+        bodySearch.category = data.category;
+        this.summaryAll.loadData(bodySearch);
+        break;
+      case 'International':
+        this.summaryInternational.setDisplayedColumns(data.categoryOfPlan);
+        this.summaryAll.loadData(bodySearch);
+        break;
+      case 'Domestic':
+        this.summaryDomestic.setDisplayedColumns(data.categoryOfPlan);
+        this.summaryAll.loadData(bodySearch);
+        break;
+    }
     console.log(data)
   }
 
   override ngOnInit(): void {
-    this.baseService.summary(this.id()).then(res => {
-      console.log(res)
-    })
   }
 }

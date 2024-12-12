@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { BaseService } from "./base-service";
 import { firstValueFrom, Observable } from "rxjs";
+import { bo } from "node_modules/@fullcalendar/core/internal-common";
 
 @Injectable({
     providedIn: 'root'
@@ -26,13 +27,13 @@ export class PlanBudgetProcurementService extends BaseService {
         return firstValueFrom(this.http.get<any>(url, this.httpOptions));
     }
 
-    reject<T = any>(id: any): Promise<T> {
-        const url = `${this.api}/${this.path}/${id}`;
-        return firstValueFrom(this.http.put<T>(url, this.httpOptions));
+    updateStatus<T = any>(body: any): Promise<T> {
+        const url = `${this.api}/${this.path}/update-status`;
+        return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
     }
 
-    summary<T = any>(id: any): Promise<T> {
-        const url = `${this.api}/${this.path}/summary/${id}`;
-        return firstValueFrom(this.http.get<T>(url, this.httpOptions));
+    summarySearch<T = any>(body: any): Promise<T> {
+        const url = `${this.api}/${this.path}/summary/search`;
+        return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
     }
 }

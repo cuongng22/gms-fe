@@ -46,7 +46,7 @@ import {MatMenuModule} from "@angular/material/menu";
 import {InputComponent} from "src/app/ui-elements/input/input.component";
 import {NoDataRowOutlet} from "@angular/cdk/table";
 import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
-import {FlightMarketService} from "src/app/crew-trip/core/services/ flight-market.service";
+import {FlightMarketService} from "src/app/crew-trip/core/services/flight-market.service";
 import {HttpStatusCode} from "@angular/common/http";
 
 @Component({

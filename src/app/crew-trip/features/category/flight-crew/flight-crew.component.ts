@@ -55,7 +55,7 @@ import {RouterLink} from "@angular/router";
 import {MatMenuModule} from "@angular/material/menu";
 import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
 import {SelectOptions} from "src/app/crew-trip/shared/select-option";
-import {FlightMarketService} from "src/app/crew-trip/core/services/ flight-market.service";
+import {FlightMarketService} from "src/app/crew-trip/core/services/flight-market.service";
 import {CrewsDetailComponent} from "src/app/crew-trip/features/category/crews/crews-detail/crews-detail.component";
 import {MatDialog} from "@angular/material/dialog";
 import {InfoPlaneService} from "src/app/crew-trip/core/services/InfoPlaneService.service";

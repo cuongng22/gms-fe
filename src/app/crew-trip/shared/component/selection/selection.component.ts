@@ -26,13 +26,14 @@ import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.comp
 })
 export class SelectionComponent implements ControlValueAccessor {
   @Input() placeholder: string = '';
-  @Input() sizeInput: string = 'sm';
+  @Input() size: string = 'sm';
   @Input() label: string = '';
   @Input() readonly: boolean = false;
   @Input() hint = '';
   @Input() required: boolean = false;
-  @Input() options: { value: any; display: string }[] = [];
-
+  @Input() options: any[] = [];
+  @Input() attrValue = 'value';
+  @Input() attrDisplay = 'display';
 
   get formControl(): FormControl {
     return (this.ngControl?.control as FormControl) ?? new FormControl();

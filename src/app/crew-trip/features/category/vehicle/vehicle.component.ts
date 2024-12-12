@@ -17,7 +17,7 @@ import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
-import { FlightMarketService } from 'src/app/crew-trip/core/services/ flight-market.service';
+import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { Constant, DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';

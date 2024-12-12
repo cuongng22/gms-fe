@@ -24,7 +24,7 @@ export class MESSAGE {
   static DELETE_SUCCESS = $localize`:@@deletedSuccessfully:Deleted successfully`;
   static DELETE_FAIL = $localize`:@@deleteFail:Delete fail`;
   static UPLOAD_SUCCESS = $localize`:@@importedSuccessfully:Imported successfully`;
-  static REJECT_SUCCESS = $localize`:@@rejectSuccess:Reject success`;
+  static REJECT_SUCCESS = $localize`:@@rejectSuccess:Reject successfully`;
   static REJECT_FAIL = $localize`:@@rejectFail:Reject fail`;
   static REQUIRED = $localize`:@@required:is required`;
   static FORMAT_INVALID = $localize`:@@formatInvalid:invalid format.`;

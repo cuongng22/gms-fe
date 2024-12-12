@@ -22,12 +22,14 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
-import { Statuses, years } from './budget-procurement-list.model';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
 import { HttpStatusCode } from '@angular/common/http';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { NgxControlError } from 'ngxtension/control-error';
+import { Statuses, years } from '../budget-procurement.model';
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
+import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 
 @Component({
   selector: 'app-budget-procurement-list',
@@ -36,7 +38,7 @@ import { NgxControlError } from 'ngxtension/control-error';
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule,
-    SelectionSuggestComponent],
+    SelectionSuggestComponent, SelectionComponent, NgxControlError, DigitOnlyModule, SelectMultipleComponent],
   templateUrl: './budget-procurement-list.component.html',
   styleUrl: './budget-procurement-list.component.scss'
 })
@@ -54,7 +56,7 @@ export class BudgetProcurementListComponent extends CommonComponent {
     s: new FormControl(''),
     year: new FormControl(''),
     version: new FormControl(''),
-    status: new FormControl('')
+    status: new FormControl([])
   });
 
   override formGroupDetail = this.formBuilder.group({
@@ -97,7 +99,12 @@ export class BudgetProcurementListComponent extends CommonComponent {
     }
     try {
       await this.spinner.show();
-      let res = await this.baseService.reject(this.formGroupReject.value.id);
+      const body = {
+        id: this.formGroupReject.value.id,
+        status: 'rejected',
+        reason: this.formGroupReject.value.reason
+      }
+      let res = await this.baseService.updateStatus(body);
       this.baseService.showSuccess(MESSAGE.REJECT_SUCCESS);
       await this.search();
       return res;
@@ -127,8 +134,8 @@ export class BudgetProcurementListComponent extends CommonComponent {
   override async showDialogDetail(isCreate: boolean, id?: any) {
     let budgetProcurementDetail;
     if (id != null) {
-      let res = await this.baseService.detail(id);
-      budgetProcurementDetail = res
+      let res = this.dataSource.data.find((x: any) => x.id == id);
+      budgetProcurementDetail = res;
     }
     const dialogDetailRef = this.dialog.open(DialogBudgetProcurementDetail, {
       data: { isCreate: isCreate, budgetProcurementDetail: budgetProcurementDetail },
@@ -140,7 +147,29 @@ export class BudgetProcurementListComponent extends CommonComponent {
     });
 
   }
-
+  async changeStatus(id: any, status: string) {
+    console.log(status)
+    try {
+      await this.spinner.show();
+      const body = {
+        id: id,
+        status: status
+      }
+      let res = await this.baseService.updateStatus(body);
+      this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
+      await this.search(null, true);
+      return res;
+    } catch (e: any) {
+      console.log(e);
+      this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+  override async search<T>(body?: any, isNextPage?: boolean) {
+    let bodySearch = { ...this.formGroupSearch.value, status: this.formGroupSearch.value.status?.map((x: any) => x).join(',') };
+    super.search(bodySearch, isNextPage);
+  }
 
   toggleDialogReject() {
     this.showDialogReject = !this.showDialogReject;

@@ -9,6 +9,13 @@ export const Statuses: { code: string, value: string }[] = [
     { code: 'rejected', value: 'Rejected' }, //Từ chối
 ];
 
+// Trạng thái màn hình summary
+export const StatusesSummary: { code: string, value: string }[] = [
+    { code: '', value: '-- All Status --' },
+    { code: 'draft', value: 'Draft' },//Bản nháp
+    { code: 'completed', value: 'Completed' }, //Hoàn thành 
+];
+
 export function years() {
     let arrYears = []
     const currYear = new Date().getFullYear();
@@ -17,3 +24,15 @@ export function years() {
     }
     return arrYears;
 }
+
+export const categories = [
+    { code: '', value: $localize`:@@allCategory:-- All Category --` },
+    { code: 'International', value: $localize`:@@international:International` },
+    { code: 'Domestic', value: $localize`:@@domestic:Domestic` }
+];
+
+export const categoryOfPlans = [
+    { code: '', value: $localize`:@@allCategory:-- All Category of plan --` },
+    { code: 'BUDGET', value: $localize`:@@budgetPlan:Budget Plan` },
+    { code: 'PROCUREMENT', value: $localize`:@@procurementPlan:Procurement Plan` }
+]

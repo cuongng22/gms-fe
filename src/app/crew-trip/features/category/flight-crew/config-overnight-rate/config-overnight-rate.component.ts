@@ -18,7 +18,7 @@ import {DecimalPipe, NgClass, NgForOf} from "@angular/common";
 import {SelectMultipleComponent} from "src/app/crew-trip/shared/component/select-multiple/select-multiple.component";
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 import {FlightCrewService} from "src/app/crew-trip/core/services/flight-crew-service";
-import {FlightMarketService} from "src/app/crew-trip/core/services/ flight-market.service";
+import {FlightMarketService} from "src/app/crew-trip/core/services/flight-market.service";
 import {InfoPlaneService} from "src/app/crew-trip/core/services/InfoPlaneService.service";
 import {UsersService} from "src/app/crew-trip/core/services/users-service";
 import {ConfigOvernightRateService} from "src/app/crew-trip/core/services/config-overnight-rate-service";

@@ -20,7 +20,7 @@ import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
   hostDirectives: [NgxControlValueAccessor],
 
 })
-export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterContentInit {
+export class SelectionSuggestComponent implements OnInit {
 
   @Input() size = 'sm';
   @Input() label = '';
@@ -52,14 +52,6 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterCo
         return valueAttrDisplay.includes(value.toLowerCase());
       }));
     });
-  }
-
-  ngAfterViewInit(): void {
-    console.log('ngAfterViewInit options: ', this.options);
-  }
-
-  ngAfterContentInit(): void {
-    console.log('ngAfterContentInit options: ', this.options);
   }
 
   filter(): void {
