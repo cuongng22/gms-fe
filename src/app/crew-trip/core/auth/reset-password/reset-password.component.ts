@@ -61,13 +61,16 @@ export class ResetPasswordComponent {
   passwordMatchValidator(form: FormGroup) {
     const password = form.get('newPassword');
     const confirmPassword = form.get('confirmPassword');
-    if (password?.value !== confirmPassword?.value) {
-      confirmPassword?.setErrors({mismatch: true});
+    if (confirmPassword?.value) {
+      if (password?.value !== confirmPassword?.value) {
+        confirmPassword?.setErrors({mismatch: true});
+      } else {
+        confirmPassword?.setErrors(null);
+      }
     } else {
-      confirmPassword?.setErrors(null);
+      confirmPassword?.setErrors({required: true});
     }
   }
-
 
   async resetPassword() {
     if (this.formGroup.invalid) {
