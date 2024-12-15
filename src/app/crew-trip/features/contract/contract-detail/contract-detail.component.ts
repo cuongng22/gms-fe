@@ -93,8 +93,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   listFieldCode2 = ContractLookup.FieldCode2;
   listBudgetCode = ContractLookup.BudgetCode;
   //debounce
-  brake: any;
   marketCodeChangeDebounce: any;
+  marketCodeChangeBrake: any;
+  partnerChangeDebounce: any;
+  partnerChangeBrake: any;
   protected readonly LOCALE = LOCALE;
 
   // private filesControl = new FormControl(null, );
@@ -179,9 +181,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       updatePriceUnitInfo: [],
       priceUnitInfoRequests: [], // deletePriceUnitInfo: [],
       iban: [],
+
       appendixCode: [],
       appendixName: [],
       appendixNo: [],
+      signedAppendix: [],
+      effectiveAppendix: [],
+      expiryAppendix: [],
+      notesAppendix: [],
     });
     this.formGroupFileUpload = this.fb.group({
       fileUpload: []
@@ -200,6 +207,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           this.formGroupDetail.patchValue({doiTuongDichVu: '1'});
         } else if (this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({doiTuongDichVu: '2'});
+        } else {
+          this.formGroupDetail.patchValue({doiTuongDichVu: '1'});
         }
         this.formGroupDetail.patchValue({
           //fix tam
@@ -222,16 +231,39 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.tblUnitPrice = new MatTableDataSource(priceUnitInfo);
 
         //debounce
-        this.brake = true;
+        this.marketCodeChangeBrake = true;
         this.marketCodeChangeDebounce = debounce(async (value: any) => {
-          if (value && !this.brake) {
+          if (value && !this.marketCodeChangeBrake) {
             try {
               await this.spinner.show();
               await this.baseService.getMarket({marketCode: value.toUpperCase()}).then(res => {
                 if (res.status == HttpStatusCode.Ok) {
                   // delete res.data.marketCode;
                   this.formGroupDetail.patchValue(res.data);
-                  this.brake = true;
+                  this.marketCodeChangeBrake = true;
+                }
+              });
+            } catch (e) {
+              console.log(e);
+            } finally {
+              await this.spinner.hide();
+            }
+          }
+        }, 1000);
+
+        this.partnerChangeBrake = true;
+        this.partnerChangeDebounce = debounce(async (value: any) => {
+          if (value && !this.partnerChangeBrake) {
+            try {
+              await this.spinner.show();
+              await this.baseService.getPartnerInfo({
+                partnerCode: value.toUpperCase(),
+                isHotel: this.formGroupDetail.getRawValue().isHotel,
+                isVehicle: this.formGroupDetail.getRawValue().isVehicle
+              }).then(res => {
+                if (res.status == HttpStatusCode.Ok) {
+                  this.formGroupDetail.patchValue(res.data);
+                  this.partnerChangeBrake = true;
                 }
               });
             } catch (e) {
@@ -303,16 +335,24 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     this.tbl63.data = [...this.tbl63.data, {action: 'ADD'}];
   }
 
-  async editUnitPrice(index: any) {
-  }
-
-  async saveUnitPrice(index: any) {
-  }
-
   async deleteUnitPrice(index: any) {
+    this.tblUnitPrice.data[index]
   }
 
   async cancelUnitPrice(index: any) {
+  }
+
+  _showDialogDelete = false;
+  async _closeConfirmDelete(){
+    this._showDialogDelete = false;
+  }
+  async _doDelete(){
+
+  }
+
+  async _confirmDelete(element: any) {
+    this.curFile = element;
+    this._showDialogDelete = true;
   }
 
   async confirmDeleteFile(element: any) {
@@ -419,11 +459,13 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   async setReadMode(form: FormGroup) {
     let fieldContract = ['marketCode', 'marketName', 'nation', 'classification', 'flightGroup', 'statusUsage', 'supplierName', 'supplierPhone', 'supplierEmail', 'carType', 'standardCheckIn', 'standardCheckOut', 'notes', 'doiTuongDichVu', 'contractSpec'];
-    let fieldAnnex = [''];
+    let fieldAnnex = ['partnerName'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
       } else if (this.viewType == 'HD' && !fieldContract.includes(k)) {
+        v.disable();
+      } else if (this.viewType == 'PL' && fieldAnnex.includes(k)) {
         v.disable();
       }
     });
@@ -435,7 +477,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     } else if (this.viewType = 'PL') {
       const resContract = await this.baseService.detail(this.contractObj.bizDocId);
       let bizDocIdContract = cloneDeep(resContract.data.bizDocId);
-      ['contractCode', 'contractName', 'contractNo', 'signedDate', 'dueDateNumber', 'handoverDate']
+      ['contractCode', 'contractName', 'contractNo', 'signedDate', 'dueDateNumber', 'handoverDate', 'priceUnitInfo']
         .forEach(key => delete resContract.data[key]);
       this.formGroupDetail.patchValue({
         ...resContract?.data || resContract, hdPlRoot: bizDocIdContract
@@ -457,12 +499,17 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         appendixCode: this.formGroupDetail.getRawValue().contractCode,
         appendixName: this.formGroupDetail.getRawValue().contractName,
         appendixNo: this.formGroupDetail.getRawValue().contractNo,
+        signedAppendix: this.formGroupDetail.getRawValue().signedDate,
+        effectiveAppendix: this.formGroupDetail.getRawValue().effectiveDate,
+        expiryAppendix: this.formGroupDetail.getRawValue().expiryDate,
+        notesAppendix: this.formGroupDetail.getRawValue().notes,
         isHotel: (this.formGroupDetail.getRawValue().doiTuongDichVu == 1 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3),
         isVehicle: (this.formGroupDetail.getRawValue().doiTuongDichVu == 2 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3),
         email: this.formGroupDetail.getRawValue().supplierEmail,
         priceUnitInfo: this.tblUnitPrice.data,
         insertPriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action == 'ADD'),
-        updatePriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action != 'ADD'),
+        updatePriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action != 'ADD' || s.action != 'DELETE'),
+        deletePriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action != 'DELETE').map((s: any) => s.id),
         priceUnitInfoRequests: this.tblUnitPrice.data, // deletePriceUnitInfo: this.tblUnitPrice.data,
       });
       this.formGroupDetailInit = {...this.formGroupDetail.getRawValue()};
@@ -474,8 +521,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       // const update = !!this.formGroupDetail.getRawValue().bizDocId;
 
       await this.spinner.show();
+      //xoa bản ghi trang
+      this.tblUnitPrice.data = this.tblUnitPrice.data.filter((s: any) => !!s.fromDate);
+      this.tbl61.data = this.tbl61.data.filter((s: any) => !!s.col611);
+      this.tbl62.data = this.tbl62.data.filter((s: any) => !!s.col621);
+      this.tbl63.data = this.tbl63.data.filter((s: any) => !!s.col631);
       let res;
       if (this.action == 'edit') {
+        this.formGroupDetail.patchValue({id: this.formGroupDetail.getRawValue().bizDocId});
         res = await this.baseService.update(this.formGroupDetail.getRawValue());
       } else {
         res = await this.baseService.create(this.formGroupDetail.getRawValue());

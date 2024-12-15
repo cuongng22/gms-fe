@@ -162,6 +162,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
       contractName: this.contractObj.contractName,
       contractCode: this.contractObj.contractCode,
     });
+
     await this.search();
   }
 
@@ -178,12 +179,14 @@ export class ContractComponent extends CommonComponent implements OnInit {
       }
       let res;
       if (this.viewType == 'HD') {
+        this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'effectiveDate', 'appendixCount', 'action'];
         res = await this.baseService.search<ListResponse<T>>({
           page: this.pageIndex,
           size: this.pageSize,
           limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
         });
       } else if (this.viewType == 'PL') {
+        this.displayedColumns = ['stt', 'bizDocId', 'contractCode', 'contractName', 'partnerName', 'marketCode', 'effectiveDate', 'action'];
         res = await this.baseService.getListAnnex<ListResponse<T>>({
           page: this.pageIndex,
           size: this.pageSize,
@@ -231,20 +234,20 @@ export class ContractComponent extends CommonComponent implements OnInit {
     }
   }
 
-/*  override async delete() {
-    try {
-      console.log(this.formGroupDetail.getRawValue(), 'this.formGroupDetail.getRawValue()this.formGroupDetail.getRawValue()')
-      await this.spinner.show();
-      const res = await this.baseService.delete(this.formGroupDetail.getRawValue().bizDocId);
-      this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
-      await this.search();
-      return res;
-    } catch (e: any) {
-      this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
-    } finally {
-      await this.spinner.hide();
-      await this.closeConfirmDelete();
-    }
-  }*/
+  /*  override async delete() {
+      try {
+        console.log(this.formGroupDetail.getRawValue(), 'this.formGroupDetail.getRawValue()this.formGroupDetail.getRawValue()')
+        await this.spinner.show();
+        const res = await this.baseService.delete(this.formGroupDetail.getRawValue().bizDocId);
+        this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
+        await this.search();
+        return res;
+      } catch (e: any) {
+        this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
+      } finally {
+        await this.spinner.hide();
+        await this.closeConfirmDelete();
+      }
+    }*/
 
 }
