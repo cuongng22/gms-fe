@@ -1,14 +1,5 @@
 import {
-  Component,
-  ElementRef,
-  EventEmitter,
-  inject,
-  Input,
-  LOCALE_ID,
-  model,
-  OnInit,
-  Output,
-  ViewChild
+  Component, ElementRef, EventEmitter, inject, Input, LOCALE_ID, model, OnInit, Output, ViewChild
 } from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
@@ -22,15 +13,11 @@ import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelDescription,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle
+  MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle
 } from '@angular/material/expansion';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
@@ -47,11 +34,11 @@ import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocom
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {NgxMatTimepickerFieldComponent} from "ngx-mat-timepicker";
-import {debounce} from 'lodash';
+import {clone, cloneDeep, debounce} from 'lodash';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import * as ContractLookup from "src/app/crew-trip/features/contract/contract-lookup";
-import {NegotiateCompetence} from "src/app/crew-trip/features/contract/contract-lookup";
+import {BudgetCode, FieldCode2, NegotiateCompetence} from "src/app/crew-trip/features/contract/contract-lookup";
 import {CheckType} from "src/app/crew-trip/features/contract/contract-lookup";
 
 
@@ -61,8 +48,7 @@ import {CheckType} from "src/app/crew-trip/features/contract/contract-lookup";
   imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
-  providers: [
-    provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
 
   ]
 })
@@ -81,7 +67,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   @Input() id: any;
   @Input() viewType: any;
   @Input() readMode: any;
+  @Input() action: any;
   @Input() dataObject: any;
+  @Input() contractObj: any;
   @Output() backStep = new EventEmitter<any>();
 
   tblAttachedDocument = new MatTableDataSource();
@@ -102,6 +90,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   listCheckType = ContractLookup.CheckType;
   listCompetence = ContractLookup.Competence;
   listNegotiateCompetence = ContractLookup.NegotiateCompetence;
+  listFieldCode2 = ContractLookup.FieldCode2;
+  listBudgetCode = ContractLookup.BudgetCode;
   //debounce
   brake: any;
   marketCodeChangeDebounce: any;
@@ -126,7 +116,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       statusUsage: [],
       supplierName: [],
       supplierPhone: [],
-      supplierEmail: [],
+      supplierEmail: [, [Validators.email]],
       email: [],
       carType: [],
       standardCheckIn: [],
@@ -187,7 +177,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       priceUnitInfo: [],
       insertPriceUnitInfo: [],
       updatePriceUnitInfo: [],
-      // deletePriceUnitInfo: [],
+      priceUnitInfoRequests: [], // deletePriceUnitInfo: [],
       iban: [],
       appendixCode: [],
       appendixName: [],
@@ -203,9 +193,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       await this.spinner.show();
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         // this.loadListMaNghiepVu(),
-        this.loadListQuocGia(),
-        this.setReadMode(this.formGroupDetail)
-      ]).then(() => {
+        this.loadListQuocGia(), this.setReadMode(this.formGroupDetail)]).then(() => {
         if (this.formGroupDetail.getRawValue().isHotel && this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({doiTuongDichVu: '3'});
         } else if (this.formGroupDetail.getRawValue().isHotel) {
@@ -213,24 +201,23 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         } else if (this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({doiTuongDichVu: '2'});
         }
-        this.formGroupDetail.patchValue(
-          {
-            //fix tam
-            swiftCodeB1: '12345',
-            //
-            contractType: this.listContractType.find(s => s.value == this.formGroupDetail.getRawValue().contractType)?.key,
-            contractForm: this.listContractForm.find(s => s.value == this.formGroupDetail.getRawValue().contractForm)?.key,
-            negotiateCompetence: this.listNegotiateCompetence.find(s => s.value == this.formGroupDetail.getRawValue().negotiateCompetence)?.key,
-            competence: this.listCompetence.find(s => s.value == this.formGroupDetail.getRawValue().competence)?.key,
-            standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout
-          });
+        this.formGroupDetail.patchValue({
+          //fix tam
+          swiftCodeB1: '12345', //
+          contractType: this.listContractType.find(s => s.value == this.formGroupDetail.getRawValue().contractType)?.key,
+          contractForm: this.listContractForm.find(s => s.value == this.formGroupDetail.getRawValue().contractForm)?.key,
+          negotiateCompetence: this.listNegotiateCompetence.find(s => s.value == this.formGroupDetail.getRawValue().negotiateCompetence)?.key,
+          competence: this.listCompetence.find(s => s.value == this.formGroupDetail.getRawValue().competence)?.key,
+          fieldCode2: this.listFieldCode2.find(s => s.value == this.formGroupDetail.getRawValue().fieldCode2)?.key,
+          budgetCode: this.listBudgetCode.find(s => s.value == this.formGroupDetail.getRawValue().budgetCode)?.key,
+          standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout
+        });
 
         this.getPartnerInfo();
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.getRawValue().documentsList ?? []);
 
-        let priceUnitInfo = this.formGroupDetail.getRawValue().priceUnitInfo.map((s: any) => ({
-          ...s,
-          serviceFeeCode: s.serviceCode
+        let priceUnitInfo = this.formGroupDetail.getRawValue()?.priceUnitInfo?.map((s: any) => ({
+          ...s, serviceFeeCode: s.serviceCode
         }));
         this.tblUnitPrice = new MatTableDataSource(priceUnitInfo);
 
@@ -264,6 +251,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   goBack() {
     this.backStep.emit();
+    window.scrollTo(0, 0);
   }
 
   async actionUpload() {
@@ -285,9 +273,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           if (res.status == HttpStatusCode.Ok) {
             this.tblAttachedDocument.data = [...this.tblAttachedDocument.data, {
               // documentType: this.formGroupFileUpload.value.documentType == 1 ? 'Contract/annex or appendix' : 'Other documents of contract',
-              fileName: fileUpload.name,
-              fileUrl: res.data,
-              isManual: true
+              fileName: fileUpload.name, fileUrl: res.data, isManual: true
             }];
           }
         });
@@ -380,7 +366,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   readCellUP(row: any, cell: any) {
     let cur = new Set(row.cellEdit);
-    if (!this.validField(row,cell)) {
+    if (!this.validField(row, cell)) {
       cur.delete(cell);
       row.cellEdit = Array.from(cur);
     }
@@ -432,11 +418,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async setReadMode(form: FormGroup) {
-    let fieldContract = ['marketCode', 'marketName', 'nation',
-      'classification', 'flightGroup', 'statusUsage', 'supplierName',
-      'supplierPhone', 'supplierEmail', 'carType', 'standardCheckIn',
-      'standardCheckOut', 'notes',
-      'doiTuongDichVu', 'contractSpec'];
+    let fieldContract = ['marketCode', 'marketName', 'nation', 'classification', 'flightGroup', 'statusUsage', 'supplierName', 'supplierPhone', 'supplierEmail', 'carType', 'standardCheckIn', 'standardCheckOut', 'notes', 'doiTuongDichVu', 'contractSpec'];
     let fieldAnnex = [''];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
@@ -450,44 +432,86 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   override async detail(id: any): Promise<void> {
     if (id) {
       await super.detail(id);
+    } else if (this.viewType = 'PL') {
+      const resContract = await this.baseService.detail(this.contractObj.bizDocId);
+      let bizDocIdContract = cloneDeep(resContract.data.bizDocId);
+      ['contractCode', 'contractName', 'contractNo', 'signedDate', 'dueDateNumber', 'handoverDate']
+        .forEach(key => delete resContract.data[key]);
+      this.formGroupDetail.patchValue({
+        ...resContract?.data || resContract, hdPlRoot: bizDocIdContract
+      });
+      /*await Promise.all([
+        this.addUnitPrice(),
+        this.addTbl61(),
+        this.addTbl62(),
+        this.addTbl63(),
+      ]);*/
     } else {
       this.formGroupDetail.patchValue({})
     }
   }
 
   override async save() {
-    this.formGroupDetail.patchValue({
-      id: this.formGroupDetail.getRawValue().bizDocId,
-      appendixCode: this.formGroupDetail.getRawValue().contractCode,
-      appendixName: this.formGroupDetail.getRawValue().contractName,
-      appendixNo: this.formGroupDetail.getRawValue().bizDocId,
-      isHotel: (this.formGroupDetail.getRawValue().doiTuongDichVu == 1 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3),
-      isVehicle: (this.formGroupDetail.getRawValue().doiTuongDichVu == 2 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3),
-      email: this.formGroupDetail.getRawValue().supplierEmail,
-      priceUnitInfo: this.tblUnitPrice.data,
-      insertPriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action == 'ADD'),
-      updatePriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action != 'ADD'),
-      // deletePriceUnitInfo: this.tblUnitPrice.data,
-    });
-    this.formGroupDetailInit = {...this.formGroupDetail.getRawValue()};
-    let res = await super.save();
-    if (res == null) {
-      this.goBack();
+    try {
+      this.formGroupDetail.patchValue({
+        appendixCode: this.formGroupDetail.getRawValue().contractCode,
+        appendixName: this.formGroupDetail.getRawValue().contractName,
+        appendixNo: this.formGroupDetail.getRawValue().contractNo,
+        isHotel: (this.formGroupDetail.getRawValue().doiTuongDichVu == 1 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3),
+        isVehicle: (this.formGroupDetail.getRawValue().doiTuongDichVu == 2 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3),
+        email: this.formGroupDetail.getRawValue().supplierEmail,
+        priceUnitInfo: this.tblUnitPrice.data,
+        insertPriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action == 'ADD'),
+        updatePriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action != 'ADD'),
+        priceUnitInfoRequests: this.tblUnitPrice.data, // deletePriceUnitInfo: this.tblUnitPrice.data,
+      });
+      this.formGroupDetailInit = {...this.formGroupDetail.getRawValue()};
+      this.formGroupDetail.markAllAsTouched();
+      if (this.formGroupDetail.invalid) {
+        this.findInvalidControls(this.formGroupDetail)
+        return;
+      }
+      // const update = !!this.formGroupDetail.getRawValue().bizDocId;
+
+      await this.spinner.show();
+      let res;
+      if (this.action == 'edit') {
+        res = await this.baseService.update(this.formGroupDetail.getRawValue());
+      } else {
+        res = await this.baseService.create(this.formGroupDetail.getRawValue());
+      }
+      await this.search();
+      this.baseService.showSuccess(this.action == 'edit' ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
+      await this.closeDetail();
+      if (res === null) {
+        this.goBack();
+      }
+    } catch (e: any) {
+      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
+      return e;
+    } finally {
+      await this.spinner.hide();
     }
   }
 
 
-  validField(row:any,cell:any,inputRef?:any){
-    if(!row[cell]){
+  validField(row: any, cell: any, inputRef?: any) {
+    if (!row[cell]) {
       return 'Not empty';
-    }
-    else if(cell == 'col614' && row[cell]>2){
-      inputRef.control.setErrors({ invalid: true });
+    } else if (cell == 'col614' && row[cell] > 2) {
+      inputRef.control.setErrors({invalid: true});
       return 'Must less than 2';
+    } else if (cell == 'col633') {
+      const regex = /^(>?)([1-9]|1[0-9]|2[0-4])$/;
+      if (!regex.test(row[cell])) {
+        inputRef.control.setErrors({invalid: true});
+        return 'Not valid';
+      }
     }
     return '';
   }
 }
+
 /*
 private RequestNotAllDay priceNotAllDayRequests;
 private List<DayUse> dayUses;

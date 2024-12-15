@@ -356,7 +356,11 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Budget Code</mat-label>
-              <input formControlName="budgetCode" matInput required trim="blur">
+              <mat-select formControlName="budgetCode" required>
+                <mat-option *ngFor="let option of listBudgetCode" [value]="option.key">
+                  {{ option.value }}
+                </mat-option>
+              </mat-select>
               @if (!!formGroupDetail.controls['budgetCode'].hasError('required')) {
                 <mat-error><span i18n>Budget Code</span><span i18n> not empty</span></mat-error>
               }
@@ -365,7 +369,11 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Field</mat-label>
-              <input formControlName="fieldCode2" matInput required trim="blur">
+              <mat-select formControlName="fieldCode2" required>
+                <mat-option *ngFor="let option of listFieldCode2" [value]="option.key">
+                  {{ option.value }}
+                </mat-option>
+              </mat-select>
               @if (!!formGroupDetail.controls['fieldCode2'].hasError('required')) {
                 <mat-error><span i18n>Field</span><span i18n> not empty</span></mat-error>
               }
@@ -725,6 +733,8 @@
               <input formControlName="supplierEmail" matInput required trim="blur">
               @if (!!formGroupDetail.controls['supplierEmail'].hasError('required')) {
                 <mat-error><span i18n>Supplier Booking Email</span><span i18n> not empty</span></mat-error>
+              } @else if (!!formGroupDetail.controls['supplierEmail'].hasError('email') && formGroupDetail.get('supplierEmail')!.touched) {
+                <mat-error><span i18n>Email</span><span i18n> invalid</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -1168,6 +1178,10 @@
           <tr *matHeaderRowDef="['stt','col611','col612','col613','col614','action']" mat-header-row></tr>
           <tr *matRowDef="let row; columns: ['stt','col611','col612','col613','col614','action'];" class="input-row"
               mat-row></tr>
+          <tr *matNoDataRow class="mat-row">
+            <td [attr.colspan]="6" class="mat-cell border-none text-center"><span
+              i18n>No data!</span></td>
+          </tr>
         </table>
       </div>
       <div class="mt-25">
@@ -1282,12 +1296,15 @@
                   </i>
                 </a>
               </div>
-
             </td>
           </ng-container>
           <tr *matHeaderRowDef="['stt','col621','col622','col623','col624','action']" mat-header-row></tr>
           <tr *matRowDef="let row; columns: ['stt','col621','col622','col623','col624','action'];" class="input-row"
               mat-row></tr>
+          <tr *matNoDataRow class="mat-row">
+            <td [attr.colspan]="6" class="mat-cell border-none text-center"><span
+              i18n>No data!</span></td>
+          </tr>
         </table>
       </div>
       <div class="mt-25">
@@ -1352,18 +1369,19 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="col633">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Phân loại</th>
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Thời gian nghỉ (tiếng)</th>
             <td (click)="editCellUP(element,'col633')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell>
               <div class="input-cell">
                 <mat-form-field class="edit-inline-table">
-                  <mat-select [(ngModel)]="element.col633" required>
-                    <mat-option *ngFor="let option of listCheckType" [value]="option.key">
-                      {{ option.value }}
-                    </mat-option>
-                  </mat-select>
+                  <input #inputRef="ngModel" (blur)="true" (clickOutside)="readCellUP(element,'col633')"
+                         [(ngModel)]="element.col633" matInput
+                         required
+                         trim="blur">
+                  <mat-error>{{ validField(element, 'col633', inputRef) }}</mat-error>
                 </mat-form-field>
+
               </div>
             </td>
           </ng-container>
@@ -1408,6 +1426,10 @@
           <tr *matHeaderRowDef="['stt','col631','col632','col633','col634','action']" mat-header-row></tr>
           <tr *matRowDef="let row; columns: ['stt','col631','col632','col633','col634','action'];" class="input-row"
               mat-row></tr>
+          <tr *matNoDataRow class="mat-row">
+            <td [attr.colspan]="6" class="mat-cell border-none text-center"><span
+              i18n>No data!</span></td>
+          </tr>
         </table>
       </div>
     </mat-panel-description>

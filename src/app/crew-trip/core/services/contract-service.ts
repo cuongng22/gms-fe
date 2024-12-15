@@ -5,7 +5,7 @@ import {HttpHeaders, HttpParams} from '@angular/common/http';
 import {Response, Role} from 'src/app/crew-trip/features/system/users/users.model';
 import {response} from 'express';
 import {DetailResponse, ListResponse} from "src/app/crew-trip/shared/models/common.model";
-import {removeNullValues} from "src/app/crew-trip/shared/utils/constant";
+import {MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
 
 @Injectable({
   providedIn: 'root'
@@ -62,5 +62,24 @@ export class ContractService extends BaseService {
   override create<T = any>(body: any): Promise<T> {
     const url = `${this.api}/${this.path}/appendix`;
     return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
+  }
+
+  export(body: any) {
+    const url = `${this.api}/${this.path}`;
+    const httpOptionsExport = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/octet-stream'
+      }),
+      responseType: 'blob' as 'json',
+      params: new HttpParams({ fromObject: body })
+    };
+    return firstValueFrom(this.http.get<any>(url, httpOptionsExport));
+
+  }
+
+  override delete<T = any>(id: any): Promise<T> {
+    const url = `${this.api}/${this.path}/appendix/${id}`;
+    return firstValueFrom(this.http.delete<T>(url, this.httpOptions));
   }
 }
