@@ -72,6 +72,9 @@ export class RateUthComponent extends CommonComponent implements OnInit {
     ];
     await this.initSearchVersion();
     await this.search();
+    this.fileUpload.valueChanges.subscribe(value => {
+      this.uploadFileError = {};
+    })
   }
 
   async initSearchVersion() {
@@ -86,7 +89,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
     });
   }
 
-  override async search(body?: any,isNextPage?: boolean) {
+  override async search(body?: any, isNextPage?: boolean) {
     try {
       await this.spinner.show();
       if (!isNextPage) {
@@ -137,8 +140,6 @@ export class RateUthComponent extends CommonComponent implements OnInit {
           await this.search();
         }
       }
-    } catch (e: any) {
-      this.baseService.showError(e.error?.error ?? e.error?.error?.code ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }

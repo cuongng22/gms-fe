@@ -64,6 +64,9 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
     ];
     await this.initSearchVersion();
     await this.search();
+    this.fileUpload.valueChanges.subscribe(value => {
+      this.uploadFileError = {};
+    })
   }
 
   async initSearchVersion() {
@@ -79,7 +82,7 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
   }
 
 
-  override async search(body?: any,isNextPage?: boolean) {
+  override async search(body?: any, isNextPage?: boolean) {
     try {
       await this.spinner.show();
       if (!isNextPage) {
