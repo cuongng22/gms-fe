@@ -157,12 +157,12 @@ export const menu: Menu[] = [
             subMenu: [
               {
                 path: 'plan/production/est-annual-production',
-                title: $localize`:@@estAnnualProduction:Estimated Annual Production`,
+                title: $localize`:@@estAnnualProduction:Estimated annual production`,
                 icon: 'ri-folder-chart-line'
               },
               {
                 path: 'plan/production/planned',
-                title: $localize`:@@planedAnnualProduction:Planned Annual Production`,
+                title: $localize`:@@planedAnnualProduction:Planned annual production`,
                 icon: 'ri-folder-chart-line'
               },
               {

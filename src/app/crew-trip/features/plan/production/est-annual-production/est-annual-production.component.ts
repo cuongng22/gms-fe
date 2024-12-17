@@ -1,29 +1,29 @@
-import { AsyncPipe, CommonModule } from '@angular/common';
-import { Component, inject, OnInit, model, DestroyRef, ElementRef, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
-import { RouterLink, RouterModule } from '@angular/router';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { debounceTime, map, Observable, startWith, Subject } from 'rxjs';
-import { FlightMarketService } from 'src/app/crew-trip/core/services/ flight-market.service';
-import { AirplaneService } from 'src/app/crew-trip/core/services/airplane-service';
-import { EstimatedAnnualProductionService } from 'src/app/crew-trip/core/services/estimated-annual-production';
-import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
-import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { EstAnnualProduction } from './est-annual-production.model';
-import { Constant } from 'src/app/crew-trip/shared/utils/constant';
-import { FileUploadModule, FileUploadValidators } from '@iplab/ngx-file-upload';
-import { error } from 'console';
+import {AsyncPipe, CommonModule} from '@angular/common';
+import {Component, inject, OnInit, model, DestroyRef, ElementRef, ViewChild} from '@angular/core';
+import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MatFormField, MatFormFieldModule} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSelectModule} from '@angular/material/select';
+import {MatTableModule} from '@angular/material/table';
+import {RouterLink, RouterModule} from '@angular/router';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {debounceTime, map, Observable, startWith, Subject} from 'rxjs';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
+import {AirplaneService} from 'src/app/crew-trip/core/services/airplane-service';
+import {EstimatedAnnualProductionService} from 'src/app/crew-trip/core/services/estimated-annual-production';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {EstAnnualProduction} from './est-annual-production.model';
+import {Constant} from 'src/app/crew-trip/shared/utils/constant';
+import {FileUploadModule, FileUploadValidators} from '@iplab/ngx-file-upload';
+import {error} from 'console';
 
 @Component({
   selector: 'app-est-annual-production',
@@ -72,25 +72,25 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
 
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
-    { label: $localize`:@@id:ID`, value: 'id' },
-    { label: $localize`:@@network:NETWORK`, value: 'network' },
-    { label: $localize`:@@routeId:ROUTE_ID`, value: 'routeId' },
-    { label: $localize`:@@route:ROUTE`, value: 'route' },
-    { label: $localize`:@@route2w:ROUTE_2W`, value: 'route2w' },
-    { label: $localize`:@@ori:ORI`, value: 'ori' },
-    { label: $localize`:@@des:DES`, value: 'des' },
-    { label: $localize`:@@oriCountry:ORI_COUNTRY`, value: 'oriCountry' },
-    { label: $localize`:@@desCountry:DES_COUNTRY`, value: 'desCountry' },
-    { label: $localize`:@@verId:VER_ID`, value: 'verId' },
-    { label: $localize`:@@acId:AC_ID`, value: 'acId' },
-    { label: $localize`:@@acGroup:AC_GROUP`, value: 'acGroup' },
-    { label: $localize`:@@carrier:CARRIER`, value: 'carrier' },
-    { label: $localize`:@@fltDate:FLT_DATE`, value: 'fltDate', type: Constant.DATE, format: Constant.DATE_FORMAT },
-    { label: $localize`:@@fltMonth:FLT_MONTH`, value: 'fltMonth' },
-    { label: $localize`:@@fltYear:FLT_YEAR`, value: 'fltYear' },
-    { label: $localize`:@@bh:BH`, value: 'bh' },
-    { label: $localize`:@@fls:FLS`, value: 'fls' },
-    { label: $localize`:@@rateBhFls:BH/FLS`, value: 'rateBhFls' },
+    // {label: $localize`:@@id:ID`, value: 'id'},
+    {label: $localize`:@@network:NETWORK`, value: 'network'},
+    {label: $localize`:@@route:ROUTE`, value: 'route'},
+    // {label: $localize`:@@routeId:ROUTE_ID`, value: 'routeId'},
+    {label: $localize`:@@route2w:ROUTE_2W`, value: 'route2w'},
+    {label: $localize`:@@ori:ORI`, value: 'ori'},
+    {label: $localize`:@@des:DES`, value: 'des'},
+    {label: $localize`:@@oriCountry:ORI_COUNTRY`, value: 'oriCountry'},
+    {label: $localize`:@@desCountry:DES_COUNTRY`, value: 'desCountry'},
+    {label: $localize`:@@verId:VER_ID`, value: 'verId'},
+    {label: $localize`:@@acId:AC_ID`, value: 'acId'},
+    {label: $localize`:@@acGroup:AC_GROUP`, value: 'acGroup'},
+    {label: $localize`:@@carrier:CARRIER`, value: 'carrier'},
+    {label: $localize`:@@fltDate:FLT_DATE`, value: 'fltDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`:@@fltMonth:FLT_MONTH`, value: 'fltMonth'},
+    {label: $localize`:@@fltYear:FLT_YEAR`, value: 'fltYear'},
+    {label: $localize`:@@bh:BH`, value: 'bh'},
+    {label: $localize`:@@fls:FLS`, value: 'fls'},
+    {label: $localize`:@@rateBhFls:BH/FLS`, value: 'rateBhFls'},
   ];
 
   override formGroupSearch = this.formBuilder.group({
@@ -113,7 +113,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
   }
 
   override ngOnInit() {
-    this.flightMarketService.search<{ data: string[] }>({ option: 1 }).then((res) => {
+    this.flightMarketService.search<{ data: string[] }>({option: 1}).then((res) => {
       this.oriList = res.data;
       this.filteredOptionsOri.set(this.oriList);
 
@@ -131,14 +131,21 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
       this.filteredOptionsAcGroup.set(this.acGroupList);
     });
 
-    this.baseService.getVersion(0).then((res) => {
-      this.versionList = res.data;
-      if (this.versionList.length > 0) {
-        this.formGroupSearch.controls['versionId'].setValue(this.versionList[0]);
-      }
-      this.filteredOptionsVersion.set(this.versionList);
-      this.search();
-    });
+    this.fileUpload.valueChanges.subscribe(value => {
+      this.uploadFileError = {};
+    })
+
+
+    this.initSearchVersion();
+
+    // this.baseService.getVersion(0).then((res) => {
+    //   this.versionList = res.data;
+    //   if (this.versionList.length > 0) {
+    //     this.formGroupSearch.controls['versionId'].setValue(this.versionList[0]);
+    //   }
+    //   this.filteredOptionsVersion.set(this.versionList);
+    //   this.search();
+    // });
 
 
     // --------------------handle valueChange for filterd-----------------
@@ -216,12 +223,34 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
 
   }
 
+  async initSearchVersion() {
+    this.baseService.getVersion(0).then((res) => {
+      this.versionList = res.data;
+      if (this.versionList.length > 0) {
+        this.formGroupSearch.controls['versionId'].setValue(this.versionList[0]);
+      }
+      this.filteredOptionsVersion.set(this.versionList);
+      this.search();
+    });
+  }
+
+
   override search(body?: any, isNextPage?: boolean): any {
-    super.search<EstAnnualProduction>({ ...this.formGroupSearch.value, option: 0, export: false, versionId: this.formGroupSearch.controls.versionId.value }, isNextPage);
+    super.search<EstAnnualProduction>({
+      ...this.formGroupSearch.value,
+      option: 0,
+      export: false,
+      versionId: this.formGroupSearch.controls.versionId.value
+    }, isNextPage);
   }
 
   override exportFileOptions(): any {
-    super.exportFileOptions({ ...this.formGroupSearch.value, option: 0, export: true, versionId: this.formGroupSearch.controls.versionId.value });
+    super.exportFileOptions({
+      ...this.formGroupSearch.value,
+      option: 0,
+      export: true,
+      versionId: this.formGroupSearch.controls.versionId.value
+    });
   }
 
 
@@ -263,7 +292,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
       if (this.fileUpload.valid && this.fileUpload.value) {
         const form = new FormData();
         const file: File = this.fileUpload.value[0];
-        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
+        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], {type: file.type}));
         form.append('option', new Blob(['0'], {
           type: 'application/json'
         }));
@@ -272,7 +301,9 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
         this.uploadFileError = res;
         if (!res.totalErrors) {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
-          this.search();
+          // this.search();
+          this.resetFileUpload();
+          await this.initSearchVersion();
           this.toggleDialogUpload();
         }
       }
@@ -286,5 +317,11 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  resetFileUpload() {
+    this.uploadFileError = {};
+    this.fileUpload.setValue([]);
+    this.fileUpload.reset()
   }
 }

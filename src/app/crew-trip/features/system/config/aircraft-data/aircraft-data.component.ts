@@ -1,6 +1,13 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {
+  AbstractControl,
+  FormBuilder,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from "@angular/forms";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 import {MatAnchor, MatButton, MatButtonModule} from "@angular/material/button";
 import {
@@ -41,6 +48,8 @@ import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
 import {NoDataRowOutlet} from "@angular/cdk/table";
 import {InputComponent} from "src/app/crew-trip/shared/component/input/input.component";
+import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {HttpStatusCode} from "@angular/common/http";
 
 @Component({
   selector: 'app-aircraft-data',
@@ -55,6 +64,7 @@ export class AircraftDataComponent extends CommonComponent implements OnInit {
   override baseService = inject(InfoPlaneService);
   usersService = inject(UsersService);
   fb = inject(FormBuilder);
+  existCheck: boolean = false;
 
 
   constructor() {
@@ -64,8 +74,8 @@ export class AircraftDataComponent extends CommonComponent implements OnInit {
     });
     this.formGroupDetail = this.fb.group({
       id: ['',],
-      acGroup: ['', [Validators.required]],
-      acType: ['', [Validators.required]],
+      acGroup: ['', [Validators.required, this.existValidator.bind(this)]],
+      acType: ['', [Validators.required, this.existValidator.bind(this)]],
       note: ['', [Validators.maxLength(500)]],
       active: [true,]
     });
@@ -74,12 +84,12 @@ export class AircraftDataComponent extends CommonComponent implements OnInit {
   }
 
   override async ngOnInit() {
-    this.displayedColumns = ['stt', 'acgroup', 'actype', 'note', 'active' ,'action'];
+    this.displayedColumns = ['stt', 'acgroup', 'actype', 'note', 'active', 'action'];
     await Promise.all([this.search(),]).then(() => {
     });
   }
 
-  override  async showDialogDetail(id?: any, type?: string) {
+  override async showDialogDetail(id?: any, type?: string) {
     if (id != null && type === 'index') {
       this.formGroupDetail.patchValue(this.dataSource.data[id] as JSON);
     } else if (id != null) {
@@ -88,4 +98,43 @@ export class AircraftDataComponent extends CommonComponent implements OnInit {
     this.toggleDialogCreate();
   }
 
+  override async showConfirmDelete(id: any, actype?: any) {
+    this.formGroupDetail.patchValue({
+      id: id,
+      acType: actype
+    });
+    console.log("this.formGroupDetailthis.formGroupDetail:", this.formGroupDetail)
+    this.toggleDialogDelete();
+  }
+
+  override async delete() {
+    try {
+      await this.spinner.show();
+      const res = await this.baseService.delete(this.formGroupDetail.getRawValue().id);
+      this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
+      await this.search();
+      return res;
+    } catch (e: any) {
+      this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+      await this.closeConfirmDelete();
+    }
+  }
+
+
+  override async save(): Promise<any> {
+    super.save().then(value => {
+      if (value.status == HttpStatusCode.Conflict) {
+        this.existCheck = true;
+        this.formGroupDetail.controls['acGroup'].updateValueAndValidity();
+        this.formGroupDetail.controls['acType'].updateValueAndValidity();
+        this.existCheck = false;
+      }
+    });
+  }
+
+  existValidator(control: AbstractControl): ValidationErrors | null {
+    return this.existCheck ? {existCheck: true} : null
+  }
 }

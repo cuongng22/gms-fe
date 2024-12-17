@@ -40,12 +40,12 @@ import {RouterLink, RouterModule} from '@angular/router';
 import {EstimatedAnnualProductionService} from 'src/app/crew-trip/core/services/estimated-annual-production';
 import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
 import {AirplaneService} from 'src/app/crew-trip/core/services/airplane-service';
-import {debounceTime, startWith, Subject} from 'rxjs';
+import {debounceTime, of, startWith, Subject, take} from 'rxjs';
 import {Constant} from 'src/app/crew-trip/shared/utils/constant';
 import {
   EstAnnualProduction
 } from 'src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.model';
-import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 
 @Component({
   selector: 'app-annual-production',
@@ -58,7 +58,7 @@ import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
   templateUrl: './annual-production.component.html',
   styleUrl: './annual-production.component.scss'
 })
-export class AnnualProductionComponent extends CommonComponent implements OnInit{
+export class AnnualProductionComponent extends CommonComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(EstimatedAnnualProductionService);
   private readonly flightMarketService = inject(FlightMarketService);
@@ -96,25 +96,25 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
 
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
-    { label: $localize`:@@id:ID`, value: 'id' },
-    { label: $localize`:@@network:NETWORK`, value: 'network' },
-    { label: $localize`:@@routeId:ROUTE_ID`, value: 'routeId' },
-    { label: $localize`:@@route:ROUTE`, value: 'route' },
-    { label: $localize`:@@route2w:ROUTE_2W`, value: 'route2w' },
-    { label: $localize`:@@ori:ORI`, value: 'ori' },
-    { label: $localize`:@@des:DES`, value: 'des' },
-    { label: $localize`:@@oriCountry:ORI_COUNTRY`, value: 'oriCountry' },
-    { label: $localize`:@@desCountry:DES_COUNTRY`, value: 'desCountry' },
-    { label: $localize`:@@verId:VER_ID`, value: 'verId' },
-    { label: $localize`:@@acId:AC_ID`, value: 'acId' },
-    { label: $localize`:@@acGroup:AC_GROUP`, value: 'acGroup' },
-    { label: $localize`:@@carrier:CARRIER`, value: 'carrier' },
-    { label: $localize`:@@fltDate:FLT_DATE`, value: 'fltDate', type: Constant.DATE, format: Constant.DATE_FORMAT },
-    { label: $localize`:@@fltMonth:FLT_MONTH`, value: 'fltMonth' },
-    { label: $localize`:@@fltYear:FLT_YEAR`, value: 'fltYear' },
-    { label: $localize`:@@bh:BH`, value: 'bh' },
-    { label: $localize`:@@fls:FLS`, value: 'fls' },
-    { label: $localize`:@@rateBhFls:BH/FLS`, value: 'rateBhFls' },
+    // {label: $localize`:@@id:ID`, value: 'id'},
+    {label: $localize`:@@network:NETWORK`, value: 'network'},
+    // {label: $localize`:@@routeId:ROUTE_ID`, value: 'routeId'},
+    {label: $localize`:@@route:ROUTE`, value: 'route'},
+    {label: $localize`:@@route2w:ROUTE_2W`, value: 'route2w'},
+    {label: $localize`:@@ori:ORI`, value: 'ori'},
+    {label: $localize`:@@des:DES`, value: 'des'},
+    {label: $localize`:@@oriCountry:ORI_COUNTRY`, value: 'oriCountry'},
+    {label: $localize`:@@desCountry:DES_COUNTRY`, value: 'desCountry'},
+    {label: $localize`:@@verId:VER_ID`, value: 'verId'},
+    {label: $localize`:@@acId:AC_ID`, value: 'acId'},
+    {label: $localize`:@@acGroup:AC_GROUP`, value: 'acGroup'},
+    {label: $localize`:@@carrier:CARRIER`, value: 'carrier'},
+    {label: $localize`:@@fltDate:FLT_DATE`, value: 'fltDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`:@@fltMonth:FLT_MONTH`, value: 'fltMonth'},
+    {label: $localize`:@@fltYear:FLT_YEAR`, value: 'fltYear'},
+    {label: $localize`:@@bh:BH`, value: 'bh'},
+    {label: $localize`:@@fls:FLS`, value: 'fls'},
+    {label: $localize`:@@rateBhFls:BH/FLS`, value: 'rateBhFls'},
   ];
 
   override formGroupSearch = this.formBuilder.group({
@@ -137,7 +137,7 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
   }
 
   override ngOnInit() {
-    this.flightMarketService.search<{ data: string[] }>({ option: 1  }).then((res) => {
+    this.flightMarketService.search<{ data: string[] }>({option: 1}).then((res) => {
       this.oriList = res.data;
       this.filteredOptionsOri.set(this.oriList);
 
@@ -155,14 +155,19 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
       this.filteredOptionsAcGroup.set(this.acGroupList);
     });
 
-    this.baseService.getVersion(1).then((res) => {
-      this.versionList = res.data;
-      if (this.versionList.length > 0) {
-        this.formGroupSearch.controls['versionId'].setValue(this.versionList[0]);
-      }
-      this.filteredOptionsVersion.set(this.versionList);
-      this.search();
-    });
+    this.fileUpload.valueChanges.subscribe(value => {
+      this.uploadFileError = {};
+    })
+
+    this.initSearchVersion();
+    // this.baseService.getVersion(1).then((res) => {
+    //   this.versionList = res.data;
+    //   if (this.versionList.length > 0) {
+    //     this.formGroupSearch.controls['versionId'].setValue(this.versionList[0]);
+    //   }
+    //   this.filteredOptionsVersion.set(this.versionList);
+    //   this.search();
+    // });
 
 
     // --------------------handle valueChange for filterd-----------------
@@ -241,13 +246,33 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
   }
 
   override search(body?: any, isNextPage?: boolean): any {
-    super.search<EstAnnualProduction>({ ...this.formGroupSearch.value, option: 1, export: false, versionId: this.formGroupSearch.controls.versionId.value }, isNextPage);
+    super.search<EstAnnualProduction>({
+      ...this.formGroupSearch.value,
+      option: 1,
+      export: false,
+      versionId: this.formGroupSearch.controls.versionId.value
+    }, isNextPage);
   }
 
   override exportFileOptions(): any {
-    super.exportFileOptions({ ...this.formGroupSearch.value, option: 1, export: true, versionId: this.formGroupSearch.controls.versionId.value });
+    super.exportFileOptions({
+      ...this.formGroupSearch.value,
+      option: 1,
+      export: true,
+      versionId: this.formGroupSearch.controls.versionId.value
+    });
   }
 
+  async initSearchVersion() {
+    this.baseService.getVersion(1).then((res) => {
+      this.versionList = res.data;
+      if (this.versionList.length > 0) {
+        this.formGroupSearch.controls['versionId'].setValue(this.versionList[0]);
+      }
+      this.filteredOptionsVersion.set(this.versionList);
+      this.search();
+    });
+  }
 
   // ------------------------filter----------------------------
   filterOri(): void {
@@ -287,7 +312,7 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
       if (this.fileUpload.valid && this.fileUpload.value) {
         const form = new FormData();
         const file: File = this.fileUpload.value[0];
-        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
+        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], {type: file.type}));
         form.append('option', new Blob(['1'], {
           type: 'application/json'
         }));
@@ -296,7 +321,9 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
         this.uploadFileError = res;
         if (!res.totalErrors) {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
-          this.search();
+          this.resetFileUpload();
+          await this.initSearchVersion();
+          // this.search();
           this.toggleDialogUpload();
         }
       }
