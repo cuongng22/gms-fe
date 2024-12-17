@@ -2,7 +2,6 @@ import { ex } from "node_modules/@fullcalendar/core/internal-common"
 
 export const formula: any = {
 
-
   //Số chuyến bay theo tàu (công thức của kế hoạch mua sắm)
   totalFlightByAircraft: {
     formula: 'data.totalFlightMonth * data.flightOvernightRate'
@@ -10,44 +9,44 @@ export const formula: any = {
 
   //Tổng tiền xe chở tổ bay (ngoại tệ)
   totalAmountForeignTransport: {
-    formula: 'data.totalFlightMonth * 2 * data.carRate',
-    groupFormula: 'aircraftType && periodStart',
+    formula: 'data.totalFlightMonth * 2 * data.priceCrewTransport',
+    groupFormula: 'aircraftType && period',
   },
   //Số phòng đơn
   singleRoom: {
-    formula: 'data.overnight * data.totalFlightByAircraft * data.numberOfPilots + (data.numberOfFlightAttendants % 2 === 0 ? 0 : data.totalFlightByAircraft)',
+    formula: 'data.overnight * data.totalFlightByAircraft * data.pilotNumber + (data.attendantNumber % 2 === 0 ? 0 : data.totalFlightByAircraft)',
   },
   //Số phòng đôi
   doubleRoom: {
-    formula: 'data.overnight * data.totalFlightByAircraft * (data.numberOfFlightAttendants % 2 === 0 ? (data.numberOfFlightAttendants/2) : ((data.numberOfFlightAttendants - 1)/2)) ',
+    formula: 'data.overnight * data.totalFlightByAircraft * (data.attendantNumber % 2 === 0 ? (data.attendantNumber/2) : ((data.attendantNumber - 1)/2)) ',
   },
   //Số phòng đơn dự phòng do lẻ nam nữ
   singleRoomReserved: {
-    formula: 'data.singleRoom * data.rateForSingle'
+    formula: 'data.singleRoom * generalData.rateForSingle'
   },
   //Số phòng đơn early-checkin dự kiến
   singleRoomEarly: {
-    formula: '1 * data.numberOfEarlyFlights * data.numberOfPilots + (data.numberOfFlightAttendants % 2 === 0 ? 0 : data.totalFlightByAircraft)'
+    formula: '1 * data.totalFlightEarlyCheckin * data.pilotNumber + (data.attendantNumber % 2 === 0 ? 0 : data.totalFlightByAircraft)'
   },
   //Số phòng đôi early-checkin dự kiến
   doubleRoomEarly: {
-    formula: '1 * data.numberOfEarlyFlights * (data.numberOfFlightAttendants % 2 === 0 ? (data.numberOfFlightAttendants/2) : ((data.numberOfFlightAttendants - 1)/2))'
+    formula: '1 * data.totalFlightEarlyCheckin * (data.attendantNumber % 2 === 0 ? (data.attendantNumber/2) : ((data.attendantNumber - 1)/2))'
   },
   //Số phòng đơn early-checkin dự kiến do lẻ nam nữ
   singleRoomEarlyReserved: {
-    formula: 'data.singleRoomEarly * data.rateForSingle'
+    formula: 'data.singleRoomEarly * generalData.rateForSingle'
   },
   //Số phòng đơn late checkout dự kiến
   singleRoomLate: {
-    formula: 'data.overnightLate * data.numberOfLateFlights * data.numberOfPilots + (data.numberOfFlightAttendants % 2 === 0 ? 0 : data.totalFlightByAircraft)'
+    formula: '1 * data.totalFlightLateCheckout * data.pilotNumber + (data.attendantNumber % 2 === 0 ? 0 : data.totalFlightByAircraft)'
   },
   //Số phòng đôi late checkout dự kiến
   doubleRoomLate: {
-    formula: 'data.overnightLate * data.numberOfLateFlights * (data.numberOfFlightAttendants % 2 === 0 ? (data.numberOfFlightAttendants/2) : ((data.numberOfFlightAttendants - 1)/2))'
+    formula: '1 * data.totalFlightLateCheckout * (data.attendantNumber % 2 === 0 ? (data.attendantNumber/2) : ((data.attendantNumber - 1)/2))'
   },
   //Số phòng đơn late checkout dự kiến do lẻ nam nữ
   singleRoomLateReserved: {
-    formula: 'data.singleRoomLate * data.rateForSingle'
+    formula: 'data.singleRoomLate * generalData.rateForSingle'
   },
   //Thành tiền ngoại tệ, - phòng đơn 
   totalAmountForeignSingleRoom: {
@@ -77,30 +76,30 @@ export const formula: any = {
       + ' + (data.doubleRoomEarly * data.priceDoubleRoomEarly) '
       + ' + (data.singleRoomLate + data.singleRoomLateReserved) * data.priceSingleRoomLate '
       + ' + (data.doubleRoomLate * data.priceDoubleRoomLate) '
-      + ' + (data.totalFlightMonth * 2 * data.carRate) ',
+      + ' + (data.totalFlightMonth * 2 * data.priceCrewTransport) ',
     formulaUpdateBudgetPlan: ' data.singleRoom * data.priceSingleRoom '
       + ' + data.doubleRoom * data.priceDoubleRoom '
       + ' + data.singleRoomEarly * data.priceSingleRoomEarly '
       + ' + data.doubleRoomEarly * data.priceDoubleRoomEarly '
       + ' + data.singleRoomLate * data.priceSingleRoomLate '
       + ' + data.doubleRoomLate * data.priceDoubleRoomLate '
-      + ' + (data.totalFlightMonth * 2 * data.carRate) ',
-    groupFormula: 'periodStart',
+      + ' + (data.totalFlightMonth * 2 * data.priceCrewTransport) ',
+    groupFormula: 'period',
   },
   //Tổng tiền ngoại tệ - Bao gồm VAT
   totalAmountForeignVat: {
     formula: '(data.totalAmountForeignSingleRoom + data.totalAmountForeignDoubleRoom + data.totalAmountForeignEarly + data.totalAmountForeignLate + data.totalAmountForeignTransport)',
-    groupFormula: 'periodStart',
+    groupFormula: 'period',
   },
   //Tổng tiền VND - bao gồm VAT
   totalAmountVat: {
-    formula: 'data.totalAmountForeignVat * data.rateForeign',
-    groupFormula: 'periodStart',
+    formula: 'data.totalAmountForeignVat * data.rateInPeriod',
+    groupFormula: 'period',
   },
   //Tổng tiền VND - chưa bao gồm VAT
   totalAmount: {
-    formula: 'data.totalAmountForeign * data.rateForeign',
-    groupFormula: 'periodStart',
+    formula: 'data.totalAmountForeign * data.rateInPeriod',
+    groupFormula: 'period',
   },
   //Tổng số phòng đơn
   totalSingleRoom: {
@@ -157,7 +156,7 @@ export const rawData = {
   rateForeign: 1.1, // Tỷ giá ngoại tệ
   totalFlightByAircraft: 50, // Số chuyến bay theo tàu
   numberOfPilots: 4, //Số phi công
-  numberOfFlightAttendants: 5, //Số tiếp viên	
+  attendantNumber: 5, //Số tiếp viên	
   rateForSingle: 1.1, // TỈ lệ dự phòng lẻ nam/nữ (dành cho khách sạn)
   numberOfEarlyFlights: 10, // Số chuyến bay early-checkin
   numberOfLateFlights: 5, // Số chuyến bay late-checkout
@@ -168,9 +167,9 @@ export const rawData = {
 
 export const contractData = {
   // Phí early-checkin
-  earlyCheckinFeeFlag: false,
+  earlyCheckinFeeFlag: true,
   //Phí late checkout
-  lateCheckoutFeeFlag: false,
+  lateCheckoutFeeFlag: true,
   //Phí thuê xe chở tổ bay
   crewTransportFeeFlag: true,
   //Phí thuê xe chở tổ bay
@@ -184,14 +183,14 @@ export function getHeaderRowDef1(contractData: any, type: string): string[] {
     { column: "overnight", visible: true },
     { column: "numberOfRooms", visible: true },
     { column: "numberOfRoomsForOthers", visible: true },
-    { column: "numberOfEstimatedEarlyCheckIn Rooms", visible: !!contractData.earlyCheckinFeeFlag },
+    { column: "numberOfEstimatedEarlyCheckInRooms", visible: !!contractData.earlyCheckinFeeFlag },
     { column: "numberOfEstimatedLateCheckoutRooms", visible: !!contractData.lateCheckoutFeeFlag },
     //start phần kế hoạch mua sắm
     { column: "unitPriceIncludingVat", visible: type === 'PROCUREMENT' }, // (Đơn giá bao gồm vat) 
     { column: "priceCrewTransport", visible: type === 'PROCUREMENT' && !!contractData.priceCrewTransportFlag }, // (Đơn giá xe chở tổ bay/lượt) 
     // end phần kế hoạch mua sắm
     { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
-    { column: "totalAmountForeign", visible: true },
+    { column: "totalAmountForeignColspan", visible: true },
     { column: "totalAmountColspan", visible: true }
   ]
   return columns.filter((column: any) => column.visible).map((column: any) => column.column)
@@ -218,6 +217,8 @@ export function getHeaderRowDef2(contractData: any, type: string): string[] {
     { column: "priceSingleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag }, // (Đơn giá late checkout phòng đơn) 
     { column: "priceDoubleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag }, // (Đơn giá late check out phòng đôi) 
     // end phần kế hoạch mua sắm
+    { column: "totalAmountForeign", visible: true },
+    { column: "totalAmountForeignVat", visible: true },
     { column: "totalAmount", visible: true },
     { column: "totalAmountVat", visible: true },
   ];
@@ -251,6 +252,7 @@ export function getRowDef(contractData: any, type: string): string[] {
     // end phần kế hoạch mua sắm
     { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
     { column: "totalAmountForeign", visible: true },
+    { column: "totalAmountForeignVat", visible: true },
     { column: "totalAmount", visible: true },
     { column: "totalAmountVat", visible: true },
   ];
@@ -300,7 +302,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -347,7 +349,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -394,7 +396,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -441,7 +443,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -489,7 +491,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -536,7 +538,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -583,7 +585,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -630,7 +632,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -677,7 +679,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -724,7 +726,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -771,7 +773,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -818,7 +820,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -865,7 +867,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -912,7 +914,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -959,7 +961,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1006,7 +1008,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1053,7 +1055,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1100,7 +1102,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1147,7 +1149,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1194,7 +1196,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1241,7 +1243,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1288,7 +1290,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1335,7 +1337,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1382,7 +1384,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1429,7 +1431,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1476,7 +1478,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1523,7 +1525,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1570,7 +1572,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1617,7 +1619,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1664,7 +1666,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1711,7 +1713,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1758,7 +1760,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1805,7 +1807,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1852,7 +1854,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1899,7 +1901,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1946,7 +1948,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -1993,7 +1995,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2040,7 +2042,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2087,7 +2089,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2134,7 +2136,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2181,7 +2183,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2228,7 +2230,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2275,7 +2277,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2322,7 +2324,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2369,7 +2371,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2416,7 +2418,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2463,7 +2465,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2510,7 +2512,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2557,7 +2559,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2604,7 +2606,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2651,7 +2653,7 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
@@ -2698,13 +2700,13 @@ export const exampleData =
       "vat": 10,
       "totalFlightByAircraft": 50,
       "numberOfPilots": 4,
-      "numberOfFlightAttendants": 5,
+      "attendantNumber": 5,
       "rateForSingle": 1.1,
       "numberOfEarlyFlights": 10,
       "numberOfLateFlights": 5,
       "overnightLate": 1
     }
-];
+  ];
 
 
 export const planFlightByOvernight = [
@@ -2721,3 +2723,7 @@ export const planFlightByOvernight = [
     flightRate: 40
   }
 ]
+
+export function checkChange(value1: any, value2: any) {
+  return value1 && value1 !== value2;
+}

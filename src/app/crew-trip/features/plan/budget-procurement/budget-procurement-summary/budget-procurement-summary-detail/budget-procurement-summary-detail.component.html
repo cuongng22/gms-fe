@@ -2,14 +2,14 @@
 <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center justify-content-between mt-2">
         <button type="button" class="btn btn-outline-secondary mr-20" i18n="@@back"
-            [routerLink]="['/plan/est-plan/budget-procurement']">
+            [routerLink]="['/plan/est-plan/budget-procurement',planBudgetProcurementId(),'summary']">
             <i class="material-symbols-outlined">
                 undo
             </i>
             Back
         </button>
         <h5 class="mb-0" i18n="@@planForAirport">
-            Plan for Airport ...
+            Plan for Airport {{airportCode()}}
         </h5>
     </div>
 
@@ -47,7 +47,8 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <app-budget-procurement-general #budgetProcurementGeneral></app-budget-procurement-general>
+        <app-budget-procurement-general #budgetProcurementGeneral [category]="CategoryEnum.INTERNATIONAL"
+            (formValueChanges)="formGeneralValueChanges($event)"></app-budget-procurement-general>
     </mat-card-content>
 </mat-card>
 <mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
@@ -59,31 +60,24 @@
                     <mat-panel-title>
                         <h5 class="mb-0">II. <span i18n="@@generalInformation">Calculation basis</span></h5>
                     </mat-panel-title>
-                    <!-- @if(panelCalBasisOpenState()){
-                    <mat-panel-title class="d-flex justify-content-end">
-                        <button mat-button color="primary" type="button" class="add-btn">
-                            <i class="material-symbols-outlined">
-                                save
-                            </i>
-                            <span i18n="@@save">Save</span>
-                        </button>
-                    </mat-panel-title>
-                    } -->
                 </mat-expansion-panel-header>
-                <div style="position: absolute; top: 3px; right: 60px;">
-                    <button mat-button color="primary" type="button" class="add-btn">
+                <div style="position: absolute; top: 6px; right: 60px;">
+                    <button mat-button color="primary" type="button" class="add-btn" (click)="dataSummary()">
                         <i class="material-symbols-outlined">
-                            save
+                            directory_sync
                         </i>
-                        <span i18n="@@save">Save</span>
+                        <span i18n="@@save">Data Summary</span>
                     </button>
                 </div>
                 <mat-accordion multi>
-                    <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel [expanded]="panelFlightRateYearState()">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <h6 class="mb-0">2.1 <span i18n="@@flightRateOverTheYears">
-                                        Flight Rate Over the Years</span></h6>
+                                <h6 class="mb-0">2.1
+                                    <span i18n="@@flightRateOverTheYears">
+                                        Flight Rate Over the Years
+                                    </span>
+                                </h6>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
@@ -91,11 +85,14 @@
                         </div>
                     </mat-expansion-panel>
 
-                    <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel [expanded]="panelFlightPeriodState()">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
-                                <h6 class="mb-0">2.2 <span i18n="@@numberOfFlightsByPeriod">Number of Flights by
-                                        Period</span></h6>
+                                <h6 class="mb-0">2.2
+                                    <span i18n="@@numberOfFlightsByPeriod">
+                                        Number of Flights by Period
+                                    </span>
+                                </h6>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
@@ -114,14 +111,7 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <div class="d-flex justify-content-end">
-                                <button mat-button class="mini-vna-btn">
-                                    <i class="material-symbols-outlined">
-                                        add
-                                    </i>
-                                </button>
-                            </div>
-                            <app-budget-procurement-flight-overnight #budgetProcurementFlightOvernight />
+                            <app-budget-procurement-flight-overnight #budgetProcurementFlightOvernight (valueChange)="overnightValueChange($event)"/>
                         </div>
                     </mat-expansion-panel>
                 </mat-accordion>
@@ -140,12 +130,12 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-accordion multi>
-                    <mat-expansion-panel [expanded]="false">
+                    <mat-expansion-panel [expanded]="true">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">3.1
-                                    <span i18n="@@flightFrequencyStatisticsByNumberOfOvernightStays">
-                                        Flight Frequency Statistics by Number of Overnight Stays (Weekly)
+                                    <span i18n="@@budgetPlanForHotel">
+                                        Budget Plan for Hotel
                                     </span>
                                 </h6>
                             </mat-panel-title>
@@ -184,7 +174,7 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-accordion multi>
-                    <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel [expanded]="false">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">4.1
@@ -198,7 +188,7 @@
                             <app-budget-procurement-hotel #procurementHotel [yearPlan]="2024" type="PROCUREMENT" />
                         </div>
                     </mat-expansion-panel>
-                    <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel [expanded]="false">
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">4.2

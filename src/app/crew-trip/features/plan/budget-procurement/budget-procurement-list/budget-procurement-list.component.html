@@ -212,7 +212,7 @@
                             element.status === 'confirmed' ||
                             element.status === 'rejected' ||
                             element.status === 'approved'){
-                            <button type="button" mat-button class="text-primary" [routerLink]="['summary',element.id]"
+                            <button type="button" mat-button class="text-primary" [routerLink]="[element.id,'summary']"
                                 routerLinkActive="router-link-active">
                                 <i class="material-symbols-outlined " title="Detail" i18n-title="@@detail">
                                     zoom_in

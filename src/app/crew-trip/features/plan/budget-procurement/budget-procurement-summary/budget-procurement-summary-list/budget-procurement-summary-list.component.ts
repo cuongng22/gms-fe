@@ -15,8 +15,9 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { getDisplayedColumns, getDisplayedColumnTotals } from './budget-procurement-summary-list.model';
+import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from './budget-procurement-summary-list.model';
 import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
+import { CAR_RENTAL, HOTEL, ServiceType } from '../../budget-procurement.model';
 
 @Component({
   selector: 'app-budget-procurement-summary-list',
@@ -28,8 +29,7 @@ import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/pl
   styleUrl: './budget-procurement-summary-list.component.scss'
 })
 export class BudgetProcurementSummaryListComponent extends CommonComponent implements OnInit {
-  readonly HOTEL = 'Hotel';
-  readonly CAR_RENTAL = 'CarRental';
+  readonly serviceType = ServiceType;
 
   categoryType = input<string>('All'); //All,International,Domestic  loại quốc tế hay quốc nội
   planBudgetProcurementId = input<number>(); // id của kế hoạch
@@ -63,12 +63,12 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
         let lastCarRentalIndex = -1;
 
         data.data.forEach((item: any, index: number) => {
-          if (item.serviceType === this.HOTEL) {
+          if (item.serviceType === this.serviceType.HOTEL) {
             lastHotelIndex = index;
             if (firstHotelIndex === -1) {
               firstHotelIndex = index;
             }
-          } else if (item.serviceType === this.CAR_RENTAL) {
+          } else if (item.serviceType === this.serviceType.CAR_RENTAL) {
             lastCarRentalIndex = index;
             if (firstCarRentalIndex === -1) {
               firstCarRentalIndex = index;
@@ -95,9 +95,9 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
     }
   }
 
-  getTotal(control: string, serviceType?: string) {
-    this.dataSource.data.filter((t: any) => t.serviceType === serviceType)
-      .map((t: any) => Number(t[control])).reduce((acc, value) => acc + value, 0);
+  getTotal(control: string, serviceType: string) {
+    return this.dataSource.data.filter((t: any) => t.serviceType === serviceType)
+      .map((t: any) => Number(t[getControlTotal(control, serviceType)])).reduce((acc, value) => acc + value, 0);
   }
 
 
@@ -136,5 +136,16 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
       return numSelected > 0 && numSelected < numRows;
     }
     return this.selection.hasValue() && !this.isAllSelected();
+  }
+
+  completed() {
+    this.spinner.show();
+    const selected = this.selection.selected;
+    this.spinner.show();
+    // this.baseService.completed(selected.map((item: any) => item.id)).then(() => {
+    //   this.loadData();
+    // }).finally(() => {
+    //   this.spinner.hide();
+    // })
   }
 }

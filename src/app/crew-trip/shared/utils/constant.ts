@@ -45,6 +45,8 @@ export class MESSAGE {
   static LABEL_END_DATE = $localize`:@@endDate:End Date`;
   static MESSAGE_END_DATE_REQUIRED = $localize`:@@endDateRequired:End Date is required`;
 
+  static END_DATE_LESS_THAN_START_DATE = $localize`:@@endDateLessThanStartDate:End Date must be greater than Start Date`;
+
   static LABEL_ESTIMATED_TIME = $localize`:@@estimatedTime:Estimated Time`;
   static MESSAGE_ESTIMATED_TIME_REQUIRED = $localize`:@@estimatedTimeRequired:Estimated Time is required`;
 
@@ -106,7 +108,7 @@ export const DATE_FORMAT_DD_MM_YYYY = {
 };
 
 export class COMMON_CONFIG {
-  static TIMEOUT=10000;
+  static TIMEOUT=20000;
   static MAX_FILE_SIZE='5MB';
   static FILE_ACCEPT='.doc,.docx,.pdf,.xls,.xlsx'
 }

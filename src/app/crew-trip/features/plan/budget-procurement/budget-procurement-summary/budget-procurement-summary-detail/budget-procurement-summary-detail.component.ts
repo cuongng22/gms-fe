@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, signal, ViewChild } from '@angular/core';
+import { Component, inject, input, OnInit, signal, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -21,6 +21,12 @@ import { BudgetProcurementFlightOvernightComponent } from '../../budget-procurem
 import { BudgetProcurementHotelComponent } from '../../budget-procurement-common/budget-procurement-hotel/budget-procurement-hotel.component';
 import { BudgetProcurementCarRentalComponent } from '../../budget-procurement-common/budget-procurement-car-rental/budget-procurement-car-rental.component';
 import { BudgetProcurementCostAnalysisComponent } from '../../budget-procurement-common/budget-procurement-cost-analysis/budget-procurement-cost-analysis.component';
+import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { DataSummayRequest, summaryDataExample } from './budget-procurement-summary-detail.model';
+import { CategoryEnum } from '../../budget-procurement.model';
+import { set } from 'lodash';
+import { exampleData } from '../../budget-procurement-common/budget-procurement-hotel/budget-procurement-hotel.model';
 
 @Component({
   selector: 'app-budget-procurement-summary-detail',
@@ -31,11 +37,17 @@ import { BudgetProcurementCostAnalysisComponent } from '../../budget-procurement
     BudgetProcurementGeneralComponent, MatExpansionModule, MatExpansionPanelContent,
     BudgetProcurementFlightRateComponent, BudgetProcurementFlightPeriodComponent, BudgetProcurementFlightOvernightComponent,
     BudgetProcurementHotelComponent, BudgetProcurementCarRentalComponent, BudgetProcurementCostAnalysisComponent],
+  providers: [DataTransformPipe],
   templateUrl: './budget-procurement-summary-detail.component.html',
   styleUrl: './budget-procurement-summary-detail.component.scss'
 })
-export class BudgetProcurementSummaryDetailComponent implements OnInit {
+export class BudgetProcurementSummaryDetailComponent extends CommonComponent implements OnInit {
+  override baseService = inject(PlanBudgetProcurementService);
+  dataTransformPipe = inject(DataTransformPipe);
+
   readonly panelCalBasisOpenState = signal(false);
+  panelFlightRateYearState = signal(false);
+  panelFlightPeriodState = signal(false);
 
   @ViewChild('budgetProcurementGeneral') budgetProcurementGeneral: BudgetProcurementGeneralComponent;
   @ViewChild('budgetProcurementFlightRate') budgetProcurementFlightRate: BudgetProcurementFlightRateComponent;
@@ -47,11 +59,108 @@ export class BudgetProcurementSummaryDetailComponent implements OnInit {
   @ViewChild('procurementCarRental') procurementCarRental: BudgetProcurementCarRentalComponent;
   @ViewChild('budgetProcurementCostAnalysis') budgetProcurementCostAnalysis: BudgetProcurementCostAnalysisComponent
 
+  id = input.required<number>();
+  planBudgetProcurementId = input<number>();
+  yearPlan = input<number>();
+  airportCode = input<string>();
 
-  ngOnInit(): void {
+  CategoryEnum = CategoryEnum;
+
+  override ngOnInit(): void {
+    console.log('id: ', this.id());
+    console.log('planBudgetProcurementId: ', this.planBudgetProcurementId());
+    console.log('yearPlan: ', this.yearPlan());
+    console.log('airportCode: ', this.airportCode());
+    this.getDetailSummary();
+    // this.dataSummary();
   }
 
-  save(): void {
+  async getDetailSummary(): Promise<any> {
+    try {
+      await this.spinner.show();
+      const response = await this.baseService.getDetailSummary(this.id() ?? 0);
+      this.budgetProcurementGeneral.formGroupDetail.patchValue(response.data);
+      this.budgetProcurementGeneral.setDefaultValueGeneral();
+
+    } catch (error) {
+      console.error('loadData error: ', error);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async dataSummary() {
+    try {
+      this.spinner.show();
+      const procStartDate = this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.value;
+      const procEndDate = this.budgetProcurementGeneral.formGroupDetail.controls.procEndDate.value;
+      const requestBody = new DataSummayRequest(this.id() ?? 0,
+        this.planBudgetProcurementId() ?? 0,
+        this.yearPlan() ?? 0,
+        this.airportCode() ?? '',
+        this.dataTransformPipe.transform(procStartDate, ['date', this.Constant.MONTH_FORMAT]),
+        this.dataTransformPipe.transform(procEndDate, ['date', this.Constant.MONTH_FORMAT]),
+        !!this.budgetProcurementGeneral.formGroupDetail.controls.earlyCheckinFlag.value,
+        !!this.budgetProcurementGeneral.formGroupDetail.controls.lateCheckoutFlag.value
+      );
+      const response = summaryDataExample;//await this.baseService.dataSummary(requestBody);//
+      this.budgetProcurementFlightRate.setDataSource(response.data.planFlightRates);
+      this.budgetProcurementFlightPeriod.setDataSource(response.data.planFlightPeriods);
+
+      // set id âm cho số nghỉ đêm nếu id chưa có
+      // let planOverightRates = response.data.planOverightRates;
+      // let planBudgetHotels = response.data.planBudgetHotels;
+      // planOverightRates.forEach((item: any) => {
+      //   if (!!!item.id) {
+      //     item.id = -Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) + 1;
+      //   }
+      // });
+      // //set overnightId cho planBudgetHotels để dùng cho lúc sửa xóa số đêm nghỉ
+      // planBudgetHotels.forEach((item: any) => {
+      //   const overnightId = planOverightRates.filter((x: any) => x.numberOfOverNight === item.overnight).map((x: any) => x.id)[0]
+      //   item.overnightId = overnightId;
+      // });
+
+      this.budgetProcurementFlightOvernight.setDataSource(response.data.planOverightRates);
+      this.budgetHotel.calculateSpan(response.data.listActype.length, response.data.planOverightRates.length)
+      this.budgetHotel.setDataSource(response.data.planBudgetHotels, this.budgetProcurementGeneral.formGroupDetail.value);
+      this.setPanelState(response);
+    } catch (error) {
+      console.error('loadData error: ', error);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  override async save(): Promise<any> {
     console.log('budgetProcurementCostAnalysis: ', this.budgetProcurementCostAnalysis.formGroupDetail.value);
   }
+
+  setPanelState(response: any): void {
+    this.panelFlightRateYearState.set(!!response.data.planFlightRates && response.data.planFlightRates.length > 0);
+    this.panelFlightPeriodState.set(!!response.data.planFlightPeriods && response.data.planFlightPeriods.length > 0);
+  }
+
+  formGeneralValueChanges(event: any): void {
+    this.budgetHotel.setGeneralData(event);
+  }
+
+  overnightValueChange(event: any): void {
+    console.log('overnightValueChange: ', event);
+    switch (event.type) {
+      case 'add':
+        this.budgetHotel.setOvernightRates(event.data, event.type);
+        break;
+      case 'edit':
+        const dataFlightOvernight = this.budgetProcurementFlightOvernight.dataSource.data.filter((x: any) => x.id === event.id)[0];
+        this.budgetHotel.setOvernightRates(dataFlightOvernight, event.type)
+        break;
+      case 'delete':
+        this.budgetHotel.setOvernightRates({ id: event.id }, event.type, event.overnightLength)
+        break;
+      default:
+        break;
+    }
+  }
+
 }

@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, ElementRef, inject, model, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, DestroyRef, ElementRef, inject, input, model, OnInit, output, ViewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -16,8 +16,15 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { NgxControlError } from 'ngxtension/control-error';
-import { DatepickerComponent } from 'src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component';
+import { DatepickerYearMonthComponent } from 'src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component';
 import { DigitOnlyModule } from '@uiowa/digit-only';
+import { SeparatorDirective } from 'src/app/crew-trip/shared/directive/separator.directive';
+import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
+import { categories } from '../../budget-procurement.model';
+import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
+import { ifValidator } from 'ngxtension/if-validator';
+import { ValidationErrors } from '@iplab/ngx-file-upload';
+import moment from 'moment';
 
 @Component({
   selector: 'app-budget-procurement-general',
@@ -25,75 +32,151 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
   imports: [MatCardModule, FormsModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
-    NgxControlError, DatepickerComponent, DigitOnlyModule],
+    NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent],
   templateUrl: './budget-procurement-general.component.html',
   styleUrl: './budget-procurement-general.component.scss'
 })
 export class BudgetProcurementGeneralComponent extends CommonComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
   private readonly formBuilder = inject(FormBuilder);
+  private readonly flightMarketService = inject(FlightMarketService);
 
+  category = input<string>(''); //International,Domestic  loại quốc tế hay quốc nội
+  formValueChanges = output<any>();
 
-  categorys: any[] = ['International', 'Domestic'];
+  categorys: any[] = categories.filter((item: any) => !!item.code).map((item: any) => item.code);
 
   @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
-  filteredOptionsAirport = model<any[]>([]);
-  keySearchAirport = new Subject<string>();
-  airports: any[] = ['HAN', 'SGN'];
-
-
+  airports = model<any[]>([]);
 
 
   override formGroupDetail = this.formBuilder.group({
-    budgetPlanFlag: new FormControl(''),
+    budgetPlanFlag: new FormControl(true),
     category: new FormControl({ value: '', disabled: true }, Validators.required),
-    airport: new FormControl('', Validators.required),
-    division: new FormControl(''),
-    unitPrice: new FormControl(''),
-    unitPriceDouble: new FormControl(''),
-    rateForSingle: new FormControl(''),
-    procurementPlanFlag: new FormControl(''),
-    procStartDate: new FormControl('', Validators.required),
-    procEndDate: new FormControl('', Validators.required),
-    totalTime: new FormControl(''),
-    estimatedTime: new FormControl(''),
-    time: new FormControl(''),
+    airportCode: new FormControl('', Validators.required),
+    division: new FormControl('', [Validators.maxLength(100)]),
+    unitPriceHotel: new FormControl('', [Validators.maxLength(20)]),
+    unitPriceDoubleHotel: new FormControl('', [Validators.maxLength(20)]),
+    rateForSingle: new FormControl(),
+    procurementPlanFlag: new FormControl(false),
+    procStartDate: new FormControl('', ifValidator(() => !!this.procurementPlanFlag, Validators.required)),
+    procEndDate: new FormControl('', [ifValidator(() => !!this.procurementPlanFlag, Validators.required),
+    this.endDateLessThanStartDate.bind(this)
+    ]),
+    totalTime: new FormControl('', [Validators.maxLength(3)]),
+    estimateTime: new FormControl(''),
+    time: new FormControl('', [Validators.maxLength(3)]),
     num: new FormControl(''),
     unit: new FormControl(''),
     supplierMethod: new FormControl('Chào giá/ Đàm phán'),
-    earlyCheckinFlag: new FormControl(''),
-    lateCheckoutFlag: new FormControl(''),
+    earlyCheckinFlag: new FormControl(false),
+    lateCheckoutFlag: new FormControl(false),
   });
-
+  _procurementPlanFlag: boolean = false;
 
 
   override ngOnInit(): void {
-    this.keySearchAirport.pipe(
-      debounceTime(500),
-      startWith(''),
-    ).subscribe((value: string) => this._filterAirport(value ?? ''));
+    this.flightMarketService.search({ option: 1, type: this.category() }).then((res: any) => {
+      this.airports.set(res.data);
+    });
+    this.formGroupDetail.controls.procurementPlanFlag.valueChanges.subscribe((value: any) => {
+      this.procurementPlanFlag = !!value;
+    });
+
+    this.formGroupDetail.controls.procEndDate.valueChanges.subscribe((value: any) => {
+      this.formGroupDetail.controls.procEndDate.updateValueAndValidity({ emitEvent: false });
+      this.calculateTotalTime();
+    });
+    this.formGroupDetail.controls.procStartDate.valueChanges.subscribe((value: any) => {
+      this.formGroupDetail.controls.procEndDate.updateValueAndValidity({ emitEvent: false });
+      this.calculateTotalTime();
+    });
+
+    this.formGroupDetail.valueChanges.pipe(debounceTime(1000)).subscribe((value: any) => {
+      this.formValueChanges.emit(value);
+    })
   }
 
 
-  private _filterAirport(value: string): void {
-    if (!value) {
-      this.filteredOptionsAirport.set(this.airports);
-      return;
-    }
-    const filterValue = value.toLowerCase();
-    this.filteredOptionsAirport.set(this.airports.filter(airport => airport?.toLowerCase().includes(filterValue)));
-  }
-
-  filterAirport(): void {
-    const filterdValue = this.airport.nativeElement.value;
-    if (!filterdValue) {
-      this.filteredOptionsAirport.set(this.airports);
-      return;
-    }
-    this.keySearchAirport.next(filterdValue);
-  }
 
   submit(): void {
-    console.log(this.formGroupDetail.value);
+    this.formGroupDetail.updateValueAndValidity();
+    Object.keys(this.formGroupDetail.controls).forEach((key: string) => {
+      this.formGroupDetail.get(key)?.markAsDirty();
+      this.formGroupDetail.get(key)?.updateValueAndValidity();
+    });
+    console.log(this.formGroupDetail);
+  }
+
+
+  get procurementPlanFlag(): boolean {
+    return this._procurementPlanFlag;
+  }
+  set procurementPlanFlag(value: boolean) {
+    this._procurementPlanFlag = value;
+    this.setDefaultValueGeneral(true);
+  }
+
+  endDateLessThanStartDate(control: AbstractControl): ValidationErrors | null {
+    const startDate = this.formGroupDetail?.controls?.procStartDate.value;
+    const endDate = this.formGroupDetail?.controls?.procEndDate.value;
+    if (endDate && startDate && moment(startDate).isAfter(endDate)) {
+      return { endDateLessThanStartDate: true };
+    }
+    return null;
+  }
+
+  calculateTotalTime(): void {
+    //Thời gian mua sắm đến - Thời gian mua sắm từ
+    const startDate = this.formGroupDetail.controls.procStartDate.value;
+    const endDate = this.formGroupDetail.controls.procEndDate.value;
+    if (startDate && endDate && moment(startDate).isBefore(endDate)) {
+      const totalTime = moment(endDate).diff(moment(startDate), 'months');
+      this.formGroupDetail.controls.totalTime.setValue(totalTime.toString());
+    } else {
+      this.formGroupDetail.controls.totalTime.setValue(null);
+    }
+  }
+
+  /**
+   * 
+   * @param isCheckProcurementPlan Để handle check lập kế hoạch mua sắm hoặc init giá trị mặc định khi load detail
+   */
+  setDefaultValueGeneral(isCheckProcurementPlan?: boolean): void {
+    if (!!!this.formGroupDetail.controls.rateForSingle.value) {
+      this.formGroupDetail.controls.rateForSingle.setValue('20');
+    }
+    if (!!!this.formGroupDetail.controls.division.value) {
+      this.formGroupDetail.controls.division.setValue('Khai thác');
+    }
+    if (this.formGroupDetail.controls.budgetPlanFlag.value === null ||
+      this.formGroupDetail.controls.budgetPlanFlag.value === undefined) {
+      this.formGroupDetail.controls.budgetPlanFlag.setValue(true);
+    }
+    if (isCheckProcurementPlan) {
+      this.formGroupDetail.controls.procStartDate.setValue(null);
+      this.formGroupDetail.controls.procStartDate.markAsUntouched();
+      this.formGroupDetail.controls.procEndDate.setValue(null);
+      this.formGroupDetail.controls.procEndDate.markAsUntouched();
+      this.formGroupDetail.controls.totalTime.setValue(null);
+      this.formGroupDetail.controls.estimateTime.setValue(null);
+      this.formGroupDetail.controls.time.setValue(null);
+      this.formGroupDetail.controls.earlyCheckinFlag.setValue(false);
+      this.formGroupDetail.controls.lateCheckoutFlag.setValue(false);
+      this.formGroupDetail.controls.num.setValue(this.procurementPlanFlag ? '1' : null);
+      this.formGroupDetail.controls.unit.setValue(this.procurementPlanFlag ? 'Gói HĐ/DV' : null);
+      this.formGroupDetail.controls.supplierMethod.setValue(this.procurementPlanFlag ? 'Chào giá/ Đàm phán' : null);
+    }
+    
+    
+    // if (!this.formGroupDetail.controls.num.value) {
+    //   this.formGroupDetail.controls.num.setValue(this.procurementPlanFlag ? '1' : null);
+    // }
+    // if (!this.formGroupDetail.controls.unit.value) {
+    //   this.formGroupDetail.controls.unit.setValue(this.procurementPlanFlag ? 'Gói HĐ/DV' : null);
+    // }
+    // if (!this.formGroupDetail.controls.supplierMethod.value) {
+    //   this.formGroupDetail.controls.supplierMethod.setValue(this.procurementPlanFlag ? 'Chào giá/ Đàm phán' : null);
+    // }
   }
 }

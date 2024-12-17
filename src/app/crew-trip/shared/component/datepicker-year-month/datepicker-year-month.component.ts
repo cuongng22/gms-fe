@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, input, LOCALE_ID, OnInit, Optional, Self, SimpleChanges, ViewEncapsulation } from '@angular/core';
+import { Component, forwardRef, inject, input, LOCALE_ID, OnInit, Optional, Self, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormsModule, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
@@ -15,6 +15,7 @@ import { InputSizeComponent } from '../../input/input-size.component';
 import { MESSAGE } from '../../utils/constant';
 import { NgxControlError } from 'ngxtension/control-error';
 import { DatepickerYearMonthAdapter } from './datepicker-year-month-adapter.component';
+import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
 const moment = _rollupMoment || _moment;
 
 export const MONTH_MODE_FORMATS = {
@@ -39,11 +40,11 @@ export const MONTH_MODE_FORMATS = {
   templateUrl: './datepicker-year-month.component.html',
   styleUrl: './datepicker-year-month.component.scss',
   providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DatepickerComponent),
-      multi: true
-    },
+    // {
+    //   provide: NG_VALUE_ACCESSOR,
+    //   useExisting: forwardRef(() => DatepickerYearMonthComponent),
+    //   multi: true
+    // },
     { provide: MAT_DATE_FORMATS, useValue: MONTH_MODE_FORMATS },
     {
       provide: DateAdapter,
@@ -52,60 +53,35 @@ export const MONTH_MODE_FORMATS = {
     },
     { provide: DateAdapter, useClass: DatepickerYearMonthAdapter }
   ],
+  hostDirectives: [NgxControlValueAccessor],
 })
-export class DatepickerComponent implements OnInit, ControlValueAccessor {
+export class DatepickerYearMonthComponent implements OnInit {
   MESSAGE = MESSAGE;
   size = input<string>('');
   label = input<string>();
-  required = input<boolean>(false);
   readonly = input<boolean>(false);
-  datePickerValue = new FormControl();
+
+  protected datepickerYearMonth = inject<NgxControlValueAccessor<any>>(
+    NgxControlValueAccessor,
+  );
+
+  get formControl(): FormControl {
+    return (this.datepickerYearMonth?.ngControl?.control as FormControl) ?? new FormControl();
+  }
 
   ngOnInit(): void {
   }
-
-
-  ngOnChanges(changes: SimpleChanges) {
-    if (changes['readonly']) {
-      this.updateEnableState();
-    }
-  }
-
-  writeValue(value: Date) {
-    if (this.datePickerValue?.value !== value) {
-      this.datePickerValue.setValue(value ?? null, { emitEvent: false });
-    }
-  }
-
-  propagateChange = (_: any) => { };
-  propagateTouched = (_: any) => { };
-
-  registerOnChange(fn: any) {
-    this.propagateChange = fn;
-  }
-
-  registerOnTouched(fn: any) {
-    this.propagateTouched = fn;
-  }
-
-  touched($event: any) {
-    this.propagateTouched($event);
+  get required(): boolean {
+    return this.formControl.hasValidator(Validators.required);
   }
 
   setMonthAndYear(normalizedMonthAndYear: any, datepicker: MatDatepicker<any>) {
-    const ctrlValue = this.datePickerValue.value ? moment(this.datePickerValue.value) : moment();
+    const ctrlValue = this.datepickerYearMonth.value ? moment(this.datepickerYearMonth.value) : moment();
     ctrlValue.month(normalizedMonthAndYear.getMonth());
     ctrlValue.year(normalizedMonthAndYear.getFullYear());
-    this.datePickerValue.setValue(ctrlValue.toDate());
+    this.datepickerYearMonth.writeValue(ctrlValue.toDate());
+    this.formControl.setValue(ctrlValue.toDate());
     datepicker.close();
-  }
-
-  private updateEnableState() {
-    if (!this.readonly) {
-      this.datePickerValue.enable({ emitEvent: false });
-    } else {
-      this.datePickerValue.disable({ emitEvent: false });
-    }
   }
 
 }

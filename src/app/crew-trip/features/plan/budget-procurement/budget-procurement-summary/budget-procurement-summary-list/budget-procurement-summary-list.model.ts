@@ -5,6 +5,9 @@
 // +  Khi chọn lọc theo ""Kế hoạch mua sắm"", danh sách chỉ hiện các cột:     
 // #, Phân loại, Danh mục hàng hóa dịch vụ, Khối, Số, Đơn vị, Giá trị kế hoạch mua sắm (chưa bao gồm VAT), 
 // Giá trị kế hoạch mua sắm (bao gồm VAT), Hình thức lựa chọn Nhà cung cấp, Thời điểm dự, Tổng thời gian, Thời gian, % VAT, 
+
+import { HOTEL, ServiceType } from "../../budget-procurement.model";
+
 // Ghi chú, Trạng thái, Hành động"
 export function getDisplayedColumns(type: string): string[] {
     const columns: { column: string, visible: boolean }[] = [
@@ -25,9 +28,9 @@ export function getDisplayedColumns(type: string): string[] {
         { column: "totalTime", visible: !type || type === 'PROCUREMENT' },
         { column: "time", visible: !type || type === 'PROCUREMENT' },
         { column: "vat", visible: true },
-        { column: "planVsEstimate", visible: !type || type === 'BUDGET'  },
-        { column: "planVsEstimateRate", visible: !type || type === 'BUDGET'  },
-        { column: "unitPriceYear", visible: !type || type === 'BUDGET'  },
+        { column: "planVsEstimate", visible: !type || type === 'BUDGET' },
+        { column: "planVsEstimateRate", visible: !type || type === 'BUDGET' },
+        { column: "unitPriceYear", visible: !type || type === 'BUDGET' },
         { column: "notes", visible: true },
         { column: "status", visible: true },
         { column: "action", visible: true },
@@ -51,12 +54,27 @@ export function getDisplayedColumnTotals(type: string): string[] {
         { column: "totalTimeTotal", visible: !type || type === 'PROCUREMENT' },
         { column: "timeTotal", visible: !type || type === 'PROCUREMENT' },
         { column: "vatTotal", visible: true },
-        { column: "planVsEstimateTotal", visible: !type || type === 'BUDGET'  },
-        { column: "planVsEstimateRateTotal", visible: !type || type === 'BUDGET'  },
-        { column: "unitPriceYearTotal", visible: !type || type === 'BUDGET'  },
+        { column: "planVsEstimateTotal", visible: !type || type === 'BUDGET' },
+        { column: "planVsEstimateRateTotal", visible: !type || type === 'BUDGET' },
+        { column: "unitPriceYearTotal", visible: !type || type === 'BUDGET' },
         { column: "notesTotal", visible: true },
         { column: "statusTotal", visible: true },
         { column: "actionTotal", visible: true },
     ];
     return columns.filter((column: any) => column.visible).map((column: any) => column.column)
+}
+
+export function getControlTotal(control: string, serviceType: string): string {
+    switch (control) {
+        case 'cost':
+            return serviceType === ServiceType.HOTEL ? 'costHotel' : 'costCar';
+        case 'budget':
+            return serviceType === ServiceType.HOTEL ? 'budgetVatHotel' : 'budgetVatCar';
+        case 'procurementValueExVat':
+            return serviceType === ServiceType.HOTEL ? 'procurementValueHotel' : 'procurementValueCar';
+        case 'procurementValue':
+            return serviceType === ServiceType.HOTEL ? 'procurementValueVatHotel' : 'procurementValueVatCar';
+        default:
+            return '';
+    }
 }

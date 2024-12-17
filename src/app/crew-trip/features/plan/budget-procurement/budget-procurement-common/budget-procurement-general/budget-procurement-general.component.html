@@ -22,38 +22,46 @@
                 </mat-error>
             </mat-form-field>
         </div>
+        <div class="col mb-2">
+            <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="airports()"
+                formControlName="airportCode" size="md" [required]="true" />
+        </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@airport">Airport</mat-label>
-                <input required #airport (input)="filterAirport()" type="text" matInput formControlName="airport"
-                    [matAutocomplete]="airportComplete">
-                <mat-autocomplete autoActiveFirstOption requireSelection #airportComplete="matAutocomplete">
-                    @for (option of filteredOptionsAirport(); track option) {
-                    <mat-option [value]="option">{{option}}</mat-option>
-                    }
-                </mat-autocomplete>
-                <mat-error i18n="@@cairportRequired"
-                    *ngxControlError="formGroupDetail.controls.airport; track: 'required'">
-                    Airport {{MESSAGE.ALREADY_EXISTS}}
+                <mat-label i18n="@@division">Division</mat-label>
+                <input matInput formControlName="division">
+                <mat-error *ngxControlError="formGroupDetail.controls.division; track: 'maxlength'"
+                    i18n="@@singleRoomRateMaxlength">
+                    Division {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,100]
+                    }}
                 </mat-error>
             </mat-form-field>
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@division">Division</mat-label>
-                <input matInput formControlName="division" maxlength="100">
-            </mat-form-field>
-        </div>
-        <div class="col" sizeInput="sm">
-            <mat-form-field class="mb-2">
                 <mat-label i18n="@@singleRoomRate">Single Room Rate</mat-label>
-                <input type="number" matInput formControlName="unitPrice" maxlength="12">
+                <input type="text" matInput formControlName="unitPriceHotel" decimalSeparator="," digitOnly
+                    appSeparator>
+                <mat-error *ngxControlError="formGroupDetail.controls.unitPriceHotel; track: 'maxlength'"
+                    i18n="@@singleRoomRateMaxlength">
+                    Single Room Rate {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,20]
+                    }}
+                </mat-error>
             </mat-form-field>
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@doubleRoomRate">Double Room Rate</mat-label>
-                <input type="number" matInput formControlName="unitPriceDouble" maxlength="12">
+                <input type="text" matInput formControlName="unitPriceDoubleHotel" decimalSeparator="," digitOnly
+                    appSeparator>
+                <mat-error *ngxControlError="formGroupDetail.controls.unitPriceDoubleHotel; track: 'maxlength'"
+                    i18n="@@doubleRoomRateMaxlength">
+                    Double Room Rate {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,20]
+                    }}
+                </mat-error>
             </mat-form-field>
         </div>
     </div>
@@ -61,8 +69,8 @@
         <div class="wp-20" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@rateForSingle">Buffer rate (for single-gender)</mat-label>
-                <input type="text" inputmode="numeric"  decimalSeparator="," digitOnly
-                [decimal]="true" matInput formControlName="rateForSingle">
+                <input type="text" inputmode="numeric" decimalSeparator="," digitOnly [decimal]="true" matInput
+                    formControlName="rateForSingle">
                 <i class="material-symbols-outlined fs-18" matSuffix>
                     percent
                 </i>
@@ -75,6 +83,7 @@
             Procurement Plan
         </mat-checkbox>
     </div>
+    @if(formGroupDetail.controls.procurementPlanFlag.value) {
     <div class="row">
         <div class="col">
             <app-datepicker-year-month class="mb-2" [required]="true" i18n-label="@@startDate" label="Start Date"
@@ -88,20 +97,30 @@
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@totalTime">Total Time</mat-label>
-                <input type="number" matInput formControlName="totalTime" maxlength="3">
+                <mat-label i18n="@@totalTime">Total Time (month)</mat-label>
+                <input type="text" matInput formControlName="totalTime" digitOnly>
+                <mat-error *ngxControlError="formGroupDetail.controls.totalTime; track: 'maxlength'"
+                    i18n="@@totalTimeMaxlength">
+                    Total Time {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,3]
+                    }}
+                </mat-error>
             </mat-form-field>
         </div>
         <div class="col">
-
             <app-datepicker-year-month class="mb-2" i18n-lable="@@estimatedTime" label="Estimated Time" size="sm"
-                formControlName="estimatedTime">
+                formControlName="estimateTime">
             </app-datepicker-year-month>
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@time">Time</mat-label>
-                <input type="number" matInput formControlName="time" maxlength="3">
+                <mat-label i18n="@@time">Time (month)</mat-label>
+                <input type="text" matInput formControlName="time" digitOnly>
+                <mat-error *ngxControlError="formGroupDetail.controls.time; track: 'maxlength'" i18n="@@timeMaxlength">
+                    Time {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,3]
+                    }}
+                </mat-error>
             </mat-form-field>
         </div>
     </div>
@@ -109,19 +128,35 @@
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@number">Number</mat-label>
-                <input type="text" matInput formControlName="num" maxlength="20">
+                <input type="text" matInput formControlName="num">
+                <mat-error *ngxControlError="formGroupDetail.controls.num; track: 'maxlength'" i18n="@@numberMaxlength">
+                    Number {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,20]
+                    }}
+                </mat-error>
             </mat-form-field>
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@unit">Unit</mat-label>
-                <input type="text" matInput formControlName="unit" maxlength="100">
+                <input type="text" matInput formControlName="unit">
+                <mat-error *ngxControlError="formGroupDetail.controls.unit; track: 'maxlength'" i18n="@@unitMaxlength">
+                    Unit {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,100]
+                    }}
+                </mat-error>
             </mat-form-field>
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@supplierSelectionMethod">Supplier Selection Method</mat-label>
-                <input type="text" matInput formControlName="supplierMethod" maxlength="100">
+                <input type="text" matInput formControlName="supplierMethod">
+                <mat-error *ngxControlError="formGroupDetail.controls.supplierMethod; track: 'maxlength'"
+                    i18n="@@supplierMethodMaxlength">
+                    Supplier Selection Method {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,100]
+                    }}
+                </mat-error>
             </mat-form-field>
         </div>
         <div class="col" sizeInput="sm">
@@ -135,4 +170,5 @@
             </mat-checkbox>
         </div>
     </div>
+    }
 </form>

@@ -1,3 +1,10 @@
+export const HOTEL = 'Hotel';
+export const CAR_RENTAL = 'CarRental';
+export enum ServiceType {
+    HOTEL = 'Hotel',
+    CAR_RENTAL = 'CarRental'
+};
+
 //Bản nháp, Hoàn thành KH quốc tế, Hoàn thành KH quốc nội, Từ chối, Đã duyệt, Xác nhận
 export const Statuses: { code: string, value: string }[] = [
     { code: 'draft', value: 'Draft' },//Bản nháp
@@ -36,3 +43,8 @@ export const categoryOfPlans = [
     { code: 'BUDGET', value: $localize`:@@budgetPlan:Budget Plan` },
     { code: 'PROCUREMENT', value: $localize`:@@procurementPlan:Procurement Plan` }
 ]
+
+export enum CategoryEnum {
+    INTERNATIONAL = 'International',
+    DOMESTIC = 'Domestic'
+}
