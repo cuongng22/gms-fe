@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { AfterViewChecked, ChangeDetectorRef, Component, input, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, inject, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -23,13 +23,15 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
   providers: [DatePipe, DataTransformPipe]
 })
 export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked {
-
+  dataTransformPipe = inject(DataTransformPipe);
   dataSource = new MatTableDataSource();
   periodRowspan = 0;
   aircraftTypeRowspan = 0;
   overnightRowspan = 0;
   periods: string[] = [];
   aircraftTypes: string[] = [];
+  planFlightByOvernight: any[] = []; //tỉ lệ chuyến bay theo số đêm nghỉ
+  planFlightPeriods: any[] = []; //Số chuyến bay theo giai đoạn
 
   contractData = contractData;
   generalData: any = {};
@@ -70,7 +72,12 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
     // this.periodRowspan = this.overnightRowspan * this.aircraftTypeRowspan;
 
     this.dataSource.data.forEach((item: any, index) => {
-      const period = `Tháng ${this.datePipe.transform(item.periodStart, Constant.MONTH_FORMAT)}`;
+      let period = '';
+      if (this.type() === 'PROCUREMENT') {
+        period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+      } else {
+        period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+      }
       item.period = period;
       if (!this.periods.includes(period)) {
         this.periods.push(period);
@@ -100,18 +107,56 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
     }
   }
 
-  setOvernightRates(data: any, type: string, length?: number) {
-    switch (type) {
+  setOvernightRates(data: any, actionType: string, length?: number, planFlightByOvernight?: any[]) {
+    let checkExists: boolean;
+    switch (actionType) {
       case 'edit':
-        this.dataSource.data.forEach((item: any, index) => {
-          if (item.overnightId === data.id) {
-            item.overnight = Number(data.numberOfOverNight);
-            item.flightOvernightRate = data.flightRate;
+        // Kiểm tra xem đã tồn tại id của ngủ đêm nay chưa, nếu chưa chuyển sang thêm mới
+        checkExists = this.dataSource.data.some((item: any, index) => item.overnightId == data.id);
+        if (checkExists) {
+          this.dataSource.data.forEach((item: any, index) => {
+            if (item.overnightId === data.id) {
+              item.overnight = Number(data.numberOfOverNight);
+              item.flightOvernightRate = data.flightRate;
+            }
+            this.calculateData(item, index);
+          });
+        } else {
+          // lấy id bản ghi cuối cùng để làm cơ sở ví trí thêm data
+          if (planFlightByOvernight && planFlightByOvernight.length) {
+            this.setPlanFlightByOvernight(planFlightByOvernight)
           }
-          this.calculateData(item, index);
-        });
+
+          const overnightId = (this.dataSource.data[this.dataSource.data.length - 1] as any).overnightId;
+          const dataProcessHotel = [...this.dataSource.data];
+          for (let i = dataProcessHotel.length - 1; i >= 0; i--) {
+            const dataHotel = (this.dataSource.data[i] as any);
+            if (dataHotel.overnightId == overnightId) {
+              dataProcessHotel.splice(i + 1, 0, {
+                ...dataHotel,
+                overnightId: data.id,
+                overnight: Number(data.numberOfOverNight),
+                flightOvernightRate: data.flightRate,
+              });
+              this.calculateData(dataProcessHotel[i + 1], i + 1);
+            }
+            this.calculateData(dataProcessHotel[i], i);
+          }
+          if (length) {
+            this.calculateSpan(this.aircraftTypeRowspan, length);
+          }
+          this.dataSource.data = [...dataProcessHotel];
+          console.log(this.dataSource.data);
+          console.log('periodRowspan: ', this.periodRowspan);
+          console.log('aircraftTypeRowspan: ', this.aircraftTypeRowspan);
+          console.log('overnightRowspan: ', this.overnightRowspan)
+        }
+
         break;
       case 'delete':
+        if (planFlightByOvernight && planFlightByOvernight.length) {
+          this.setPlanFlightByOvernight(planFlightByOvernight)
+        }
         this.dataSource.data = [...this.dataSource.data.filter((itemFilter: any) => itemFilter.overnightId !== data.id)];
         if (length) {
           this.calculateSpan(this.aircraftTypeRowspan, length);
@@ -123,6 +168,14 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
     }
   }
 
+  setPlanFlightByOvernight(data: any[]) {
+    this.planFlightByOvernight = [...data];
+  }
+
+  setPlanFlightPeriods(data: any[]) {
+    this.planFlightPeriods = [...data];
+  }
+
   /**
    * 
    * @param item Giá trị từng dòng của dataSource theo công thức
@@ -131,8 +184,10 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
 
     if (this.type() === 'PROCUREMENT') {
       // thêm tỉ lệ chuyến bay nghỉ đêm
-      item.flightOvernightRate = planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOvernight === item.overnight).map(item => item.flightRate);
+      item.flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOvernight === item.overnight).map(item => item.flightRate);
 
+      // thêm số chuyến bay theo giai đoạn
+      item.planFlightPeriod = this.planFlightPeriods.filter(itemFilter => itemFilter.periodStart === item.periodStart && itemFilter.periodEnd === item.periodEnd && itemFilter.aircraftType === item.aircraftType).map(item => item.numberOfFlight).reduce((acc, value) => acc + value, 0);
       //Số chuyến bay theo tàu 
       this.calculate(item, 'totalFlightByAircraft');
     }
@@ -240,8 +295,9 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
         strFomular = objFormula.formulaUpdateBudgetPlan;
       }
     }
-    item[key] = this.calculateFormula(item, strFomular);
-    const groupFormula = formula[key].groupFormula;
+    if (!!strFomular) {
+      item[key] = this.calculateFormula(item, strFomular);
+    }
     return item[key];
   }
 

@@ -27,7 +27,7 @@
                         Number of Flights
                     </th>
                     <td mat-cell *matCellDef="let element; let i = dataIndex">
-                        {{element.numberOfFlight}}
+                        {{element.numberOfFlight | number}}
                     </td>
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

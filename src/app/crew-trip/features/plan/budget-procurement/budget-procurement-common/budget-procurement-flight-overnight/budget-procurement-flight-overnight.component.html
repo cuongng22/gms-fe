@@ -6,7 +6,11 @@
                     <th mat-sort-header mat-header-cell *matHeaderCellDef colspan="3" style="
                     background-color: white;
                     border: none !important;">
-                        <div class="d-flex justify-content-end">
+                        <div class="d-flex "
+                            [ngClass]="{'justify-content-between': invalid(), 'justify-content-end':!invalid()}">
+                            @if(invalid()){
+                            <span class="text-danger">Duplicate Number of Overnight Stays</span>
+                            }
                             <button mat-button class="mini-vna-btn" (click)="add()">
                                 <i class="material-symbols-outlined">
                                     add
@@ -30,7 +34,7 @@
                             <mat-form-field (clickOutside)="clickOutside(element,'numberOfOverNightEditing')"
                                 class="edit-inline-table">
                                 <input matInput [(ngModel)]="element.numberOfOverNight"
-                                    (change)="modelChange($event,element.id,'numberOfOverNight')" maxlength="100"
+                                    (ngModelChange)="edit($event,element.id,'numberOfOverNight')" maxlength="100"
                                     digitOnly>
                             </mat-form-field>
                         </div>
@@ -52,7 +56,7 @@
                             <mat-form-field (clickOutside)="clickOutside(element,'flightRateEditing')"
                                 class="edit-inline-table">
                                 <input matInput [(ngModel)]="element.flightRate"
-                                    (ngModelChange)="modelChange($event,element.id)" maxlength="100"
+                                    (ngModelChange)="edit($event,element.id)" maxlength="100"
                                     decimalSeparator="." digitOnly [decimal]="true">
                             </mat-form-field>
                         </div>

@@ -4,7 +4,7 @@ export const formula: any = {
 
   //Số chuyến bay theo tàu (công thức của kế hoạch mua sắm)
   totalFlightByAircraft: {
-    formula: 'data.totalFlightMonth * data.flightOvernightRate'
+    formula: 'data.planFlightPeriod * data.flightOvernightRate'
   },
 
   //Tổng tiền xe chở tổ bay (ngoại tệ)

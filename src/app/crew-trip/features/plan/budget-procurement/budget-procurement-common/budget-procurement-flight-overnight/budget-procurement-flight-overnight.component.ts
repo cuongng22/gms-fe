@@ -30,24 +30,19 @@ export class BudgetProcurementFlightOvernightComponent extends ShowMessageCompon
   showDialogDelete = false;
   valueChange = output<any>();
   overnightChange = new Subject<any>();
-  private _invalid: any = {};
 
 
   ngOnInit(): void {
     this.overnightChange.pipe(debounceTime(2000)).subscribe((data: any) => {
       if (data.control === 'numberOfOverNight') {
-        const isDuplicate = this.dataSource.data.some((item: any, index) => item.numberOfOverNight == data.value && item.id !== data.id);
-        if (isDuplicate) {
-          this._invalid[data.id] = true;
-          console.log(document.getElementById(data.id.toString()));
-          this.showError('Duplicate Number of Overnight Stays');
+        if (this.invalid()) {
           return;
-        } else {
-          this._invalid[data.id] = false;
         }
       }
-      this.valueChange.emit({ ...data, type: 'edit' });
-
+      const overnight = this.dataSource.data.find((item: any) => item.id === data.id) as any;
+      if (overnight && !!overnight.numberOfOverNight && !!overnight.flightRate) {
+        this.valueChange.emit({ ...overnight, actionType: 'edit', overnightLength: this.dataSource.data.length });
+      }
     });
   }
 
@@ -56,17 +51,44 @@ export class BudgetProcurementFlightOvernightComponent extends ShowMessageCompon
   }
 
   add() {
-    this.dataSource.data.push({
-      numberOfOvernight: null,
-      flightRate: null
-    });
+    const addItem = {
+      id: -Date.now(),
+      numberOfOverNight: null,
+      flightRate: null,
+      actionType: 'add'
+    }
+    this.dataSource.data.push(addItem);
     this.dataSource.data = [...this.dataSource.data];
+    // this.valueChange.emit({ id: addItem.id, type: 'add', overnightLength: this.dataSource.data.length });
   }
 
-  modelChange(event: any, id: number, control?: string) {
+  edit(event: any, id: number, control?: string) {
     console.log(event);
     this.overnightChange.next({ id, value: event, control });
   }
+
+  delete() {
+    const id = (this.dataSource.data[this.indexDelete] as any).id;
+    this.dataSource.data.splice(this.indexDelete, 1);
+    this.dataSource.data = [...this.dataSource.data];
+    this.toggleDialogDelete();
+    this.valueChange.emit({ id, actionType: 'delete', overnightLength: this.dataSource.data.length });
+  }
+
+  invalid() {
+    const unique = new Set();
+    if (this.dataSource.data) {
+      for (const item of this.dataSource.data) {
+        const numberOfOverNight = (item as any).numberOfOverNight?.toString();
+        if (unique.has(numberOfOverNight)) {
+          return true;
+        }
+        unique.add(numberOfOverNight);
+      }
+    }
+    return false;
+  }
+
 
   clickEdit(data: any, control: string) {
     data[control] = true;
@@ -83,23 +105,4 @@ export class BudgetProcurementFlightOvernightComponent extends ShowMessageCompon
     this.toggleDialogDelete();
   }
 
-  delete() {
-    const id = (this.dataSource.data[this.indexDelete] as any).id;
-    this.dataSource.data.splice(this.indexDelete, 1);
-    this.dataSource.data = [...this.dataSource.data];
-    this.toggleDialogDelete();
-    this.valueChange.emit({ id, type: 'delete', overnightLength: this.dataSource.data.length });
-  }
-
-
-  get invalid() {
-    let result = false;
-    Object.keys(this._invalid).forEach(key => {
-      if (this._invalid[key]) {
-        result = true;
-        return;
-      }
-    });
-    return result;
-  }
 }

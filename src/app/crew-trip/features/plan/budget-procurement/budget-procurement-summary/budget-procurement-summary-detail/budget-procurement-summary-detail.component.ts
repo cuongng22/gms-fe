@@ -107,23 +107,21 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       this.budgetProcurementFlightRate.setDataSource(response.data.planFlightRates);
       this.budgetProcurementFlightPeriod.setDataSource(response.data.planFlightPeriods);
 
-      // set id âm cho số nghỉ đêm nếu id chưa có
-      // let planOverightRates = response.data.planOverightRates;
-      // let planBudgetHotels = response.data.planBudgetHotels;
-      // planOverightRates.forEach((item: any) => {
-      //   if (!!!item.id) {
-      //     item.id = -Math.floor(Math.random() * Number.MAX_SAFE_INTEGER) + 1;
-      //   }
-      // });
-      // //set overnightId cho planBudgetHotels để dùng cho lúc sửa xóa số đêm nghỉ
-      // planBudgetHotels.forEach((item: any) => {
-      //   const overnightId = planOverightRates.filter((x: any) => x.numberOfOverNight === item.overnight).map((x: any) => x.id)[0]
-      //   item.overnightId = overnightId;
-      // });
-
       this.budgetProcurementFlightOvernight.setDataSource(response.data.planOverightRates);
-      this.budgetHotel.calculateSpan(response.data.listActype.length, response.data.planOverightRates.length)
+      this.budgetHotel.calculateSpan(response.data.listActype.length, response.data.planOverightRates.length);
+      this.budgetHotel.setPlanFlightByOvernight(response.data.planOverightRates);
+      this.budgetHotel.setPlanFlightPeriods(response.data.planFlightPeriods);
       this.budgetHotel.setDataSource(response.data.planBudgetHotels, this.budgetProcurementGeneral.formGroupDetail.value);
+
+      this.procurementHotel.calculateSpan(response.data.listActype.length, response.data.planOverightRates.length);
+      this.procurementHotel.setPlanFlightByOvernight(response.data.planOverightRates);
+      this.procurementHotel.setPlanFlightPeriods(response.data.planFlightPeriods);
+      this.procurementHotel.setDataSource(response.data.planProcurementHotels, this.budgetProcurementGeneral.formGroupDetail.value);
+
+      this.budgetCarRental.setPlanFlightPeriods(response.data.planFlightPeriods);
+      this.budgetCarRental.setDataSource(response.data.planBudgetCarentals);
+      this.procurementCarRental.setPlanFlightPeriods(response.data.planFlightPeriods);
+      this.procurementCarRental.setDataSource(response.data.planProcurementCarentals);
       this.setPanelState(response);
     } catch (error) {
       console.error('loadData error: ', error);
@@ -147,16 +145,12 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
   overnightValueChange(event: any): void {
     console.log('overnightValueChange: ', event);
-    switch (event.type) {
-      case 'add':
-        this.budgetHotel.setOvernightRates(event.data, event.type);
-        break;
+    switch (event.actionType) {
       case 'edit':
-        const dataFlightOvernight = this.budgetProcurementFlightOvernight.dataSource.data.filter((x: any) => x.id === event.id)[0];
-        this.budgetHotel.setOvernightRates(dataFlightOvernight, event.type)
+        this.budgetHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.budgetProcurementFlightOvernight.dataSource.data)
         break;
       case 'delete':
-        this.budgetHotel.setOvernightRates({ id: event.id }, event.type, event.overnightLength)
+        this.budgetHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.budgetProcurementFlightOvernight.dataSource.data)
         break;
       default:
         break;

@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { AfterViewChecked, ChangeDetectorRef, Component, input, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, inject, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -23,10 +23,8 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
   providers: [DatePipe, DataTransformPipe]
 })
 export class BudgetProcurementCarRentalComponent implements OnInit, AfterViewChecked {
-
+  dataTransformPipe = inject(DataTransformPipe);
   dataSource = new MatTableDataSource();
-  periodRowspan = 0;
-  periods: string[] = [];
 
   headerRowDef1: string[] = getHeaderRowDef1();
   headerRowDef2: string[] = getHeaderRowDef2();
@@ -36,45 +34,56 @@ export class BudgetProcurementCarRentalComponent implements OnInit, AfterViewChe
   yearPlan = input<number>(2024); // năm kế hoạch
   type = input<string>(''); // Loại Ngân sách hoặc mua sắm (budget/procurement)
 
+
+  planFlightPeriods: any[] = []; // danh sách chuyến bay theo giai đoạn
+
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) { }
 
   ngAfterViewChecked(): void {
     this.cdRef.detectChanges(); // Phát hiện và cập nhật các thay đổi
   }
   ngOnInit(): void {
-    this.dataSource.data = exampleData;
-
-    this.periodRowspan = this.dataSource.data.map((item: any) => item.aircraftType).filter((value: any, index: any, self: any) => self.indexOf(value) === index).length;
-
-    this.dataSource.data.forEach((item: any, index) => {
-      const period = `Tháng ${this.datePipe.transform(item.periodStart, Constant.MONTH_FORMAT)}`;
-      if (!this.periods.includes(period)) {
-        this.periods.push(period);
-        item.period = period;
-      }
-
-      if (this.type() === 'PROCUREMENT') {
-        //Số lượng chuyến bay theo giai đoạn
-        item.numberFlight = planFlightPeriodList.filter((t: any) => t.periodStart === item.periodStart && t.periodEnd === item.periodEnd).map((t: any) => t.noOfFlight).reduce((acc, value) => acc + value, 0);
-      }
-
-      //Số lượt xe
-      this.calculate(index, 'numberVehicles');
-      //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
-      this.calculate(index, 'totalAmountForeign');
-      //Thành tiền (ngoại tệ) - Bao gồm VAT
-      this.calculate(index, 'totalAmountForeignVat');
-      //Thành tiền VND (Chưa bao gồm VAT)
-      this.calculate(index, 'totalAmount');
-      //Thành tiền VND (Bao gồm VAT)
-      this.calculate(index, 'totalAmountVat');
-    });
 
   }
 
+  setDataSource(data: any[]) {
+    this.dataSource.data = [...data];
+    this.dataSource.data.forEach((item: any, index) => {
+      let period = '';
+      if (this.type() === 'PROCUREMENT') {
+        period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+      } else {
+        period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+      }
+      item.period = period;
+      this.calculateData(item, index);
+    });
+  }
 
+  private calculateData(item: any, index: number) {
 
+    if (this.type() === 'PROCUREMENT') {
+      //Số lượng chuyến bay theo giai đoạn
+      item.numberFlight = this.planFlightPeriods.filter((t: any) =>
+        t.periodStart === item.periodStart && t.periodEnd === item.periodEnd
+      ).map((t: any) => t.numberOfFlight).reduce((acc, value) => acc + value, 0);
+    }
 
+    //Số lượt xe
+    this.calculate(item, 'numberVehicles');
+    //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
+    this.calculate(item, 'totalAmountForeign');
+    //Thành tiền (ngoại tệ) - Bao gồm VAT
+    this.calculate(item, 'totalAmountForeignVat');
+    //Thành tiền VND (Chưa bao gồm VAT)
+    this.calculate(item, 'totalAmount');
+    //Thành tiền VND (Bao gồm VAT)
+    this.calculate(item, 'totalAmountVat');
+
+  }
+  setPlanFlightPeriods(data: any[]) {
+    this.planFlightPeriods = data;
+  }
   // TÍnh dòng tổng 
   getTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
@@ -97,21 +106,21 @@ export class BudgetProcurementCarRentalComponent implements OnInit, AfterViewChe
   }
 
   // hàm công thức tính chung
-  calculate(index: number, key: string) {
-    let data: any = this.dataSource.data[index];
+  calculate(item: any, key: string) {
     // Check lập kế hoạch sản lượng thay đổi
     // Tháng nào đã thực hiện thì tính theo công thưc mới
     const objFormula = formula[key];
     // Nếu là mua sắm thì lấy theo công thức mua sắm
     let strFomular = this.type() === 'PROCUREMENT' && objFormula.formulaProcurement ? objFormula.formulaProcurement : objFormula.formula;
-    if (this.updateBudgetPlan() && data.monthIsPerform) {
+    if (this.updateBudgetPlan() && item.monthIsPerform) {
       if (objFormula.formulaUpdateBudgetPlan) {
         strFomular = objFormula.formulaUpdateBudgetPlan;
       }
     }
-    data[key] = this.calculateFormula(data, strFomular);
-    const groupFormula = formula[key].groupFormula;
-    return data[key];
+    if (!!strFomular) {
+      item[key] = this.calculateFormula(item, strFomular);
+    }
+    return item[key];
   }
 
   // hàm tính tổng theo group (rowspan)
