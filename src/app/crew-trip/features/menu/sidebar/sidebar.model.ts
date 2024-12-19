@@ -247,7 +247,7 @@ export const menu: Menu[] = [
               },
               {
                 path: 'system/config/email-supplier',
-                title: $localize`:@@emailSupplier:Email to Supplier`,
+                title: $localize`:@@emailSupplier:Email to supplier`,
                 icon: 'ri-mail-add-line'
               },
               {
