@@ -47,7 +47,7 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
     }
   }
   ngOnInit(): void {
-
+    this.selectOptionsRaw = [...this.selectOptions];
     this.formControl.valueChanges
       .pipe(
         debounceTime(200),
@@ -101,7 +101,11 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
     this.onTouched = fn;
   }
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.formControl.disable() : this.formControl.enable();
+    if (isDisabled) {
+      this.readonly = true;
+    } else {
+      this.readonly = false;
+    }
   }
 
   onChange = (value: any) => {

@@ -10,4 +10,9 @@ export const SelectOptions = {
     {value: 'active', display: 'Active'},
     {value: 'inactive', display: 'Inactive'},
   ],
+  EMAIL_TYPE: [
+    {value: null, display: '-- All email type --'},
+    {value: 'active', display: 'Estimated schedule email'},
+    {value: 'inactive', display: 'Changed schedule email'},
+  ],
 };

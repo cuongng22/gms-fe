@@ -50,6 +50,7 @@ import {
 } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary-detail/budget-procurement-summary-detail.component';
 import {FlightCrewComponent} from "src/app/crew-trip/features/category/flight-crew/flight-crew.component";
 import {AircraftDataComponent} from "src/app/crew-trip/features/system/config/aircraft-data/aircraft-data.component";
+import {EmailSupplierComponent} from "src/app/crew-trip/features/system/config/email-supplier/email-supplier.component";
 
 
 export const routes: Routes = [
@@ -76,6 +77,7 @@ export const routes: Routes = [
         path: 'system/config', children: [
           {path: 'group-mail', component: GroupMailComponent},
           {path: 'information-plane', component: AircraftDataComponent},
+          {path: 'email-supplier', component: EmailSupplierComponent},
         ],
 
 
