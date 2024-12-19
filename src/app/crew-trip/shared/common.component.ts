@@ -207,7 +207,6 @@ export class CommonComponent implements OnInit, AfterViewInit {
     this.formGroupDetail.markAsUntouched();
     this.formGroupDetail.markAsPristine();
     this.formGroupDetail.updateValueAndValidity();
-
     this.toggleDialogCreate();
   }
 

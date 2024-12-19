@@ -76,12 +76,22 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
 
+  override formGroupDetail = this.fb.group({
+    id: ['',],
+    marketCode: ['', [Validators.required]],
+    nightCount: [''],
+    rate: [''],
+    notes: ['']
+  });
+
   constructor(public dialog: MatDialog) {
     super();
     this.formGroupSearch = this.fb.group({
       marketCode: ['',]
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
+
+
   }
 
   override async ngOnInit() {
