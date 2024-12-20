@@ -359,7 +359,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         });
         this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter((item: any) => item.fileName !== this.curFile.fileName);
       } else if (this.deleteObj.type == 'tbl5') {
-        this.tblUnitPrice.data.find()
+
         this.tblUnitPrice.data = [...this.tblUnitPrice.data, {action: 'DELETE'}];
 
       } else if (this.deleteObj.type == 'tbl61') {
