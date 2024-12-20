@@ -97,6 +97,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   marketCodeChangeBrake: any;
   partnerChangeDebounce: any;
   partnerChangeBrake: any;
+  _showDialogDelete = false;
+  confirmDeleteMessage = '';
+  deleteObj: any;
   protected readonly LOCALE = LOCALE;
 
   // private filesControl = new FormControl(null, );
@@ -342,16 +345,39 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   async cancelUnitPrice(index: any) {
   }
 
-  _showDialogDelete = false;
-  async _closeConfirmDelete(){
+  async _closeConfirmDelete() {
     this._showDialogDelete = false;
   }
-  async _doDelete(){
 
+  async _doDelete() {
+    try {
+      if (this.deleteObj?.type == 'file') {
+        await this.baseService.deleteFile(this.deleteObj.fileName, this.id).then((res: any) => {
+          if (res.status == HttpStatusCode.Ok) {
+            this.baseService.showSuccess("Delete file successfully.");
+          }
+        });
+        this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter((item: any) => item.fileName !== this.curFile.fileName);
+      } else if (this.deleteObj.type == 'tbl5') {
+        this.tblUnitPrice.data.find()
+        this.tblUnitPrice.data = [...this.tblUnitPrice.data, {action: 'DELETE'}];
+
+      } else if (this.deleteObj.type == 'tbl61') {
+      } else if (this.deleteObj.type == 'tbl62') {
+      } else if (this.deleteObj.type == 'tbl63') {
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this.confirmDeleteMessage = '';
+    }
   }
 
-  async _confirmDelete(element: any) {
-    this.curFile = element;
+  async _confirmDelete(element: any, type: any, message?: any) {
+    this.confirmDeleteMessage = message;
+    this.deleteObj = {...element, deleteType: type};
+    //this.curFile = element;
+    console.log(this.deleteObj);
     this._showDialogDelete = true;
   }
 

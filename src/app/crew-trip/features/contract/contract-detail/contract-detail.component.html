@@ -596,7 +596,7 @@
                 <td *matCellDef="let element; let i = dataIndex" class="text-body text-end" mat-cell>
                   <div class="action-buttons align-items-center text-center">
                     @if (!!element.isManual) {
-                      <a (click)="confirmDeleteFile(element)" mat-button class="text-danger" type="button">
+                      <a (click)="_confirmDelete(element,'file','Are you sure you want to delete?')" mat-button class="text-danger" type="button">
                         <i class="material-symbols-outlined" i18n-title title="Delete">
                           delete
                         </i>
@@ -619,7 +619,7 @@
           <!--            </mat-form-field>-->
           <!--          </div>-->
 
-          <div *ngIf="viewType==='HD'" class="col-4 mt-20" sizeInput='sm'>
+          <div *ngIf="viewType==='PL'" class="col-4 mt-20" sizeInput='sm'>
             <file-upload (ngModelChange)="actionUpload()" [accept]="COMMON_CONFIG.FILE_ACCEPT" [multiple]="false"
                          class="file-uploader"
                          formControlName="fileUpload"></file-upload>
@@ -1080,11 +1080,11 @@
             </th>
             <td *matCellDef="let element;let i = dataIndex" mat-cell>
               <div class="action-buttons align-items-center text-center">
-                <!--                <a (click)="conf(i)" class="text-danger" mat-button type="button">-->
-                <!--                  <i class="material-symbols-outlined" i18n-title title="Delete">-->
-                <!--                    delete-->
-                <!--                  </i>-->
-                <!--                </a>-->
+                                <a (click)="_confirmDelete(element,'tbl5','Are you sure you want to delete?')" class="text-danger" mat-button type="button">
+                                  <i class="material-symbols-outlined" i18n-title title="Delete">
+                                    delete
+                                  </i>
+                                </a>
               </div>
             </td>
           </ng-container>
@@ -1214,7 +1214,7 @@
               </th>
               <td *matCellDef="let element;let i = dataIndex" mat-cell>
                 <div class="action-buttons align-items-center text-center">
-                  <a (click)="confirmDeleteFile(element)" class="text-danger" mat-button type="button">
+                  <a (click)="_confirmDelete(element,'tbl61','Are you sure you want to delete?')" class="text-danger" mat-button type="button">
                     <i class="material-symbols-outlined" i18n-title title="Delete">
                       delete
                     </i>
@@ -1340,7 +1340,7 @@
               </th>
               <td *matCellDef="let element;let i = dataIndex" mat-cell>
                 <div class="action-buttons align-items-center text-center">
-                  <a (click)="confirmDeleteFile(element)" class="text-danger" mat-button type="button">
+                  <a (click)="_confirmDelete(element,'tbl62','Are you sure you want to delete?')" class="text-danger" mat-button type="button">
                     <i class="material-symbols-outlined" i18n-title title="Delete">
                       delete
                     </i>
@@ -1466,7 +1466,7 @@
               </th>
               <td *matCellDef="let element;let i = dataIndex" mat-cell>
                 <div class="action-buttons align-items-center text-center">
-                  <a (click)="confirmDeleteFile(element)" class="text-danger" mat-button type="button">
+                  <a (click)="_confirmDelete(element,'tbl63','Are you sure you want to delete?')" class="text-danger" mat-button type="button">
                     <i class="material-symbols-outlined" i18n-title title="Delete">
                       delete
                     </i>
@@ -1496,7 +1496,7 @@
       <mat-card-header>
         <mat-card-title>
           <h5 class="mb-0">
-            <span i18n>Are you sure you want to delete file?</span>
+            <span>{{confirmDeleteMessage}}</span>
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
