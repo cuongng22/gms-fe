@@ -75,6 +75,22 @@ export const NegotiateCompetence = [
 ];
 
 export const CheckType =[
-  {key:1,value: $localize`Checkin sớm`},
-  {key:2,value: $localize`Checkout muộn`},
+  {key:'EARLY',value: $localize`Checkin sớm`},
+  {key:'LATE',value: $localize`Checkout muộn`},
 ]
+
+export const FlightGroup = [
+  {key: 'NĐ tối thiểu và ngắn', value: $localize`NĐ tối thiểu và ngắn`},
+  {key: 'QT tối thiểu', value: $localize`QT tối thiểu`},
+  {key: 'NĐ trục', value: $localize`NĐ trục`},
+  {key: 'QT ngắn', value: $localize`QT ngắn`},
+  {key: 'QT trung bình', value: $localize`QT trung bình`},
+  {key: 'QT trung bình dài', value: $localize`QT trung bình dài`},
+  {key: 'Quốc tế dài', value: $localize`Quốc tế dài`},
+];
+
+export const StatusUsage = [
+  {key: 'Operational', value: $localize`Operational`},
+  {key: 'Suspended', value: $localize`Suspended`},
+  {key: 'Not operational', value: $localize`Not operational`},
+];

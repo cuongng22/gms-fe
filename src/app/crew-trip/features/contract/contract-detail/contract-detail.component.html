@@ -596,7 +596,8 @@
                 <td *matCellDef="let element; let i = dataIndex" class="text-body text-end" mat-cell>
                   <div class="action-buttons align-items-center text-center">
                     @if (!!element.isManual) {
-                      <a (click)="_confirmDelete(element,'file','Are you sure you want to delete?')" mat-button class="text-danger" type="button">
+                      <a (click)="_confirmDelete(element,'file','Are you sure you want to delete?')" mat-button
+                         class="text-danger" type="button">
                         <i class="material-symbols-outlined" i18n-title title="Delete">
                           delete
                         </i>
@@ -693,16 +694,21 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Flight Group</mat-label>
-              <input formControlName="flightGroup" matInput trim="blur">
-              @if (!!formGroupDetail.controls['flightGroup'].hasError('required')) {
-                <mat-error><span i18n>Flight Group</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-select formControlName="flightGroup" required>
+                <mat-option *ngFor="let option of listFlightGroup" [value]="option.key">
+                  {{ option.value }}
+                </mat-option>
+              </mat-select>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Status Usage</mat-label>
-              <input formControlName="statusUsage" matInput required trim="blur">
+              <mat-select formControlName="statusUsage" required>
+                <mat-option *ngFor="let option of listStatusUsage" [value]="option.key">
+                  {{ option.value }}
+                </mat-option>
+              </mat-select>
               @if (!!formGroupDetail.controls['statusUsage'].hasError('required')) {
                 <mat-error><span i18n>Status Usage</span><span i18n> not empty</span></mat-error>
               }
@@ -763,7 +769,7 @@
                                                 class="time-picker-clock"></ngx-material-timepicker-toggle>
                 <ngx-material-timepicker #toggleTimepicker1 [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
                                          [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                                         [minutesGap]="5"></ngx-material-timepicker>
+                ></ngx-material-timepicker>
               </div>
               @if (!!formGroupDetail.controls['standardCheckIn'].hasError('required')) {
                 <mat-error><span i18n>Standard Checkin</span><span i18n> not empty</span></mat-error>
@@ -784,7 +790,7 @@
                                          [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
                                          [confirmBtnTmpl]="confirmBtn"
                                          [enableKeyboardInput]="true"
-                                         [minutesGap]="5"></ngx-material-timepicker>
+                ></ngx-material-timepicker>
               </div>
               @if (!!formGroupDetail.controls['standardCheckOut'].hasError('required')) {
                 <mat-error><span i18n>Standard Checkout</span><span i18n> not empty</span></mat-error>
@@ -1080,11 +1086,12 @@
             </th>
             <td *matCellDef="let element;let i = dataIndex" mat-cell>
               <div class="action-buttons align-items-center text-center">
-                                <a (click)="_confirmDelete(element,'tbl5','Are you sure you want to delete?')" class="text-danger" mat-button type="button">
-                                  <i class="material-symbols-outlined" i18n-title title="Delete">
-                                    delete
-                                  </i>
-                                </a>
+                <a (click)="_confirmDelete(element,'tbl5','Are you sure you want to delete?')" class="text-danger"
+                   mat-button type="button">
+                  <i class="material-symbols-outlined" i18n-title title="Delete">
+                    delete
+                  </i>
+                </a>
               </div>
             </td>
           </ng-container>
@@ -1148,7 +1155,7 @@
                 <div class="input-cell">
                   <mat-form-field
                     class="edit-inline-table time-picker">
-                    <input [(ngModel)]="element.col612"
+                    <input #inputRef="ngModel" [(ngModel)]="element.col612"
                            [disableClick]="true" [format]="24"
                            [ngxTimepicker]="timpicker612_Tbl" matInput
                            required trim="blur">
@@ -1156,8 +1163,8 @@
                                                     class="time-picker-clock"></ngx-material-timepicker-toggle>
                     <ngx-material-timepicker #timpicker612_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
                                              [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                                             [minutesGap]="5"></ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col613') }}</mat-error>
+                    ></ngx-material-timepicker>
+                    <mat-error>{{ validField(element, 'col612', inputRef) }}</mat-error>
                   </mat-form-field>
                 </div>
               </td>
@@ -1170,17 +1177,17 @@
                 <div class="input-cell">
                   <mat-form-field
                     class="edit-inline-table time-picker">
-                    <input (clickOutside)="readCellUP(element,'col613')" [(ngModel)]="element.col613"
-                           [disableClick]="true" [format]="24"
-                           [ngxTimepicker]="timpicker613_Tbl" matInput
-                           required
+                    <input #inputRef="ngModel" (clickOutside)="readCellUP(element,'col613')"
+                           [(ngModel)]="element.col613" [disableClick]="true"
+                           [format]="24" [ngxTimepicker]="timpicker613_Tbl"
+                           matInput required
                            trim="blur">
                     <ngx-material-timepicker-toggle [for]="timpicker613_Tbl"
                                                     class="time-picker-clock"></ngx-material-timepicker-toggle>
                     <ngx-material-timepicker #timpicker613_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
                                              [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                                             [minutesGap]="5"></ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col613') }}</mat-error>
+                    ></ngx-material-timepicker>
+                    <mat-error>{{ validField(element, 'col613', inputRef) }}</mat-error>
                   </mat-form-field>
                 </div>
               </td>
@@ -1214,7 +1221,8 @@
               </th>
               <td *matCellDef="let element;let i = dataIndex" mat-cell>
                 <div class="action-buttons align-items-center text-center">
-                  <a (click)="_confirmDelete(element,'tbl61','Are you sure you want to delete?')" class="text-danger" mat-button type="button">
+                  <a (click)="_confirmDelete(element,'tbl61','Are you sure you want to delete?')" class="text-danger"
+                     mat-button type="button">
                     <i class="material-symbols-outlined" i18n-title title="Delete">
                       delete
                     </i>
@@ -1281,8 +1289,9 @@
                     <ngx-material-timepicker-toggle [for]="timpicker622_Tbl"
                                                     class="time-picker-clock"></ngx-material-timepicker-toggle>
                     <ngx-material-timepicker #timpicker622_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                             [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                                             [minutesGap]="5"></ngx-material-timepicker>
+                                             [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true">
+
+                    </ngx-material-timepicker>
                     <mat-error>{{ validField(element, 'col623') }}</mat-error>
                   </mat-form-field>
                 </div>
@@ -1305,7 +1314,7 @@
                                                     class="time-picker-clock"></ngx-material-timepicker-toggle>
                     <ngx-material-timepicker #timpicker623_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
                                              [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                                             [minutesGap]="5"></ngx-material-timepicker>
+                    ></ngx-material-timepicker>
                     <mat-error>{{ validField(element, 'col623') }}</mat-error>
                   </mat-form-field>
                 </div>
@@ -1340,7 +1349,8 @@
               </th>
               <td *matCellDef="let element;let i = dataIndex" mat-cell>
                 <div class="action-buttons align-items-center text-center">
-                  <a (click)="_confirmDelete(element,'tbl62','Are you sure you want to delete?')" class="text-danger" mat-button type="button">
+                  <a (click)="_confirmDelete(element,'tbl62','Are you sure you want to delete?')" class="text-danger"
+                     mat-button type="button">
                     <i class="material-symbols-outlined" i18n-title title="Delete">
                       delete
                     </i>
@@ -1391,7 +1401,7 @@
                                                     class="time-picker-clock"></ngx-material-timepicker-toggle>
                     <ngx-material-timepicker #timpicker631_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
                                              [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                                             [minutesGap]="5"></ngx-material-timepicker>
+                    ></ngx-material-timepicker>
                     <mat-error>{{ validField(element, 'col631') }}</mat-error>
                   </mat-form-field>
                 </div>
@@ -1414,7 +1424,7 @@
                                                     class="time-picker-clock"></ngx-material-timepicker-toggle>
                     <ngx-material-timepicker #timpicker632_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
                                              [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                                             [minutesGap]="5"></ngx-material-timepicker>
+                    ></ngx-material-timepicker>
                     <mat-error>{{ validField(element, 'col632') }}</mat-error>
                   </mat-form-field>
                 </div>
@@ -1466,7 +1476,8 @@
               </th>
               <td *matCellDef="let element;let i = dataIndex" mat-cell>
                 <div class="action-buttons align-items-center text-center">
-                  <a (click)="_confirmDelete(element,'tbl63','Are you sure you want to delete?')" class="text-danger" mat-button type="button">
+                  <a (click)="_confirmDelete(element,'tbl63','Are you sure you want to delete?')" class="text-danger"
+                     mat-button type="button">
                     <i class="material-symbols-outlined" i18n-title title="Delete">
                       delete
                     </i>
@@ -1490,40 +1501,35 @@
 </mat-accordion>
 <!-- POPUP-->
 <!-- Delete file confirm Popup -->
-<div [class.active]="_showDialogDelete" class="add-new-popup">
-  <div class="popup-dialog">
-    <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
-      <mat-card-header>
-        <mat-card-title>
-          <h5 class="mb-0">
-            <span>{{confirmDeleteMessage}}</span>
-          </h5>
-        </mat-card-title>
-        <mat-card-subtitle>
-          <button
-            (click)="_closeConfirmDelete()"
-            mat-button
-          >
-            <i class="ri-close-fill"></i>
-          </button>
-        </mat-card-subtitle>
-      </mat-card-header>
+<div [class.active]="confirmDeleteMessage" class="add-new-popup">
+  <div class="popup-dialog dialog-delete-with">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
       <mat-card-content>
-        <div class="btn-box">
-          <button (click)="_closeConfirmDelete()" class="close-btn" i18n mat-button type="button">
+        <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+        </div>
+        <div class="text-center mb-20">
+          <h3 class="mb-0" i18n>Are you sure you want to delete?</h3>
+        </div>
+        <div class="text-center mb-20">
+                    <span class="font-weight-normal color-black font-size-19" i18n>
+                        You will not be able to recover the deleted data!</span>
+        </div>
+        <div class="btn-box text-center">
+          <button (click)="_closeConfirmDelete()" class="close-btn  min-with-100 mlr-5" mat-button
+                  type="button">
             <i class="material-symbols-outlined">
               close
             </i>
-            Close
+            <span i18n>Cancel</span>
           </button>
-          <button
-            (click)="_doDelete()"
-            class="add-btn"
-            i18n mat-button>
+          <button (click)="_doDelete()" class="add-btn min-with-100 mlr-5" mat-button type="button">
             <i class="material-symbols-outlined">
               save
             </i>
-            Confirm
+            <span i18n>Confirm</span>
           </button>
         </div>
       </mat-card-content>

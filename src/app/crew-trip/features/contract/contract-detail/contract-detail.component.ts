@@ -34,11 +34,13 @@ import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocom
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {NgxMatTimepickerFieldComponent} from "ngx-mat-timepicker";
-import {clone, cloneDeep, debounce} from 'lodash';
+import {clone, cloneDeep, debounce, isEqual, remove} from 'lodash';
 import {MomentDateAdapter} from '@angular/material-moment-adapter';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import * as ContractLookup from "src/app/crew-trip/features/contract/contract-lookup";
-import {BudgetCode, FieldCode2, NegotiateCompetence} from "src/app/crew-trip/features/contract/contract-lookup";
+import {
+  BudgetCode, FieldCode2, FlightGroup, NegotiateCompetence, StatusUsage
+} from "src/app/crew-trip/features/contract/contract-lookup";
 import {CheckType} from "src/app/crew-trip/features/contract/contract-lookup";
 
 
@@ -92,6 +94,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   listNegotiateCompetence = ContractLookup.NegotiateCompetence;
   listFieldCode2 = ContractLookup.FieldCode2;
   listBudgetCode = ContractLookup.BudgetCode;
+  listFlightGroup = ContractLookup.FlightGroup;
+  listStatusUsage = ContractLookup.StatusUsage;
   //debounce
   marketCodeChangeDebounce: any;
   marketCodeChangeBrake: any;
@@ -100,6 +104,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   _showDialogDelete = false;
   confirmDeleteMessage = '';
   deleteObj: any;
+  deletePriceUnitInfo: any = [];
+  deleteNotAllDay: any = [];
+  deleteDayUse: any = [];
   protected readonly LOCALE = LOCALE;
 
   // private filesControl = new FormControl(null, );
@@ -136,6 +143,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       contractCode: [],
       contractNo: [],
       currency: [],
+      currencyCode: [],
       exchangeRate: [],
       signedDate: [],
       effectiveDate: [],
@@ -182,7 +190,17 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       priceUnitInfo: [],
       insertPriceUnitInfo: [],
       updatePriceUnitInfo: [],
-      priceUnitInfoRequests: [], // deletePriceUnitInfo: [],
+      deletePriceUnitInfo: [],
+      priceUnitNotAllDay: [],
+      priceUnitInfoRequests: [],
+      priceNotAllDayRequests: [],
+      insertNotAllDay: [],
+      updateNotAllDay: [],
+      deleteNotAllDay: [],
+      dayUses: [],
+      insertDayUse: [],
+      updateDayUse: [],
+      deleteDayUse: [],
       iban: [],
 
       appendixCode: [],
@@ -222,6 +240,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           competence: this.listCompetence.find(s => s.value == this.formGroupDetail.getRawValue().competence)?.key,
           fieldCode2: this.listFieldCode2.find(s => s.value == this.formGroupDetail.getRawValue().fieldCode2)?.key,
           budgetCode: this.listBudgetCode.find(s => s.value == this.formGroupDetail.getRawValue().budgetCode)?.key,
+          flightGroup: this.listFlightGroup.find(s => s.value == this.formGroupDetail.getRawValue().flightGroup)?.key,
+          statusUsage: this.listStatusUsage.find(s => s.value == this.formGroupDetail.getRawValue().statusUsage)?.key,
           standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout
         });
 
@@ -327,11 +347,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async addTbl61() {
-    this.tbl61.data = [...this.tbl61.data, {action: 'ADD'}];
+    this.tbl61.data = [...this.tbl61.data, {col611: 'EARLY', action: 'ADD'}];
   }
 
   async addTbl62() {
-    this.tbl62.data = [...this.tbl62.data, {action: 'ADD'}];
+    this.tbl62.data = [...this.tbl62.data, {col621: 'EARLY', action: 'ADD'}];
   }
 
   async addTbl63() {
@@ -351,20 +371,46 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   async _doDelete() {
     try {
-      if (this.deleteObj?.type == 'file') {
+      console.log(this.contractObj)
+      if (this.deleteObj?.deleteType == 'file') {
         await this.baseService.deleteFile(this.deleteObj.fileName, this.id).then((res: any) => {
           if (res.status == HttpStatusCode.Ok) {
             this.baseService.showSuccess("Delete file successfully.");
           }
         });
         this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter((item: any) => item.fileName !== this.curFile.fileName);
-      } else if (this.deleteObj.type == 'tbl5') {
-
-        this.tblUnitPrice.data = [...this.tblUnitPrice.data, {action: 'DELETE'}];
-
-      } else if (this.deleteObj.type == 'tbl61') {
-      } else if (this.deleteObj.type == 'tbl62') {
-      } else if (this.deleteObj.type == 'tbl63') {
+      } else if (this.deleteObj?.deleteType == 'tbl5') {
+        delete this.deleteObj.deleteType;
+        let findRow = this.tblUnitPrice.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
+        if (findRow) {
+          this.deletePriceUnitInfo = [...this.deletePriceUnitInfo, findRow.id];
+        }
+        remove(this.tblUnitPrice.data, (item: any) => item === findRow);
+        this.tblUnitPrice.data = this.tblUnitPrice.data;
+      } else if (this.deleteObj.deleteType == 'tbl61') {
+        delete this.deleteObj.deleteType;
+        let findRow = this.tbl61.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
+        if (findRow) {
+          this.deleteNotAllDay = [...this.deleteNotAllDay, findRow.id];
+        }
+        remove(this.tbl61.data, (item: any) => item === findRow);
+        this.tbl61.data = this.tbl61.data;
+      } else if (this.deleteObj.deleteType == 'tbl62') {
+        delete this.deleteObj.deleteType;
+        let findRow = this.tbl62.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
+        if (findRow) {
+          this.deleteNotAllDay = [...this.deleteNotAllDay, findRow.id];
+        }
+        remove(this.tbl62.data, (item: any) => item === findRow);
+        this.tbl62.data = this.tbl62.data;
+      } else if (this.deleteObj.deleteType == 'tbl63') {
+        delete this.deleteObj.deleteType;
+        let findRow = this.tbl63.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
+        if (findRow) {
+          this.deleteDayUse = [...this.deleteDayUse, findRow.id];
+        }
+        remove(this.tbl63.data, (item: any) => item === findRow);
+        this.tbl63.data = this.tbl63.data;
       }
     } catch (e) {
       console.log(e);
@@ -500,6 +546,19 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   override async detail(id: any): Promise<void> {
     if (id) {
       await super.detail(id);
+      this.tbl61.data = this.formGroupDetail.getRawValue().priceUnitNotAllDay.filter((s: any) => s.type === '1');
+      this.tbl61.data = this.tbl61.data.map((s: any) => ({
+        id: s.id, col611: s.typeCheck, col612: s.fromHour, col613: s.toHour, col614: s.rate,
+      }));
+
+      this.tbl62.data = this.formGroupDetail.getRawValue().priceUnitNotAllDay.filter((s: any) => s.type === '2');
+      this.tbl62.data = this.tbl62.data.map((s: any) => ({
+        id: s.id, col621: s.typeCheck, col622: s.fromHour, col623: s.toHour, col624: s.rate,
+      }));
+
+      this.tbl63.data = this.formGroupDetail.getRawValue().dayUses.map((s: any) => ({
+        id: s.id, col631: s.checkinFrom, col632: s.checkoutTo, col633: s.lengthTime, col634: s.rate,
+      }));
     } else if (this.viewType = 'PL') {
       const resContract = await this.baseService.detail(this.contractObj.bizDocId);
       let bizDocIdContract = cloneDeep(resContract.data.bizDocId);
@@ -508,6 +567,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       this.formGroupDetail.patchValue({
         ...resContract?.data || resContract, hdPlRoot: bizDocIdContract
       });
+      this.tbl61.data = this.formGroupDetail.getRawValue().priceUnitNotAllDay.filter((s: any) => s.type === '1');
+      this.tbl62.data = this.formGroupDetail.getRawValue().priceUnitNotAllDay.filter((s: any) => s.type === '2');
       /*await Promise.all([
         this.addUnitPrice(),
         this.addTbl61(),
@@ -521,6 +582,32 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   override async save() {
     try {
+      //xoa bản ghi trang
+      this.tblUnitPrice.data = this.tblUnitPrice.data.filter((s: any) => !!s.fromDate);
+      this.tbl61.data = this.tbl61.data.filter((s: any) => !!s.col612);
+      this.tbl62.data = this.tbl62.data.filter((s: any) => !!s.col622);
+      this.tbl63.data = this.tbl63.data.filter((s: any) => !!s.col632);
+
+      let notAllDay1 = this.tbl61.data.map((s: any) => ({
+        id: s.id, typeCheck: s.col611, fromHour: s.col612, toHour: s.col613, rate: s.col614, action: s.action
+      }));
+      let notAllDay2 = this.tbl62.data.map((s: any) => ({
+        id: s.id, typeCheck: s.col621, fromHour: s.col622, toHour: s.col623, rate: s.col624, action: s.action
+      }));
+      let type1 = notAllDay1;
+      let type1InsertNotAllDay = notAllDay1.filter((s: any) => s.action == 'ADD');
+      let type1UpdateNotAllDay = notAllDay1.filter((s: any) => s.action != 'ADD');
+      let type2 = notAllDay2;
+      let type2InsertNotAllDay = notAllDay2.filter((s: any) => s.action == 'ADD');
+      let type2UpdateNotAllDay = notAllDay2.filter((s: any) => s.action != 'ADD');
+
+      let priceNotAllDayRequests = {type1: type1, type2: type2};
+      let insertNotAllDay = {type1: type1InsertNotAllDay, type2: type2InsertNotAllDay};
+      let updateNotAllDay = {type1: type1UpdateNotAllDay, type2: type2UpdateNotAllDay};
+
+      let dayUses = this.tbl63.data.map((s: any) => ({
+        id: s.id, checkinFrom: s.col631, checkoutTo: s.col632, lengthTime: s.col633, rate: s.col634, action: s.action
+      }));
       this.formGroupDetail.patchValue({
         appendixCode: this.formGroupDetail.getRawValue().contractCode,
         appendixName: this.formGroupDetail.getRawValue().contractName,
@@ -529,14 +616,23 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         effectiveAppendix: this.formGroupDetail.getRawValue().effectiveDate,
         expiryAppendix: this.formGroupDetail.getRawValue().expiryDate,
         notesAppendix: this.formGroupDetail.getRawValue().notes,
+        currencyCode: this.formGroupDetail.getRawValue().currency,
         isHotel: (this.formGroupDetail.getRawValue().doiTuongDichVu == 1 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3),
         isVehicle: (this.formGroupDetail.getRawValue().doiTuongDichVu == 2 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3),
         email: this.formGroupDetail.getRawValue().supplierEmail,
         priceUnitInfo: this.tblUnitPrice.data,
         insertPriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action == 'ADD'),
-        updatePriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action != 'ADD' || s.action != 'DELETE'),
-        deletePriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action != 'DELETE').map((s: any) => s.id),
-        priceUnitInfoRequests: this.tblUnitPrice.data, // deletePriceUnitInfo: this.tblUnitPrice.data,
+        updatePriceUnitInfo: this.tblUnitPrice.data.filter((s: any) => s.action != 'ADD'),
+        deletePriceUnitInfo: this.deletePriceUnitInfo,
+        priceNotAllDayRequests: priceNotAllDayRequests,
+        insertNotAllDay: insertNotAllDay,
+        updateNotAllDay: updateNotAllDay,
+        deleteNotAllDay: this.deleteNotAllDay,
+        dayUses: dayUses,
+        insertDayUse: dayUses?.filter((s: any) => s.action == 'ADD'),
+        updateDayUse: dayUses?.filter((s: any) => s.action != 'ADD'),
+        deleteDayUse: this.deleteDayUse,
+        priceUnitInfoRequests: this.tblUnitPrice.data,
       });
       this.formGroupDetailInit = {...this.formGroupDetail.getRawValue()};
       this.formGroupDetail.markAllAsTouched();
@@ -547,11 +643,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       // const update = !!this.formGroupDetail.getRawValue().bizDocId;
 
       await this.spinner.show();
-      //xoa bản ghi trang
-      this.tblUnitPrice.data = this.tblUnitPrice.data.filter((s: any) => !!s.fromDate);
-      this.tbl61.data = this.tbl61.data.filter((s: any) => !!s.col611);
-      this.tbl62.data = this.tbl62.data.filter((s: any) => !!s.col621);
-      this.tbl63.data = this.tbl63.data.filter((s: any) => !!s.col631);
       let res;
       if (this.action == 'edit') {
         this.formGroupDetail.patchValue({id: this.formGroupDetail.getRawValue().bizDocId});
@@ -577,7 +668,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   validField(row: any, cell: any, inputRef?: any) {
     if (!row[cell]) {
       return 'Not empty';
-    } else if (cell == 'col614' && row[cell] > 2) {
+    } else if ((cell == 'col614' || cell == 'col624' || cell == 'col634') && row[cell] > 2) {
       inputRef.control.setErrors({invalid: true});
       return 'Must less than 2';
     } else if (cell == 'col633') {
@@ -586,44 +677,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         inputRef.control.setErrors({invalid: true});
         return 'Not valid';
       }
+    } else if (cell == 'col613') {
+      let from = +(row['col612'].replace(":", ""));
+      let to = +(row['col613'].replace(":", ""));
+      if (to < from) {
+        inputRef.control.setErrors({invalid: true});
+        return 'Must after from';
+      }
     }
     return '';
   }
 }
-
-/*
-private RequestNotAllDay priceNotAllDayRequests;
-private List<DayUse> dayUses;
-
-    public static class RequestNotAllDay {
-        @Valid
-        private List<NotAllDay> type1;
-        @Valid
-        private List<NotAllDay> type2;
-    }
-
-        public static class NotAllDay {
-        private Long id;
-        @NotEmpty(message = "typeCheck is required")
-        private String typeCheck;
-        @NotEmpty(message = "fromDate is required")
-        private String fromHour;
-        @NotEmpty(message = "toDate is required")
-        private String toHour;
-        @NotNull(message = "rate is required")
-        @DecimalMin("0.0")
-        @DecimalMax("2.0")
-        private Float rate;
-    }
-
-        @Getter
-    public static class DayUse {
-        private Long id;
-        private String checkinFrom;
-        private String checkoutTo;
-        private String lengthTime;
-        @DecimalMin("0.0")
-        @DecimalMax("2.0")
-        private Float rate;
-    }
-*/
