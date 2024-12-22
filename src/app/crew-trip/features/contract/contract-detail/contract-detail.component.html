@@ -9,7 +9,7 @@
         <h5 class="mb-0 ml-10">
           <span i18n>Annex Detail </span>
           <span class="text-vna">{{ contractObj.contractCode }}</span>
-          <!--          <span class="text-warning">{{ formGroupDetail.value.contractName }}</span>-->
+          <!--          <span class="text-warning">{{ formGroupDetail.getRawValue().contractName }}</span>-->
         </h5>
       }
     </h5>
@@ -39,7 +39,7 @@
     </i>
     Back
   </button>
-  <button (click)="save()" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+  <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
     <i class="material-symbols-outlined">
       save
     </i>
@@ -584,7 +584,7 @@
               <ng-container matColumnDef="fileName">
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
                 <td *matCellDef="let element" mat-cell>
-                  <a (click)="true" [href]="element.fileUrl"
+                  <a (click)="true" [href]="environment.baseUrl+element.fileUrl"
                      class="d-flex align-items-center justify-content-between position-relative"
                      style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                     {{ element.fileName }}
@@ -595,7 +595,7 @@
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
                 <td *matCellDef="let element; let i = dataIndex" class="text-body text-end" mat-cell>
                   <div class="action-buttons align-items-center text-center">
-                    @if (!!element.isManual) {
+                    @if (!!element.isManual && !readMode && viewType === 'PL') {
                       <a (click)="_confirmDelete(element,'file','Are you sure you want to delete?')" mat-button
                          class="text-danger" type="button">
                         <i class="material-symbols-outlined" i18n-title title="Delete">
@@ -620,7 +620,7 @@
           <!--            </mat-form-field>-->
           <!--          </div>-->
 
-          <div *ngIf="viewType==='PL'" class="col-4 mt-20" sizeInput='sm'>
+          <div *ngIf="!readMode" class="col-4 mt-20" sizeInput='sm'>
             <file-upload (ngModelChange)="actionUpload()" [accept]="COMMON_CONFIG.FILE_ACCEPT" [multiple]="false"
                          class="file-uploader"
                          formControlName="fileUpload"></file-upload>
@@ -804,7 +804,7 @@
             <mat-form-field>
               <mat-label i18n>Notes</mat-label>
               <textarea formControlName="notes" matInput trim="blur"></textarea>
-              <mat-hint align="end">{{ formGroupDetail.value.notes?.length }} / 500</mat-hint>
+              <mat-hint align="end">{{ formGroupDetail.getRawValue().notes?.length }} / 500</mat-hint>
               @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
                 <mat-error><span i18n>Notes</span><span i18n> too long</span></mat-error>
               }
@@ -820,15 +820,23 @@
     </mat-expansion-panel-header>
     <mat-panel-description class="d-block">
       <div class="w-100 text-end">
-        @if (formGroupDetail.value.doiTuongDichVu == '3') {
-          <mat-checkbox>
+        @if (formGroupDetail.getRawValue().doiTuongDichVu == '3' || formGroupDetail.getRawValue().doiTuongDichVu == '1') {
+          <mat-checkbox checked="true" class="mr-20">
             Hoàn thuế khách sạn
           </mat-checkbox>
-          <mat-checkbox class="mr-20">
+        }
+        @if (formGroupDetail.getRawValue().doiTuongDichVu == '3' || formGroupDetail.getRawValue().doiTuongDichVu == '2') {
+
+          <mat-checkbox checked="true" class="mr-20">
             Hoàn thuế nhà xe
           </mat-checkbox>
         }
-        <button (click)="addUnitPrice()" class="add-btn right-0 mb-10" i18n mat-button type="button">
+        @if (!formGroupDetail.getRawValue().doiTuongDichVu) {
+          <mat-checkbox checked="true" class="mr-20">
+            Hoàn thuế
+          </mat-checkbox>
+        }
+        <button (click)="addUnitPrice()" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n mat-button type="button">
           <i class="material-symbols-outlined">
             add
           </i>
@@ -853,11 +861,12 @@
                 <div class="input-cell">
                   <mat-form-field
                     class="edit-inline-table">
-                    <input trim="blur" [matDatepicker]="fromDateUP" [(ngModel)]="element.fromDate"
+                    <input #inputRef="ngModel" trim="blur" [matDatepicker]="fromDateUP" [(ngModel)]="element.fromDate"
                            (clickOutside)="readCellUP(element,'fromDate')"
                            matInput required>
                     <mat-datepicker-toggle [for]="fromDateUP" matIconSuffix></mat-datepicker-toggle>
                     <mat-datepicker #fromDateUP></mat-datepicker>
+                    <mat-error>{{ validField(element, 'fromDate', inputRef) }}</mat-error>
                   </mat-form-field>
                 </div>
               } @else {
@@ -877,11 +886,12 @@
                 <div class="input-cell">
                   <mat-form-field
                     class="edit-inline-table">
-                    <input trim="blur" [matDatepicker]="toDateUP" [(ngModel)]="element.toDate"
+                    <input #inputRef="ngModel" trim="blur" [matDatepicker]="toDateUP" [(ngModel)]="element.toDate"
                            (clickOutside)="readCellUP(element,'toDate')"
                            matInput required>
                     <mat-datepicker-toggle [for]="toDateUP" matIconSuffix></mat-datepicker-toggle>
                     <mat-datepicker #toDateUP></mat-datepicker>
+                    <mat-error>{{ validField(element, 'toDate', inputRef) }}</mat-error>
                   </mat-form-field>
                 </div>
               } @else {
@@ -895,21 +905,33 @@
             <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Service Fee Code</th>
             <td (click)="editCellUP(element,'serviceFeeCode')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'serviceFeeCode')) {
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table">
-                    <input trim="blur" [(ngModel)]="element.serviceFeeCode" matInput required
-                           (clickOutside)="readCellUP(element,'serviceFeeCode')">
-                  </mat-form-field>
-                </div>
-              } @else {
+                mat-cell>
+              <div class="input-cell">
+                <mat-form-field class="edit-inline-table">
+                  <mat-select #inputRef="ngModel" [(ngModel)]="element.serviceFeeCode" required (ngModelChange)="onChangeHHDV(element)">
+                    <mat-option *ngFor="let option of listHHDV" [value]="option.code">
+                      {{ option.code }}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error>{{ validField(element, 'serviceFeeCode', inputRef) }}</mat-error>
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="serviceFeeName">
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tên HHDV</th>
+            <td *matCellDef="let element" mat-cell>
                 <span class="label-text">
-            {{ element.serviceFeeCode }}
+            {{ element.serviceFeeName }}
             </span>
-              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="serviceFeeUnit">
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Đơn vị tính</th>
+            <td *matCellDef="let element" mat-cell>
+                <span class="label-text">
+            {{ element.serviceFeeUnit }}
+            </span>
             </td>
           </ng-container>
           <ng-container matColumnDef="codeNghiepVu">
@@ -1086,7 +1108,8 @@
             </th>
             <td *matCellDef="let element;let i = dataIndex" mat-cell>
               <div class="action-buttons align-items-center text-center">
-                <a (click)="_confirmDelete(element,'tbl5','Are you sure you want to delete?')" class="text-danger"
+                <a (click)="_confirmDelete(element,'tbl5','Are you sure you want to delete?')" *ngIf="!readMode"
+                   class="text-danger"
                    mat-button type="button">
                   <i class="material-symbols-outlined" i18n-title title="Delete">
                     delete
@@ -1096,10 +1119,10 @@
             </td>
           </ng-container>
           <tr
-            *matHeaderRowDef="['stt','fromDate','toDate','serviceFeeCode','codeNghiepVu','codeKHNS','priceBeforeTax','taxCode','taxRate','totalVatTax','priceAfterTax','notes','action']"
+            *matHeaderRowDef="['stt','fromDate','toDate','serviceFeeCode','serviceFeeName','serviceFeeUnit','codeNghiepVu','codeKHNS','priceBeforeTax','taxCode','taxRate','totalVatTax','priceAfterTax','notes','action']"
             mat-header-row></tr>
           <tr
-            *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceFeeCode','codeNghiepVu','codeKHNS','priceBeforeTax','taxCode','taxRate','totalVatTax','priceAfterTax','notes','action'];"
+            *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceFeeCode','serviceFeeName','serviceFeeUnit','codeNghiepVu','codeKHNS','priceBeforeTax','taxCode','taxRate','totalVatTax','priceAfterTax','notes','action'];"
             class="input-row" mat-row></tr>
           <tr *matNoDataRow class="mat-row">
             <td [attr.colspan]="13" class="mat-cell border-none text-center"><span
@@ -1117,7 +1140,7 @@
       <div>
         <div class="w-100 mb-10 d-flex justify-content-between">
           <span class="d-flex align-items-end fw-bold">6.1 Checkin sớm, checkout muộn</span>
-          <button (click)="addTbl61()" class="add-btn right-0" i18n mat-button type="button">
+          <button (click)="addTbl61()" *ngIf="!readMode" class="add-btn right-0" i18n mat-button type="button">
             <i class="material-symbols-outlined">
               add
             </i>
@@ -1221,7 +1244,8 @@
               </th>
               <td *matCellDef="let element;let i = dataIndex" mat-cell>
                 <div class="action-buttons align-items-center text-center">
-                  <a (click)="_confirmDelete(element,'tbl61','Are you sure you want to delete?')" class="text-danger"
+                  <a (click)="_confirmDelete(element,'tbl61','Are you sure you want to delete?')" *ngIf="!readMode"
+                     class="text-danger"
                      mat-button type="button">
                     <i class="material-symbols-outlined" i18n-title title="Delete">
                       delete
@@ -1244,7 +1268,7 @@
       <div class="mt-25">
         <div class="w-100 mb-10 d-flex justify-content-between">
           <span class="d-flex align-items-end fw-bold">6.2 Lưu trú qua đêm</span>
-          <button (click)="addTbl62()" class="add-btn right-0" i18n mat-button type="button">
+          <button (click)="addTbl62()" *ngIf="!readMode" class="add-btn right-0" i18n mat-button type="button">
             <i class="material-symbols-outlined">
               add
             </i>
@@ -1282,7 +1306,7 @@
                 <div class="input-cell">
                   <mat-form-field
                     class="edit-inline-table time-picker">
-                    <input [(ngModel)]="element.col622"
+                    <input #inputRef="ngModel" [(ngModel)]="element.col622"
                            [disableClick]="true" [format]="24"
                            [ngxTimepicker]="timpicker622_Tbl" matInput
                            required trim="blur">
@@ -1292,7 +1316,7 @@
                                              [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true">
 
                     </ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col623') }}</mat-error>
+                    <mat-error>{{ validField(element, 'col623', inputRef) }}</mat-error>
                   </mat-form-field>
                 </div>
               </td>
@@ -1305,7 +1329,8 @@
                 <div class="input-cell">
                   <mat-form-field
                     class="edit-inline-table time-picker">
-                    <input (clickOutside)="readCellUP(element,'col623')" [(ngModel)]="element.col623"
+                    <input #inputRef="ngModel" (clickOutside)="readCellUP(element,'col623')"
+                           [(ngModel)]="element.col623"
                            [disableClick]="true" [format]="24"
                            [ngxTimepicker]="timpicker623_Tbl" matInput
                            required
@@ -1315,7 +1340,7 @@
                     <ngx-material-timepicker #timpicker623_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
                                              [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
                     ></ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col623') }}</mat-error>
+                    <mat-error>{{ validField(element, 'col623', inputRef) }}</mat-error>
                   </mat-form-field>
                 </div>
               </td>
@@ -1349,7 +1374,8 @@
               </th>
               <td *matCellDef="let element;let i = dataIndex" mat-cell>
                 <div class="action-buttons align-items-center text-center">
-                  <a (click)="_confirmDelete(element,'tbl62','Are you sure you want to delete?')" class="text-danger"
+                  <a (click)="_confirmDelete(element,'tbl62','Are you sure you want to delete?')" *ngIf="!readMode"
+                     class="text-danger"
                      mat-button type="button">
                     <i class="material-symbols-outlined" i18n-title title="Delete">
                       delete
@@ -1371,7 +1397,7 @@
       <div class="mt-25">
         <div class="w-100 mb-10 d-flex justify-content-between">
           <span class="d-flex align-items-end fw-bold">6.3 DAY USE</span>
-          <button (click)="addTbl63()" class="add-btn right-0" i18n mat-button type="button">
+          <button (click)="addTbl63()" *ngIf="!readMode" class="add-btn right-0" i18n mat-button type="button">
             <i class="material-symbols-outlined">
               add
             </i>
@@ -1387,13 +1413,13 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="col631">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>From</th>
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Checkin From</th>
               <td *matCellDef="let element; let i = index"
                   mat-cell>
                 <div class="input-cell">
                   <mat-form-field
                     class="edit-inline-table time-picker">
-                    <input [(ngModel)]="element.col631"
+                    <input #inputRef="ngModel" [(ngModel)]="element.col631"
                            [disableClick]="true" [format]="24"
                            [ngxTimepicker]="timpicker631_Tbl" matInput
                            required trim="blur">
@@ -1402,20 +1428,21 @@
                     <ngx-material-timepicker #timpicker631_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
                                              [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
                     ></ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col631') }}</mat-error>
+                    <mat-error>{{ validField(element, 'col631', inputRef) }}</mat-error>
                   </mat-form-field>
                 </div>
               </td>
             </ng-container>
             <ng-container matColumnDef="col632">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>To</th>
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Checkout To</th>
               <td (click)="editCellUP(element,'col632')" *matCellDef="let element"
                   [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                   mat-cell>
                 <div class="input-cell">
                   <mat-form-field
                     class="edit-inline-table time-picker">
-                    <input (clickOutside)="readCellUP(element,'col632')" [(ngModel)]="element.col632"
+                    <input #inputRef="ngModel" (clickOutside)="readCellUP(element,'col632')"
+                           [(ngModel)]="element.col632"
                            [disableClick]="true" [format]="24"
                            [ngxTimepicker]="timpicker632_Tbl" matInput
                            required
@@ -1425,13 +1452,13 @@
                     <ngx-material-timepicker #timpicker632_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
                                              [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
                     ></ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col632') }}</mat-error>
+                    <mat-error>{{ validField(element, 'col632', inputRef) }}</mat-error>
                   </mat-form-field>
                 </div>
               </td>
             </ng-container>
             <ng-container matColumnDef="col633">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Thời gian nghỉ (tiếng)</th>
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Thời gian nghỉ tối đa (tiếng)</th>
               <td (click)="editCellUP(element,'col633')" *matCellDef="let element"
                   [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                   mat-cell>
@@ -1448,7 +1475,7 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="col634">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tỷ lệ</th>
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tỷ lệ (Theo TG nghỉ <= TG tối đa)</th>
               <td (click)="editCellUP(element,'col634')" *matCellDef="let element"
                   [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                   mat-cell>
@@ -1470,13 +1497,37 @@
                 }
               </td>
             </ng-container>
+            <ng-container matColumnDef="col635">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tỷ lệ (Theo TG nghỉ > TG tối đa)</th>
+              <td (click)="editCellUP(element,'col635')" *matCellDef="let element"
+                  [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                  mat-cell>
+                @if (checkCellUP(element, 'col635')) {
+                  <div class="input-cell">
+                    <mat-form-field
+                      class="edit-inline-table" [class.mdc-text-field--invalid]="true">
+                      <input trim="blur" [(ngModel)]="element.col635" matInput required #inputRef="ngModel"
+                             min="0" type="number" step="0.01"
+                             (blur)="true"
+                             (clickOutside)="readCellUP(element,'col635')">
+                      <mat-error>{{ validField(element, 'col635', inputRef) }}</mat-error>
+                    </mat-form-field>
+                  </div>
+                } @else {
+                  <span class="label-text">
+              {{ element.col635 }}
+              </span>
+                }
+              </td>
+            </ng-container>
             <ng-container matColumnDef="action" stickyEnd>
               <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
                 Action
               </th>
               <td *matCellDef="let element;let i = dataIndex" mat-cell>
                 <div class="action-buttons align-items-center text-center">
-                  <a (click)="_confirmDelete(element,'tbl63','Are you sure you want to delete?')" class="text-danger"
+                  <a (click)="_confirmDelete(element,'tbl63','Are you sure you want to delete?')" *ngIf="!readMode"
+                     class="text-danger"
                      mat-button type="button">
                     <i class="material-symbols-outlined" i18n-title title="Delete">
                       delete
@@ -1486,8 +1537,9 @@
 
               </td>
             </ng-container>
-            <tr *matHeaderRowDef="['stt','col631','col632','col633','col634','action']" mat-header-row></tr>
-            <tr *matRowDef="let row; columns: ['stt','col631','col632','col633','col634','action'];" class="input-row"
+            <tr *matHeaderRowDef="['stt','col631','col632','col633','col634','col635','action']" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: ['stt','col631','col632','col633','col634','col635','action'];"
+                class="input-row"
                 mat-row></tr>
             <tr *matNoDataRow class="mat-row">
               <td [attr.colspan]="6" class="mat-cell border-none text-center"><span
@@ -1523,6 +1575,7 @@
             <i class="material-symbols-outlined">
               close
             </i>
+
             <span i18n>Cancel</span>
           </button>
           <button (click)="_doDelete()" class="add-btn min-with-100 mlr-5" mat-button type="button">

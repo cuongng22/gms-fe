@@ -1,6 +1,4 @@
-import {
-  Component, ElementRef, EventEmitter, inject, Input, LOCALE_ID, model, OnInit, Output, ViewChild
-} from '@angular/core';
+import {Component, ElementRef, EventEmitter, inject, Input, model, OnInit, Output, ViewChild} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
@@ -17,14 +15,18 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {
-  MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelDescription,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle
 } from '@angular/material/expansion';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {MatRadioModule} from '@angular/material/radio';
 import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
-import {DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule} from '@angular/material/core';
+import {MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 import {ClickOutside} from "ngxtension/click-outside";
@@ -34,14 +36,10 @@ import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocom
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
 import {NgxMatTimepickerFieldComponent} from "ngx-mat-timepicker";
-import {clone, cloneDeep, debounce, isEqual, remove} from 'lodash';
-import {MomentDateAdapter} from '@angular/material-moment-adapter';
+import {cloneDeep, debounce, isEqual, remove} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import * as ContractLookup from "src/app/crew-trip/features/contract/contract-lookup";
-import {
-  BudgetCode, FieldCode2, FlightGroup, NegotiateCompetence, StatusUsage
-} from "src/app/crew-trip/features/contract/contract-lookup";
-import {CheckType} from "src/app/crew-trip/features/contract/contract-lookup";
+import {ServiceFeeService} from "src/app/crew-trip/core/services/service-fee-service";
 
 
 @Component({
@@ -59,6 +57,7 @@ import {CheckType} from "src/app/crew-trip/features/contract/contract-lookup";
 export class ContractDetailComponent extends CommonComponent implements OnInit {
   override baseService = inject(ContractService);
   nationService = inject(NationService);
+  serviceFeeService = inject(ServiceFeeService);
   fb = inject(FormBuilder);
 
   //control
@@ -86,6 +85,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   listMaNghiepVu: any = [];
   listKhoanMucKhns: any = [];
   listQuocGia: any = [];
+  listHHDV: any = [];
   listContractSpec = ContractLookup.ContractSpec;
   listContractType = ContractLookup.ContractType;
   listContractForm = ContractLookup.ContractForm;
@@ -112,7 +112,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   // private filesControl = new FormControl(null, );
   constructor() {
     super();
-    window.scrollTo(0, 0);
+    window.scrollTo({top: 0, behavior: 'instant'});
     this.formGroupDetail = this.fb.group({
       doiTuongDichVu: [],
       contractSpec: [],
@@ -221,7 +221,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       await this.spinner.show();
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         // this.loadListMaNghiepVu(),
-        this.loadListQuocGia(), this.setReadMode(this.formGroupDetail)]).then(() => {
+        this.loadListQuocGia(),
+        this.loadListHHDV(),
+        this.setReadMode(this.formGroupDetail)
+      ]).then(() => {
         if (this.formGroupDetail.getRawValue().isHotel && this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({doiTuongDichVu: '3'});
         } else if (this.formGroupDetail.getRawValue().isHotel) {
@@ -233,7 +236,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         }
         this.formGroupDetail.patchValue({
           //fix tam
-          swiftCodeB1: '12345', //
+          swiftCodeB1: '12345',
+          //
           contractType: this.listContractType.find(s => s.value == this.formGroupDetail.getRawValue().contractType)?.key,
           contractForm: this.listContractForm.find(s => s.value == this.formGroupDetail.getRawValue().contractForm)?.key,
           negotiateCompetence: this.listNegotiateCompetence.find(s => s.value == this.formGroupDetail.getRawValue().negotiateCompetence)?.key,
@@ -249,7 +253,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.getRawValue().documentsList ?? []);
 
         let priceUnitInfo = this.formGroupDetail.getRawValue()?.priceUnitInfo?.map((s: any) => ({
-          ...s, serviceFeeCode: s.serviceCode
+          ...s,
+          serviceFeeCode: s.serviceCode,
+          serviceFeeName: this.listHHDV.find((s: any) => s.serviceFeeCode === s.serviceFeeCode)?.name,
+          serviceFeeUnit: this.listHHDV.find((s: any) => s.serviceFeeCode === s.serviceFeeCode)?.unit,
         }));
         this.tblUnitPrice = new MatTableDataSource(priceUnitInfo);
 
@@ -306,7 +313,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   goBack() {
     this.backStep.emit();
-    window.scrollTo(0, 0);
+    window.scrollTo({top: 0, behavior: 'instant'});
   }
 
   async actionUpload() {
@@ -343,7 +350,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async addUnitPrice() {
-    this.tblUnitPrice.data = [...this.tblUnitPrice.data, {action: 'ADD'}];
+    this.tblUnitPrice.data = [...this.tblUnitPrice.data, {
+      fromDate: this.formGroupDetail.getRawValue().effectiveDate,
+      toDate: this.formGroupDetail.getRawValue().expiryDate,
+      action: 'ADD'
+    }];
   }
 
   async addTbl61() {
@@ -462,6 +473,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     });
   }
 
+  async loadListHHDV() {
+    await this.serviceFeeService.search({page: 0, limit: 99999}).then(res => {
+      if (res.data) {
+        this.listHHDV = res.data.content;
+      }
+    });
+  }
+
   async loadListKhoanMucKhns() {
     await this.baseService.listKhoanMucKhns().then(res => {
       if (res.data) {
@@ -471,9 +490,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   editCellUP(row: any, cell: any) {
-    let cur = new Set(row.cellEdit);
-    cur.add(cell);
-    row.cellEdit = Array.from(cur);
+    if (!this.readMode) {
+      let cur = new Set(row.cellEdit);
+      cur.add(cell);
+      row.cellEdit = Array.from(cur);
+    }
   }
 
   readCellUP(row: any, cell: any) {
@@ -557,7 +578,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       }));
 
       this.tbl63.data = this.formGroupDetail.getRawValue().dayUses.map((s: any) => ({
-        id: s.id, col631: s.checkinFrom, col632: s.checkoutTo, col633: s.lengthTime, col634: s.rate,
+        id: s.id, col631: s.checkinFrom, col632: s.checkoutTo, col633: s.lengthTime, col634: s.rate, col635: s.rate1,
       }));
     } else if (this.viewType = 'PL') {
       const resContract = await this.baseService.detail(this.contractObj.bizDocId);
@@ -606,7 +627,13 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       let updateNotAllDay = {type1: type1UpdateNotAllDay, type2: type2UpdateNotAllDay};
 
       let dayUses = this.tbl63.data.map((s: any) => ({
-        id: s.id, checkinFrom: s.col631, checkoutTo: s.col632, lengthTime: s.col633, rate: s.col634, action: s.action
+        id: s.id,
+        checkinFrom: s.col631,
+        checkoutTo: s.col632,
+        lengthTime: s.col633,
+        rate: s.col634,
+        rate1: s.col635,
+        action: s.action
       }));
       this.formGroupDetail.patchValue({
         appendixCode: this.formGroupDetail.getRawValue().contractCode,
@@ -668,7 +695,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   validField(row: any, cell: any, inputRef?: any) {
     if (!row[cell]) {
       return 'Not empty';
-    } else if ((cell == 'col614' || cell == 'col624' || cell == 'col634') && row[cell] > 2) {
+    } else if ((cell == 'col614' || cell == 'col624' || cell == 'col634' || cell == 'col635') && row[cell] > 2) {
       inputRef.control.setErrors({invalid: true});
       return 'Must less than 2';
     } else if (cell == 'col633') {
@@ -684,7 +711,27 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         inputRef.control.setErrors({invalid: true});
         return 'Must after from';
       }
+    } else if (cell == 'col623') {
+      let from = +(row['col622'].replace(":", ""));
+      let to = +(row['col623'].replace(":", ""));
+      if (to < from) {
+        inputRef.control.setErrors({invalid: true});
+        return 'Must after from';
+      }
+    } else if (cell == 'col632') {
+      let from = +(row['col631'].replace(":", ""));
+      let to = +(row['col632'].replace(":", ""));
+      if (to < from) {
+        inputRef.control.setErrors({invalid: true});
+        return 'Must after from';
+      }
     }
     return '';
+  }
+
+  async onChangeHHDV(data: any) {
+    console.log(data);
+    data.serviceFeeName = this.listHHDV.find((s: any) => s.code == data.serviceFeeCode)?.name;
+    data.serviceFeeUnit = this.listHHDV.find((s: any) => s.code == data.serviceFeeCode)?.unit;
   }
 }

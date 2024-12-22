@@ -79,7 +79,7 @@ export const CheckType =[
   {key:'LATE',value: $localize`Checkout muộn`},
 ]
 
-export const FlightGroup = [
+/*export const FlightGroup = [
   {key: 'NĐ tối thiểu và ngắn', value: $localize`NĐ tối thiểu và ngắn`},
   {key: 'QT tối thiểu', value: $localize`QT tối thiểu`},
   {key: 'NĐ trục', value: $localize`NĐ trục`},
@@ -87,6 +87,15 @@ export const FlightGroup = [
   {key: 'QT trung bình', value: $localize`QT trung bình`},
   {key: 'QT trung bình dài', value: $localize`QT trung bình dài`},
   {key: 'Quốc tế dài', value: $localize`Quốc tế dài`},
+];*/
+export const FlightGroup = [
+  {key: 'Short-haul and minimum domestic', value: $localize`Short-haul and minimum domestic`},
+  {key: 'Minimum international', value: $localize`Minimum international`},
+  {key: 'Major domestic', value: $localize`Major domestic`},
+  {key: 'Short-Haul international', value: $localize`Short-Haul international`},
+  {key: 'Medium-haul international', value: $localize`Medium-haul international`},
+  {key: 'Long medium-haul international', value: $localize`Long medium-haul international`},
+  {key: 'Long-haul international', value: $localize`Long-haul international`},
 ];
 
 export const StatusUsage = [
