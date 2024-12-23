@@ -3,7 +3,7 @@ import {
   CUSTOM_ELEMENTS_SCHEMA,
   HostListener,
   inject,
-  NO_ERRORS_SCHEMA,
+  NO_ERRORS_SCHEMA, OnDestroy,
   OnInit,
   ViewChild
 } from '@angular/core';
@@ -19,6 +19,7 @@ import {UserLogin} from 'src/app/crew-trip/shared/models/userInfo';
 import {MatCardModule} from '@angular/material/card';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {format} from 'date-fns';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
@@ -37,10 +38,11 @@ import {
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {LanguageService} from 'src/app/crew-trip/core/services/language.service';
-import {Observable} from 'rxjs';
+import {Observable, Subscription} from 'rxjs';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {HttpStatusCode} from "@angular/common/http";
+import {WebsocketService} from "src/app/crew-trip/core/services/websocket-service";
 
 
 @Component({
@@ -50,7 +52,7 @@ import {HttpStatusCode} from "@angular/common/http";
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent implements OnInit {
+export class HeaderComponent implements OnInit, OnDestroy {
   currentLanguage!: Observable<string>;
   fb = inject(FormBuilder);
   toggleService = inject(ToggleService);
@@ -63,6 +65,7 @@ export class HeaderComponent implements OnInit {
   // isSidebarToggled
   isSidebarToggled = false;
   userInfo: UserLogin | null;
+  baseService = new BaseService();
   // isToggled
   isToggled = false;
   showDialogConfirm = false;
@@ -72,7 +75,10 @@ export class HeaderComponent implements OnInit {
   errorMessage: string | null = null;
   correctPassword: boolean = false;
 
-  constructor(private languageService: LanguageService) {
+  messagesNotice: any[] = [];
+  private subscription!: Subscription;
+
+  constructor(private languageService: LanguageService, private webSocketService: WebsocketService) {
     this.userService.userInfo$.subscribe(user => {
       this.userInfo = user;
     });
@@ -134,6 +140,39 @@ export class HeaderComponent implements OnInit {
     document.addEventListener('webkitfullscreenchange', this.onFullscreenChange.bind(this));
     document.addEventListener('mozfullscreenchange', this.onFullscreenChange.bind(this));
     document.addEventListener('MSFullscreenChange', this.onFullscreenChange.bind(this));
+
+    let username = this.userInfo?.email; // Thay bằng username thực tế
+    if (username) {
+      this.webSocketService.connect(username);
+    } else {
+      console.error('Username is undefined');
+    }
+
+    this.subscription = this.webSocketService.getMessages().subscribe({
+      next: (message) => {
+        let mes = JSON.parse(message);
+        this.messagesNotice.push(mes);
+        this.baseService.showNotification("New notification", {
+          duration: 5000,
+          horizontalPosition: 'right',
+          verticalPosition: 'top',
+          data: {type: 'info', message: mes.content}
+        });
+        if (this.messagesNotice.length > 5) {
+          this.messagesNotice = this.messagesNotice.slice(-5);
+        }
+        this.messagesNotice = this.messagesNotice.map(item => {
+          item.sendTimeFormatted = format(new Date(item.timeSend), 'dd/MM/yyyy HH:mm:ss');
+          return item;
+        });
+      },
+      error: (err) => console.error(err),
+    });
+
+  }
+
+  clearAllNoti() {
+    this.messagesNotice = [];
   }
 
   toggleFullscreen() {
@@ -252,4 +291,11 @@ export class HeaderComponent implements OnInit {
 
   protected readonly MESSAGE = MESSAGE;
   protected readonly Constant = Constant;
+
+  ngOnDestroy(): void {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    this.webSocketService.disconnect();
+  }
 }

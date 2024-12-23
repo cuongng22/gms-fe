@@ -69,55 +69,22 @@
           <i class="material-symbols-outlined">
             notifications
           </i>
-          <div class="dot rounded-circle"></div>
+          <div *ngIf="messagesNotice && messagesNotice.length > 0" class="dot rounded-circle"></div>
         </button>
         <mat-menu class="notifications-menu-dropdown" #notificationsMenu="matMenu" xPosition="before">
           <div class="title d-flex align-items-center justify-content-between">
             <span class="fw-semibold text-black">
               Notifications
               <span class="text-body fw-normal">
-                (03)
+                {{ messagesNotice ? (messagesNotice.length) : (0) }}
               </span>
             </span>
-            <a href="javascript:void(0);" class="text-primary">
+            <a (click)="clearAllNoti()" class="text-primary cursor-pointer">
               Clear All
             </a>
           </div>
           <ul class="menu-body p-0 mt-0 list-unstyled">
-            <li class="position-relative">
-              <div
-                class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
-                <i class="material-symbols-outlined">
-                  sms
-                </i>
-              </div>
-              <span class="sub-title d-block text-black">
-                You have requested to <strong class="fw-semibold">withdrawal</strong>
-              </span>
-              <span class="time d-block">
-                2 hrs ago
-              </span>
-              <a routerLink="/dashboard/notifications"
-                 class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
-            </li>
-            <li class="position-relative">
-              <div
-                class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
-                <i class="material-symbols-outlined">
-                  person
-                </i>
-              </div>
-              <span class="sub-title d-block text-black">
-                <strong class="fw-semibold">A new user</strong> added in Trezo
-              </span>
-              <span class="time d-block">
-                3 hrs ago
-              </span>
-              <a routerLink="/dashboard/notifications"
-                 class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
-              <span class="unread d-inline-block rounded-circle bg-primary position-absolute"></span>
-            </li>
-            <li class="position-relative">
+            <li class="position-relative" *ngFor="let message of messagesNotice">
               <div
                 class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
                 <i class="material-symbols-outlined">
@@ -125,13 +92,13 @@
                 </i>
               </div>
               <span class="sub-title d-block text-black">
-                You have requested to <strong class="fw-semibold">withdrawal</strong>
+                 {{ message.content }}
               </span>
               <span class="time d-block">
-                1 day ago
+                 {{ message.sendTimeFormatted }}
               </span>
-              <a routerLink="/dashboard/notifications"
-                 class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>
+              <!--              <a routerLink="/dashboard/notifications"-->
+              <!--                 class="d-block left-0 top-0 bottom-0 right-0 z-1 position-absolute"></a>-->
             </li>
           </ul>
           <div class="menu-footer text-center">

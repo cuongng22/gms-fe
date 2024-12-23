@@ -1,4 +1,5 @@
 export const environment = {
   apiUrl: 'http://',
-  baseUrl: 'http://'
+  baseUrl: 'http://',
+  socketUrl: ''
 };
