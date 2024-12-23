@@ -66,6 +66,11 @@ export const menu: Menu[] = [
         path: 'flight-schedules/daily',
         title: $localize`:@@dailyFlightSchedule:Daily Flight Schedule`,
         icon: 'ri-calendar-schedule-line'
+      },
+      {
+        path: 'flight-schedules/follow-email',
+        title: $localize`:@@followEmail:Follow email`,
+        icon: 'ri-calendar-schedule-line'
       }
     ]
   },
