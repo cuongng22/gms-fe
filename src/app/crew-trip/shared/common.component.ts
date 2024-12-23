@@ -12,12 +12,14 @@ import {HttpClient, HttpStatusCode} from '@angular/common/http';
 import {saveAs} from 'file-saver';
 import {UltilService} from 'src/app/crew-trip/core/services/ultil-service';
 import {ListResponse} from './models/common.model';
+import { environment } from 'src/environments/environment';
 
 
 @Component({
   selector: 'app-common', standalone: true, imports: [], template: ''
 })
 export class CommonComponent implements OnInit, AfterViewInit {
+  environment = environment;
   Constant = Constant;
   MESSAGE = MESSAGE;
   COMMON_CONFIG = COMMON_CONFIG;
