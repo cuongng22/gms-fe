@@ -35,7 +35,7 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
   }
   let requestTimeout = COMMON_CONFIG.TIMEOUT;
   if (req.url.includes('/api/productivity')) {
-    requestTimeout = 1000000; // Timeout 10 giây cho đường dẫn cụ thể
+    requestTimeout = 1000000;
   }
   const authReq = req.clone({headers});
   return next(authReq).pipe(timeout(requestTimeout), tap(event => {
