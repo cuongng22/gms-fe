@@ -95,7 +95,7 @@ export const routes: Routes = [
                 path: ':id/summary', component: BudgetProcurementSummaryComponent, pathMatch: 'full',
               },
               {
-                path: ':planBudgetProcurementId/summary/:id/detail',
+                path: ':plan-budget-procurement-id/summary/:id/detail',
                 component: BudgetProcurementSummaryDetailComponent
               }
 

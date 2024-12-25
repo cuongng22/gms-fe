@@ -7,22 +7,22 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, planFlightByOvernight, planFlightPeriodList } from './budget-procurement-car-rental.model';
+import { exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, planFlightByOvernight, planFlightPeriodList } from './international-budget-procurement-car-rental.model';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 
 @Component({
-  selector: 'app-budget-procurement-car-rental',
+  selector: 'app-international-budget-procurement-car-rental',
   standalone: true,
   imports: [MatTableModule, CommonModule, MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent,
-    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule],
-  templateUrl: './budget-procurement-car-rental.component.html',
-  styleUrl: './budget-procurement-car-rental.component.scss',
+    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule, ClickOutside],
+  templateUrl: './international-budget-procurement-car-rental.component.html',
+  styleUrl: './international-budget-procurement-car-rental.component.scss',
   providers: [DatePipe, DataTransformPipe]
 })
-export class BudgetProcurementCarRentalComponent implements OnInit, AfterViewChecked {
+export class InternationalBudgetProcurementCarRentalComponent implements OnInit, AfterViewChecked {
   dataTransformPipe = inject(DataTransformPipe);
   dataSource = new MatTableDataSource();
 
@@ -30,7 +30,7 @@ export class BudgetProcurementCarRentalComponent implements OnInit, AfterViewChe
   headerRowDef2: string[] = getHeaderRowDef2();
   rowDef: string[] = getRowDef();
 
-  updateBudgetPlan = input<boolean>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
+  updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
   yearPlan = input<number>(2024); // năm kế hoạch
   type = input<string>(''); // Loại Ngân sách hoặc mua sắm (budget/procurement)
 

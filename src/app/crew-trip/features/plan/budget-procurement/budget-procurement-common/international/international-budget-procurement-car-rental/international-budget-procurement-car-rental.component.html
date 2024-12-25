@@ -2,44 +2,44 @@
     <div class="table-responsive max-height-600">
         <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
             <ng-container matColumnDef="month">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center"
                     [attr.rowspan]="2" i18n="@@month">
                     Month
                 </th>
-                <td mat-cell *matCellDef="let element">
+                <td mat-cell *matCellDef="let element" class="fw-bold">
                     {{element.period}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">Total</td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-center">Total</td>
             </ng-container>
 
             <ng-container matColumnDef="numberOfFlights">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center"
                     [attr.rowspan]="2" i18n="@@numberOfFlights">
                     Number of Flights
                 </th>
                 <td mat-cell *matCellDef="let element">
                     {{element.numberFlight | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
                     @if(type() === 'BUDGET'){ {{getTotal('numberFlight') | number}} }
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="numberVehicles">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center wrap-text"
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center wrap-text"
                     [attr.rowspan]="2" i18n="@@noOfTrip">
                     No. of Trip
                 </th>
                 <td mat-cell *matCellDef="let element">
                     {{element.numberVehicles | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
                     @if(type() === 'BUDGET'){ {{getTotal('numberVehicles') | number}} }
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="extraTransfer">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center"
                     [attr.rowspan]="2" i18n="@@extraTransfer">
                     Extra transfer
                 </th>
@@ -57,34 +57,34 @@
                     </div>
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
                     @if(type() === 'BUDGET'){ {{getTotal('extraTransfer') | number}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="unitPrice">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center"
                     [attr.rowspan]="2" i18n="@@unitPriceVat">
                     Unit Price <br /> (Including VAT)
                 </th>
                 <td mat-cell *matCellDef="let element">
                     {{element.unitPrice | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="font-weight-bold"></td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold"></td>
             </ng-container>
             <ng-container matColumnDef="totalAmountForeign">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center"
                     [attr.rowspan]="2" i18n="@@totalAmountForeign">
                     Total Amount <br /> (Foreign Currency)
                 </th>
                 <td mat-cell *matCellDef="let element">
                     {{element.totalAmountForeignVat | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
                     {{getTotal('totalAmountForeignVat') | number}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="totalAmountVnd">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center wrap-text"
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center wrap-text"
                     [attr.colspan]="2" i18n="@@totalAmountVnd">
                     Total Amount (VND)
                 </th>
@@ -92,27 +92,27 @@
 
 
             <ng-container matColumnDef="totalAmountExVatVnd">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center wrap-text"
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center wrap-text"
                     i18n="@@excludingVat">
                     Excluding VAT
                 </th>
                 <td mat-cell *matCellDef="let element">
                     {{element.totalAmount | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
                     {{getTotal('totalAmount') | number}}
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="totalAmountVatVnd">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center wrap-text"
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center wrap-text"
                     i18n="@@includingVat">
                     Including VAT
                 </th>
                 <td mat-cell *matCellDef="let element">
                     {{element.totalAmountVat | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="font-weight-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
                     {{getTotal('totalAmountVat') | number}}
                 </td>
             </ng-container>
@@ -120,6 +120,9 @@
             <tr mat-header-row *matHeaderRowDef="headerRowDef2" sticky:true></tr>
             <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
             <tr mat-footer-row *matFooterRowDef="rowDef; sticky: true"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell text-center" colspan="99">No data!</td>
+            </tr>
         </table>
     </div>
 </div>

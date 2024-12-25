@@ -44,7 +44,14 @@ export const categoryOfPlans = [
     { code: 'PROCUREMENT', value: $localize`:@@procurementPlan:Procurement Plan` }
 ]
 
+export enum PlanCategoryEnum {
+    BUDGET = 'BUDGET',
+    PROCUREMENT = 'PROCUREMENT'
+}
+
 export enum CategoryEnum {
     INTERNATIONAL = 'International',
     DOMESTIC = 'Domestic'
 }
+
+export const PADDING_0 = '0px !important';

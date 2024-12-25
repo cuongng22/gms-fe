@@ -168,15 +168,5 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
       this.formGroupDetail.controls.supplierMethod.setValue(this.procurementPlanFlag ? 'Chào giá/ Đàm phán' : null);
     }
     
-    
-    // if (!this.formGroupDetail.controls.num.value) {
-    //   this.formGroupDetail.controls.num.setValue(this.procurementPlanFlag ? '1' : null);
-    // }
-    // if (!this.formGroupDetail.controls.unit.value) {
-    //   this.formGroupDetail.controls.unit.setValue(this.procurementPlanFlag ? 'Gói HĐ/DV' : null);
-    // }
-    // if (!this.formGroupDetail.controls.supplierMethod.value) {
-    //   this.formGroupDetail.controls.supplierMethod.setValue(this.procurementPlanFlag ? 'Chào giá/ Đàm phán' : null);
-    // }
   }
 }

@@ -255,7 +255,7 @@
                         <div class="action-buttons d-flex align-items-center justify-content-end">
                             <button type="button" mat-button class="text-primary"
                                 [routerLink]="['/plan/est-plan/budget-procurement',element.planBudgetProcurementId,'summary',element.id,'detail']"
-                                [queryParams]="{yearPlan: element.yearPlan,airportCode: element.airportCode}" 
+                                [queryParams]="{'year-plan': element.yearPlan,'airport-code': element.airportCode,'category':element.category}"
                                 routerLinkActive="router-link-active">
                                 <i class="material-symbols-outlined " title="Detail" i18n-title="@@detail">
                                     zoom_in
@@ -269,10 +269,16 @@
                             <mat-menu #planMenu="matMenu" yPosition="above" class="card-header-menu">
                                 <ul class="p-0 mt-0 mb-0 list-unstyled">
                                     <li>
-                                        <button mat-menu-item i18n="@@budgetPlan">Budget Plan</button>
+                                        <button mat-menu-item i18n="@@budgetPlan"
+                                            [routerLink]="['/plan/est-plan/budget-procurement',element.planBudgetProcurementId,'summary',element.id,'detail']"
+                                            [queryParams]="{'year-plan': element.yearPlan,'airport-code': element.airportCode,'plan-type':PlanCategoryEnum.BUDGET,'category':element.category}"
+                                            routerLinkActive="router-link-active">Budget Plan</button>
                                     </li>
                                     <li>
-                                        <button mat-menu-item i18n="@@procurementPlan">Procurement Plan</button>
+                                        <button mat-menu-item i18n="@@procurementPlan"
+                                            [routerLink]="['/plan/est-plan/budget-procurement',element.planBudgetProcurementId,'summary',element.id,'detail']"
+                                            [queryParams]="{'year-plan': element.yearPlan,'airport-code': element.airportCode,'plan-type':PlanCategoryEnum.PROCUREMENT,'category':element.category}"
+                                            routerLinkActive="router-link-active">Procurement Plan</button>
                                     </li>
                                 </ul>
                             </mat-menu>

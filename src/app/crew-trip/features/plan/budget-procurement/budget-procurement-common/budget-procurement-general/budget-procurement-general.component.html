@@ -1,10 +1,4 @@
 <form [formGroup]="formGroupDetail" (submit)="submit()" autocomplete="off">
-    <button mat-button color="primary" type="submit" class="add-btn">
-        <i class="material-symbols-outlined">
-            save
-        </i>
-        <span i18n="@@save">Save</span>
-    </button>
     <div class="row">
         <mat-checkbox class="mb-2" i18n="@@budgetPlan" formControlName="budgetPlanFlag">Budget Plan</mat-checkbox>
     </div>
@@ -69,7 +63,7 @@
         <div class="wp-20" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@rateForSingle">Buffer rate (for single-gender)</mat-label>
-                <input type="text" inputmode="numeric" decimalSeparator="," digitOnly [decimal]="true" matInput
+                <input type="text"  decimalSeparator="," digitOnly [decimal]="true" matInput
                     formControlName="rateForSingle">
                 <i class="material-symbols-outlined fs-18" matSuffix>
                     percent

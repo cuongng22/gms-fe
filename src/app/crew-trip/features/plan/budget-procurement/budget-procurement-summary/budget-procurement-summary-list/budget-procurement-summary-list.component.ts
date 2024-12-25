@@ -17,7 +17,7 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from './budget-procurement-summary-list.model';
 import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
-import { CAR_RENTAL, HOTEL, ServiceType } from '../../budget-procurement.model';
+import { CAR_RENTAL, HOTEL, PlanCategoryEnum, ServiceType } from '../../budget-procurement.model';
 
 @Component({
   selector: 'app-budget-procurement-summary-list',
@@ -30,6 +30,7 @@ import { CAR_RENTAL, HOTEL, ServiceType } from '../../budget-procurement.model';
 })
 export class BudgetProcurementSummaryListComponent extends CommonComponent implements OnInit {
   readonly serviceType = ServiceType;
+  PlanCategoryEnum = PlanCategoryEnum;
 
   categoryType = input<string>('All'); //All,International,Domestic  loại quốc tế hay quốc nội
   planBudgetProcurementId = input<number>(); // id của kế hoạch

@@ -9,20 +9,20 @@ import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
-import { checkChange, contractData, exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, planFlightByOvernight } from './budget-procurement-hotel.model';
+import { checkChange, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './international-budget-procurement-hotel.model';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 
 @Component({
-  selector: 'app-budget-procurement-hotel',
+  selector: 'app-international-budget-procurement-hotel',
   standalone: true,
   imports: [MatTableModule, CommonModule, MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent,
     FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule],
-  templateUrl: './budget-procurement-hotel.component.html',
-  styleUrl: './budget-procurement-hotel.component.scss',
+  templateUrl: './international-budget-procurement-hotel.component.html',
+  styleUrl: './international-budget-procurement-hotel.component.scss',
   providers: [DatePipe, DataTransformPipe]
 })
-export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked {
+export class InternationalBudgetProcurementHotelComponent implements OnInit, AfterViewChecked {
   dataTransformPipe = inject(DataTransformPipe);
   dataSource = new MatTableDataSource();
   periodRowspan = 0;
@@ -33,7 +33,6 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
   planFlightByOvernight: any[] = []; //tỉ lệ chuyến bay theo số đêm nghỉ
   planFlightPeriods: any[] = []; //Số chuyến bay theo giai đoạn
 
-  contractData = contractData;
   generalData: any = {};
   totalByGroup: any = {};
 
@@ -42,7 +41,7 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
   rowDef: string[] = [];
 
   yearPlan = input<number>(2024); // năm kế hoạch
-  updateBudgetPlan = input<boolean>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
+  updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
   type = input<string>(''); // Loại Ngân sách hoặc mua sắm (budget/procurement)
 
 
@@ -53,23 +52,13 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
   }
 
   ngOnInit(): void {
-
-    this.headerRowDef1 = getHeaderRowDef1(contractData, this.type());
-    this.headerRowDef2 = getHeaderRowDef2(contractData, this.type());
-    this.rowDef = getRowDef(contractData, this.type());
-
-    // this.dataSource.data = exampleData;
-
-
   }
 
   setDataSource(data: any[], generalData?: any) {
     this.dataSource.data = [...data];
     this.generalData = { ...generalData };
 
-    // this.aircraftTypeRowspan = this.dataSource.data.map((item: any) => item.aircraftType).filter((value: any, index: any, self: any) => self.indexOf(value) === index).length;
-    // this.overnightRowspan = this.dataSource.data.map((item: any) => item.overnight).filter((value: any, index: any, self: any) => self.indexOf(value) === index).length;
-    // this.periodRowspan = this.overnightRowspan * this.aircraftTypeRowspan;
+    this.getRow();
 
     this.dataSource.data.forEach((item: any, index) => {
       let period = '';
@@ -213,11 +202,11 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
     this.calculate(item, 'totalAmountForeignSingleRoom');
     //Thành tiền ngoại tệ,  - phòng đôi
     this.calculate(item, 'totalAmountForeignDoubleRoom');
-    if (contractData.earlyCheckinFeeFlag) {
+    if (this.generalData.earlyCheckinFeeFlag) {
       //Thành tiền ngoại tệ,  - phòng early-checkin
       this.calculate(item, 'totalAmountForeignEarly');
     }
-    if (contractData.lateCheckoutFeeFlag) {
+    if (this.generalData.lateCheckoutFeeFlag) {
       //Thành tiền ngoại tệ, - phòng late checkout
       this.calculate(item, 'totalAmountForeignLate');
     }
@@ -265,9 +254,9 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
   // TÍnh dòng tổng 
   getTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
-    const startDatePlanGroup = new Date(this.yearPlan() + 1, 0, 1);
+    const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     if (control === 'totalAmountVat') {
-      const endDatePlanGroup = new Date(this.yearPlan() + 1, 10, 1);
+      const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
       return Math.round(this.dataSource.data.map((t: any) => {
         if (truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
           return Number(t[control]);
@@ -303,7 +292,6 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
 
   // hàm tính tổng theo group (rowspan)
   calculateTotalByGroup(item: any, index: number, key: string, control: string) {
-    // let data: any = this.dataSource.data[index];
     const keyGroup = this.getTotalByGroupKey(item, formula[key].groupFormula); // cái này để làm key trong object Total sau này sẽ get để lấy data hiển thị ở table
     const filterData = this.dataSource.data.filter((itemFilter: any, indexFilter: number) => index >= indexFilter && this.groupFormula(itemFilter, item, formula[key].groupFormula));
     const result = filterData.map((t: any) => t[key]).reduce((acc, value) => acc + value, 0);
@@ -366,5 +354,11 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
     }
 
     return null;
+  }
+
+  getRow(): void {
+    this.headerRowDef1 = getHeaderRowDef1(this.generalData, this.type());
+    this.headerRowDef2 = getHeaderRowDef2(this.generalData, this.type());
+    this.rowDef = getRowDef(this.generalData, this.type());
   }
 }
