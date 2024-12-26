@@ -100,7 +100,7 @@
                 <input trim="blur" type="text" matInput formControlName="versionId" #version
                        [matAutocomplete]="versionComplete" (input)="filterVersion()">
                 <mat-autocomplete autoActiveFirstOption requireSelection #versionComplete="matAutocomplete">
-                  <mat-option value="">--All VER_ID--</mat-option>
+                  <!--                  <mat-option value="">&#45;&#45;All VER_ID&#45;&#45;</mat-option>-->
                   @for (option of filteredOptionsVersion(); let index = $index; track index) {
                     <mat-option [value]="option">{{ option }}</mat-option>
                   }
