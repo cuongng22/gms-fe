@@ -207,15 +207,73 @@ export const menu: Menu[] = [
       }]
   },
   {
-    title: $localize`:@@reportManagement:Quản lý báo cáo`,
-    rootPath: 'report',
+    title: $localize`:@@reportManagement:REPORTS`,
+    rootPath: 'reports',
     subMenu: [
       {
-        path: 'report/report1',
-        title: $localize`:@@budgetReport:Báo cáo ngân sách theo thị trường`,
+        path: 'reports/report1',
+        title: $localize`:@@budgetReport:Actual vs. budgeted cost report`,
         icon: 'ri-folder-chart-line',
         menu: []
-      }
+      },
+      {
+        path: 'reports/report2',
+        title: $localize`:@@budgetReport:Market cost report `,
+        icon: 'ri-folder-chart-line',
+        menu: []
+      },
+      {
+        path: 'reports/report3',
+        title: $localize`:@@budgetReport:Room quantity report `,
+        icon: 'ri-folder-chart-line',
+        menu: []
+      },
+      {
+        path: 'reports/report4',
+        title: $localize`:@@budgetReport:Monthly performance report `,
+        icon: 'ri-folder-chart-line',
+        menu: []
+      },
+      {
+        path: 'reports/report5',
+        title: $localize`:@@budgetReport:Cost savings report `,
+        icon: 'ri-folder-chart-line',
+        menu: []
+      },
+      {
+        path: 'reports/report6',
+        title: $localize`:@@budgetReport:Accounts payable report `,
+        icon: 'ri-folder-chart-line',
+        menu: []
+      },
+      {
+        path: 'reports/report7',
+        title: $localize`:@@budgetReport:Quarterly cost report `,
+        icon: 'ri-folder-chart-line',
+        menu: []
+      },
+      {
+        path: 'reports/report8',
+        title: $localize`:@@budgetReport:Hotel room and cost report`,
+        icon: 'ri-folder-chart-line',
+        menu: []
+      },
+      {
+        path: 'reports/report9',
+        title: $localize`:@@budgetReport:Car usage and cost report `,
+        icon: 'ri-folder-chart-line',
+        menu: []
+      },
+      {
+        path: 'reports/report10',
+        title: $localize`:@@budgetReport:Cost planning report `,
+        icon: 'ri-folder-chart-line',
+        menu: []
+      },
+      
+
+      
+   
     ]
   },
 
