@@ -17,7 +17,7 @@
     <div class="sidebar-inner">
       <div class="sidebar-menu">
         <mat-accordion>
-<!--          <span class="sub-title d-block fw-medium text-uppercase">Dashboard</span>-->
+          <!--          <span class="sub-title d-block fw-medium text-uppercase">Dashboard</span>-->
           <!--          <a routerLink="/dashboard" class="sidebar-menu-link" routerLinkActive="active"-->
           <!--             [routerLinkActiveOptions]="{exact: true}">-->
           <!--            <i class="material-symbols-outlined">-->
@@ -25,12 +25,12 @@
           <!--            </i>-->
           <!--            <span class="title text-white">Dashboard</span>-->
           <!--          </a>-->
-          <mat-expansion-panel class="menu-level-1 right-aligned-header"
-                               (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+          <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <span class="title text-white uppercase-text" i18n>
-                 Quản lý dữ liệu
+                  Quản lý dữ liệu
                 </span>
               </mat-panel-title>
             </mat-expansion-panel-header>
@@ -65,23 +65,38 @@
               </li>
             </ul>
           </mat-expansion-panel>
-          <mat-expansion-panel class="menu-level-1 right-aligned-header"
-                               (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+          <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <span class="title text-white uppercase-text" i18n>
-                 Quản lý báo cáo
+                  Quản lý báo cáo 
                 </span>
               </mat-panel-title>
             </mat-expansion-panel-header>
             <ul class="sidebar-sub-menu">
               <li class="sidemenu-item">
-                <a routerLink="admin/users" class="sidemenu-link ri-folder-chart-line">
+                <a routerLink="reports/report1" class="sidemenu-link ri-folder-chart-line">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;text-up">
-                    Báo cáo ngân sách theo thị trường
+                    Báo cáo ngân sách theo thị trường 1
                   </span>
                 </a>
               </li>
+              <li class="sidemenu-item">
+                <a routerLink="reports/report2" class="sidemenu-link ri-folder-chart-line">
+                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;text-up">
+                    Báo cáo ngân sách theo thị trường 2
+                  </span>
+                </a>
+              </li>
+              <li class="sidemenu-item">
+                <a routerLink="reports/report3" class="sidemenu-link ri-folder-chart-line">
+                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;text-up">
+                    Báo cáo ngân sách theo thị trường 3
+                  </span>
+                </a>
+              </li>
+            </ul>
             </ul>
           </mat-expansion-panel>
           <mat-expansion-panel class="menu-level-1 right-aligned-header" [expanded]="checkActiveRoute('category')"
@@ -95,14 +110,16 @@
             </mat-expansion-panel-header>
             <ul class="sidebar-sub-menu">
               <li class="sidemenu-item">
-                <a routerLink="category/users" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">
+                <a routerLink="category/users" routerLinkActive="active"
+                  class="sidemenu-link ri-calendar-schedule-fill">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
                     Lịch bay năm
                   </span>
                 </a>
               </li>
               <li class="sidemenu-item">
-                <a routerLink="category/users" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">
+                <a routerLink="category/users" routerLinkActive="active"
+                  class="sidemenu-link ri-calendar-schedule-fill">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
                     Lịch bay mùa
                   </span>
@@ -117,7 +134,7 @@
               </li>
               <li class="sidemenu-item">
                 <a routerLink="category/hotel" routerLinkActive="active" class="sidemenu-link ri-hotel-bed-fill">
-                  <span class="title text-white"  i18n style="font-family: 'Aperto', sans-serif;">
+                  <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
                     Khách sạn
                   </span>
                 </a>
@@ -142,14 +159,17 @@
                     Tỉ giá ngoại tệ
                   </span>
                 </a>
-              </li> <li class="sidemenu-item">
+              </li>
+              <li class="sidemenu-item">
                 <a routerLink="category/nation" routerLinkActive="active" class="sidemenu-link ri-global-fill">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
                     Nation
                   </span>
                 </a>
-              </li><li class="sidemenu-item">
-                <a routerLink="category/service-fee" routerLinkActive="active" class="sidemenu-link ri-money-dollar-box-fill">
+              </li>
+              <li class="sidemenu-item">
+                <a routerLink="category/service-fee" routerLinkActive="active"
+                  class="sidemenu-link ri-money-dollar-box-fill">
                   <span class="title text-white" i18n style="font-family: 'Aperto', sans-serif;">
                     Service Fee
                   </span>
@@ -157,12 +177,12 @@
               </li>
             </ul>
           </mat-expansion-panel>
-          <mat-expansion-panel class="menu-level-1 right-aligned-header"
-                               (opened)="panelOpenState.set(true)" (closed)="panelOpenState.set(false)">
+          <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
+            (closed)="panelOpenState.set(false)">
             <mat-expansion-panel-header>
               <mat-panel-title>
                 <span class="title text-white text-uppercase" i18n>
-                 HỆ THỐNG
+                  HỆ THỐNG
                 </span>
               </mat-panel-title>
             </mat-expansion-panel-header>
@@ -176,65 +196,65 @@
               </li>
             </ul>
             <mat-expansion-panel [expanded]="checkActiveRoute('admin')" (opened)="panelOpenState.set(true)"
-                                 (closed)="panelOpenState.set(false)">
+              (closed)="panelOpenState.set(false)">
               <mat-expansion-panel-header>
                 <mat-panel-title>
-<!--                  <i class="material-symbols-outlined">-->
-<!--                    business_center-->
-<!--                  </i>-->
+                  <!--                  <i class="material-symbols-outlined">-->
+                  <!--                    business_center-->
+                  <!--                  </i>-->
                   <span class="title text-white">
-                  Quyền và tài khoản
-                </span>
+                    Quyền và tài khoản
+                  </span>
                 </mat-panel-title>
               </mat-expansion-panel-header>
               <ul class="sidebar-sub-menu">
                 <li class="sidemenu-item">
                   <a routerLink="admin/users" routerLinkActive="active" class="sidemenu-link ri-group-fill">
-                  <span class="title-font text-white">
-                    {{ 'ACCOUNT' | translate }}
-                  </span>
+                    <span class="title-font text-white">
+                      {{ 'ACCOUNT' | translate }}
+                    </span>
                   </a>
                 </li>
                 <li class="sidemenu-item">
                   <a routerLink="admin/roles" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">
-                  <span class="title-font text-white">
-                    Nhóm quyền
-                  </span>
+                    <span class="title-font text-white">
+                      Nhóm quyền
+                    </span>
                   </a>
                 </li>
               </ul>
             </mat-expansion-panel>
           </mat-expansion-panel>
-<!--          <span class="sub-title d-block fw-medium text-uppercase">HỆ THỐNG</span>-->
-<!--          <mat-expansion-panel [expanded]="checkActiveRoute('admin')" (opened)="panelOpenState.set(true)"-->
-<!--            (closed)="panelOpenState.set(false)">-->
-<!--            <mat-expansion-panel-header>-->
-<!--              <mat-panel-title>-->
-<!--                <i class="material-symbols-outlined">-->
-<!--                  business_center-->
-<!--                </i>-->
-<!--                <span class="title text-white">-->
-<!--                  Quyền và tài khoản-->
-<!--                </span>-->
-<!--              </mat-panel-title>-->
-<!--            </mat-expansion-panel-header>-->
-<!--            <ul class="sidebar-sub-menu">-->
-<!--              <li class="sidemenu-item">-->
-<!--                <a routerLink="admin/users" routerLinkActive="active" class="sidemenu-link ri-group-fill">-->
-<!--                  <span class="title-font text-white">-->
-<!--                    {{ 'ACCOUNT' | translate }}-->
-<!--                  </span>-->
-<!--                </a>-->
-<!--              </li>-->
-<!--              <li class="sidemenu-item">-->
-<!--                <a routerLink="admin/roles" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">-->
-<!--                  <span class="title-font text-white">-->
-<!--                    Nhóm quyền-->
-<!--                  </span>-->
-<!--                </a>-->
-<!--              </li>-->
-<!--            </ul>-->
-<!--          </mat-expansion-panel>-->
+          <!--          <span class="sub-title d-block fw-medium text-uppercase">HỆ THỐNG</span>-->
+          <!--          <mat-expansion-panel [expanded]="checkActiveRoute('admin')" (opened)="panelOpenState.set(true)"-->
+          <!--            (closed)="panelOpenState.set(false)">-->
+          <!--            <mat-expansion-panel-header>-->
+          <!--              <mat-panel-title>-->
+          <!--                <i class="material-symbols-outlined">-->
+          <!--                  business_center-->
+          <!--                </i>-->
+          <!--                <span class="title text-white">-->
+          <!--                  Quyền và tài khoản-->
+          <!--                </span>-->
+          <!--              </mat-panel-title>-->
+          <!--            </mat-expansion-panel-header>-->
+          <!--            <ul class="sidebar-sub-menu">-->
+          <!--              <li class="sidemenu-item">-->
+          <!--                <a routerLink="admin/users" routerLinkActive="active" class="sidemenu-link ri-group-fill">-->
+          <!--                  <span class="title-font text-white">-->
+          <!--                    {{ 'ACCOUNT' | translate }}-->
+          <!--                  </span>-->
+          <!--                </a>-->
+          <!--              </li>-->
+          <!--              <li class="sidemenu-item">-->
+          <!--                <a routerLink="admin/roles" routerLinkActive="active" class="sidemenu-link ri-calendar-schedule-fill">-->
+          <!--                  <span class="title-font text-white">-->
+          <!--                    Nhóm quyền-->
+          <!--                  </span>-->
+          <!--                </a>-->
+          <!--              </li>-->
+          <!--            </ul>-->
+          <!--          </mat-expansion-panel>-->
         </mat-accordion>
       </div>
     </div>

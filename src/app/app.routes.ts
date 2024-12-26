@@ -26,6 +26,18 @@ import {
 import {ActRateComponent} from "src/app/crew-trip/features/category/act-rate/act-rate.component";
 import {RateUthComponent} from "src/app/crew-trip/features/plan/rate-uth/rate-uth.component";
 import {RatePlannedComponent} from "src/app/crew-trip/features/plan/rate-planned/rate-planned.component";
+import {reportcomponent } from './crew-trip/features/reports/report1/report1.component';
+import {reportcomponent2 } from './crew-trip/features/reports/report2/report2.component';
+import {reportcomponent3 } from './crew-trip/features/reports/report3/report3.component';
+import {reportcomponent4 } from './crew-trip/features/reports/report4/report4.component';
+import {reportcomponent5 } from './crew-trip/features/reports/report5/report5.component';
+import {reportcomponent6 } from './crew-trip/features/reports/report6/report6.component';
+import { reportcomponent7 } from './crew-trip/features/reports/report7/report7.component';
+import { reportcomponent8 } from './crew-trip/features/reports/report8/report8.component';
+import { reportcomponent9 } from './crew-trip/features/reports/report9/report9.component';
+import { reportcomponent10 } from './crew-trip/features/reports/report10/report10.component';
+
+
 import {CrewsDetailComponent} from './crew-trip/features/category/crews/crews-detail/crews-detail.component';
 import {GroupMailComponent} from "src/app/crew-trip/features/system/config/group-mail/group-mail.component";
 import {
@@ -130,6 +142,21 @@ export const routes: Routes = [
             ]
           },
         ]
+      },
+      {
+        path: 'reports', children: [
+          {path: 'report1', component: reportcomponent},
+          {path: 'report2', component: reportcomponent2},
+          {path: 'report3', component: reportcomponent3},
+          {path: 'report4', component: reportcomponent4},
+          {path: 'report5', component: reportcomponent5},
+          {path: 'report6', component: reportcomponent6},
+          {path: 'report7', component: reportcomponent7},
+          {path: 'report8', component: reportcomponent8},
+          {path: 'report9', component: reportcomponent9},
+          {path: 'report10', component: reportcomponent10},
+
+        ],
       },
       {path: 'profile', component: ProfileComponent},
     ]
