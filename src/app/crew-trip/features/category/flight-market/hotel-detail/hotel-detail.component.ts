@@ -71,7 +71,7 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
   }
 
   override ngOnInit(): void {
-    console.log("this.data.hotelCodes: ", this.data.hotelCodes);
+    console.log('this.data.hotelCodes: ', this.data.hotelCodes);
     if (this.data.hotel) {
       this.formGroupDetail.patchValue(this.data.hotel);
       this.hotelCodes = this.data.hotelCodes;

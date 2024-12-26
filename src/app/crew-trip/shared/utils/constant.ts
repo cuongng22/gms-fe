@@ -1,5 +1,5 @@
 import { effect, Signal, signal } from '@angular/core';
-import {jwtDecode} from "jwt-decode";
+import {jwtDecode} from 'jwt-decode';
 
 export class Constant {
   static DATE_FORMAT = 'DD/MM/YYYY';
@@ -108,5 +108,5 @@ export const DATE_FORMAT_DD_MM_YYYY = {
 export class COMMON_CONFIG {
   static TIMEOUT=10000;
   static MAX_FILE_SIZE='5MB';
-  static FILE_ACCEPT='.doc,.docx,.pdf,.xls,.xlsx'
+  static FILE_ACCEPT='.doc,.docx,.pdf,.xls,.xlsx';
 }

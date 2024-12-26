@@ -1,5 +1,5 @@
 import {Component, ElementRef, Inject, inject, Input, input, LOCALE_ID, OnInit, ViewChild} from '@angular/core';
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {
   AbstractControl,
   FormBuilder,
@@ -7,25 +7,25 @@ import {
   ReactiveFormsModule,
   ValidationErrors,
   Validators
-} from "@angular/forms";
-import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
-import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
-import {MatButton} from "@angular/material/button";
-import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from "@angular/material/card";
-import {MatError, MatFormField, MatFormFieldModule, MatLabel} from "@angular/material/form-field";
-import {MatInput, MatInputModule} from "@angular/material/input";
-import {MatSelect} from "@angular/material/select";
-import {NgxControlError} from "ngxtension/control-error";
-import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {CrewsService} from "src/app/crew-trip/core/services/crews-service";
-import {NationService} from "src/app/crew-trip/core/services/nation-service";
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {FlightCrewService} from "src/app/crew-trip/core/services/flight-crew-service";
-import {FlightMarketService} from "src/app/crew-trip/core/services/ flight-market.service";
-import {MAT_DIALOG_DATA, MatDialogRef} from "@angular/material/dialog";
-import {CommonModule, NgForOf} from "@angular/common";
-import {MatCheckbox} from "@angular/material/checkbox";
-import {HttpStatusCode} from "@angular/common/http";
+} from '@angular/forms';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
+import {MatButton} from '@angular/material/button';
+import {MatCard, MatCardContent, MatCardHeader, MatCardTitle} from '@angular/material/card';
+import {MatError, MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
+import {MatInput, MatInputModule} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {NgxControlError} from 'ngxtension/control-error';
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {CrewsService} from 'src/app/crew-trip/core/services/crews-service';
+import {NationService} from 'src/app/crew-trip/core/services/nation-service';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {FlightCrewService} from 'src/app/crew-trip/core/services/flight-crew-service';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {CommonModule, NgForOf} from '@angular/common';
+import {MatCheckbox} from '@angular/material/checkbox';
+import {HttpStatusCode} from '@angular/common/http';
 
 @Component({
   selector: 'app-flight-crew-detail',
@@ -68,7 +68,7 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   markets: string[] = [];
   acTypes: any[] = [];
-  existActype: boolean = false;
+  existActype = false;
   messageErrorActype: string;
 
   override formGroupDetail = this.formBuilder.group({
@@ -85,8 +85,8 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
     public dialogRef: MatDialogRef<FlightCrewDetailComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any) {
     super();
-    this.markets = data.markets
-    this.acTypes = data.acTypes
+    this.markets = data.markets;
+    this.acTypes = data.acTypes;
   }
 
 
@@ -114,7 +114,7 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
   }
 
   override async save() {
-    this.messageErrorActype = "";
+    this.messageErrorActype = '';
     super.save().then(value => {
       if (value.status == HttpStatusCode.Conflict) {
         this.existActype = true;
@@ -132,6 +132,6 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
   }
 
   existActypeValidator(control: AbstractControl): ValidationErrors | null {
-    return this.existActype ? {existActype: true} : null
+    return this.existActype ? {existActype: true} : null;
   }
 }

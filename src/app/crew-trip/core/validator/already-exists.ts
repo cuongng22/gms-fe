@@ -69,7 +69,7 @@ export class AlreadyExistsValidator {
       } else {
         return of(null);
       }
-    }
+    };
   }
 
   static existsVersion(budgetProcurementPlanService: BudgetProcurementPlanService): AsyncValidatorFn {
@@ -96,6 +96,6 @@ export class AlreadyExistsValidator {
       } else {
         return of(null);
       }
-    }
+    };
   }
 }

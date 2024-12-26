@@ -85,9 +85,9 @@ export class CrewsComponent extends CommonComponent implements OnInit {
   // detail or edit, create car rental
   async crewsDetail(crewId?: any) {
     let crews = {};
-    if (!!crewId) {
+    if (crewId) {
       const response = await this.baseService.detail(crewId);
-      crews = { ...response.data }
+      crews = { ...response.data };
     }
 
     const dialogRef = this.dialog.open(CrewsDetailComponent, {

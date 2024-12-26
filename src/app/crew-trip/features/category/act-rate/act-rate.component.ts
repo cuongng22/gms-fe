@@ -26,9 +26,9 @@ import {HttpStatusCode} from '@angular/common/http';
 import {CommonModule} from '@angular/common';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatCheckbox} from '@angular/material/checkbox';
-import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 
 @Component({
   selector: 'app-act-rate',
@@ -85,7 +85,7 @@ export class ActRateComponent extends CommonComponent implements OnInit {
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
-      let res = await this.baseService.actSearch({
+      const res = await this.baseService.actSearch({
         page: this.pageIndex,
         size: this.pageSize, ...removeNullValues(body) || removeNullValues(searchValue),
         limit: this.pageSize, ...removeNullValues(body) || removeNullValues(searchValue)
@@ -95,9 +95,9 @@ export class ActRateComponent extends CommonComponent implements OnInit {
           this.dataSource.data = res.data.content;
           this.dataSource.data = this.dataSource.data.map((s: any) => ({
             ...s,
-            isActiveLabel: !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
+            isActiveLabel: s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
             activeLabel: !!s.active || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
-          }))
+          }));
           this.totalElement = res.data.totalElements;
         }
         return res;

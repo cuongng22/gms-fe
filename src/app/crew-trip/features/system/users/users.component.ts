@@ -92,7 +92,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
       ifValidator(
         () => this.isValidatePassword,
         [Validators.required, Validators.minLength(8),
-        Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')
+          Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')
         ]))],
     description: ['', Validators.maxLength(500)]
   });
@@ -230,7 +230,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
         if (err.status === HttpStatusCode.Conflict) {
           this.emailExists = true;
           this.formGroupDetail.controls.email.updateValueAndValidity();
-          this.emailExistsMessage = err?.error?.error ?? $localize`:@@emailAlreadyExists:Email ${MESSAGE.ALREADY_EXISTS}`
+          this.emailExistsMessage = err?.error?.error ?? $localize`:@@emailAlreadyExists:Email ${MESSAGE.ALREADY_EXISTS}`;
           this.emailExists = false;
         }
       } finally {
@@ -275,6 +275,6 @@ export class UsersComponent extends CommonComponent implements OnInit {
   }
 
   emailExistsValidator(control: AbstractControl): ValidationErrors | null {
-    return this.emailExists ? { emailExists: true } : null
+    return this.emailExists ? { emailExists: true } : null;
   }
 }

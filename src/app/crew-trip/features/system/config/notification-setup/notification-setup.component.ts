@@ -1,8 +1,8 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {NotificationConfigService} from "src/app/crew-trip/core/services/notification-config.service";
-import {FormBuilder} from "@angular/forms";
-import {NotificationSetupService} from "src/app/crew-trip/core/services/notification-setup.service";
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {NotificationConfigService} from 'src/app/crew-trip/core/services/notification-config.service';
+import {FormBuilder} from '@angular/forms';
+import {NotificationSetupService} from 'src/app/crew-trip/core/services/notification-setup.service';
 
 @Component({
   selector: 'app-notification-setup',

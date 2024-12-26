@@ -101,7 +101,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
 
     this.fileUpload.valueChanges.subscribe(value => {
       this.uploadFileError = {};
-    })
+    });
   }
 
   override search(body?: any, isNextPage?: boolean): any {
@@ -209,7 +209,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
   resetFileUpload() {
     this.uploadFileError = {};
     this.fileUpload.setValue([]);
-    this.fileUpload.reset()
+    this.fileUpload.reset();
   }
 }
 

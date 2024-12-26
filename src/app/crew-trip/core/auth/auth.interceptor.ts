@@ -15,7 +15,7 @@ import {BaseService} from '../services/base-service';
 import {MESSAGE, COMMON_CONFIG} from '../../shared/utils/constant';
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 import {LanguageService} from 'src/app/crew-trip/core/services/language.service';
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
+import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {MIMEType} from 'util';
 import {el} from 'node_modules/@fullcalendar/core/internal-common';
 
@@ -88,7 +88,7 @@ export function readError(error: HttpErrorResponse): Promise<HttpErrorResponse> 
             headers: error.headers,
           }));
         }
-      }
+      };
       reader.readAsText(error.error);
     } else {
       resolve(error);

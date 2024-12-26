@@ -16,14 +16,14 @@ export class BudgetProcurementSummaryComponent {
 
 
   searchCategoryAll(data:any){
-    console.log(data)
+    console.log(data);
   }
 
   searchCategoryInternational(data:any){
-    console.log(data)
+    console.log(data);
   }
 
   searchCategoryDomestic(data:any){
-    console.log(data)
+    console.log(data);
   }
 }

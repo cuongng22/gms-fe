@@ -27,19 +27,19 @@ import {MatRadioModule} from '@angular/material/radio';
 import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
-import {FileUploadModule} from "@iplab/ngx-file-upload";
-import {DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE} from "src/app/crew-trip/shared/utils/constant";
-import {ClickOutside} from "ngxtension/click-outside";
-import {HttpStatusCode} from "@angular/common/http";
-import {NationService} from "src/app/crew-trip/core/services/nation-service";
-import {MatAutocomplete, MatAutocompleteTrigger} from "@angular/material/autocomplete";
-import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
-import {NgxMatTimepickerFieldComponent} from "ngx-mat-timepicker";
+import {FileUploadModule} from '@iplab/ngx-file-upload';
+import {DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import {ClickOutside} from 'ngxtension/click-outside';
+import {HttpStatusCode} from '@angular/common/http';
+import {NationService} from 'src/app/crew-trip/core/services/nation-service';
+import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {NgxMatTimepickerFieldComponent} from 'ngx-mat-timepicker';
 import {cloneDeep, debounce, isEqual, remove} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
-import * as ContractLookup from "src/app/crew-trip/features/contract/contract-lookup";
-import {ServiceFeeService} from "src/app/crew-trip/core/services/service-fee-service";
+import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lookup';
+import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 
 
 @Component({
@@ -252,7 +252,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.getPartnerInfo();
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.getRawValue().documentsList ?? []);
 
-        let priceUnitInfo = this.formGroupDetail.getRawValue()?.priceUnitInfo?.map((s: any) => ({
+        const priceUnitInfo = this.formGroupDetail.getRawValue()?.priceUnitInfo?.map((s: any) => ({
           ...s,
           serviceFeeCode: s.serviceCode,
           serviceFeeName: this.listHHDV.find((s: any) => s.serviceFeeCode === s.serviceFeeCode)?.name,
@@ -320,9 +320,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     if (this.formGroupFileUpload.value.fileUpload.length > 0) {
       try {
         await this.spinner.show();
-        let formUpload = new FormData();
-        let fileUpload = this.formGroupFileUpload.value.fileUpload[0];
-        let bizDocIdBlob = new Blob([this.formGroupDetail.getRawValue().bizDocId], {type: 'application/json'});
+        const formUpload = new FormData();
+        const fileUpload = this.formGroupFileUpload.value.fileUpload[0];
+        const bizDocIdBlob = new Blob([this.formGroupDetail.getRawValue().bizDocId], {type: 'application/json'});
         //validate
         // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
         if (fileUpload.size > 5 * 1048576) {
@@ -339,7 +339,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
             }];
           }
         });
-        this.formGroupFileUpload.patchValue({fileUpload: []})
+        this.formGroupFileUpload.patchValue({fileUpload: []});
       } catch (e: any) {
         console.log(e);
         this.baseService.showError((e.error?.error?.file) ?? (e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
@@ -370,7 +370,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async deleteUnitPrice(index: any) {
-    this.tblUnitPrice.data[index]
+    this.tblUnitPrice.data[index];
   }
 
   async cancelUnitPrice(index: any) {
@@ -382,17 +382,17 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   async _doDelete() {
     try {
-      console.log(this.contractObj)
+      console.log(this.contractObj);
       if (this.deleteObj?.deleteType == 'file') {
         await this.baseService.deleteFile(this.deleteObj.fileName, this.id).then((res: any) => {
           if (res.status == HttpStatusCode.Ok) {
-            this.baseService.showSuccess("Delete file successfully.");
+            this.baseService.showSuccess('Delete file successfully.');
           }
         });
         this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter((item: any) => item.fileName !== this.curFile.fileName);
       } else if (this.deleteObj?.deleteType == 'tbl5') {
         delete this.deleteObj.deleteType;
-        let findRow = this.tblUnitPrice.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
+        const findRow = this.tblUnitPrice.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
         if (findRow) {
           this.deletePriceUnitInfo = [...this.deletePriceUnitInfo, findRow.id];
         }
@@ -400,7 +400,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.tblUnitPrice.data = this.tblUnitPrice.data;
       } else if (this.deleteObj.deleteType == 'tbl61') {
         delete this.deleteObj.deleteType;
-        let findRow = this.tbl61.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
+        const findRow = this.tbl61.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
         if (findRow) {
           this.deleteNotAllDay = [...this.deleteNotAllDay, findRow.id];
         }
@@ -408,7 +408,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.tbl61.data = this.tbl61.data;
       } else if (this.deleteObj.deleteType == 'tbl62') {
         delete this.deleteObj.deleteType;
-        let findRow = this.tbl62.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
+        const findRow = this.tbl62.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
         if (findRow) {
           this.deleteNotAllDay = [...this.deleteNotAllDay, findRow.id];
         }
@@ -416,7 +416,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.tbl62.data = this.tbl62.data;
       } else if (this.deleteObj.deleteType == 'tbl63') {
         delete this.deleteObj.deleteType;
-        let findRow = this.tbl63.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
+        const findRow = this.tbl63.data.find((s: any) => isEqual(s, this.deleteObj)) as any;
         if (findRow) {
           this.deleteDayUse = [...this.deleteDayUse, findRow.id];
         }
@@ -446,7 +446,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   async deleteFile() {
     await this.baseService.deleteFile(this.curFile.fileName, this.id).then((res: any) => {
       if (res.status == HttpStatusCode.Ok) {
-        this.baseService.showSuccess("Delete file successfully.");
+        this.baseService.showSuccess('Delete file successfully.');
       }
     });
     this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter((item: any) => item.fileName !== this.curFile.fileName);
@@ -491,14 +491,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   editCellUP(row: any, cell: any) {
     if (!this.readMode) {
-      let cur = new Set(row.cellEdit);
+      const cur = new Set(row.cellEdit);
       cur.add(cell);
       row.cellEdit = Array.from(cur);
     }
   }
 
   readCellUP(row: any, cell: any) {
-    let cur = new Set(row.cellEdit);
+    const cur = new Set(row.cellEdit);
     if (!this.validField(row, cell)) {
       cur.delete(cell);
       row.cellEdit = Array.from(cur);
@@ -510,8 +510,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async test() {
-    console.log(this.formGroupDetail.getRawValue(), 'this.formGroupDetail.getRawValue()')
-    console.log(this.tblUnitPrice.data)
+    console.log(this.formGroupDetail.getRawValue(), 'this.formGroupDetail.getRawValue()');
+    console.log(this.tblUnitPrice.data);
   }
 
   async filterNation() {
@@ -519,7 +519,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async nationSelected(event: any) {
-    let nation = this.listQuocGia.find((s: any) => s.id === event.option.value);
+    const nation = this.listQuocGia.find((s: any) => s.id === event.option.value);
     this.formGroupDetail.patchValue({nationId: nation?.id, nation: nation?.engName});
   }
 
@@ -530,7 +530,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       isVehicle: this.formGroupDetail.getRawValue().isVehicle
     }).then(res => {
       if (res.status == HttpStatusCode.Ok && res.data) {
-        let data = res.data;
+        const data = res.data;
         this.formGroupDetail.patchValue({
           marketType: data.marketType,
           marketCode: data.marketCode,
@@ -545,14 +545,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           supplierEmail: data.email,
           carType: data.carType,
           notes: data.notes,
-        })
+        });
       }
     });
   }
 
   async setReadMode(form: FormGroup) {
-    let fieldContract = ['marketCode', 'marketName', 'nation', 'classification', 'flightGroup', 'statusUsage', 'supplierName', 'supplierPhone', 'supplierEmail', 'carType', 'standardCheckIn', 'standardCheckOut', 'notes', 'doiTuongDichVu', 'contractSpec'];
-    let fieldAnnex = ['partnerName'];
+    const fieldContract = ['marketCode', 'marketName', 'nation', 'classification', 'flightGroup', 'statusUsage', 'supplierName', 'supplierPhone', 'supplierEmail', 'carType', 'standardCheckIn', 'standardCheckOut', 'notes', 'doiTuongDichVu', 'contractSpec'];
+    const fieldAnnex = ['partnerName'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -582,7 +582,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       }));
     } else if (this.viewType = 'PL') {
       const resContract = await this.baseService.detail(this.contractObj.bizDocId);
-      let bizDocIdContract = cloneDeep(resContract.data.bizDocId);
+      const bizDocIdContract = cloneDeep(resContract.data.bizDocId);
       ['contractCode', 'contractName', 'contractNo', 'signedDate', 'dueDateNumber', 'handoverDate', 'priceUnitInfo']
         .forEach(key => delete resContract.data[key]);
       this.formGroupDetail.patchValue({
@@ -597,7 +597,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.addTbl63(),
       ]);*/
     } else {
-      this.formGroupDetail.patchValue({})
+      this.formGroupDetail.patchValue({});
     }
   }
 
@@ -609,24 +609,24 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       this.tbl62.data = this.tbl62.data.filter((s: any) => !!s.col622);
       this.tbl63.data = this.tbl63.data.filter((s: any) => !!s.col632);
 
-      let notAllDay1 = this.tbl61.data.map((s: any) => ({
+      const notAllDay1 = this.tbl61.data.map((s: any) => ({
         id: s.id, typeCheck: s.col611, fromHour: s.col612, toHour: s.col613, rate: s.col614, action: s.action
       }));
-      let notAllDay2 = this.tbl62.data.map((s: any) => ({
+      const notAllDay2 = this.tbl62.data.map((s: any) => ({
         id: s.id, typeCheck: s.col621, fromHour: s.col622, toHour: s.col623, rate: s.col624, action: s.action
       }));
-      let type1 = notAllDay1;
-      let type1InsertNotAllDay = notAllDay1.filter((s: any) => s.action == 'ADD');
-      let type1UpdateNotAllDay = notAllDay1.filter((s: any) => s.action != 'ADD');
-      let type2 = notAllDay2;
-      let type2InsertNotAllDay = notAllDay2.filter((s: any) => s.action == 'ADD');
-      let type2UpdateNotAllDay = notAllDay2.filter((s: any) => s.action != 'ADD');
+      const type1 = notAllDay1;
+      const type1InsertNotAllDay = notAllDay1.filter((s: any) => s.action == 'ADD');
+      const type1UpdateNotAllDay = notAllDay1.filter((s: any) => s.action != 'ADD');
+      const type2 = notAllDay2;
+      const type2InsertNotAllDay = notAllDay2.filter((s: any) => s.action == 'ADD');
+      const type2UpdateNotAllDay = notAllDay2.filter((s: any) => s.action != 'ADD');
 
-      let priceNotAllDayRequests = {type1: type1, type2: type2};
-      let insertNotAllDay = {type1: type1InsertNotAllDay, type2: type2InsertNotAllDay};
-      let updateNotAllDay = {type1: type1UpdateNotAllDay, type2: type2UpdateNotAllDay};
+      const priceNotAllDayRequests = {type1: type1, type2: type2};
+      const insertNotAllDay = {type1: type1InsertNotAllDay, type2: type2InsertNotAllDay};
+      const updateNotAllDay = {type1: type1UpdateNotAllDay, type2: type2UpdateNotAllDay};
 
-      let dayUses = this.tbl63.data.map((s: any) => ({
+      const dayUses = this.tbl63.data.map((s: any) => ({
         id: s.id,
         checkinFrom: s.col631,
         checkoutTo: s.col632,
@@ -664,7 +664,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       this.formGroupDetailInit = {...this.formGroupDetail.getRawValue()};
       this.formGroupDetail.markAllAsTouched();
       if (this.formGroupDetail.invalid) {
-        this.findInvalidControls(this.formGroupDetail)
+        this.findInvalidControls(this.formGroupDetail);
         return;
       }
       // const update = !!this.formGroupDetail.getRawValue().bizDocId;
@@ -705,22 +705,22 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         return 'Not valid';
       }
     } else if (cell == 'col613') {
-      let from = +(row['col612'].replace(":", ""));
-      let to = +(row['col613'].replace(":", ""));
+      const from = +(row['col612'].replace(':', ''));
+      const to = +(row['col613'].replace(':', ''));
       if (to < from) {
         inputRef.control.setErrors({invalid: true});
         return 'Must after from';
       }
     } else if (cell == 'col623') {
-      let from = +(row['col622'].replace(":", ""));
-      let to = +(row['col623'].replace(":", ""));
+      const from = +(row['col622'].replace(':', ''));
+      const to = +(row['col623'].replace(':', ''));
       if (to < from) {
         inputRef.control.setErrors({invalid: true});
         return 'Must after from';
       }
     } else if (cell == 'col632') {
-      let from = +(row['col631'].replace(":", ""));
-      let to = +(row['col632'].replace(":", ""));
+      const from = +(row['col631'].replace(':', ''));
+      const to = +(row['col632'].replace(':', ''));
       if (to < from) {
         inputRef.control.setErrors({invalid: true});
         return 'Must after from';

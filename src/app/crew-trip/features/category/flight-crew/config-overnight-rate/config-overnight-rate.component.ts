@@ -1,8 +1,8 @@
 import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
-import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from "@angular/material/autocomplete";
-import {MatAnchor, MatButton, MatButtonModule} from "@angular/material/button";
+import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
+import {MatAnchor, MatButton, MatButtonModule} from '@angular/material/button';
 import {
   MatCard,
   MatCardActions,
@@ -10,7 +10,7 @@ import {
   MatCardHeader, MatCardModule,
   MatCardSubtitle,
   MatCardTitle
-} from "@angular/material/card";
+} from '@angular/material/card';
 import {
   MatError,
   MatFormField,
@@ -19,18 +19,18 @@ import {
   MatLabel,
   MatPrefix,
   MatSuffix
-} from "@angular/material/form-field";
-import {MatInput} from "@angular/material/input";
-import {MatSelect} from "@angular/material/select";
-import {CommonModule, DecimalPipe, NgClass, NgForOf, NgIf, TitleCasePipe} from "@angular/common";
-import {SelectMultipleComponent} from "src/app/crew-trip/shared/component/select-multiple/select-multiple.component";
-import {CommonComponent} from "src/app/crew-trip/shared/common.component";
-import {FlightCrewService} from "src/app/crew-trip/core/services/flight-crew-service";
-import {FlightMarketService} from "src/app/crew-trip/core/services/ flight-market.service";
-import {InfoPlaneService} from "src/app/crew-trip/core/services/InfoPlaneService.service";
-import {UsersService} from "src/app/crew-trip/core/services/users-service";
-import {ConfigOvernightRateService} from "src/app/crew-trip/core/services/config-overnight-rate-service";
-import {MatDialog} from "@angular/material/dialog";
+} from '@angular/material/form-field';
+import {MatInput} from '@angular/material/input';
+import {MatSelect} from '@angular/material/select';
+import {CommonModule, DecimalPipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
+import {SelectMultipleComponent} from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {FlightCrewService} from 'src/app/crew-trip/core/services/flight-crew-service';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
+import {InfoPlaneService} from 'src/app/crew-trip/core/services/InfoPlaneService.service';
+import {UsersService} from 'src/app/crew-trip/core/services/users-service';
+import {ConfigOvernightRateService} from 'src/app/crew-trip/core/services/config-overnight-rate-service';
+import {MatDialog} from '@angular/material/dialog';
 import {
   MatCell,
   MatCellDef,
@@ -39,20 +39,20 @@ import {
   MatHeaderRow,
   MatHeaderRowDef,
   MatRow, MatRowDef, MatTable, MatTableModule
-} from "@angular/material/table";
-import {MatPaginator, MatPaginatorModule} from "@angular/material/paginator";
-import {FileUploadComponent, FileUploadValidators} from "@iplab/ngx-file-upload";
-import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
-import {MatMenuModule} from "@angular/material/menu";
-import {MatCheckboxModule} from "@angular/material/checkbox";
-import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
-import {MatTab, MatTabGroup} from "@angular/material/tabs";
-import {RoleFunctionComponent} from "src/app/crew-trip/features/roles/role-function/role-function.component";
-import {NoDataRowOutlet} from "@angular/cdk/table";
-import {InputComponent} from "src/app/ui-elements/input/input.component";
-import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {OtherCrewComponent} from "src/app/crew-trip/features/category/flight-crew/other-crew/other-crew.component";
-import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
+} from '@angular/material/table';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {FileUploadComponent, FileUploadValidators} from '@iplab/ngx-file-upload';
+import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
+import {NoDataRowOutlet} from '@angular/cdk/table';
+import {InputComponent} from 'src/app/ui-elements/input/input.component';
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {OtherCrewComponent} from 'src/app/crew-trip/features/category/flight-crew/other-crew/other-crew.component';
+import {SelectionComponent} from 'src/app/crew-trip/shared/component/selection/selection.component';
 
 @Component({
   selector: 'app-config-overnight-rate',

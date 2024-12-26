@@ -21,7 +21,7 @@ import { FlightMarketService } from 'src/app/crew-trip/core/services/ flight-mar
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { Constant, DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
-import { NgxTrimDirectiveModule } from "ngx-trim-directive";
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 
 @Component({
   selector: 'app-vehicle',

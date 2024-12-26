@@ -90,7 +90,7 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
         item.aircraftTypeLabel = item.aircraftType;
       }
       if (!this.aircraftTypes.includes(`${period}_${item.aircraftType}`)) {
-        this.aircraftTypes.push(`${period}_${item.aircraftType}`)
+        this.aircraftTypes.push(`${period}_${item.aircraftType}`);
         item.aircraftTypeLabel = item.aircraftType;
       }
 
@@ -160,7 +160,7 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
 
   // hàm công thức tính chung
   calculate(index: number, key: string) {
-    let data: any = this.dataSource.data[index];
+    const data: any = this.dataSource.data[index];
     data[key] = this.calculateFormula(data, formula[key].formula);
     const groupFormula = formula[key].groupFormula;
     return data[key];
@@ -168,7 +168,7 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
 
   // hàm tính tổng theo group (rowspan)
   getTotalByGroup(index: number, key: string, control: string) {
-    let data: any = this.dataSource.data[index];
+    const data: any = this.dataSource.data[index];
     const filterData = this.dataSource.data.filter((item: any) => this.groupFormula(item, data, formula[key].groupFormula));
     data[control] = filterData.map((t: any) => t[key]).reduce((acc, value) => acc + value, 0);
   }
@@ -185,7 +185,7 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
 
   // hàm filter theo group
   groupFormula(dataSource: any, dataTarget: any, formula: string): any {
-    let formulaArr = formula.split(' ').map((item: string) => item.trim());
+    const formulaArr = formula.split(' ').map((item: string) => item.trim());
     if (formulaArr.length > 0) {
       formulaArr.forEach((item: string, index: number) => {
         if (!(item.includes('&&') || item.includes('||'))) {
@@ -200,6 +200,6 @@ export class BudgetProcurementHotelComponent implements OnInit, AfterViewChecked
       const calFormular = dynamicFunction(dataSource, dataTarget);
       return calFormular;
     }
-    return false
+    return false;
   }
 }

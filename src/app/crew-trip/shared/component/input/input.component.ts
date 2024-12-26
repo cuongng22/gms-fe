@@ -1,15 +1,15 @@
-import {Component, Input, Optional, Self, SimpleChanges} from '@angular/core';
+import {Component, Input, Optional, Self, SimpleChanges, OnChanges} from '@angular/core';
 import {
   ControlValueAccessor,
   NgControl,
   ReactiveFormsModule,
   FormControl
-} from "@angular/forms";
-import {MatFormField, MatFormFieldModule} from "@angular/material/form-field";
-import {MatInput, MatInputModule} from "@angular/material/input";
-import {NgIf} from "@angular/common";
-import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
+} from '@angular/forms';
+import {MatFormField, MatFormFieldModule} from '@angular/material/form-field';
+import {MatInput, MatInputModule} from '@angular/material/input';
+import {NgIf} from '@angular/common';
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 
 @Component({
   selector: 'app-input',
@@ -27,15 +27,15 @@ import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.comp
   templateUrl: './input.component.html',
   styleUrl: './input.component.scss',
 })
-export class InputComponent implements ControlValueAccessor {
-  @Input() placeholder: string = '';
-  @Input() label: string = '';
-  @Input() sizeInput: string = 'sm';
-  @Input() readonly: boolean = false;
+export class InputComponent implements ControlValueAccessor, OnChanges {
+  @Input() placeholder = '';
+  @Input() label = '';
+  @Input() sizeInput = 'sm';
+  @Input() readonly = false;
   @Input() hint = '';
-  @Input() maxLength: number = 100;
-  @Input() required: boolean = false;
-  @Input() type: string = 'text';
+  @Input() maxLength = 100;
+  @Input() required = false;
+  @Input() type = 'text';
 
   get formControl(): FormControl {
     return (this.ngControl?.control as FormControl) ?? new FormControl();

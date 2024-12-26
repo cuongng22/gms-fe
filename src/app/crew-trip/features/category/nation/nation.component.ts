@@ -19,9 +19,9 @@ import {NoDataRowOutlet} from '@angular/cdk/table';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {HttpStatusCode} from "@angular/common/http";
-import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {InputComponent} from "src/app/crew-trip/shared/component/input/input.component";
+import {HttpStatusCode} from '@angular/common/http';
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
 
 
 @Component({
@@ -43,13 +43,13 @@ export class NationComponent extends CommonComponent implements OnInit {
   _displayedColumns: {
     label: string; value: string, type?: string, format?: string
   }[] = [
-    {label: $localize`Code`, value: 'code'}, {
-      label: $localize`English name`,
-      value: 'engName'
-    }, {label: $localize`VietNam name`, value: 'vniName'}, {
-      label: $localize`Region`,
-      value: 'area'
-    }, {label: $localize`Status`, value: 'activeLabel'},];
+      {label: $localize`Code`, value: 'code'}, {
+        label: $localize`English name`,
+        value: 'engName'
+      }, {label: $localize`VietNam name`, value: 'vniName'}, {
+        label: $localize`Region`,
+        value: 'area'
+      }, {label: $localize`Status`, value: 'activeLabel'},];
 
   constructor() {
     super();
@@ -82,7 +82,7 @@ export class NationComponent extends CommonComponent implements OnInit {
     this.toggleDialogCreate();
   }
 
-  existCode: boolean = false;
+  existCode = false;
 
   override async save(): Promise<any> {
     super.save().then(value => {
@@ -106,7 +106,7 @@ export class NationComponent extends CommonComponent implements OnInit {
   }
 
   existCodeValidator(control: AbstractControl): ValidationErrors | null {
-    return this.existCode ? {existCode: true} : null
+    return this.existCode ? {existCode: true} : null;
   }
 
 }

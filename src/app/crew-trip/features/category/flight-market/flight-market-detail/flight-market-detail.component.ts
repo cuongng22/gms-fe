@@ -86,7 +86,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   override formGroupDetail = this.formBuilder.group({
     id: [],
     marketCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3),
-    this.airportCodeExistsValidator.bind(this)
+      this.airportCodeExistsValidator.bind(this)
     ]],
     marketName: ['', Validators.maxLength(250)],
     nationId: ['', Validators.required],
@@ -293,7 +293,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       if (e.status === HttpStatusCode.Conflict) {
         this.airportCodeExists = true;
         this.formGroupDetail.controls.marketCode.updateValueAndValidity();
-        this.airportCodeExistsMessage = e?.error?.error ?? $localize`:@@airportCodeExistsMessage:Airport code ${MESSAGE.ALREADY_EXISTS}`
+        this.airportCodeExistsMessage = e?.error?.error ?? $localize`:@@airportCodeExistsMessage:Airport code ${MESSAGE.ALREADY_EXISTS}`;
         this.airportCodeExists = false;
       } else {
         this.baseService.showError((e.error?.error ?? e.error?.error?.code) ?? MESSAGE.ERROR);
@@ -406,6 +406,6 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   }
 
   airportCodeExistsValidator(control: AbstractControl): ValidationErrors | null {
-    return this.airportCodeExists ? { airportCodeExists: true } : null
+    return this.airportCodeExists ? { airportCodeExists: true } : null;
   }
 }

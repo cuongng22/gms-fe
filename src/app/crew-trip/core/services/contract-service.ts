@@ -4,8 +4,8 @@ import {firstValueFrom} from 'rxjs';
 import {HttpHeaders, HttpParams} from '@angular/common/http';
 import {Response, Role} from 'src/app/crew-trip/features/system/users/users.model';
 import {response} from 'express';
-import {DetailResponse, ListResponse} from "src/app/crew-trip/shared/models/common.model";
-import {MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
+import {DetailResponse, ListResponse} from 'src/app/crew-trip/shared/models/common.model';
+import {MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 
 @Injectable({
   providedIn: 'root'
