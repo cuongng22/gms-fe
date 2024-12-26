@@ -33,8 +33,9 @@
               <mat-select formControlName="emailClass">
                 <mat-option [value]="null" i18n="@@allStatus">-- All email type --</mat-option>
                 <mat-option value="INVOICE_CONFIRMATION" i18n="@@confirmation">Invoice confirmation</mat-option>
-                <mat-option value="EXPECTED_SCHEDULE" i18n="@@estimated">Estimated schedule email</mat-option>
-                <mat-option value="CHANGED_SCHEDULE" i18n="@@changed">Changed schedule email</mat-option>
+                <mat-option value="INVOICE_REMINDER" i18n="@@confirmation">Invoice reminder</mat-option>
+                <mat-option value="EXPECTED_SCHEDULE" i18n="@@estimated">Estimated schedule</mat-option>
+                <mat-option value="CHANGED_SCHEDULE" i18n="@@changed">Changed schedule</mat-option>
               </mat-select>
             </mat-form-field>
           </div>
@@ -151,7 +152,7 @@
           <td *matCellDef="let element;let i = dataIndex" mat-cell>
             <div class="action-buttons d-flex align-items-center justify-content-end">
               <a mat-button type="button" (click)="onViewDetail(element.id)">
-                <i class="material-symbols-outlined" title="Detail" i18n-title="@@detail">
+                <i class="material-symbols-outlined" title="View" i18n-title="@@view">
                   visibility
                 </i>
               </a>
@@ -218,6 +219,7 @@
                     <mat-option value="EXPECTED_SCHEDULE" i18n>
                       Expected schedule
                     </mat-option>
+                    <mat-option value="INVOICE_REMINDER" i18n="@@confirmation">Invoice reminder</mat-option>
                     <mat-option value="CHANGED_SCHEDULE" i18n>
                       Changed schedule
                     </mat-option>
@@ -248,8 +250,8 @@
                     </mat-option>
                   </mat-select>
                   @if (
-                    formGroupDetail.controls.emailClass.hasError('required') &&
-                    formGroupDetail.controls.emailClass.touched) {
+                    formGroupDetail.controls.marketClass.hasError('required') &&
+                    formGroupDetail.controls.marketClass.touched) {
                     <mat-error i18n="@@fullNameRequired"> Market type {{MESSAGE.REQUIRED}}</mat-error>
                   }
                 </mat-form-field>
@@ -279,8 +281,7 @@
               <div class="form-group" sizeInput="sm">
                   <div class="NgxEditor__Wrapper">
                     <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
-                    <ngx-editor  [required]="true" [editor]="editor" formControlName="content" placeholder="Content"
-                                >
+                    <ngx-editor  [required]="true" [editor]="editor" formControlName="content" placeholder="Email body *">
                     </ngx-editor>
                     @if (
                       formGroupDetail.controls.content.hasError('required') &&
