@@ -1,28 +1,36 @@
-import { CommonModule, AsyncPipe } from '@angular/common';
-import { Component, DestroyRef, ElementRef, Inject, inject, model, ViewChild, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
-import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTableDataSource, MatTableModule } from '@angular/material/table';
-import { RouterLink, RouterModule } from '@angular/router';
-import { FileUploadModule } from '@iplab/ngx-file-upload';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { debounceTime, startWith, Subject } from 'rxjs';
-import { BudgetProcurementPlanService } from 'src/app/crew-trip/core/services/budget-procurement-plan.service';
-import { AlreadyExistsValidator } from 'src/app/crew-trip/core/validator/already-exists';
-import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
-import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
+import {CommonModule, AsyncPipe} from '@angular/common';
+import {Component, DestroyRef, ElementRef, Inject, inject, model, ViewChild, OnInit} from '@angular/core';
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {
+  MAT_DIALOG_DATA,
+  MatDialog,
+  MatDialogActions,
+  MatDialogClose,
+  MatDialogContent,
+  MatDialogRef,
+  MatDialogTitle
+} from '@angular/material/dialog';
+import {MatFormFieldModule, MatFormField} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
+import {MatSelectModule} from '@angular/material/select';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {RouterLink, RouterModule} from '@angular/router';
+import {FileUploadModule} from '@iplab/ngx-file-upload';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {debounceTime, startWith, Subject} from 'rxjs';
+import {BudgetProcurementPlanService} from 'src/app/crew-trip/core/services/budget-procurement-plan.service';
+import {AlreadyExistsValidator} from 'src/app/crew-trip/core/validator/already-exists';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-budget-procurement-list',
@@ -34,7 +42,7 @@ import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
   templateUrl: './budget-procurement-list.component.html',
   styleUrl: './budget-procurement-list.component.scss'
 })
-export class BudgetProcurementListComponent implements OnInit extends CommonComponent {
+export class BudgetProcurementListComponent extends CommonComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(BudgetProcurementPlanService);
@@ -49,12 +57,12 @@ export class BudgetProcurementListComponent implements OnInit extends CommonComp
 
   //Bản nháp, Hoàn thành KH quốc tế, Hoàn thành KH quốc nội, Từ chối, Đã duyệt, Xác nhận
   statusList: { code: string, value: string }[] = [
-    { code: '1', value: 'Bản nháp' },
-    { code: '2', value: 'Hoàn thành KH quốc tế' },
-    { code: '3', value: 'Hoàn thành KH quốc nội' },
-    { code: '4', value: 'Từ chối' },
-    { code: '5', value: 'Đã duyệt' },
-    { code: '6', value: 'Xác nhận' }
+    {code: '1', value: 'Bản nháp'},
+    {code: '2', value: 'Hoàn thành KH quốc tế'},
+    {code: '3', value: 'Hoàn thành KH quốc nội'},
+    {code: '4', value: 'Từ chối'},
+    {code: '5', value: 'Đã duyệt'},
+    {code: '6', value: 'Xác nhận'}
   ];
 
   override formGroupSearch = this.formBuilder.group({
@@ -145,7 +153,7 @@ export class BudgetProcurementListComponent implements OnInit extends CommonComp
   }
 
   async showConfirmReject(id: any) {
-    this.formGroupReject.patchValue({ id: id });
+    this.formGroupReject.patchValue({id: id});
     this.toggleDialogReject();
   }
 
@@ -195,7 +203,7 @@ export class BudgetProcurementListComponent implements OnInit extends CommonComp
       budgetProcurementDetail = res;
     }
     this.dialog.open(DialogBudgetProcurementDetail, {
-      data: { isCreate: isCreate, budgetProcurementDetail: budgetProcurementDetail },
+      data: {isCreate: isCreate, budgetProcurementDetail: budgetProcurementDetail},
     });
 
   }
@@ -205,7 +213,6 @@ export class BudgetProcurementListComponent implements OnInit extends CommonComp
     this.showDialogReject = !this.showDialogReject;
   }
 }
-
 
 
 @Component({
