@@ -309,7 +309,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
     } catch (e: any) {
       if (e?.error instanceof Blob) {
         const err = await e?.error.text();
-        this.baseService.showError(JSON.parse(err)?.error ?? this.MESSAGE.ERROR);
+        this.baseService.showError(JSON.parse(err)?.error.file ?? JSON.parse(err)?.error ?? this.MESSAGE.ERROR);
       } else {
         this.baseService.showError(e.error?.error ?? e.error?.error?.code ?? this.MESSAGE.ERROR);
       }

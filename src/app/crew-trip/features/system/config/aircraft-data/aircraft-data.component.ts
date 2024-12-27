@@ -1,26 +1,14 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {
-  AbstractControl,
-  FormBuilder,
-  ReactiveFormsModule,
-  ValidationErrors,
-  Validators
-} from '@angular/forms';
+import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import { MatButtonModule} from '@angular/material/button';
-import {
-
-  MatCardModule,
-
-} from '@angular/material/card';
-import {
-  MatTableModule
-} from '@angular/material/table';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule,} from '@angular/material/card';
+import {MatTableModule} from '@angular/material/table';
 import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatOption} from '@angular/material/core';
-import { MatPaginatorModule} from '@angular/material/paginator';
+import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSelect} from '@angular/material/select';
 import {CommonModule, NgClass, NgIf} from '@angular/common';
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
@@ -28,10 +16,6 @@ import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {InfoPlaneService} from 'src/app/crew-trip/core/services/InfoPlaneService.service';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
-import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
-import {NoDataRowOutlet} from '@angular/cdk/table';
-import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
 import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 import {HttpStatusCode} from '@angular/common/http';
 
@@ -39,7 +23,7 @@ import {HttpStatusCode} from '@angular/common/http';
   selector: 'app-aircraft-data',
   standalone: true,
   imports: [
-    CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent, NgxTrimDirectiveModule, MatHint
+    CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatSuffix, NgxTrimDirectiveModule, MatHint
   ],
   templateUrl: './aircraft-data.component.html',
   styleUrl: './aircraft-data.component.scss'
@@ -58,8 +42,8 @@ export class AircraftDataComponent extends CommonComponent implements OnInit {
     });
     this.formGroupDetail = this.fb.group({
       id: ['',],
-      acGroup: ['', [Validators.required, this.existValidator.bind(this)]],
-      acType: ['', [Validators.required, this.existValidator.bind(this)]],
+      acGroup: ['', [Validators.required, this.existValidator.bind(this), Validators.maxLength(5)]],
+      acType: ['', [Validators.required, this.existValidator.bind(this), Validators.maxLength(5)]],
       note: ['', [Validators.maxLength(500)]],
       active: [true,]
     });
@@ -87,7 +71,6 @@ export class AircraftDataComponent extends CommonComponent implements OnInit {
       id: id,
       acType: actype
     });
-    console.log('this.formGroupDetailthis.formGroupDetail:', this.formGroupDetail);
     this.toggleDialogDelete();
   }
 
