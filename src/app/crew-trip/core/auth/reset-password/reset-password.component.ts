@@ -1,12 +1,10 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {CommonModule} from '@angular/common';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from '@angular/material/card';
-import {MatCheckbox} from '@angular/material/checkbox';
 import {TranslateModule} from '@ngx-translate/core';
 import {MatIconModule} from '@angular/material/icon';
 import {NgxSpinnerModule, NgxSpinnerService} from 'ngx-spinner';
@@ -14,15 +12,12 @@ import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
-import {ifValidator} from 'ngxtension/if-validator';
-import {NgxControlError} from 'ngxtension/control-error';
 import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
-    TranslateModule, MatIconModule, NgxSpinnerModule, NgxTrimDirectiveModule, NgxControlError
+  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, TranslateModule, MatIconModule, NgxSpinnerModule, NgxTrimDirectiveModule
   ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss'
