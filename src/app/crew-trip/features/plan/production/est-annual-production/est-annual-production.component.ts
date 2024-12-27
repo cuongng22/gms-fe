@@ -99,7 +99,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
     fltMonth: new FormControl(''),
     acId: new FormControl(''),
     acGroup: new FormControl(''),
-    versionId: new FormControl(''),
+    versionId: new FormControl('', Validators.required),
     myControl: new FormControl('')
   });
 
@@ -215,7 +215,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
       this.keySearchAcId.unsubscribe();
       this.keySearchAcGroup.unsubscribe();
     });
-
+    this.formGroupSearchInit = {...this.formGroupDetail};
 
     // -----------------List Est Annual Production-------------
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value)];

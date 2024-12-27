@@ -57,8 +57,8 @@
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>FLT_Month</mat-label>
-                <mat-select formControlName="fltMonth">
-                  <!--                  <mat-option value="">&#45;&#45; All FLT_Month &#45;&#45;</mat-option>-->
+                <mat-select formControlName="fltMonth" class="w-100">
+                  <mat-option [value]="null">-- All FLT_Month --</mat-option>
                   <mat-option *ngFor="let month of fltMonthList" [value]="month">{{
                       month
                     }}
@@ -105,6 +105,9 @@
                     <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
+                @if (!!formGroupSearch.controls['versionId'].hasError('required')) {
+                  <mat-error><span i18n>Version</span><span i18n> is required</span></mat-error>
+                }
               </mat-form-field>
             </div>
             <div class="col d-sm-flex flex-row  justify-content-lg-start justify-content-md-center">

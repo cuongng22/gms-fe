@@ -60,7 +60,7 @@ export class ProfileComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     const token = localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN);
     if (!token || !this.userCurrent || this.isTokenExpired(token)) {
       this.userService.logout();
@@ -69,8 +69,10 @@ export class ProfileComponent implements OnInit {
         skipLocationChange: true
       });
     }
+    this.userCurrent = await this.userService.getUserById(this.userService.getUserLogin()?.id);
     this.avatarUrl = this.userCurrent?.avartarUrl ?? null;
     this.formGroup.disable();
+
   }
 
 
