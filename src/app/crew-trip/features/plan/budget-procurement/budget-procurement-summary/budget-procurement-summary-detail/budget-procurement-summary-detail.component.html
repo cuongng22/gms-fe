@@ -70,10 +70,10 @@
 <mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
         <mat-accordion multi>
-            <mat-expansion-panel class="remove-mat-expansion-panel-padding" [expanded]="true">
+            <mat-expansion-panel class="remove-mat-expansion-panel-padding" [expanded]="true" #panelCalculationBasisState>
                 <mat-expansion-panel-header>
                     <mat-panel-title>
-                        <h5 class="mb-0">II. <span i18n="@@generalInformation">Calculation basis</span></h5>
+                        <h5 class="mb-0">II. <span i18n="@@calculationBasis">Calculation basis</span></h5>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div style="position: absolute; top: 6px; right: 60px;">
@@ -81,11 +81,11 @@
                         <i class="material-symbols-outlined">
                             directory_sync
                         </i>
-                        <span i18n="@@save">Data Summary</span>
+                        <span i18n="@@dataSummary">Data Summary</span>
                     </button>
                 </div>
                 @if (category() === CategoryEnum.DOMESTIC) {
-                <app-domestic-budget-procurement-flight-rate #domesticBudgetProcurementFlightRate />
+                <app-domestic-budget-procurement-flight-rate #domesticFlightRate [data]="dataDetail" />
                 } @else {
                 <mat-accordion multi>
                     <mat-expansion-panel #panelFlightRateYearState [expanded]="false">
@@ -99,8 +99,8 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <app-international-budget-procurement-flight-rate
-                                #internationalBudgetProcurementFlightRate />
+                            <app-international-budget-procurement-flight-rate [data]="dataDetail"
+                                #internationalFlightRate />
                         </div>
                     </mat-expansion-panel>
 
@@ -115,11 +115,11 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <app-budget-procurement-flight-period #budgetProcurementFlightPeriod />
+                            <app-budget-procurement-flight-period #internationalFlightPeriod />
                         </div>
                     </mat-expansion-panel>
 
-                    <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel [expanded]="true" #panelFlightOvernightState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">2.3
@@ -130,7 +130,7 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <app-budget-procurement-flight-overnight #budgetProcurementFlightOvernight
+                            <app-budget-procurement-flight-overnight #internationalFlightOvernight
                                 (valueChange)="overnightValueChange($event)" />
                         </div>
                     </mat-expansion-panel>
@@ -143,14 +143,14 @@
 <mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
         <mat-accordion multi class="mt-10">
-            <mat-expansion-panel class="remove-mat-expansion-panel-padding" #panelBudgetPlanState>
+            <mat-expansion-panel [expanded]="true" class="remove-mat-expansion-panel-padding" #panelBudgetPlanState>
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <h5 class="mb-0">III. <span i18n="@@budgetPlan">Budget Plan</span></h5>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-accordion multi>
-                    <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel [expanded]="true" #panelBudgetPlanHotelState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">3.1
@@ -162,41 +162,39 @@
                         </mat-expansion-panel-header>
                         <div>
                             @if(category() === CategoryEnum.DOMESTIC){
-                            <app-domestic-budget-procurement-hotel #domesticBudgetProcurementHotel type="BUDGET"
-                                [yearPlan]="yearPlan()"
-                                [updateBudgetPlan]="detailData?.updateBudgetPlan">
+                            <app-domestic-budget-procurement-hotel #domesticBudgetHotel [type]="PlanCategoryEnum.BUDGET"
+                                [yearPlan]="yearPlan()" [updateBudgetPlan]="dataDetail?.updateBudgetPlan">
                             </app-domestic-budget-procurement-hotel>
                             }@else {
                             <app-international-budget-procurement-hotel #internationalBudgetHotel
-                                [yearPlan]="yearPlan()" type="BUDGET"
-                                [updateBudgetPlan]="detailData?.updateBudgetPlan" />
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
                             }
                         </div>
                     </mat-expansion-panel>
-                    <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel [expanded]="false" #panelBudgetPlanCarRentalState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">3.2
-                                    <span i18n="@@procurementPlanForCarRental">
-                                        Procurement Plan for Car Rental
+                                    <span i18n="@@budgetPlanForTransportation">
+                                        Budget Plan for Transportation
                                     </span>
                                 </h6>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
                             @if(category() === CategoryEnum.DOMESTIC){
-                            <app-domestic-budget-procurement-car-rental #domesticBudgetProcurementCarRental
-                                [yearPlan]="yearPlan()" type="BUDGET"
-                                [updateBudgetPlan]="detailData?.updateBudgetPlan" />
+                            <app-domestic-budget-procurement-car-rental #domesticBudgetCarRental [yearPlan]="yearPlan()"
+                                [type]="PlanCategoryEnum.BUDGET" [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
                             }@else {
                             <app-international-budget-procurement-car-rental #internationalBudgetCarRental
-                                [yearPlan]="yearPlan()" type="BUDGET"
-                                [updateBudgetPlan]="detailData?.updateBudgetPlan" />
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
                             }
                         </div>
                     </mat-expansion-panel>
-                    @if(category() === CategoryEnum.DOMESTIC && !!detailData?.wetLeaseFlag){
-                    <mat-expansion-panel [expanded]="true" #budgetPlanForWetLease>
+                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.wetLeaseFlag){
+                    <mat-expansion-panel [expanded]="false" #panelBudgetPlanWetLeaseState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">3.3
@@ -207,8 +205,8 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            <app-domestic-budget-procurement-wet-lease [yearPlan]="yearPlan()" type="BUDGET"
-                                [updateBudgetPlan]="detailData?.updateBudgetPlan"
+                            <app-domestic-budget-procurement-wet-lease [yearPlan]="yearPlan()"
+                                [type]="PlanCategoryEnum.BUDGET" [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
                                 #domesticBudgetWetLease />
                         </div>
                     </mat-expansion-panel>
@@ -221,14 +219,14 @@
 <mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
         <mat-accordion multi class="mt-10">
-            <mat-expansion-panel class="remove-mat-expansion-panel-padding" #panelProcurementPlanState>
+            <mat-expansion-panel [expanded]="true" class="remove-mat-expansion-panel-padding" #panelProcurementPlanState>
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <h5 class="mb-0">IV. <span i18n="@@procurementPlan">Procurement Plan</span></h5>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <mat-accordion multi>
-                    <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel [expanded]="false" #panelProcurementPlanHotelState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">4.1
@@ -239,12 +237,20 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
+                            @if(category() === CategoryEnum.DOMESTIC){
+                            <app-domestic-budget-procurement-hotel #domesticProcurementHotel
+                                [type]="PlanCategoryEnum.PROCUREMENT" [yearPlan]="yearPlan()"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan">
+                            </app-domestic-budget-procurement-hotel>
+                            }@else {
                             <app-international-budget-procurement-hotel #internationalProcurementHotel
-                                [yearPlan]="yearPlan()" type="PROCUREMENT"
-                                [updateBudgetPlan]="detailData?.updateBudgetPlan" />
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                            }
+
                         </div>
                     </mat-expansion-panel>
-                    <mat-expansion-panel [expanded]="true">
+                    <mat-expansion-panel [expanded]="false" #panelProcurementPlanCarRentalState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">4.2
@@ -255,11 +261,36 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
+                            @if(category() === CategoryEnum.DOMESTIC){
+                            <app-domestic-budget-procurement-car-rental #domesticProcurementCarRental
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                            }@else {
                             <app-international-budget-procurement-car-rental #internationalProcurementCarRental
-                                [yearPlan]="yearPlan()" type="PROCUREMENT"
-                                [updateBudgetPlan]="detailData?.updateBudgetPlan" />
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                            }
+
                         </div>
                     </mat-expansion-panel>
+                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.wetLeaseFlag){
+                    <mat-expansion-panel [expanded]="false" #panelProcurementPlanWetLeaseState>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6 class="mb-0">4.3
+                                    <span i18n="@@procurementPlanForWetLease">
+                                        Procurement Plan for Wet Lease
+                                    </span>
+                                </h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <app-domestic-budget-procurement-wet-lease [yearPlan]="yearPlan()"
+                                [type]="PlanCategoryEnum.PROCUREMENT" [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                #domesticProcurementWetLease />
+                        </div>
+                    </mat-expansion-panel>
+                    }
                 </mat-accordion>
             </mat-expansion-panel>
         </mat-accordion>

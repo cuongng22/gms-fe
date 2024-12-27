@@ -1,3 +1,5 @@
+import { MatExpansionPanel } from "@angular/material/expansion";
+
 export const HOTEL = 'Hotel';
 export const CAR_RENTAL = 'CarRental';
 export enum ServiceType {
@@ -55,3 +57,17 @@ export enum CategoryEnum {
 }
 
 export const PADDING_0 = '0px !important';
+
+
+export function openPanel(panel: MatExpansionPanel, isCheckData?: boolean, data?: any[]): void {
+    if (isCheckData && !(data && data.length > 0)) {
+        return;
+    }
+    panel?.open();
+    panel.disabled = false;
+}
+
+export function closePanel(panel: MatExpansionPanel): void {
+    panel?.close();
+    panel.disabled = true;
+}

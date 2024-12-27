@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, input } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, input, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -11,7 +11,7 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-budget-procurement-wet-lease.model';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
-import { PADDING_0 } from '../../../budget-procurement.model';
+import { PADDING_0, PlanCategoryEnum } from '../../../budget-procurement.model';
 
 @Component({
   selector: 'app-domestic-budget-procurement-wet-lease',
@@ -32,9 +32,10 @@ export class DomesticBudgetProcurementWetLeaseComponent {
 
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
   yearPlan = input<number>(2024); // năm kế hoạch
-  type = input<string>(''); // Loại Ngân sách hoặc mua sắm (budget/procurement)
+  type = input<PlanCategoryEnum>(PlanCategoryEnum.BUDGET); // Loại Ngân sách hoặc mua sắm (budget/procurement)
 
   planFlightPeriods: any[] = []; // danh sách chuyến bay theo giai đoạn
+  year = signal<number>(2024);
 
   PADDING_0 = PADDING_0;
 
@@ -57,13 +58,16 @@ export class DomesticBudgetProcurementWetLeaseComponent {
   setDataSource(data: any[]) {
     console.log('DomesticBudgetProcurementWetLeaseComponent: ', data);
     if (!data || data.length === 0) {
+      const year = this.type() === PlanCategoryEnum.BUDGET ? this.yearPlan() : (Number(this.yearPlan()) + 1);
       this.dataSource.data = [{
         id: null,
         content: 'Phòng đơn/đôi',
-        year: this.yearPlan()
+        year: year
       }];
+      this.year.set(year);
     } else {
       this.dataSource.data = [...data];
+      this.year.set(data[0].year);
     }
     this.getRow();
     this.dataSource.data.forEach((item: any, index) => {

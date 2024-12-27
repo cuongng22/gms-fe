@@ -12,7 +12,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-budget-procurement-hotel.model';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
-import { PADDING_0 } from '../../../budget-procurement.model';
+import { PADDING_0, PlanCategoryEnum } from '../../../budget-procurement.model';
 
 @Component({
   selector: 'app-domestic-budget-procurement-hotel',
@@ -27,7 +27,7 @@ export class DomesticBudgetProcurementHotelComponent implements OnInit, AfterVie
 
   yearPlan = input<number>(2024); // năm kế hoạch
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
-  type = input<string>(''); // Loại Ngân sách hoặc mua sắm (budget/procurement)
+  type = input<PlanCategoryEnum>(PlanCategoryEnum.BUDGET); // Loại Ngân sách hoặc mua sắm (budget/procurement)
 
   dataTransformPipe = inject(DataTransformPipe);
   dataSource = new MatTableDataSource();
@@ -37,6 +37,7 @@ export class DomesticBudgetProcurementHotelComponent implements OnInit, AfterVie
   rowDef: string[] = [];
 
   PADDING_0 = PADDING_0;
+  PlanCategoryEnum = PlanCategoryEnum;
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
 
@@ -56,7 +57,7 @@ export class DomesticBudgetProcurementHotelComponent implements OnInit, AfterVie
 
     this.dataSource.data.forEach((item: any, index) => {
       let period = '';
-      if (this.type() === 'PROCUREMENT') {
+      if (this.type() === PlanCategoryEnum.PROCUREMENT) {
         period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
       } else {
         period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;

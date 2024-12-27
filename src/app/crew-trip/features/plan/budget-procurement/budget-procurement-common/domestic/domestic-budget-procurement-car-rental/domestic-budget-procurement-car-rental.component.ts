@@ -11,6 +11,8 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-budget-procurement-car-rental.model';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
+import { PlanCategoryEnum } from '../../../budget-procurement.model';
+import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-domestic-budget-procurement-car-rental',
@@ -25,7 +27,7 @@ export class DomesticBudgetProcurementCarRentalComponent {
 
   yearPlan = input<number>(2024); // năm kế hoạch
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
-  type = input<string>(''); // Loại Ngân sách hoặc mua sắm (budget/procurement)
+  type = input<PlanCategoryEnum>(PlanCategoryEnum.BUDGET); // Loại Ngân sách hoặc mua sắm (budget/procurement)
 
   dataTransformPipe = inject(DataTransformPipe);
   dataSource = new MatTableDataSource();
@@ -34,11 +36,27 @@ export class DomesticBudgetProcurementCarRentalComponent {
   headerRowDef2: string[] = [];
   rowDef: string[] = [];
 
+  PlanCategoryEnum = PlanCategoryEnum;
+
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
 
   }
   ngOnInit(): void {
     this.getRow();
+  }
+
+  setDataSource(data: any) {
+    this.dataSource.data = [...data]
+    this.getRow();
+    this.dataSource.data.forEach((item: any, index) => {
+      let period = '';
+      if (this.type() === PlanCategoryEnum.PROCUREMENT) {
+        period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+      } else {
+        period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+      }
+      item.periodLabel = period;
+    });
   }
 
   // TÍnh dòng tổng 

@@ -6,7 +6,7 @@
 // #, Phân loại, Danh mục hàng hóa dịch vụ, Khối, Số, Đơn vị, Giá trị kế hoạch mua sắm (chưa bao gồm VAT), 
 // Giá trị kế hoạch mua sắm (bao gồm VAT), Hình thức lựa chọn Nhà cung cấp, Thời điểm dự, Tổng thời gian, Thời gian, % VAT, 
 
-import { HOTEL, ServiceType } from "../../budget-procurement.model";
+import { HOTEL, PlanCategoryEnum, ServiceType } from "../../budget-procurement.model";
 
 // Ghi chú, Trạng thái, Hành động"
 export function getDisplayedColumns(type: string): string[] {
@@ -16,21 +16,21 @@ export function getDisplayedColumns(type: string): string[] {
         { column: "category", visible: true },
         { column: "name", visible: true },
         { column: "division", visible: true },
-        { column: "num", visible: !type || type === 'PROCUREMENT' },
-        { column: "unit", visible: !type || type === 'PROCUREMENT' },
-        { column: "unitPrice", visible: !type || type === 'BUDGET' },
-        { column: "cost", visible: !type || type === 'BUDGET' },
-        { column: "budget", visible: !type || type === 'BUDGET' },
-        { column: "procurementValueExVat", visible: !type || type === 'PROCUREMENT' },
-        { column: "procurementValue", visible: !type || type === 'PROCUREMENT' },
-        { column: "supplierMethod", visible: !type || type === 'PROCUREMENT' },
-        { column: "estimatedTime", visible: !type || type === 'PROCUREMENT' },
-        { column: "totalTime", visible: !type || type === 'PROCUREMENT' },
-        { column: "time", visible: !type || type === 'PROCUREMENT' },
+        { column: "num", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "unit", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "unitPrice", visible: !type || type === PlanCategoryEnum.BUDGET },
+        { column: "cost", visible: !type || type === PlanCategoryEnum.BUDGET },
+        { column: "budget", visible: !type || type === PlanCategoryEnum.BUDGET },
+        { column: "procurementValueExVat", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "procurementValue", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "supplierMethod", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "estimatedTime", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "totalTime", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "time", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
         { column: "vat", visible: true },
-        { column: "planVsEstimate", visible: !type || type === 'BUDGET' },
-        { column: "planVsEstimateRate", visible: !type || type === 'BUDGET' },
-        { column: "unitPriceYear", visible: !type || type === 'BUDGET' },
+        { column: "planVsEstimate", visible: !type || type === PlanCategoryEnum.BUDGET },
+        { column: "planVsEstimateRate", visible: !type || type === PlanCategoryEnum.BUDGET },
+        { column: "unitPriceYear", visible: !type || type === PlanCategoryEnum.BUDGET },
         { column: "notes", visible: true },
         { column: "status", visible: true },
         { column: "action", visible: true },
@@ -42,21 +42,21 @@ export function getDisplayedColumnTotals(type: string): string[] {
     const columns: { column: string, visible: boolean }[] = [
         { column: "total", visible: true },
         { column: "divisionTotal", visible: true },
-        { column: "numTotal", visible: !type || type === 'PROCUREMENT' },
-        { column: "unitTotal", visible: !type || type === 'PROCUREMENT' },
-        { column: "unitPriceTotal", visible: !type || type === 'BUDGET' },
-        { column: "costTotal", visible: !type || type === 'BUDGET' },
-        { column: "budgetTotal", visible: !type || type === 'BUDGET' },
-        { column: "procurementValueExVatTotal", visible: !type || type === 'PROCUREMENT' },
-        { column: "procurementValueTotal", visible: !type || type === 'PROCUREMENT' },
-        { column: "supplierMethodTotal", visible: !type || type === 'PROCUREMENT' },
-        { column: "estimatedTimeTotal", visible: !type || type === 'PROCUREMENT' },
-        { column: "totalTimeTotal", visible: !type || type === 'PROCUREMENT' },
-        { column: "timeTotal", visible: !type || type === 'PROCUREMENT' },
+        { column: "numTotal", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "unitTotal", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "unitPriceTotal", visible: !type || type === PlanCategoryEnum.BUDGET },
+        { column: "costTotal", visible: !type || type === PlanCategoryEnum.BUDGET },
+        { column: "budgetTotal", visible: !type || type === PlanCategoryEnum.BUDGET },
+        { column: "procurementValueExVatTotal", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "procurementValueTotal", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "supplierMethodTotal", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "estimatedTimeTotal", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "totalTimeTotal", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
+        { column: "timeTotal", visible: !type || type === PlanCategoryEnum.PROCUREMENT },
         { column: "vatTotal", visible: true },
-        { column: "planVsEstimateTotal", visible: !type || type === 'BUDGET' },
-        { column: "planVsEstimateRateTotal", visible: !type || type === 'BUDGET' },
-        { column: "unitPriceYearTotal", visible: !type || type === 'BUDGET' },
+        { column: "planVsEstimateTotal", visible: !type || type === PlanCategoryEnum.BUDGET },
+        { column: "planVsEstimateRateTotal", visible: !type || type === PlanCategoryEnum.BUDGET },
+        { column: "unitPriceYearTotal", visible: !type || type === PlanCategoryEnum.BUDGET },
         { column: "notesTotal", visible: true },
         { column: "statusTotal", visible: true },
         { column: "actionTotal", visible: true },
@@ -68,7 +68,7 @@ export function getControlTotal(control: string, serviceType: string): string {
     switch (control) {
         case 'cost':
             return serviceType === ServiceType.HOTEL ? 'costHotel' : 'costCar';
-        case 'budget':
+        case PlanCategoryEnum.BUDGET:
             return serviceType === ServiceType.HOTEL ? 'budgetVatHotel' : 'budgetVatCar';
         case 'procurementValueExVat':
             return serviceType === ServiceType.HOTEL ? 'procurementValueHotel' : 'procurementValueCar';

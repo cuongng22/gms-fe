@@ -4,7 +4,7 @@
             <ng-container matColumnDef="month" sticky>
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.rowspan]="2"
                     i18n="@@month">
-                    Month
+                    {{type() === PlanCategoryEnum.BUDGET? 'Month':'Period'}}
                 </th>
                 <td mat-cell *matCellDef="let element" class="fw-bold">
                     {{element.periodLabel}}
@@ -18,6 +18,13 @@
                     Total rooms in current year
                 </th>
             </ng-container>
+            <ng-container matColumnDef="numberOfRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
+                    i18n="@@numberOfRoom">
+                    Number of Room
+                </th>
+            </ng-container>
+
             <ng-container matColumnDef="singleRoomYearPerform">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
                     Single Room
@@ -25,7 +32,8 @@
                 <td mat-cell *matCellDef="let element">
                     {{element.singleRoomYearPerform}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('singleRoomYearPerform') | number}}
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomYearPerform') | number}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="doubleRoomYearPerform">
@@ -35,7 +43,8 @@
                 <td mat-cell *matCellDef="let element">
                     {{element.doubleRoomYearPerform}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('doubleRoomYearPerform') | number}}
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomYearPerform') | number}} }
                 </td>
             </ng-container>
 
@@ -52,7 +61,8 @@
                 <td mat-cell *matCellDef="let element; let index = dataIndex;">
                     {{element.singleRoom}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('singleRoom') | number}}
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoom') | number}} }
                 <td>
             </ng-container>
             <ng-container matColumnDef="doubleRoom">
@@ -62,7 +72,9 @@
                 <td mat-cell *matCellDef="let element; let index = dataIndex;">
                     {{element.doubleRoom}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('doubleRoom') | number}}</td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoom') | number}} }
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="extraRoom">
@@ -88,7 +100,9 @@
                     </div>
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('singleRoomExtra') | number}}</td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomExtra') | number}} }
+                </td>
             </ng-container>
             <ng-container matColumnDef="doubleRoomExtra">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
@@ -107,7 +121,61 @@
                     </div>
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('doubleRoomExtra') | number}}</td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomExtra') | number}} }
+                </td>
+            </ng-container>
+
+            <!-- Đơn giá phòng đơn -->
+            <ng-container matColumnDef="singleRoomRate">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
+                    i18n="@@singleRoomRate">
+                    Single Room Rate
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="priceSingleRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVAT">
+                    Excluding VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;">
+                    {{element.priceSingleRoom}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            <ng-container matColumnDef="priceSingleRoomVat">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVAT">
+                    Including VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;">
+                    {{element.priceSingleRoomVat}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <!-- Đơn giá phòng đôi -->
+            <ng-container matColumnDef="twinRoomRate">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
+                    i18n="@@twinRoomRate">
+                    Twin Room Rate
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="priceDoubleRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVAT">
+                    Excluding VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;">
+                    {{element.priceDoubleRoom}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            <ng-container matColumnDef="priceDoubleRoomVat">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVAT">
+                    Including VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;">
+                    {{element.priceDoubleRoomVat}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
 
 

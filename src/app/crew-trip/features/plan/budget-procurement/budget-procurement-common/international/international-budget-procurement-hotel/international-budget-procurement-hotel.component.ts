@@ -12,6 +12,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { checkChange, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './international-budget-procurement-hotel.model';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
+import { PlanCategoryEnum } from '../../../budget-procurement.model';
 
 @Component({
   selector: 'app-international-budget-procurement-hotel',
@@ -42,8 +43,8 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
   yearPlan = input<number>(2024); // năm kế hoạch
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
-  type = input<string>(''); // Loại Ngân sách hoặc mua sắm (budget/procurement)
-
+  type = input<PlanCategoryEnum>(PlanCategoryEnum.BUDGET); // Loại Ngân sách hoặc mua sắm (budget/procurement)
+  PlanCategoryEnum = PlanCategoryEnum;
 
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) { }
@@ -62,7 +63,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
     this.dataSource.data.forEach((item: any, index) => {
       let period = '';
-      if (this.type() === 'PROCUREMENT') {
+      if (this.type() === PlanCategoryEnum.PROCUREMENT) {
         period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
       } else {
         period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
@@ -171,7 +172,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
    */
   private calculateData(item: any, index: number) {
 
-    if (this.type() === 'PROCUREMENT') {
+    if (this.type() === PlanCategoryEnum.PROCUREMENT) {
       // thêm tỉ lệ chuyến bay nghỉ đêm
       item.flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOvernight === item.overnight).map(item => item.flightRate);
 

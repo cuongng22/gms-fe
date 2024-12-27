@@ -66,7 +66,7 @@
                     {{element.singleRoom}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === 'BUDGET'){ {{getTotal('singleRoom')}} }
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoom')}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="doubleRoom">
@@ -78,7 +78,7 @@
                     {{element.doubleRoom}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === 'BUDGET'){ {{getTotal('doubleRoom')}} }</td>
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoom')}} }</td>
             </ng-container>
             <ng-container matColumnDef="singleRoomReserved">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center wrap-text"
@@ -89,7 +89,7 @@
                     {{element.singleRoomReserved}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === 'BUDGET'){ {{getTotal('singleRoomReserved')}} }</td>
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomReserved')}} }</td>
             </ng-container>
 
 
@@ -119,7 +119,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === 'BUDGET'){ {{getTotal('singleRoomOther')}} }</td>
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomOther')}} }</td>
             </ng-container>
             <ng-container matColumnDef="doubleRoomOther">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center"
@@ -141,7 +141,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === 'BUDGET'){ {{getTotal('doubleRoomOther')}} }
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomOther')}} }
                 </td>
             </ng-container>
 
@@ -163,7 +163,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === 'BUDGET'){ {{getTotal('singleRoomEarly')}} }
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomEarly')}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="doubleRoomEarly">
@@ -178,7 +178,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === 'BUDGET'){ {{getTotal('doubleRoomEarly')}} }
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomEarly')}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="singleRoomEarlyReserved">
@@ -194,7 +194,7 @@
                 </td>
 
                 <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === 'BUDGET'){ {{getTotal('singleRoomEarlyReserved')}} }
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomEarlyReserved')}} }
                 </td>
             </ng-container>
 
@@ -217,7 +217,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === 'BUDGET'){ {{getTotal('singleRoomLate')}} }
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomLate')}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="doubleRoomLate">
@@ -232,7 +232,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === 'BUDGET'){ {{getTotal('doubleRoomLate')}} }
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomLate')}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="singleRoomLateReserved">
@@ -247,7 +247,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === 'BUDGET'){ {{getTotal('singleRoomLateReserved')}} }
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomLateReserved')}} }
                 </td>
             </ng-container>
 

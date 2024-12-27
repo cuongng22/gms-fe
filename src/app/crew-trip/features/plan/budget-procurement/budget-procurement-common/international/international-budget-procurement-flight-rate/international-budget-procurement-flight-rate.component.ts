@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -18,9 +18,17 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
   styleUrl: './international-budget-procurement-flight-rate.component.scss'
 })
 export class InternationalBudgetProcurementFlightRateComponent implements OnInit {
-
+  data = input<any>();
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ["year", "rateOrTotal"];
+
+  constructor() {
+    effect(() => {
+      if (this.data()) {
+        this.setDataSource(this.data().planFlightRates ?? []);
+      }
+    })
+  }
 
   ngOnInit(): void {
   }

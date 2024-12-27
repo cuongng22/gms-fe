@@ -114,7 +114,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   }
   set procurementPlanFlag(value: boolean) {
     this._procurementPlanFlag = value;
-    this.setDefaultValueGeneral(true);
+    this.setDefaultValueGeneral(this._procurementPlanFlag);
   }
 
   endDateLessThanStartDate(control: AbstractControl): ValidationErrors | null {

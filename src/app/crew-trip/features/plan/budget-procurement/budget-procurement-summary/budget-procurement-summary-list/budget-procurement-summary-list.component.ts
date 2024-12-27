@@ -52,6 +52,7 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
   loadData(bodySearch?: any) {
     try {
       this.spinner.show();
+      this.setDisplayedColumns(bodySearch.categoryOfPlan);
       const body = {
         planBudgetProcurementId: this.planBudgetProcurementId(),
         category: this.categoryType(),

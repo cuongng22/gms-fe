@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject, input, OnInit, signal, viewChild, ViewChild, HostListener, AfterViewChecked, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, input, OnInit, signal, viewChild, ViewChild, HostListener, AfterViewChecked, ChangeDetectorRef, AfterViewInit, AfterContentInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -23,13 +23,14 @@ import { InternationalBudgetProcurementCarRentalComponent } from '../../budget-p
 import { BudgetProcurementCostAnalysisComponent } from '../../budget-procurement-common/budget-procurement-cost-analysis/budget-procurement-cost-analysis.component';
 import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { DataSummayRequest, summaryDataExample, summaryDataExample1 } from './budget-procurement-summary-detail.model';
-import { CategoryEnum, PlanCategoryEnum } from '../../budget-procurement.model';
+import { DataSummayRequest, dataDetailExample, summaryDataExample, summaryDataExample1 } from './budget-procurement-summary-detail.model';
+import { CategoryEnum, closePanel, openPanel, PlanCategoryEnum } from '../../budget-procurement.model';
 import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
 import { DomesticBudgetProcurementFlightRateComponent } from '../../budget-procurement-common/domestic/domestic-budget-procurement-flight-rate/domestic-budget-procurement-flight-rate.component';
 import { DomesticBudgetProcurementHotelComponent } from '../../budget-procurement-common/domestic/domestic-budget-procurement-hotel/domestic-budget-procurement-hotel.component';
 import { DomesticBudgetProcurementCarRentalComponent } from '../../budget-procurement-common/domestic/domestic-budget-procurement-car-rental/domestic-budget-procurement-car-rental.component';
 import { DomesticBudgetProcurementWetLeaseComponent } from '../../budget-procurement-common/domestic/domestic-budget-procurement-wet-lease/domestic-budget-procurement-wet-lease.component';
+import { V } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-budget-procurement-summary-detail',
@@ -46,45 +47,45 @@ import { DomesticBudgetProcurementWetLeaseComponent } from '../../budget-procure
   templateUrl: './budget-procurement-summary-detail.component.html',
   styleUrl: './budget-procurement-summary-detail.component.scss'
 })
-export class BudgetProcurementSummaryDetailComponent extends CommonComponent implements OnInit, AfterViewChecked {
+export class BudgetProcurementSummaryDetailComponent extends CommonComponent implements OnInit, AfterViewChecked, AfterViewInit {
   override baseService = inject(PlanBudgetProcurementService);
   dataTransformPipe = inject(DataTransformPipe);
 
-  @ViewChild('panelFlightRateYearState', { static: false }) panelFlightRateYearState: MatExpansionPanel;
-  @ViewChild('panelFlightPeriodState', { static: false }) panelFlightPeriodState: MatExpansionPanel;
-  @ViewChild('panelBudgetPlanState', { static: false }) panelBudgetPlanState: MatExpansionPanel;
-  @ViewChild('panelProcurementPlanState', { static: false }) panelProcurementPlanState: MatExpansionPanel;
-  @ViewChild('budgetPlanForWetLease', { static: false }) budgetPlanForWetLease: MatExpansionPanel;
+  @ViewChild('panelCalculationBasisState', { static: false }) panelCalculationBasisState: MatExpansionPanel; // II
+  @ViewChild('panelFlightRateYearState', { static: false }) panelFlightRateYearState: MatExpansionPanel; // 2.1
+  @ViewChild('panelFlightPeriodState', { static: false }) panelFlightPeriodState: MatExpansionPanel; // 2.2
+  @ViewChild('panelFlightOvernightState', { static: false }) panelFlightOvernightState: MatExpansionPanel; // 2.3
+
+  @ViewChild('panelBudgetPlanState', { static: false }) panelBudgetPlanState: MatExpansionPanel; // III
+  @ViewChild('panelBudgetPlanHotelState', { static: false }) panelBudgetPlanHotelState: MatExpansionPanel; // 3.1
+  @ViewChild('panelBudgetPlanCarRentalState', { static: false }) panelBudgetPlanCarRentalState: MatExpansionPanel; // 3.2
+  @ViewChild('panelBudgetPlanWetLeaseState', { static: false }) panelBudgetPlanWetLeaseState: MatExpansionPanel; // 3.3
+
+  @ViewChild('panelProcurementPlanState', { static: false }) panelProcurementPlanState: MatExpansionPanel; // IV
+  @ViewChild('panelProcurementPlanHotelState', { static: false }) panelProcurementPlanHotelState: MatExpansionPanel; // 4.1
+  @ViewChild('panelProcurementPlanCarRentalState', { static: false }) panelProcurementPlanCarRentalState: MatExpansionPanel; // 4.2
+  @ViewChild('panelProcurementPlanWetLeaseState', { static: false }) panelProcurementPlanWetLeaseState: MatExpansionPanel; // 4.3
+
 
   @ViewChild('budgetProcurementGeneral', { static: false }) budgetProcurementGeneral: BudgetProcurementGeneralComponent;
-  // budgetProcurementGeneral = viewChild<BudgetProcurementGeneralComponent>('budgetProcurementGeneral');
-  @ViewChild('budgetProcurementFlightPeriod', { static: false }) budgetProcurementFlightPeriod: BudgetProcurementFlightPeriodComponent;
-  // budgetProcurementFlightPeriod = viewChild<BudgetProcurementFlightPeriodComponent>('budgetProcurementFlightPeriod');
-  @ViewChild('budgetProcurementFlightOvernight', { static: false }) budgetProcurementFlightOvernight: BudgetProcurementFlightOvernightComponent;
-  // budgetProcurementFlightOvernight = viewChild<BudgetProcurementFlightOvernightComponent>('budgetProcurementFlightOvernight');
 
-  @ViewChild('internationalBudgetProcurementFlightRate', { static: false }) internationalBudgetProcurementFlightRate: InternationalBudgetProcurementFlightRateComponent;
-  // internationalBudgetProcurementFlightRate = viewChild<InternationalBudgetProcurementFlightRateComponent>('InternationalBudgetProcurementFlightRateComponent');
-  @ViewChild('internationalBudgetHotel', { static: false }) internationalBudgetHotel: InternationalBudgetProcurementHotelComponent;
-  // internationalBudgetHotel = viewChild<InternationalBudgetProcurementHotelComponent>('internationalBudgetHotel');
-  @ViewChild('internationalBudgetCarRental', { static: false }) internationalBudgetCarRental: InternationalBudgetProcurementCarRentalComponent;
-  // internationalBudgetCarRental = viewChild<InternationalBudgetProcurementCarRentalComponent>('internationalBudgetCarRental');
-  @ViewChild('internationalProcurementHotel', { static: false }) internationalProcurementHotel: InternationalBudgetProcurementHotelComponent;
-  // internationalProcurementHotel = viewChild<InternationalBudgetProcurementHotelComponent>('internationalProcurementHotel');
-  @ViewChild('internationalProcurementCarRental', { static: false }) internationalProcurementCarRental: InternationalBudgetProcurementCarRentalComponent;
-  // internationalProcurementCarRental = viewChild<InternationalBudgetProcurementCarRentalComponent>('internationalProcurementCarRental');
+  @ViewChild('internationalFlightRate', { static: false }) internationalFlightRate: InternationalBudgetProcurementFlightRateComponent; // 2.1
+  @ViewChild('internationalFlightPeriod', { static: false }) internationalFlightPeriod: BudgetProcurementFlightPeriodComponent; // 2.2
+  @ViewChild('internationalFlightOvernight', { static: false }) internationalFlightOvernight: BudgetProcurementFlightOvernightComponent; // 2.3
+  @ViewChild('internationalBudgetHotel', { static: false }) internationalBudgetHotel: InternationalBudgetProcurementHotelComponent; // 3.1
+  @ViewChild('internationalBudgetCarRental', { static: false }) internationalBudgetCarRental: InternationalBudgetProcurementCarRentalComponent; // 3.2
+  @ViewChild('internationalProcurementHotel', { static: false }) internationalProcurementHotel: InternationalBudgetProcurementHotelComponent; // 4.1
+  @ViewChild('internationalProcurementCarRental', { static: false }) internationalProcurementCarRental: InternationalBudgetProcurementCarRentalComponent; // 4.2
 
-  @ViewChild('domesticBudgetProcurementFlightRate', { static: false }) domesticBudgetProcurementFlightRate: DomesticBudgetProcurementFlightRateComponent;
-  // domesticBudgetProcurementFlightRate = viewChild<DomesticBudgetProcurementFlightRateComponent>('domesticBudgetProcurementFlightRate');
-  @ViewChild('domesticBudgetProcurementHotel', { static: false }) domesticBudgetProcurementHotel: DomesticBudgetProcurementHotelComponent;
-  // domesticBudgetProcurementHotel = viewChild<DomesticBudgetProcurementHotelComponent>('domesticBudgetProcurementHotel');
-  @ViewChild('domesticBudgetProcurementCarRental', { static: false }) domesticBudgetProcurementCarRental: DomesticBudgetProcurementCarRentalComponent;
-  // domesticBudgetProcurementCarRental = viewChild<DomesticBudgetProcurementCarRentalComponent>('domesticBudgetProcurementCarRental');
-  @ViewChild('domesticBudgetWetLease', { static: false }) domesticBudgetWetLease: DomesticBudgetProcurementWetLeaseComponent;
-  // domesticBudgetWetLease = viewChild<DomesticBudgetProcurementWetLeaseComponent>('domesticBudgetWetLease');
+  @ViewChild('domesticFlightRate', { static: false }) domesticFlightRate: DomesticBudgetProcurementFlightRateComponent;  // II
+  @ViewChild('domesticBudgetHotel', { static: false }) domesticBudgetHotel: DomesticBudgetProcurementHotelComponent; // 3.1
+  @ViewChild('domesticBudgetCarRental', { static: false }) domesticBudgetCarRental: DomesticBudgetProcurementCarRentalComponent; // 3.2
+  @ViewChild('domesticBudgetWetLease', { static: false }) domesticBudgetWetLease: DomesticBudgetProcurementWetLeaseComponent; // 3.3
+  @ViewChild('domesticProcurementHotel', { static: false }) domesticProcurementHotel: DomesticBudgetProcurementHotelComponent; // 4.1
+  @ViewChild('domesticProcurementCarRental', { static: false }) domesticProcurementCarRental: DomesticBudgetProcurementCarRentalComponent; // 4.2
+  @ViewChild('domesticProcurementWetLease', { static: false }) domesticProcurementWetLease: DomesticBudgetProcurementWetLeaseComponent; // 4.3
 
   @ViewChild('budgetProcurementCostAnalysis', { static: false }) budgetProcurementCostAnalysis: BudgetProcurementCostAnalysisComponent;
-  // budgetProcurementCostAnalysis = viewChild<BudgetProcurementCostAnalysisComponent>('budgetProcurementCostAnalysis');
 
   id = input.required<number>();
   planBudgetProcurementId = input<number>(0, { alias: 'plan-budget-procurement-id' });
@@ -94,32 +95,37 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
   category = input.required<CategoryEnum>();
 
   CategoryEnum = CategoryEnum;
+  PlanCategoryEnum = PlanCategoryEnum;
 
-  summayData: any;
-  detailData: any;
+  dataDetail: any;
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     super();
   }
+
   override ngOnInit(): void {
     console.log('id: ', this.id());
     console.log('planBudgetProcurementId: ', this.planBudgetProcurementId());
     console.log('yearPlan: ', this.yearPlan());
     console.log('airportCode: ', this.airportCode());
     this.getDetailSummary();
-    // this.dataSummary();
-    this.setPanelState({})
   }
   ngAfterViewChecked(): void {
     this.cdRef.detectChanges(); // Phát hiện và cập nhật các thay đổi
   }
+  override  ngAfterViewInit(): void {
+    this.setPanelState();
+    this.setDataDetail();
+  }
+
+
 
   async getDetailSummary(): Promise<any> {
     try {
       await this.spinner.show();
-      const response = await this.baseService.getDetailSummary(this.id() ?? 0);
-      this.detailData = { ...response.data };
-      this.budgetProcurementGeneral.formGroupDetail.patchValue(this.summayData);
+      const response = await this.baseService.getDetailSummary(this.id() ?? 0); //dataDetailExample;//
+      this.dataDetail = { ...response.data };
+      this.budgetProcurementGeneral.formGroupDetail.patchValue(this.dataDetail);
       this.budgetProcurementGeneral.setDefaultValueGeneral();
 
     } catch (error) {
@@ -143,41 +149,22 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
         !!this.budgetProcurementGeneral.formGroupDetail.controls.earlyCheckinFlag.value,
         !!this.budgetProcurementGeneral.formGroupDetail.controls.lateCheckoutFlag.value
       );
-      const response = summaryDataExample1;// await this.baseService.dataSummary(requestBody);//summaryDataExample;//
-      this.summayData = { ...response.data }
+      const response = await this.baseService.dataSummary(requestBody);//summaryDataExample;//summaryDataExample1;//
+      this.dataDetail = {
+        ...this.dataDetail,
+        planFlightRates: response.data.planFlightRates ?? [],
+        planFlightPeriods: response.data.planFlightPeriods ?? [],
+        planOverightRates: response.data.planOverightRates ?? [],
+        planBudgetHotels: response.data.planBudgetHotels ?? [],
+        planBudgetCarentals: response.data.planBudgetCarentals ?? [],
+        planProcurementHotels: response.data.planProcurementHotels ?? [],
+        planProcurementCarentals: response.data.planProcurementCarentals ?? [],
+        planBudgetWetLease: response.data.planBudgetWetLease ?? [],
+        planProcumentWetLease: response.data.planProcumentWetLease ?? [],
+        listActype: response.data.listActype ?? [],
+      };
 
-      if (this.category() === CategoryEnum.DOMESTIC) {
-        this.domesticBudgetProcurementFlightRate.setDataSource(this.summayData.planFlightRates);
-
-        this.domesticBudgetProcurementHotel.setDataSource(this.summayData.planBudgetHotels, this.budgetProcurementGeneral.formGroupDetail.value);
-        if (this.detailData?.wetLeaseFlag) {
-          this.domesticBudgetWetLease.setDataSource(this.summayData.planBudgetWetLease ?? []);
-        }
-        // this.domesticBudgetWetLease()?.setDataSource(this.summayData.planBudgetWetLease ?? []);
-      } else {
-        this.internationalBudgetProcurementFlightRate.setDataSource(this.summayData.planFlightRates);
-        this.budgetProcurementFlightPeriod.setDataSource(this.summayData.planFlightPeriods ?? []);
-        this.budgetProcurementFlightOvernight.setDataSource(this.summayData.planOverightRates ?? []);
-
-        this.internationalBudgetHotel.calculateSpan((this.summayData.listActype ?? []).length, this.summayData.planOverightRates ?? length);
-        this.internationalBudgetHotel.setPlanFlightByOvernight(this.summayData.planOverightRates ?? []);
-        this.internationalBudgetHotel.setPlanFlightPeriods(this.summayData.planFlightPeriods ?? []);
-        this.internationalBudgetHotel.setDataSource(this.summayData.planBudgetHotels, this.budgetProcurementGeneral.formGroupDetail.value);
-
-        this.internationalProcurementHotel.calculateSpan((this.summayData.listActype ?? []).length, (this.summayData.planOverightRates ?? []).length);
-        this.internationalProcurementHotel.setPlanFlightByOvernight(this.summayData.planOverightRates ?? []);
-        this.internationalProcurementHotel.setPlanFlightPeriods(this.summayData.planFlightPeriods ?? []);
-        this.internationalProcurementHotel.setDataSource(this.summayData.planProcurementHotels ?? [], this.budgetProcurementGeneral.formGroupDetail.value);
-
-
-        this.internationalBudgetCarRental.setPlanFlightPeriods(this.summayData.planFlightPeriods ?? []);
-        this.internationalBudgetCarRental.setDataSource(this.summayData.planBudgetCarentals ?? []);
-        this.internationalProcurementCarRental.setPlanFlightPeriods(this.summayData.planFlightPeriods ?? []);
-        this.internationalProcurementCarRental.setDataSource(this.summayData.planProcurementCarentals ?? []);
-      }
-
-
-      this.setPanelState(response);
+      this.setDataDetail();
     } catch (error) {
       console.error('loadData error: ', error);
     } finally {
@@ -185,39 +172,100 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     }
   }
 
+  setDataDetail() {
+    if (this.category() === CategoryEnum.DOMESTIC) {
+      // this.domesticFlightRate.setDataSource(this.dataDetail.planFlightRates ?? []);
+      this.domesticBudgetHotel.setDataSource(this.dataDetail.planBudgetHotels ?? [], this.budgetProcurementGeneral.formGroupDetail.value);
+      this.domesticProcurementHotel.setDataSource(this.dataDetail.planProcurementHotels ?? [], this.budgetProcurementGeneral.formGroupDetail.value);
+      this.domesticBudgetCarRental.setDataSource(this.dataDetail.planBudgetCarentals ?? []);
+      this.domesticProcurementCarRental.setDataSource(this.dataDetail.planProcurementCarentals ?? []);
+
+      if (this.dataDetail?.wetLeaseFlag) {
+        this.domesticBudgetWetLease.setDataSource(this.dataDetail.planBudgetWetLease ?? []);
+        this.domesticProcurementWetLease.setDataSource(this.dataDetail.planProcumentWetLease ?? []);
+        this.domesticBudgetWetLease
+      }
+    } else {
+      // this.internationalFlightRate.setDataSource(this.dataDetail.planFlightRates);
+      this.internationalFlightPeriod.setDataSource(this.dataDetail.planFlightPeriods ?? []);
+      this.internationalFlightOvernight.setDataSource(this.dataDetail.planOverightRates ?? []);
+
+      this.internationalBudgetHotel.calculateSpan((this.dataDetail.listActype ?? []).length, this.dataDetail.planOverightRates ?? length);
+      this.internationalBudgetHotel.setPlanFlightByOvernight(this.dataDetail.planOverightRates ?? []);
+      this.internationalBudgetHotel.setPlanFlightPeriods(this.dataDetail.planFlightPeriods ?? []);
+      this.internationalBudgetHotel.setDataSource(this.dataDetail.planBudgetHotels, this.budgetProcurementGeneral.formGroupDetail.value);
+
+      this.internationalProcurementHotel.calculateSpan((this.dataDetail.listActype ?? []).length, (this.dataDetail.planOverightRates ?? []).length);
+      this.internationalProcurementHotel.setPlanFlightByOvernight(this.dataDetail.planOverightRates ?? []);
+      this.internationalProcurementHotel.setPlanFlightPeriods(this.dataDetail.planFlightPeriods ?? []);
+      this.internationalProcurementHotel.setDataSource(this.dataDetail.planProcurementHotels ?? [], this.budgetProcurementGeneral.formGroupDetail.value);
+
+
+      this.internationalBudgetCarRental.setPlanFlightPeriods(this.dataDetail.planFlightPeriods ?? []);
+      this.internationalBudgetCarRental.setDataSource(this.dataDetail.planBudgetCarentals ?? []);
+
+      this.internationalProcurementCarRental.setPlanFlightPeriods(this.dataDetail.planFlightPeriods ?? []);
+      this.internationalProcurementCarRental.setDataSource(this.dataDetail.planProcurementCarentals ?? []);
+    }
+
+
+    this.setPanelState();
+  }
+
   override async save(): Promise<any> {
     try {
       this.budgetProcurementGeneral.formGroupDetail.markAllAsTouched();
       this.budgetProcurementCostAnalysis.formGroupDetail.markAllAsTouched();
       if (this.budgetProcurementGeneral.formGroupDetail.invalid ||
-        this.budgetProcurementFlightOvernight.invalid() ||
+        (this.category() === CategoryEnum.INTERNATIONAL && this.internationalFlightOvernight.invalid()) ||
         this.budgetProcurementCostAnalysis.formGroupDetail.invalid) {
         return;
       }
       await this.spinner.show();
-      const update = !!this.summayData.data.id;
+      const update = !!this.dataDetail.id;
 
       let planFlightRates: any[] = [];
       let planFlightPeriods: any[] = [];
+      let planOverightRates: any[] = [];
       let planBudgetHotels: any[] = [];
+      let planBudgetCarentals: any[] = [];
+      let planProcurementHotels: any[] = [];
+      let planProcurementCarentals: any[] = [];
+      let planBudgetWetLease: any[] = [];
+      let planProcumentWetLease: any[] = [];
 
       if (this.category() === CategoryEnum.DOMESTIC) {
-        planFlightRates = [...this.domesticBudgetProcurementFlightRate.dataSource.data ?? [].map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }))];
+        planFlightRates = [...this.cleanData(this.domesticFlightRate.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.domesticBudgetHotel.dataSource.data ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.domesticBudgetCarRental.dataSource.data ?? [])];
+        planProcurementHotels = [...this.cleanData(this.domesticProcurementHotel.dataSource.data ?? [])];
+        planProcurementCarentals = [...this.cleanData(this.domesticProcurementCarRental.dataSource.data ?? [])];
+        if (this.dataDetail?.wetLeaseFlag) {
+          planBudgetWetLease = [...this.cleanData(this.domesticBudgetWetLease.dataSource.data ?? [])];
+          planProcumentWetLease = [...this.cleanData(this.domesticProcurementWetLease.dataSource.data ?? [])];
+        }
       } else {
-        planFlightRates = [...this.internationalBudgetProcurementFlightRate.dataSource.data ?? [].map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }))]
-        planFlightPeriods = [...this.budgetProcurementFlightPeriod.dataSource.data ?? [].map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }))]
+        planFlightRates = [...this.cleanData(this.internationalFlightRate.dataSource.data ?? [])]
+        planFlightPeriods = [...this.cleanData(this.internationalFlightPeriod.dataSource.data ?? [])];
+        planOverightRates = [...this.cleanData(this.internationalFlightOvernight.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.internationalBudgetHotel.dataSource.data ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.internationalBudgetCarRental.dataSource.data ?? [])];
+        planProcurementHotels = [...this.cleanData(this.internationalProcurementHotel.dataSource.data ?? [])];
+        planProcurementCarentals = [...this.cleanData(this.internationalProcurementCarRental.dataSource.data ?? [])];
       }
 
       const data = {
-        ...this.summayData.data,
+        ...this.dataDetail,
         ...this.budgetProcurementGeneral.formGroupDetail.value,
         planFlightRates: planFlightRates,
         planFlightPeriods: planFlightPeriods,
-        planOverightRates: [...this.budgetProcurementFlightOvernight.dataSource.data ?? [].map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }))],
-        planBudgetHotels: [...this.internationalBudgetHotel.dataSource.data ?? [].map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }))],
-        planBudgetCarentals: [...this.internationalBudgetCarRental.dataSource.data ?? [].map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }))],
-        planProcurementHotels: [...this.internationalProcurementHotel.dataSource.data ?? [].map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }))],
-        planProcurementCarentals: [...this.internationalProcurementCarRental.dataSource.data ?? [].map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }))],
+        planOverightRates: planOverightRates,
+        planBudgetHotels: planBudgetHotels,
+        planBudgetCarentals: planBudgetCarentals,
+        planProcurementHotels: planProcurementHotels,
+        planProcurementCarentals: planProcurementCarentals,
+        planBudgetWetLease: planBudgetWetLease,
+        planProcumentWetLease: planProcumentWetLease,
         ...this.budgetProcurementCostAnalysis.formGroupDetail.value
       };
       console.log('data: ', data);
@@ -231,94 +279,58 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     }
   }
 
-  setPanelState(response: any,): void {
-    let panelFlightRateYearState = this.panelFlightRateYearState;
-    let panelFlightPeriodState = this.panelFlightPeriodState;
-    let panelBudgetPlanState = this.panelBudgetPlanState;
-    let panelProcurementPlanState = this.panelProcurementPlanState;
-
+  setPanelState(): void {
     if (this.category() === CategoryEnum.DOMESTIC) {
-      if (this.detailData?.wetLeaseFlag) {
-        this.budgetPlanForWetLease.open();
-      }
-
+      this.setDomesticPanelState();
     } else {
-      if (!!response?.data?.planFlightRates && response?.data?.planFlightRates.length > 0) {
-        if (panelFlightRateYearState) {
-          panelFlightRateYearState.open();
-          panelFlightRateYearState.disabled = false;
-        }
-      } else if (panelFlightRateYearState) {
-        panelFlightRateYearState.close();
-        panelFlightRateYearState.disabled = true;
-      }
-
-      if (!!response?.data?.planFlightPeriods && response?.data?.planFlightPeriods.length > 0) {
-        if (panelFlightPeriodState) {
-          panelFlightPeriodState.open();
-          panelFlightPeriodState.disabled = false;
-        }
-      } else if (panelFlightPeriodState) {
-        panelFlightPeriodState.close();
-        panelFlightPeriodState.disabled = true;
-      }
+      this.setInternationalPanelState();
     }
+    this.setPanelStateCommon();
+  }
 
+  private setDomesticPanelState(): void {
+    openPanel(this.panelBudgetPlanCarRentalState, true, this.dataDetail?.planBudgetCarentals);
+    if (this.dataDetail?.wetLeaseFlag) {
+      openPanel(this.panelBudgetPlanWetLeaseState);
+      openPanel(this.panelProcurementPlanWetLeaseState)
+    }
+  }
 
+  private setInternationalPanelState(): void {
+    openPanel(this.panelFlightRateYearState, true, this.dataDetail?.planFlightRates);
+    openPanel(this.panelFlightPeriodState, true, this.dataDetail?.planFlightPeriods);
+    openPanel(this.panelBudgetPlanCarRentalState);
+  }
+
+  private setPanelStateCommon(): void {
+    openPanel(this.panelProcurementPlanHotelState, true, this.dataDetail?.planProcurementHotels);
+    openPanel(this.panelProcurementPlanCarRentalState, true, this.dataDetail?.planProcurementCarentals);
 
     switch (this.planType()) {
       case PlanCategoryEnum.PROCUREMENT:
-        if (panelBudgetPlanState) {
-          panelBudgetPlanState.close();
-          panelBudgetPlanState.disabled = true;
-        }
-        if (panelProcurementPlanState) {
-          panelProcurementPlanState.open();
-          panelProcurementPlanState.disabled = false;
-        }
+        closePanel(this.panelBudgetPlanState);
         break;
       case PlanCategoryEnum.BUDGET:
-        if (panelBudgetPlanState) {
-          panelBudgetPlanState.open();
-          panelBudgetPlanState.disabled = false;
-        }
-        if (panelProcurementPlanState) {
-          panelProcurementPlanState.close();
-          panelProcurementPlanState.disabled = true;
-        }
+        closePanel(this.panelProcurementPlanState);
         break;
       default:
-        if (panelBudgetPlanState) {
-          panelBudgetPlanState.open();
-          panelBudgetPlanState.disabled = false;
-        }
-        if (panelProcurementPlanState) {
-          panelProcurementPlanState.open();
-          panelProcurementPlanState.disabled = false;
-        }
         break;
     }
   }
 
   formGeneralValueChanges(event: any): void {
-    if (this.category() === CategoryEnum.DOMESTIC) {
-    } else {
+    if (this.category() === CategoryEnum.INTERNATIONAL) {
       this.internationalBudgetHotel.setGeneralData(event);
     }
   }
 
   overnightValueChange(event: any): void {
     console.log('overnightValueChange: ', event);
-    switch (event.actionType) {
-      case 'edit':
-        this.internationalBudgetHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.budgetProcurementFlightOvernight.dataSource.data)
-        break;
-      case 'delete':
-        this.internationalBudgetHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.budgetProcurementFlightOvernight.dataSource.data)
-        break;
-      default:
-        break;
-    }
+    this.internationalBudgetHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.internationalFlightOvernight.dataSource.data);
+  }
+
+  cleanData(data: any[]): any[] {
+    return data.map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }));
   }
 
 }

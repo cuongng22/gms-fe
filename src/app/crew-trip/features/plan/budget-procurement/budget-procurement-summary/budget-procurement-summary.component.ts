@@ -36,11 +36,11 @@ export class BudgetProcurementSummaryComponent extends CommonComponent implement
         break;
       case 'International':
         this.summaryInternational.setDisplayedColumns(data.categoryOfPlan);
-        this.summaryAll.loadData(bodySearch);
+        this.summaryInternational.loadData(bodySearch);
         break;
       case 'Domestic':
         this.summaryDomestic.setDisplayedColumns(data.categoryOfPlan);
-        this.summaryAll.loadData(bodySearch);
+        this.summaryDomestic.loadData(bodySearch);
         break;
     }
     console.log(data)

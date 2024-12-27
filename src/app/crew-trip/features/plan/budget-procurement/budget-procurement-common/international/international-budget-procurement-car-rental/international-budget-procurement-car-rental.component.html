@@ -21,7 +21,7 @@
                     {{element.numberFlight | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                    @if(type() === 'BUDGET'){ {{getTotal('numberFlight') | number}} }
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('numberFlight') | number}} }
                 </td>
             </ng-container>
 
@@ -34,7 +34,7 @@
                     {{element.numberVehicles | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                    @if(type() === 'BUDGET'){ {{getTotal('numberVehicles') | number}} }
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('numberVehicles') | number}} }
                 </td>
             </ng-container>
 
@@ -58,7 +58,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                    @if(type() === 'BUDGET'){ {{getTotal('extraTransfer') | number}} }
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('extraTransfer') | number}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="unitPrice">
