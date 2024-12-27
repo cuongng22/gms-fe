@@ -1,20 +1,18 @@
 import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
-import {MatFormField, MatFormFieldControl, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
-import {MatSelect, MatSelectModule} from '@angular/material/select';
+import {MatFormFieldModule} from '@angular/material/form-field';
+import {MatSelectModule} from '@angular/material/select';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {Router} from '@angular/router';
 import {MatCardModule} from '@angular/material/card';
 import {MatInputModule} from '@angular/material/input';
 import {MatNativeDateModule} from '@angular/material/core';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CommonModule, NgClass} from '@angular/common';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommonModule} from '@angular/common';
 import {MatButtonModule} from '@angular/material/button';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
-import  { jwtDecode } from 'jwt-decode';
 import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
@@ -29,7 +27,7 @@ import {decodeToken} from 'src/app/crew-trip/shared/utils/constant';
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [MatCardModule, FormsModule, MatButtonModule, ReactiveFormsModule, CommonModule, NgClass, MatFormField, MatSelectModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, FileUploadModule, NgxTrimDirectiveModule, InputComponent, SharedModule, SelectionComponent],
+  imports: [MatCardModule, FormsModule, MatButtonModule, ReactiveFormsModule, CommonModule, MatSelectModule, MatFormFieldModule, MatInputModule, MatDatepickerModule, MatNativeDateModule, FileUploadModule, NgxTrimDirectiveModule, InputComponent, SharedModule, SelectionComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.scss'
 })
@@ -66,7 +64,10 @@ export class ProfileComponent implements OnInit {
     const token = localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN);
     if (!token || !this.userCurrent || this.isTokenExpired(token)) {
       this.userService.logout();
-      this.router.navigate(['auth/login'], { fragment: HttpStatusCode.Unauthorized.toString(), skipLocationChange: true });
+      this.router.navigate(['auth/login'], {
+        fragment: HttpStatusCode.Unauthorized.toString(),
+        skipLocationChange: true
+      });
     }
     this.avatarUrl = this.userCurrent?.avartarUrl ?? null;
     this.formGroup.disable();
@@ -160,7 +161,7 @@ export class ProfileComponent implements OnInit {
         return;
       }
       formData.append('file', file);
-      formData.append('email',email);
+      formData.append('email', email);
       return await this.userService.uploadAvatar(formData);
     } catch (error: any) {
       if (error?.status === 401 && error.error?.error) {
