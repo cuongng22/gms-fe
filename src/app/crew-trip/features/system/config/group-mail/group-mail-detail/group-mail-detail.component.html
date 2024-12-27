@@ -10,7 +10,7 @@
       <span class="mb-10">
         <span i18n="@@generalInfomation">General information</span>
       </span>
-    <form [formGroup]="formGroupDetail" (ngSubmit)="save()" autocomplete="off" class="mt-10">
+    <form [formGroup]="formGroupDetail" autocomplete="off" class="mt-10">
       <div class="row">
         <div class="col-sm-6 col-md-6">
           <div class="form-group mb-20" sizeInput="md">
@@ -39,6 +39,9 @@
                   <mat-option [value]="option">{{ option }}</mat-option>
                 }
               </mat-autocomplete>
+              @if (!!formGroupDetail.controls['marketCode'].hasError('existCode')) {
+                <mat-error><span i18n>Marketcode</span><span i18n> already exist</span></mat-error>
+              }
             </mat-form-field>
           </div>
         </div>

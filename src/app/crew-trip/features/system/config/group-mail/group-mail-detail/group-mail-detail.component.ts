@@ -6,7 +6,15 @@ import {MatCardModule} from '@angular/material/card';
 import {MatFormField, MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormGroup,
+  FormsModule,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validators
+} from '@angular/forms';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {GroupMailService} from 'src/app/crew-trip/core/services/group-mail.service';
@@ -17,6 +25,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatPaginatorModule} from '@angular/material/paginator';
+import {HttpStatusCode} from "@angular/common/http";
 
 interface EmailObj {
   email: string;
@@ -28,10 +37,10 @@ interface EmailObj {
   selector: 'app-group-mail-detail',
   standalone: true,
   imports: [
-    MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
+    MatCardModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+    MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule
+    MatTableModule, MatPaginatorModule, CommonModule,
   ],
   templateUrl: './group-mail-detail.component.html',
   styleUrl: './group-mail-detail.component.scss'
@@ -48,12 +57,12 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   emailList: EmailObj[] = [];
   emailForm: FormGroup;
   emailListStr: string[] = [];
-
+  existCode = false;
   override formGroupDetail = this.formBuilder.group({
     id: [],
     groupName: ['', Validators.required],
     notes: [''],
-    marketCode: ['', Validators.required],
+    marketCode: ['', [Validators.required, this.existCodeValidator.bind(this)]],
     groupEmail: [[] as string[], Validators.required]
   });
 
@@ -139,15 +148,22 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
     }
     this.formGroupDetail.patchValue({groupEmail: this.emailListStr});
     try {
-      const res = await super.save();
-      if (res) {
-        this.dialogRef.close('Update Success');
-        await super.search();
-      }
+      await super.save().then(value => {
+        if (value.status == HttpStatusCode.Conflict) {
+          this.existCode = true;
+          this.formGroupDetail.controls['marketCode'].updateValueAndValidity();
+          this.existCode = false;
+        } else {
+          this.dialogRef.close('Update Success');
+        }
+      });
     } catch (e: any) {
     } finally {
       await this.spinner.hide();
     }
   }
 
+  existCodeValidator(control: AbstractControl): ValidationErrors | null {
+    return this.existCode ? {existCode: true} : null;
+  }
 }
