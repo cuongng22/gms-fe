@@ -19,7 +19,7 @@ import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {HttpStatusCode} from "@angular/common/http";
+import {HttpStatusCode} from '@angular/common/http';
 
 
 @Component({
@@ -41,11 +41,11 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
   _displayedColumns: {
     label: string; value: string, type?: string, format?: string
   }[] = [{label: $localize`Code`, value: 'code'}, {
-    label: $localize`Cost category name`, value: 'name'
-  }, {label: $localize`Unit`, value: 'unit'}, {label: $localize`Note`, value: 'description'}, {
-    label: $localize`Status`, value: 'activeLabel'
-  }, {label: $localize`DataSource`, value: 'dataSource'},];
-  existCode: boolean = false;
+      label: $localize`Cost category name`, value: 'name'
+    }, {label: $localize`Unit`, value: 'unit'}, {label: $localize`Note`, value: 'description'}, {
+      label: $localize`Status`, value: 'activeLabel'
+    }, {label: $localize`DataSource`, value: 'dataSource'},];
+  existCode = false;
 
   constructor() {
     super();
@@ -107,6 +107,6 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
 
 
   existCodeValidator(control: AbstractControl): ValidationErrors | null {
-    return this.existCode ? {existCode: true} : null
+    return this.existCode ? {existCode: true} : null;
   }
 }

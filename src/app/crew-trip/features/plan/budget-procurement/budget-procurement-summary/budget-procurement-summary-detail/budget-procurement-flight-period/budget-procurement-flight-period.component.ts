@@ -21,7 +21,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 export class BudgetProcurementFlightPeriodComponent implements OnInit {
 
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ["period", "aircraftType", "numberOfFlight"];
+  displayedColumns: string[] = ['period', 'aircraftType', 'numberOfFlight'];
   periodRowspan = 0;
   periods: string[] = [];
 
@@ -33,36 +33,36 @@ export class BudgetProcurementFlightPeriodComponent implements OnInit {
       {
         periodStart: new Date(2025, 1, 1),
         periodEnd: new Date(2025, 12, 1),
-        aircraftType: "B787",
+        aircraftType: 'B787',
         numberOfFlight: 10
       },
       {
         periodStart: new Date(2025, 1, 1),
         periodEnd: new Date(2025, 12, 1),
-        aircraftType: "A321",
+        aircraftType: 'A321',
         numberOfFlight: 10
       },
       {
         periodStart: new Date(2026, 1, 1),
         periodEnd: new Date(2026, 12, 1),
-        aircraftType: "B787",
+        aircraftType: 'B787',
         numberOfFlight: 10
       },
       {
         periodStart: new Date(2026, 1, 1),
         periodEnd: new Date(2026, 12, 1),
-        aircraftType: "A321",
+        aircraftType: 'A321',
         numberOfFlight: 10
       }, {
         periodStart: new Date(2027, 1, 1),
         periodEnd: new Date(2027, 4, 1),
-        aircraftType: "B787",
+        aircraftType: 'B787',
         numberOfFlight: 10
       },
       {
         periodStart: new Date(2027, 1, 1),
         periodEnd: new Date(2027, 4, 1),
-        aircraftType: "A321",
+        aircraftType: 'A321',
         numberOfFlight: 10
       }
     ];

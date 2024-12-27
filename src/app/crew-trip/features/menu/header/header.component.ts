@@ -40,9 +40,9 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {LanguageService} from 'src/app/crew-trip/core/services/language.service';
 import {Observable, Subscription} from 'rxjs';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
-import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {HttpStatusCode} from "@angular/common/http";
-import {WebsocketService} from "src/app/crew-trip/core/services/websocket-service";
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {HttpStatusCode} from '@angular/common/http';
+import {WebsocketService} from 'src/app/crew-trip/core/services/websocket-service';
 
 
 @Component({
@@ -73,7 +73,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   dialogResetPassword = false;
   formGroup: FormGroup;
   errorMessage: string | null = null;
-  correctPassword: boolean = false;
+  correctPassword = false;
 
   messagesNotice: any[] = [];
   private subscription!: Subscription;
@@ -141,7 +141,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
     document.addEventListener('mozfullscreenchange', this.onFullscreenChange.bind(this));
     document.addEventListener('MSFullscreenChange', this.onFullscreenChange.bind(this));
 
-    let username = this.userInfo?.email; // Thay bằng username thực tế
+    const username = this.userInfo?.email; // Thay bằng username thực tế
     if (username) {
       this.webSocketService.connect(username);
     } else {
@@ -150,9 +150,9 @@ export class HeaderComponent implements OnInit, OnDestroy {
 
     this.subscription = this.webSocketService.getMessages().subscribe({
       next: (message) => {
-        let mes = JSON.parse(message);
+        const mes = JSON.parse(message);
         this.messagesNotice.push(mes);
-        this.baseService.showNotification("New notification", {
+        this.baseService.showNotification('New notification', {
           duration: 5000,
           horizontalPosition: 'right',
           verticalPosition: 'top',
@@ -266,7 +266,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
       if (this.formGroup.valid) {
         this.spinner.show();
         await this.userService.changePassword(this.formGroup.value);
-        this.userService.showSuccess("Change password successfully");
+        this.userService.showSuccess('Change password successfully');
       }
     } catch (error: any) {
       if (error?.status === HttpStatusCode.Conflict && error?.error?.error) {
@@ -286,7 +286,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   }
 
   existCodeValidator(control: AbstractControl): ValidationErrors | null {
-    return this.correctPassword ? {correctPassword: true} : null
+    return this.correctPassword ? {correctPassword: true} : null;
   }
 
   protected readonly MESSAGE = MESSAGE;

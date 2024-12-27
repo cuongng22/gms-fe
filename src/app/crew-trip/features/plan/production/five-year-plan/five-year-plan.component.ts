@@ -19,9 +19,9 @@ import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-funct
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {FiveYearPlanService} from 'src/app/crew-trip/core/services/five-year-plan.service';
-import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
-import {HttpStatusCode} from "@angular/common/http";
-import {InputComponent} from "src/app/crew-trip/shared/component/input/input.component";
+import {SelectionComponent} from 'src/app/crew-trip/shared/component/selection/selection.component';
+import {HttpStatusCode} from '@angular/common/http';
+import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
 
 
 @Component({
@@ -49,19 +49,19 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
     rowspan?: string,
     colspan?: string
   }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Year`, value: 'year', rowspan: '2'},
-    {label: $localize`Production`, value: 'totalInternational', type: Constant.NUMBER},
-    {label: $localize`Compared to last year`, value: 'rateInternationalLast', type: Constant.NUMBER},
-    {label: $localize`Production`, value: 'totalDomestic', type: Constant.NUMBER},
-    {label: $localize`Compared to last year`, value: 'rateDomesticLast', type: Constant.NUMBER},
-    {label: $localize`Production`, value: 'total', type: Constant.NUMBER},
-    {label: $localize`Compared to last year`, value: 'rateTotalLast', type: Constant.NUMBER},
-    {label: $localize`Remark`, value: 'notes', rowspan: '2'},
-    {label: $localize`Status`, value: 'activeLabel', rowspan: '2'},
-  ];
+      {label: $localize`Year`, value: 'year', rowspan: '2'},
+      {label: $localize`Production`, value: 'totalInternational', type: Constant.NUMBER},
+      {label: $localize`Compared to last year`, value: 'rateInternationalLast', type: Constant.NUMBER},
+      {label: $localize`Production`, value: 'totalDomestic', type: Constant.NUMBER},
+      {label: $localize`Compared to last year`, value: 'rateDomesticLast', type: Constant.NUMBER},
+      {label: $localize`Production`, value: 'total', type: Constant.NUMBER},
+      {label: $localize`Compared to last year`, value: 'rateTotalLast', type: Constant.NUMBER},
+      {label: $localize`Remark`, value: 'notes', rowspan: '2'},
+      {label: $localize`Status`, value: 'activeLabel', rowspan: '2'},
+    ];
   listYear: any = [];
   currentYear = new Date().getFullYear();
-  existYear: boolean = false;
+  existYear = false;
 
   constructor() {
     super();
@@ -143,6 +143,6 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
   }
 
   existYearValidator(control: AbstractControl): ValidationErrors | null {
-    return this.existYear ? {existYear: true} : null
+    return this.existYear ? {existYear: true} : null;
   }
 }

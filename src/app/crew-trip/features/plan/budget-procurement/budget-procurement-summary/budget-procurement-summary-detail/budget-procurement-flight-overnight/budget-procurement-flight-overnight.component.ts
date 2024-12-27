@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -16,10 +16,10 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
   templateUrl: './budget-procurement-flight-overnight.component.html',
   styleUrl: './budget-procurement-flight-overnight.component.scss'
 })
-export class BudgetProcurementFlightOvernightComponent {
+export class BudgetProcurementFlightOvernightComponent implements OnInit {
 
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ["numberOfOvernight", "flightRate", "action"];
+  displayedColumns: string[] = ['numberOfOvernight', 'flightRate', 'action'];
 
   ngOnInit(): void {
     this.dataSource.data = [

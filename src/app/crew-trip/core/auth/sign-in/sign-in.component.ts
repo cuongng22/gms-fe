@@ -23,8 +23,8 @@ import {CommonModule, Location} from '@angular/common';
 import {NgxSpinnerComponent, NgxSpinnerService} from 'ngx-spinner';
 import {response} from 'express';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
-import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {HttpStatusCode} from "@angular/common/http";
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {HttpStatusCode} from '@angular/common/http';
 
 @Component({
   selector: 'app-sign-in',
@@ -89,8 +89,8 @@ export class SignInComponent implements OnInit {
         await this.spinner.show();
         const email = this.formGroup.get('email')?.value.toLowerCase();
         this.formGroup.patchValue({
-          "email": email
-        })
+          'email': email
+        });
         const resp = await this.usersService.login(this.formGroup.value);
         this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, resp.data.token);
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(resp.data.userInfo));
@@ -108,7 +108,7 @@ export class SignInComponent implements OnInit {
         // this.formGroup.get('password')?.setErrors({incorrect: true});
         // this.errorMessage = error.error.error;
       } else if (error.status === 404 && error.error?.error) {
-        if (error.error.error.includes("email")) {
+        if (error.error.error.includes('email')) {
           this.formGroup.get('email')?.setErrors({incorrect: true});
           this.errorMessage = error.error.error;
         } else {

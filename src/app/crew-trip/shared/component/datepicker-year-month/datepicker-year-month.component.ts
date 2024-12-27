@@ -96,7 +96,7 @@ export class DatepickerComponent implements OnInit, ControlValueAccessor {
   }
 
   setMonthAndYear(normalizedMonthAndYear: any, datepicker: MatDatepicker<any>) {
-    console.log(normalizedMonthAndYear)
+    console.log(normalizedMonthAndYear);
     const ctrlValue = this.datePickerValue ? moment(this.datePickerValue) : moment();
     ctrlValue.month(normalizedMonthAndYear.getMonth());
     ctrlValue.year(normalizedMonthAndYear.getFullYear());

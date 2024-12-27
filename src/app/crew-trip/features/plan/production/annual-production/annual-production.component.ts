@@ -157,7 +157,7 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
 
     this.fileUpload.valueChanges.subscribe(value => {
       this.uploadFileError = {};
-    })
+    });
 
     this.initSearchVersion();
     // this.baseService.getVersion(1).then((res) => {
@@ -342,6 +342,6 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
   resetFileUpload() {
     this.uploadFileError = {};
     this.fileUpload.setValue([]);
-    this.fileUpload.reset()
+    this.fileUpload.reset();
   }
 }

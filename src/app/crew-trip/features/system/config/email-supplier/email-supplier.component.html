@@ -194,7 +194,14 @@
         <mat-card-title>
           <h5 class="mb-0">
             <span *ngIf="!formGroupDetail.value.id" i18n>Add new</span>
-            <span *ngIf="formGroupDetail.value.id" i18n>Edit</span>
+            <span *ngIf="formGroupDetail.value.id" i18n>
+            @if (!isView) {
+              Edit
+            } @else {
+              View
+            }
+            </span>
+
           </h5>
         </mat-card-title>
         <mat-card-subtitle>

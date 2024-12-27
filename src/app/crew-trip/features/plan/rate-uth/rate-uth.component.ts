@@ -74,7 +74,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
     await this.search();
     this.fileUpload.valueChanges.subscribe(value => {
       this.uploadFileError = {};
-    })
+    });
   }
 
   async initSearchVersion() {
@@ -95,7 +95,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
-      this.formGroupSearch.patchValue({export: false})
+      this.formGroupSearch.patchValue({export: false});
       const res = await this.baseService.uthSearch({
         page: this.pageIndex,
         size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
@@ -172,6 +172,6 @@ export class RateUthComponent extends CommonComponent implements OnInit {
   resetFileUpload() {
     this.uploadFileError = {};
     this.fileUpload.setValue([]);
-    this.fileUpload.reset()
+    this.fileUpload.reset();
   }
 }

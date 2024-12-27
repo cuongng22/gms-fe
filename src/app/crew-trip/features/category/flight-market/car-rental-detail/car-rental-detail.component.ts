@@ -76,7 +76,7 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
       }
       this.formGroupDetail.patchValue(this.data.carRental);
       this.carRentalCodes = this.data.carRentalCodes;
-      console.log("this.data.carRentalCodes: ", this.carRentalCodes);
+      console.log('this.data.carRentalCodes: ', this.carRentalCodes);
       this.formGroupDetail.controls.code.addAsyncValidators(AlreadyExistsValidator.existsCarRentalCode(this.carRentalService, this.data.carRental.marketCode, this.carRentalCodes));
       this.readonlyDetail.set(this.data.isViewDetail);
     }

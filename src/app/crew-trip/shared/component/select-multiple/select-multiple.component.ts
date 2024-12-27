@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, Component, DestroyRef, inject, Input, OnInit, Optional, Self, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, DestroyRef, inject, Input, OnInit, Optional, Self, SimpleChanges, ViewChild, OnChanges } from '@angular/core';
 import { ControlValueAccessor, FormControl, FormsModule, NgControl, ReactiveFormsModule } from '@angular/forms';
 import { MatOption } from '@angular/material/core';
 import { MatError, MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
@@ -22,13 +22,13 @@ import { MatTooltip, MatTooltipModule } from '@angular/material/tooltip';
   templateUrl: './select-multiple.component.html',
   styleUrl: './select-multiple.component.scss',
 })
-export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
-  @Input() placeholder: string = '';
-  @Input() size: string = 'sm';
-  @Input() label: string = '';
-  @Input() readonly: boolean = false;
+export class SelectMultipleComponent implements ControlValueAccessor, OnInit, OnChanges {
+  @Input() placeholder = '';
+  @Input() size = 'sm';
+  @Input() label = '';
+  @Input() readonly = false;
   @Input() hint = '';
-  @Input() required: boolean = false;
+  @Input() required = false;
   @Input() selectOptions: any[] = [];
   @Input() attrValue = ''; // trường để lấy giá trị trong options
   @Input() attrDisplay = ''; // Trường để hiển thị trong options
@@ -66,7 +66,7 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit {
           return check;
         });
       }
-    })
+    });
   }
 
   ngOnChanges(changes: SimpleChanges) {

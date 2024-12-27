@@ -13,10 +13,10 @@ import {NgxSpinnerModule, NgxSpinnerService} from 'ngx-spinner';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
-import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {ifValidator} from "ngxtension/if-validator";
-import {NgxControlError} from "ngxtension/control-error";
-import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {ifValidator} from 'ngxtension/if-validator';
+import {NgxControlError} from 'ngxtension/control-error';
+import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-reset-password',

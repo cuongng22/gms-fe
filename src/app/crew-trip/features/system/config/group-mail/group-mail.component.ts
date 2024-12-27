@@ -1,36 +1,30 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {MatButton, MatButtonModule} from '@angular/material/button';
-import {
-  MatCardModule,
-} from '@angular/material/card';
-import {
-  MatRow, MatRowDef, MatTable, MatTableModule
-} from '@angular/material/table';
-import {MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
-import {MatInput, MatInputModule} from '@angular/material/input';
-import {MatAutocompleteModule, MatOption} from '@angular/material/autocomplete';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatSelect, MatSelectModule} from '@angular/material/select';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule,} from '@angular/material/card';
+import {MatTableModule} from '@angular/material/table';
+import {MatFormField, MatFormFieldModule,} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatAutocompleteModule,} from '@angular/material/autocomplete';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSelectModule} from '@angular/material/select';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {CrewsService} from 'src/app/crew-trip/core/services/crews-service';
 import {GroupMailService} from 'src/app/crew-trip/core/services/group-mail.service';
 import {Validators} from 'ngx-editor';
-import {CrewsDetailComponent} from 'src/app/crew-trip/features/category/crews/crews-detail/crews-detail.component';
 import {MatDialog} from '@angular/material/dialog';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {RouterLink, RouterModule} from '@angular/router';
+import {RouterModule} from '@angular/router';
 import {CommonModule} from '@angular/common';
 import {
   GroupMailDetailComponent
 } from 'src/app/crew-trip/features/system/config/group-mail/group-mail-detail/group-mail-detail.component';
-import {MatTab, MatTabChangeEvent, MatTabGroup} from "@angular/material/tabs";
-import {OtherCrewComponent} from "src/app/crew-trip/features/category/flight-crew/other-crew/other-crew.component";
-import {PaymentEmailComponent} from "src/app/crew-trip/features/system/config/payment-mail/payment-mail.component";
+import {MatTab, MatTabChangeEvent, MatTabGroup} from '@angular/material/tabs';
+import {PaymentEmailComponent} from 'src/app/crew-trip/features/system/config/payment-mail/payment-mail.component';
+import {MatDivider} from '@angular/material/divider';
 
 @Component({
   selector: 'app-group-mail',
@@ -39,7 +33,7 @@ import {PaymentEmailComponent} from "src/app/crew-trip/features/system/config/pa
     MatCardModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, MatTabGroup, MatTab, OtherCrewComponent, PaymentEmailComponent
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterModule, MatTabGroup, MatTab, PaymentEmailComponent, MatDivider
   ],
   templateUrl: './group-mail.component.html',
   styleUrl: './group-mail.component.scss'
@@ -47,12 +41,12 @@ import {PaymentEmailComponent} from "src/app/crew-trip/features/system/config/pa
 export class GroupMailComponent extends CommonComponent implements OnInit {
   override baseService = inject(GroupMailService);
   formBuilder = inject(FormBuilder);
-  activeTab: number = 0;
+  activeTab = 0;
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
-    { label: $localize`:@@name:Name`, value: 'groupName' },
-    { label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
-    { label: $localize`:@@note:Description`, value: 'notes' },
+    {label: $localize`:@@name:Name`, value: 'groupName'},
+    {label: $localize`:@@airportCode:Airport code`, value: 'marketCode'},
+    {label: $localize`:@@note:Description`, value: 'notes'},
     // { label: $localize`:@@status:Status`, value: 'status' }
   ];
 
@@ -80,13 +74,13 @@ export class GroupMailComponent extends CommonComponent implements OnInit {
 
   }
 
-  async grMailDetail(id?: any,mode?:string) {
+  async grMailDetail(id?: any, mode?: string) {
     let response;
-    if(id){
+    if (id) {
       response = await this.baseService.detail(id);
     }
     const dialogRef = this.dialog.open(GroupMailDetailComponent, {
-      data: response ? { grMail: { ...response.data }, mode:mode } : null,
+      data: response ? {grMail: {...response.data}, mode: mode} : null,
       disableClose: true,
     });
     dialogRef.afterClosed().subscribe(result => {

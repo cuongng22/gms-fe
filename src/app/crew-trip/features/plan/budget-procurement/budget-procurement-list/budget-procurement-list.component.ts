@@ -1,5 +1,5 @@
 import { CommonModule, AsyncPipe } from '@angular/common';
-import { Component, DestroyRef, ElementRef, Inject, inject, model, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, Inject, inject, model, ViewChild, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -34,7 +34,7 @@ import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
   templateUrl: './budget-procurement-list.component.html',
   styleUrl: './budget-procurement-list.component.scss'
 })
-export class BudgetProcurementListComponent extends CommonComponent {
+export class BudgetProcurementListComponent implements OnInit extends CommonComponent {
 
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(BudgetProcurementPlanService);
@@ -55,7 +55,7 @@ export class BudgetProcurementListComponent extends CommonComponent {
     { code: '4', value: 'Từ chối' },
     { code: '5', value: 'Đã duyệt' },
     { code: '6', value: 'Xác nhận' }
-  ]
+  ];
 
   override formGroupSearch = this.formBuilder.group({
     s: new FormControl(''),
@@ -156,7 +156,7 @@ export class BudgetProcurementListComponent extends CommonComponent {
     }
     try {
       await this.spinner.show();
-      let res = await this.baseService.reject(this.formGroupReject.value.id);
+      const res = await this.baseService.reject(this.formGroupReject.value.id);
       this.baseService.showSuccess(MESSAGE.REJECT_SUCCESS);
       await this.search();
       return res;
@@ -191,12 +191,12 @@ export class BudgetProcurementListComponent extends CommonComponent {
   override async showDialogDetail(isCreate: boolean, id?: any) {
     let budgetProcurementDetail;
     if (id != null) {
-      let res = await this.baseService.detail(id);
-      budgetProcurementDetail = res
+      const res = await this.baseService.detail(id);
+      budgetProcurementDetail = res;
     }
     this.dialog.open(DialogBudgetProcurementDetail, {
       data: { isCreate: isCreate, budgetProcurementDetail: budgetProcurementDetail },
-    })
+    });
 
   }
 
@@ -250,7 +250,7 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
   override ngOnInit(): void {
     if (this.data) {
       console.log(this.data);
-      this.isCreate.set(this.data.isCreate)
+      this.isCreate.set(this.data.isCreate);
       this.baseService.isUpdate = !this.data.isCreate || !!this.formGroupDetail.controls.id.value;
 
       if (this.data.budgetProcurementDetail) {
@@ -266,7 +266,7 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
       if (this.formGroupDetail.invalid) {
         return;
       }
-      let update = !!this.formGroupDetail.value.id;
+      const update = !!this.formGroupDetail.value.id;
       await this.spinner.show();
       let res;
       if (update) {
@@ -274,7 +274,7 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
       } else {
         res = await this.baseService.create(this.formGroupDetail.value);
       }
-      console.log(res)
+      console.log(res);
       await this.search();
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
       this.dialogRef.close();

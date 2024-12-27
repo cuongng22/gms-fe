@@ -20,13 +20,13 @@ import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
 import {ContractDetailComponent} from 'src/app/crew-trip/features/contract/contract-detail/contract-detail.component';
 import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
-import {FlightMarketService} from "src/app/crew-trip/core/services/flight-market.service";
-import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
-import {VehicleService} from "src/app/crew-trip/core/services/vehicle.service";
-import {MatDatepickerModule} from "@angular/material/datepicker";
-import {log} from "util";
-import {ListResponse} from "src/app/crew-trip/shared/models/common.model";
-import {HttpStatusCode} from "@angular/common/http";
+import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
+import {HotelService} from 'src/app/crew-trip/core/services/hotel-service';
+import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {log} from 'util';
+import {ListResponse} from 'src/app/crew-trip/shared/models/common.model';
+import {HttpStatusCode} from '@angular/common/http';
 
 
 @Component({
@@ -60,17 +60,17 @@ export class ContractComponent extends CommonComponent implements OnInit {
   _displayedColumns: {
     label: string; value: string, type?: string, format?: string
   }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Market`, value: 'marketCode'}, {
-      label: $localize`bizDocId`, value: 'bizDocId'
-    }, {label: $localize`Contract Code`, value: 'contractCode'}, {
-      label: $localize`Contract No`, value: 'contractNo'
-    }, {label: $localize`Contract Name`, value: 'contractName'}, {
-      label: $localize`Partner Name`, value: 'partnerName'
-    }, {label: $localize`Service Object`, value: 'serviceObject'}, {
-      label: $localize`Signed Date`, value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT
-    }, // {label: $localize`Effective Date`, value: 'effectiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
+      {label: $localize`Market`, value: 'marketCode'}, {
+        label: $localize`bizDocId`, value: 'bizDocId'
+      }, {label: $localize`Contract Code`, value: 'contractCode'}, {
+        label: $localize`Contract No`, value: 'contractNo'
+      }, {label: $localize`Contract Name`, value: 'contractName'}, {
+        label: $localize`Partner Name`, value: 'partnerName'
+      }, {label: $localize`Service Object`, value: 'serviceObject'}, {
+        label: $localize`Signed Date`, value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT
+      }, // {label: $localize`Effective Date`, value: 'effectiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
     // {label: $localize`Expiry Date`, value: 'expiryDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
-  ];
+    ];
   @Input() contractId: any;
 
   showPopupAnnex = false;
@@ -97,7 +97,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   override async ngOnInit() {
     await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(), this.search(),]).then(() => {
-      let listCombine = [...this.listVehicle, ...this.listHotel];
+      const listCombine = [...this.listVehicle, ...this.listHotel];
       this.listPartner = listCombine.map((s: any) => ({
         code: s.code ?? s.hotelCode, name: s.name ?? s.hotelName,
       }));

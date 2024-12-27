@@ -25,7 +25,7 @@ import {MatCheckbox} from '@angular/material/checkbox';
 import {FileUploadComponent, FileUploadValidators} from '@iplab/ngx-file-upload';
 import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {debounceTime, map, Observable, of, startWith, take} from 'rxjs';
-import {HttpStatusCode} from "@angular/common/http";
+import {HttpStatusCode} from '@angular/common/http';
 
 @Component({
   selector: 'app-rate-planned',
@@ -66,7 +66,7 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
     await this.search();
     this.fileUpload.valueChanges.subscribe(value => {
       this.uploadFileError = {};
-    })
+    });
   }
 
   async initSearchVersion() {
@@ -88,7 +88,7 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
-      this.formGroupSearch.patchValue({export: false})
+      this.formGroupSearch.patchValue({export: false});
       const res = await this.baseService.search({
         page: this.pageIndex,
         size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
@@ -164,6 +164,6 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
   resetFileUpload() {
     this.uploadFileError = {};
     this.fileUpload.setValue([]);
-    this.fileUpload.reset()
+    this.fileUpload.reset();
   }
 }

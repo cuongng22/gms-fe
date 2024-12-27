@@ -15,16 +15,16 @@ import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {NgxSpinnerService} from 'ngx-spinner';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import  { jwtDecode } from 'jwt-decode';
-import {StorageService} from "src/app/crew-trip/core/services/storage.service";
+import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
-import {NgxTrimDirectiveModule} from "ngx-trim-directive";
-import {InputComponent} from "src/app/crew-trip/shared/component/input/input.component";
-import {SharedModule} from "src/app/crew-trip/shared/component/shared.module";
-import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
-import {SelectOptions} from "src/app/crew-trip/shared/select-option";
-import {environment} from "src/environments/environment";
-import {HttpStatusCode} from "@angular/common/http";
-import {decodeToken} from "src/app/crew-trip/shared/utils/constant";
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
+import {SharedModule} from 'src/app/crew-trip/shared/component/shared.module';
+import {SelectionComponent} from 'src/app/crew-trip/shared/component/selection/selection.component';
+import {SelectOptions} from 'src/app/crew-trip/shared/select-option';
+import {environment} from 'src/environments/environment';
+import {HttpStatusCode} from '@angular/common/http';
+import {decodeToken} from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-profile',
@@ -94,9 +94,9 @@ export class ProfileComponent implements OnInit {
       try {
         await this.spinner.show();
         await this.userService.update(this.formGroup.value, 'update');
-        let userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
+        const userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
         if (this.selectedFile) {
-          let resp = await this.uploadFile(this.selectedFile);
+          const resp = await this.uploadFile(this.selectedFile);
           if (resp && resp.data) {
             userInfo.avartarUrl = `${environment.baseUrl}/${resp.data}`;
           }
@@ -111,7 +111,7 @@ export class ProfileComponent implements OnInit {
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(userInfo));
         this.userService.userInfoSubject.next(userInfo);
         this.updateEditMode();
-        this.baseService.showSuccess("Profile updated successfully");
+        this.baseService.showSuccess('Profile updated successfully');
       } catch (error: any) {
         if (error?.status === 401 && error.error?.error) {
           this.baseService.showError(error?.error?.error);

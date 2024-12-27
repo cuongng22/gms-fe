@@ -14,8 +14,8 @@ import {HelperService} from 'src/app/crew-trip/core/services/helper.service';
 import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
 import {MatIconModule} from '@angular/material/icon';
 import {NgxSpinnerModule, NgxSpinnerService} from 'ngx-spinner';
-import {HttpErrorResponse} from "@angular/common/http";
-import {NgxTrimDirectiveModule} from "ngx-trim-directive";
+import {HttpErrorResponse} from '@angular/common/http';
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 
 @Component({
   selector: 'app-forgot-password',

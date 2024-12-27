@@ -66,6 +66,7 @@ export class EmailSupplierComponent extends CommonComponent implements OnInit, O
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
+  isView = false;
 
   override formGroupSearch = this.fb.group({
     s: [''], //Keyword Search
@@ -107,6 +108,7 @@ export class EmailSupplierComponent extends CommonComponent implements OnInit, O
     if (value === 'INVOICE_CONFIRMATION' || value === 'INVOICE_REMINDER') {
       targetObjectControl?.clearValidators();
       targetObjectControl?.disable();
+      targetObjectControl?.setValue('');
     } else {
       targetObjectControl?.setValidators([Validators.required]);
       targetObjectControl?.enable();
@@ -116,6 +118,7 @@ export class EmailSupplierComponent extends CommonComponent implements OnInit, O
 
 
   override async showDialogDetail(id?: any, type?: string) {
+    this.isView = false;
     this.formGroupDetail.enable();
     if (id != null && type === 'index') {
     } else if (id != null) {
@@ -127,10 +130,12 @@ export class EmailSupplierComponent extends CommonComponent implements OnInit, O
   async onViewDetail(id?: any) {
     if (id != null) {
       await this.detail(id);
+      this.isView = true;
     }
     if (!this.formGroupDetail.disabled) {
       try {
         this.formGroupDetail.disable({emitEvent: false});
+        // this.formGroupDetail.patchValue();
       } catch (error) {
         console.error('Error disabling form:', error);
       }
@@ -175,7 +180,7 @@ export class EmailSupplierComponent extends CommonComponent implements OnInit, O
       await this.closeDetail();
       return res;
     } catch (e: any) {
-      if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
+      if ((e.status = HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
         this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
       }
       return e;

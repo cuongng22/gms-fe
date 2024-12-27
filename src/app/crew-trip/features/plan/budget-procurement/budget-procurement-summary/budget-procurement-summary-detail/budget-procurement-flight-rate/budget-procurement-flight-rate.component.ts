@@ -19,7 +19,7 @@ import { ClickOutside } from 'ngxtension/click-outside';
 export class BudgetProcurementFlightRateComponent implements OnInit {
 
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ["year", "rateOrTotal"];
+  displayedColumns: string[] = ['year', 'rateOrTotal'];
 
   ngOnInit(): void {
     this.dataSource.data = [
@@ -27,29 +27,29 @@ export class BudgetProcurementFlightRateComponent implements OnInit {
       {
         year: 2025,
         value: 5000000,
-        type: "total"
+        type: 'total'
       },
       {
         year: 2026,
         value: 6000000,
-        type: "total"
+        type: 'total'
       },
       {
         year: 2027,
         value: 7000000,
-        type: "total"
+        type: 'total'
       },
       {
         year: 2026,
         rateYear: 2025,
         value: 8000000,
-        type: "rate"
+        type: 'rate'
       },
       {
         year: 2027,
         rateYear: 2025,
         value: 9000000,
-        type: "rate"
+        type: 'rate'
       }
     ];
   }

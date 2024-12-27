@@ -24,9 +24,9 @@ export class BudgetProcurementCarRentalComponent implements OnInit {
   periodRowspan = 0;
   periods: string[] = [];
 
-  headerRowDef1: string[] = ["month", "aircraftType", "numberOfOvernightStays", "numberOfRooms", "numberOfRoomsForOthers", "numberOfEstimatedEarlyCheckInRooms", "numberOfEstimatedLateCheckoutRooms", "totalCostOfCrewTransport", "totalCost", "totalAmountColspan"];
-  headerRowDef2: string[] = ["singleRoom", "doubleRoom", "singleReservedRoom", "singleRoomOther", "doubleRoomOther", "singleRoomEarly", "doubleRoomEarly", "reservedRoomEarly", "singleRoomLate", "doubleRoomLate", "reservedRoomLate", "totalAmount", "totalAmountVat"];
-  rowDef: string[] = ["month", "aircraftType", "numberOfOvernightStays", "singleRoom", "doubleRoom", "singleReservedRoom", "singleRoomOther", "doubleRoomOther", "singleRoomEarly", "doubleRoomEarly", "reservedRoomEarly", "singleRoomLate", "doubleRoomLate", "reservedRoomLate", "totalCostOfCrewTransport", "totalCost", "totalAmount", "totalAmountVat"];
+  headerRowDef1: string[] = ['month', 'aircraftType', 'numberOfOvernightStays', 'numberOfRooms', 'numberOfRoomsForOthers', 'numberOfEstimatedEarlyCheckInRooms', 'numberOfEstimatedLateCheckoutRooms', 'totalCostOfCrewTransport', 'totalCost', 'totalAmountColspan'];
+  headerRowDef2: string[] = ['singleRoom', 'doubleRoom', 'singleReservedRoom', 'singleRoomOther', 'doubleRoomOther', 'singleRoomEarly', 'doubleRoomEarly', 'reservedRoomEarly', 'singleRoomLate', 'doubleRoomLate', 'reservedRoomLate', 'totalAmount', 'totalAmountVat'];
+  rowDef: string[] = ['month', 'aircraftType', 'numberOfOvernightStays', 'singleRoom', 'doubleRoom', 'singleReservedRoom', 'singleRoomOther', 'doubleRoomOther', 'singleRoomEarly', 'doubleRoomEarly', 'reservedRoomEarly', 'singleRoomLate', 'doubleRoomLate', 'reservedRoomLate', 'totalCostOfCrewTransport', 'totalCost', 'totalAmount', 'totalAmountVat'];
 
   constructor(private datePipe: DatePipe) { }
 

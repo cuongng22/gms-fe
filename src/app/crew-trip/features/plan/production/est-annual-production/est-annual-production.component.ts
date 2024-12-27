@@ -133,7 +133,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
 
     this.fileUpload.valueChanges.subscribe(value => {
       this.uploadFileError = {};
-    })
+    });
 
 
     this.initSearchVersion();
@@ -322,6 +322,6 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
   resetFileUpload() {
     this.uploadFileError = {};
     this.fileUpload.setValue([]);
-    this.fileUpload.reset()
+    this.fileUpload.reset();
   }
 }

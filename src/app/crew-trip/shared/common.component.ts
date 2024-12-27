@@ -1,4 +1,4 @@
-import {Component, inject, OnInit, ViewChild, AfterViewInit, HostListener} from '@angular/core';
+import {AfterViewInit, Component, HostListener, inject, OnInit, ViewChild} from '@angular/core';
 import {MatTableDataSource} from '@angular/material/table';
 import {SelectionModel} from '@angular/cdk/collections';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
@@ -7,12 +7,12 @@ import {NgxSpinnerService} from 'ngx-spinner';
 import {ToggleService} from 'src/app/common/header/toggle.service';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {FormGroup} from '@angular/forms';
-import {Constant, MESSAGE, removeNullValues, COMMON_CONFIG} from 'src/app/crew-trip/shared/utils/constant';
-import {HttpClient, HttpStatusCode} from '@angular/common/http';
+import {COMMON_CONFIG, Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
+import {HttpStatusCode} from '@angular/common/http';
 import {saveAs} from 'file-saver';
 import {UltilService} from 'src/app/crew-trip/core/services/ultil-service';
 import {ListResponse} from './models/common.model';
-import { environment } from 'src/environments/environment';
+import {environment} from 'src/environments/environment';
 
 
 @Component({
@@ -143,7 +143,7 @@ export class CommonComponent implements OnInit, AfterViewInit {
     try {
       this.formGroupDetail.markAllAsTouched();
       if (this.formGroupDetail.invalid) {
-        this.findInvalidControls(this.formGroupDetail)
+        this.findInvalidControls(this.formGroupDetail);
         return;
       }
       const update = !!this.formGroupDetail.getRawValue().id;

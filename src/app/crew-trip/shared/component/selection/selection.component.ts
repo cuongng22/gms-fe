@@ -1,10 +1,10 @@
-import {Component, Input, Optional, Self, SimpleChanges} from '@angular/core';
-import {ControlValueAccessor, FormControl, FormsModule, NgControl, ReactiveFormsModule} from "@angular/forms";
-import {MatError, MatFormField, MatLabel} from "@angular/material/form-field";
-import {MatOption} from "@angular/material/core";
-import {MatSelect, MatSelectChange} from "@angular/material/select";
-import {CommonModule, NgIf} from "@angular/common";
-import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
+import {Component, Input, Optional, Self, SimpleChanges, OnChanges} from '@angular/core';
+import {ControlValueAccessor, FormControl, FormsModule, NgControl, ReactiveFormsModule} from '@angular/forms';
+import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
+import {MatOption} from '@angular/material/core';
+import {MatSelect, MatSelectChange} from '@angular/material/select';
+import {CommonModule, NgIf} from '@angular/common';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 
 @Component({
   selector: 'app-selection',
@@ -24,13 +24,13 @@ import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.comp
   templateUrl: './selection.component.html',
   styleUrl: './selection.component.scss'
 })
-export class SelectionComponent implements ControlValueAccessor {
-  @Input() placeholder: string = '';
-  @Input() sizeInput: string = 'sm';
-  @Input() label: string = '';
-  @Input() readonly: boolean = false;
+export class SelectionComponent implements ControlValueAccessor, OnChanges {
+  @Input() placeholder = '';
+  @Input() sizeInput = 'sm';
+  @Input() label = '';
+  @Input() readonly = false;
   @Input() hint = '';
-  @Input() required: boolean = false;
+  @Input() required = false;
   @Input() options: { value: any; display: string }[] = [];
 
 
