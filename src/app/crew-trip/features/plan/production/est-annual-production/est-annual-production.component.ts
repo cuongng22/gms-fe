@@ -1,5 +1,5 @@
-import {AsyncPipe, CommonModule} from '@angular/common';
-import {Component, inject, OnInit, model, DestroyRef, ElementRef, ViewChild} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {Component, DestroyRef, ElementRef, inject, model, OnInit, ViewChild} from '@angular/core';
 import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatAutocompleteModule} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
@@ -11,9 +11,9 @@ import {MatInputModule} from '@angular/material/input';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTableModule} from '@angular/material/table';
-import {RouterLink, RouterModule} from '@angular/router';
+import {RouterModule} from '@angular/router';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {debounceTime, map, Observable, startWith, Subject} from 'rxjs';
+import {debounceTime, startWith, Subject} from 'rxjs';
 import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
 import {AirplaneService} from 'src/app/crew-trip/core/services/airplane-service';
 import {EstimatedAnnualProductionService} from 'src/app/crew-trip/core/services/estimated-annual-production';
@@ -23,7 +23,6 @@ import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.comp
 import {EstAnnualProduction} from './est-annual-production.model';
 import {Constant} from 'src/app/crew-trip/shared/utils/constant';
 import {FileUploadModule, FileUploadValidators} from '@iplab/ngx-file-upload';
-import {error} from 'console';
 
 @Component({
   selector: 'app-est-annual-production',
@@ -31,7 +30,7 @@ import {error} from 'console';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule],
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterModule, FileUploadModule],
   templateUrl: './est-annual-production.component.html',
   styleUrl: './est-annual-production.component.scss'
 })

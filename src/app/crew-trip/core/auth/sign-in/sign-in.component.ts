@@ -4,16 +4,8 @@ import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
-import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  AbstractControl,
-  ValidationErrors
-} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
-import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from '@angular/material/card';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {HelperService} from 'src/app/crew-trip/core/services/helper.service';
 import {TranslateModule, TranslateService} from '@ngx-translate/core';
@@ -21,16 +13,13 @@ import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 import {CommonModule, Location} from '@angular/common';
 import {NgxSpinnerComponent, NgxSpinnerService} from 'ngx-spinner';
-import {response} from 'express';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
-import {HttpStatusCode} from '@angular/common/http';
 
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
-    TranslateModule, NgxSpinnerComponent, NgxTrimDirectiveModule
+  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCheckbox, TranslateModule, NgxSpinnerComponent, NgxTrimDirectiveModule
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss'

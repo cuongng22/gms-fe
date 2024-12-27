@@ -1,6 +1,6 @@
 import {Component, Inject, inject, LOCALE_ID, OnInit} from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
@@ -20,17 +20,10 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {InputSizeComponent} from '../../../shared/input/input-size.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 
-
-export interface PeriodicElement {
-  projectName: string;
-  deadline: string;
-  status: any;
-}
-
 @Component({
   selector: 'app-ke-hoach',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatSelectModule, MatDatepickerModule, MatNativeDateModule, NgxMaterialTimepickerModule],
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, MatCheckboxModule, TitleCasePipe, DataTransformPipe, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatSelectModule, MatDatepickerModule, MatNativeDateModule, NgxMaterialTimepickerModule],
   templateUrl: './ke-hoach.component.html',
   styleUrl: './ke-hoach.component.scss',
 })
@@ -86,8 +79,7 @@ export class KeHoachComponent extends CommonComponent implements OnInit {
     {label: 'Tên trạng thái tổng hợp', value: 'tenTrangThaiTh'},
     {label: 'Tên trạng thái quyết định', value: 'tenTrangThaiQd'},
     {label: 'Căn cứ', value: 'canCu'}
-  ]
-    ;
+  ];
 
   constructor(
     @Inject(LOCALE_ID) public locale: string
