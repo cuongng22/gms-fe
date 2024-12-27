@@ -19,6 +19,7 @@ import {Editor, NgxEditorModule, Toolbar} from 'ngx-editor';
 import {SelectMultipleComponent} from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import {HttpStatusCode} from '@angular/common/http';
 import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import {MatListOption, MatSelectionList} from '@angular/material/list';
 
 @Component({
   selector: 'app-email-supplier',
@@ -45,7 +46,7 @@ import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
     MatCheckbox,
     MatFormFieldModule,
     MatInputModule,
-    NgxEditorModule, SelectMultipleComponent, MatPaginator, MatAnchor],
+    NgxEditorModule, SelectMultipleComponent, MatPaginator, MatAnchor, MatSelectionList, MatListOption],
   templateUrl: './email-supplier.component.html',
   styleUrl: './email-supplier.component.scss'
 })
