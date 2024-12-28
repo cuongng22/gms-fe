@@ -3,14 +3,12 @@ import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.comp
 import {MatAutocompleteModule,} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
-import {MatFormField, MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {
   AbstractControl,
   FormBuilder,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   ValidationErrors,
   Validators
@@ -25,7 +23,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import {HttpStatusCode} from "@angular/common/http";
+import {HttpStatusCode} from '@angular/common/http';
 
 interface EmailObj {
   email: string;
@@ -58,6 +56,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   emailForm: FormGroup;
   emailListStr: string[] = [];
   existCode = false;
+  existMessage = '';
   override formGroupDetail = this.formBuilder.group({
     id: [],
     groupName: ['', Validators.required],
@@ -73,7 +72,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
     , private fb: FormBuilder) {
     super();
     this.emailForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]]
     });
     if (!data?.mode || data.mode !== 'view') {
       this.displayedColumns = ['email', 'actions'];
@@ -90,7 +89,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
         isEditing: false
       }));
     }
-    this.flightMarketSv.search({option: 1}).then(res => {
+    this.flightMarketSv.search({option: 1, status: 'Operational'}).then(res => {
       this.markets = res.data;
 
     });
@@ -143,7 +142,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   override async save() {
     this.emailListStr = this.emailList.filter(emailObj => !emailObj.isEditing).map(emailObj => emailObj.email);
     if (!this.emailListStr || this.emailListStr.length <= 0) {
-      this.baseService.showError('List email is required!');
+      // this.baseService.showError('List email is required!');
       return;
     }
     this.formGroupDetail.patchValue({groupEmail: this.emailListStr});
@@ -151,6 +150,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
       await super.save().then(value => {
         if (value.status == HttpStatusCode.Conflict) {
           this.existCode = true;
+          this.existMessage = value.error?.error;
           this.formGroupDetail.controls['marketCode'].updateValueAndValidity();
           this.existCode = false;
         } else {
