@@ -121,7 +121,7 @@ export const menu: Menu[] = [
     rootPath: 'invoice',
     subMenu: [
       {
-        path: 'invoice/detailed', title: $localize`:@@detailedStatment:Detailed statement`, icon: 'ri-calendar-line'
+        path: 'invoice/invoice-form-tab', title: $localize`:@@detailedStatment:Detailed statement`, icon: 'ri-calendar-line'
       },
       {
         path: 'invoice/e-invoice', title: $localize`:@@invoice:Invoice`, icon: 'ri-folder-chart-line'
@@ -270,10 +270,10 @@ export const menu: Menu[] = [
         icon: 'ri-folder-chart-line',
         menu: []
       },
-      
 
-      
-   
+
+
+
     ]
   },
 
