@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { AfterViewChecked, ChangeDetectorRef, Component, inject, input, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectorRef, Component, effect, inject, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -34,12 +34,20 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
   yearPlan = input<number>(2024); // năm kế hoạch
   type = input<PlanCategoryEnum>(PlanCategoryEnum.BUDGET); // Loại Ngân sách hoặc mua sắm (budget/procurement)
+  data = input<any>();
 
   PlanCategoryEnum = PlanCategoryEnum;
 
   planFlightPeriods: any[] = []; // danh sách chuyến bay theo giai đoạn
 
-  constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) { }
+  constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
+    effect(() => {
+      if (this.data()) {
+        this.setPlanFlightPeriods(this.data().planFlightPeriods);
+        this.setDataSource(this.data().planCarentals);
+      }
+    })
+  }
 
   ngAfterViewChecked(): void {
     this.cdRef.detectChanges(); // Phát hiện và cập nhật các thay đổi

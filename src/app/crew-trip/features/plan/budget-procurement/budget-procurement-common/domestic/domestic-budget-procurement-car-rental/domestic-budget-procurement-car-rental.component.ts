@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, input } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -28,6 +28,7 @@ export class DomesticBudgetProcurementCarRentalComponent {
   yearPlan = input<number>(2024); // năm kế hoạch
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
   type = input<PlanCategoryEnum>(PlanCategoryEnum.BUDGET); // Loại Ngân sách hoặc mua sắm (budget/procurement)
+  data = input<any>();
 
   dataTransformPipe = inject(DataTransformPipe);
   dataSource = new MatTableDataSource();
@@ -39,7 +40,11 @@ export class DomesticBudgetProcurementCarRentalComponent {
   PlanCategoryEnum = PlanCategoryEnum;
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
-
+    effect(() => {
+      if (this.data()) {
+        this.setDataSource(this.data());
+      }
+    })
   }
   ngOnInit(): void {
     this.getRow();

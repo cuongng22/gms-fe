@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, inject, input, signal } from '@angular/core';
+import { ChangeDetectorRef, Component, effect, inject, input, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -36,10 +36,17 @@ export class DomesticBudgetProcurementWetLeaseComponent {
 
   planFlightPeriods: any[] = []; // danh sách chuyến bay theo giai đoạn
   year = signal<number>(2024);
+  data = input<any>();
 
   PADDING_0 = PADDING_0;
 
-  constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) { }
+  constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) { 
+    effect(() => {
+      if (this.data()) {
+        this.setDataSource(this.data());
+      }
+    })
+  }
 
   ngAfterViewChecked(): void {
     this.cdRef.detectChanges(); // Phát hiện và cập nhật các thay đổi

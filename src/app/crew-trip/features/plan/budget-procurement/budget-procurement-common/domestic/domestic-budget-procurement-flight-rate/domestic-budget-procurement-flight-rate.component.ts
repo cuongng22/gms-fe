@@ -27,12 +27,12 @@ export class DomesticBudgetProcurementFlightRateComponent implements OnInit {
   data = input<any>();
 
   setDataSource(data: any[]) {
-    this.dataSource.data = data;
+    this.dataSource.data = [...data];
   }
   constructor() {
     effect(() => {
       if (this.data()) {
-        this.setDataSource(this.data().planFlightRates ?? []);
+        this.setDataSource(this.data());
       }
     })
   }

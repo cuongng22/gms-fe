@@ -25,7 +25,7 @@ export class InternationalBudgetProcurementFlightRateComponent implements OnInit
   constructor() {
     effect(() => {
       if (this.data()) {
-        this.setDataSource(this.data().planFlightRates ?? []);
+        this.setDataSource(this.data());
       }
     })
   }
@@ -34,7 +34,7 @@ export class InternationalBudgetProcurementFlightRateComponent implements OnInit
   }
 
   setDataSource(data: any[]) {
-    this.dataSource.data = data;
+    this.dataSource.data = [...data];
   }
 
   clickEdit(data: any) {

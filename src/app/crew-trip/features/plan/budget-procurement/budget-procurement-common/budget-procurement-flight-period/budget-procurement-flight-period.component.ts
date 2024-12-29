@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, effect, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -25,17 +25,25 @@ export class BudgetProcurementFlightPeriodComponent implements OnInit {
   displayedColumns: string[] = ["period", "aircraftType", "numberOfFlight"];
   periodRowspan = 0;
   periods: string[] = [];
+  data = input<any>();
 
-  constructor(private datePipe: DatePipe) { }
+  constructor(private datePipe: DatePipe) {
+    effect(() => {
+      if (this.data()) {
+        this.periodRowspan = this.data().periodRowspan;
+        this.setDataSource(this.data().planFlightPeriods);
+      }
+    })
+  }
 
   ngOnInit(): void {
 
   }
 
   setDataSource(data: any[]) {
-    this.dataSource.data = data;
-    this.periodRowspan = this.dataSource.data.map((item: any) => item.aircraftType).
-      filter((value: any, index: any, self: any) => self.indexOf(value) === index).length;
+    this.dataSource.data = [...data];
+    // this.periodRowspan = this.dataSource.data.map((item: any) => item.aircraftType).
+    //   filter((value: any, index: any, self: any) => self.indexOf(value) === index).length;
 
     this.dataSource.data.forEach((item: any) => {
       const period = `${item.periodStartStr} - ${item.periodEndStr}`;

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, output } from '@angular/core';
+import { Component, effect, inject, input, output } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -31,6 +31,16 @@ export class BudgetProcurementFlightOvernightComponent extends ShowMessageCompon
   valueChange = output<any>();
   overnightChange = new Subject<any>();
 
+  data = input<any>();
+
+  constructor() {
+    super();
+    effect(() => {
+      if (this.data()) {
+        this.setDataSource(this.data());
+      }
+    })
+  }
 
   ngOnInit(): void {
     this.overnightChange.pipe(debounceTime(2000)).subscribe((data: any) => {
@@ -47,7 +57,7 @@ export class BudgetProcurementFlightOvernightComponent extends ShowMessageCompon
   }
 
   setDataSource(data: any[]) {
-    this.dataSource.data = data;
+    this.dataSource.data = [...data];
   }
 
   add() {
