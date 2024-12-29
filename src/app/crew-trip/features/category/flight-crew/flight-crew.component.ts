@@ -149,7 +149,14 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
         page: this.pageIndex,
         limit: 9999
       });
-      this.listActype = res.data.content;
+      const setAcGroup = new Set();
+      this.listActype = res.data.content.filter((item: any) => {
+        if (!setAcGroup.has(item.acgroup)) {
+          setAcGroup.add(item.acgroup);
+          return true;
+        }
+        return false;
+      });
     } finally {
       await this.spinner.hide();
     }
