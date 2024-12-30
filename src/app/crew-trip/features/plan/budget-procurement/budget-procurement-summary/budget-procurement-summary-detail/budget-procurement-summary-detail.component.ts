@@ -124,7 +124,6 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
   async getDetailSummary() {
     try {
-      console.log('vaooooooo getDetailSummary');
       await this.spinner.show();
       const response = await this.baseService.getDetailSummary(this.id() ?? 0); //dataDetailExample;//
       this.dataDetail = { ...response.data };
@@ -222,6 +221,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     try {
       this.budgetProcurementGeneral.formGroupDetail.markAllAsTouched();
       this.budgetProcurementCostAnalysis.formGroupDetail.markAllAsTouched();
+      console.log(this.budgetProcurementGeneral.formGroupDetail)
       if (this.budgetProcurementGeneral.formGroupDetail.invalid ||
         (this.category() === CategoryEnum.INTERNATIONAL && this.internationalFlightOvernight.invalid()) ||
         this.budgetProcurementCostAnalysis.formGroupDetail.invalid) {
@@ -277,6 +277,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       console.log('data: ', data);
       const response = await this.baseService.save(data);
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
+      this.getDetailSummary()
       console.log('response: ', response);
     } catch (error) {
       console.error('save error: ', error);
