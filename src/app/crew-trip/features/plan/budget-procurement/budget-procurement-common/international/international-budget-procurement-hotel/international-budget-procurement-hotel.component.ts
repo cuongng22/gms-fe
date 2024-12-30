@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { AfterViewChecked, ChangeDetectorRef, Component, effect, inject, input, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -13,6 +13,7 @@ import { checkChange, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } f
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { PlanCategoryEnum } from '../../../budget-procurement.model';
+import { el } from 'node_modules/@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-international-budget-procurement-hotel',
@@ -21,7 +22,8 @@ import { PlanCategoryEnum } from '../../../budget-procurement.model';
     FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule],
   templateUrl: './international-budget-procurement-hotel.component.html',
   styleUrl: './international-budget-procurement-hotel.component.scss',
-  providers: [DatePipe, DataTransformPipe]
+  providers: [DatePipe, DataTransformPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InternationalBudgetProcurementHotelComponent implements OnInit, AfterViewChecked {
   dataTransformPipe = inject(DataTransformPipe);
@@ -51,6 +53,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
+      console.log('effect data InternationalBudgetProcurementHotelComponent: ', this.data());
       if (this.data()) {
         this.calculateSpan(this.data().aircraftTypeRowspan, this.data().overnightRowspan);
         this.setPlanFlightByOvernight(this.data().planOverightRates ?? []);
@@ -73,29 +76,42 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     this.getRow();
 
     this.dataSource.data.forEach((item: any, index) => {
-      let period = '';
-      if (this.type() === PlanCategoryEnum.PROCUREMENT) {
-        period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
-      } else {
-        period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
-      }
-      item.period = period;
-      if (!this.periods.includes(period)) {
-        this.periods.push(period);
-        item.periodLabel = period;
-      }
-      if (!this.aircraftTypes.includes(`${period}_${item.aircraftType}`)) {
-        this.aircraftTypes.push(`${period}_${item.aircraftType}`)
-        item.aircraftTypeLabel = item.aircraftType;
-      }
+      this.calculatePeriodLabel(item, index);
+      this.calculateAirCraftLabel(item, index);
       this.calculateData(item, index);
     });
   };
+
+  calculatePeriodLabel(item: any, index: number) {
+    let period = '';
+    if (this.type() === PlanCategoryEnum.PROCUREMENT) {
+      period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+    } else {
+      period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+    }
+    item.period = period;
+    if (!this.periods.includes(period)) {
+      this.periods.push(period);
+      item.periodLabel = period;
+    } else {
+      item.periodLabel = '';
+    }
+  }
+
+  calculateAirCraftLabel(item: any, index: number) {
+    if (!this.aircraftTypes.includes(`${item.period}_${item.aircraftType}`)) {
+      this.aircraftTypes.push(`${item.period}_${item.aircraftType}`)
+      item.aircraftTypeLabel = item.aircraftType;
+    } else {
+      item.aircraftTypeLabel = '';
+    }
+  }
 
   calculateSpan(aircraftTypeRowspan: number, overnightRowspan: number) {
     this.periodRowspan = aircraftTypeRowspan * overnightRowspan;
     this.aircraftTypeRowspan = aircraftTypeRowspan;
     this.overnightRowspan = overnightRowspan;
+    console.log('periodRowspan: ', this.periodRowspan, 'aircraftTypeRowspan: ', this.aircraftTypeRowspan, 'overnightRowspan: ', this.overnightRowspan);
   }
 
   setGeneralData(data: any) {
@@ -125,7 +141,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         } else {
           // lấy id bản ghi cuối cùng để làm cơ sở ví trí thêm data
           if (planFlightByOvernight && planFlightByOvernight.length) {
-            this.setPlanFlightByOvernight(planFlightByOvernight)
+            this.setPlanFlightByOvernight(planFlightByOvernight);
           }
 
           const overnightId = (this.dataSource.data[this.dataSource.data.length - 1] as any).overnightId;
@@ -135,6 +151,8 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
             if (dataHotel.overnightId == overnightId) {
               dataProcessHotel.splice(i + 1, 0, {
                 ...dataHotel,
+                periodLabel: '',
+                aircraftTypeLabel: '',
                 overnightId: data.id,
                 overnight: Number(data.numberOfOverNight),
                 flightOvernightRate: data.flightRate,
@@ -156,7 +174,8 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         break;
       case 'delete':
         if (planFlightByOvernight && planFlightByOvernight.length) {
-          this.setPlanFlightByOvernight(planFlightByOvernight)
+          this.setPlanFlightByOvernight(planFlightByOvernight);
+          this.calculateSpan(this.aircraftTypeRowspan, planFlightByOvernight.length);
         }
         this.dataSource.data = [...this.dataSource.data.filter((itemFilter: any) => itemFilter.overnightId !== data.id)];
         if (length) {

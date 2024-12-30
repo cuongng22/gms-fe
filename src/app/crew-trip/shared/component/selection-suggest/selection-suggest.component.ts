@@ -55,7 +55,7 @@ export class SelectionSuggestComponent implements OnInit {
       distinctUntilChanged(),
       startWith(''),
     ).subscribe(value => {
-      const optionFilter = [...this.options]
+      const optionFilter = [...(this.options ?? [])]
       if (!value) {
         this.filtered.set(optionFilter);
         return;
@@ -79,7 +79,7 @@ export class SelectionSuggestComponent implements OnInit {
 
   @Input() set options(options: any[]) {
     this._options = options;
-    this.filtered.set([...this._options]);
+    this.filtered.set([...(this._options ?? [])]);
   }
 
   get options(): any[] {

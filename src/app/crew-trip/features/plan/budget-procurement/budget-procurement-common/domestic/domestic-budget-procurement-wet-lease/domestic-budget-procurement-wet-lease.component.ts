@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, effect, inject, input, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, signal } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -20,7 +20,8 @@ import { PADDING_0, PlanCategoryEnum } from '../../../budget-procurement.model';
     FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule, ClickOutside],
   templateUrl: './domestic-budget-procurement-wet-lease.component.html',
   styleUrl: './domestic-budget-procurement-wet-lease.component.scss',
-  providers: [DatePipe, DataTransformPipe]
+  providers: [DatePipe, DataTransformPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DomesticBudgetProcurementWetLeaseComponent {
   dataTransformPipe = inject(DataTransformPipe);
@@ -40,12 +41,13 @@ export class DomesticBudgetProcurementWetLeaseComponent {
 
   PADDING_0 = PADDING_0;
 
-  constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) { 
+  constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
+      console.log('effect data DomesticBudgetProcurementWetLeaseComponent: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
       }
-    })
+    }, { allowSignalWrites: true })
   }
 
   ngAfterViewChecked(): void {

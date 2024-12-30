@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, input, output } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject, input, output } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -21,7 +21,8 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
   imports: [MatTableModule, CommonModule, MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent,
     FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DigitOnlyModule, MatCardModule, MatTooltipModule],
   templateUrl: './budget-procurement-flight-overnight.component.html',
-  styleUrl: './budget-procurement-flight-overnight.component.scss'
+  styleUrl: './budget-procurement-flight-overnight.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BudgetProcurementFlightOvernightComponent extends ShowMessageComponent {
   dataSource = new MatTableDataSource();
@@ -36,6 +37,7 @@ export class BudgetProcurementFlightOvernightComponent extends ShowMessageCompon
   constructor() {
     super();
     effect(() => {
+      console.log('effect data BudgetProcurementFlightOvernightComponent: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
       }

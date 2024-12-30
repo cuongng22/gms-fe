@@ -1,11 +1,12 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, effect, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { ClickOutside } from 'ngxtension/click-outside';
+import { co } from 'node_modules/@fullcalendar/core/internal-common';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
@@ -17,7 +18,8 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
     FormsModule, ReactiveFormsModule, ClickOutside, DigitOnlyModule],
   templateUrl: './budget-procurement-flight-period.component.html',
   styleUrl: './budget-procurement-flight-period.component.scss',
-  providers: [DatePipe]
+  providers: [DatePipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BudgetProcurementFlightPeriodComponent implements OnInit {
 
@@ -29,6 +31,7 @@ export class BudgetProcurementFlightPeriodComponent implements OnInit {
 
   constructor(private datePipe: DatePipe) {
     effect(() => {
+      console.log('effect data BudgetProcurementFlightPeriodComponent: ', this.data())
       if (this.data()) {
         this.periodRowspan = this.data().periodRowspan;
         this.setDataSource(this.data().planFlightPeriods);

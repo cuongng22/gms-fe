@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { AfterViewChecked, ChangeDetectorRef, Component, effect, inject, input, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -21,7 +21,8 @@ import { PlanCategoryEnum } from '../../../budget-procurement.model';
     FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule, ClickOutside],
   templateUrl: './international-budget-procurement-car-rental.component.html',
   styleUrl: './international-budget-procurement-car-rental.component.scss',
-  providers: [DatePipe, DataTransformPipe]
+  providers: [DatePipe, DataTransformPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InternationalBudgetProcurementCarRentalComponent implements OnInit, AfterViewChecked {
   dataTransformPipe = inject(DataTransformPipe);
@@ -42,6 +43,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
+      console.log('effect data InternationalBudgetProcurementCarRentalComponent: ', this.data())
       if (this.data()) {
         this.setPlanFlightPeriods(this.data().planFlightPeriods);
         this.setDataSource(this.data().planCarentals);

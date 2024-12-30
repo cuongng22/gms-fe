@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -9,6 +9,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { ClickOutside } from 'ngxtension/click-outside';
+import { co } from 'node_modules/@fullcalendar/core/internal-common';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 
 @Component({
@@ -17,7 +18,8 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
   imports: [MatTableModule, CommonModule, MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent,
     FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DigitOnlyModule, MatCardModule, MatTooltipModule],
   templateUrl: './domestic-budget-procurement-flight-rate.component.html',
-  styleUrl: './domestic-budget-procurement-flight-rate.component.scss'
+  styleUrl: './domestic-budget-procurement-flight-rate.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DomesticBudgetProcurementFlightRateComponent implements OnInit {
 
@@ -31,6 +33,7 @@ export class DomesticBudgetProcurementFlightRateComponent implements OnInit {
   }
   constructor() {
     effect(() => {
+      console.log('effect data DomesticBudgetProcurementFlightRateComponent: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
       }

@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -21,7 +21,8 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
     FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule],
   templateUrl: './domestic-budget-procurement-car-rental.component.html',
   styleUrl: './domestic-budget-procurement-car-rental.component.scss',
-  providers: [DatePipe, DataTransformPipe]
+  providers: [DatePipe, DataTransformPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DomesticBudgetProcurementCarRentalComponent {
 
@@ -41,6 +42,7 @@ export class DomesticBudgetProcurementCarRentalComponent {
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
+      console.log('effect data DomesticBudgetProcurementCarRentalComponent: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
       }

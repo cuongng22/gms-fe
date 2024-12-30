@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, Input, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -15,7 +15,8 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
     FormsModule, ReactiveFormsModule, ClickOutside, DigitOnlyModule
   ],
   templateUrl: './international-budget-procurement-flight-rate.component.html',
-  styleUrl: './international-budget-procurement-flight-rate.component.scss'
+  styleUrl: './international-budget-procurement-flight-rate.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InternationalBudgetProcurementFlightRateComponent implements OnInit {
   data = input<any>();
@@ -24,6 +25,7 @@ export class InternationalBudgetProcurementFlightRateComponent implements OnInit
 
   constructor() {
     effect(() => {
+      console.log('effect data InternationalBudgetProcurementFlightRateComponent: ')
       if (this.data()) {
         this.setDataSource(this.data());
       }
@@ -32,6 +34,7 @@ export class InternationalBudgetProcurementFlightRateComponent implements OnInit
 
   ngOnInit(): void {
   }
+
 
   setDataSource(data: any[]) {
     this.dataSource.data = [...data];

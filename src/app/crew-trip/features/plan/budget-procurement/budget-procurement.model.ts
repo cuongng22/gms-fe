@@ -63,11 +63,11 @@ export function openPanel(panel: MatExpansionPanel, isCheckData?: boolean, data?
     if (isCheckData && !(data && data.length > 0)) {
         return;
     }
-    panel?.open();
+    panel.open();
     panel.disabled = false;
 }
 
 export function closePanel(panel: MatExpansionPanel): void {
-    panel?.close();
+    panel.close();
     panel.disabled = true;
 }

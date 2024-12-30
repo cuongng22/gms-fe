@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { AfterViewChecked, ChangeDetectorRef, Component, effect, inject, input, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -13,6 +13,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-budget-procurement-hotel.model';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { PADDING_0, PlanCategoryEnum } from '../../../budget-procurement.model';
+import { co } from 'node_modules/@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-domestic-budget-procurement-hotel',
@@ -21,7 +22,8 @@ import { PADDING_0, PlanCategoryEnum } from '../../../budget-procurement.model';
     FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule],
   templateUrl: './domestic-budget-procurement-hotel.component.html',
   styleUrl: './domestic-budget-procurement-hotel.component.scss',
-  providers: [DatePipe, DataTransformPipe]
+  providers: [DatePipe, DataTransformPipe],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DomesticBudgetProcurementHotelComponent implements OnInit, AfterViewChecked {
 
@@ -42,6 +44,7 @@ export class DomesticBudgetProcurementHotelComponent implements OnInit, AfterVie
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
+      console.log('effect data DomesticBudgetProcurementHotelComponent: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
       }
