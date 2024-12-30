@@ -42,7 +42,7 @@ import {MatAutocompleteModule, MatAutocompleteTrigger} from '@angular/material/a
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {map, Observable, startWith} from 'rxjs';
 import {debounceTime} from 'rxjs/operators';
-import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
 import {Constant, DATE_FORMAT_DD_MM_YYYY} from 'src/app/crew-trip/shared/utils/constant';
 import {MAT_MOMENT_DATE_FORMATS, provideMomentDateAdapter} from '@angular/material-moment-adapter';
 

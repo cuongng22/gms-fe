@@ -16,7 +16,7 @@ import { MatTableModule } from '@angular/material/table';
 import { RouterLink, RouterModule } from '@angular/router';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { Observable, debounceTime, startWith, map, Subject } from 'rxjs';
-import { FlightMarketService } from 'src/app/crew-trip/core/services/ flight-market.service';
+import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';

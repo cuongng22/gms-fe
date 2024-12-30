@@ -1,11 +1,11 @@
-<div [sizeInput]="sizeInput">
+<div [sizeInput]="size">
   <mat-form-field>
     <mat-label>
       {{ label }}
     </mat-label>
     <mat-select [formControl]="formControl" [required]="required">
-      <mat-option *ngFor="let item of options" [value]="item.value">
-        {{ item.display }}
+      <mat-option *ngFor="let item of options" [value]="attrValue?item[attrValue]:item">
+        {{ attrDisplay?item[attrDisplay]:item }}
       </mat-option>
     </mat-select>
     <mat-error *ngIf="ngControl?.control?.hasError('required')">

@@ -38,6 +38,7 @@
     "@types/lodash": "^4.17.9",
     "@types/luxon": "^1.11.1",
     "@types/sprintf-js": "^1.1.4",
+    "@uiowa/digit-only": "^3.2.1",
     "apexcharts": "~3.49.2",
     "bootstrap": "^5.3.3",
     "date-fns": "^4.1.0",

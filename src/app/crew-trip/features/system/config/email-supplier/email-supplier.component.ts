@@ -11,7 +11,7 @@ import {CommonModule} from '@angular/common';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginator} from '@angular/material/paginator';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
 import {EmailSupplierService} from 'src/app/crew-trip/core/services/email-supplier-service';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
