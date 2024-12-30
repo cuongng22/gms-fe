@@ -25,6 +25,7 @@ import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/se
 import { ifValidator } from 'ngxtension/if-validator';
 import { ValidationErrors } from '@iplab/ngx-file-upload';
 import moment from 'moment';
+import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-budget-procurement-general',
@@ -34,7 +35,8 @@ import moment from 'moment';
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
     NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent],
   templateUrl: './budget-procurement-general.component.html',
-  styleUrl: './budget-procurement-general.component.scss'
+  styleUrl: './budget-procurement-general.component.scss',
+  providers: [DataTransformPipe]
 })
 export class BudgetProcurementGeneralComponent extends CommonComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
@@ -49,6 +51,9 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
   airports = model<any[]>([]);
 
+  constructor(private dataTransformPipe: DataTransformPipe) {
+    super();
+  }
 
   override formGroupDetail = this.formBuilder.group({
     budgetPlanFlag: new FormControl(true),
@@ -167,6 +172,36 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
       this.formGroupDetail.controls.unit.setValue(this.procurementPlanFlag ? 'Gói HĐ/DV' : null);
       this.formGroupDetail.controls.supplierMethod.setValue(this.procurementPlanFlag ? 'Chào giá/ Đàm phán' : null);
     }
-    
+
+  }
+
+  private _unitPriceDoubleHotel: string = '';
+  get unitPriceDoubleHotel(): string {
+    return this._unitPriceDoubleHotel;
+  }
+  set unitPriceDoubleHotel(value: string) {
+    let result: string[] = [];
+    if (value) {
+      const entries = Object.entries(JSON.parse(value));
+      for (const [key, value] of entries) {
+        result.push(`${key} : ${this.dataTransformPipe.transform(value, [Constant.NUMBER])}`);
+      }
+    }
+    this._unitPriceDoubleHotel = result.join('\n');
+  }
+
+  private _unitPriceSingleHotel: string = '';
+  get unitPriceSingleHotel(): string {
+    return this._unitPriceSingleHotel;
+  }
+  set unitPriceSingleHotel(value: string) {
+    let result: string[] = [];
+    if (value) {
+      const entries = Object.entries(JSON.parse(value));
+      for (const [key, value] of entries) {
+        result.push(`${key} : ${this.dataTransformPipe.transform(value, [Constant.NUMBER])}`);
+      }
+    }
+    this._unitPriceSingleHotel = result.join('\n');
   }
 }

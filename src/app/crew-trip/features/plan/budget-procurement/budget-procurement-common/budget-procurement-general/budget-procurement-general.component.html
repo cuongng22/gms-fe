@@ -32,7 +32,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
-        <div class="wp-20" sizeInput="sm">
+        <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@rateForSingle">Buffer rate (for single-gender)</mat-label>
                 <input type="text" decimalSeparator="," digitOnly [decimal]="true" matInput
@@ -45,21 +45,33 @@
 
     </div>
     <div class="row">
-        <div class="col" sizeInput="sm">
+        <div class="col col-lg-3">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@singleRoomRate">Single Room Rate</mat-label>
-                <input type="text" matInput formControlName="unitPriceHotel" decimalSeparator="," digitOnly
+                <textarea matInput [disabled]="true" [ngModel]="unitPriceSingleHotel"
+                    [ngModelOptions]="{standalone: true}" matTextareaAutosize cdkAutosizeMinRows="2" cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize">
+                    </textarea>
+                <!-- <input type="text" matInput formControlName="unitPriceHotel" decimalSeparator="," digitOnly
                     appSeparator>
                 <mat-error *ngxControlError="formGroupDetail.controls.unitPriceHotel; track: 'maxlength'"
                     i18n="@@singleRoomRateMaxlength">
                     Single Room Rate {{MESSAGE.MAX_LENGTH_INVALID|
                     dataTransformPipe:[Constant.STRING_FORMAT,20]
                     }}
-                </mat-error>
+                </mat-error> -->
             </mat-form-field>
         </div>
-        <div class="col" sizeInput="sm">
+        <div class="col col-lg-3">
             <mat-form-field class="mb-2">
+                <mat-label i18n="@@doubleRoomRate">Double Room Rate</mat-label>
+                <textarea matInput [disabled]="true" [ngModel]="unitPriceDoubleHotel"
+                    [ngModelOptions]="{standalone: true}" matTextareaAutosize cdkAutosizeMinRows="2" cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize">
+                    </textarea>
+            </mat-form-field>
+
+            <!-- <mat-form-field class="mb-2">
                 <mat-label i18n="@@doubleRoomRate">Double Room Rate</mat-label>
                 <input type="text" matInput formControlName="unitPriceDoubleHotel" decimalSeparator="," digitOnly
                     appSeparator>
@@ -69,7 +81,8 @@
                     dataTransformPipe:[Constant.STRING_FORMAT,20]
                     }}
                 </mat-error>
-            </mat-form-field>
+            </mat-form-field> -->
+
         </div>
     </div>
     <div class="row">

@@ -129,6 +129,8 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       const response = await this.baseService.getDetailSummary(this.id() ?? 0); //dataDetailExample;//
       this.dataDetail = { ...response.data };
       this.budgetProcurementGeneral.formGroupDetail.patchValue(this.dataDetail);
+      this.budgetProcurementGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
+      this.budgetProcurementGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
       this.budgetProcurementGeneral.setDefaultValueGeneral();
       this.setDataDetail();
       this.setPanelState();
