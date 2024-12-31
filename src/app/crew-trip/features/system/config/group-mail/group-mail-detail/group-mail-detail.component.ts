@@ -1,4 +1,7 @@
-import {Component, ElementRef, Inject, inject, LOCALE_ID, model, OnInit, ViewChild} from '@angular/core';
+import {
+  Component, ElementRef, Inject, inject, LOCALE_ID, model, OnChanges, OnInit, SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {MatAutocompleteModule,} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
@@ -24,11 +27,14 @@ import {MatNativeDateModule} from '@angular/material/core';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {HttpStatusCode} from '@angular/common/http';
+import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
 
 interface EmailObj {
   email: string;
   isEditing: boolean;
   isInvalid?: boolean;
+  isEmpty?: boolean;
+  isDuplicate?: boolean;
 }
 
 @Component({
@@ -38,7 +44,7 @@ interface EmailObj {
     MatCardModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, CommonModule,
+    MatTableModule, MatPaginatorModule, CommonModule, InputComponent
   ],
   templateUrl: './group-mail-detail.component.html',
   styleUrl: './group-mail-detail.component.scss'
@@ -57,10 +63,11 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   emailListStr: string[] = [];
   existCode = false;
   existMessage = '';
+  emailListCheck: EmailObj[] = [];
   override formGroupDetail = this.formBuilder.group({
     id: [],
-    groupName: ['', Validators.required],
-    notes: [''],
+    groupName: ['', [Validators.required, Validators.maxLength(100)]],
+    notes: ['', Validators.maxLength(500)],
     marketCode: ['', [Validators.required, this.existCodeValidator.bind(this)]],
     groupEmail: [[] as string[], Validators.required]
   });
@@ -82,6 +89,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   }
 
   override ngOnInit(): void {
+    console.log(this.formGroupDetail);
     if (this.data?.grMail) {
       this.formGroupDetail.patchValue(this.data?.grMail);
       this.emailList = this.data?.grMail.groupEmail.map((email: string) => ({
@@ -93,6 +101,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
       this.markets = res.data;
 
     });
+    this.formGroupDetail.patchValue({marketCode: this.formGroupDetail.value.marketCode});
   }
 
   filterMarket(): void {
@@ -117,21 +126,27 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
     this.emailList[index].email = email;
 
     this.emailForm.controls['email'].setValue(email);
-    if (this.emailForm.controls['email'].invalid) {
-      this.emailList[index].isInvalid = true;
-    } else {
-      this.emailList[index].isInvalid = false;
-    }
+    this.emailList[index].isInvalid = this.emailForm.controls['email'].invalid;
+    this.emailList[index].isEmpty = this.emailList[index].email === '';
+    this.emailList[index].isDuplicate = false;
   }
 
   editEmail(index: number): void {
     this.emailList[index].isEditing = true;
     this.emailList = [...this.emailList];
+    this.emailList[index].isEmpty = this.emailList[index].email === '';
   }
 
   saveEmail(index: number): void {
     this.emailList[index].isEditing = false;
-    this.emailList = [...this.emailList];
+    const exist = this.emailListCheck.find((emailObj: EmailObj) => emailObj.email.toLowerCase() === this.emailList[index].email.toLowerCase());
+    if (exist) {
+      this.emailList[index].isDuplicate = true;
+    } else {
+      this.emailList = [...this.emailList];
+      this.emailListCheck.push(this.emailList[index]);
+      this.emailList[index].isEmpty = this.emailList[index].email === '';
+    }
   }
 
   deleteEmail(index: number): void {
