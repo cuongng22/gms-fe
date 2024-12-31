@@ -33,8 +33,8 @@
               <mat-label>Actype</mat-label>
               <mat-select formControlName="acType">
                 <mat-option [value]="null">Choose actype</mat-option>
-                <mat-option *ngFor="let type of acTypes" [value]="type.actype">
-                  {{ type.actype }}
+                <mat-option *ngFor="let type of acTypes" [value]="type.acgroup">
+                  {{ type.acgroup }}
                 </mat-option>
               </mat-select>
               @if (!!formGroupDetail.controls['acType'].hasError('existActype')) {

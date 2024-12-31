@@ -366,7 +366,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async addTbl63() {
-    this.tbl63.data = [...this.tbl63.data, {action: 'ADD'}];
+    if (this.tbl63.data.length <= 0) {
+      this.tbl63.data = [...this.tbl63.data, {action: 'ADD'}];
+    }
   }
 
   async deleteUnitPrice(index: any) {
@@ -630,7 +632,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         id: s.id,
         checkinFrom: s.col631,
         checkoutTo: s.col632,
-        lengthTime: s.col633,
+        lengthTime: +s.col633,
         rate: s.col634,
         rate1: s.col635,
         action: s.action

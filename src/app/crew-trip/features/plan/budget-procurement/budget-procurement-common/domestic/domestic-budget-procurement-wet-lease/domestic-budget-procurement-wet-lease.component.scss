@@ -1,0 +1,9 @@
+:host::ng-deep {
+
+    .mat-column-totalRoom,
+    .mat-column-price,
+    .mat-column-priceVat {
+        min-width: 300px !important;
+        max-width: 300px !important;
+    }
+}

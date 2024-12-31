@@ -13,8 +13,13 @@ import { MatSelectModule } from '@angular/material/select';
 import { RouterLink, RouterModule } from '@angular/router';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { debounceTime, startWith, Subject } from 'rxjs';
+import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
+import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { categories, categoryOfPlans, StatusesSummary } from '../../budget-procurement.model';
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
+import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 
 @Component({
   selector: 'app-budget-procurement-summary-search',
@@ -22,7 +27,8 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    DataTransformPipe, RouterLink, RouterModule, AsyncPipe],
+    DataTransformPipe, RouterLink, RouterModule, AsyncPipe, SelectionSuggestComponent, SelectionComponent,
+    SelectMultipleComponent],
   templateUrl: './budget-procurement-summary-search.component.html',
   styleUrl: './budget-procurement-summary-search.component.scss'
 })
@@ -30,50 +36,46 @@ export class BudgetProcurementSummarySearchComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
   private readonly formBuilder = inject(FormBuilder);
+  flightMarketService = inject(FlightMarketService);
 
-  categoryType = input<string>();
+  _categoryType: string = '';
   search = output<any>();
 
   @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
   filteredOptionsAirport = model<any[]>([]);
   keySearchAirport = new Subject<string>();
-  airports: any[] = ['HAN','SGN'];
+  airports = model<any[]>([]);
+  categories = categories;
+  categoryOfPlans = categoryOfPlans;
+  statuses = StatusesSummary;
 
   formGroupSearch = this.formBuilder.group({
-    airport: [''],
-    categoryOfPlan: [''],
-    category: [''],
+    airportCodes: [''],
+    categoryOfPlan: [''], // loại kế hoạch ngân sách hay mua sắm
+    category: [''], // loại quốc tế hay quốc nội
     status: ['']
   });
 
 
   ngOnInit(): void {
-    this.keySearchAirport.pipe(
-      debounceTime(500),
-      startWith(''),
-    ).subscribe((value: string) => this._filterAirport(value ?? ''));
+    // Lấy danh sách thị trường cho ô search
+    this.flightMarketService.search({ option: 1 }).then(res => {
+      this.airports.set(res.data);
+    });
   }
 
-  private _filterAirport(value: string): void {
-    if (!value) {
-      this.filteredOptionsAirport.set(this.airports);
-      return;
-    }
-    const filterValue = value.toLowerCase();
-    this.filteredOptionsAirport.set(this.airports.filter(airport => airport?.toLowerCase().includes(filterValue)));
-  }
-
-  filterAirport(): void {
-    const filterdValue = this.airport.nativeElement.value;
-    if (!filterdValue) {
-      this.filteredOptionsAirport.set(this.airports);
-      return;
-    }
-    this.keySearchAirport.next(filterdValue);
-  }
 
   onSearch(): void {
     this.search.emit(this.formGroupSearch.value);
+  }
+
+  @Input()
+  set categoryType(value: string) {
+    this._categoryType = value;
+  }
+
+  get categoryType(): string {
+    return this._categoryType;
   }
 }
 

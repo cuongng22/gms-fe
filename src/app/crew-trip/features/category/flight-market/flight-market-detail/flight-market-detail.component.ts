@@ -14,7 +14,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ActivatedRoute, Router, RouterLink, RouterModule } from '@angular/router';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { FlightMarketService } from 'src/app/crew-trip/core/services/ flight-market.service';
+import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { NationService } from 'src/app/crew-trip/core/services/nation-service';
 import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';

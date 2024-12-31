@@ -1,24 +1,25 @@
-import {AfterViewInit, Component, HostListener, inject, OnInit, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
-import {SelectionModel} from '@angular/cdk/collections';
-import {MatPaginator, PageEvent} from '@angular/material/paginator';
-import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {ToggleService} from 'src/app/common/header/toggle.service';
-import {BaseService} from 'src/app/crew-trip/core/services/base-service';
-import {FormGroup} from '@angular/forms';
-import {COMMON_CONFIG, Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
-import {HttpStatusCode} from '@angular/common/http';
-import {saveAs} from 'file-saver';
-import {UltilService} from 'src/app/crew-trip/core/services/ultil-service';
-import {ListResponse} from './models/common.model';
-import {environment} from 'src/environments/environment';
+import { AfterViewInit, Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import { MatTableDataSource } from '@angular/material/table';
+import { SelectionModel } from '@angular/cdk/collections';
+import { MatPaginator, PageEvent } from '@angular/material/paginator';
+import { CustomizerSettingsService } from 'src/app/customizer-settings/customizer-settings.service';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { ToggleService } from 'src/app/common/header/toggle.service';
+import { BaseService } from 'src/app/crew-trip/core/services/base-service';
+import { FormGroup } from '@angular/forms';
+import { COMMON_CONFIG, Constant, MESSAGE, removeNullValues } from 'src/app/crew-trip/shared/utils/constant';
+import { HttpStatusCode } from '@angular/common/http';
+import { saveAs } from 'file-saver';
+import { UltilService } from 'src/app/crew-trip/core/services/ultil-service';
+import { ListResponse } from './models/common.model';
+import { environment } from 'src/environments/environment';
+import { ShowMessageComponent } from './component/show-message/show-message.component';
 
 
 @Component({
   selector: 'app-common', standalone: true, imports: [], template: ''
 })
-export class CommonComponent implements OnInit, AfterViewInit {
+export class CommonComponent extends ShowMessageComponent implements OnInit, AfterViewInit {
   environment = environment;
   Constant = Constant;
   MESSAGE = MESSAGE;
@@ -54,6 +55,7 @@ export class CommonComponent implements OnInit, AfterViewInit {
   configScrollY = 60;
 
   constructor() {
+    super();
     this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
       this.isSidebarToggled = isSidebarToggled;
     });
@@ -213,7 +215,7 @@ export class CommonComponent implements OnInit, AfterViewInit {
   }
 
   async showConfirmDelete(id: any) {
-    this.formGroupDetail.patchValue({id: id});
+    this.formGroupDetail.patchValue({ id: id });
     this.toggleDialogDelete();
   }
 
@@ -233,7 +235,7 @@ export class CommonComponent implements OnInit, AfterViewInit {
   async exportFile(body?: any, filename?: string) {
     try {
       await this.spinner.show();
-      const res = await this.baseService.exportData({...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)});
+      const res = await this.baseService.exportData({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) });
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
@@ -248,7 +250,7 @@ export class CommonComponent implements OnInit, AfterViewInit {
       this.formGroupSearch.patchValue({
         'export': true
       });
-      const res = await this.baseService.exportDataOptions({...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)}, sourcePath);
+      const res = await this.baseService.exportDataOptions({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) }, sourcePath);
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);

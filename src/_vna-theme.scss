@@ -713,7 +713,7 @@
 
 .fixed {
   position: fixed;
-  z-index: 2;
+  z-index: 999;
   right: 25px;
   top: 75px;
   transition: top 0.7s ease;

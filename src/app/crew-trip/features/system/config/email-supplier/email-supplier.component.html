@@ -265,7 +265,7 @@
             <div class="col-sm-4 col-md-4">
               <div class="form-group mb-20" sizeInput="md">
                 <app-select-multiple size="sm" label="Subjects of application"
-                                     [required]="true" [selectOptions]="targetPersonals" attrValue="code"
+                                     [required]="true" [options]="targetPersonals" attrValue="code"
                                      attrDisplay="label"
                                      [readonly]="formGroupDetail.get('targetObject')?.disabled ?? false"
                                      [isSearch]="false"

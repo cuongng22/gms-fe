@@ -18,7 +18,7 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {RouterModule} from '@angular/router';
 import {EstimatedAnnualProductionService} from 'src/app/crew-trip/core/services/estimated-annual-production';
-import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
 import {AirplaneService} from 'src/app/crew-trip/core/services/airplane-service';
 import {debounceTime, startWith, Subject} from 'rxjs';
 import {Constant} from 'src/app/crew-trip/shared/utils/constant';

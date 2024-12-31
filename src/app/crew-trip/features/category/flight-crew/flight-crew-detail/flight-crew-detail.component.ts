@@ -21,7 +21,7 @@ import {CrewsService} from 'src/app/crew-trip/core/services/crews-service';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {FlightCrewService} from 'src/app/crew-trip/core/services/flight-crew-service';
-import {FlightMarketService} from 'src/app/crew-trip/core/services/ flight-market.service';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
 import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
 import {CommonModule, NgForOf} from '@angular/common';
 import {MatCheckbox} from '@angular/material/checkbox';

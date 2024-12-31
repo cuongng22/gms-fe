@@ -18,10 +18,10 @@ import {ProfileComponent} from "src/app/crew-trip/core/auth/profile/profile.comp
 import {ResetPasswordComponent} from "src/app/crew-trip/core/auth/reset-password/reset-password.component";
 import {FlightMarketComponent} from './crew-trip/features/category/flight-market/flight-market.component';
 import {
-  FlightMarketDetailComponent
+    FlightMarketDetailComponent
 } from './crew-trip/features/category/flight-market/flight-market-detail/flight-market-detail.component';
 import {
-  FlightMarketListComponent
+    FlightMarketListComponent
 } from './crew-trip/features/category/flight-market/flight-market-list/flight-market-list.component';
 import {ActRateComponent} from "src/app/crew-trip/features/category/act-rate/act-rate.component";
 import {RateUthComponent} from "src/app/crew-trip/features/plan/rate-uth/rate-uth.component";
@@ -41,28 +41,30 @@ import {reportcomponent10} from './crew-trip/features/reports/report10/report10.
 import {CrewsDetailComponent} from './crew-trip/features/category/crews/crews-detail/crews-detail.component';
 import {GroupMailComponent} from "src/app/crew-trip/features/system/config/group-mail/group-mail.component";
 import {
-  FiveYearPlanComponent
+    FiveYearPlanComponent
 } from "src/app/crew-trip/features/plan/production/five-year-plan/five-year-plan.component";
 import {
-  EstAnnualProductionComponent
+    EstAnnualProductionComponent
 } from "src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.component";
 import {
-  AnnualProductionComponent
+    AnnualProductionComponent
 } from "src/app/crew-trip/features/plan/production/annual-production/annual-production.component";
 import {AutocompleteComponent} from './ui-elements/autocomplete/autocomplete.component';
 import {BudgetProcurementComponent} from './crew-trip/features/plan/budget-procurement/budget-procurement.component';
 import {
-  BudgetProcurementListComponent
+    BudgetProcurementListComponent
 } from './crew-trip/features/plan/budget-procurement/budget-procurement-list/budget-procurement-list.component';
 import {
-  BudgetProcurementSummaryComponent
+    BudgetProcurementSummaryComponent
 } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary.component';
 import {
-  BudgetProcurementSummaryDetailComponent
+    BudgetProcurementSummaryDetailComponent
 } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary-detail/budget-procurement-summary-detail.component';
-import {FlightCrewComponent} from "src/app/crew-trip/features/category/flight-crew/flight-crew.component";
-import {AircraftDataComponent} from "src/app/crew-trip/features/system/config/aircraft-data/aircraft-data.component";
-import {EmailSupplierComponent} from "src/app/crew-trip/features/system/config/email-supplier/email-supplier.component";
+import { FlightCrewComponent } from "src/app/crew-trip/features/category/flight-crew/flight-crew.component";
+import { AircraftDataComponent } from "src/app/crew-trip/features/system/config/aircraft-data/aircraft-data.component";
+import { EmailSupplierComponent } from "src/app/crew-trip/features/system/config/email-supplier/email-supplier.component";
+import {InvoiceFormComponent} from "src/app/crew-trip/features/invoice/form/invoice-form.component";
+
 
 
 export const routes: Routes = [
@@ -76,100 +78,111 @@ export const routes: Routes = [
     component: FirstPageComponent,
     canActivate: [AuthGuard],
     children: [
-      {path: 'ke-hoach', component: KeHoachComponent},
-      {path: 'contract', component: ContractComponent},
+      { path: 'ke-hoach', component: KeHoachComponent },
+      { path: 'contract', component: ContractComponent },
       {
         path: 'system/admin', children: [
-          {path: 'users', component: UsersComponent},
-          {path: 'roles', component: RolesComponent},
-          {path: 'functions', component: FunctionsComponent},
+          { path: 'users', component: UsersComponent },
+          { path: 'roles', component: RolesComponent },
+          { path: 'functions', component: FunctionsComponent },
         ],
       },
       {
         path: 'system/config', children: [
-          {path: 'group-mail', component: GroupMailComponent},
-          {path: 'information-plane', component: AircraftDataComponent},
-          {path: 'email-supplier', component: EmailSupplierComponent},
+          { path: 'group-mail', component: GroupMailComponent },
+          { path: 'information-plane', component: AircraftDataComponent },
+          { path: 'email-supplier', component: EmailSupplierComponent },
         ],
 
 
       },
       {
         path: 'plan', children: [
-          {path: 'rate/uth', component: RateUthComponent},
-          {path: 'rate/planned', component: RatePlannedComponent},
-          {path: 'production/five-year-plan', component: FiveYearPlanComponent},
-          {path: 'production/est-annual-production', component: EstAnnualProductionComponent},
-          {path: 'production/planned', component: AnnualProductionComponent},
+          { path: 'rate/uth', component: RateUthComponent },
+          { path: 'rate/planned', component: RatePlannedComponent },
+          { path: 'production/five-year-plan', component: FiveYearPlanComponent },
+          { path: 'production/est-annual-production', component: EstAnnualProductionComponent },
+          { path: 'production/planned', component: AnnualProductionComponent },
           {
             path: 'est-plan/budget-procurement', component: BudgetProcurementComponent,
             children: [
-              {path: '', component: BudgetProcurementListComponent},
-              {path: 'summary', component: BudgetProcurementSummaryComponent},
-              {path: 'detail/:id', component: BudgetProcurementSummaryDetailComponent}
+              { path: '', component: BudgetProcurementListComponent },
+              {
+                path: ':id/summary', component: BudgetProcurementSummaryComponent, pathMatch: 'full',
+              },
+              {
+                path: ':plan-budget-procurement-id/summary/:id/detail',
+                component: BudgetProcurementSummaryDetailComponent
+              }
+
             ]
           },
         ]
       },
       {
         path: 'category', children: [
-          {path: 'vehicle', component: VehicleComponent},
-          {path: 'contract', component: ContractComponent},
-          {path: 'act-rate', component: ActRateComponent},
-          {path: 'hotel', component: HotelComponent},
-          {path: 'nation', component: NationComponent},
-          {path: 'cost', component: ServiceFeeComponent},
-          {path: 'crews', component: CrewsComponent},
-          {path: 'flight-crew', component: FlightCrewComponent},
-          {path: 'vehicle', component: VehicleComponent},
-          {path: 'contract', component: ContractComponent},
-          {path: 'hotel', component: HotelComponent},
-          {path: 'nation', component: NationComponent},
+          { path: 'vehicle', component: VehicleComponent },
+          { path: 'contract', component: ContractComponent },
+          { path: 'act-rate', component: ActRateComponent },
+          { path: 'hotel', component: HotelComponent },
+          { path: 'nation', component: NationComponent },
+          { path: 'cost', component: ServiceFeeComponent },
+          { path: 'crews', component: CrewsComponent },
+          { path: 'flight-crew', component: FlightCrewComponent },
+          { path: 'vehicle', component: VehicleComponent },
+          { path: 'contract', component: ContractComponent },
+          { path: 'hotel', component: HotelComponent },
+          { path: 'nation', component: NationComponent },
           {
             path: 'crews', component: CrewsComponent,
             children: [
-              {path: '', component: CrewsComponent},
-              {path: 'detail', component: CrewsDetailComponent},
+              { path: '', component: CrewsComponent },
+              { path: 'detail', component: CrewsDetailComponent },
             ]
           },
-          {path: 'autocomplete', component: AutocompleteComponent},
+          { path: 'autocomplete', component: AutocompleteComponent },
           {
             path: 'flight-market', component: FlightMarketComponent,
             children: [
-              {path: '', component: FlightMarketListComponent},
-              {path: 'detail', component: FlightMarketDetailComponent},
-              {path: 'detail/:id', component: FlightMarketDetailComponent}
+              { path: '', component: FlightMarketListComponent },
+              { path: 'detail', component: FlightMarketDetailComponent },
+              { path: 'detail/:id', component: FlightMarketDetailComponent }
             ]
           },
         ]
       },
       {
+        path: 'invoice', children: [
+          { path: 'invoice-form-tab', component: InvoiceFormComponent },
+        ]
+      },
+      {
         path: 'reports', children: [
-          {path: 'report1', component: reportcomponent},
-          {path: 'report2', component: reportcomponent2},
-          {path: 'report3', component: reportcomponent3},
-          {path: 'report4', component: reportcomponent4},
-          {path: 'report5', component: reportcomponent5},
-          {path: 'report6', component: reportcomponent6},
-          {path: 'report7', component: reportcomponent7},
-          {path: 'report8', component: reportcomponent8},
-          {path: 'report9', component: reportcomponent9},
-          {path: 'report10', component: reportcomponent10},
+          { path: 'report1', component: reportcomponent },
+          { path: 'report2', component: reportcomponent2 },
+          { path: 'report3', component: reportcomponent3 },
+          { path: 'report4', component: reportcomponent4 },
+          { path: 'report5', component: reportcomponent5 },
+          { path: 'report6', component: reportcomponent6 },
+          { path: 'report7', component: reportcomponent7 },
+          { path: 'report8', component: reportcomponent8 },
+          { path: 'report9', component: reportcomponent9 },
+          { path: 'report10', component: reportcomponent10 },
 
         ],
       },
-      {path: 'profile', component: ProfileComponent},
+      { path: 'profile', component: ProfileComponent },
     ]
   },
   {
     path: 'auth',
     children: [
-      {path: 'login', component: SignInComponent},
-      {path: 'forgot-password', component: ForgotPasswordComponent},
-      {path: 'reset-password', component: ResetPasswordComponent}
+      { path: 'login', component: SignInComponent },
+      { path: 'forgot-password', component: ForgotPasswordComponent },
+      { path: 'reset-password', component: ResetPasswordComponent }
     ]
   },
-  {path: '**', component: NotFoundComponent}
+  { path: '**', component: NotFoundComponent }
 
   /*,
   {

@@ -1,56 +1,31 @@
 <!--Search-->
-<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+<mat-card class="mb-0 pt-0 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
         <form [formGroup]="formGroupSearch" (ngSubmit)="onSearch()" autocomplete="off">
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-11">
                     <div class="row">
-                        <div class="col" sizeInput="md">
-                            <mat-form-field class="mb-1">
-                                <mat-label i18n="@@airport">Airport</mat-label>
-                                <input #airport (input)="filterAirport()" type="text" matInput formControlName="airport"
-                                    [matAutocomplete]="airportComplete">
-                                <mat-autocomplete autoActiveFirstOption requireSelection
-                                    #airportComplete="matAutocomplete">
-                                    @for (option of filteredOptionsAirport(); track option) {
-                                    <mat-option [value]="option">{{option}}</mat-option>
-                                    }
-                                </mat-autocomplete>
-                            </mat-form-field>
+                        <div class="col">
+                            <app-select-multiple i18n-label="@@airport" label="Airport" [options]="airports()"
+                                size="md" formControlName="airportCodes"></app-select-multiple>
                         </div>
-                        <div class="col" sizeInput="md">
-                            <mat-form-field class="mb-1">
-                                <mat-label i18n="@@categoryOfPlan">Category of plan</mat-label>
-                                <mat-select formControlName="categoryOfPlan">
-                                    <mat-option [value]="null" i18n="@@allCategory">-- All Category of plan --</mat-option>
-                                    <mat-option value="Procurement Plan" i18n="@@procurementPlan">Procurement Plan</mat-option>
-                                    <mat-option value="Budget Plan" i18n="@@budgetPlan">Budget Plan</mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                        <div class="col">
+                            <app-selection class="mb-1" size="md" i18n-label="@@categoryOfPlan" label="Category of plan"
+                                [options]="categoryOfPlans" formControlName="categoryOfPlan" attrValue="code"
+                                attrDisplay="value"></app-selection>
                         </div>
-                        @if(categoryType() === 'ALL'){
-                        <div class="col" sizeInput="md">
-                            <mat-form-field class="mb-1">
-                                <mat-label i18n="@@category">Category</mat-label>
-                                <mat-select formControlName="category">
-                                    <mat-option [value]="null" i18n="@@allCategory">-- All Category --</mat-option>
-                                    <mat-option value="International" i18n="@@international">International</mat-option>
-                                    <mat-option value="Domestic" i18n="@@domestic">Domestic</mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                        @if(categoryType === 'All'){
+                        <div class="col">
+                            <app-selection class="mb-1" size="md" label="Category" i18n-label="@@category"
+                                [options]="categories" formControlName="category" attrValue="code"
+                                attrDisplay="value"></app-selection>
                         </div>
                         }
 
-
-                        <div class="col" sizeInput="md">
-                            <mat-form-field class="mb-1">
-                                <mat-label i18n="@@status">Status</mat-label>
-                                <mat-select formControlName="status">
-                                    <mat-option [value]="null" i18n="@@allStatus">-- All Status --</mat-option>
-                                    <mat-option value="Completed" i18n="@@completed">Completed</mat-option>
-                                    <mat-option value="Incomplete" i18n="@@incomplete">Incomplete</mat-option>
-                                </mat-select>
-                            </mat-form-field>
+                        <div class="col">
+                            <app-selection class="mb-1" size="md" label="Status" i18n-label="@@status"
+                                [options]="statuses" formControlName="status" attrValue="code"
+                                attrDisplay="value"></app-selection>
                         </div>
                     </div>
                 </div>

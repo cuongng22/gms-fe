@@ -1,36 +1,35 @@
-import {CommonModule, AsyncPipe} from '@angular/common';
-import {Component, DestroyRef, ElementRef, Inject, inject, model, ViewChild, OnInit} from '@angular/core';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatNativeDateModule} from '@angular/material/core';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {
-  MAT_DIALOG_DATA,
-  MatDialog,
-  MatDialogActions,
-  MatDialogClose,
-  MatDialogContent,
-  MatDialogRef,
-  MatDialogTitle
-} from '@angular/material/dialog';
-import {MatFormFieldModule, MatFormField} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatSelectModule} from '@angular/material/select';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-import {RouterLink, RouterModule} from '@angular/router';
-import {FileUploadModule} from '@iplab/ngx-file-upload';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {debounceTime, startWith, Subject} from 'rxjs';
-import {BudgetProcurementPlanService} from 'src/app/crew-trip/core/services/budget-procurement-plan.service';
-import {AlreadyExistsValidator} from 'src/app/crew-trip/core/validator/already-exists';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import { CommonModule, AsyncPipe } from '@angular/common';
+import { Component, DestroyRef, ElementRef, Inject, inject, model, OnInit, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { RouterLink, RouterModule } from '@angular/router';
+import { FileUploadModule } from '@iplab/ngx-file-upload';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { debounceTime, startWith, Subject } from 'rxjs';
+import { AlreadyExistsValidator } from 'src/app/crew-trip/core/validator/already-exists';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
+import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
+import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
+import { HttpStatusCode } from '@angular/common/http';
+import { DigitOnlyModule } from '@uiowa/digit-only';
+import { NgxControlError } from 'ngxtension/control-error';
+import { Statuses, years } from '../budget-procurement.model';
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
+import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 
 @Component({
   selector: 'app-budget-procurement-list',
@@ -38,38 +37,26 @@ import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule],
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule,
+    SelectionSuggestComponent, SelectionComponent, NgxControlError, DigitOnlyModule, SelectMultipleComponent],
   templateUrl: './budget-procurement-list.component.html',
   styleUrl: './budget-procurement-list.component.scss'
 })
 export class BudgetProcurementListComponent extends CommonComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
-  override baseService = inject(BudgetProcurementPlanService);
+  override baseService = inject(PlanBudgetProcurementService);
 
   formBuilder = inject(FormBuilder);
-
-
-  @ViewChild('version') version: ElementRef<HTMLInputElement>;
-  versionList: string[] = []; // danh sách chọn phiên bản
-  filteredOptionsVersion = model<string[]>([]); // filtered Des
-  keySearchVersion = new Subject<string>();
-
-  //Bản nháp, Hoàn thành KH quốc tế, Hoàn thành KH quốc nội, Từ chối, Đã duyệt, Xác nhận
-  statusList: { code: string, value: string }[] = [
-    {code: '1', value: 'Bản nháp'},
-    {code: '2', value: 'Hoàn thành KH quốc tế'},
-    {code: '3', value: 'Hoàn thành KH quốc nội'},
-    {code: '4', value: 'Từ chối'},
-    {code: '5', value: 'Đã duyệt'},
-    {code: '6', value: 'Xác nhận'}
-  ];
+  versions = model<any[]>([]);
+  statuses = Statuses;
+  years = model<any[]>([]);
 
   override formGroupSearch = this.formBuilder.group({
     s: new FormControl(''),
     year: new FormControl(''),
-    versionId: new FormControl(''),
-    status: new FormControl('')
+    version: new FormControl(''),
+    status: new FormControl([])
   });
 
   override formGroupDetail = this.formBuilder.group({
@@ -88,65 +75,13 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
     super();
   }
 
-  override ngOnInit(): void {
+  override ngOnInit() {
     super.ngOnInit();
-
-    this.dataSource.data = [
-      {
-        id: '1',
-        name: 'Budget Plan A',
-        year: 2023,
-        version: 'v1.0',
-        versionProd: 'v1.0-prod',
-        versionRate: 'v1.0-rate',
-        status: 'Đã duyệt',
-        completionDate: new Date('2023-01-15'),
-        confirmationDate: new Date('2023-01-20'),
-        approvalDate: new Date('2023-01-25'),
-        rejectionDate: new Date('2023-02-25'),
-        reason: 'test',
-        notes: 'Initial budget plan',
-        updateBudgetPlan: false,
-        createdDate: new Date('2023-01-01'),
-        createdBy: 'User A',
-        updatedBy: 'User B',
-        updatedDate: new Date('2023-01-10')
-      },
-      {
-        id: '2',
-        name: 'Budget Plan B',
-        year: 2023,
-        version: 'v2.0',
-        versionProd: 'v2.0-prod',
-        versionRate: 'v2.0-rate',
-        status: 'Từ chối',
-        completionDate: new Date('2023-02-15'),
-        confirmationDate: new Date('2023-02-20'),
-        approvalDate: new Date('2023-01-25'),
-        rejectionDate: new Date('2023-02-25'),
-        reason: 'Insufficient funds',
-        notes: 'Second budget plan',
-        updateBudgetPlan: true,
-        createdDate: new Date('2023-02-01'),
-        createdBy: 'User C',
-        updatedBy: 'User D',
-        updatedDate: new Date('2023-02-10')
-      }
-    ];
-
-
-    // --------------------handle valueChange for filterd-----------------
-    this.keySearchVersion.pipe(
-      debounceTime(500),
-      startWith(''))
-      .subscribe(value => {
-        if (!value) {
-          this.filteredOptionsVersion.set(this.versionList);
-          return;
-        }
-        const filterValue = value.toLowerCase();
-        this.filteredOptionsVersion.set(this.versionList.filter(version => version?.toString().toLowerCase().includes(filterValue)));
-      });
+    this.years.set(years());
+    this.baseService.versions().then(res => {
+      this.versions.set(res.data);
+    });
+    this.search();
 
     // -----------------List Budget Shopping-------------
     this.displayedColumns = ['select', 'name', 'year', 'version', 'versionProd', 'versionRate', 'time', 'status', 'action'];
@@ -164,7 +99,12 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
     }
     try {
       await this.spinner.show();
-      const res = await this.baseService.reject(this.formGroupReject.value.id);
+      const body = {
+        id: this.formGroupReject.value.id,
+        status: 'rejected',
+        reason: this.formGroupReject.value.reason
+      }
+      let res = await this.baseService.updateStatus(body);
       this.baseService.showSuccess(MESSAGE.REJECT_SUCCESS);
       await this.search();
       return res;
@@ -186,11 +126,6 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
     this.toggleDialogReject();
   }
 
-
-  filterVersion(): void {
-    this.keySearchVersion.next(this.version.nativeElement.value);
-  }
-
   checkBoxTable(row: any) {
     this.selection.clear();
     this.selection.toggle(row);
@@ -199,15 +134,42 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
   override async showDialogDetail(isCreate: boolean, id?: any) {
     let budgetProcurementDetail;
     if (id != null) {
-      const res = await this.baseService.detail(id);
+      let res = this.dataSource.data.find((x: any) => x.id == id);
       budgetProcurementDetail = res;
     }
-    this.dialog.open(DialogBudgetProcurementDetail, {
-      data: {isCreate: isCreate, budgetProcurementDetail: budgetProcurementDetail},
+    const dialogDetailRef = this.dialog.open(DialogBudgetProcurementDetail, {
+      data: { isCreate: isCreate, budgetProcurementDetail: budgetProcurementDetail },
+    });
+    dialogDetailRef.afterClosed().subscribe(async (res) => {
+      if (res) {
+        await this.search();
+      }
     });
 
   }
-
+  async changeStatus(id: any, status: string) {
+    console.log(status)
+    try {
+      await this.spinner.show();
+      const body = {
+        id: id,
+        status: status
+      }
+      let res = await this.baseService.updateStatus(body);
+      this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
+      await this.search(null, true);
+      return res;
+    } catch (e: any) {
+      console.log(e);
+      this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+  override async search<T>(body?: any, isNextPage?: boolean) {
+    let bodySearch = { ...this.formGroupSearch.value, status: this.formGroupSearch.value.status?.map((x: any) => x).join(',') };
+    super.search(bodySearch, isNextPage);
+  }
 
   toggleDialogReject() {
     this.showDialogReject = !this.showDialogReject;
@@ -223,25 +185,24 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
     MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule, DigitOnlyModule,
+    NgxControlError
   ],
 })
 export class DialogBudgetProcurementDetail extends CommonComponent {
   formBuilder = inject(FormBuilder);
-  override baseService = inject(BudgetProcurementPlanService);
+  override baseService = inject(PlanBudgetProcurementService);
 
   override formGroupDetail = this.formBuilder.group({
     id: new FormControl(''),
-    checkBox: new FormControl(false),
-    planName: new FormControl('', Validators.required),
+    name: new FormControl('', Validators.required),
     year: new FormControl('', Validators.required),
     version: new FormControl('', {
       validators: [Validators.required],
-      asyncValidators: [AlreadyExistsValidator.existsVersion(this.baseService)],
-      updateOn: 'blur'
     }),
-    versionOfProduction: new FormControl(''),
-    versionOfExchangeRate: new FormControl(''),
+    versionProd: new FormControl(''),
+    versionRate: new FormControl(''),
+    updateBudgetPlan: new FormControl(false)
   });
 
   isCreate = model<boolean>(false);
@@ -259,6 +220,10 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
       console.log(this.data);
       this.isCreate.set(this.data.isCreate);
       this.baseService.isUpdate = !this.data.isCreate || !!this.formGroupDetail.controls.id.value;
+      if (this.baseService.isUpdate) {
+        this.formGroupDetail.controls.versionProd.disable();
+        this.formGroupDetail.controls.versionRate.disable();
+      }
 
       if (this.data.budgetProcurementDetail) {
         console.log(this.data.budgetProcurementDetail);
@@ -281,14 +246,16 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
       } else {
         res = await this.baseService.create(this.formGroupDetail.value);
       }
-      console.log(res);
-      await this.search();
+      console.log(res)
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
-      this.dialogRef.close();
+      this.dialogRef.close('OK');
     } catch (e: any) {
-      this.baseService.showError(e.error?.data ?? JSON.stringify(e.error) ?? MESSAGE.ERROR);
+      if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
+        this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
+      }
+      return e;
     } finally {
-      await this.spinner.hide();
+      this.spinner.hide();
     }
   }
 }

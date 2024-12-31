@@ -1,9 +1,11 @@
-import { Component } from '@angular/core';
+import { Component, inject, input, OnInit, ViewChild } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatTabsModule } from '@angular/material/tabs';
 import { RouterLink } from '@angular/router';
 import { BudgetProcurementSummarySearchComponent } from './budget-procurement-summary-search/budget-procurement-summary-search.component';
 import { BudgetProcurementSummaryListComponent } from './budget-procurement-summary-list/budget-procurement-summary-list.component';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
 
 @Component({
   selector: 'app-budget-procurement-summary',
@@ -12,18 +14,38 @@ import { BudgetProcurementSummaryListComponent } from './budget-procurement-summ
   templateUrl: './budget-procurement-summary.component.html',
   styleUrl: './budget-procurement-summary.component.scss'
 })
-export class BudgetProcurementSummaryComponent {
+export class BudgetProcurementSummaryComponent extends CommonComponent implements OnInit {
+  override baseService = inject(PlanBudgetProcurementService);
+  // id của kế hoạch
+  id = input<number>();
 
+  @ViewChild('budgetProcurementSummaryListAll') summaryAll: BudgetProcurementSummaryListComponent;
+  @ViewChild('budgetProcurementSummaryListInternational') summaryInternational: BudgetProcurementSummaryListComponent;
+  @ViewChild('budgetProcurementSummaryListDomestic') summaryDomestic: BudgetProcurementSummaryListComponent;
 
-  searchCategoryAll(data:any){
-    console.log(data);
+  searchSummary(data: any, type: string) {
+    let bodySearch: any = {
+      status: data.status,
+      airportCodes: data.airportCodes
+    }
+    switch (type) {
+      case 'All':
+        this.summaryAll.setDisplayedColumns(data.categoryOfPlan);
+        bodySearch.category = data.category;
+        this.summaryAll.loadData(bodySearch);
+        break;
+      case 'International':
+        this.summaryInternational.setDisplayedColumns(data.categoryOfPlan);
+        this.summaryInternational.loadData(bodySearch);
+        break;
+      case 'Domestic':
+        this.summaryDomestic.setDisplayedColumns(data.categoryOfPlan);
+        this.summaryDomestic.loadData(bodySearch);
+        break;
+    }
+    console.log(data)
   }
 
-  searchCategoryInternational(data:any){
-    console.log(data);
-  }
-
-  searchCategoryDomestic(data:any){
-    console.log(data);
+  override ngOnInit(): void {
   }
 }
