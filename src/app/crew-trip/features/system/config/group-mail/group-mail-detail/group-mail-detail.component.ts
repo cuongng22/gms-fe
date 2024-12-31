@@ -1,16 +1,17 @@
-import {Component, ElementRef, Inject, inject, LOCALE_ID, model, OnInit, ViewChild} from '@angular/core';
+import {
+  Component, ElementRef, Inject, inject, LOCALE_ID, model, OnChanges, OnInit, SimpleChanges,
+  ViewChild
+} from '@angular/core';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {MatAutocompleteModule,} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
-import {MatFormField, MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
 import {MatSelectModule} from '@angular/material/select';
 import {
   AbstractControl,
   FormBuilder,
   FormGroup,
-  FormsModule,
   ReactiveFormsModule,
   ValidationErrors,
   Validators
@@ -25,12 +26,16 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import {HttpStatusCode} from "@angular/common/http";
+import {HttpStatusCode} from '@angular/common/http';
+import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
+import {BehaviorSubject} from "rxjs";
 
 interface EmailObj {
   email: string;
   isEditing: boolean;
   isInvalid?: boolean;
+  isEmpty?: boolean;
+  isDuplicate?: boolean;
 }
 
 @Component({
@@ -40,7 +45,7 @@ interface EmailObj {
     MatCardModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, CommonModule,
+    MatTableModule, MatPaginatorModule, CommonModule, InputComponent
   ],
   templateUrl: './group-mail-detail.component.html',
   styleUrl: './group-mail-detail.component.scss'
@@ -50,18 +55,20 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   formBuilder = inject(FormBuilder);
   override baseService = inject(GroupMailService);
   flightMarketSv = inject(FlightMarketService);
-  @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
+  @ViewChild('marketCode', {static: true}) marketCode!: ElementRef;
   markets: any[] = [];
-  filteredOptionsMarket = model<any[]>([]);
+  filteredOptionsMarket: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
   // override displayedColumns: string[] = ['email', 'actions'];
   emailList: EmailObj[] = [];
   emailForm: FormGroup;
   emailListStr: string[] = [];
   existCode = false;
+  existMessage = '';
+  emailListCheck: EmailObj[] = [];
   override formGroupDetail = this.formBuilder.group({
     id: [],
-    groupName: ['', Validators.required],
-    notes: [''],
+    groupName: ['', [Validators.required, Validators.maxLength(100)]],
+    notes: ['', Validators.maxLength(500)],
     marketCode: ['', [Validators.required, this.existCodeValidator.bind(this)]],
     groupEmail: [[] as string[], Validators.required]
   });
@@ -73,7 +80,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
     , private fb: FormBuilder) {
     super();
     this.emailForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]]
+      email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]]
     });
     if (!data?.mode || data.mode !== 'view') {
       this.displayedColumns = ['email', 'actions'];
@@ -83,6 +90,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   }
 
   override ngOnInit(): void {
+    console.log(this.formGroupDetail);
     if (this.data?.grMail) {
       this.formGroupDetail.patchValue(this.data?.grMail);
       this.emailList = this.data?.grMail.groupEmail.map((email: string) => ({
@@ -90,18 +98,29 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
         isEditing: false
       }));
     }
-    this.flightMarketSv.search({option: 1}).then(res => {
+    this.flightMarketSv.search({option: 1, status: 'Operational'}).then(res => {
       this.markets = res.data;
 
     });
+    this.formGroupDetail.patchValue({marketCode: this.formGroupDetail.value.marketCode});
+    this.filteredOptionsMarket.next(this.markets);
   }
 
   filterMarket(): void {
-    const filterValue = this.marketCode.nativeElement.value.toLowerCase();
-    if (!filterValue) {
-      this.filteredOptionsMarket.set(this.markets);
+    const filterValue = this.marketCode.nativeElement.value?.toLowerCase() || '';
+    const filteredMarkets = this.markets.filter(market =>
+      market?.toLowerCase().includes(filterValue)
+    );
+    const currentMarket = this.formGroupDetail.get('marketCode')?.value;
+    if (currentMarket && !filteredMarkets.includes(currentMarket)) {
+      this.filteredOptionsMarket.next([currentMarket, ...filteredMarkets]);
+    } else {
+      this.filteredOptionsMarket.next(filteredMarkets);
     }
-    this.filteredOptionsMarket.set(this.markets.filter(market => market?.toLowerCase().includes(filterValue)));
+  }
+
+  displayMarket(market: string | null): string {
+    return market ? market : '';
   }
 
   close(): void {
@@ -118,21 +137,27 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
     this.emailList[index].email = email;
 
     this.emailForm.controls['email'].setValue(email);
-    if (this.emailForm.controls['email'].invalid) {
-      this.emailList[index].isInvalid = true;
-    } else {
-      this.emailList[index].isInvalid = false;
-    }
+    this.emailList[index].isInvalid = this.emailForm.controls['email'].invalid;
+    this.emailList[index].isEmpty = this.emailList[index].email === '';
+    this.emailList[index].isDuplicate = false;
   }
 
   editEmail(index: number): void {
     this.emailList[index].isEditing = true;
     this.emailList = [...this.emailList];
+    this.emailList[index].isEmpty = this.emailList[index].email === '';
   }
 
   saveEmail(index: number): void {
     this.emailList[index].isEditing = false;
-    this.emailList = [...this.emailList];
+    const exist = this.emailListCheck.find((emailObj: EmailObj) => emailObj.email.toLowerCase() === this.emailList[index].email.toLowerCase());
+    if (exist) {
+      this.emailList[index].isDuplicate = true;
+    } else {
+      this.emailList = [...this.emailList];
+      this.emailListCheck.push(this.emailList[index]);
+      this.emailList[index].isEmpty = this.emailList[index].email === '';
+    }
   }
 
   deleteEmail(index: number): void {
@@ -143,7 +168,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   override async save() {
     this.emailListStr = this.emailList.filter(emailObj => !emailObj.isEditing).map(emailObj => emailObj.email);
     if (!this.emailListStr || this.emailListStr.length <= 0) {
-      this.baseService.showError('List email is required!');
+      // this.baseService.showError('List email is required!');
       return;
     }
     this.formGroupDetail.patchValue({groupEmail: this.emailListStr});
@@ -151,6 +176,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
       await super.save().then(value => {
         if (value.status == HttpStatusCode.Conflict) {
           this.existCode = true;
+          this.existMessage = value.error?.error;
           this.formGroupDetail.controls['marketCode'].updateValueAndValidity();
           this.existCode = false;
         } else {
