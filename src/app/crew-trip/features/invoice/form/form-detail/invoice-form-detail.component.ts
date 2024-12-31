@@ -15,11 +15,7 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelDescription,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle
+  MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle
 } from '@angular/material/expansion';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
@@ -28,7 +24,7 @@ import {ContractService} from 'src/app/crew-trip/core/services/contract-service'
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
-import {DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 import {ClickOutside} from 'ngxtension/click-outside';
 import {HttpStatusCode} from '@angular/common/http';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
@@ -40,6 +36,7 @@ import {debounce, isEqual, remove} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lookup';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
+import {InvoiceFormService} from "src/app/crew-trip/core/services/invoice-form-service";
 
 
 @Component({
@@ -55,14 +52,11 @@ import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-ser
 
 
 export class InvoiceFormDetailComponent extends CommonComponent implements OnInit {
-  override baseService = inject(ContractService);
+  override baseService = inject(InvoiceFormService);
   nationService = inject(NationService);
   serviceFeeService = inject(ServiceFeeService);
   fb = inject(FormBuilder);
 
-  //control
-  @ViewChild('nationName') nationName: ElementRef<HTMLInputElement>;
-  filteredNation = model<any[]>([]);
 
   //variable
   @Input() id: any;
@@ -75,12 +69,8 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
 
   tblAttachedDocument = new MatTableDataSource();
   tblUnitPrice = new MatTableDataSource();
-  tbl61 = new MatTableDataSource();
-  tbl62 = new MatTableDataSource();
-  tbl63 = new MatTableDataSource();
-  expandList = new Set<string>(['tab1', 'tab2', 'tab3', 'tab4', 'tab5', 'tab6']);
+  expandList = new Set<string>(['tab1', 'tab2']);
   formGroupFileUpload!: FormGroup;
-  curFile: any;
   showDialogDeleteFile = false;
   listMaNghiepVu: any = [];
   listKhoanMucKhns: any = [];
@@ -96,120 +86,98 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   listBudgetCode = ContractLookup.BudgetCode;
   listFlightGroup = ContractLookup.FlightGroup;
   listStatusUsage = ContractLookup.StatusUsage;
-  //debounce
-  marketCodeChangeDebounce: any;
-  marketCodeChangeBrake: any;
-  partnerChangeDebounce: any;
-  partnerChangeBrake: any;
-  _showDialogDelete = false;
-  confirmDeleteMessage = '';
-  deleteObj: any;
-  deletePriceUnitInfo: any = [];
-  deleteNotAllDay: any = [];
-  deleteDayUse: any = [];
+  _displayedColumns1: {
+    label: string;
+    value: string,
+    type?: string,
+    format?: string,
+    rowspan?: string,
+    colspan?: string
+  }[] =
+    [
+      {label:"$localize`Access Bridge`",value:"accessBridge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Accommodation Tax Cc Charge`",value:"accommodationTaxCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Accommodation Tax Fc Charge`",value:"accommodationTaxFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Airport Parking Fee`",value:"airportParkingFee",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Breakfast Cc`",value:"breakfastCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Breakfast Fc`",value:"breakfastFc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Cc`",value:"cc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Ci Date`",value:"ciDate",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Ci Fltno`",value:"ciFltno",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Ci Time`",value:"ciTime",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`City Tax Cc Charge`",value:"cityTaxCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`City Tax Fc Charge`",value:"cityTaxFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Co Date`",value:"coDate",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Co Fltno`",value:"coFltno",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Co Time`",value:"coTime",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Cdate`",value:"cdate",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Detail`",value:"detail",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Early Checkin`",value:"earlyCheckin",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Eci Single Room Cc Charge`",value:"eciSingleRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Eci Single Room Fc Charge`",value:"eciSingleRoomFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Eci Twin Room Cc Charge`",value:"eciTwinRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Fc`",value:"fc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Fltno`",value:"fltno",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Fullname`",value:"fullname",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Late Checkout`",value:"lateCheckout",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Lco Single Room Cc Charge`",value:"lcoSingleRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Lco Single Room Fc Charge`",value:"lcoSingleRoomFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Lco Twin Room Cc Charge`",value:"lcoTwinRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Night`",value:"night",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Number Of Nights`",value:"numberOfNights",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Number Of Vehicle`",value:"numberOfVehicle",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Price`",value:"price",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Remark`",value:"remark",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Room No`",value:"roomNo",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Service Tax Cc Charge`",value:"serviceTaxCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Service Tax Fc Charge`",value:"serviceTaxFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Single Room Cc`",value:"singleRoomCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Single Room Cc Charge`",value:"singleRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Single Room Fc`",value:"singleRoomFc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Single Room Fc Charge`",value:"singleRoomFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Time Stay`",value:"timeStay",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Toll`",value:"toll",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Amount Cc`",value:"totalAmountCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Amount Fc`",value:"totalAmountFc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Breakfast Cc Charge`",value:"totalBreakfastCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Breakfast Fc Charge`",value:"totalBreakfastFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Charge`",value:"totalCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Charges`",value:"totalCharges",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Night`",value:"totalNight",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Revenue`",value:"totalRevenue",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Single Rooms Cc`",value:"totalSingleRoomsCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Single Rooms Fc`",value:"totalSingleRoomsFc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Twin Rooms Cc`",value:"totalTwinRoomsCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Total Vat`",value:"totalVat",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Transit Duty`",value:"transitDuty",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Transport Charge`",value:"transportCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Twin Room Cc`",value:"twinRoomCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Twin Room Cc Charge`",value:"twinRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:"$localize`Unit Price`",value:"unitPrice",type: Constant.NUMBER,rowspan: '2',},
+    ]
   protected readonly LOCALE = LOCALE;
 
-  // private filesControl = new FormControl(null, );
   constructor() {
     super();
     window.scrollTo({top: 0, behavior: 'instant'});
     this.formGroupDetail = this.fb.group({
-      doiTuongDichVu: [],
-      contractSpec: [],
-
-      //tab4
-      marketCode: [],
-      marketName: [],
-      marketType: [],
-      nation: [],
-      nationId: [],
-      classification: [],
-      flightGroup: [],
-      statusUsage: [],
-      supplierName: [],
-      supplierPhone: [],
-      supplierEmail: [, [Validators.email]],
-      email: [],
-      carType: [],
-      standardCheckIn: [],
-      standardCheckOut: [],
-      standardCheckout: [],
-      notes: [],
-
-      tempp: [],
       id: [],
-      bizDocId: [],
-      bizDocIdC1: [],
-      contractCode: [],
-      contractNo: [],
-      currency: [],
-      currencyCode: [],
-      exchangeRate: [],
-      signedDate: [],
-      effectiveDate: [],
-      expiryDate: [],
-      contractType: [],
-      contractForm: [],
-      hdPlRoot: [],
-      contractName: [],
+      ctype: [],
+      typeRoom: [],
+      airportCode: [],
+      airportName: [],
       partnerCode: [],
       partnerName: [],
-      partnerAddress: [],
-      negotiateCompetence: [],
-      competence: [],
-      employeeSigned: [],
-      signedDepartmentName: [],
-      budgetDepartmentName: [],
-      proceedDepartmentName: [],
-      paidDepartmentName: [],
-      employeeId: [],
-      employeeName: [],
-      paymentType: [],
-      budgetCode: [],
-      fieldCode2: [],
-      dueDateNumber: [],
-      handoverDate: [],
-      documentsList: [],
-      bankAccountNoB: [],
-      peopleName: [],
-      bankNameB: [],
-      bankAddressB: [],
-      cityB: [],
-      bankBranchNameB: [],
-      bankLocalCode: [],
-      swiftCodeB: [],
-      bankCharge: [],
-      bankCharge1: [],
-      bankAccountNoB1: [],
-      bankNameB1: [],
-      swiftCodeB1: [],
-      isHotel: [],
-      isVehicle: [],
-      hotel: [],
-      vehicle: [],
-      priceUnitInfo: [],
-      insertPriceUnitInfo: [],
-      updatePriceUnitInfo: [],
-      deletePriceUnitInfo: [],
-      priceUnitNotAllDay: [],
-      priceUnitInfoRequests: [],
-      priceNotAllDayRequests: [],
-      insertNotAllDay: [],
-      updateNotAllDay: [],
-      deleteNotAllDay: [],
-      dayUses: [],
-      insertDayUse: [],
-      updateDayUse: [],
-      deleteDayUse: [],
-      iban: [],
-
-      appendixCode: [],
-      appendixName: [],
-      appendixNo: [],
-      signedAppendix: [],
-      effectiveAppendix: [],
-      expiryAppendix: [],
-      notesAppendix: [],
+      partnerType: [],
+      invoiceNumber: [],
+      invoiceDate: [],
+      invoiceReceiveDate: [],
+      periodFrom: [],
+      periodTo: [],
+      bizDocId: [],
+      totalAmount: [],
+      invoiceFormDtl: [],
+      fileAttachments: []
     });
     this.formGroupFileUpload = this.fb.group({
       fileUpload: []
@@ -220,89 +188,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     try {
       await this.spinner.show();
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
-        // this.loadListMaNghiepVu(),
-        // this.loadListQuocGia(),
-        // this.loadListHHDV(),
-        this.setReadMode(this.formGroupDetail)
-      ]).then(() => {
-        if (this.formGroupDetail.getRawValue().isHotel && this.formGroupDetail.getRawValue().isVehicle) {
-          this.formGroupDetail.patchValue({doiTuongDichVu: '3'});
-        } else if (this.formGroupDetail.getRawValue().isHotel) {
-          this.formGroupDetail.patchValue({doiTuongDichVu: '1'});
-        } else if (this.formGroupDetail.getRawValue().isVehicle) {
-          this.formGroupDetail.patchValue({doiTuongDichVu: '2'});
-        } else {
-          this.formGroupDetail.patchValue({doiTuongDichVu: '1'});
-        }
-        this.formGroupDetail.patchValue({
-          //fix tam
-          swiftCodeB1: '12345',
-          //
-          contractType: this.listContractType.find(s => s.value == this.formGroupDetail.getRawValue().contractType)?.key,
-          contractForm: this.listContractForm.find(s => s.value == this.formGroupDetail.getRawValue().contractForm)?.key,
-          negotiateCompetence: this.listNegotiateCompetence.find(s => s.value == this.formGroupDetail.getRawValue().negotiateCompetence)?.key,
-          competence: this.listCompetence.find(s => s.value == this.formGroupDetail.getRawValue().competence)?.key,
-          fieldCode2: this.listFieldCode2.find(s => s.value == this.formGroupDetail.getRawValue().fieldCode2)?.key,
-          budgetCode: this.listBudgetCode.find(s => s.value == this.formGroupDetail.getRawValue().budgetCode)?.key,
-          flightGroup: this.listFlightGroup.find(s => s.value == this.formGroupDetail.getRawValue().flightGroup)?.key,
-          statusUsage: this.listStatusUsage.find(s => s.value == this.formGroupDetail.getRawValue().statusUsage)?.key,
-          standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout
-        });
-
-        this.getPartnerInfo();
-        this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.getRawValue().documentsList ?? []);
-
-        const priceUnitInfo = this.formGroupDetail.getRawValue()?.priceUnitInfo?.map((s: any) => ({
-          ...s,
-          serviceFeeCode: s.serviceCode,
-          serviceFeeName: this.listHHDV.find((s: any) => s.serviceFeeCode === s.serviceFeeCode)?.name,
-          serviceFeeUnit: this.listHHDV.find((s: any) => s.serviceFeeCode === s.serviceFeeCode)?.unit,
-        }));
-        this.tblUnitPrice = new MatTableDataSource(priceUnitInfo);
-
-        //debounce
-        this.marketCodeChangeBrake = true;
-        this.marketCodeChangeDebounce = debounce(async (value: any) => {
-          if (value && !this.marketCodeChangeBrake) {
-            try {
-              await this.spinner.show();
-              await this.baseService.getMarket({marketCode: value.toUpperCase()}).then(res => {
-                if (res.status == HttpStatusCode.Ok) {
-                  // delete res.data.marketCode;
-                  this.formGroupDetail.patchValue(res.data);
-                  this.marketCodeChangeBrake = true;
-                }
-              });
-            } catch (e) {
-              console.log(e);
-            } finally {
-              await this.spinner.hide();
-            }
-          }
-        }, 1000);
-
-        this.partnerChangeBrake = true;
-        this.partnerChangeDebounce = debounce(async (value: any) => {
-          if (value && !this.partnerChangeBrake) {
-            try {
-              await this.spinner.show();
-              await this.baseService.getPartnerInfo({
-                partnerCode: value.toUpperCase(),
-                isHotel: this.formGroupDetail.getRawValue().isHotel,
-                isVehicle: this.formGroupDetail.getRawValue().isVehicle
-              }).then(res => {
-                if (res.status == HttpStatusCode.Ok) {
-                  this.formGroupDetail.patchValue(res.data);
-                  this.partnerChangeBrake = true;
-                }
-              });
-            } catch (e) {
-              console.log(e);
-            } finally {
-              await this.spinner.hide();
-            }
-          }
-        }, 1000);
+        this.setReadMode(this.formGroupDetail)]).then(() => {
       });
     } catch (e) {
       console.log(e);
@@ -314,75 +200,6 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   goBack() {
     this.backStep.emit();
     window.scrollTo({top: 0, behavior: 'instant'});
-  }
-
-  async closeConfirmDeleteFile() {
-    this.showDialogDeleteFile = false;
-  }
-
-  async loadListMaNghiepVu() {
-    await this.baseService.listMaNghiepVu().then(res => {
-      if (res.data) {
-        this.listMaNghiepVu = res.data;
-      }
-    });
-  }
-
-  async loadListQuocGia() {
-    await this.nationService.search({page: 0, limit: 99999}).then(res => {
-      if (res.data) {
-        this.listQuocGia = res.data.content;
-      }
-    });
-  }
-
-  async loadListHHDV() {
-    await this.serviceFeeService.search({page: 0, limit: 99999}).then(res => {
-      if (res.data) {
-        this.listHHDV = res.data.content;
-      }
-    });
-  }
-
-  async loadListKhoanMucKhns() {
-    await this.baseService.listKhoanMucKhns().then(res => {
-      if (res.data) {
-        this.listKhoanMucKhns = res.data;
-      }
-    });
-  }
-
-
-  async nationSelected(event: any) {
-    const nation = this.listQuocGia.find((s: any) => s.id === event.option.value);
-    this.formGroupDetail.patchValue({nationId: nation?.id, nation: nation?.engName});
-  }
-
-  async getPartnerInfo() {
-    await this.baseService.getPartnerInfo({
-      partnerCode: this.formGroupDetail.getRawValue().partnerCode,
-      isHotel: this.formGroupDetail.getRawValue().isHotel,
-      isVehicle: this.formGroupDetail.getRawValue().isVehicle
-    }).then(res => {
-      if (res.status == HttpStatusCode.Ok && res.data) {
-        const data = res.data;
-        this.formGroupDetail.patchValue({
-          marketType: data.marketType,
-          marketCode: data.marketCode,
-          marketName: data.marketName,
-          nation: data.nation,
-          nationId: data.nationId,
-          classification: data.classification,
-          flightGroup: data.flightGroup,
-          statusUsage: data.statusUsage,
-          supplierName: data.peopleName,
-          supplierPhone: data.phoneNumber,
-          supplierEmail: data.email,
-          carType: data.carType,
-          notes: data.notes,
-        });
-      }
-    });
   }
 
   async setReadMode(form: FormGroup) {

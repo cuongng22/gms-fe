@@ -62,7 +62,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   listVehicle = [];
   listAirportCode = [];
   _displayedColumns: {
-    label: string; value: string, type?: string, format?: string
+      label: string; value: string, type?: string, format?: string
   }[] = [
     {label: $localize`Airport Code`, value: 'airportCode'},
     {label: $localize`Partner Name`, value: 'partnerName'},
