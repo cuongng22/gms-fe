@@ -16,6 +16,27 @@ export class InvoiceFormService extends BaseService {
     this.path = 'invoice/form';
   }
 
+  async exportFileData(body: any) {
+    const url = `${this.api}/${this.path}/export`;
+    const httpOptionsExport = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/octet-stream'
+      }),
+      responseType: 'blob' as any,
+      params: new HttpParams({ fromObject: body })
+    };
+    return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
+  }
+
+  async uploadFileData(form: FormData): Promise<any> {
+    const url = `${this.api}/${this.path}/upload`;
+    const headers = {
+      headers: new HttpHeaders()
+    };
+    return firstValueFrom(this.http.post(url, form, headers));
+  }
+
   getPartnerInfo(body: any): Promise<any> {
     const url = `${this.api}/${this.path}/get-partner-info`;
     const params = new HttpParams({fromObject: removeNullValues(body)});
@@ -45,13 +66,7 @@ export class InvoiceFormService extends BaseService {
     return firstValueFrom(this.http.get<ListResponse<T>>(url, {params}));
   }
 
-  override uploadFile(form: FormData): Promise<any> {
-    const url = `${this.api}/${this.path}/attachment`;
-    const headers = {
-      headers: new HttpHeaders()
-    };
-    return firstValueFrom(this.http.post(url, form, headers));
-  }
+
 
   deleteFile(fileName: any, bizDocId: any): Promise<any> {
     const url = `${this.api}/${this.path}/delete-attachment`;

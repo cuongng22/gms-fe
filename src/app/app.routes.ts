@@ -63,7 +63,7 @@ import {
 import { FlightCrewComponent } from "src/app/crew-trip/features/category/flight-crew/flight-crew.component";
 import { AircraftDataComponent } from "src/app/crew-trip/features/system/config/aircraft-data/aircraft-data.component";
 import { EmailSupplierComponent } from "src/app/crew-trip/features/system/config/email-supplier/email-supplier.component";
-import {InvoiceFormComponent} from "src/app/crew-trip/features/invoice/form/invoice-form.component";
+import {InvoiceFormTabComponent} from "src/app/crew-trip/features/invoice/form/invoice-form-tab.component";
 
 
 
@@ -153,7 +153,7 @@ export const routes: Routes = [
       },
       {
         path: 'invoice', children: [
-          { path: 'invoice-form-tab', component: InvoiceFormComponent },
+          { path: 'invoice-form-tab', component: InvoiceFormTabComponent },
         ]
       },
       {

@@ -33,7 +33,7 @@ import {InvoiceFormComponent} from "src/app/crew-trip/features/invoice/form/invo
 export class InvoiceFormTabComponent implements OnInit {
 
 
-  partnerType =''
+  partnerType ='HOTEL';
 
   constructor() {
   }

@@ -112,4 +112,5 @@ export class COMMON_CONFIG {
   static TIMEOUT=20000;
   static MAX_FILE_SIZE='5MB';
   static FILE_ACCEPT='.doc,.docx,.pdf,.xls,.xlsx';
+  static FILE_ACCEPT_EXCEL='.xls,.xlsx';
 }

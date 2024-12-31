@@ -11,10 +11,12 @@
     </ol>
   </div>
   <!--Search-->
+  {{partnerType}}
   <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
       <mat-tab-group (selectedTabChange)="onTabChange($event)" mat-align-tabs="start" mat-stretch-tabs="false">
         <mat-tab label="Hotel">
+
           @if (partnerType === 'HOTEL') {
             <app-invoice-form [partnerType]="partnerType"/>
           }
