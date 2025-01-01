@@ -42,14 +42,14 @@
               </mat-label>
               <input type="text" #marketCode matInput formControlName="marketCode" [matAutocomplete]="marketComplete"
                      (input)="filterMarket()" (focus)="filterMarket()">
-              <mat-autocomplete autoActiveFirstOption [displayWith]="displayMarket" requireSelection
-                                #marketComplete="matAutocomplete">
-                <mat-option [value]="null">
+              <mat-autocomplete autoActiveFirstOption requireSelection
+                                #marketComplete="matAutocomplete" >
+                <mat-option [value]="">
                   -- Choose airport code --
                 </mat-option>
-                @for (option of filteredOptionsMarket | async; track option) {
-                  <mat-option [value]="option">{{ option }}</mat-option>
-                }
+                <mat-option *ngFor="let option of filteredOptionsMarket | async" [value]="option" >
+                  {{ option }}
+                </mat-option>
               </mat-autocomplete>
               @if (!!formGroupDetail.controls['marketCode'].hasError('existCode')) {
                 <mat-error><span i18n>{{ existMessage }}</span></mat-error>

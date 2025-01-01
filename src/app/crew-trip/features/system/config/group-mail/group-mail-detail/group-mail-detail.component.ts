@@ -89,8 +89,11 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
     }
   }
 
-  override ngOnInit(): void {
-    console.log(this.formGroupDetail);
+  override async ngOnInit(): Promise<void> {
+    await this.flightMarketSv.search({option: 1, status: 'Operational'}).then(res => {
+      this.markets = res.data;
+    });
+    this.filteredOptionsMarket.next(this.markets);
     if (this.data?.grMail) {
       this.formGroupDetail.patchValue(this.data?.grMail);
       this.emailList = this.data?.grMail.groupEmail.map((email: string) => ({
@@ -98,12 +101,8 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
         isEditing: false
       }));
     }
-    this.flightMarketSv.search({option: 1, status: 'Operational'}).then(res => {
-      this.markets = res.data;
 
-    });
     this.formGroupDetail.patchValue({marketCode: this.formGroupDetail.value.marketCode});
-    this.filteredOptionsMarket.next(this.markets);
   }
 
   filterMarket(): void {
