@@ -4,7 +4,7 @@ import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
@@ -30,7 +30,7 @@ import {
   InvoiceFormDetailComponent
 } from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
-import { FileUploadModule} from "@iplab/ngx-file-upload";
+import {FileUploadModule} from "@iplab/ngx-file-upload";
 
 
 @Component({
@@ -100,9 +100,9 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   }
 
   override async ngOnInit() {
-    this.formGroupFile.patchValue({partnerType:this.partnerType});
-    await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-      // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(), this.search(),]).then(() => {
+    this.formGroupFile.patchValue({partnerType: this.partnerType});
+    // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
+    await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(), this.search(),]).then(() => {
       const listCombine = [...this.listVehicle, ...this.listHotel];
       this.listPartner = listCombine.map((s: any) => ({
         code: s.code ?? s.hotelCode, name: s.name ?? s.hotelName,
@@ -180,23 +180,22 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
       await this.spinner.show();
       let formUpload = new FormData();
       let fileUpload = this.formGroupFile.value.fileUpload[0];
-      let invoiceRequest = new Blob([
-        // ctype: this.formGroupFile.getRawValue().ctype,
-        // partnerType: this.formGroupFile.getRawValue().partnerType
-        'haha'
-      ], {type: 'application/json'});
       if (fileUpload.size > 50 * 1048576) {
         this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
         return;
       }
       formUpload.append('file', fileUpload, fileUpload.name);
-      formUpload.append('invoiceRequest', invoiceRequest);
+      formUpload.append('invoiceRequest', JSON.stringify({
+        ctype: this.formGroupFile.getRawValue().ctype,
+        partnerType: this.formGroupFile.getRawValue().partnerType
+      }));
       await this.baseService.uploadFileData(formUpload).then(res => {
         if (res.status == HttpStatusCode.Ok) {
-          console.log(res)
+          this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
         }
       });
-    } catch (e) {
+    } catch (e: any) {
+      this.baseService.showError(e.error?.message ?? this.MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }

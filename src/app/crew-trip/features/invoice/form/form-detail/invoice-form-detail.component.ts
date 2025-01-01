@@ -1,6 +1,6 @@
 import {Component, ElementRef, EventEmitter, inject, Input, model, OnInit, Output, ViewChild} from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
+import {DecimalPipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
@@ -32,17 +32,18 @@ import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocom
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {NgxMatTimepickerFieldComponent} from 'ngx-mat-timepicker';
-import {debounce, isEqual, remove} from 'lodash';
+import {debounce, isEqual, remove, transform} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lookup';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 import {InvoiceFormService} from "src/app/crew-trip/core/services/invoice-form-service";
+import {DigitOnlyModule} from "@uiowa/digit-only";
 
 
 @Component({
   selector: 'app-invoice-form-detail',
   standalone: true,
-  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule],
+  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe],
   templateUrl: './invoice-form-detail.component.html',
   styleUrl: './invoice-form-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -95,65 +96,65 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     colspan?: string
   }[] =
     [
-      {label:"$localize`Access Bridge`",value:"accessBridge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Accommodation Tax Cc Charge`",value:"accommodationTaxCcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Accommodation Tax Fc Charge`",value:"accommodationTaxFcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Airport Parking Fee`",value:"airportParkingFee",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Breakfast Cc`",value:"breakfastCc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Breakfast Fc`",value:"breakfastFc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Cc`",value:"cc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Ci Date`",value:"ciDate",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Ci Fltno`",value:"ciFltno",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Ci Time`",value:"ciTime",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`City Tax Cc Charge`",value:"cityTaxCcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`City Tax Fc Charge`",value:"cityTaxFcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Co Date`",value:"coDate",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Co Fltno`",value:"coFltno",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Co Time`",value:"coTime",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Cdate`",value:"cdate",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Detail`",value:"detail",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Early Checkin`",value:"earlyCheckin",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Eci Single Room Cc Charge`",value:"eciSingleRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Eci Single Room Fc Charge`",value:"eciSingleRoomFcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Eci Twin Room Cc Charge`",value:"eciTwinRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Fc`",value:"fc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Fltno`",value:"fltno",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Fullname`",value:"fullname",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Late Checkout`",value:"lateCheckout",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Lco Single Room Cc Charge`",value:"lcoSingleRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Lco Single Room Fc Charge`",value:"lcoSingleRoomFcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Lco Twin Room Cc Charge`",value:"lcoTwinRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Night`",value:"night",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Number Of Nights`",value:"numberOfNights",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Number Of Vehicle`",value:"numberOfVehicle",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Price`",value:"price",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Remark`",value:"remark",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Room No`",value:"roomNo",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Service Tax Cc Charge`",value:"serviceTaxCcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Service Tax Fc Charge`",value:"serviceTaxFcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Single Room Cc`",value:"singleRoomCc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Single Room Cc Charge`",value:"singleRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Single Room Fc`",value:"singleRoomFc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Single Room Fc Charge`",value:"singleRoomFcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Time Stay`",value:"timeStay",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Toll`",value:"toll",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Amount Cc`",value:"totalAmountCc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Amount Fc`",value:"totalAmountFc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Breakfast Cc Charge`",value:"totalBreakfastCcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Breakfast Fc Charge`",value:"totalBreakfastFcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Charge`",value:"totalCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Charges`",value:"totalCharges",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Night`",value:"totalNight",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Revenue`",value:"totalRevenue",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Single Rooms Cc`",value:"totalSingleRoomsCc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Single Rooms Fc`",value:"totalSingleRoomsFc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Twin Rooms Cc`",value:"totalTwinRoomsCc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Total Vat`",value:"totalVat",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Transit Duty`",value:"transitDuty",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Transport Charge`",value:"transportCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Twin Room Cc`",value:"twinRoomCc",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Twin Room Cc Charge`",value:"twinRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
-      {label:"$localize`Unit Price`",value:"unitPrice",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Access Bridge`,value:"accessBridge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Accommodation Tax Cc Charge`,value:"accommodationTaxCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Accommodation Tax Fc Charge`,value:"accommodationTaxFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Airport Parking Fee`,value:"airportParkingFee",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Breakfast Cc`,value:"breakfastCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Breakfast Fc`,value:"breakfastFc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Cc`,value:"cc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Ci Date`,value:"ciDate",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Ci Fltno`,value:"ciFltno",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Ci Time`,value:"ciTime",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`City Tax Cc Charge`,value:"cityTaxCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`City Tax Fc Charge`,value:"cityTaxFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Co Date`,value:"coDate",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Co Fltno`,value:"coFltno",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Co Time`,value:"coTime",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Cdate`,value:"cdate",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Detail`,value:"detail",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Early Checkin`,value:"earlyCheckin",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Eci Single Room Cc Charge`,value:"eciSingleRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Eci Single Room Fc Charge`,value:"eciSingleRoomFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Eci Twin Room Cc Charge`,value:"eciTwinRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Fc`,value:"fc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Fltno`,value:"fltno",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Fullname`,value:"fullname",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Late Checkout`,value:"lateCheckout",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Lco Single Room Cc Charge`,value:"lcoSingleRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Lco Single Room Fc Charge`,value:"lcoSingleRoomFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Lco Twin Room Cc Charge`,value:"lcoTwinRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Night`,value:"night",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Number Of Nights`,value:"numberOfNights",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Number Of Vehicle`,value:"numberOfVehicle",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Price`,value:"price",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Remark`,value:"remark",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Room No`,value:"roomNo",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Service Tax Cc Charge`,value:"serviceTaxCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Service Tax Fc Charge`,value:"serviceTaxFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Single Room Cc`,value:"singleRoomCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Single Room Cc Charge`,value:"singleRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Single Room Fc`,value:"singleRoomFc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Single Room Fc Charge`,value:"singleRoomFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Time Stay`,value:"timeStay",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Toll`,value:"toll",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Amount Cc`,value:"totalAmountCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Amount Fc`,value:"totalAmountFc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Breakfast Cc Charge`,value:"totalBreakfastCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Breakfast Fc Charge`,value:"totalBreakfastFcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Charge`,value:"totalCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Charges`,value:"totalCharges",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Night`,value:"totalNight",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Revenue`,value:"totalRevenue",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Single Rooms Cc`,value:"totalSingleRoomsCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Single Rooms Fc`,value:"totalSingleRoomsFc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Twin Rooms Cc`,value:"totalTwinRoomsCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Total Vat`,value:"totalVat",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Transit Duty`,value:"transitDuty",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Transport Charge`,value:"transportCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Twin Room Cc`,value:"twinRoomCc",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Twin Room Cc Charge`,value:"twinRoomCcCharge",type: Constant.NUMBER,rowspan: '2',},
+      {label:$localize`Unit Price`,value:"unitPrice",type: Constant.NUMBER,rowspan: '2',},
     ]
   protected readonly LOCALE = LOCALE;
 
@@ -176,6 +177,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
       periodTo: [],
       bizDocId: [],
       totalAmount: [],
+      totalAmountVat: [],
       invoiceFormDtl: [],
       fileAttachments: []
     });
@@ -209,4 +211,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
       }
     });
   }
+
+  protected readonly transform = transform;
+  protected readonly DATE_FORMAT_DD_MM_YYYY = DATE_FORMAT_DD_MM_YYYY;
 }
