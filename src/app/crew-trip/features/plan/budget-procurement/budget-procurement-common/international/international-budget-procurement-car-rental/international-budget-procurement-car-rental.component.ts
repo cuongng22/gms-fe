@@ -36,6 +36,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   yearPlan = input<number>(2024); // năm kế hoạch
   type = input<PlanCategoryEnum>(PlanCategoryEnum.BUDGET); // Loại Ngân sách hoặc mua sắm (budget/procurement)
   data = input<any>();
+  disabled = input<boolean>(false);
 
   PlanCategoryEnum = PlanCategoryEnum;
 
@@ -45,8 +46,8 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     effect(() => {
       console.log('effect data InternationalBudgetProcurementCarRentalComponent: ', this.data())
       if (this.data()) {
-        this.setPlanFlightPeriods(this.data().planFlightPeriods);
-        this.setDataSource(this.data().planCarentals);
+        this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
+        this.setDataSource(this.data().planCarentals ?? []);
       }
     })
   }

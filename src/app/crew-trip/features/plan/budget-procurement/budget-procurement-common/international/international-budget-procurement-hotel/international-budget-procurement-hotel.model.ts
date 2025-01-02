@@ -1,4 +1,5 @@
 import { ex } from 'node_modules/@fullcalendar/core/internal-common';
+import { PlanCategoryEnum } from '../../../budget-procurement.model';
 
 export const formula: any = {
 
@@ -122,8 +123,8 @@ export function getHeaderRowDef1(contractData: any, type: string): string[] {
     { column: "numberOfEstimatedEarlyCheckInRooms", visible: !!contractData.earlyCheckinFeeFlag },
     { column: "numberOfEstimatedLateCheckoutRooms", visible: !!contractData.lateCheckoutFeeFlag },
     //start phần kế hoạch mua sắm
-    { column: "unitPriceIncludingVat", visible: type === 'PROCUREMENT' }, // (Đơn giá bao gồm vat) 
-    { column: "priceCrewTransport", visible: type === 'PROCUREMENT' && !!contractData.priceCrewTransportFlag }, // (Đơn giá xe chở tổ bay/lượt) 
+    { column: "unitPriceIncludingVat", visible: type === PlanCategoryEnum.PROCUREMENT }, // (Đơn giá bao gồm vat) 
+    { column: "priceCrewTransport", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.priceCrewTransportFlag }, // (Đơn giá xe chở tổ bay/lượt) 
     // end phần kế hoạch mua sắm
     { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
     { column: "totalAmountForeignColspan", visible: true },
@@ -146,12 +147,12 @@ export function getHeaderRowDef2(contractData: any, type: string): string[] {
     { column: "doubleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
     { column: "singleRoomLateReserved", visible: !!contractData.lateCheckoutFeeFlag },
     //start phần kế hoạch mua sắm
-    { column: "priceSingleRoom", visible: type === 'PROCUREMENT' }, // (Đơn giá phòng đơn) 
-    { column: "priceDoubleRoom", visible: type === 'PROCUREMENT' }, // (Đơn giá phòng đôi) 
-    { column: "priceSingleRoomEarly", visible: type === 'PROCUREMENT' && !!contractData.earlyCheckinFeeFlag }, // (Đơn giá Early-checkin phòng đơn) 
-    { column: "priceDoubleRoomEarly", visible: type === 'PROCUREMENT' && !!contractData.earlyCheckinFeeFlag }, // (Đơn giá Early-checkin phòng đôi) 
-    { column: "priceSingleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag }, // (Đơn giá late checkout phòng đơn) 
-    { column: "priceDoubleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag }, // (Đơn giá late check out phòng đôi) 
+    { column: "priceSingleRoom", visible: type === PlanCategoryEnum.PROCUREMENT }, // (Đơn giá phòng đơn) 
+    { column: "priceDoubleRoom", visible: type === PlanCategoryEnum.PROCUREMENT }, // (Đơn giá phòng đôi) 
+    { column: "priceSingleRoomEarly", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.earlyCheckinFeeFlag }, // (Đơn giá Early-checkin phòng đơn) 
+    { column: "priceDoubleRoomEarly", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.earlyCheckinFeeFlag }, // (Đơn giá Early-checkin phòng đôi) 
+    { column: "priceSingleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.lateCheckoutFeeFlag }, // (Đơn giá late checkout phòng đơn) 
+    { column: "priceDoubleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.lateCheckoutFeeFlag }, // (Đơn giá late check out phòng đôi) 
     // end phần kế hoạch mua sắm
     { column: "totalAmountForeign", visible: true },
     { column: "totalAmountForeignVat", visible: true },
@@ -178,13 +179,13 @@ export function getRowDef(contractData: any, type: string): string[] {
     { column: "doubleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
     { column: "singleRoomLateReserved", visible: !!contractData.lateCheckoutFeeFlag },
     //start phần kế hoạch mua sắm
-    { column: "priceSingleRoom", visible: type === 'PROCUREMENT' },
-    { column: "priceDoubleRoom", visible: type === 'PROCUREMENT' },
-    { column: "priceSingleRoomEarly", visible: type === 'PROCUREMENT' && !!contractData.earlyCheckinFeeFlag },
-    { column: "priceDoubleRoomEarly", visible: type === 'PROCUREMENT' && !!contractData.earlyCheckinFeeFlag },
-    { column: "priceSingleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag },
-    { column: "priceDoubleRoomLate", visible: type === 'PROCUREMENT' && !!contractData.lateCheckoutFeeFlag },
-    { column: "priceCrewTransport", visible: type === 'PROCUREMENT' && !!contractData.priceCrewTransportFlag },
+    { column: "priceSingleRoom", visible: type === PlanCategoryEnum.PROCUREMENT },
+    { column: "priceDoubleRoom", visible: type === PlanCategoryEnum.PROCUREMENT },
+    { column: "priceSingleRoomEarly", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.earlyCheckinFeeFlag },
+    { column: "priceDoubleRoomEarly", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.earlyCheckinFeeFlag },
+    { column: "priceSingleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.lateCheckoutFeeFlag },
+    { column: "priceDoubleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.lateCheckoutFeeFlag },
+    { column: "priceCrewTransport", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.priceCrewTransportFlag },
     // end phần kế hoạch mua sắm
     { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
     { column: "totalAmountForeign", visible: true },
@@ -194,6 +195,50 @@ export function getRowDef(contractData: any, type: string): string[] {
   ];
   return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
+
+const FlagTypeEnum = {
+  EARLY_CHECKIN: 'earlyCheckinFeeFlag',
+  LATE_CHECKOUT: 'lateCheckoutFeeFlag',
+  CREW_TRANSPORT: 'priceCrewTransportFlag'
+}
+
+function checkVisibleColumn(contractData: any, flagType: string, type: string): boolean {
+  // earlyCheckinContractFlag: new FormControl(false),
+  // lateCheckoutContractFlag: new FormControl(false),
+  //   (1) trường hợp có hợp đồng, trong hợp đồng có HHDV = phí ECI, LCO 
+  // => có tích 2 checkbox -> bảng KHNS, KHMS hiển thị các cột liên quan đến ECI, LCO
+  // => Khi người dùng bỏ tích chọn -> bảng KHNS vẫn hiển thị các cột ECI, LCO. Bảng KHMS k hiển thị các cột ECI, LCO
+
+  if (contractData.haveContract) {
+    if (contractData.earlyCheckinContractFlag && flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFeeFlag) {
+      return true
+    } else if (contractData.earlyCheckinContractFlag && flagType === FlagTypeEnum.EARLY_CHECKIN && !contractData.earlyCheckinFeeFlag && type === PlanCategoryEnum.BUDGET) {
+      return true
+    } else if (contractData.lateCheckoutContractFlag && flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFeeFlag) {
+      return true;
+    } else if (contractData.lateCheckoutContractFlag && flagType === FlagTypeEnum.LATE_CHECKOUT && !contractData.lateCheckoutFeeFlag && type === PlanCategoryEnum.BUDGET) {
+      return true
+    }
+    //   (2) trường hợp có hợp đồng, trong hợp đồng KHÔNG có HHDV = phí ECI, LCO 
+    // => không tích 2 checkbox -> bảng KHNS, KHMS KHÔNG hiển thị các cột liên quan đến ECI, LCO
+    // => Khi người dùng CÓ tích chọn -> bảng KHNS KHÔNG hiển thị các cột ECI, LCO. Bảng KHMS CÓ hiển thị các cột ECI, LCO
+    else if (!contractData.earlyCheckinContractFlag && flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFeeFlag && type === PlanCategoryEnum.PROCUREMENT) {
+      return true;
+    } else if (!contractData.lateCheckoutContractFlag && flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFeeFlag && type === PlanCategoryEnum.PROCUREMENT) {
+      return true;
+    }
+
+  }
+  //   (3) Trường hợp không có hợp đồng -> vào kịch bay mùa (NETLINE_FLIGHT_LEGS_MASTER) theo điều kiện: năm làm kế hoạch = năm của trường min_dep_at:
+  // + Check ECI: mã thị trường = ARR_AP_SCHED   -> nếu có 1 dòng có cột ECI  = 1 -> có tích chọn checkbox ECI 
+  // -> cả 2 bảng KHNS, KHMS đều hiện các cột liên quan đến ECI. Khi người dùng bỏ tích chọn -> cả 2 bảng KHNS, KHMS đều không hiện các cột liên quan đến ECI
+  // + Check LCO: mã thị trường = DEP_AP_SCHED  -> nếu có 1 gdòng có cột LCO = 1 -> có tích chọn checkbox LCO
+  // -> cả 2 bảng KHNS, KHMS đều hiện các cột liên quan đến LCO. Khi người dùng bỏ tích chọn -> cả 2 bảng KHNS, KHMS đều không hiện các cột liên quan đến LCO
+  // + nếu tất cả các dòng đều có ECI = 0, LCO = 0 -> KHÔNG tích chọn 2 checkbox
+  // -> 2 bảng KHNS, KHMS KHÔNG hiện các cột ECI, LCO. Khi người dùng tích chọn check box ECI thì cả 2 bảng KHNS, KHMS đều hiện các cột liên quan đến ECI (LCO cũng tương tự)
+  return false
+}
+
 
 export const exampleData =
   [
@@ -2661,5 +2706,5 @@ export const planFlightByOvernight = [
 ]
 
 export function checkChange(value1: any, value2: any) {
-  return value1 && value1 !== value2;
+  return value1 !== value2;
 }

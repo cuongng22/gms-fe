@@ -18,6 +18,21 @@ export const Statuses: { code: string, value: string }[] = [
     { code: 'rejected', value: 'Rejected' }, //Từ chối
 ];
 
+export const StatusEnum = {
+    DRAFT: 'draft',
+    INTERNATIONAL_COMPLETED: 'international_completed',
+    DOMESTIC_COMPLETED: 'domestic_completed',
+    DOM_INT_COMPLETED: 'dom_int_completed',
+    CONFIRMED: 'confirmed',
+    APPROVED: 'approved',
+    REJECTED: 'rejected'
+}
+
+export const StatusSummaryEnum = {
+    DRAFT: 'draft',
+    COMPLETED: 'completed',
+}
+
 // Trạng thái màn hình summary
 export const StatusesSummary: { code: string, value: string }[] = [
     { code: '', value: '-- All Status --' },
