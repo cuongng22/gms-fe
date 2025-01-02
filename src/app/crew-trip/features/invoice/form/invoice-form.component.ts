@@ -1,4 +1,4 @@
-import {Component, inject, Input, OnInit} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
@@ -18,7 +18,7 @@ import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-funct
 import {NoDataRowOutlet} from '@angular/cdk/table';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {ContractDetailComponent} from 'src/app/crew-trip/features/contract/contract-detail/contract-detail.component';
-import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
 import {HotelService} from 'src/app/crew-trip/core/services/hotel-service';
 import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
@@ -31,6 +31,7 @@ import {
 } from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FileUploadModule} from "@iplab/ngx-file-upload";
+import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 
 
 @Component({
@@ -39,6 +40,8 @@ import {FileUploadModule} from "@iplab/ngx-file-upload";
   imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule],
   templateUrl: './invoice-form.component.html',
   styleUrl: './invoice-form.component.scss',
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+  ]
 })
 
 
@@ -52,6 +55,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
 
   //variable
   @Input() partnerType: any;
+  @Output() nextStepEmit = new EventEmitter<any>();
   step = 1;
   readMode = true;
   action = 'edit';
@@ -64,7 +68,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
   _displayedColumns: {
-      label: string; value: string, type?: string, format?: string
+    label: string; value: string, type?: string, format?: string
   }[] = [
     {label: $localize`Airport Code`, value: 'airportCode'},
     {label: $localize`Partner Name`, value: 'partnerName'},
@@ -87,7 +91,9 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
     this.formGroupSearch = this.fb.group({
       searchString: [],
       ctype: [],
+      partnerType: [],
       airportCode: [],
+      listAirportCode: [],
       periodFrom: [],
       periodTo: [],
     });
@@ -104,11 +110,8 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   override async ngOnInit() {
     this.formGroupFile.patchValue({partnerType: this.partnerType});
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(), this.search(),]).then(() => {
-      const listCombine = [...this.listVehicle, ...this.listHotel];
-      this.listPartner = listCombine.map((s: any) => ({
-        code: s.code ?? s.hotelCode, name: s.name ?? s.hotelName,
-      }));
+    await Promise.all([this.loadListFlightMarket(), this.search(),]).then(() => {
+
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'periodDate', 'action'];
   }
@@ -119,6 +122,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
     this.readMode = readMode;
     this.action = action;
     await this.cookTemplateName();
+    this.nextStepEmit.emit([this.id, this.readMode])
   }
 
   async backStep() {
@@ -134,24 +138,12 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
     });
   }
 
-  async loadListHotel() {
-    await this.hotelService.search({}).then(res => {
-      if (res.data) {
-        this.listHotel = res.data.content;
-      }
-    });
-  }
-
-  async loadListVehiclesPartner() {
-    await this.vehicleService.search({}).then(res => {
-      if (res.data) {
-        this.listVehicle = res.data.content;
-      }
-    });
-  }
-
   override async search<T>(body?: any, isNextPage?: boolean) {
     try {
+      this.formGroupSearch.patchValue({
+        listAirportCode: this.formGroupSearch.getRawValue().airportCode,
+        partnerType: this.partnerType
+      });
       await this.spinner.show();
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
@@ -193,7 +185,8 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
         partnerType: this.formGroupFile.getRawValue().partnerType
       }));
       await this.baseService.uploadFileData(formUpload).then(res => {
-        if (res.status == HttpStatusCode.Ok) {
+        if (res.code == HttpStatusCode.Ok) {
+          this.search();
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
         }
       });
@@ -201,6 +194,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
       this.baseService.showError(e.error?.message ?? this.MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
+      this.closeDialogFile();
     }
   }
 
@@ -249,7 +243,6 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   }
 
   async cookTemplateName() {
-    console.log(this.formGroupFile.getRawValue(), 'this.formGroupFile.getRawValue()')
     if (this.formGroupFile.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupFile.getRawValue().partnerType === 'HOTEL') {
       this.formGroupFile.patchValue({
         templateName: '[Crew Trip]_Template bảng kê chi phí khách sạn_Quốc tế.xlsx'

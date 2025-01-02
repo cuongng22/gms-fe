@@ -19,21 +19,25 @@ import {NoDataRowOutlet} from '@angular/cdk/table';
 import {ContractDetailComponent} from 'src/app/crew-trip/features/contract/contract-detail/contract-detail.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {InvoiceFormComponent} from "src/app/crew-trip/features/invoice/form/invoice-form.component";
+import {
+  InvoiceFormDetailComponent
+} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
 
 
 @Component({
   selector: 'app-invoice-form-tab',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormComponent],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormComponent, InvoiceFormDetailComponent],
   templateUrl: './invoice-form-tab.component.html',
   styleUrl: './invoice-form-tab.component.scss',
 })
 
 
 export class InvoiceFormTabComponent implements OnInit {
-
-
-  partnerType ='HOTEL';
+  partnerType = 'HOTEL';
+  step = 1;
+  id: any;
+  readMode: any;
 
   constructor() {
   }
@@ -48,5 +52,16 @@ export class InvoiceFormTabComponent implements OnInit {
     } else {
       this.partnerType = 'TRANSPORTATION';
     }
+  }
+
+  nextStepEmit($event: any) {
+    this.step = 2;
+    this.id = $event[0];
+    this.readMode = $event[1];
+  }
+
+  backStepEmit($event: any) {
+    this.step = 1;
+    this.partnerType = $event[0]
   }
 }

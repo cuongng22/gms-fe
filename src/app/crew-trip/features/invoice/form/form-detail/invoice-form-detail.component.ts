@@ -1,4 +1,4 @@
-import {Component, ElementRef, EventEmitter, inject, Input, model, OnInit, Output, ViewChild} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {DecimalPipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
@@ -11,28 +11,30 @@ import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {
-  MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelDescription,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle
 } from '@angular/material/expansion';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {MatRadioModule} from '@angular/material/radio';
-import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
-import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE} from 'src/app/crew-trip/shared/utils/constant';
 import {ClickOutside} from 'ngxtension/click-outside';
-import {HttpStatusCode} from '@angular/common/http';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
 import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {NgxMatTimepickerFieldComponent} from 'ngx-mat-timepicker';
-import {debounce, isEqual, remove, transform} from 'lodash';
+import {transform} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lookup';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
@@ -66,7 +68,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   @Input() action: any;
   @Input() dataObject: any;
   @Input() contractObj: any;
-  @Output() backStep = new EventEmitter<any>();
+  @Output() backStepEmit = new EventEmitter<any>();
 
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   @Input() formType: any;
@@ -90,25 +92,35 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   listFlightGroup = ContractLookup.FlightGroup;
   listStatusUsage = ContractLookup.StatusUsage;
 
-  _displayedColumnsHeader1: string[];
-  _displayedColumnsHeader2: string[];
-  _displayedColumnsRow: string[];
+  _displayedColumnsHeader1: string[]=[];
+  _displayedColumnsHeader2: string[]=[];
+  _displayedColumnsRow: string[]=[];
   _displayedColumnsAll: {
     label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string
   }[] = [
     {label: $localize`Access Bridge`, value: "accessBridge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Accommodation Tax Cc Charge`, value: "accommodationTaxCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Accommodation Tax Fc Charge`, value: "accommodationTaxFcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {
+      label: $localize`Accommodation Tax Cc Charge`,
+      value: "accommodationTaxCcCharge",
+      type: Constant.NUMBER,
+      rowspan: "2"
+    },
+    {
+      label: $localize`Accommodation Tax Fc Charge`,
+      value: "accommodationTaxFcCharge",
+      type: Constant.NUMBER,
+      rowspan: "2"
+    },
     {label: $localize`Airport Parking Fee`, value: "airportParkingFee", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Breakfast Cc`, value: "breakfastCc", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Breakfast Fc`, value: "breakfastFc", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Cc`, value: "cc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Ci Date`, value: "ciDate", type: Constant.DATE,format: Constant.DATE_FORMAT},
+    {label: $localize`Ci Date`, value: "ciDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Ci Fltno`, value: "ciFltno"},
     {label: $localize`Ci Time`, value: "ciTime"},
     {label: $localize`City Tax Cc Charge`, value: "cityTaxCcCharge", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`City Tax Fc Charge`, value: "cityTaxFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Co Date`, value: "coDate", type: Constant.DATE,format: Constant.DATE_FORMAT},
+    {label: $localize`Co Date`, value: "coDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Co Fltno`, value: "coFltno"},
     {label: $localize`Co Time`, value: "coTime"},
     {label: $localize`Cdate`, value: "cdate", type: Constant.NUMBER, rowspan: "2"},
@@ -233,7 +245,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   }
 
   goBack() {
-    this.backStep.emit();
+    this.backStepEmit.emit([this.formGroupDetail.getRawValue().partnerType]);
     window.scrollTo({top: 0, behavior: 'instant'});
   }
 
