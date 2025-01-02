@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {BehaviorSubject, firstValueFrom} from 'rxjs';
-import { ResetPasswordRequest, Response, User } from 'src/app/crew-trip/features/system/users/users.model';
+import {ResetPasswordRequest, Response, User} from 'src/app/crew-trip/features/system/users/users.model';
 import {UserLogin} from 'src/app/crew-trip/shared/models/userInfo';
 import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
-import { HttpParams } from '@angular/common/http';
+import {HttpParams} from '@angular/common/http';
 
 @Injectable({
   providedIn: 'root'
@@ -13,6 +13,7 @@ import { HttpParams } from '@angular/common/http';
 export class UsersService extends BaseService {
   userInfoSubject = new BehaviorSubject<any>(this.getUserLogin());
   userInfo$ = this.userInfoSubject.asObservable();
+
   constructor(private storageService: StorageService) {
     super();
     this.path = 'user';
@@ -52,7 +53,7 @@ export class UsersService extends BaseService {
     return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
   }
 
-  getUserLogin(): UserLogin | null{
+  getUserLogin(): UserLogin | null {
     const userInfo = this.storageService.get(STORAGE_KEY.USER_INFO);
     return userInfo ? UserLogin.fromObject(JSON.parse(userInfo)) : null;
   }
@@ -79,4 +80,7 @@ export class UsersService extends BaseService {
     return firstValueFrom(this.http.post<any>(url, body, this.httpOptions));
   }
 
+  isLoggedIn(): boolean {
+    return !!localStorage.getItem(STORAGE_KEY.USER_INFO); // Trả về true nếu có token
+  }
 }

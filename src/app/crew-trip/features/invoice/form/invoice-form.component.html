@@ -28,7 +28,7 @@
               <mat-label i18n>Airport Code</mat-label>
               <mat-select formControlName="airportCode" multiple>
                 @for (item of listFlightMarket; track item) {
-                  <mat-option [value]="item">{{ item }}</mat-option>
+                <mat-option [value]="item">{{ item }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -44,10 +44,10 @@
               <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
               @if (!!formGroupSearch.controls['periodFrom'].hasError('matStartDateInvalid')) {
-                <mat-error>Invalid start date</mat-error>
+              <mat-error>Invalid start date</mat-error>
               }
               @if (!!formGroupSearch.controls['periodTo'].hasError('matEndDateInvalid')) {
-                <mat-error>Invalid end date</mat-error>
+              <mat-error>Invalid end date</mat-error>
               }
             </mat-form-field>
           </div>
@@ -73,30 +73,21 @@
     <mat-card-header>
       <mat-card-title>
       </mat-card-title>
-      <!--      <mat-card-subtitle>
-              <button (click)="exportFile()" class="add-btn mr-10" i18n mat-button type="button">
-                <i class="material-symbols-outlined">
-                  download
-                </i>
-                Export
-              </button>
-              @if (viewType == 'HD') {
-                <button (click)="syncDWH()" class="add-btn" mat-button type="button">
-                  <i class="material-symbols-outlined">
-                    sync
-                  </i>
-                  <span i18n>Synchronize</span>
-                </button>
-              }
-              @if (viewType == 'PL') {
-                <button (click)="nextStep(null,false)" class="add-btn" mat-button type="button">
-                  <i class="material-symbols-outlined">
-                    add
-                  </i>
-                  <span i18n>Add new</span>
-                </button>
-              }
-            </mat-card-subtitle>-->
+      <mat-card-subtitle>
+        <button  class="add-btn mr-10" i18n mat-button
+                type="button">
+          <i class="material-symbols-outlined">
+            download
+          </i>
+          Export
+        </button>
+        <button (click)="openDialogFile()" class="add-btn" i18n mat-button type="button">
+          <i class="material-symbols-outlined">
+            add
+          </i>
+          Add new
+        </button>
+      </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
       <div class="table-responsive">
@@ -108,7 +99,7 @@
             </td>
           </ng-container>
           @for (innerColumn of _displayedColumns; track innerColumn.value) {
-            <ng-container matColumnDef="{{innerColumn.value}}">
+          <ng-container matColumnDef="{{innerColumn.value}}">
               <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
               <td mat-cell *matCellDef="let element">
               <span [ngClass]="{
@@ -116,17 +107,15 @@
           'text-bg-vna': innerColumn.value === 'isActiveLabel' && element['isActive'] == 1,
           'text-bg-vna-danger': innerColumn.value === 'isActiveLabel' && element['isActive'] == 0
           }">{{
-                  element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-                }}</span>
+          element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+          }}</span>
               </td>
             </ng-container>
           }
           <ng-container matColumnDef="periodDate">
             <th *matHeaderCellDef mat-header-cell mat-sort-header>Period Date</th>
-            <td *matCellDef="let element" mat-cell>{{
-                element.periodFrom | dataTransformPipe:[Constant.DATE,
-                  Constant.DATE_FORMAT]
-              }}
+            <td *matCellDef="let element"
+                mat-cell>{{element.periodFrom | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]}}
               - {{ element.periodTo | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
             </td>
           </ng-container>
@@ -135,44 +124,14 @@
             <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
               Action
             </th>
-            <td
-              *matCellDef="let element;let i = index"
-              [class]="{'status-color-1':element.optionOutput == 1,'status-color-2':element.optionOutput == 2,'status-color-3':element.optionOutput == 3}"
-              mat-cell>
-              @if (viewType == 'HD') {
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <a (click)="showListAnnex(element.bizDocId)"
-                     class="text-secondary"
-                     mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Show Annex">
-                      contract
-                    </i>
-                  </a>
-                  <a (click)="nextStep(element.bizDocId,true)" class="text-secondary" mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Detail">
-                      visibility
-                    </i>
-                  </a>
-                  <a (click)="nextStep(element.bizDocId,false,'edit')" class="text-warning" mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Edit">
-                      edit
-                    </i>
-                  </a>
-                </div>
-              } @else if (viewType == 'PL') {
-                <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <a (click)="nextStep(element.bizDocId,false,'edit')" class="text-warning" mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Edit">
-                      edit
-                    </i>
-                  </a>
-                  <a (click)="showConfirmDelete(element.bizDocId)" class="text-danger" mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Delete">
-                      delete
-                    </i>
-                  </a>
-                </div>
-              }
+            <td *matCellDef="let element;let i = index" mat-cell>
+              <div class="action-buttons d-flex align-items-center justify-content-end">
+                <a (click)="nextStep(element.id,true)" class="text-secondary" mat-button type="button">
+                  <i class="material-symbols-outlined" i18n-title title="Detail">
+                    visibility
+                  </i>
+                </a>
+              </div>
             </td>
           </ng-container>
           <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
@@ -195,49 +154,83 @@
     </mat-card-content>
   </mat-card>
 </ng-container>
-<!-- Delete confirm Popup -->
-<div [class.active]="showDialogDelete" class="add-new-popup">
-  <div class="popup-dialog dialog-delete-with">
-    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+<!-- Detail -->
+<ng-container *ngIf="step==2">
+  <app-invoice-form-detail (backStep)="backStep()"
+                           [dataObject]="formGroupDetail.value"
+                           [id]="id" [readMode]="readMode"></app-invoice-form-detail>
+</ng-container>
+
+<!-- Add New Popup -->
+<div
+  [class.active]="showDialogFile"
+  class="add-new-popup"
+>
+  <div class="popup-dialog">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
+      <mat-card-header>
+        <mat-card-title>
+          <h5 class="mb-0">
+            <span i18n>Title</span>
+          </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <button (click)="closeDialogFile()" mat-button>
+            <i class="ri-close-fill"></i>
+          </button>
+        </mat-card-subtitle>
+      </mat-card-header>
       <mat-card-content>
-        <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
-        </div>
-        <div class="text-center mb-20">
-          <h3 class="mb-0" i18n>Are you sure you want to delete?</h3>
-        </div>
-        <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n>
-                        You will not be able to recover the deleted data!</span>
-        </div>
-        <div class="btn-box text-center">
-          <button (click)="closeConfirmDelete()" class="close-btn  min-with-100 mlr-5" mat-button
-                  type="button">
+        <form [formGroup]="formGroupFile" autocomplete="off">
+          <div class="row">
+            <div class="col-md-12" sizeInput='sm'>
+              <label class="main-label fw-medium text-black pr-15" i18n>
+                Type <span style="color:red">*</span>
+              </label>
+              <mat-radio-group formControlName="ctype" (ngModelChange)="cookTemplateName()">
+                <mat-radio-button i18n value="INTERNATIONAL">
+                  International
+                </mat-radio-button>
+                <mat-radio-button i18n value="DOMESTIC">
+                  Domestic
+                </mat-radio-button>
+              </mat-radio-group>
+            </div>
+            <div class="col-md-12 mt-20">
+                <span i18n>File Template</span>
+                <button (click)="download('DOWNLOAD')" class="close-btn" i18n mat-button type="button">
+                  <i class="material-symbols-outlined">
+                    download
+                  </i>
+                  {{formGroupFile.getRawValue().templateName}}
+                </button>
+            </div>
+            <div class="col-md-12 mt-20" sizeInput='sm'>
+              <file-upload [accept]="COMMON_CONFIG.FILE_ACCEPT_EXCEL" [multiple]="false"
+                           class="file-uploader"
+                           formControlName="fileUpload"></file-upload>
+            </div>
+          </div>
+        </form>
+        <div class="btn-box mt-20">
+          <button (click)="closeDialogFile()" class="close-btn" i18n mat-button type="button">
             <i class="material-symbols-outlined">
               close
             </i>
-            <span i18n>Cancel</span>
+            Close
           </button>
-          <button (click)="delete()" class="add-btn min-with-100 mlr-5" mat-button type="button">
+          <button
+            (click)="upload()"
+            class="add-btn"
+            i18n mat-button
+          >
             <i class="material-symbols-outlined">
-              save
+              upload
             </i>
-            <span i18n>Confirm</span>
+            Upload
           </button>
         </div>
       </mat-card-content>
     </mat-card>
   </div>
 </div>
-
-
-<!--ds phu luc-->
-
-<!-- Detail -->
-<ng-container *ngIf="step==2">
-  <app-invoice-form-detail (backStep)="backStep()"
-                       [dataObject]="formGroupDetail.value"
-                       [id]="id" [readMode]="readMode"></app-invoice-form-detail>
-</ng-container>

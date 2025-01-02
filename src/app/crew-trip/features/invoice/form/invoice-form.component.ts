@@ -4,14 +4,14 @@ import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
@@ -29,12 +29,14 @@ import {InvoiceFormService} from 'src/app/crew-trip/core/services/invoice-form-s
 import {
   InvoiceFormDetailComponent
 } from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
+import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {FileUploadModule} from "@iplab/ngx-file-upload";
 
 
 @Component({
   selector: 'app-invoice-form',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule],
   templateUrl: './invoice-form.component.html',
   styleUrl: './invoice-form.component.scss',
 })
@@ -54,16 +56,13 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   readMode = true;
   action = 'edit';
   id: any;
-  bizDocId: any;
-  contractObj: any;
   listFlightMarket = [];
   listPartner: any[] = [];
   listHotel = [];
   listVehicle = [];
   listAirportCode = [];
-  tblAnnexData = new MatTableDataSource();
   _displayedColumns: {
-    label: string; value: string, type?: string, format?: string
+      label: string; value: string, type?: string, format?: string
   }[] = [
     {label: $localize`Airport Code`, value: 'airportCode'},
     {label: $localize`Partner Name`, value: 'partnerName'},
@@ -75,36 +74,34 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
       type: Constant.DATE,
       format: Constant.DATE_FORMAT
     },
-    //{ label: $localize`Period From`, value: 'periodFrom', type: Constant.DATE, format: Constant.DATE_FORMAT },
-    //{ label: $localize`Period To`, value: 'periodTo', type: Constant.DATE, format: Constant.DATE_FORMAT },
     {label: $localize`Total Amount`, value: 'totalAmount', type: Constant.NUMBER}
   ];
   @Input() contractId: any;
-
-  showPopupAnnex = false;
+  formGroupFile!: FormGroup;
+  showDialogFile = false;
 
   constructor() {
     super();
-
     this.formGroupSearch = this.fb.group({
       searchString: [],
       ctype: [],
       airportCode: [],
       periodFrom: [],
       periodTo: [],
-      /*  export: [null],
-        exportType: [],
-        active: [false],
-        contractId: []*/
     });
     this.formGroupDetail = this.fb.group({
       id: [], bizDocId: [], bizDocIdC1: [], contractName: [], contractCode: []
+    });
+    this.formGroupFile = this.fb.group({
+      ctype: ['INTERNATIONAL'], partnerType: [], fileUpload: [], templateName: []
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
 
   override async ngOnInit() {
+    this.formGroupFile.patchValue({partnerType: this.partnerType});
+    // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
     await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(), this.search(),]).then(() => {
       const listCombine = [...this.listVehicle, ...this.listHotel];
       this.listPartner = listCombine.map((s: any) => ({
@@ -115,7 +112,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   }
 
   async nextStep(id?: any, readMode?: any, action?: any) {
-    this.bizDocId = id;
+    this.id = id;
     this.step = 2;
     this.readMode = readMode;
     this.action = action;
@@ -124,14 +121,6 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   async backStep() {
     await this.search();
     this.step = 1;
-  }
-
-  async showAnnex(index: any) {
-    // await this.baseService.getListAnnex({contractId: id}).then(res => {
-    //   this.tblAnnexData.data = res.data.content;
-    this.tblAnnexData.data = (this.dataSource.data[index] as any).appendixList;
-    this.showPopupAnnex = true;
-
   }
 
   async loadListFlightMarket() {
@@ -156,28 +145,6 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
         this.listVehicle = res.data.content;
       }
     });
-  }
-
-  async syncDWH() {
-  }
-
-
-  async showListAnnex(id: any) {
-    this.viewType = 'PL';
-    this.formGroupSearch.patchValue({contractId: id});
-    this.contractObj = this.dataSource.data.find((value: any) => value.bizDocId == id);
-    this.formGroupDetail.patchValue({
-      bizDocIdC1: this.contractObj.bizDocId,
-      contractName: this.contractObj.contractName,
-      contractCode: this.contractObj.contractCode,
-    });
-
-    await this.search();
-  }
-
-  async showListContract() {
-    this.viewType = 'HD';
-    await this.search();
   }
 
   override async search<T>(body?: any, isNextPage?: boolean) {
@@ -208,37 +175,94 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
     }
   }
 
+  async upload() {
+    try {
+      await this.spinner.show();
+      let formUpload = new FormData();
+      let fileUpload = this.formGroupFile.value.fileUpload[0];
+      if (fileUpload.size > 50 * 1048576) {
+        this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
+        return;
+      }
+      formUpload.append('file', fileUpload, fileUpload.name);
+      formUpload.append('invoiceRequest', JSON.stringify({
+        ctype: this.formGroupFile.getRawValue().ctype,
+        partnerType: this.formGroupFile.getRawValue().partnerType
+      }));
+      await this.baseService.uploadFileData(formUpload).then(res => {
+        if (res.status == HttpStatusCode.Ok) {
+          this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
+        }
+      });
+    } catch (e: any) {
+      this.baseService.showError(e.error?.message ?? this.MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async download(type: any) {
+    try {
+      await this.spinner.show();
+      let filename = '';
+      if (type === 'EXPORT') {
+      } else if (type === 'DOWNLOAD') {
+        const res = await this.baseService.exportFileData({
+          fileExportType: '1'
+          // ctype: this.formGroupFile.getRawValue().ctype,
+          // partnerType: this.formGroupFile.getRawValue().partnerType
+        });
+        this.downloadFile(res, this.formGroupFile.getRawValue().templateName);
+      }
+    } catch (e) {
+      console.log(e)
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
   override async exportFile(body?: any, filename?: string) {
     try {
       await this.spinner.show();
-      this.formGroupSearch.patchValue({export: true, exportType: 'ALL'});
-      this.baseService.export(removeNullValues(this.formGroupSearch.value)).then(res => {
-        this.downloadFile(res, filename ?? res.fileName);
+      const res = await this.baseService.exportData({
+        ctype: this.formGroupFile.getRawValue().ctype,
+        partnerType: this.formGroupFile.getRawValue().partnerType
       });
-      this.formGroupSearch.patchValue({export: false, exportType: 'ALL'});
-
+      this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
-      console.log(e);
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
   }
 
-  /*  override async delete() {
-      try {
-        console.log(this.formGroupDetail.getRawValue(), 'this.formGroupDetail.getRawValue()this.formGroupDetail.getRawValue()')
-        await this.spinner.show();
-        const res = await this.baseService.delete(this.formGroupDetail.getRawValue().bizDocId);
-        this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
-        await this.search();
-        return res;
-      } catch (e: any) {
-        this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
-      } finally {
-        await this.spinner.hide();
-        await this.closeConfirmDelete();
-      }
-    }*/
+  async openDialogFile() {
+    await this.cookTemplateName();
+    this.showDialogFile = !this.showDialogFile;
+  }
 
+  closeDialogFile() {
+    this.showDialogFile = !this.showDialogFile;
+  }
+
+  async cookTemplateName() {
+    console.log(this.formGroupFile.getRawValue(), 'this.formGroupFile.getRawValue()')
+    if (this.formGroupFile.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupFile.getRawValue().partnerType === 'HOTEL') {
+      this.formGroupFile.patchValue({
+        templateName: '[Crew Trip]_Template bảng kê chi phí khách sạn_Quốc tế.xlsx'
+      })
+    } else if (this.formGroupFile.getRawValue().ctype === 'DOMESTIC' && this.formGroupFile.getRawValue().partnerType === 'HOTEL') {
+      this.formGroupFile.patchValue({
+        templateName: '[CrewTrip]_Template bảng kê chi phí khách sạn_Quốc nội.xlsx'
+      })
+    } else if (this.formGroupFile.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupFile.getRawValue().partnerType === 'TRANSPORTATION') {
+      this.formGroupFile.patchValue({
+        templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc tế.xlsx'
+      })
+    } else if (this.formGroupFile.getRawValue().ctype === 'DOMESTIC' && this.formGroupFile.getRawValue().partnerType === 'TRANSPORTATION') {
+      this.formGroupFile.patchValue({
+        templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc nội.xlsx'
+      })
+    }
+  }
 }

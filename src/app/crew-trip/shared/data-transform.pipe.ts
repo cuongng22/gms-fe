@@ -12,8 +12,8 @@ export class DataTransformPipe implements PipeTransform {
       const type = args[0];
       const format = args[1];
       if (type === 'number') {
-        // return value.toLocaleString('vi-VN');
-        return value.toLocaleString('en-US');
+        return value.toLocaleString('vi-VN');
+        // return value.toLocaleString('en-US');
       } else if (type === Constant.DATE) {
         return moment(value).format(format);
       } else if (type === Constant.STRING_FORMAT) {

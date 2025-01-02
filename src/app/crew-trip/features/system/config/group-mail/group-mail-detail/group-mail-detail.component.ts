@@ -28,6 +28,7 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {HttpStatusCode} from '@angular/common/http';
 import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
+import {BehaviorSubject} from "rxjs";
 
 interface EmailObj {
   email: string;
@@ -54,9 +55,9 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   formBuilder = inject(FormBuilder);
   override baseService = inject(GroupMailService);
   flightMarketSv = inject(FlightMarketService);
-  @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
+  @ViewChild('marketCode', {static: true}) marketCode!: ElementRef;
   markets: any[] = [];
-  filteredOptionsMarket = model<any[]>([]);
+  filteredOptionsMarket: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
   // override displayedColumns: string[] = ['email', 'actions'];
   emailList: EmailObj[] = [];
   emailForm: FormGroup;
@@ -88,8 +89,11 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
     }
   }
 
-  override ngOnInit(): void {
-    console.log(this.formGroupDetail);
+  override async ngOnInit(): Promise<void> {
+    await this.flightMarketSv.search({option: 1, status: 'Operational'}).then(res => {
+      this.markets = res.data;
+    });
+    this.filteredOptionsMarket.next(this.markets);
     if (this.data?.grMail) {
       this.formGroupDetail.patchValue(this.data?.grMail);
       this.emailList = this.data?.grMail.groupEmail.map((email: string) => ({
@@ -105,11 +109,20 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   }
 
   filterMarket(): void {
-    const filterValue = this.marketCode.nativeElement.value.toLowerCase();
-    if (!filterValue) {
-      this.filteredOptionsMarket.set(this.markets);
+    const filterValue = this.marketCode.nativeElement.value?.toLowerCase() || '';
+    const filteredMarkets = this.markets.filter(market =>
+      market?.toLowerCase().includes(filterValue)
+    );
+    const currentMarket = this.formGroupDetail.get('marketCode')?.value;
+    if (currentMarket && !filteredMarkets.includes(currentMarket)) {
+      this.filteredOptionsMarket.next([currentMarket, ...filteredMarkets]);
+    } else {
+      this.filteredOptionsMarket.next(filteredMarkets);
     }
-    this.filteredOptionsMarket.set(this.markets.filter(market => market?.toLowerCase().includes(filterValue)));
+  }
+
+  displayMarket(market: string | null): string {
+    return market ? market : '';
   }
 
   close(): void {

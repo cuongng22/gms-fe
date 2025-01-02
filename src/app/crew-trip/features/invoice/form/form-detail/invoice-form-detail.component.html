@@ -1,356 +1,482 @@
 <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
-  <div class="d-md-flex align-items-center">
-    <h5 class="mb-0 d-inline ml-10">
-        <h5 class="mb-0 ml-10">
-          <span i18n>Detailed Statement</span>
+    <div class="d-md-flex align-items-center">
+        <h5 class="mb-0 d-inline ml-10">
+            <h5 class="mb-0 ml-10">
+                <span i18n>Detailed Statement</span>
+            </h5>
         </h5>
-    </h5>
 
-  </div>
-  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
-    <li class="breadcrumb-item d-inline-block position-relative">
-      <a class="d-inline-block position-relative" routerLink="/">
-        <i class="material-symbols-outlined">
-          home
-        </i>
-        Dashboard
-      </a>
-    </li>
-    <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      Detailed Statement
-    </li>
-    <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      Detail
-    </li>
-  </ol>
+    </div>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative">
+            <a class="d-inline-block position-relative" routerLink="/">
+                <i class="material-symbols-outlined">
+                    home
+                </i>
+                Dashboard
+            </a>
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n>
+            Detailed Statement
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n>
+            Detail
+        </li>
+    </ol>
 </div>
 <div (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'" class="w-100 text-end mb-10">
-  <button (click)="goBack()" class="step-2-menu-button btn-slot-3" extended i18n mat-fab>
-    <i class="material-symbols-outlined">
-      undo
-    </i>
-    Back
-  </button>
+    <button (click)="goBack()" class="step-2-menu-button btn-slot-3" extended i18n mat-fab>
+        <i class="material-symbols-outlined">
+            undo
+        </i>
+        Back
+    </button>
 </div>
-<mat-card class="mb-10 border-radius d-block bg-white border-0 p-10">
-  <mat-card-content>
-    <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
-      <!--        dong1-->
-      <div class="row">
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Contract number</mat-label>
-            <input formControlName="contractCode" matInput required trim="blur">
-            @if (!!formGroupDetail.controls['contractCode'].hasError('required')) {
-              <mat-error><span i18n>Contract number</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Contract No</mat-label>
-            <input formControlName="contractNo" matInput required trim="blur">
-            @if (!!formGroupDetail.controls['contractNo'].hasError('required')) {
-              <mat-error><span i18n>Contract No</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <div class="row">
-            <div class="col-6" sizeInput='sm'>
-              <mat-form-field>
-                <mat-label i18n>Currency</mat-label>
-                <input formControlName="currency" matInput required trim="blur">
-                @if (!!formGroupDetail.controls['currency'].hasError('required')) {
-                  <mat-error><span i18n>Currency</span><span i18n> not empty</span></mat-error>
-                }
-              </mat-form-field>
+<mat-accordion multi>
+    <mat-expansion-panel [expanded]="expandList.has('tab1')">
+        <mat-expansion-panel-header i18n>
+            <div (click)="$event.stopPropagation();" class="title-no-event">1. General information</div>
+        </mat-expansion-panel-header>
+        <mat-panel-description>
+            <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
+                <!--        dong1-->
+                <div class="row">
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>Airport code</mat-label>
+                            <input formControlName="airportCode" matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>Invoice number</mat-label>
+                            <input formControlName="invoiceNumber" matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>Invoice date</mat-label>
+                            <input [value]="formGroupDetail.getRawValue().invoiceDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]"
+                                   formControlName="invoiceDate"
+                                   matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>Invoice receive date</mat-label>
+                            <input [value]="formGroupDetail.getRawValue().invoiceReceiveDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]"
+                                   formControlName="invoiceReceiveDate" matInput>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <!--        dong2-->
+                <div class="row mt-20">
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>Period From</mat-label>
+                            <input [value]="formGroupDetail.getRawValue().periodFrom | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]"
+                                   formControlName="periodFrom"
+                                   matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>Period To</mat-label>
+                            <input [value]="formGroupDetail.getRawValue().periodTo | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]"
+                                   formControlName="periodTo"
+                                   matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>BizDocId</mat-label>
+                            <input formControlName="bizDocId" matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>Partner Type</mat-label>
+                            <input formControlName="partnerType" matInput>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <!--        dong3-->
+                <div class="row mt-20">
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>Partner Code</mat-label>
+                            <input formControlName="partnerCode" matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>Partner Name</mat-label>
+                            <input formControlName="partnerName" matInput>
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>Total amount</mat-label>
+                            <input [value]="formGroupDetail.getRawValue().totalAmount | dataTransformPipe:[Constant.NUMBER]"
+                                   formControlName="totalAmount"
+                                   matInput type="text">
+                        </mat-form-field>
+                    </div>
+                    <div class="col-3" sizeInput='sm'>
+                        <mat-form-field>
+                            <mat-label i18n>Total amount VAT</mat-label>
+                            <input [value]="formGroupDetail.getRawValue().totalAmountVat | dataTransformPipe:[Constant.NUMBER]"
+                                   formControlName="totalAmountVat"
+                                   matInput>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <!--        dong4-->
+                <div class="row mt-20">
+                </div>
+                <!--        dong5-->
+                <div class="row mt-20">
+                </div>
+            </form>
+        </mat-panel-description>
+    </mat-expansion-panel>
+    <mat-expansion-panel [expanded]="expandList.has('tab2')">
+        <mat-expansion-panel-header i18n>
+            <div (click)="$event.stopPropagation();" class="title-no-event">2. Detailed Statement</div>
+        </mat-expansion-panel-header>
+        <mat-panel-description class="d-block">
+            <div class="table-responsive">
+                <table [dataSource]="formGroupDetail.getRawValue().invoiceFormDtl" class="table-light table-responsive"
+                       mat-table>
+                    <ng-container matColumnDef="stt">
+                        <th *matHeaderCellDef class="text-center" rowspan="2" mat-header-cell mat-sort-header>#</th>
+                        <td *matCellDef="let element; let i = index" class="text-center"
+                            mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
+                        </td>
+                    </ng-container>
+                    <ng-container matColumnDef="checkin">
+                        <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkin</th>
+                    </ng-container>
+                    <ng-container matColumnDef="checkout">
+                        <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkout</th>
+                    </ng-container>
+                    @for (innerColumn of _displayedColumns1; track innerColumn.value) {
+                        <ng-container matColumnDef="{{innerColumn.value}}">
+                            <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center"
+                                [rowSpan]=innerColumn.rowspan
+                                [colSpan]=innerColumn.colspan>
+                                {{ innerColumn.label }}
+                            </th>
+                            <td
+                                    [ngClass]="{'text-center': innerColumn.value === 'activeLabel' || innerColumn.value === 'year' ,'text-right': innerColumn.value === 'totalInternational' || innerColumn.value === 'rateInternationalLast' || innerColumn.value === 'totalDomestic' || innerColumn.value === 'rateDomesticLast' || innerColumn.value === 'total'  || innerColumn.value === 'rateTotalLast'}"
+                                    mat-cell *matCellDef="let element">
+                <span [ngClass]="{
+        'badge': innerColumn.value === 'activeLabel',
+        'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
+        'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
+        }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
+                            </td>
+                        </ng-container>
+                    }
+                    <tr *matHeaderRowDef="['stt','checkin','checkout','accessBridge','accommodationTaxCcCharge'];" mat-header-row></tr>
+                    <tr *matHeaderRowDef="['ciFltno','ciFltno','coFltno','coFltno'];" mat-header-row></tr>
+                    <!--<tr *matHeaderRowDef="['stt','accessBridge']"
+                        mat-header-row></tr>-->
+                    <tr *matRowDef="let row; columns: ['stt','ciFltno','ciFltno','coFltno','coFltno']"
+                        class="input-row" mat-row></tr>
+                    <tr *matNoDataRow class="mat-row">
+                        <td [attr.colspan]="13" class="mat-cell border-none text-center"><span
+                                i18n>No data!</span></td>
+                    </tr>
+                </table>
+                <!--<table [dataSource]="tblUnitPrice" class="table-light table-responsive" mat-table>
+                  <ng-container matColumnDef="stt">
+                    <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
+                    <td *matCellDef="let element; let i = index" class="text-center"
+                        mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="fromDate">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>From Date</th>
+                    <td (click)="editCellUP(element,'fromDate')" *matCellDef="let element"
+                        [style.padding]="checkCellUP(element, 'fromDate')?'0px !important':''"
+                        mat-cell
+                    >
+                      @if (checkCellUP(element, 'fromDate')) {
+                      <div class="input-cell">
+                        <mat-form-field
+                          class="edit-inline-table">
+                          <input #inputRef="ngModel" trim="blur" [matDatepicker]="fromDateUP" [(ngModel)]="element.fromDate"
+                                 (clickOutside)="readCellUP(element,'fromDate')"
+                                 matInput required>
+                          <mat-datepicker-toggle [for]="fromDateUP" matIconSuffix></mat-datepicker-toggle>
+                          <mat-datepicker #fromDateUP></mat-datepicker>
+                          <mat-error>{{ validField(element, 'fromDate', inputRef) }}</mat-error>
+                          </mat-form-field>
+                        </div>
+                      } @else {
+                      <span class="label-text">
+                      {{ element.fromDate ? (element.fromDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]) : '' }}
+                      </span>
+                      }
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="toDate">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>To Date</th>
+                    <td (click)="editCellUP(element,'toDate')" *matCellDef="let element"
+                        [style.padding]="checkCellUP(element, 'toDate')?'0px !important':''"
+                        mat-cell
+                    >
+                      @if (checkCellUP(element, 'toDate')) {
+                      <div class="input-cell">
+                        <mat-form-field
+                          class="edit-inline-table">
+                          <input #inputRef="ngModel" trim="blur" [matDatepicker]="toDateUP" [(ngModel)]="element.toDate"
+                                 (clickOutside)="readCellUP(element,'toDate')"
+                                 matInput required>
+                          <mat-datepicker-toggle [for]="toDateUP" matIconSuffix></mat-datepicker-toggle>
+                          <mat-datepicker #toDateUP></mat-datepicker>
+                          <mat-error>{{ validField(element, 'toDate', inputRef) }}</mat-error>
+                          </mat-form-field>
+                        </div>
+                      } @else {
+                      <span class="label-text">
+                      {{ element.toDate ? (element.toDate| dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]) : '' }}
+                      </span>
+                      }
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="serviceFeeCode">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Service Fee Code</th>
+                    <td (click)="editCellUP(element,'serviceFeeCode')" *matCellDef="let element"
+                        [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                        mat-cell>
+                      <div class="input-cell">
+                        <mat-form-field class="edit-inline-table">
+                          <mat-select #inputRef="ngModel" [(ngModel)]="element.serviceFeeCode" required (ngModelChange)="onChangeHHDV(element)">
+                            <mat-option *ngFor="let option of listHHDV" [value]="option.code">
+                              {{ option.code }}
+                            </mat-option>
+                          </mat-select>
+                          <mat-error>{{ validField(element, 'serviceFeeCode', inputRef) }}</mat-error>
+                        </mat-form-field>
+                      </div>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="serviceFeeName">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tên HHDV</th>
+                    <td *matCellDef="let element" mat-cell>
+                        <span class="label-text">
+                    {{ element.serviceFeeName }}
+                    </span>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="serviceFeeUnit">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Đơn vị tính</th>
+                    <td *matCellDef="let element" mat-cell>
+                        <span class="label-text">
+                    {{ element.serviceFeeUnit }}
+                    </span>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="codeNghiepVu">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Mã nghiệp vụ</th>
+                    <td (click)="editCellUP(element,'codeNghiepVu')" *matCellDef="let element"
+                        [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                        mat-cell
+                    >
+                      @if (checkCellUP(element, 'codeNghiepVu')) {
+                      <div class="input-cell">
+                        <mat-form-field
+                          class="edit-inline-table">
+                          <input trim="blur" [(ngModel)]="element.codeNghiepVu" matInput required
+                                 (clickOutside)="readCellUP(element,'codeNghiepVu')">
+                        </mat-form-field>
+                      </div>
+                      } @else {
+                      <span class="label-text">
+                      {{ element.codeNghiepVu }}
+                      </span>
+                      }
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="codeKHNS">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Khoản mục KHNS</th>
+                    <td (click)="editCellUP(element,'codeKHNS')" *matCellDef="let element"
+                        [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                        mat-cell
+                    >
+                      @if (checkCellUP(element, 'codeKHNS')) {
+                      <div class="input-cell">
+                        <mat-form-field
+                          class="edit-inline-table">
+                          <input trim="blur" [(ngModel)]="element.codeKHNS" matInput required
+                                 (clickOutside)="readCellUP(element,'codeKHNS')">
+                        </mat-form-field>
+                      </div>
+                      } @else {
+                      <span class="label-text">
+                      {{ element.codeKHNS }}
+                      </span>
+                      }
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="priceBeforeTax">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Price Before Tax</th>
+                    <td (click)="editCellUP(element,'priceBeforeTax')" *matCellDef="let element"
+                        [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                        mat-cell
+                    >
+                      @if (checkCellUP(element, 'priceBeforeTax')) {
+                      <div class="input-cell">
+                        <mat-form-field
+                          class="edit-inline-table">
+                          <input trim="blur" [(ngModel)]="element.priceBeforeTax" matInput required
+                                 (clickOutside)="readCellUP(element,'priceBeforeTax')">
+                        </mat-form-field>
+                      </div>
+                      } @else {
+                      <span class="label-text">
+                      {{ element.priceBeforeTax }}
+                      </span>
+                      }
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="taxCode">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tax Code</th>
+                    <td (click)="editCellUP(element,'taxCode')" *matCellDef="let element"
+                        [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                        mat-cell
+                    >
+                      @if (checkCellUP(element, 'taxCode')) {
+                      <div class="input-cell">
+                        <mat-form-field
+                          class="edit-inline-table">
+                          <input trim="blur" [(ngModel)]="element.taxCode" matInput required
+                                 (clickOutside)="readCellUP(element,'taxCode')">
+                        </mat-form-field>
+                      </div>
+                      } @else {
+                      <span class="label-text">
+                      {{ element.taxCode }}
+                      </span>
+                      }
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="taxRate">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tax Rate</th>
+                    <td (click)="editCellUP(element,'taxRate')" *matCellDef="let element"
+                        [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                        mat-cell
+                    >
+                      @if (checkCellUP(element, 'taxRate')) {
+                      <div class="input-cell">
+                        <mat-form-field
+                          class="edit-inline-table">
+                          <input trim="blur" [(ngModel)]="element.taxRate" matInput required
+                                 (clickOutside)="readCellUP(element,'taxRate')">
+                        </mat-form-field>
+                      </div>
+                      } @else {
+                      <span class="label-text">
+                      {{ element.taxRate }}
+                      </span>
+                      }
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="totalVatTax">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Total Vat Tax</th>
+                    <td (click)="editCellUP(element,'totalVatTax')" *matCellDef="let element"
+                        [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                        mat-cell
+                    >
+                      @if (checkCellUP(element, 'totalVatTax')) {
+                      <div class="input-cell">
+                        <mat-form-field
+                          class="edit-inline-table">
+                          <input trim="blur" [(ngModel)]="element.totalVatTax" matInput required
+                                 (clickOutside)="readCellUP(element,'totalVatTax')">
+                        </mat-form-field>
+                      </div>
+                      } @else {
+                      <span class="label-text">
+                      {{ element.totalVatTax }}
+                      </span>
+                      }
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="priceAfterTax">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Price After Tax</th>
+                    <td (click)="editCellUP(element,'priceAfterTax')" *matCellDef="let element"
+                        [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                        mat-cell
+                    >
+                      @if (checkCellUP(element, 'priceAfterTax')) {
+                      <div class="input-cell">
+                        <mat-form-field
+                          class="edit-inline-table">
+                          <input trim="blur" [(ngModel)]="element.priceAfterTax" matInput required
+                                 (clickOutside)="readCellUP(element,'priceAfterTax')">
+                        </mat-form-field>
+                      </div>
+                      } @else {
+                      <span class="label-text">
+                      {{ element.priceAfterTax }}
+                      </span>
+                      }
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="notes">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Note</th>
+                    <td (click)="editCellUP(element,'notes')" *matCellDef="let element"
+                        [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
+                        mat-cell
+                    >
+                      @if (checkCellUP(element, 'notes')) {
+                      <div class="input-cell">
+                        <mat-form-field
+                          class="edit-inline-table">
+                          <input trim="blur" [(ngModel)]="element.notes" matInput required
+                                 (clickOutside)="readCellUP(element,'notes')">
+                        </mat-form-field>
+                      </div>
+                      } @else {
+                      <span class="label-text">
+                      {{ element.notes }}
+                      </span>
+                      }
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="action" stickyEnd>
+                    <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
+                      Action
+                    </th>
+                    <td *matCellDef="let element;let i = dataIndex" mat-cell>
+                      <div class="action-buttons align-items-center text-center">
+                        <a (click)="_confirmDelete(element,'tbl5','Are you sure you want to delete?')" *ngIf="!readMode"
+                           class="text-danger"
+                           mat-button type="button">
+                          <i class="material-symbols-outlined" i18n-title title="Delete">
+                            delete
+                          </i>
+                        </a>
+                      </div>
+                    </td>
+                  </ng-container>
+                  <tr
+                    *matHeaderRowDef="['stt','fromDate','toDate','serviceFeeCode','serviceFeeName','serviceFeeUnit','codeNghiepVu','codeKHNS','priceBeforeTax','taxCode','taxRate','totalVatTax','priceAfterTax','notes','action']"
+                    mat-header-row></tr>
+                  <tr
+                    *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceFeeCode','serviceFeeName','serviceFeeUnit','codeNghiepVu','codeKHNS','priceBeforeTax','taxCode','taxRate','totalVatTax','priceAfterTax','notes','action'];"
+                    class="input-row" mat-row></tr>
+                  <tr *matNoDataRow class="mat-row">
+                    <td [attr.colspan]="13" class="mat-cell border-none text-center"><span
+                      i18n>No data!</span></td>
+                  </tr>
+                </table>-->
             </div>
-            <div class="col-6" sizeInput='sm'>
-              <mat-form-field>
-                <mat-label i18n>Exchange rate</mat-label>
-                <input formControlName="exchangeRate" matInput min="0" trim="blur" type="number">
-                @if (!!formGroupDetail.controls['exchangeRate'].hasError('required')) {
-                  <mat-error><span i18n>Exchange rate</span><span i18n> not empty</span></mat-error>
-                }
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-      </div>
-      <!--        dong2-->
-      <div class="row mt-20">
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Sign date</mat-label>
-            <input [matDatepicker]="signedDate" formControlName="signedDate" matInput required
-                   trim="blur">
-            <mat-datepicker-toggle [for]="signedDate" matIconSuffix></mat-datepicker-toggle>
-            <mat-datepicker #signedDate></mat-datepicker>
-            @if (!!formGroupDetail.controls['signedDate'].hasError('required')) {
-              <mat-error><span i18n>Sign date</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <div class="row">
-            <div class="col-6" sizeInput='sm'>
-              <mat-form-field>
-                <mat-label i18n>Effective date</mat-label>
-                <input [matDatepicker]="effectiveDate" formControlName="effectiveDate" matInput
-                       required trim="blur">
-                <mat-datepicker-toggle [for]="effectiveDate" matIconSuffix></mat-datepicker-toggle>
-                <mat-datepicker #effectiveDate></mat-datepicker>
-                @if (!!formGroupDetail.controls['effectiveDate'].hasError('required')) {
-                  <mat-error><span i18n>Effective date</span><span i18n> not empty</span></mat-error>
-                }
-              </mat-form-field>
-            </div>
-            <div class="col-6" sizeInput='sm'>
-              <mat-form-field>
-                <mat-label i18n>Expiry date</mat-label>
-                <input [matDatepicker]="expiryDate" formControlName="expiryDate" matInput requiredt
-                       trim="blur">
-                <mat-datepicker-toggle [for]="expiryDate" matIconSuffix></mat-datepicker-toggle>
-                <mat-datepicker #expiryDate></mat-datepicker>
-                @if (!!formGroupDetail.controls['expiryDate'].hasError('required')) {
-                  <mat-error><span i18n>Expiry date</span><span i18n> not empty</span></mat-error>
-                }
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Contract type</mat-label>
-            <mat-select formControlName="contractType" required>
-              <mat-option *ngFor="let option of listContractType" [value]="option.key">
-                {{ option.value }}
-              </mat-option>
-            </mat-select>
-            @if (!!formGroupDetail.controls['contractType'].hasError('required')) {
-              <mat-error><span i18n>Contract type</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-      </div>
-      <!--        dong3-->
-      <div class="row mt-20">
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Contract form</mat-label>
-            <mat-select formControlName="contractForm" required>
-              <mat-option *ngFor="let option of listContractForm" [value]="option.key">
-                {{ option.value }}
-              </mat-option>
-            </mat-select>
-            @if (!!formGroupDetail.controls['contractForm'].hasError('required')) {
-              <mat-error><span i18n>Contract form</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Original Contract No</mat-label>
-            <input formControlName="hdPlRoot" matInput trim="blur">
-            @if (!!formGroupDetail.controls['hdPlRoot'].hasError('required')) {
-              <mat-error><span i18n>Original Contract No</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Contract name</mat-label>
-            <input formControlName="contractName" matInput required trim="blur">
-            @if (!!formGroupDetail.controls['contractName'].hasError('required')) {
-              <mat-error><span i18n>Contract name</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-      </div>
-      <!--        dong4-->
-      <div class="row mt-20">
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Supplier ID</mat-label>
-            <input (ngModelChange)="partnerChangeDebounce($event);this.partnerChangeBrake=false;"
-                   formControlName="partnerCode" matInput required trim="blur">
-            @if (!!formGroupDetail.controls['partnerCode'].hasError('required')) {
-              <mat-error><span i18n>Supplier ID</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Supplier name</mat-label>
-            <input formControlName="partnerName" matInput required trim="blur">
-            @if (!!formGroupDetail.controls['partnerName'].hasError('required')) {
-              <mat-error><span i18n>Supplier name</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Supplier address</mat-label>
-            <input formControlName="partnerAddress" matInput trim="blur">
-            @if (!!formGroupDetail.controls['partnerAddress'].hasError('required')) {
-              <mat-error><span i18n>Supplier address</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-      </div>
-      <!--        dong5-->
-      <div class="row mt-20">
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Contract authority</mat-label>
-            <mat-select formControlName="negotiateCompetence" required>
-              <mat-option *ngFor="let option of listNegotiateCompetence" [value]="option.key">
-                {{ option.value }}
-              </mat-option>
-            </mat-select>
-            @if (!!formGroupDetail.controls['negotiateCompetence'].hasError('required')) {
-              <mat-error><span i18n>Contract authority</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Signatory authority</mat-label>
-            <mat-select formControlName="competence" required>
-              <mat-option *ngFor="let option of listCompetence" [value]="option.key">
-                {{ option.value }}
-              </mat-option>
-            </mat-select>
-            @if (!!formGroupDetail.controls['competence'].hasError('required')) {
-              <mat-error><span i18n>Signatory authority</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Representative</mat-label>
-            <input formControlName="employeeSigned" matInput required trim="blur">
-            @if (!!formGroupDetail.controls['employeeSigned'].hasError('required')) {
-              <mat-error><span i18n>Representative</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-      </div>
-      <!--        dong6-->
-      <div class="row mt-20">
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Sign department</mat-label>
-            <input formControlName="signedDepartmentName" matInput required trim="blur">
-            @if (!!formGroupDetail.controls['signedDepartmentName'].hasError('required')) {
-              <mat-error><span i18n>Sign department</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Budget Management Unit</mat-label>
-            <input formControlName="budgetDepartmentName" matInput required trim="blur">
-            @if (!!formGroupDetail.controls['budgetDepartmentName'].hasError('required')) {
-              <mat-error><span i18n>Budget Management Unit</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Proceed department</mat-label>
-            <input formControlName="proceedDepartmentName" matInput required trim="blur">
-            @if (!!formGroupDetail.controls['proceedDepartmentName'].hasError('required')) {
-              <mat-error><span i18n>Proceed department</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-      </div>
-      <!--        dong7-->
-      <div class="row mt-20">
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Payment unit</mat-label>
-            <input formControlName="paidDepartmentName" matInput required trim="blur">
-            @if (!!formGroupDetail.controls['paidDepartmentName'].hasError('required')) {
-              <mat-error><span i18n>Payment unit</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Method Payments</mat-label>
-            <input formControlName="paymentType" matInput trim="blur">
-            @if (!!formGroupDetail.controls['paymentType'].hasError('required')) {
-              <mat-error><span i18n>Method Payments</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Employee</mat-label>
-            <input formControlName="employeeId" matInput trim="blur">
-            @if (!!formGroupDetail.controls['employeeId'].hasError('required')) {
-              <mat-error><span i18n>Employee</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-      </div>
-      <!--        dong8-->
-      <div class="row mt-20">
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Budget Code</mat-label>
-            <mat-select formControlName="budgetCode" required>
-              <mat-option *ngFor="let option of listBudgetCode" [value]="option.key">
-                {{ option.value }}
-              </mat-option>
-            </mat-select>
-            @if (!!formGroupDetail.controls['budgetCode'].hasError('required')) {
-              <mat-error><span i18n>Budget Code</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <mat-form-field>
-            <mat-label i18n>Field</mat-label>
-            <mat-select formControlName="fieldCode2" required>
-              <mat-option *ngFor="let option of listFieldCode2" [value]="option.key">
-                {{ option.value }}
-              </mat-option>
-            </mat-select>
-            @if (!!formGroupDetail.controls['fieldCode2'].hasError('required')) {
-              <mat-error><span i18n>Field</span><span i18n> not empty</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <div class="col-4" sizeInput='sm'>
-          <div class="row">
-            <div class="col-6" sizeInput='sm'>
-              <mat-form-field>
-                <mat-label i18n>Due Date</mat-label>
-                <input formControlName="dueDateNumber" matInput trim="blur">
-                @if (!!formGroupDetail.controls['dueDateNumber'].hasError('required')) {
-                  <mat-error><span i18n>Due Date</span><span i18n> not empty</span></mat-error>
-                }
-              </mat-form-field>
-            </div>
-            <div class="col-6" sizeInput='sm'>
-              <mat-form-field>
-                <mat-label i18n>Handover Date</mat-label>
-                <input [matDatepicker]="handoverDate" formControlName="handoverDate" matInput
-                       required trim="blur">
-                <mat-datepicker-toggle [for]="handoverDate" matIconSuffix></mat-datepicker-toggle>
-                <mat-datepicker #handoverDate></mat-datepicker>
-                @if (!!formGroupDetail.controls['handoverDate'].hasError('required')) {
-                  <mat-error><span i18n>Handover Date</span><span i18n> not empty</span></mat-error>
-                }
-              </mat-form-field>
-            </div>
-          </div>
-        </div>
-      </div>
-    </form>
-  </mat-card-content>
-</mat-card>
+        </mat-panel-description>
+    </mat-expansion-panel>
+
+</mat-accordion>
+
