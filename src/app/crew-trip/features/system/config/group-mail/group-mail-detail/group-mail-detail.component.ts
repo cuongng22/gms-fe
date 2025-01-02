@@ -101,7 +101,10 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
         isEditing: false
       }));
     }
+    this.flightMarketSv.search({option: 1, status: 'Operational'}).then(res => {
+      this.markets = res.data;
 
+    });
     this.formGroupDetail.patchValue({marketCode: this.formGroupDetail.value.marketCode});
   }
 

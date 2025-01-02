@@ -190,6 +190,8 @@
                     <mat-error><span i18n>AC group</span><span i18n> is required</span></mat-error>
                   } @else if (!!formGroupDetail.controls['acGroup'].hasError('existCheck')) {
                     <mat-error><span i18n>AC group and AC type already exists</span></mat-error>
+                  } @else if (!!formGroupDetail.controls['acGroup'].hasError('maxlength')) {
+                    <mat-error><span i18n>AC group must be less than {{maxLengthAc}} characters</span></mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -204,6 +206,8 @@
                     <mat-error><span i18n>AC type</span><span i18n> is required</span></mat-error>
                   } @else if (!!formGroupDetail.controls['acType'].hasError('existCheck')) {
                     <mat-error><span i18n>AC group and AC type already exists</span></mat-error>
+                  } @else if (!!formGroupDetail.controls['acType'].hasError('maxlength')) {
+                    <mat-error><span i18n>AC type must be less than {{maxLengthAc}} characters</span></mat-error>
                   }
                 </mat-form-field>
               </div>

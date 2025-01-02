@@ -33,17 +33,17 @@ export class AircraftDataComponent extends CommonComponent implements OnInit {
   usersService = inject(UsersService);
   fb = inject(FormBuilder);
   existCheck = false;
-
+  maxLengthAc = 5;
 
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
-      s: ['',], active: ['',], area: ['',],
+      s: ['',], active: ['1',], area: ['',],
     });
     this.formGroupDetail = this.fb.group({
       id: ['',],
-      acGroup: ['', [Validators.required, this.existValidator.bind(this), Validators.maxLength(5)]],
-      acType: ['', [Validators.required, this.existValidator.bind(this), Validators.maxLength(5)]],
+      acGroup: ['', [Validators.required, this.existValidator.bind(this), Validators.maxLength(this.maxLengthAc)]],
+      acType: ['', [Validators.required, this.existValidator.bind(this), Validators.maxLength(this.maxLengthAc)]],
       note: ['', [Validators.maxLength(500)]],
       active: [true,]
     });
