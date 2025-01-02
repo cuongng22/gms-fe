@@ -61,6 +61,8 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   listHotel = [];
   listVehicle = [];
   listAirportCode = [];
+  //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
+  formType = 1;
   _displayedColumns: {
       label: string; value: string, type?: string, format?: string
   }[] = [
@@ -116,6 +118,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
     this.step = 2;
     this.readMode = readMode;
     this.action = action;
+    await this.cookTemplateName();
   }
 
   async backStep() {
