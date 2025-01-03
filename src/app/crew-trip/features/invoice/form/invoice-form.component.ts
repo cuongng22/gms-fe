@@ -101,7 +101,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
       id: [], bizDocId: [], bizDocIdC1: [], contractName: [], contractCode: []
     });
     this.formGroupFile = this.fb.group({
-      ctype: ['INTERNATIONAL'], partnerType: [], fileUpload: [], templateName: []
+      ctype: ['INTERNATIONAL'], partnerType: [], fileUpload: [], templateName: [],templateNameLabel: []
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
@@ -245,19 +245,23 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   async cookTemplateName() {
     if (this.formGroupFile.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupFile.getRawValue().partnerType === 'HOTEL') {
       this.formGroupFile.patchValue({
-        templateName: '[Crew Trip]_Template bảng kê chi phí khách sạn_Quốc tế.xlsx'
+        templateName: '[Crew Trip]_Template bảng kê chi phí khách sạn_Quốc tế.xlsx',
+        templateNameLabel: 'report-hotel-international-template.xlsx'
       })
     } else if (this.formGroupFile.getRawValue().ctype === 'DOMESTIC' && this.formGroupFile.getRawValue().partnerType === 'HOTEL') {
       this.formGroupFile.patchValue({
-        templateName: '[CrewTrip]_Template bảng kê chi phí khách sạn_Quốc nội.xlsx'
+        templateName: '[CrewTrip]_Template bảng kê chi phí khách sạn_Quốc nội.xlsx',
+        templateNameLabel: 'report-hotel-domestic-template.xlsx'
       })
     } else if (this.formGroupFile.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupFile.getRawValue().partnerType === 'TRANSPORTATION') {
       this.formGroupFile.patchValue({
-        templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc tế.xlsx'
+        templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc tế.xlsx',
+        templateNameLabel: 'report-transport-international-template.xlsx'
       })
     } else if (this.formGroupFile.getRawValue().ctype === 'DOMESTIC' && this.formGroupFile.getRawValue().partnerType === 'TRANSPORTATION') {
       this.formGroupFile.patchValue({
-        templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc nội.xlsx'
+        templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc nội.xlsx',
+        templateNameLabel: 'report-transport-international-template.xlsx'
       })
     }
   }

@@ -95,6 +95,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   _displayedColumnsHeader1: string[]=[];
   _displayedColumnsHeader2: string[]=[];
   _displayedColumnsRow: string[]=[];
+  _displayedColumnsFooter: string[]=[];
   _displayedColumnsAll: {
     label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string
   }[] = [
@@ -203,7 +204,6 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
 
   override async ngOnInit() {
     try {
-
       await this.spinner.show();
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         this.setReadMode(this.formGroupDetail)]).then(() => {
@@ -236,6 +236,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
           this._displayedColumnsHeader2 = [];
           this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'accessBridge', 'toll', 'transitDuty', 'airportParkingFee', 'totalCharge', 'remark'];
         }
+        this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
       });
     } catch (e) {
       console.log(e);
@@ -255,5 +256,33 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
         v.disable();
       }
     });
+  }
+
+  calTotal(column:any){
+    if(column.type === Constant.NUMBER){
+      return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev:any,cur:any)=>prev+cur[column.value],0)
+    }
+    else{
+      return '';
+    }
+  }
+
+  async download(fileRow: any) {
+    try {
+      await this.spinner.show();
+      if (type === 'EXPORT') {
+      } else if (type === 'DOWNLOAD') {
+        const res = await this.baseService.exportFileData({
+          fileExportType: '1'
+          // ctype: this.formGroupFile.getRawValue().ctype,
+          // partnerType: this.formGroupFile.getRawValue().partnerType
+        });
+        this.downloadFile(res, fileRow.fileName);
+      }
+    } catch (e) {
+      console.log(e)
+    } finally {
+      await this.spinner.hide();
+    }
   }
 }
