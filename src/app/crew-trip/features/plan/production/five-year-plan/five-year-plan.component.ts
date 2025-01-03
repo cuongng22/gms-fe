@@ -1,11 +1,9 @@
 import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {CommonModule, NgClass, NgIf} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatTableModule} from '@angular/material/table';
@@ -13,13 +11,9 @@ import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatInput} from '@angular/material/input';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {NoDataRowOutlet} from '@angular/cdk/table';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
-import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 import {FiveYearPlanService} from 'src/app/crew-trip/core/services/five-year-plan.service';
-import {SelectionComponent} from 'src/app/crew-trip/shared/component/selection/selection.component';
 import {HttpStatusCode} from '@angular/common/http';
 import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
 

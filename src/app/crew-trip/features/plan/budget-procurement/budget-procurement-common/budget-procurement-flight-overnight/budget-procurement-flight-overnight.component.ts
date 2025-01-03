@@ -33,6 +33,7 @@ export class BudgetProcurementFlightOvernightComponent extends ShowMessageCompon
   overnightChange = new Subject<any>();
 
   data = input<any>();
+  disabled = input<boolean>(false);
 
   constructor() {
     super();

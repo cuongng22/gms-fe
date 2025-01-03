@@ -98,24 +98,11 @@
                                 </mat-error>
                             </mat-form-field>
                         </div>
-                        <div class="col" sizeInput="sm">
-                            <mat-form-field class="mb-2">
-                                <mat-label i18n="@@country">Country</mat-label>
-                                <input type="text" required #nationName matInput formControlName="nationName"
-                                    [matAutocomplete]="countryComplete" (input)="filterCountry()"
-                                    (focus)="filterCountry(true)">
-                                <mat-autocomplete autoActiveFirstOption requireSelection
-                                    #countryComplete="matAutocomplete" (optionSelected)="countrySelected($event)">
-                                    @for (country of filteredCountry(); track country) {
-                                    <mat-option [value]="country">
-                                        {{locale == LOCALE.VN ? country.vniName:country.engName}}</mat-option>
-                                    }
-                                </mat-autocomplete>
-                                <mat-error *ngxControlError="formGroupDetail.controls.nationName; track: 'required'"
-                                    i18n="@@countryRequired">
-                                    Country {{MESSAGE.REQUIRED}}
-                                </mat-error>
-                            </mat-form-field>
+                        <div class="col mb-2">
+                            <app-selection-suggest i18n-label="@@country" label="Country" [options]="countries"
+                                formControlName="nationId" size="sm"  attrValue="id" (selectionChange)="countrySelected($event)"
+                                attrDisplay="vniName" />
+
                         </div>
                         <div class="col" sizeInput="sm">
                             <mat-form-field class="mb-2">

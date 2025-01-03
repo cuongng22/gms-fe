@@ -2,12 +2,12 @@ import {
   Component, ElementRef, Inject, inject, LOCALE_ID, model, OnChanges, OnInit, SimpleChanges,
   ViewChild
 } from '@angular/core';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {MatAutocompleteModule,} from '@angular/material/autocomplete';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatInputModule} from '@angular/material/input';
-import {MatSelectModule} from '@angular/material/select';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { MatAutocompleteModule, } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatInputModule } from '@angular/material/input';
+import { MatSelectModule } from '@angular/material/select';
 import {
   AbstractControl,
   FormBuilder,
@@ -16,19 +16,20 @@ import {
   ValidationErrors,
   Validators
 } from '@angular/forms';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
-import {GroupMailService} from 'src/app/crew-trip/core/services/group-mail.service';
-import {CommonModule} from '@angular/common';
-import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
-import {MatTableModule} from '@angular/material/table';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {HttpStatusCode} from '@angular/common/http';
-import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
-import {BehaviorSubject} from "rxjs";
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { GroupMailService } from 'src/app/crew-trip/core/services/group-mail.service';
+import { CommonModule } from '@angular/common';
+import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
+import { MatTableModule } from '@angular/material/table';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { HttpStatusCode } from '@angular/common/http';
+import { InputComponent } from 'src/app/crew-trip/shared/component/input/input.component';
+import { BehaviorSubject } from "rxjs";
+import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 
 interface EmailObj {
   email: string;
@@ -45,7 +46,7 @@ interface EmailObj {
     MatCardModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, CommonModule, InputComponent
+    MatTableModule, MatPaginatorModule, CommonModule, InputComponent, SelectionSuggestComponent
   ],
   templateUrl: './group-mail-detail.component.html',
   styleUrl: './group-mail-detail.component.scss'
@@ -55,7 +56,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   formBuilder = inject(FormBuilder);
   override baseService = inject(GroupMailService);
   flightMarketSv = inject(FlightMarketService);
-  @ViewChild('marketCode', {static: true}) marketCode!: ElementRef;
+  @ViewChild('marketCode', { static: true }) marketCode!: ElementRef;
   markets: any[] = [];
   filteredOptionsMarket: BehaviorSubject<string[]> = new BehaviorSubject<string[]>([]);
   // override displayedColumns: string[] = ['email', 'actions'];
@@ -90,7 +91,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   }
 
   override async ngOnInit(): Promise<void> {
-    await this.flightMarketSv.search({option: 1, status: 'Operational'}).then(res => {
+    await this.flightMarketSv.search({ option: 1, status: 'Operational' }).then(res => {
       this.markets = res.data;
     });
     this.filteredOptionsMarket.next(this.markets);
@@ -101,33 +102,20 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
         isEditing: false
       }));
     }
+    this.flightMarketSv.search({ option: 1, status: 'Operational' }).then(res => {
+      this.markets = res.data;
 
-    this.formGroupDetail.patchValue({marketCode: this.formGroupDetail.value.marketCode});
+      this.formGroupDetail.patchValue({ marketCode: this.formGroupDetail.value.marketCode });
+    })
   }
 
-  filterMarket(): void {
-    const filterValue = this.marketCode.nativeElement.value?.toLowerCase() || '';
-    const filteredMarkets = this.markets.filter(market =>
-      market?.toLowerCase().includes(filterValue)
-    );
-    const currentMarket = this.formGroupDetail.get('marketCode')?.value;
-    if (currentMarket && !filteredMarkets.includes(currentMarket)) {
-      this.filteredOptionsMarket.next([currentMarket, ...filteredMarkets]);
-    } else {
-      this.filteredOptionsMarket.next(filteredMarkets);
-    }
-  }
-
-  displayMarket(market: string | null): string {
-    return market ? market : '';
-  }
 
   close(): void {
     this.dialogRef.close();
   }
 
   addEmailRow(): void {
-    this.emailList.push({email: '', isEditing: true});
+    this.emailList.push({ email: '', isEditing: true });
     this.emailList = [...this.emailList];
   }
 
@@ -170,7 +158,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
       // this.baseService.showError('List email is required!');
       return;
     }
-    this.formGroupDetail.patchValue({groupEmail: this.emailListStr});
+    this.formGroupDetail.patchValue({ groupEmail: this.emailListStr });
     try {
       await super.save().then(value => {
         if (value.status == HttpStatusCode.Conflict) {
@@ -189,6 +177,6 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   }
 
   existCodeValidator(control: AbstractControl): ValidationErrors | null {
-    return this.existCode ? {existCode: true} : null;
+    return this.existCode ? { existCode: true } : null;
   }
 }

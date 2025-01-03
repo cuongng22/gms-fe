@@ -1,2 +1,24 @@
 :host::ng-deep {
+    .mat-column-hotelName,
+    .mat-column-carRentalCompany {
+        word-wrap: break-word !important;
+        white-space: unset !important;
+        max-width: 350px !important;
+        min-width: 300px !important;
+        overflow-wrap: break-word;
+        word-break: break-word;
+
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+    }
+
+    .break-word{
+        display: inline-block;       /* Đảm bảo giới hạn chiều rộng */
+        max-width: 200;           /* Đặt chiều rộng tối đa */
+        word-break: break-word;     /* Tự động ngắt từ khi cần */
+        overflow-wrap: break-word;  /* Hỗ trợ thêm cho ngắt từ */
+        white-space: normal;        
+    }
 }
