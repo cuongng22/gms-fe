@@ -24,7 +24,7 @@ import { BudgetProcurementCostAnalysisComponent } from '../../budget-procurement
 import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataSummayRequest, dataDetailExample, summaryDataExample, summaryDataExample1 } from './budget-procurement-summary-detail.model';
-import { CategoryEnum, closePanel, openPanel, PlanCategoryEnum } from '../../budget-procurement.model';
+import { CategoryEnum, closePanel, openPanel, PlanCategoryEnum, StatusEnum, StatusSummaryEnum } from '../../budget-procurement.model';
 import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
 import { DomesticBudgetProcurementFlightRateComponent } from '../../budget-procurement-common/domestic/domestic-budget-procurement-flight-rate/domestic-budget-procurement-flight-rate.component';
 import { DomesticBudgetProcurementHotelComponent } from '../../budget-procurement-common/domestic/domestic-budget-procurement-hotel/domestic-budget-procurement-hotel.component';
@@ -67,6 +67,8 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
   @ViewChild('panelProcurementPlanCarRentalState', { static: false }) panelProcurementPlanCarRentalState: MatExpansionPanel; // 4.2
   @ViewChild('panelProcurementPlanWetLeaseState', { static: false }) panelProcurementPlanWetLeaseState: MatExpansionPanel; // 4.3
 
+  @ViewChild('panelBudgetProcurementCostAnalysisState', { static: false }) panelBudgetProcurementCostAnalysisState: MatExpansionPanel; // V
+
 
   @ViewChild('budgetProcurementGeneral', { static: false }) budgetProcurementGeneral: BudgetProcurementGeneralComponent;
 
@@ -99,6 +101,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
   PlanCategoryEnum = PlanCategoryEnum;
 
   dataDetail: any;
+  showDialogSummary = false;
 
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
@@ -140,7 +143,23 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     }
   }
 
-  async dataSummary() {
+  summaryData() {
+    if (this.dataDetail.planFlightRates
+      || this.dataDetail.planFlightPeriods
+      || this.dataDetail.planOverightRates
+      || this.dataDetail.planBudgetHotels
+      || this.dataDetail.planBudgetCarentals
+      || this.dataDetail.planProcurementHotels
+      || this.dataDetail.planProcurementCarentals
+      || this.dataDetail.planBudgetWetLease
+      || this.dataDetail.planProcumentWetLease) {
+      this.showDialogSummary = true;
+    } else {
+      this.confirmSummaryData();
+    }
+  }
+
+  async confirmSummaryData() {
     try {
       this.spinner.show();
       const procStartDate = this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.value;
@@ -172,6 +191,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       this.setPanelState();
     } catch (error) {
     } finally {
+      this.showDialogSummary = false;
       this.spinner.hide();
     }
   }
@@ -331,6 +351,15 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       default:
         break;
     }
+
+    if (this.budgetProcurementCostAnalysis.formGroupDetail.dirty
+      || this.budgetProcurementCostAnalysis.formGroupDetail.controls.notes.value
+      || this.budgetProcurementCostAnalysis.formGroupDetail.controls.planVsEstimate.value
+      || this.budgetProcurementCostAnalysis.formGroupDetail.controls.planVsEstimateRate.value
+      || this.budgetProcurementCostAnalysis.formGroupDetail.controls.ratePriceCarBefore.value
+      || this.budgetProcurementCostAnalysis.formGroupDetail.controls.ratePriceRoomBefore.value) {
+      openPanel(this.panelBudgetProcurementCostAnalysisState);
+    }
   }
 
   formGeneralValueChanges(event: any): void {
@@ -346,6 +375,13 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
   cleanData(data: any[]): any[] {
     return data.map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }));
+  }
+
+  completed() {
+    this.baseService.summaryUpdateStatus({ id: this.id(), status: StatusSummaryEnum.COMPLETED }).then(() => {
+      this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
+      this.getDetailSummary();
+    });
   }
 
 
@@ -495,6 +531,14 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
   }
   set domesticProcurementWetLeaseData(value: any[]) {
     this._domesticProcurementWetLeaseData = value;
+  }
+
+  toggleDialogSummary() {
+    this.showDialogSummary = !this.showDialogSummary;
+  }
+
+  checkStatusCompelted(): boolean {
+    return this.dataDetail?.status === StatusSummaryEnum.COMPLETED;
   }
 
 }

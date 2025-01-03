@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, input, Input, model, OnInit, output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, Input, model, OnInit, output, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,7 +12,7 @@ import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
 import { MESSAGE } from '../../utils/constant';
 import { NgxControlError } from 'ngxtension/control-error';
 import { Validators } from '@angular/forms';
-import { MatIcon, MatIconModule } from '@angular/material/icon';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-selection-suggest',
@@ -70,6 +70,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
   get requiredControl(): boolean {
     return this.formControl.hasValidator(Validators.required);
   }
+
   ngOnInit(): void {
     this.keySearch.pipe(
       debounceTime(500),

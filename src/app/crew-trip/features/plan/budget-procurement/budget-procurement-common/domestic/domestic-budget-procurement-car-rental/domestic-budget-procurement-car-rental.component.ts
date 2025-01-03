@@ -30,6 +30,7 @@ export class DomesticBudgetProcurementCarRentalComponent {
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
   type = input<PlanCategoryEnum>(PlanCategoryEnum.BUDGET); // Loại Ngân sách hoặc mua sắm (budget/procurement)
   data = input<any>();
+  disabled = input<boolean>(false);
 
   dataTransformPipe = inject(DataTransformPipe);
   dataSource = new MatTableDataSource();
