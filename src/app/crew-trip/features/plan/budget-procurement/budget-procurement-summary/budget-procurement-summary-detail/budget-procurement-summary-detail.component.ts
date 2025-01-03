@@ -67,6 +67,8 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
   @ViewChild('panelProcurementPlanCarRentalState', { static: false }) panelProcurementPlanCarRentalState: MatExpansionPanel; // 4.2
   @ViewChild('panelProcurementPlanWetLeaseState', { static: false }) panelProcurementPlanWetLeaseState: MatExpansionPanel; // 4.3
 
+  @ViewChild('panelBudgetProcurementCostAnalysisState', { static: false }) panelBudgetProcurementCostAnalysisState: MatExpansionPanel; // V
+
 
   @ViewChild('budgetProcurementGeneral', { static: false }) budgetProcurementGeneral: BudgetProcurementGeneralComponent;
 
@@ -349,6 +351,15 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       default:
         break;
     }
+
+    if (this.budgetProcurementCostAnalysis.formGroupDetail.dirty
+      || this.budgetProcurementCostAnalysis.formGroupDetail.controls.notes.value
+      || this.budgetProcurementCostAnalysis.formGroupDetail.controls.planVsEstimate.value
+      || this.budgetProcurementCostAnalysis.formGroupDetail.controls.planVsEstimateRate.value
+      || this.budgetProcurementCostAnalysis.formGroupDetail.controls.ratePriceCarBefore.value
+      || this.budgetProcurementCostAnalysis.formGroupDetail.controls.ratePriceRoomBefore.value) {
+      openPanel(this.panelBudgetProcurementCostAnalysisState);
+    }
   }
 
   formGeneralValueChanges(event: any): void {
@@ -367,7 +378,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
   }
 
   completed() {
-    this.baseService.summaryUpdateStatus({id:this.id(), status: StatusSummaryEnum.COMPLETED}).then(() => {
+    this.baseService.summaryUpdateStatus({ id: this.id(), status: StatusSummaryEnum.COMPLETED }).then(() => {
       this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
       this.getDetailSummary();
     });
