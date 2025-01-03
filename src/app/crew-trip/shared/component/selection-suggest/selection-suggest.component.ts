@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, input, Input, model, OnInit, ViewChild, ViewEncapsulation } from '@angular/core';
+import { AfterContentInit, AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, input, Input, model, OnInit, output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -32,8 +32,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
     this.auto?.options.changes.subscribe((list: any[]) => {
       if (list) {
         let findResult = list.find((o) => o.value === this.formControl.value);
-        findResult.focus(null, { preventScroll: true });
-        findResult.select(false)
+        findResult?.focus(null, { preventScroll: true });
+        findResult?.select(false)
       }
 
     })
@@ -47,6 +47,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
   @Input() label = '';
   @Input() attrValue = '';
   @Input() attrDisplay = '';
+  selectionChange = output<any>();
 
   private _options: any[] = []
   keySearch = new Subject<string>();
@@ -118,6 +119,10 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
     this.viewControl.updateValueAndValidity()
     this.selectionControl.writeValue(event.option.value ?? null);
     this.formControl.updateValueAndValidity();
+    this.selectionChange.emit({
+      value: event.option.value ?? null,
+      viewValue: event.option.viewValue ?? null
+    })
   }
 
 

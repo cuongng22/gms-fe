@@ -16,7 +16,7 @@
         </mat-autocomplete>
 
     </mat-form-field>
-    @if(formControl.hasError('required')){
+    @if(viewControl.touched && formControl.hasError('required')){
     <span class="required">
         {{ label }} {{MESSAGE.REQUIRED}}
     </span>

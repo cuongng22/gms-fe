@@ -100,7 +100,7 @@
                         </div>
                         <div class="col mb-2">
                             <app-selection-suggest i18n-label="@@country" label="Country" [options]="countries"
-                                formControlName="nationId" size="sm"  attrValue="id"
+                                formControlName="nationId" size="sm"  attrValue="id" (selectionChange)="countrySelected($event)"
                                 attrDisplay="vniName" />
 
                         </div>
