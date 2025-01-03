@@ -12,8 +12,8 @@ export class VehicleService extends BaseService {
     this.path = 'vehicles';
   }
 
-  checkCodeExists(code: string, marketCode: string): Observable<any> {
-    const url = `${this.api}/${this.path}/check-code-exist?code=${code}&marketCode=${marketCode}`;
+  checkCodeExists(code: string): Observable<any> {
+    const url = `${this.api}/${this.path}/check-code-exist?code=${code}`;
     return this.http.get<any>(url, this.httpOptions);
   }
 

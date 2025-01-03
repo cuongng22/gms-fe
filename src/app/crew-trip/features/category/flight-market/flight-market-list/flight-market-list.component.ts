@@ -176,7 +176,6 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
         this.uploadFileError = res;
         if (!res.totalErrors) {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
-          this.search();
           this.resetFileUpload();
           this.toggleDialogUpload();
           this.baseService.search({ option: 1 }).then(res => {
@@ -187,6 +186,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
       }
     } finally {
       await this.spinner.hide();
+      this.search();
     }
   }
 
