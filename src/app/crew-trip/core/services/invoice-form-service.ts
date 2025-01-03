@@ -59,26 +59,6 @@ export class InvoiceFormService extends BaseService {
     return firstValueFrom(this.http.get<any>(url, this.httpOptions));
   }
 
-
-  getListAnnex<T = any>(body: any): Promise<ListResponse<T> | any> {
-    const url = `${this.api}/${this.path}/appendix`;
-    const params = new HttpParams({fromObject: removeNullValues(body)});
-    return firstValueFrom(this.http.get<ListResponse<T>>(url, {params}));
-  }
-
-
-
-  deleteFile(fileName: any, bizDocId: any): Promise<any> {
-    const url = `${this.api}/${this.path}/delete-attachment`;
-    const params = new HttpParams({fromObject: {fileName: fileName, bizDocId: bizDocId}});
-    return firstValueFrom(this.http.delete(url, {params}));
-  }
-
-  override create<T = any>(body: any): Promise<T> {
-    const url = `${this.api}/${this.path}/appendix`;
-    return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
-  }
-
   export(body: any) {
     const url = `${this.api}/${this.path}`;
     const httpOptionsExport = {
@@ -93,8 +73,16 @@ export class InvoiceFormService extends BaseService {
 
   }
 
-  override delete<T = any>(id: any): Promise<T> {
-    const url = `${this.api}/${this.path}/appendix/${id}`;
-    return firstValueFrom(this.http.delete<T>(url, this.httpOptions));
+  async exportFileData(body: any) {
+    const url = `${this.api}/${this.path}/export`;
+    const httpOptionsExport = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/octet-stream'
+      }),
+      responseType: 'blob' as any,
+      params: new HttpParams({ fromObject: body })
+    };
+    return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
   }
 }
