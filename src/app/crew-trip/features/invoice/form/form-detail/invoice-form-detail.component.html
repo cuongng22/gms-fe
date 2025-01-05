@@ -141,7 +141,7 @@
       <ng-container matColumnDef="fileName">
         <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
         <td *matCellDef="let element" mat-cell>
-          <a (click)="download(environment.baseUrl+element.fileUrl)"
+          <a (click)="download(element)"
              class="d-flex align-items-center justify-content-between position-relative"
              style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
         {{ element.fileName }}

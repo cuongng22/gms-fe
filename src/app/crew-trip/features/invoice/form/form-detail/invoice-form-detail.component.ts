@@ -92,10 +92,10 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   listFlightGroup = ContractLookup.FlightGroup;
   listStatusUsage = ContractLookup.StatusUsage;
 
-  _displayedColumnsHeader1: string[]=[];
-  _displayedColumnsHeader2: string[]=[];
-  _displayedColumnsRow: string[]=[];
-  _displayedColumnsFooter: string[]=[];
+  _displayedColumnsHeader1: string[] = [];
+  _displayedColumnsHeader2: string[] = [];
+  _displayedColumnsRow: string[] = [];
+  _displayedColumnsFooter: string[] = [];
   _displayedColumnsAll: {
     label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string
   }[] = [
@@ -258,11 +258,10 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     });
   }
 
-  calTotal(column:any){
-    if(column.type === Constant.NUMBER){
-      return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev:any,cur:any)=>prev+cur[column.value],0)
-    }
-    else{
+  calTotal(column: any) {
+    if (column.type === Constant.NUMBER) {
+      return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev: any, cur: any) => prev + cur[column.value], 0)
+    } else {
       return '';
     }
   }
@@ -270,15 +269,9 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   async download(fileRow: any) {
     try {
       await this.spinner.show();
-      if (type === 'EXPORT') {
-      } else if (type === 'DOWNLOAD') {
-        const res = await this.baseService.exportFileData({
-          fileExportType: '1'
-          // ctype: this.formGroupFile.getRawValue().ctype,
-          // partnerType: this.formGroupFile.getRawValue().partnerType
-        });
-        this.downloadFile(res, fileRow.fileName);
-      }
+      let res = await this.baseService.getFileData(fileRow.id);
+      this.downloadFile(res, fileRow.fileName + "." + fileRow.fileType);
+
     } catch (e) {
       console.log(e)
     } finally {

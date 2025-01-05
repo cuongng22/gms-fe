@@ -209,7 +209,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
           // ctype: this.formGroupFile.getRawValue().ctype,
           // partnerType: this.formGroupFile.getRawValue().partnerType
         });
-        this.downloadFile(res, this.formGroupFile.getRawValue().templateName);
+        this.downloadFile(res, this.formGroupFile.getRawValue().templateNameLabel);
       }
     } catch (e) {
       console.log(e)
