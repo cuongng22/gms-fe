@@ -60,7 +60,6 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   readMode = true;
   action = 'edit';
   id: any;
-  listFlightMarket = [];
   listPartner: any[] = [];
   listHotel = [];
   listVehicle = [];
@@ -128,14 +127,6 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   async backStep() {
     await this.search();
     this.step = 1;
-  }
-
-  async loadListFlightMarket() {
-    await this.flightMarketService.search({option: 1}).then(res => {
-      if (res.data) {
-        this.listFlightMarket = res.data;
-      }
-    });
   }
 
   override async search<T>(body?: any, isNextPage?: boolean) {

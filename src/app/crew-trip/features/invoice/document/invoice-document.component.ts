@@ -32,6 +32,7 @@ import {
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
+import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 
 
 @Component({
@@ -46,21 +47,19 @@ import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 
 
 export class InvoiceDocumentComponent extends CommonComponent implements OnInit {
-  viewType = 'HD';//HD-PL
-  override baseService = inject(InvoiceFormService);
+  override baseService = inject(InvoiceDocumentService);
   flightMarketService = inject(FlightMarketService);
   hotelService = inject(HotelService);
   vehicleService = inject(VehicleService);
   fb = inject(FormBuilder);
 
   //variable
-  @Input() partnerType: any;
+  @Input() tabType: any;
   @Output() nextStepEmit = new EventEmitter<any>();
   step = 1;
   readMode = true;
   action = 'edit';
   id: any;
-  listFlightMarket = [];
   listPartner: any[] = [];
   listHotel = [];
   listVehicle = [];
@@ -76,14 +75,32 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   }[] = [
     {label: $localize`Airport Code`, value: 'airportCode', rowspan: "2"},
     {label: $localize`Invoice Number`, value: 'invoiceNumber', rowspan: "2"},
-    {label: $localize`Invoice Date`, value: 'invoiceDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
-    {label: $localize`InvoiceReceive Date`, value: 'invoiceReceiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
-    {label: $localize`Period From`, value: 'periodFrom', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
+    {
+      label: $localize`Invoice Date`,
+      value: 'invoiceDate',
+      type: Constant.DATE,
+      format: Constant.DATE_FORMAT,
+      rowspan: "2"
+    },
+    {
+      label: $localize`InvoiceReceive Date`,
+      value: 'invoiceReceiveDate',
+      type: Constant.DATE,
+      format: Constant.DATE_FORMAT,
+      rowspan: "2"
+    },
+    {
+      label: $localize`Period From`,
+      value: 'periodFrom',
+      type: Constant.DATE,
+      format: Constant.DATE_FORMAT,
+      rowspan: "2"
+    },
     {label: $localize`Period To`, value: 'periodTo', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
     {label: $localize`bizDocId`, value: 'bizDocId', rowspan: "2"},
     {label: $localize`Partner Name`, value: 'partnerName', rowspan: "2"},
     {label: $localize`Partner Type`, value: 'partnerType', rowspan: "2"},
-    {label: $localize`Description`, value: 'description', rowspan: "2"},
+    // {label: $localize`Description`, value: 'description', rowspan: "2"},
     {label: $localize`FC`, value: 'amountFcBeforeVat', type: Constant.NUMBER},
     {label: $localize`VND`, value: 'amountVndBeforeVat', type: Constant.NUMBER},
     {label: $localize`FC`, value: 'vatFc', type: Constant.NUMBER},
@@ -95,7 +112,13 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     {label: $localize`Status`, value: 'status', rowspan: "2"},
     {label: $localize`Email Status`, value: 'statusEmail', rowspan: "2"},
     {label: $localize`Payment Status`, value: 'statusPayment', rowspan: "2"},
-    {label: $localize`Payment Due Date`, value: 'paymentDueDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
+    {
+      label: $localize`Payment Due Date`,
+      value: 'paymentDueDate',
+      type: Constant.DATE,
+      format: Constant.DATE_FORMAT,
+      rowspan: "2"
+    },
   ];
   @Input() contractId: any;
   formGroupFile!: FormGroup;
@@ -128,14 +151,13 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     await Promise.all([this.search(),]).then(() => {
 
     });
-    this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVat', 'vat', 'totalAmount', 'reimbursementTotal',
-      'status', 'emailStatus', 'paymentStatus', 'paymentDueDate', 'action'];
-    this._displayedColumnsHeader2 = ['amountBeforeVatFc', 'amountBeforeVatVnd', 'vatFc', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd'];
-    this._displayedColumnsRow = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVatFc', 'amountBeforeVatVnd', 'vatFc', 'vatVnd',
-      'totalAmountFc', 'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd',
-      'status', 'emailStatus', 'paymentStatus', 'paymentDueDate', 'action'];
+    this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVat',
+      'vat', 'totalAmount', 'reimbursementTotal', 'status', 'statusEmail', 'statusPayment', 'paymentDueDate', 'action'];
+    this._displayedColumnsHeader2 = ['amountFcBeforeVat', 'amountVndBeforeVat', 'vatFc', 'vatVnd', 'totalAmountFc',
+      'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd'];
+    this._displayedColumnsRow = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountFcBeforeVat', 'amountVndBeforeVat', 'vatFc', 'vatVnd', 'totalAmountFc',
+      'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd', 'status', 'statusEmail', 'statusPayment', 'paymentDueDate', 'action'];
     this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
-
   }
 
   async nextStep(id?: any, readMode?: any, action?: any) {
@@ -152,27 +174,13 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     this.step = 1;
   }
 
-  async loadListFlightMarket() {
-    await this.flightMarketService.search({option: 1}).then(res => {
-      if (res.data) {
-        this.listFlightMarket = res.data;
-      }
-    });
-  }
-
   override async search<T>(body?: any, isNextPage?: boolean) {
     try {
-      this.formGroupSearch.patchValue({
-        listAirportCode: this.formGroupSearch.getRawValue().airportCode,
-        partnerType: this.partnerType
-      });
       await this.spinner.show();
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
-      let res;
-      this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'periodDate', 'action'];
-      res = await this.baseService.search<ListResponse<T>>({
+      let res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,
         limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)

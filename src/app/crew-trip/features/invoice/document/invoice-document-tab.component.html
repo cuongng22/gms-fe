@@ -20,12 +20,12 @@
             <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="tabType==='INVOICE'?0:1"
                            mat-align-tabs="start" mat-stretch-tabs="false">
                 <mat-tab label="Invoice">
-                    @if (partnerType === 'INVOICE') {
-                        <app-invoice-document [partnerType]="partnerType" (nextStepEmit)="nextStepEmit($event)"/>
+                    @if (tabType === 'INVOICE') {
+                        <app-invoice-document [tabType]="tabType" (nextStepEmit)="nextStepEmit($event)"/>
                     }
                 </mat-tab>
                 <mat-tab label="Reminder">
-                    @if (partnerType === 'REMINDER') {
+                    @if (tabType === 'REMINDER') {
                         <app-invoice-document-remind/>
                     }
                 </mat-tab>
