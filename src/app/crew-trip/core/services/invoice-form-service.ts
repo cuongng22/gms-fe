@@ -73,15 +73,15 @@ export class InvoiceFormService extends BaseService {
 
   }
 
-  async exportFileData(body: any) {
-    const url = `${this.api}/${this.path}/export`;
+  async getFileData(id: any) {
+    const url = `${this.api}/invoice/get-file/${id}`;
     const httpOptionsExport = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Accept': 'application/octet-stream'
       }),
       responseType: 'blob' as any,
-      params: new HttpParams({ fromObject: body })
+
     };
     return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
   }
