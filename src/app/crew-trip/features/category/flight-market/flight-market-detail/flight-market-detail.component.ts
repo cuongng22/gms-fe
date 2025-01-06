@@ -34,6 +34,8 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { HttpStatusCode } from '@angular/common/http';
 import { ValidationErrors } from '@iplab/ngx-file-upload';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
+import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
+import { bo } from 'node_modules/@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-flight-market-detail',
@@ -42,7 +44,7 @@ import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/sele
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, NgxTrimDirectiveModule, NgxControlError, DataTransformPipe,
-    SelectMultipleComponent],
+    SelectMultipleComponent, SelectionSuggestComponent],
   templateUrl: './flight-market-detail.component.html',
   styleUrl: './flight-market-detail.component.scss'
 })
@@ -63,11 +65,9 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   readonlyDetail = model<boolean>(false);
   isCreate = model<boolean>(false);
 
-  filteredCountry = model<any[]>([]);
   costCategorysRaw: any[] = [];
   costCategorys: any[] = [];
   countries: any[] = [];
-  keySearchNation = new Subject<string>();
   flightGroupData = FlightGroupData;
 
   hotelDataSource = new MatTableDataSource<any[]>([]);
@@ -86,11 +86,10 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   override formGroupDetail = this.formBuilder.group({
     id: [],
     marketCode: ['', [Validators.required, Validators.minLength(3), Validators.maxLength(3),
-      this.airportCodeExistsValidator.bind(this)
+    this.airportCodeExistsValidator.bind(this)
     ]],
     marketName: ['', Validators.maxLength(250)],
     nationId: ['', Validators.required],
-    nationName: ['', Validators.required],
     marketType: ['', Validators.required],
     flightGroup: [''],
     serviceFeeCode: [''],
@@ -131,11 +130,6 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       if (resNationService) {
         this.countries = resNationService.data.content;
 
-        // set lại nationName
-        const nationName = this.countries
-          .filter(country => country.id === this.formGroupDetail.controls.nationId.value)
-          .map(country => LOCALE.VN ? country.vniName : country.engName)[0];
-        this.formGroupDetail.patchValue({ nationName: nationName });
       }
     }).catch(e => { })
       .finally(() => {
@@ -158,49 +152,20 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
 
     this.isCreate.set(!!this.id());
 
-    //search Nation
-    this.keySearchNation.pipe(
-      debounceTime(500)
-    ).subscribe(value => {
-      this.filteredCountry.set(this.countries.filter(country => {
-        const code = country.code.toLowerCase();
-        return code.includes(value.toLowerCase()) || (this.locale == LOCALE.VN ?
-          country.vniName.toLowerCase().includes(value.toLowerCase()) :
-          country.engName.toLowerCase().includes(value.toLowerCase()));
-      }));
-    });
-
-
-    this.destroyRef.onDestroy(() => {
-      this.keySearchNation.unsubscribe();
-    });
   }
 
   override ngAfterViewInit(): void {
   }
 
-  filterCountry(isClean?: boolean): void {
-    const filterValue = isClean ? null : this.nationName.nativeElement.value;
-    const value = this.nationName.nativeElement.value.startsWith('[') ? null : this.nationName.nativeElement.value;
-    if (value) {
-      this.formGroupDetail.controls.nationName.setValue(value);
-    }
-    if (!filterValue) {
-      this.filteredCountry.set(this.countries);
-      return;
-    }
-    this.keySearchNation.next(filterValue);
-  }
 
-  countrySelected(country: MatAutocompleteSelectedEvent) {
-    const selectedCountry = country.option.value;
-    this.formGroupDetail.controls.nationId.setValue(selectedCountry.id);
-    this.formGroupDetail.controls.nationName.setValue(this.locale == LOCALE.VN ? selectedCountry.vniName : selectedCountry.engName);
-    // Nếu code = VN thì set marketType = International
-    if (selectedCountry.code === 'VN') {
-      this.formGroupDetail.controls.marketType.setValue('Domestic');
-    } else {
-      this.formGroupDetail.controls.marketType.setValue('International');
+  countrySelected(country: any) {
+    console.log('countrySelected: ', country)
+    if (country) {
+      if (country.viewValue === 'Việt Nam') {
+        this.formGroupDetail.controls.marketType.setValue('Domestic');
+      } else {
+        this.formGroupDetail.controls.marketType.setValue('International');
+      }
     }
   }
 
@@ -280,12 +245,13 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       let res;
       if (isUpdate) {
         const body = this.updateBody({ ...this.formGroupDetail.value, marketCode: this.formGroupDetail.controls.marketCode.value?.toUpperCase() }, this.hotelDataSource.data, this.carRentalDataSource.data);
+        console.log(body)
         res = await this.baseService.update(body);
       } else {
         const body = this.createBody({ ...this.formGroupDetail.value, marketCode: this.formGroupDetail.controls.marketCode.value?.toUpperCase() }, this.hotelDataSource.data, this.carRentalDataSource.data);
+        console.log(body)
         res = await this.baseService.create(body);
       }
-      console.log(res);
       this.baseService.showSuccess(isUpdate ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
       this.router.navigate(['/category/flight-market']);
     } catch (e: any) {
@@ -309,17 +275,23 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     const carRentals: CreateVehiclePartner[] = [];
 
     hotelDatas.forEach(hotel => {
-      if (hotel.id < 0) {
-        hotel.id = null;
+      if (!hotel.isDelete) {
+        if (hotel.id < 0) {
+          hotel.id = null;
+        }
+        hotels.push(new CreateHotel(hotel));
       }
-      hotels.push(new CreateHotel(hotel));
+
     });
 
     carRentalDatas.forEach(carRental => {
-      if (carRental.id < 0) {
-        carRental.id = null;
+      if (!carRental.isDelete) {
+        if (carRental.id < 0) {
+          carRental.id = null;
+        }
+        carRentals.push(new CreateVehiclePartner(carRental));
       }
-      carRentals.push(new CreateVehiclePartner(carRental));
+
     });
 
     const createFlightMarketDTO = new CreateFlightMarketDTO(marketFlight, hotels, carRentals);

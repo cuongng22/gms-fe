@@ -1,17 +1,17 @@
-import {CommonModule} from '@angular/common';
-import {Component, DestroyRef, inject, Input, OnChanges, OnInit, Optional, Self, SimpleChanges} from '@angular/core';
-import {ControlValueAccessor, FormControl, FormsModule, NgControl, ReactiveFormsModule} from '@angular/forms';
-import {MatOption} from '@angular/material/core';
-import {MatError, MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
-import {MatSelect, MatSelectModule} from '@angular/material/select';
-import {InputSizeComponent} from '../../input/input-size.component';
-import {debounceTime, tap} from 'rxjs';
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
-import {MESSAGE} from '../../utils/constant';
-import {MatInputModule} from '@angular/material/input';
-import {NgxControlError} from 'ngxtension/control-error';
-import {MatButtonModule} from '@angular/material/button';
-import {MatTooltipModule} from '@angular/material/tooltip';
+import { CommonModule } from '@angular/common';
+import { Component, DestroyRef, inject, Input, OnChanges, OnInit, Optional, Self, SimpleChanges } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormsModule, NgControl, ReactiveFormsModule } from '@angular/forms';
+import { MatOption } from '@angular/material/core';
+import { MatError, MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { InputSizeComponent } from '../../input/input-size.component';
+import { debounceTime, tap } from 'rxjs';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { MESSAGE } from '../../utils/constant';
+import { MatInputModule } from '@angular/material/input';
+import { NgxControlError } from 'ngxtension/control-error';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
   selector: 'app-select-multiple',
@@ -103,7 +103,7 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit, On
 
   writeValue(obj: any): void {
     if (this.formControl?.value !== obj) {
-      this.formControl.setValue(obj, {emitEvent: false});
+      this.formControl.setValue(obj, { emitEvent: false });
     }
   }
 
@@ -132,8 +132,10 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit, On
   getSelectTrigger(): string {
     const selected = this.formControl?.value || [];
     if (Array.isArray(selected) && selected && selected.length > 0) {
+    
       return selected
         .map((select: any) => this.options.find((option: any) => (this.attrValue ? option[this.attrValue] : option) === select))
+        .filter((value: any) => !!value)
         .map((select: any) => this.attrDisplay ? select[this.attrDisplay] : select)
         .filter((name: any) => name)
         .join('; ') ?? this.placeholder;
@@ -143,9 +145,9 @@ export class SelectMultipleComponent implements ControlValueAccessor, OnInit, On
 
   private updateEnableState() {
     if (!this.readonly) {
-      this.formControl.enable({emitEvent: false});
+      this.formControl.enable({ emitEvent: false });
     } else {
-      this.formControl.disable({emitEvent: false});
+      this.formControl.disable({ emitEvent: false });
     }
   }
 }

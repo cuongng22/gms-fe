@@ -40,19 +40,21 @@
         <mat-card-subtitle>
             <div (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'">
                 <button type="button" mat-button class="close-btn  min-with-100 mlr-5"
-                    routerLink="/category/flight-market">
+                    [routerLink]="['/plan/est-plan/budget-procurement',planBudgetProcurementId(),'summary']">
                     <i class="material-symbols-outlined">
                         close
                     </i>
                     <span i18n="@@close">Close</span>
                 </button>
-                <button class="success-btn" type="button" mat-button>
+                <button class="success-btn" type="button" mat-button [disabled]="checkStatusCompelted()"
+                    (click)="completed()">
                     <i class="material-symbols-outlined">
                         check_circle
                     </i>
                     <span i18n="@@completed">Completed</span>
                 </button>
-                <button mat-button color="primary" type="button" class="add-btn min-with-100 mlr-5" (click)="save()">
+                <button mat-button color="primary" type="button" class="add-btn min-with-100 mlr-5" (click)="save()"
+                    [disabled]="checkStatusCompelted()">
                     <i class="material-symbols-outlined">
                         save
                     </i>
@@ -63,7 +65,9 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
+        {{checkStatusCompelted()}}
         <app-budget-procurement-general #budgetProcurementGeneral [category]="CategoryEnum.INTERNATIONAL"
+            [disabled]="checkStatusCompelted()"
             (formValueChanges)="formGeneralValueChanges($event)"></app-budget-procurement-general>
     </mat-card-content>
 </mat-card>
@@ -78,7 +82,8 @@
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div style="position: absolute; top: 6px; right: 60px;">
-                    <button mat-button color="primary" type="button" class="add-btn" (click)="dataSummary()">
+                    <button [disabled]="checkStatusCompelted()" mat-button color="primary" type="button" class="add-btn"
+                        (click)="summaryData()">
                         <i class="material-symbols-outlined">
                             directory_sync
                         </i>
@@ -133,7 +138,7 @@
                         </mat-expansion-panel-header>
                         <div>
                             <app-budget-procurement-flight-overnight #internationalFlightOvernight
-                                [data]="internationalFlightOvernightData"
+                                [disabled]="checkStatusCompelted()" [data]="internationalFlightOvernightData"
                                 (valueChange)="overnightValueChange($event)" />
                         </div>
                     </mat-expansion-panel>
@@ -166,12 +171,13 @@
                         <div>
                             @if(category() === CategoryEnum.DOMESTIC){
                             <app-domestic-budget-procurement-hotel #domesticBudgetHotel [type]="PlanCategoryEnum.BUDGET"
-                                [data]="domesticBudgetHotelData" [yearPlan]="yearPlan()"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [disabled]="checkStatusCompelted()" [data]="domesticBudgetHotelData"
+                                [yearPlan]="yearPlan()" [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
                             }@else {
                             <app-international-budget-procurement-hotel #internationalBudgetHotel
-                                [data]="internationalBudgetHotelData" [yearPlan]="yearPlan()"
-                                [type]="PlanCategoryEnum.BUDGET" [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [disabled]="checkStatusCompelted()" [data]="internationalBudgetHotelData"
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
                             }
                         </div>
                     </mat-expansion-panel>
@@ -188,12 +194,14 @@
                         <div>
                             @if(category() === CategoryEnum.DOMESTIC){
                             <app-domestic-budget-procurement-car-rental #domesticBudgetCarRental [yearPlan]="yearPlan()"
-                                [type]="PlanCategoryEnum.BUDGET" [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
                                 [data]="domesticBudgetCarRentalData" />
                             }@else {
                             <app-international-budget-procurement-car-rental #internationalBudgetCarRental
-                                [data]="internationalBudgetCarRentalData" [yearPlan]="yearPlan()"
-                                [type]="PlanCategoryEnum.BUDGET" [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [disabled]="checkStatusCompelted()" [data]="internationalBudgetCarRentalData"
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
                             }
                         </div>
                     </mat-expansion-panel>
@@ -210,8 +218,9 @@
                         </mat-expansion-panel-header>
                         <div>
                             <app-domestic-budget-procurement-wet-lease [yearPlan]="yearPlan()"
-                                [data]="domesticBudgetWetLeaseData" [type]="PlanCategoryEnum.BUDGET"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" #domesticBudgetWetLease />
+                                [disabled]="checkStatusCompelted()" [data]="domesticBudgetWetLeaseData"
+                                [type]="PlanCategoryEnum.BUDGET" [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                #domesticBudgetWetLease />
                         </div>
                     </mat-expansion-panel>
                     }
@@ -244,13 +253,14 @@
                         <div>
                             @if(category() === CategoryEnum.DOMESTIC){
                             <app-domestic-budget-procurement-hotel #domesticProcurementHotel
-                                [data]="domesticProcurementHotelData" [type]="PlanCategoryEnum.PROCUREMENT"
-                                [yearPlan]="yearPlan()" [updateBudgetPlan]="dataDetail?.updateBudgetPlan">
+                                [disabled]="checkStatusCompelted()" [data]="domesticProcurementHotelData"
+                                [type]="PlanCategoryEnum.PROCUREMENT" [yearPlan]="yearPlan()"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan">
                             </app-domestic-budget-procurement-hotel>
                             }@else {
                             <app-international-budget-procurement-hotel #internationalProcurementHotel
-                                [data]="internationalProcurementHotelData" [yearPlan]="yearPlan()"
-                                [type]="PlanCategoryEnum.PROCUREMENT"
+                                [disabled]="checkStatusCompelted()" [data]="internationalProcurementHotelData"
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
                                 [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
                             }
 
@@ -269,13 +279,13 @@
                         <div>
                             @if(category() === CategoryEnum.DOMESTIC){
                             <app-domestic-budget-procurement-car-rental #domesticProcurementCarRental
-                                [data]="domesticProcurementCarRentalData" [yearPlan]="yearPlan()"
-                                [type]="PlanCategoryEnum.PROCUREMENT"
+                                [disabled]="checkStatusCompelted()" [data]="domesticProcurementCarRentalData"
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
                                 [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
                             }@else {
                             <app-international-budget-procurement-car-rental #internationalProcurementCarRental
-                                [data]="internationalProcurementCarRentalData" [yearPlan]="yearPlan()"
-                                [type]="PlanCategoryEnum.PROCUREMENT"
+                                [disabled]="checkStatusCompelted()" [data]="internationalProcurementCarRentalData"
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
                                 [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
                             }
 
@@ -294,8 +304,9 @@
                         </mat-expansion-panel-header>
                         <div>
                             <app-domestic-budget-procurement-wet-lease [yearPlan]="yearPlan()"
-                                [data]="domesticProcurementWetLeaseData" [type]="PlanCategoryEnum.PROCUREMENT"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" #domesticProcurementWetLease />
+                                [disabled]="checkStatusCompelted()" [data]="domesticProcurementWetLeaseData"
+                                [type]="PlanCategoryEnum.PROCUREMENT" [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                #domesticProcurementWetLease />
                         </div>
                     </mat-expansion-panel>
                     }
@@ -307,14 +318,15 @@
 <mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
         <mat-accordion multi class="mt-10">
-            <mat-expansion-panel class="remove-mat-expansion-panel-padding" [expanded]="true">
+            <mat-expansion-panel class="remove-mat-expansion-panel-padding" #panelBudgetProcurementCostAnalysisState [expanded]="false">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <h5 class="mb-0">V. <span i18n="@@costAnalysis">Cost Analysis</span></h5>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div>
-                    <app-budget-procurement-cost-analysis #budgetProcurementCostAnalysis />
+                    <app-budget-procurement-cost-analysis #budgetProcurementCostAnalysis
+                        [disabled]="checkStatusCompelted()" />
                 </div>
             </mat-expansion-panel>
         </mat-accordion>
@@ -347,3 +359,37 @@
         </mat-card-subtitle>
     </mat-card-header>
 </mat-card> -->
+
+<!-- Dialog summary data  -->
+<div class="add-new-popup" [class.active]="showDialogSummary">
+    <div class="popup-dialog dialog-delete-with">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+            <mat-card-content>
+                <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+                </div>
+                <div class="text-center mb-20">
+                    <h3 class="mb-0" i18n="@@summaryMessage">Are you sure you want to aggregate the data?</h3>
+                </div>
+                <div class="btn-box text-center">
+                    <button type="button" mat-button (click)="toggleDialogSummary()"
+                        class="close-btn  min-with-100 mlr-5">
+                        <i class="material-symbols-outlined">
+                            close
+                        </i>
+                        <span i18n="@@cancel">Cancel</span>
+                    </button>
+                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="confirmSummaryData()">
+                        <i class="material-symbols-outlined">
+                            save
+                        </i>
+                        <span i18n="@@confirm">Confirm</span>
+                    </button>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

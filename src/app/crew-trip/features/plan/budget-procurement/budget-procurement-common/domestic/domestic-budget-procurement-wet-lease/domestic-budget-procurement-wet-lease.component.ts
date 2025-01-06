@@ -38,6 +38,7 @@ export class DomesticBudgetProcurementWetLeaseComponent {
   planFlightPeriods: any[] = []; // danh sách chuyến bay theo giai đoạn
   year = signal<number>(2024);
   data = input<any>();
+  disabled = input<boolean>(false);
 
   PADDING_0 = PADDING_0;
 

@@ -18,7 +18,7 @@ export class AlreadyExistsValidator {
           if (hotelCodes.includes(hotelCode)) {
             return of({ existsHotelCode: true });
           }
-          return hotelService.checkCodeExists(hotelCode, marketCode).pipe(
+          return hotelService.checkCodeExists(hotelCode).pipe(
             map((res: any) => {
               return res && res.status == 409 ? { existsHotelCode: true } : null;
             }),
@@ -51,7 +51,7 @@ export class AlreadyExistsValidator {
           if (carRentalCodes.includes(code)) {
             return of({ existsCarRentalCode: true });
           }
-          return carRentalService.checkCodeExists(code, marketCode).pipe(
+          return carRentalService.checkCodeExists(code).pipe(
             map((res: any) => {
               return res && res.status == 409 ? { existsCarRentalCode: true } : null;
             }),

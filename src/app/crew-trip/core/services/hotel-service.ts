@@ -12,9 +12,9 @@ export class HotelService extends BaseService {
     this.path = 'hotel';
   }
 
-  checkCodeExists(code: string, marketCode: string): Observable<any> {
+  checkCodeExists(code: string): Observable<any> {
     console.log('Request checkCodeExist');
-    const url = `${this.api}/${this.path}/check-code-exist?code=${code}&marketCode=${marketCode}`;
+    const url = `${this.api}/${this.path}/check-code-exist?code=${code}`;
     return this.http.get<any>(url, this.httpOptions);
   }
 

@@ -6,18 +6,15 @@
       </h5>
     </mat-card-title>
     <mat-card-subtitle>
-      <button
-        (click)="close()"
-        mat-button
-      >
+      <button (click)="close()" mat-button>
         <i class="ri-close-fill"></i>
       </button>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-      <span class="mb-10">
-        <span i18n="@@generalInfomation">General information</span>
-      </span>
+    <span class="mb-10">
+      <span i18n="@@generalInfomation">General information</span>
+    </span>
     <form [formGroup]="formGroupDetail" autocomplete="off" class="mt-10">
       <div class="row">
         <div class="col-sm-6 col-md-6">
@@ -31,27 +28,9 @@
           </app-input>
         </div>
         <div class="col-sm-6 col-md-6">
-          <div class="form-group mb-20" sizeInput="md">
-            <mat-form-field>
-              <mat-label i18n="@@airportCode">
-                Airport code
-              </mat-label>
-              <input type="text" #marketCode matInput formControlName="marketCode" [matAutocomplete]="marketComplete"
-                     (input)="filterMarket()" (focus)="filterMarket()">
-              <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
-                <mat-option [value]="null">
-                  -- Choose airport code --
-                </mat-option>
-                @for (option of markets; track option) {
-                  <mat-option [value]="option">{{ option }}</mat-option>
-                }
-              </mat-autocomplete>
-              @if (!!formGroupDetail.controls['marketCode'].hasError('existCode')) {
-                <mat-error><span i18n>{{ existMessage }}</span></mat-error>
-              } @else if (!!formGroupDetail.controls['marketCode'].hasError('required')) {
-                <mat-error><span i18n>Airport code</span><span i18n> is required</span></mat-error>
-              }
-            </mat-form-field>
+          <div class="form-group mb-20">
+            <app-selection-suggest i18n-label="@@marketCode" label="Airport code" [options]="markets"
+              formControlName="marketCode" size="sm" />
           </div>
         </div>
       </div>
@@ -63,10 +42,9 @@
                 Description
               </mat-label>
               <textarea matInput matTextareaAutosize cdkTextareaAutosize #autosize="cdkTextareaAutosize"
-                        cdkAutosizeMinRows="2" cdkAutosizeMaxRows="10" formControlName="notes"
-              ></textarea>
+                cdkAutosizeMinRows="2" cdkAutosizeMaxRows="10" formControlName="notes"></textarea>
               @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
-                <mat-error><span i18n>Description must be less than 500 characters</span></mat-error>
+              <mat-error><span i18n>Description must be less than 500 characters</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -80,7 +58,7 @@
             </div>
             <div class="col-sm-6 col-md-6 text-right">
               <button mat-icon-button type="button" title="Add email" (click)="addEmailRow()" class="mt-10 mb-10"
-                      *ngIf="!data?.mode || data.mode !== 'view'">
+                *ngIf="!data?.mode || data.mode !== 'view'">
                 <i class="material-symbols-outlined vna-color-icon-btn">
                   add
                 </i>
@@ -94,41 +72,38 @@
                   <ng-container matColumnDef="email">
                     <th mat-header-cell *matHeaderCellDef>Email</th>
                     <td mat-cell *matCellDef="let element; let i = index">
-                      <input matInput [value]="element.email" [maxLength]="250"
-                             (input)="onEmailInput($event, i)"
-                             maxlength="250" [readonly]="!element.isEditing" email
-                             [ngClass]="{'readonly-input': !element.isEditing}">
+                      <input matInput [value]="element.email" [maxLength]="250" (input)="onEmailInput($event, i)"
+                        maxlength="250" [readonly]="!element.isEditing" email
+                        [ngClass]="{'readonly-input': !element.isEditing}">
                       @if (element.isInvalid) {
-                        <mat-error i18n="@@invalidEmailFormat"><i>Invalid email format</i></mat-error>
+                      <mat-error i18n="@@invalidEmailFormat"><i>Invalid email format</i></mat-error>
                       } @else if (element.isEmpty) {
-                        <mat-error i18n="@@emailRequired"><i>Email is required</i></mat-error>
+                      <mat-error i18n="@@emailRequired"><i>Email is required</i></mat-error>
                       } @else if (element.isDuplicate) {
-                        <mat-error i18n="@@emailDuplicate"><i>Email already exists</i></mat-error>
+                      <mat-error i18n="@@emailDuplicate"><i>Email already exists</i></mat-error>
                       }
                     </td>
                   </ng-container>
                   <!-- Actions Column -->
-                  <ng-container matColumnDef="actions" class="text-center"
-                                *ngIf="!data?.mode || data.mode !== 'view'">
+                  <ng-container matColumnDef="actions" class="text-center" *ngIf="!data?.mode || data.mode !== 'view'">
                     <th mat-header-cell *matHeaderCellDef class="text-center" style="width: 100px;">Actions</th>
-                    <td mat-cell *matCellDef="let element; let i = index" class="text-center"
-                        style="width: 100px;">
+                    <td mat-cell *matCellDef="let element; let i = index" class="text-center" style="width: 100px;">
                       <div class="action-buttons d-flex align-items-center justify-content-end">
                         <a mat-button type="button" (click)="editEmail(i)"
-                           *ngIf="!element.isEditing && (!data?.mode || data.mode !== 'view')">
+                          *ngIf="!element.isEditing && (!data?.mode || data.mode !== 'view')">
                           <i class="material-symbols-outlined text-warning" i18n-title title="Edit">
                             edit
                           </i>
                         </a>
                         <a mat-button type="button" (click)="saveEmail(i)"
-                           *ngIf="element.isEditing && (!data?.mode || data.mode !== 'view')"
-                           [disabled]="element.isInvalid">
+                          *ngIf="element.isEditing && (!data?.mode || data.mode !== 'view')"
+                          [disabled]="element.isInvalid">
                           <i class="material-symbols-outlined" i18n-title title="save">
                             save
                           </i>
                         </a>
                         <a mat-button type="button" (click)="deleteEmail(i)" title="Delete"
-                           *ngIf="(!data?.mode || data.mode !== 'view')">
+                          *ngIf="(!data?.mode || data.mode !== 'view')">
                           <i class="material-symbols-outlined text-danger" i18n-title title="Delete">
                             delete
                           </i>
@@ -153,7 +128,7 @@
           <span i18n="@@cancel">Close</span>
         </button>
         <button mat-button color="primary" (click)="save()" type="submit" class="add-btn min-with-100 mlr-5"
-                *ngIf="!data?.mode || data.mode !== 'view'">
+          *ngIf="!data?.mode || data.mode !== 'view'">
           <i class="material-symbols-outlined">
             save
           </i>

@@ -83,6 +83,16 @@
                                     i18n="@@apply">Apply</button>
                             </mat-date-range-picker-actions>
                         </mat-date-range-picker>
+                        <mat-error
+                            *ngxControlError="formGroupSearch.controls.contractStartDate; track: 'matDatepickerParse'"
+                            i18n="@@contractPeriodInvalidFormat">
+                            Contract period invalid format
+                        </mat-error>
+                        <mat-error
+                            *ngxControlError="formGroupSearch.controls.contractEndDate; track: 'matDatepickerParse'"
+                            i18n="@@contractPeriodInvalidFormat">
+                            Contract period invalid format
+                        </mat-error>
                     </mat-form-field>
                 </div>
                 <div class="col d-flex  justify-content-lg-start justify-content-md-center">
@@ -169,7 +179,7 @@
                     <td mat-cell *matCellDef="let element">
                         @if (element.hotels) {
                         @for (hotel of element.hotels; track $index) {
-                        <a type="button" class="badge "
+                        <a type="button" class="badge break-word"
                             [ngClass]="!!hotel.active?'text-bg-vna-hover':'text-soft-dark-hover'"
                             (click)="showHotelDetail(true,hotel, element.marketCode)">{{hotel.hotelName}}
                         </a>
@@ -185,7 +195,7 @@
                     <td mat-cell *matCellDef="let element">
                         @if (element.vehiclesPartner) {
                         @for (vehicle of element.vehiclesPartner; track $index) {
-                        <a type="button" class="badge"
+                        <a type="button" class="badge break-word"
                             [ngClass]="!!vehicle.active?'text-bg-vna-hover':'text-soft-dark-hover'"
                             (click)="showCarRentalDetail(true, vehicle,element.marketCode)">{{vehicle.name}}
                         </a>

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, DestroyRef, ElementRef, inject, input, model, OnInit, output, ViewChild } from '@angular/core';
+import { Component, DestroyRef, effect, ElementRef, inject, input, model, OnInit, output, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -26,6 +26,7 @@ import { ifValidator } from 'ngxtension/if-validator';
 import { ValidationErrors } from '@iplab/ngx-file-upload';
 import moment from 'moment';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import { el } from 'node_modules/@fullcalendar/core/internal-common';
 
 @Component({
   selector: 'app-budget-procurement-general',
@@ -50,9 +51,17 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
 
   @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
   airports = model<any[]>([]);
+  disabled = input<boolean>(false);
 
   constructor(private dataTransformPipe: DataTransformPipe) {
     super();
+    effect(() => {
+      if (this.disabled()) {
+        this.formGroupDetail.disable();
+      } else {
+        this.formGroupDetail.enable();
+      }
+    }, { allowSignalWrites: true });
   }
 
   override formGroupDetail = this.formBuilder.group({
@@ -76,6 +85,10 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     supplierMethod: new FormControl('Chào giá/ Đàm phán'),
     earlyCheckinFlag: new FormControl(false),
     lateCheckoutFlag: new FormControl(false),
+    // thêm trường để check hiển thị, ko làm gì cả
+    earlyCheckinContractFlag: new FormControl(false),
+    lateCheckoutContractFlag: new FormControl(false),
+    haveContract: new FormControl(false),
   });
   _procurementPlanFlag: boolean = false;
 

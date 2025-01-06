@@ -18,7 +18,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
     FormsModule, ReactiveFormsModule, ClickOutside, DigitOnlyModule],
   templateUrl: './budget-procurement-flight-period.component.html',
   styleUrl: './budget-procurement-flight-period.component.scss',
-  providers: [DatePipe],
+  providers: [DatePipe, DataTransformPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class BudgetProcurementFlightPeriodComponent implements OnInit {
@@ -29,12 +29,12 @@ export class BudgetProcurementFlightPeriodComponent implements OnInit {
   periods: string[] = [];
   data = input<any>();
 
-  constructor(private datePipe: DatePipe) {
+  constructor(private datePipe: DatePipe, private dataTransformPipe: DataTransformPipe) {
     effect(() => {
       console.log('effect data BudgetProcurementFlightPeriodComponent: ', this.data())
       if (this.data()) {
-        this.periodRowspan = this.data().periodRowspan;
-        this.setDataSource(this.data().planFlightPeriods);
+        // this.periodRowspan = this.data().periodRowspan;
+        this.setDataSource(this.data().planFlightPeriods ?? []);
       }
     })
   }
@@ -44,12 +44,14 @@ export class BudgetProcurementFlightPeriodComponent implements OnInit {
   }
 
   setDataSource(data: any[]) {
+    this.periods = [];
     this.dataSource.data = [...data];
-    // this.periodRowspan = this.dataSource.data.map((item: any) => item.aircraftType).
-    //   filter((value: any, index: any, self: any) => self.indexOf(value) === index).length;
+    this.periodRowspan = this.dataSource.data.map((item: any) => item.aircraftType).
+      filter((value: any, index: any, self: any) => self.indexOf(value) === index).length;
 
     this.dataSource.data.forEach((item: any) => {
-      const period = `${item.periodStartStr} - ${item.periodEndStr}`;
+      const period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+      // const period = `${item.periodStartStr} - ${item.periodEndStr}`;
       if (!this.periods.includes(period)) {
         this.periods.push(period);
         item.period = period;

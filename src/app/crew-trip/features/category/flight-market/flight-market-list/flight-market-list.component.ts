@@ -29,6 +29,7 @@ import { File } from 'buffer';
 import { subscribe } from 'diagnostics_channel';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import { NgxControlError } from 'ngxtension/control-error';
 
 @Component({
   selector: 'app-flight-market-list',
@@ -36,8 +37,8 @@ import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, FileUploadModule, NgxTrimDirectiveModule],
-  providers: [DataTransformPipe, { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl },
+    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, FileUploadModule, NgxTrimDirectiveModule, NgxControlError],
+  providers: [DataTransformPipe, { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl, },
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY)
   ],
@@ -105,15 +106,17 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
   }
 
   override search(body?: any, isNextPage?: boolean): any {
-    console.log(this.formGroupSearch.value);
-    const contractStartDate = this.formGroupSearch.controls.contractStartDate.value;
-    const contractEndDate = this.formGroupSearch.controls.contractEndDate.value;
-    const searchValue = {
-      ...this.formGroupSearch.value, option: 0,
-      contractStartDate: contractStartDate ? this.dataTransformPipe.transform(contractStartDate, ['date', Constant.DATE_FORMAT]) : null,
-      contractEndDate: contractEndDate ? this.dataTransformPipe.transform(contractEndDate, ['date', Constant.DATE_FORMAT]) : null,
-    };
-    super.search(searchValue, isNextPage);
+    console.log(this.formGroupSearch);
+    if (this.formGroupSearch.valid) {
+      const contractStartDate = this.formGroupSearch.controls.contractStartDate.value;
+      const contractEndDate = this.formGroupSearch.controls.contractEndDate.value;
+      const searchValue = {
+        ...this.formGroupSearch.value, option: 0,
+        contractStartDate: contractStartDate ? this.dataTransformPipe.transform(contractStartDate, ['date', Constant.DATE_FORMAT]) : null,
+        contractEndDate: contractEndDate ? this.dataTransformPipe.transform(contractEndDate, ['date', Constant.DATE_FORMAT]) : null,
+      };
+      super.search(searchValue, isNextPage);
+    }
   }
 
 
@@ -173,7 +176,6 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
         this.uploadFileError = res;
         if (!res.totalErrors) {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
-          this.search();
           this.resetFileUpload();
           this.toggleDialogUpload();
           this.baseService.search({ option: 1 }).then(res => {
@@ -184,6 +186,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
       }
     } finally {
       await this.spinner.hide();
+      this.search();
     }
   }
 

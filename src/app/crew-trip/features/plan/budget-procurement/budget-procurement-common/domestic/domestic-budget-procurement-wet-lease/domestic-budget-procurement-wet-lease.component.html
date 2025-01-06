@@ -30,7 +30,7 @@
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'totalRoomEditing')"
                             class="edit-inline-table">
-                            <input type="text" digitOnly matInput [(ngModel)]="element.totalRoom">
+                            <input type="text" digitOnly matInput [(ngModel)]="element.totalRoom" [disabled]="disabled()">
                         </mat-form-field>
                     </div>
                     }

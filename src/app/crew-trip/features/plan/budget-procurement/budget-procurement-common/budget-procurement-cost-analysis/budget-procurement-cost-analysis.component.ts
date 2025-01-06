@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, effect, inject, input, OnInit } from '@angular/core';
 import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,6 +31,7 @@ import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.c
 })
 export class BudgetProcurementCostAnalysisComponent extends CommonComponent implements OnInit {
   private readonly formBuilder = inject(FormBuilder);
+  disabled = input<boolean>(false);
 
   override formGroupDetail = this.formBuilder.group({
     planVsEstimate: new FormControl(),
@@ -39,4 +40,15 @@ export class BudgetProcurementCostAnalysisComponent extends CommonComponent impl
     ratePriceCarBefore: new FormControl(),
     notes: new FormControl('', [Validators.maxLength(500)]),
   });
+
+  constructor() {
+    super();
+    effect(() => {
+      if (this.disabled()) {
+        this.formGroupDetail.disable()
+      } else {
+        this.formGroupDetail.enable()
+      }
+    })
+  }
 }

@@ -47,6 +47,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
   type = input<PlanCategoryEnum>(PlanCategoryEnum.BUDGET); // Loại Ngân sách hoặc mua sắm (budget/procurement)
   data = input<any>();
+  disabled = input<boolean>(false);
 
   PlanCategoryEnum = PlanCategoryEnum;
 
@@ -70,6 +71,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   }
 
   setDataSource(data: any[], generalData?: any) {
+    this.periods = []
     this.dataSource.data = [...data];
     this.generalData = { ...generalData };
 
@@ -116,12 +118,19 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
   setGeneralData(data: any) {
     const isChangeRateForSingle = checkChange(this.generalData.rateForSingle, data.rateForSingle);
-    this.generalData = { ...data };
     if (isChangeRateForSingle) {
+      this.generalData = { ...data };
       this.dataSource.data.forEach((item: any, index) => {
         this.calculateData(item, index);
       });
     }
+    const earlyCheckinFlag = checkChange(this.generalData.earlyCheckinFlag, data.earlyCheckinFlag);
+    const lateCheckoutFlag = checkChange(this.generalData.lateCheckoutFlag, data.lateCheckoutFlag);
+    if (earlyCheckinFlag || lateCheckoutFlag) {
+      this.generalData = { ...data };
+      this.getRow();
+    }
+
   }
 
   setOvernightRates(data: any, actionType: string, length?: number, planFlightByOvernight?: any[]) {
