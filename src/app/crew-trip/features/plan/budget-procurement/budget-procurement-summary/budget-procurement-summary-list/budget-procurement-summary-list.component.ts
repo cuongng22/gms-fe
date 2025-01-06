@@ -18,6 +18,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from './budget-procurement-summary-list.model';
 import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
 import { CAR_RENTAL, HOTEL, PlanCategoryEnum, ServiceType } from '../../budget-procurement.model';
+import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-budget-procurement-summary-list',
@@ -26,7 +27,8 @@ import { CAR_RENTAL, HOTEL, PlanCategoryEnum, ServiceType } from '../../budget-p
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule],
   templateUrl: './budget-procurement-summary-list.component.html',
-  styleUrl: './budget-procurement-summary-list.component.scss'
+  styleUrl: './budget-procurement-summary-list.component.scss',
+  providers: [DataTransformPipe]
 })
 export class BudgetProcurementSummaryListComponent extends CommonComponent implements OnInit {
   readonly serviceType = ServiceType;
@@ -39,6 +41,9 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
 
   override baseService = inject(PlanBudgetProcurementService);
 
+  constructor(protected dataTransformPipe: DataTransformPipe) {
+    super();
+  }
   override ngOnInit(): void {
     this.setDisplayedColumns('');
     this.loadData();
@@ -149,5 +154,18 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
     // }).finally(() => {
     //   this.spinner.hide();
     // })
+  }
+
+  getUnitPrice(unitPrice: any) {
+    const _unitPrice = JSON.parse(unitPrice);
+    if (_unitPrice) {
+      const _entries = Object.entries(_unitPrice);
+      let _result: any[] = []
+      for (const [key, value] of _entries) {
+        _result.push(`${key}: ${this.dataTransformPipe.transform(value, [Constant.NUMBER])}`);
+      }
+      return _result.join('<br/>')
+    }
+    return null;
   }
 }
