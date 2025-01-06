@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterContentInit, AfterViewInit, Component, ElementRef, inject, input, Input, model, OnInit, ViewChild } from '@angular/core';
+import { AfterContentInit, AfterViewInit, Component, effect, ElementRef, inject, input, Input, model, OnInit, ViewChild } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -49,6 +49,7 @@ export class SelectionSuggestComponent implements OnInit {
   get required(): boolean {
     return this.formControl.hasValidator(Validators.required);
   }
+
   ngOnInit(): void {
     this.keySearch.pipe(
       debounceTime(500),
