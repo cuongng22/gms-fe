@@ -17,22 +17,18 @@
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group mb-20" sizeInput="md">
-                        <mat-checkbox formControlName="updateBudgetPlan">Update budget plan based on updated planned
-                            production</mat-checkbox>
-                    </div>
-                    <div class="form-group mb-20" sizeInput="md">
                         <mat-form-field>
-                            <mat-label i18n="@@planName">
-                                Plan name
+                            <mat-label i18n="@@name">
+                                Name
                             </mat-label>
                             <input matInput formControlName="name" required maxlength="500">
                             <mat-error *ngxControlError="formGroupDetail.controls.name; track: 'required'"
-                                i18n="@@planNameRequired">
-                                Plan name {{MESSAGE.REQUIRED}}
+                                i18n="@@nameRequired">
+                                Name {{MESSAGE.REQUIRED}}
                             </mat-error>
                             <mat-error *ngxControlError="formGroupDetail.controls.name; track: 'maxlength'"
-                                i18n="@@planNameMaxlength">
-                                Plan name {{ MESSAGE.MAX_LENGTH_INVALID |
+                                i18n="@@nameMaxlength">
+                                Name {{ MESSAGE.MAX_LENGTH_INVALID |
                                 dataTransformPipe:[Constant.STRING_FORMAT,500]}}
                             </mat-error>
                         </mat-form-field>
