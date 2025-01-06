@@ -57,10 +57,6 @@ export class PlanBudgetProcurementService extends BaseService {
         const url = `${this.api}/${this.path}/summary/create`;
         return firstValueFrom(this.http.post(url, body, this.httpOptions));
     }
-    summaryUpdateStatus<T = any>(body: any): Promise<T> {
-        const url = `${this.api}/${this.path}/summary/update-status`;
-        return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
-    }
 
     summaryDelete<T = any>(id: any): Promise<T> {
         const url = `${this.api}/${this.path}/summary/${id}`;

@@ -136,7 +136,61 @@
                         {{(element.serviceType === serviceType.HOTEL ? element.budgetVatHotel : element.budgetVatCar) | number}}
                     </td>
                 </ng-container>
-                
+                <ng-container matColumnDef="procurementValueExVat">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold wrap-text text-center"
+                        i18n="@@procurementPlanValueExcludingVat">
+                        Procurement Plan Value (Excluding VAT)
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{(element.serviceType === serviceType.HOTEL ? element.procurementValueHotel : element.procurementValueCar) | number}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="procurementValue">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold wrap-text text-center"
+                        i18n="@@procurementPlanValueIncludingVat">
+                        Procurement Plan Value (Including VAT)
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{(element.serviceType === serviceType.HOTEL ? element.procurementValueVatHotel :
+                        element.procurementValueVatCar) | number}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="supplierMethod">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold wrap-text text-center"
+                        i18n="@@supplierSelectionMethod">
+                        Supplier Selection Method
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.supplierMethod}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="estimatedTime">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@estimatedTime">
+                        Estimated Time
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.estimatedTime | date: 'MM/yyyy'}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="totalTime">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@totalTime">
+                        Total Time
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.totalTime}} Month
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="time">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@time">
+                        Time
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.time}} Month
+                    </td>
+                </ng-container>
                 <ng-container matColumnDef="vat">
                     <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@percentVAT">
@@ -146,7 +200,33 @@
                         {{element.vat}}
                     </td>
                 </ng-container>
-                
+                <ng-container matColumnDef="planVsEstimate">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold wrap-text text-center"
+                        i18n="@@plannedProductionVsEstimatedProduction">
+                        Planned Production vs Estimated Production
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.planVsEstimate}}%
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="planVsEstimateRate">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold wrap-text text-center"
+                        i18n="@@plannedExchangeRateVsEstimatedExchangeRate">
+                        Planned Exchange Rate vs Estimated Exchange Rate
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.planVsEstimateRate}}%
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="unitPriceYear">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold wrap-text text-center"
+                        i18n="@@unitPriceThisYearVsLastYear">
+                        Unit Price This Year vs Last Year
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.unitPriceYear}}%
+                    </td>
+                </ng-container>
                 <ng-container matColumnDef="notes">
                     <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
                         i18n="@@notes">
@@ -262,6 +342,30 @@
                         }
                     </ng-container>
                 </ng-container>
+                <ng-container matColumnDef="divisionTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="text-center " mat-cell>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
+                <ng-container matColumnDef="numTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="text-center " mat-cell>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
+                <ng-container matColumnDef="unitTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="text-center " mat-cell>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
                 <ng-container matColumnDef="unitPriceTotal">
                     <ng-container *matCellDef="let element">
                         @if(element?.isLast){
@@ -288,7 +392,56 @@
                         }
                     </ng-container>
                 </ng-container>
-               
+                <ng-container matColumnDef="procurementValueExVatTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="" mat-cell>
+                            <span class="fw-bold">{{getTotal('procurementValueExVat',element.serviceType) | number}}</span>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
+                <ng-container matColumnDef="procurementValueTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="" mat-cell>
+                            <span class="fw-bold">{{getTotal('procurementValue',element.serviceType) | number}}</span>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
+                <ng-container matColumnDef="supplierMethodTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="" mat-cell>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
+                <ng-container matColumnDef="estimatedTimeTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="" mat-cell>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
+                <ng-container matColumnDef="totalTimeTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="" mat-cell>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
+                <ng-container matColumnDef="timeTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="" mat-cell>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
                 <ng-container matColumnDef="vatTotal">
                     <ng-container *matCellDef="let element">
                         @if(element?.isLast){
@@ -297,7 +450,30 @@
                         }
                     </ng-container>
                 </ng-container>
-                
+                <ng-container matColumnDef="planVsEstimateTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="" mat-cell>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
+                <ng-container matColumnDef="planVsEstimateRateTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="" mat-cell>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
+                <ng-container matColumnDef="unitPriceYearTotal">
+                    <ng-container *matCellDef="let element">
+                        @if(element?.isLast){
+                        <td class="" mat-cell>
+                        </td>
+                        }
+                    </ng-container>
+                </ng-container>
                 <ng-container matColumnDef="notesTotal">
                     <ng-container *matCellDef="let element">
                         @if(element?.isLast){

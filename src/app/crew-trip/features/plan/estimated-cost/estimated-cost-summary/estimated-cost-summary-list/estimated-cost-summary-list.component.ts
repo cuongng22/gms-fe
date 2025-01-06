@@ -15,9 +15,9 @@ import { PlanBudgetProcurementService } from "src/app/crew-trip/core/services/pl
 import { CommonComponent } from "src/app/crew-trip/shared/common.component";
 import { DataTransformPipe } from "src/app/crew-trip/shared/data-transform.pipe";
 import { InputSizeComponent } from "src/app/crew-trip/shared/input/input-size.component";
-import { getDisplayedColumns, getDisplayedColumnTotals, getControlTotal } from "../../../budget-procurement/budget-procurement-summary/budget-procurement-summary-list/budget-procurement-summary-list.model";
 import { ServiceType, PlanCategoryEnum } from "../../../budget-procurement/budget-procurement.model";
 import { CategoriesEnum, StatusesSummary, StatusesSummaryEnum } from "../../estimated-cost.model";
+import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from "./estimated-cost-summary-list.model";
 
 @Component({
   selector: 'app-estimated-cost-summary-list',
@@ -172,7 +172,7 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
   override async delete() {
     try {
       await this.spinner.show();
-      const res = await this.baseService.delete(this.formGroupDetail.getRawValue().id);
+      const res = await this.baseService.summaryDelete(this.formGroupDetail.getRawValue().id);
       this.baseService.showSuccess(this.MESSAGE.DELETE_SUCCESS);
       await this.search();
       return res;

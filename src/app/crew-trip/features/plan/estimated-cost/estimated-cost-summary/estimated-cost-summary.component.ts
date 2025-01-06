@@ -37,15 +37,15 @@ export class EstimatedCostSummaryComponent extends CommonComponent implements On
       case 'All':
         this.summaryAll.setDisplayedColumns(data.categoryOfPlan);
         bodySearch.category = data.category;
-        this.summaryAll.loadData(bodySearch);
+        this.summaryAll.search(bodySearch);
         break;
       case 'International':
         this.summaryInternational.setDisplayedColumns(data.categoryOfPlan);
-        this.summaryInternational.loadData(bodySearch);
+        this.summaryInternational.search(bodySearch);
         break;
       case 'Domestic':
         this.summaryDomestic.setDisplayedColumns(data.categoryOfPlan);
-        this.summaryDomestic.loadData(bodySearch);
+        this.summaryDomestic.search(bodySearch);
         break;
     }
     console.log(data)
