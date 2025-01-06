@@ -1,7 +1,7 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { CommonModule } from '@angular/common';
 import { Component, inject, input, InputSignal, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -17,7 +17,7 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from './budget-procurement-summary-list.model';
 import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
-import { CAR_RENTAL, HOTEL, PlanCategoryEnum, ServiceType } from '../../budget-procurement.model';
+import { CAR_RENTAL, CategoryEnum, HOTEL, PlanCategoryEnum, ServiceType, StatusEnum, StatusSummaryEnum } from '../../budget-procurement.model';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
@@ -31,13 +31,23 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
   providers: [DataTransformPipe]
 })
 export class BudgetProcurementSummaryListComponent extends CommonComponent implements OnInit {
+  formBuilder = inject(FormBuilder);
+
   readonly serviceType = ServiceType;
   PlanCategoryEnum = PlanCategoryEnum;
+  StatusEnum = StatusEnum;
+  CategoryEnum = CategoryEnum;
+  StatusSummaryEnum = StatusSummaryEnum;
 
-  categoryType = input<string>('All'); //All,International,Domestic  loại quốc tế hay quốc nội
+
+  categoryType = input<CategoryEnum>(); //All,International,Domestic  loại quốc tế hay quốc nội
   planBudgetProcurementId = input<number>(); // id của kế hoạch
 
   displayedColumnTotals: string[] = [];
+
+  override formGroupDetail = this.formBuilder.group({
+    id: ''
+  })
 
   override baseService = inject(PlanBudgetProcurementService);
 
@@ -46,7 +56,7 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
   }
   override ngOnInit(): void {
     this.setDisplayedColumns('');
-    this.loadData();
+    this.search();
   }
 
   setDisplayedColumns(type: string) {
@@ -54,7 +64,7 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
     this.displayedColumnTotals = getDisplayedColumnTotals(type);
   }
 
-  loadData(bodySearch?: any) {
+  override async search(bodySearch?: any) {
     try {
       this.spinner.show();
       this.setDisplayedColumns(bodySearch?.categoryOfPlan);
@@ -168,4 +178,33 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
     }
     return null;
   }
+
+  async changeStatus(id: number, status: any) {
+    try {
+      await this.spinner.show();
+      const res = await this.baseService.summaryUpdateStatus({ id: id, status: status });
+      this.baseService.showSuccess(this.MESSAGE.UPDATE_SUCCESS);
+      await this.search();
+    } catch (e: any) {
+      this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? this.MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  override async delete() {
+    try {
+      await this.spinner.show();
+      const res = await this.baseService.summaryDelete(this.formGroupDetail.getRawValue().id);
+      this.baseService.showSuccess(this.MESSAGE.DELETE_SUCCESS);
+      await this.search();
+      return res;
+    } catch (e: any) {
+      this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? this.MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+      await this.closeConfirmDelete();
+    }
+  }
+
 }

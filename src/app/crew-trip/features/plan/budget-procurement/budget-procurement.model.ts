@@ -71,6 +71,11 @@ export enum CategoryEnum {
     DOMESTIC = 'Domestic'
 }
 
+export const Categories = [
+    { code: '', value: $localize`:@@allCategory:-- All Category --` },
+    { code: 'International', value: $localize`:@@international:International` },
+    { code: 'Domestic', value: $localize`:@@domestic:Domestic` }
+];
 export const PADDING_0 = '0px !important';
 
 
