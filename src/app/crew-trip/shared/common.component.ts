@@ -14,6 +14,9 @@ import {UltilService} from 'src/app/crew-trip/core/services/ultil-service';
 import {ListResponse} from './models/common.model';
 import {environment} from 'src/environments/environment';
 import {ShowMessageComponent} from './component/show-message/show-message.component';
+import {FlightMarketService} from "src/app/crew-trip/core/services/flight-market.service";
+import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
+import {VehicleService} from "src/app/crew-trip/core/services/vehicle.service";
 
 
 @Component({
@@ -28,6 +31,9 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
   toggleService = inject(ToggleService);
   ultilService = inject(UltilService);
   themeService = inject(CustomizerSettingsService);
+  _flightMarketService = inject(FlightMarketService);
+  _hotelService = inject(HotelService);
+  _vehicleService = inject(VehicleService);
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource();
   selection = new SelectionModel<any>(true, []);
@@ -53,6 +59,7 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
   showDialogDelete = false;
   isSticky = false;
   configScrollY = 60;
+  listFlightMarket = [];
 
   constructor() {
     super();
@@ -291,5 +298,13 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
         invalid.push(name);
       }
     }
+  }
+
+  async loadListFlightMarket() {
+    await this._flightMarketService.search({option: 1}).then(res => {
+      if (res.data) {
+        this.listFlightMarket = res.data;
+      }
+    });
   }
 }

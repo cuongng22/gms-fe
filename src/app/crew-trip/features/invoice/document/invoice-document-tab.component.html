@@ -1,0 +1,47 @@
+<!-- Breadcrumb -->
+<ng-container *ngIf="step==1">
+    <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+        <h5 class="mb-0" i18n>
+            Invoice
+        </h5>
+        <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+
+            <li class="breadcrumb-item d-inline-block position-relative" i18n>
+                Invoice
+            </li>
+            <li class="breadcrumb-item d-inline-block position-relative" i18n>
+                List of Invoice
+            </li>
+        </ol>
+    </div>
+    <!--    List data-->
+    <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
+        <mat-card-content>
+            <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="tabType==='INVOICE'?0:1"
+                           mat-align-tabs="start" mat-stretch-tabs="false">
+                <mat-tab label="Invoice">
+                    @if (partnerType === 'INVOICE') {
+                        <app-invoice-document [partnerType]="partnerType" (nextStepEmit)="nextStepEmit($event)"/>
+                    }
+                </mat-tab>
+                <mat-tab label="Reminder">
+                    @if (partnerType === 'REMINDER') {
+                        <app-invoice-document-remind/>
+                    }
+                </mat-tab>
+            </mat-tab-group>
+        </mat-card-content>
+    </mat-card>
+</ng-container>
+<!-- Detail -->
+<ng-container *ngIf="step==2">
+    <app-invoice-document-detail (backStepEmit)="backStepEmit($event)"
+                             [id]="id" [readMode]="readMode">
+    </app-invoice-document-detail>
+</ng-container>
+<!-- review -->
+<ng-container *ngIf="step==3">
+    <app-invoice-document-review (backStepEmit)="backStepEmit($event)"
+                             [id]="id" [readMode]="readMode">
+    </app-invoice-document-review>
+</ng-container>
