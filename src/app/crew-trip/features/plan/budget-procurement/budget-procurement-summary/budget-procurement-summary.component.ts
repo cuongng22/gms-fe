@@ -6,6 +6,7 @@ import { BudgetProcurementSummarySearchComponent } from './budget-procurement-su
 import { BudgetProcurementSummaryListComponent } from './budget-procurement-summary-list/budget-procurement-summary-list.component';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
+import { CategoryEnum } from '../budget-procurement.model';
 
 @Component({
   selector: 'app-budget-procurement-summary',
@@ -23,6 +24,8 @@ export class BudgetProcurementSummaryComponent extends CommonComponent implement
   @ViewChild('budgetProcurementSummaryListInternational') summaryInternational: BudgetProcurementSummaryListComponent;
   @ViewChild('budgetProcurementSummaryListDomestic') summaryDomestic: BudgetProcurementSummaryListComponent;
 
+  CategoryEnum = CategoryEnum;
+
   searchSummary(data: any, type: string) {
     let bodySearch: any = {
       status: data.status,
@@ -32,15 +35,15 @@ export class BudgetProcurementSummaryComponent extends CommonComponent implement
       case 'All':
         this.summaryAll.setDisplayedColumns(data.categoryOfPlan);
         bodySearch.category = data.category;
-        this.summaryAll.loadData(bodySearch);
+        this.summaryAll.search(bodySearch);
         break;
       case 'International':
         this.summaryInternational.setDisplayedColumns(data.categoryOfPlan);
-        this.summaryInternational.loadData(bodySearch);
+        this.summaryInternational.search(bodySearch);
         break;
       case 'Domestic':
         this.summaryDomestic.setDisplayedColumns(data.categoryOfPlan);
-        this.summaryDomestic.loadData(bodySearch);
+        this.summaryDomestic.search(bodySearch);
         break;
     }
     console.log(data)
