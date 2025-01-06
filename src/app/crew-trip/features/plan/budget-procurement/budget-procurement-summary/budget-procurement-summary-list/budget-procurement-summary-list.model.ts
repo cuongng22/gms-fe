@@ -68,7 +68,7 @@ export function getControlTotal(control: string, serviceType: string): string {
     switch (control) {
         case 'cost':
             return serviceType === ServiceType.HOTEL ? 'costHotel' : 'costCar';
-        case PlanCategoryEnum.BUDGET:
+        case 'budget':
             return serviceType === ServiceType.HOTEL ? 'budgetVatHotel' : 'budgetVatCar';
         case 'procurementValueExVat':
             return serviceType === ServiceType.HOTEL ? 'procurementValueHotel' : 'procurementValueCar';

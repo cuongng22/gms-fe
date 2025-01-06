@@ -115,7 +115,6 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
   }
 
   onSelectionChange(event: any) {
-    console.log('onSelectionChange: ', event)
     this.viewControl.setValue(event.option.viewValue ?? null);
     this.viewControl.updateValueAndValidity()
     this.selectionControl.writeValue(event.option.value ?? null);

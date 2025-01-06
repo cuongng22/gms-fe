@@ -36,7 +36,7 @@
                 <ng-template matTabContent>
                     <app-budget-procurement-summary-search categoryType="All" (search)="searchSummary($event,'All')">
                     </app-budget-procurement-summary-search>
-                    <app-budget-procurement-summary-list categoryType="" [planBudgetProcurementId]="id()"
+                    <app-budget-procurement-summary-list [planBudgetProcurementId]="id()"
                         #budgetProcurementSummaryListAll>
                     </app-budget-procurement-summary-list>
                 </ng-template>
@@ -46,7 +46,7 @@
                     <app-budget-procurement-summary-search categoryType="International"
                         (search)="searchSummary($event,'International')">
                     </app-budget-procurement-summary-search>
-                    <app-budget-procurement-summary-list categoryType="International" [planBudgetProcurementId]="id()"
+                    <app-budget-procurement-summary-list [categoryType]="CategoryEnum.INTERNATIONAL" [planBudgetProcurementId]="id()"
                         #budgetProcurementSummaryListInternational>
                     </app-budget-procurement-summary-list>
                 </ng-template>
@@ -57,7 +57,7 @@
                     <app-budget-procurement-summary-search categoryType="Domestic"
                         (search)="searchSummary($event,'Domestic')">
                     </app-budget-procurement-summary-search>
-                    <app-budget-procurement-summary-list categoryType="Domestic" [planBudgetProcurementId]="id()"
+                    <app-budget-procurement-summary-list [categoryType]="CategoryEnum.DOMESTIC" [planBudgetProcurementId]="id()"
                         #budgetProcurementSummaryListDomestic>
                     </app-budget-procurement-summary-list>
                 </ng-template>

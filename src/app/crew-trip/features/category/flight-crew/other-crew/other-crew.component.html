@@ -236,6 +236,14 @@
                     }
                   </mat-form-field>
                 </div>
+                  <div class="col-sm-6 col-md-6 form-group">
+                      <app-selection-suggest i18n-label="@@nation" (selectionChange)="changeValueNation($event)" label="Nation" attrValue="id" attrDisplay="vniName"  [options]="countries"
+                                             formControlName="nation" size="sm" />
+                  </div>
+                  <div class="col-sm-6 col-md-6 form-group">
+                      <app-selection-suggest i18n-label="@@airportCodes" label="Market code" [options]="markets"
+                                             formControlName="airportCodes" size="sm" />
+                  </div>
                 <div class="col-sm-12 col-md-12 form-group">
                   <mat-form-field>
                     <mat-label i18n>Remark</mat-label>
