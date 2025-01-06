@@ -33,6 +33,11 @@ export class PlanBudgetProcurementService extends BaseService {
         return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
     }
 
+    summaryUpdateStatus<T = any>(body: any): Promise<T> {
+        const url = `${this.api}/${this.path}/summary/update-status`;
+        return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
+    }
+
     summarySearch<T = any>(body: any): Promise<T> {
         const url = `${this.api}/${this.path}/summary/search`;
         return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
