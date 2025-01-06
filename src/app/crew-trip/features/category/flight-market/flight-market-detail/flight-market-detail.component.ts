@@ -65,7 +65,6 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
   readonlyDetail = model<boolean>(false);
   isCreate = model<boolean>(false);
 
-  costCategorysRaw: any[] = [];
   costCategorys: any[] = [];
   countries: any[] = [];
   flightGroupData = FlightGroupData;
@@ -112,7 +111,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
     await this.spinner.show();
     Promise.all([
       this.id() ? this.baseService.detail(this.id()) : null,
-      this.serviceFeeService.search({ page: 0, size: 99999 }),
+      this.serviceFeeService.listServiceCode(null),
       this.nationService.search({ page: 0, limit: 99999 })
     ]).then(([resDetail, resServiceFee, resNationService]) => {
       if (resDetail) {
@@ -123,8 +122,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
       }
       // lấy danh sách dịch vụ
       if (resServiceFee) {
-        this.costCategorysRaw = resServiceFee.data.content;
-        this.costCategorys = resServiceFee.data.content;
+        this.costCategorys = resServiceFee.data;
       }
       // Lấy danh sách quốc gia
       if (resNationService) {
@@ -181,7 +179,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
         ...hotel, id: -+new Date(), marketCode: this.formGroupDetail.controls.marketCode.value
       };
     }
-    const hotelCodes = this.hotelDataSource.data.map((hotel: any) => hotel.hotelCode);
+    const hotelCodes = this.hotelDataSource.data.filter((hotelFilter: any) => hotelFilter.id !== hotel.id).map((hotelMap: any) => hotelMap.hotelCode);
     const dialogRef = this.dialog.open(HotelDetailComponent, {
       data: { hotel: hotel, isViewDetail: isViewDetail, hotelCodes: hotelCodes },
       disableClose: true
@@ -212,7 +210,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
         ...carRental, id: -+new Date(), marketCode: this.formGroupDetail.controls.marketCode.value
       };
     }
-    const carRentalCodes = this.carRentalDataSource.data.map((carRental: any) => carRental.code);
+    const carRentalCodes = this.carRentalDataSource.data.filter((carRentelFilter: any) => carRentelFilter.id !== carRental.id).map((carRentalMap: any) => carRentalMap.code);
     const dialogRef = this.dialog.open(CarRentalDetailComponent, {
       data: { carRental: carRental, isViewDetail: isViewDetail, carRentalCodes: carRentalCodes },
       disableClose: true

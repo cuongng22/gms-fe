@@ -47,7 +47,7 @@ export class PlanBudgetProcurementService extends BaseService {
         const url = `${this.api}/${this.path}/summary`;
         return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
     }
-    
+
     save(body: any): Promise<any> {
         const url = `${this.api}/${this.path}/summary/create`;
         return firstValueFrom(this.http.post(url, body, this.httpOptions));
@@ -55,5 +55,10 @@ export class PlanBudgetProcurementService extends BaseService {
     summaryUpdateStatus<T = any>(body: any): Promise<T> {
         const url = `${this.api}/${this.path}/summary/update-status`;
         return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
+    }
+
+    summaryDelete<T = any>(id: any): Promise<T> {
+        const url = `${this.api}/${this.path}/summary/${id}`;
+        return firstValueFrom(this.http.delete<T>(url, this.httpOptions));
     }
 }
