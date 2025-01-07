@@ -24,12 +24,16 @@ import {
 } from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
 import {InvoiceDocumentDetailComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-detail.component";
 import {InvoiceDocumentReviewComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-review.component";
+import {InvoiceDocumentComponent} from "src/app/crew-trip/features/invoice/document/invoice-document.component";
+import {
+  InvoiceDocumentRemindComponent
+} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
 
 
 @Component({
   selector: 'app-invoice-document-tab',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormComponent, InvoiceFormDetailComponent, InvoiceDocumentDetail, InvoiceDocumentDetailComponent, InvoiceDocumentReviewComponent],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormComponent, InvoiceFormDetailComponent, InvoiceDocumentDetailComponent, InvoiceDocumentDetailComponent, InvoiceDocumentReviewComponent, InvoiceDocumentComponent, InvoiceDocumentRemindComponent],
   templateUrl: './invoice-document-tab.component.html',
   styleUrl: './invoice-document-tab.component.scss',
 })

@@ -52,7 +52,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
   action = 'edit';
   bizDocId: any;
   contractObj: any;
-  listFlightMarket = [];
   listPartner: any[] = [];
   listHotel = [];
   listVehicle = [];
@@ -123,14 +122,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
     this.tblAnnexData.data = (this.dataSource.data[index] as any).appendixList;
     this.showPopupAnnex = true;
 
-  }
-
-  async loadListFlightMarket() {
-    await this.flightMarketService.search({option: 1}).then(res => {
-      if (res.data) {
-        this.listFlightMarket = res.data;
-      }
-    });
   }
 
   async loadListHotel() {
