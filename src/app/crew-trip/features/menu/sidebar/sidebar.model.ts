@@ -124,7 +124,7 @@ export const menu: Menu[] = [
         path: 'invoice/invoice-form-tab', title: $localize`:@@detailedStatment:Detailed statement`, icon: 'ri-calendar-line'
       },
       {
-        path: 'invoice/e-invoice', title: $localize`:@@invoice:Invoice`, icon: 'ri-folder-chart-line'
+        path: 'invoice/invoice-document-tab', title: $localize`:@@invoice:Invoice`, icon: 'ri-folder-chart-line'
       },
       {
         path: 'invoice/actual-expense-tracking',

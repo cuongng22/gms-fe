@@ -65,6 +65,7 @@ import {AircraftDataComponent} from "src/app/crew-trip/features/system/config/ai
 import {EmailSupplierComponent} from "src/app/crew-trip/features/system/config/email-supplier/email-supplier.component";
 import {InvoiceFormTabComponent} from "src/app/crew-trip/features/invoice/form/invoice-form-tab.component";
 import {RedirectGuard} from "src/app/crew-trip/core/guards/redirect-guard";
+import {InvoiceDocumentTabComponent} from "src/app/crew-trip/features/invoice/document/invoice-document-tab.component";
 
 
 export const routes: Routes = [
@@ -156,6 +157,7 @@ export const routes: Routes = [
       {
         path: 'invoice', children: [
           {path: 'invoice-form-tab', component: InvoiceFormTabComponent},
+          {path: 'invoice-document-tab', component: InvoiceDocumentTabComponent},
         ]
       },
       {

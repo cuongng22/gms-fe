@@ -43,18 +43,18 @@ import {DigitOnlyModule} from "@uiowa/digit-only";
 
 
 @Component({
-  selector: 'app-invoice-form-detail',
+  selector: 'app-invoice-document-review',
   standalone: true,
   imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe],
-  templateUrl: './invoice-form-detail.component.html',
-  styleUrl: './invoice-form-detail.component.scss',
+  templateUrl: './invoice-document-review.component.html',
+  styleUrl: './invoice-document-review.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
 
   ]
 })
 
 
-export class InvoiceFormDetailComponent extends CommonComponent implements OnInit {
+export class InvoiceDocumentReviewComponent extends CommonComponent implements OnInit {
   override baseService = inject(InvoiceFormService);
   nationService = inject(NationService);
   serviceFeeService = inject(ServiceFeeService);

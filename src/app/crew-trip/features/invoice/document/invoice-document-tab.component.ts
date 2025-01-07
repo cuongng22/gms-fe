@@ -22,19 +22,25 @@ import {InvoiceFormComponent} from "src/app/crew-trip/features/invoice/form/invo
 import {
   InvoiceFormDetailComponent
 } from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
+import {InvoiceDocumentDetailComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-detail.component";
+import {InvoiceDocumentReviewComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-review.component";
+import {InvoiceDocumentComponent} from "src/app/crew-trip/features/invoice/document/invoice-document.component";
+import {
+  InvoiceDocumentRemindComponent
+} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
 
 
 @Component({
-  selector: 'app-invoice-form-tab',
+  selector: 'app-invoice-document-tab',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormComponent, InvoiceFormDetailComponent],
-  templateUrl: './invoice-form-tab.component.html',
-  styleUrl: './invoice-form-tab.component.scss',
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormComponent, InvoiceFormDetailComponent, InvoiceDocumentDetailComponent, InvoiceDocumentDetailComponent, InvoiceDocumentReviewComponent, InvoiceDocumentComponent, InvoiceDocumentRemindComponent],
+  templateUrl: './invoice-document-tab.component.html',
+  styleUrl: './invoice-document-tab.component.scss',
 })
 
 
-export class InvoiceFormTabComponent implements OnInit {
-  partnerType = 'HOTEL';
+export class InvoiceDocumentTabComponent implements OnInit {
+  tabType = 'INVOICE';
   step = 1;
   id: any;
   readMode: any;
@@ -48,20 +54,20 @@ export class InvoiceFormTabComponent implements OnInit {
 
   onTabChange($event: any) {
     if ($event.index === 0) {
-      this.partnerType = 'HOTEL';
+      this.tabType = 'INVOICE';
     } else {
-      this.partnerType = 'TRANSPORTATION';
+      this.tabType = 'REMINDER';
     }
   }
 
   nextStepEmit($event: any) {
-    this.step = 2;
+    this.step = $event[2];;
     this.id = $event[0];
     this.readMode = $event[1];
   }
 
   backStepEmit($event: any) {
     this.step = 1;
-    this.partnerType = $event[0]
+    this.tabType = $event[0]
   }
 }

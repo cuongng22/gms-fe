@@ -2,18 +2,15 @@ import {Injectable} from '@angular/core';
 import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {firstValueFrom} from 'rxjs';
 import {HttpHeaders, HttpParams} from '@angular/common/http';
-import {Response, Role} from 'src/app/crew-trip/features/system/users/users.model';
-import {response} from 'express';
-import {DetailResponse, ListResponse} from 'src/app/crew-trip/shared/models/common.model';
-import {MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
+import {removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 
 @Injectable({
   providedIn: 'root'
 })
-export class InvoiceFormService extends BaseService {
+export class InvoiceDocumentService extends BaseService {
   constructor() {
     super();
-    this.path = 'invoice/form';
+    this.path = 'invoice/document';
   }
 
   async exportFileData(body: any) {
@@ -24,7 +21,7 @@ export class InvoiceFormService extends BaseService {
         'Accept': 'application/octet-stream'
       }),
       responseType: 'blob' as any,
-      params: new HttpParams({ fromObject: body })
+      params: new HttpParams({fromObject: body})
     };
     return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
   }
@@ -67,7 +64,7 @@ export class InvoiceFormService extends BaseService {
         'Accept': 'application/octet-stream'
       }),
       responseType: 'blob' as 'json',
-      params: new HttpParams({ fromObject: body })
+      params: new HttpParams({fromObject: body})
     };
     return firstValueFrom(this.http.get<any>(url, httpOptionsExport));
 

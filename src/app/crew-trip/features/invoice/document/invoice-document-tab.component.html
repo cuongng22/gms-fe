@@ -2,7 +2,7 @@
 <ng-container *ngIf="step==1">
     <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
         <h5 class="mb-0" i18n>
-            Detailed Statement
+            Invoice
         </h5>
         <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
 
@@ -10,24 +10,23 @@
                 Invoice
             </li>
             <li class="breadcrumb-item d-inline-block position-relative" i18n>
-                Detailed Statement
-
+                List of Invoice
             </li>
         </ol>
     </div>
     <!--    List data-->
     <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
         <mat-card-content>
-            <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="partnerType==='HOTEL'?0:1"
+            <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="tabType==='INVOICE'?0:1"
                            mat-align-tabs="start" mat-stretch-tabs="false">
-                <mat-tab label="Hotel">
-                    @if (partnerType === 'HOTEL') {
-                        <app-invoice-form [partnerType]="partnerType" (nextStepEmit)="nextStepEmit($event)"/>
+                <mat-tab label="Invoice">
+                    @if (tabType === 'INVOICE') {
+                        <app-invoice-document [tabType]="tabType" (nextStepEmit)="nextStepEmit($event)"/>
                     }
                 </mat-tab>
-                <mat-tab label="Transportation">
-                    @if (partnerType === 'TRANSPORTATION') {
-                        <app-invoice-form [partnerType]="partnerType" (nextStepEmit)="nextStepEmit($event)"/>
+                <mat-tab label="Reminder">
+                    @if (tabType === 'REMINDER') {
+                        <app-invoice-document-remind/>
                     }
                 </mat-tab>
             </mat-tab-group>
@@ -36,7 +35,13 @@
 </ng-container>
 <!-- Detail -->
 <ng-container *ngIf="step==2">
-    <app-invoice-form-detail (backStepEmit)="backStepEmit($event)"
+    <app-invoice-document-detail (backStepEmit)="backStepEmit($event)"
                              [id]="id" [readMode]="readMode">
-    </app-invoice-form-detail>
+    </app-invoice-document-detail>
+</ng-container>
+<!-- review -->
+<ng-container *ngIf="step==3">
+    <app-invoice-document-review (backStepEmit)="backStepEmit($event)"
+                             [id]="id" [readMode]="readMode">
+    </app-invoice-document-review>
 </ng-container>

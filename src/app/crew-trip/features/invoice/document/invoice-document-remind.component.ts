@@ -35,17 +35,17 @@ import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 
 
 @Component({
-  selector: 'app-invoice-form',
+  selector: 'app-invoice-document-remind',
   standalone: true,
   imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule],
-  templateUrl: './invoice-form.component.html',
-  styleUrl: './invoice-form.component.scss',
+  templateUrl: './invoice-document-remind.component.html',
+  styleUrl: './invoice-document-remind.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
   ]
 })
 
 
-export class InvoiceFormComponent extends CommonComponent implements OnInit {
+export class InvoiceDocumentRemindComponent extends CommonComponent implements OnInit {
   viewType = 'HD';//HD-PL
   override baseService = inject(InvoiceFormService);
   flightMarketService = inject(FlightMarketService);
@@ -128,6 +128,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
     await this.search();
     this.step = 1;
   }
+
 
   override async search<T>(body?: any, isNextPage?: boolean) {
     try {

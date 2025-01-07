@@ -15,7 +15,7 @@ export class DataTransformPipe implements PipeTransform {
         return value.toLocaleString('vi-VN');
         // return value.toLocaleString('en-US');
       } else if (type === Constant.DATE) {
-        return moment(value).format(format);
+        return moment(value).isValid() ? moment(value).format(format) : '';
       } else if (type === Constant.STRING_FORMAT) {
         const params = args.slice(1);
         return sprintf(value, params);
