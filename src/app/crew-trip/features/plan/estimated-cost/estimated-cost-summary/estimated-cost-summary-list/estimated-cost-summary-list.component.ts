@@ -16,7 +16,7 @@ import { CommonComponent } from "src/app/crew-trip/shared/common.component";
 import { DataTransformPipe } from "src/app/crew-trip/shared/data-transform.pipe";
 import { InputSizeComponent } from "src/app/crew-trip/shared/input/input-size.component";
 import { ServiceType, PlanCategoryEnum } from "../../../budget-procurement/budget-procurement.model";
-import { CategoriesEnum, StatusesSummary, StatusesSummaryEnum } from "../../estimated-cost.model";
+import { CategoriesEnum, StatusesSummary, StatusSummaryEnum } from "../../estimated-cost.model";
 import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from "./estimated-cost-summary-list.model";
 
 @Component({
@@ -34,7 +34,7 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
   readonly serviceType = ServiceType;
   PlanCategoryEnum = PlanCategoryEnum;
   StatusesSummary = StatusesSummary;
-  StatusesSummaryEnum = StatusesSummaryEnum;
+  StatusSummaryEnum = StatusSummaryEnum;
   CategoriesEnum = CategoriesEnum;
 
   categoryType = input<CategoriesEnum>(CategoriesEnum.ALL); //All,International,Domestic  loại quốc tế hay quốc nội
@@ -156,7 +156,7 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
     // })
   }
 
-  async changeStatus(id: number, status: StatusesSummaryEnum) {
+  async changeStatus(id: number, status: StatusSummaryEnum) {
     try {
       await this.spinner.show();
       const res = await this.baseService.summaryUpdateStatus({ id: id, status: status });

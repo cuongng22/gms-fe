@@ -1,0 +1,69 @@
+<form [formGroup]="formGroupDetail" (submit)="submit()" autocomplete="off">
+    <div class="row">
+        <mat-checkbox class="mb-2" i18n="@@budgetPlan" formControlName="budgetPlanFlag">Budget Plan</mat-checkbox>
+    </div>
+    <div class="row">
+        <div class="col" sizeInput="sm">
+            <mat-form-field class="mb-2">
+                <mat-label i18n="@@category">Category</mat-label>
+                <mat-select required formControlName="category">
+                    <mat-option value="International" i18n="@@international">International</mat-option>
+                    <mat-option value="Domestic" i18n="@@domestic">Domestic</mat-option>
+                </mat-select>
+                <mat-error i18n="@@categoryRequired"
+                    *ngxControlError="formGroupDetail.controls.category; track: 'required'">
+                    Category {{MESSAGE.ALREADY_EXISTS}}
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col mb-2">
+            <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="airports()"
+                formControlName="airportCode" size="md" [required]="true" />
+        </div>
+        <div class="col">
+            <mat-form-field class="mb-2">
+                <mat-label i18n="@@singleRoomRate">Single Room Rate</mat-label>
+                <textarea matInput [disabled]="true" [ngModel]="unitPriceSingleHotel"
+                    [ngModelOptions]="{standalone: true}" matTextareaAutosize cdkAutosizeMinRows="1" cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize">
+                    </textarea>
+            </mat-form-field>
+        </div>
+        <div class="col">
+            <mat-form-field class="mb-2">
+                <mat-label i18n="@@doubleRoomRate">Double Room Rate</mat-label>
+                <textarea matInput [disabled]="true" [ngModel]="unitPriceDoubleHotel"
+                    [ngModelOptions]="{standalone: true}" matTextareaAutosize cdkAutosizeMinRows="1" cdkTextareaAutosize
+                    #autosize="cdkTextareaAutosize">
+                    </textarea>
+                <mat-error *ngxControlError="formGroupDetail.controls.notes; track: 'maxlength'" i18n="@@noteMaxlength">
+                    Note {{ MESSAGE.MAX_LENGTH_INVALID |
+                    dataTransformPipe:[Constant.STRING_FORMAT,500]}}
+                </mat-error>
+            </mat-form-field>
+        </div>
+        @if (category() === CategoriesEnum.INTERNATIONAL ) {
+        <div class="col" sizeInput="sm">
+            <mat-form-field class="mb-2">
+                <mat-label i18n="@@rateForSingle">Buffer rate (for single-gender)</mat-label>
+                <input type="text" decimalSeparator="," digitOnly [decimal]="true" matInput
+                    formControlName="rateForSingle">
+                <i class="material-symbols-outlined fs-18" matSuffix>
+                    percent
+                </i>
+            </mat-form-field>
+        </div>
+        }
+
+    </div>
+    <div class="row">
+        <mat-form-field class="mb-2">
+            <mat-label i18n="@@notes">Notes</mat-label>
+            <textarea matInput [disabled]="disabled()" formControlName="notes" matTextareaAutosize
+                cdkAutosizeMinRows="2" cdkTextareaAutosize #autosize="cdkTextareaAutosize">
+                </textarea>
+        </mat-form-field>
+    </div>
+
+
+</form>

@@ -6,7 +6,7 @@ export const StatusesSummary: { code: string, value: string }[] = [
     { code: 'completed', value: 'Completed' }, //Hoàn thành 
 ];
 
-export enum StatusesSummaryEnum {
+export enum StatusSummaryEnum {
     DRAFT = 'draft',
     COMPLETED = 'completed'
 }
