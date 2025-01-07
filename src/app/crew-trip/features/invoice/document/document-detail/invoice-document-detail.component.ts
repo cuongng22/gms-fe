@@ -41,12 +41,15 @@ import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-ser
 import {InvoiceFormService} from "src/app/crew-trip/core/services/invoice-form-service";
 import {DigitOnlyModule} from "@uiowa/digit-only";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
+import {CdkTextareaAutosize} from "@angular/cdk/text-field";
+import {ContractService} from "src/app/crew-trip/core/services/contract-service";
 
 
 @Component({
   selector: 'app-invoice-document-detail',
   standalone: true,
-  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe],
+  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize],
   templateUrl: './invoice-document-detail.component.html',
   styleUrl: './invoice-document-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -56,9 +59,10 @@ import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-looku
 
 
 export class InvoiceDocumentDetailComponent extends CommonComponent implements OnInit {
-  override baseService = inject(InvoiceFormService);
+  override baseService = inject(InvoiceDocumentService);
   nationService = inject(NationService);
   serviceFeeService = inject(ServiceFeeService);
+  contractService = inject(ContractService);
   fb = inject(FormBuilder);
 
 
@@ -80,7 +84,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   showDialogDeleteFile = false;
 
   listDocumentType = InvoiceLookup.InvoiceDocumentType;
-
+  listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
+  listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
   _displayedColumnsHeader1: string[] = [];
   _displayedColumnsHeader2: string[] = [];
   _displayedColumnsRow: string[] = [];
@@ -204,6 +209,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       totalAmountVnd: [],
       reimbursementTotalFc: [],
       reimbursementTotalVnd: [],
+      invoiceDocumentDtl: [],
+      fileAttachments: []
     });
     this.formGroupFileUpload = this.fb.group({
       fileUpload: []
@@ -215,6 +222,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       await this.spinner.show();
       await Promise.all([this.detail(this.id),
         this.loadListFlightMarket(),
+        this.loadListFeeService(),
         this.setReadMode(this.formGroupDetail)]).then(() => {
       });
     } catch (e) {
@@ -232,7 +240,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   async setReadMode(form: FormGroup) {
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
-        v.disable();
+        // v.disable();
       }
     });
   }
@@ -253,6 +261,21 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
     } catch (e) {
       console.log(e)
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async airportCodeChange($event: any) {
+    try {
+      await this.spinner.show();
+      await this.baseService.getContractByAirport($event).then(res => {
+        if (res.data?.bizDocId) {
+          //todo set du lieu thong tin hop dong cho form detail
+        }
+      });
+    } catch (e) {
+      console.log(e);
     } finally {
       await this.spinner.hide();
     }

@@ -32,6 +32,7 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
   ultilService = inject(UltilService);
   themeService = inject(CustomizerSettingsService);
   _flightMarketService = inject(FlightMarketService);
+  _serviceFeeService = inject(FlightMarketService);
   _hotelService = inject(HotelService);
   _vehicleService = inject(VehicleService);
   displayedColumns: string[] = [];
@@ -60,6 +61,7 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
   isSticky = false;
   configScrollY = 60;
   listFlightMarket = [];
+  listFeeService = [];
 
   constructor() {
     super();
@@ -304,6 +306,13 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
     await this._flightMarketService.search({option: 1}).then(res => {
       if (res.data) {
         this.listFlightMarket = res.data;
+      }
+    });
+  }
+  async loadListFeeService() {
+    await this._serviceFeeService.search({page: 0, limit: 99999}).then(res => {
+      if (res.data) {
+        this.listFeeService = res.data.content;
       }
     });
   }
