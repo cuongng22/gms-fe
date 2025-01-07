@@ -247,7 +247,7 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
       if (update) {
         res = await this.baseService.update({ ...this.formGroupDetail.value, type: PlanTypeEnum.KHNS });
       } else {
-        res = await this.baseService.create(this.formGroupDetail.value);
+        res = await this.baseService.create({ ...this.formGroupDetail.value, type: PlanTypeEnum.KHNS });
       }
       console.log(res)
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
