@@ -91,3 +91,8 @@ export function closePanel(panel: MatExpansionPanel): void {
     panel.close();
     panel.disabled = true;
 }
+
+export enum PlanTypeEnum {
+    KHNS = 'KHNS', // Kế hoạch ngân sách
+    UTH = 'UTH' // Ước thực hiện
+}

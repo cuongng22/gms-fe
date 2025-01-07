@@ -27,7 +27,7 @@ import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/pl
 import { HttpStatusCode } from '@angular/common/http';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { NgxControlError } from 'ngxtension/control-error';
-import { Statuses, years } from '../budget-procurement.model';
+import { PlanTypeEnum, Statuses, years } from '../budget-procurement.model';
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 
@@ -88,7 +88,7 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
   }
 
   async showConfirmReject(id: any) {
-    this.formGroupReject.patchValue({id: id});
+    this.formGroupReject.patchValue({ id: id });
     this.toggleDialogReject();
   }
 
@@ -167,7 +167,10 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
     }
   }
   override async search<T>(body?: any, isNextPage?: boolean) {
-    let bodySearch = { ...this.formGroupSearch.value, status: this.formGroupSearch.value.status?.map((x: any) => x).join(',') };
+    let bodySearch = {
+      ...this.formGroupSearch.value, status: this.formGroupSearch.value.status?.map((x: any) => x).join(','),
+      type: PlanTypeEnum.KHNS
+    };
     super.search(bodySearch, isNextPage);
   }
 
@@ -242,7 +245,7 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
       await this.spinner.show();
       let res;
       if (update) {
-        res = await this.baseService.update(this.formGroupDetail.value);
+        res = await this.baseService.update({ ...this.formGroupDetail.value, type: PlanTypeEnum.KHNS });
       } else {
         res = await this.baseService.create(this.formGroupDetail.value);
       }
