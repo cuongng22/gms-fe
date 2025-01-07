@@ -61,7 +61,7 @@ export class InvoiceDocumentTabComponent implements OnInit {
   }
 
   nextStepEmit($event: any) {
-    this.step = 2;
+    this.step = $event[2];;
     this.id = $event[0];
     this.readMode = $event[1];
   }

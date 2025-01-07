@@ -346,3 +346,8 @@
     }
   }
 }
+.d-grid-columns-3 {
+  display: grid !important;
+  grid-template-columns: repeat(3, 1fr) !important;
+  gap: 5px !important;
+}

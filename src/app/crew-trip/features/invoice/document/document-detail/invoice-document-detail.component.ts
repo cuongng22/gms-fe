@@ -168,23 +168,42 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     window.scrollTo({top: 0, behavior: 'instant'});
     this.formGroupDetail = this.fb.group({
       id: [],
+      idParent: [],
+      idContract: [],
+      idInvoiceForm: [],
+      version: [],
       ctype: [],
-      typeRoom: [],
-      airportCode: [],
-      airportName: [],
-      partnerCode: [],
-      partnerName: [],
-      partnerType: [],
       invoiceNumber: [],
       invoiceDate: [],
       invoiceReceiveDate: [],
       periodFrom: [],
       periodTo: [],
+      periodOccurrence: [],
+      paymentDueDay: [],
+      paymentDueDate: [],
       bizDocId: [],
-      totalAmount: [],
-      totalAmountVat: [],
-      invoiceFormDtl: [],
-      fileAttachments: []
+      airportCode: [],
+      airportName: [],
+      partnerCode: [],
+      partnerName: [],
+      partnerType: [],
+      contractServiceType: [],
+      currency: [],
+      exchangeRate: [],
+      exchangeRateDate: [],
+      exchangeRateType: [],
+      description: [],
+      note: [],
+      status: [],
+      statusEmail: [],
+      amountFcBeforeVat: [],
+      vatFc: [],
+      totalAmountFc: [],
+      amountVndBeforeVat: [],
+      vatVnd: [],
+      totalAmountVnd: [],
+      reimbursementTotalFc: [],
+      reimbursementTotalVnd: [],
     });
     this.formGroupFileUpload = this.fb.group({
       fileUpload: []
@@ -197,36 +216,6 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       await Promise.all([this.detail(this.id),
         this.loadListFlightMarket(),
         this.setReadMode(this.formGroupDetail)]).then(() => {
-        if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
-          this.formType = 1;
-          this._displayedColumnsHeader1 = ['stt', 'checkin2col', 'checkout2col', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights', 'earlyCheckin',
-            'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge', 'singleRoomCcCharge',
-            'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge', 'lcoTwinRoomCcCharge',
-            'totalBreakfastFcCharge', 'totalBreakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge', 'accommodationTaxFcCharge',
-            'accommodationTaxCcCharge', 'transportCharge', 'totalCharges', 'remark'];
-          this._displayedColumnsHeader2 = ['ciFltno', 'ciDate', 'coFltno', 'coDate'];
-          this._displayedColumnsRow = ['stt', 'ciFltno', 'ciDate', 'coFltno', 'coDate', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights',
-            'earlyCheckin', 'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge',
-            'singleRoomCcCharge', 'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge',
-            'lcoTwinRoomCcCharge', 'totalBreakfastFcCharge', 'totalBreakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge',
-            'accommodationTaxFcCharge', 'accommodationTaxCcCharge', 'transportCharge', 'totalCharges', 'remark'];
-        } else if (this.formGroupDetail.getRawValue().ctype === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
-          this.formType = 2;
-          this._displayedColumnsHeader1 = ['stt', 'fullname', 'checkin3col', 'checkout3col', 'roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge', 'remark', 'typeRoom'];
-          this._displayedColumnsHeader2 = ['ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime',];
-          this._displayedColumnsRow = ['stt', 'fullname', 'ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime', 'roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge', 'remark', 'typeRoom'];
-        } else if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
-          this.formType = 3;
-          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
-          this._displayedColumnsHeader2 = [];
-          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
-        } else if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
-          this.formType = 4;
-          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'accessBridge', 'toll', 'transitDuty', 'airportParkingFee', 'totalCharge', 'remark'];
-          this._displayedColumnsHeader2 = [];
-          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'accessBridge', 'toll', 'transitDuty', 'airportParkingFee', 'totalCharge', 'remark'];
-        }
-        this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
       });
     } catch (e) {
       console.log(e);
@@ -236,7 +225,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   goBack() {
-    this.backStepEmit.emit([this.formGroupDetail.getRawValue().partnerType]);
+    this.backStepEmit.emit([]);
     window.scrollTo({top: 0, behavior: 'instant'});
   }
 

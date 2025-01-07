@@ -33,7 +33,7 @@ import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
-
+import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
 
 @Component({
   selector: 'app-invoice-document',
@@ -64,6 +64,9 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   listHotel = [];
   listVehicle = [];
   listAirportCode = [];
+  listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
+  listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
+
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
   _displayedColumnsHeader1: string[] = [];
@@ -100,7 +103,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     {label: $localize`bizDocId`, value: 'bizDocId', rowspan: "2"},
     {label: $localize`Partner Name`, value: 'partnerName', rowspan: "2"},
     {label: $localize`Partner Type`, value: 'partnerType', rowspan: "2"},
-    // {label: $localize`Description`, value: 'description', rowspan: "2"},
+    {label: $localize`Description`, value: 'description', rowspan: "2"},
     {label: $localize`FC`, value: 'amountFcBeforeVat', type: Constant.NUMBER},
     {label: $localize`VND`, value: 'amountVndBeforeVat', type: Constant.NUMBER},
     {label: $localize`FC`, value: 'vatFc', type: Constant.NUMBER},
@@ -134,6 +137,8 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       listAirportCode: [],
       periodFrom: [],
       periodTo: [],
+      status: [],
+      statusEmail: [],
     });
     this.formGroupDetail = this.fb.group({
       id: [], bizDocId: [], bizDocIdC1: [], contractName: [], contractCode: []
@@ -148,7 +153,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   override async ngOnInit() {
 
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.search(),]).then(() => {
+    await Promise.all([this.search(), this.loadListFlightMarket()]).then(() => {
 
     });
     this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVat',
@@ -160,13 +165,11 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
   }
 
-  async nextStep(id?: any, readMode?: any, action?: any) {
+  async nextStep(id?: any, readMode?: any, step?: any) {
     this.id = id;
-    this.step = 2;
+    this.step = step;
     this.readMode = readMode;
-    this.action = action;
-    await this.cookTemplateName();
-    this.nextStepEmit.emit([this.id, this.readMode])
+    this.nextStepEmit.emit([this.id, this.readMode, this.step])
   }
 
   async backStep() {
