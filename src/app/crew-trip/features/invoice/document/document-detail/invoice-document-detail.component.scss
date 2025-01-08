@@ -17,17 +17,21 @@
 .mat-column-stt {
   width: 70px !important;
 }
-
-.mat-column-fromDate, .mat-column-toDate {
-  max-width: 150px !important;
-  min-width: 150px !important;
-  width: 150px !important;
+.mat-column-serviceCode,
+.mat-column-serviceName,
+.mat-column-unit,
+.mat-column-periodOccurrence,
+.mat-column-nsCode,
+.mat-column-unitPrice,
+.mat-column-amountFcBeforeVat,
+.mat-column-amountVndBeforeVat,
+.mat-column-amountFcVat,
+.mat-column-amountVndVat,
+.mat-column-vatType,
+.mat-column-vat {
+  width: 500px !important;
 }
 
-.mat-column-serviceCode, .mat-column-vnaTransId, mat-column-expenseCatgId, mat-column-priceNoTax, mat-column-taxCode, mat-column-taxRate {
-  max-width: 200px !important;
-  width: 200px !important;
-}
 
 .tables-of-content-card {
   .mat-mdc-card-content {

@@ -1,6 +1,6 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {RouterLink} from '@angular/router';
-import {DecimalPipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
+import {AsyncPipe, DecimalPipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
@@ -11,7 +11,7 @@ import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {
@@ -44,12 +44,14 @@ import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-looku
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import {CdkTextareaAutosize} from "@angular/cdk/text-field";
 import {ContractService} from "src/app/crew-trip/core/services/contract-service";
+import {SelectionSuggestComponent} from "src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component";
+import {map, Observable, startWith} from "rxjs";
 
 
 @Component({
   selector: 'app-invoice-document-detail',
   standalone: true,
-  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize],
+  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, SelectionSuggestComponent, AsyncPipe],
   templateUrl: './invoice-document-detail.component.html',
   styleUrl: './invoice-document-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -216,7 +218,6 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       fileUpload: []
     });
   }
-
   override async ngOnInit() {
     try {
       await this.spinner.show();
@@ -225,6 +226,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         this.loadListFeeService(),
         this.setReadMode(this.formGroupDetail)]).then(() => {
       });
+
     } catch (e) {
       console.log(e);
     } finally {
@@ -280,6 +282,17 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       } finally {
         await this.spinner.hide();
       }
+    }
+  }
+
+  changeServiceFee($event:any,row:any,type:any) {
+    if(type === 'code'){
+      row.unit = this.listFeeService.find((s: any) => s.code == $event.value)?.unit;
+      row.serviceName = this.listFeeService.find((s: any) => s.code == $event.value)?.name;
+    }
+    else if(type === 'name'){
+      row.unit = this.listFeeService.find((s: any) => s.name == $event.value)?.unit;
+      row.serviceCode = this.listFeeService.find((s: any) => s.name == $event.value)?.code;
     }
   }
 }

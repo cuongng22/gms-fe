@@ -62,7 +62,7 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
   isSticky = false;
   configScrollY = 60;
   listFlightMarket = [];
-  listFeeService = [];
+  listFeeService: any = [];
 
   constructor() {
     super();
