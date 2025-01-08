@@ -78,7 +78,6 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
       startWith(''),
     ).subscribe(value => {
       const optionFilter = [...(this.options ?? [])]
-      this.viewControl.setValue(null);
       this.formControl.setValue(null);
       this.formControl.updateValueAndValidity()
       if (!value) {

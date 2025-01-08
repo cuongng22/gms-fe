@@ -1,404 +1,407 @@
 <!-- Breadcrumb -->
 <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
-    <h5 class="mb-0" i18n="@@airportCode">
-        Airport code
-    </h5>
-    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
-        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
-            Category
-        </li>
-        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@airportCode">
-            Airport code
-        </li>
-    </ol>
+  <h5 class="mb-0" i18n="@@airportCode">
+    Airport code
+  </h5>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
+      Category
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@airportCode">
+      Airport code
+    </li>
+  </ol>
 </div>
 
 
 <!--Search-->
 <mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
-    <mat-card-content>
-        <form [formGroup]="formGroupSearch" (ngSubmit)="search()" autocomplete="off">
-            <div class="row">
-                <div class="col mb-2" sizeInput="md">
-                    <mat-form-field class="mb-1">
-                        <mat-label i18n="@@keyword">Keyword</mat-label>
-                        <input trim="blur" matInput formControlName="s">
-                    </mat-form-field>
-                </div>
+  <mat-card-content>
+    <form [formGroup]="formGroupSearch" (ngSubmit)="search()" autocomplete="off">
+      <div class="row">
+        <div class="col mb-2" sizeInput="md">
+          <mat-form-field class="mb-1">
+            <mat-label i18n="@@keyword">Keyword</mat-label>
+            <input trim="blur" matInput formControlName="s">
+          </mat-form-field>
+        </div>
 
-                <div class="col mb-2" sizeInput="md">
-                    <mat-form-field class="mb-1">
-                        <mat-label i18n="@@airportCode">Airport code</mat-label>
-                        <input trim="blur" #airport (input)="filterMarket()" type="text" matInput formControlName="code"
-                            [matAutocomplete]="marketComplete">
-                        <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
-                            <mat-option [value]="null">
-                                -- All Airport code --
-                            </mat-option>
-                            @for (option of filteredOptionsMarket(); track option) {
-                            <mat-option [value]="option">{{option}}</mat-option>
-                            }
-                        </mat-autocomplete>
-                    </mat-form-field>
-                </div>
-                <div class="col mb-2" sizeInput="md">
-                    <mat-form-field class="mb-1">
-                        <mat-label i18n="@@airportCode:category">Category</mat-label>
-                        <mat-select formControlName="type">
-                            <mat-option [value]="null" i18n="@@allCategory">-- All Category --</mat-option>
-                            <mat-option value="International" i18n="@@international">International</mat-option>
-                            <mat-option value="Domestic" i18n="@@domestic">Domestic</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
+        <div class="col mb-2" sizeInput="md">
+          <mat-form-field class="mb-1">
+            <mat-label i18n="@@airportCode">Airport code</mat-label>
+            <input trim="blur" #airport (input)="filterMarket()" type="text" matInput formControlName="code"
+                   [matAutocomplete]="marketComplete">
+            <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
+              <mat-option [value]="null">
+                -- All Airport code --
+              </mat-option>
+              @for (option of filteredOptionsMarket(); track option) {
+                <mat-option [value]="option">{{ option }}</mat-option>
+              }
+            </mat-autocomplete>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="md">
+          <mat-form-field class="mb-1">
+            <mat-label i18n="@@airportCode:category">Category</mat-label>
+            <mat-select formControlName="type">
+              <mat-option [value]="null" i18n="@@allCategory">-- All Category --</mat-option>
+              <mat-option value="International" i18n="@@international">International</mat-option>
+              <mat-option value="Domestic" i18n="@@domestic">Domestic</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-                <div class="col mb-2" sizeInput="md">
-                    <mat-form-field class="mb-1">
-                        <mat-label i18n="@@airportStatus">Airport status</mat-label>
-                        <mat-select formControlName="status">
-                            <mat-option [value]="null" i18n="@@allStatus">-- All Status --</mat-option>
-                            <mat-option value="Not operational" i18n="@@notOperational">Not
-                                operational</mat-option>
-                            <mat-option value="Operational" i18n="@@operational">Operational</mat-option>
-                            <mat-option value="Suspended" i18n="@@suspended">Suspended</mat-option>
-                        </mat-select>
-                    </mat-form-field>
-                </div>
+        <div class="col mb-2" sizeInput="md">
+          <mat-form-field class="mb-1">
+            <mat-label i18n="@@airportStatus">Airport status</mat-label>
+            <mat-select formControlName="status">
+              <mat-option [value]="null" i18n="@@allStatus">-- All Status --</mat-option>
+              <mat-option value="Not operational" i18n="@@notOperational">Not
+                operational
+              </mat-option>
+              <mat-option value="Operational" i18n="@@operational">Operational</mat-option>
+              <mat-option value="Suspended" i18n="@@suspended">Suspended</mat-option>
+            </mat-select>
+          </mat-form-field>
+        </div>
 
-                <div class="col mb-2" sizeInput="md">
-                    <mat-form-field class="mb-1">
-                        <mat-date-range-input [rangePicker]="contractRangePicker">
-                            <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="dd/mm/yyyy"
-                                formControlName="contractStartDate">
-                            <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
-                                formControlName="contractEndDate">
-                        </mat-date-range-input>
-                        <mat-label i18n="@@contractPeriod">Contract period</mat-label>
-                        <mat-datepicker-toggle matIconSuffix [for]="contractRangePicker"></mat-datepicker-toggle>
-                        <mat-date-range-picker #contractRangePicker>
-                            <mat-date-range-picker-actions>
-                                <button sizeButton="sm" mat-button matDateRangePickerCancel
-                                    i18n="@@cancel">Cancel</button>
-                                <button sizeButton="sm" mat-raised-button color="primary" matDateRangePickerApply
-                                    i18n="@@apply">Apply</button>
-                            </mat-date-range-picker-actions>
-                        </mat-date-range-picker>
-                        <mat-error
-                            *ngxControlError="formGroupSearch.controls.contractStartDate; track: 'matDatepickerParse'"
-                            i18n="@@contractPeriodInvalidFormat">
-                            Contract period invalid format
-                        </mat-error>
-                        <mat-error
-                            *ngxControlError="formGroupSearch.controls.contractEndDate; track: 'matDatepickerParse'"
-                            i18n="@@contractPeriodInvalidFormat">
-                            Contract period invalid format
-                        </mat-error>
-                    </mat-form-field>
-                </div>
-                <div class="col d-flex  justify-content-lg-start justify-content-md-center">
-                    <mat-card-header class="mb-0 search">
-                        <mat-card-title>
-                            <button class="search-btn" type="submit" mat-button>
-                                <i class="material-symbols-outlined">
-                                    search
-                                </i>
-                                <span i18n="@@search">Search</span>
-                            </button>
-                        </mat-card-title>
-                    </mat-card-header>
-                </div>
-            </div>
-        </form>
-    </mat-card-content>
+        <div class="col mb-2" sizeInput="md">
+          <mat-form-field class="mb-1">
+            <mat-date-range-input [rangePicker]="contractRangePicker">
+              <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="dd/mm/yyyy"
+                     formControlName="startDate">
+              <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
+                     formControlName="endDate">
+            </mat-date-range-input>
+            <mat-label i18n="@@contractEndDate">Contract end date</mat-label>
+            <mat-datepicker-toggle matIconSuffix [for]="contractRangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #contractRangePicker>
+              <mat-date-range-picker-actions>
+                <button sizeButton="sm" mat-button matDateRangePickerCancel
+                        i18n="@@cancel">Cancel
+                </button>
+                <button sizeButton="sm" mat-raised-button color="primary" matDateRangePickerApply
+                        i18n="@@apply">Apply
+                </button>
+              </mat-date-range-picker-actions>
+            </mat-date-range-picker>
+            <mat-error
+              *ngxControlError="formGroupSearch.controls.startDate; track: 'matDatepickerParse'"
+              i18n="@@contractPeriodInvalidFormat">
+              Contract period invalid format
+            </mat-error>
+            <mat-error
+              *ngxControlError="formGroupSearch.controls.endDate; track: 'matDatepickerParse'"
+              i18n="@@contractPeriodInvalidFormat">
+              Contract period invalid format
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col d-flex  justify-content-lg-start justify-content-md-center">
+          <mat-card-header class="mb-0 search">
+            <mat-card-title>
+              <button class="search-btn" type="submit" mat-button>
+                <i class="material-symbols-outlined">
+                  search
+                </i>
+                <span i18n="@@search">Search</span>
+              </button>
+            </mat-card-title>
+          </mat-card-header>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
 </mat-card>
 
 
 <!-- Start List FlightMarket-->
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
-    <mat-card-header class="mb-10">
-        <mat-card-title>
-            <!-- <h5 i18n="@@airportList">Airport list</h5> -->
-        </mat-card-title>
-        <mat-card-subtitle>
-            <button class="add-btn mr-10" type="button" mat-button (click)="exportFile()">
-                <i class="material-symbols-outlined">
-                    download
-                </i>
-                <span i18n="@@export">Export</span>
-            </button>
-            <button class="add-btn mr-10" type="button" mat-button (click)="toggleDialogUpload()">
-                <i class="material-symbols-outlined">
-                    upload
-                </i>
-                <span i18n="@@import">Import</span>
-            </button>
-            <a class="add-btn" type="button" mat-button [routerLink]="['/category/flight-market/detail']">
-                <i class="material-symbols-outlined">
-                    add
-                </i>
-                <span i18n="@@addNew">Add new</span>
-            </a>
-        </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
-                <ng-container matColumnDef="stt">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center">#</th>
-                    <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
-                        {{ (pageIndex * pageSize) + i + 1 }}
-                    </td>
-                </ng-container>
+  <mat-card-header class="mb-10">
+    <mat-card-title>
+      <!-- <h5 i18n="@@airportList">Airport list</h5> -->
+    </mat-card-title>
+    <mat-card-subtitle>
+      <button class="add-btn mr-10" type="button" mat-button (click)="exportFile()">
+        <i class="material-symbols-outlined">
+          download
+        </i>
+        <span i18n="@@export">Export</span>
+      </button>
+      <button class="add-btn mr-10" type="button" mat-button (click)="toggleDialogUpload()">
+        <i class="material-symbols-outlined">
+          upload
+        </i>
+        <span i18n="@@import">Import</span>
+      </button>
+      <a class="add-btn" type="button" mat-button [routerLink]="['/category/flight-market/detail']">
+        <i class="material-symbols-outlined">
+          add
+        </i>
+        <span i18n="@@addNew">Add new</span>
+      </a>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+        <ng-container matColumnDef="stt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center">#</th>
+          <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
+            {{ (pageIndex * pageSize) + i + 1 }}
+          </td>
+        </ng-container>
 
-                <ng-container matColumnDef="airport">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@airport">
-                        Airport
-                    </th>
-                    <td mat-cell *matCellDef="let element">
+        <ng-container matColumnDef="airport">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+              i18n="@@airport">
+            Airport
+          </th>
+          <td mat-cell *matCellDef="let element">
                         <span>
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@code">
                                 Code
                             </span>:
-                            {{element.marketCode}}
+                          {{ element.marketCode }}
                         </span>
-                        <br>
-                        <span>
+            <br>
+            <span>
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@Name">
                                 Name
                             </span>:
-                            {{element.marketName}}
+              {{ element.marketName }}
                         </span>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="hotelName">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@hotelName">
-                        Hotel name
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        @if (element.hotels) {
-                        @for (hotel of element.hotels; track $index) {
-                        <a type="button" class="badge break-word"
-                            [ngClass]="!!hotel.active?'text-bg-vna-hover':'text-soft-dark-hover'"
-                            (click)="showHotelDetail(true,hotel, element.marketCode)">{{hotel.hotelName}}
-                        </a>
-                        }
-                        }
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="carRentalCompany">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@carCompanyName">
-                        Car company name
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        @if (element.vehiclesPartner) {
-                        @for (vehicle of element.vehiclesPartner; track $index) {
-                        <a type="button" class="badge break-word"
-                            [ngClass]="!!vehicle.active?'text-bg-vna-hover':'text-soft-dark-hover'"
-                            (click)="showCarRentalDetail(true, vehicle,element.marketCode)">{{vehicle.name}}
-                        </a>
-                        }
-                        }
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="country">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@country">
-                        Country
-                    </th>
-                    <td mat-cell *matCellDef="let element">{{element.nation}}</td>
-                </ng-container>
-                <ng-container matColumnDef="category">
-                    <th mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" mat-sort-header
-                        i18n="@@airportCode:category">
-                        Category
-                    </th>
-                    <td mat-cell *matCellDef="let element;">{{element.marketType}}</td>
-                </ng-container>
-                <ng-container matColumnDef="flightGroup">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@flightGroup"
-                        class="font-weight-bold text-center">Flight group</th>
-                    <td mat-cell *matCellDef="let element">{{ element.flightGroup}}</td>
-                </ng-container>
-                <ng-container matColumnDef="costCategory">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@costCategory"
-                        class="font-weight-bold text-center">Cost category</th>
-                    <td mat-cell *matCellDef="let element">
-                        @if (element.serviceFeeName) {
-                        <mat-chip-set aria-label="Fish selection">
-                            @for (serviceFee of element.serviceFeeName; track $index) {
-                            <span class="badge text-bg-label-badge">{{serviceFee}}</span>
-                            }
-                        </mat-chip-set>
-                        }
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@airportStatus"
-                        class="font-weight-bold text-center">
-                        Airport status
-                    </th>
-                    <td mat-cell *matCellDef="let element" class="text-left">{{ element.statusUsage}}</td>
-                </ng-container>
-                <ng-container matColumnDef="action" stickyEnd>
-                    <th mat-header-cell *matHeaderCellDef i18n="@@actions" class="font-weight-bold text-center">
-                        Actions
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        <div class="action-buttons d-flex justify-content-end">
-                            <a mat-button title="View" i18n-title="@@view" class="text-vna"
-                                [routerLink]="['/category/flight-market/detail', element.id]"
-                                [queryParams]="{'view-detail':true}">
-                                <i class="material-symbols-outlined " text-primary>
-                                    visibility
-                                </i>
-                            </a>
-                            <a type="button" class="text-warning" mat-button
-                                [routerLink]="['/category/flight-market/detail', element.id]"
-                                [queryParams]="{'view-detail':false}">
-                                <i class="material-symbols-outlined " text-warning title="Edit" i18n-title="@@edit">
-                                    edit
-                                </i>
-                            </a>
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="hotelName">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+              i18n="@@hotelName">
+            Hotel name
+          </th>
+          <td mat-cell *matCellDef="let element">
+            @if (element.hotels) {
+              @for (hotel of element.hotels; track $index) {
+                <a type="button" class="badge break-word"
+                   [ngClass]="!!hotel.active?'text-bg-vna-hover':'text-soft-dark-hover'"
+                   (click)="showHotelDetail(true,hotel, element.marketCode)">{{ hotel.hotelName }}
+                </a>
+              }
+            }
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="carRentalCompany">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+              i18n="@@carCompanyName">
+            Car company name
+          </th>
+          <td mat-cell *matCellDef="let element">
+            @if (element.vehiclesPartner) {
+              @for (vehicle of element.vehiclesPartner; track $index) {
+                <a type="button" class="badge break-word"
+                   [ngClass]="!!vehicle.active?'text-bg-vna-hover':'text-soft-dark-hover'"
+                   (click)="showCarRentalDetail(true, vehicle,element.marketCode)">{{ vehicle.name }}
+                </a>
+              }
+            }
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="country">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+              i18n="@@country">
+            Country
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.nation }}</td>
+        </ng-container>
+        <ng-container matColumnDef="category">
+          <th mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" mat-sort-header
+              i18n="@@airportCode:category">
+            Category
+          </th>
+          <td mat-cell *matCellDef="let element;">{{ element.marketType }}</td>
+        </ng-container>
+        <ng-container matColumnDef="flightGroup">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@flightGroup"
+              class="font-weight-bold text-center">Flight group
+          </th>
+          <td mat-cell *matCellDef="let element">{{ element.flightGroup }}</td>
+        </ng-container>
+        <ng-container matColumnDef="costCategory">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@costCategory"
+              class="font-weight-bold text-center">Cost category
+          </th>
+          <td mat-cell *matCellDef="let element">
+            @if (element.serviceFeeName) {
+              <mat-chip-set aria-label="Fish selection">
+                @for (serviceFee of element.serviceFeeName; track $index) {
+                  <span class="badge text-bg-label-badge">{{ serviceFee }}</span>
+                }
+              </mat-chip-set>
+            }
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="status">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@airportStatus"
+              class="font-weight-bold text-center">
+            Airport status
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-left">{{ element.statusUsage }}</td>
+        </ng-container>
+        <ng-container matColumnDef="action" stickyEnd>
+          <th mat-header-cell *matHeaderCellDef i18n="@@actions" class="font-weight-bold text-center">
+            Actions
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="action-buttons d-flex justify-content-end">
+              <a mat-button title="View" i18n-title="@@view" class="text-vna"
+                 [routerLink]="['/category/flight-market/detail', element.id]"
+                 [queryParams]="{'view-detail':true}">
+                <i class="material-symbols-outlined " text-primary>
+                  visibility
+                </i>
+              </a>
+              <a type="button" class="text-warning" mat-button
+                 [routerLink]="['/category/flight-market/detail', element.id]"
+                 [queryParams]="{'view-detail':false}">
+                <i class="material-symbols-outlined " text-warning title="Edit" i18n-title="@@edit">
+                  edit
+                </i>
+              </a>
 
-                            <button type="button" mat-button title="Delete" i18n-title="@@delete"
-                                (click)="showConfirmDelete(element.id)">
-                                <i class="material-symbols-outlined " text-danger>
-                                    delete
-                                </i>
-                            </button>
+              <button type="button" mat-button title="Delete" i18n-title="@@delete"
+                      (click)="showConfirmDelete(element.id)">
+                <i class="material-symbols-outlined " text-danger>
+                  delete
+                </i>
+              </button>
 
-                        </div>
-                    </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell text-center" colspan="10">No data!</td>
-                </tr>
-            </table>
-        </div>
-        <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-            [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
-            aria-label="Select page" i18n-aria-label="@@selectPage">
-        </mat-paginator>
-    </mat-card-content>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell text-center" colspan="10">No data!</td>
+        </tr>
+      </table>
+    </div>
+    <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+                   [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
+                   [pageIndex]="pageIndex"
+                   aria-label="Select page" i18n-aria-label="@@selectPage">
+    </mat-paginator>
+  </mat-card-content>
 </mat-card>
 
 <!-- End List FlightMarket -->
 
 
-
-
 <!-- Dialog delete FlightMarket -->
 <div class="add-new-popup" [class.active]="showDialogDelete">
-    <div class="popup-dialog dialog-delete-with">
-        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
-            <mat-card-content>
-                <div class="text-warning text-center">
+  <div class="popup-dialog dialog-delete-with">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+      <mat-card-content>
+        <div class="text-warning text-center">
                     <span class="material-symbols-outlined font-size-5rem">
                         error
                     </span>
-                </div>
-                <div class="text-center mb-20">
-                    <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
-                </div>
-                <div class="text-center mb-20">
+        </div>
+        <div class="text-center mb-20">
+          <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
+        </div>
+        <div class="text-center mb-20">
                     <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
                         You will not be able to recover the deleted data!</span>
-                </div>
-                <div class="btn-box text-center">
-                    <button type="button" mat-button (click)="closeConfirmDelete()"
-                        class="close-btn  min-with-100 mlr-5">
-                        <i class="material-symbols-outlined">
-                            close
-                        </i>
-                        <span i18n="@@cancel">Cancel</span>
-                    </button>
-                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
-                        <i class="material-symbols-outlined">
-                            save
-                        </i>
-                        <span i18n="@@confirm">Confirm</span>
-                    </button>
+        </div>
+        <div class="btn-box text-center">
+          <button type="button" mat-button (click)="closeConfirmDelete()"
+                  class="close-btn  min-with-100 mlr-5">
+            <i class="material-symbols-outlined">
+              close
+            </i>
+            <span i18n="@@cancel">Cancel</span>
+          </button>
+          <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
+            <i class="material-symbols-outlined">
+              save
+            </i>
+            <span i18n="@@confirm">Confirm</span>
+          </button>
 
-                </div>
-            </mat-card-content>
-        </mat-card>
-    </div>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
 </div>
 
 
 <!-- Dialog upload file -->
 <div class="add-new-popup" [class.active]="showDialogUpload">
-    <div class="popup-dialog dialog-with">
-        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
-            <mat-card-header class="p-15">
-                <mat-card-title>
-                    <h5 class="mb-0" i18n="@@importData">
-                        Import data
-                    </h5>
-                </mat-card-title>
-                <mat-card-subtitle>
-                    <button mat-button (click)="resetFileUpload();toggleDialogUpload()">
-                        <i class="ri-close-fill"></i>
-                    </button>
-                </mat-card-subtitle>
-            </mat-card-header>
-            <mat-card-content>
-                <div class="row">
-                    <mat-label i18n="@@downloadTemplate" class="p-2 text-dark">Download template</mat-label>
-                    <button mat-button type="button" class="search-btn min-with-100 mlr-5" style="width: auto;"
-                        (click)="downloadTemplate()">
-                        <i class="material-symbols-outlined">
-                            download
-                        </i>
-                        <span i18n="@@airportCodeTemplate">airport-code-template.xlsx</span>
-                    </button>
-                </div>
-                <div class="row mt-20">
-                    <mat-label i18n="@@selectFile" class="p-2 text-dark">Select file</mat-label>
-                    <file-upload [ngClass]="{'invalid':fileUpload.hasError('required') && fileUpload.touched}"
-                        [formControl]="fileUpload" class="file-uploader" [multiple]="false">
-                    </file-upload>
-                    @if (
-                    fileUpload.hasError('required') &&
-                    fileUpload.touched) {
-                    <mat-error i18n="@@fileRequired" style="font-style: italic; font-size: 12px;">
-                        File {{MESSAGE.REQUIRED}}
-                    </mat-error>
-                    }
-                </div>
-                @if(!!uploadFileError.totalErrors) {
-                <div class="row mt-20">
-                    <p class="text-danger" i18n="@@flightMarket.UploadError">
-                        Cannot perform excel data import when there are {{uploadFileError.totalErrors}} error records
-                    </p>
-                    <span i18n="@@downloadErrorFile" class="text-dark">Download error file:
+  <div class="popup-dialog dialog-with">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+      <mat-card-header class="p-15">
+        <mat-card-title>
+          <h5 class="mb-0" i18n="@@importData">
+            Import data
+          </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <button mat-button (click)="resetFileUpload();toggleDialogUpload()">
+            <i class="ri-close-fill"></i>
+          </button>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <div class="row">
+          <mat-label i18n="@@downloadTemplate" class="p-2 text-dark">Download template</mat-label>
+          <button mat-button type="button" class="search-btn min-with-100 mlr-5" style="width: auto;"
+                  (click)="downloadTemplate()">
+            <i class="material-symbols-outlined">
+              download
+            </i>
+            <span i18n="@@airportCodeTemplate">airport-code-template.xlsx</span>
+          </button>
+        </div>
+        <div class="row mt-20">
+          <mat-label i18n="@@selectFile" class="p-2 text-dark">Select file</mat-label>
+          <file-upload [ngClass]="{'invalid':fileUpload.hasError('required') && fileUpload.touched}"
+                       [formControl]="fileUpload" class="file-uploader" [multiple]="false">
+          </file-upload>
+          @if (fileUpload.hasError('required') &&
+          fileUpload.touched) {
+            <mat-error i18n="@@fileRequired" style="font-style: italic; font-size: 12px;">
+              File {{ MESSAGE.REQUIRED }}
+            </mat-error>
+          }
+        </div>
+        @if (!!uploadFileError.totalErrors) {
+          <div class="row mt-20">
+            <p class="text-danger" i18n="@@flightMarket.UploadError">
+              Cannot perform excel data import when there are {{ uploadFileError.totalErrors }} error records
+            </p>
+            <span i18n="@@downloadErrorFile" class="text-dark">Download error file:
                         <button class="pt-0 pb-0" mat-raised-button (click)="downloadFileError()">
                             Download file excel
                         </button>
                     </span>
-                </div>
-                }
-            </mat-card-content>
-            <mat-card-actions class="p-15 d-flex justify-content-end">
-                <button type="button" mat-button (click)="resetFileUpload(); toggleDialogUpload()"
-                    class="close-btn  min-with-100 mlr-5">
-                    <i class="material-symbols-outlined">
-                        close
-                    </i>
-                    <span i18n="@@cancel">Close</span>
-                </button>
-                <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
-                    <i class="material-symbols-outlined">
-                        upload
-                    </i>
-                    <span i18n="@@upload">Upload</span>
-                </button>
-            </mat-card-actions>
-        </mat-card>
-    </div>
+          </div>
+        }
+      </mat-card-content>
+      <mat-card-actions class="p-15 d-flex justify-content-end">
+        <button type="button" mat-button (click)="resetFileUpload(); toggleDialogUpload()"
+                class="close-btn  min-with-100 mlr-5">
+          <i class="material-symbols-outlined">
+            close
+          </i>
+          <span i18n="@@cancel">Close</span>
+        </button>
+        <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
+          <i class="material-symbols-outlined">
+            upload
+          </i>
+          <span i18n="@@upload">Upload</span>
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
 </div>
