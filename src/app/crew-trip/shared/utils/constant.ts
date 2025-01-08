@@ -12,6 +12,7 @@ export class Constant {
   static PAGE = 0;
   static PAGE_SIZE = 20;
   static TIME_ZONE = 'Asia/Ho_Chi_Minh';
+  static DATE_FORMAT_YYYYMMDD = 'YYYY/MM/DD';
 }
 
 export class MESSAGE {

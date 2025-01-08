@@ -168,8 +168,8 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
         this.planBudgetProcurementId() ?? 0,
         this.yearPlan() ?? 0,
         this.airportCode() ?? '',
-        this.dataTransformPipe.transform(procStartDate, ['date', this.Constant.MONTH_FORMAT]),
-        this.dataTransformPipe.transform(procEndDate, ['date', this.Constant.MONTH_FORMAT]),
+        procStartDate ? this.dataTransformPipe.transform(procStartDate, ['date', this.Constant.MONTH_FORMAT]) : null,
+        procEndDate ? this.dataTransformPipe.transform(procEndDate, ['date', this.Constant.MONTH_FORMAT]) : null,
         !!this.budgetProcurementGeneral.formGroupDetail.controls.earlyCheckinFlag.value,
         !!this.budgetProcurementGeneral.formGroupDetail.controls.lateCheckoutFlag.value
       );

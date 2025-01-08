@@ -68,8 +68,8 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
     code: [''], // Mã thị trường
     type: [''], // Phân Loại
     status: [''], // Trạng thái thị trường
-    contractStartDate: [''], // Ngày hợp đồng từ
-    contractEndDate: [''], // Ngày hợp đồng đến
+    startDate: [''], // Ngày hợp đồng từ
+    endDate: [''], // Ngày hợp đồng đến
   });
 
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
@@ -106,12 +106,12 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
 
   override search(body?: any, isNextPage?: boolean): any {
     console.log(this.formGroupSearch.value);
-    const contractStartDate = this.formGroupSearch.controls.contractStartDate.value;
-    const contractEndDate = this.formGroupSearch.controls.contractEndDate.value;
+    const contractStartDate = this.formGroupSearch.controls.startDate.value;
+    const contractEndDate = this.formGroupSearch.controls.endDate.value;
     const searchValue = {
       ...this.formGroupSearch.value, option: 0,
-      contractStartDate: contractStartDate ? this.dataTransformPipe.transform(contractStartDate, ['date', Constant.DATE_FORMAT]) : null,
-      contractEndDate: contractEndDate ? this.dataTransformPipe.transform(contractEndDate, ['date', Constant.DATE_FORMAT]) : null,
+      startDate: contractStartDate ? this.dataTransformPipe.transform(contractStartDate, ['date', Constant.DATE_FORMAT_YYYYMMDD]) : null,
+      endDate: contractEndDate ? this.dataTransformPipe.transform(contractEndDate, ['date', Constant.DATE_FORMAT_YYYYMMDD]) : null,
     };
     super.search(searchValue, isNextPage);
   }
