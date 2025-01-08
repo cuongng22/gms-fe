@@ -60,11 +60,11 @@
           <mat-form-field class="mb-1">
             <mat-date-range-input [rangePicker]="contractRangePicker">
               <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="dd/mm/yyyy"
-                formControlName="contractStartDate">
+                formControlName="startDate">
               <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
-                formControlName="contractEndDate">
+                formControlName="endDate">
             </mat-date-range-input>
-            <mat-label i18n="@@contractPeriod">Contract period</mat-label>
+            <mat-label i18n="@@contractEndDate">Contract end date</mat-label>
             <mat-datepicker-toggle matIconSuffix [for]="contractRangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #contractRangePicker>
               <mat-date-range-picker-actions>

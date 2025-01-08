@@ -54,8 +54,8 @@ export class VehicleComponent extends CommonComponent implements OnInit {
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
     marketCode: [''],
-    contractStartDate: [''],
-    contractEndDate: [''],
+    startDate: [''],
+    endDate: [''],
     active: [''],
   });
 
@@ -103,12 +103,12 @@ export class VehicleComponent extends CommonComponent implements OnInit {
   }
 
   override search(body?: any, isNextPage?: boolean): any {
-    const contractStartDate = this.formGroupSearch.controls.contractStartDate.value;
-    const contractEndDate = this.formGroupSearch.controls.contractEndDate.value;
+    const contractStartDate = this.formGroupSearch.controls.startDate.value;
+    const contractEndDate = this.formGroupSearch.controls.endDate.value;
     const searchValue = {
       ...this.formGroupSearch.value,
-      contractStartDate: contractStartDate ? this.dataTransformPipe.transform(contractStartDate, ['date', Constant.DATE_FORMAT]) : null,
-      contractEndDate: contractEndDate ? this.dataTransformPipe.transform(contractEndDate, ['date', Constant.DATE_FORMAT]) : null,
+      startDate: contractStartDate ? this.dataTransformPipe.transform(contractStartDate, ['date', Constant.DATE_FORMAT_YYYYMMDD]) : null,
+      endDate: contractEndDate ? this.dataTransformPipe.transform(contractEndDate, ['date', Constant.DATE_FORMAT_YYYYMMDD]) : null,
     };
     super.search(searchValue, isNextPage);
   }

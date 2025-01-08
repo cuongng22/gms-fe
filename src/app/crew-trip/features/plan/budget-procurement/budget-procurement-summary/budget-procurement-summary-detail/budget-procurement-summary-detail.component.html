@@ -65,7 +65,7 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <app-budget-procurement-general #budgetProcurementGeneral [category]="CategoryEnum.INTERNATIONAL"
+        <app-budget-procurement-general #budgetProcurementGeneral [category]="category()"
             [disabled]="checkStatusCompelted()"
             (formValueChanges)="formGeneralValueChanges($event)"></app-budget-procurement-general>
     </mat-card-content>
