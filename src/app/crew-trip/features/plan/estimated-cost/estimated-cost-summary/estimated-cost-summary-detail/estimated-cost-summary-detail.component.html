@@ -2,7 +2,7 @@
 <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center justify-content-between mt-2">
         <button type="button" class="btn btn-outline-secondary mr-20" i18n="@@back"
-            [routerLink]="['/plan/est-plan/est-cost',estimatedCostId(),'summary']">
+            [routerLink]="['/plan/est-plan/est-cost',estCostId(),'summary']">
             <i class="material-symbols-outlined">
                 undo
             </i>
@@ -40,7 +40,7 @@
         <mat-card-subtitle>
             <div (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'">
                 <button type="button" mat-button class="close-btn  min-with-100 mlr-5"
-                    [routerLink]="['/plan/est-plan/est-cost',estimatedCostId(),'summary']">
+                    [routerLink]="['/plan/est-plan/est-cost',estCostId(),'summary']">
                     <i class="material-symbols-outlined">
                         close
                     </i>
@@ -68,5 +68,122 @@
         <app-estimated-cost-general #estimatedCostGeneral [category]="CategoryEnum.INTERNATIONAL"
             [disabled]="checkStatusCompelted()"
             (formValueChanges)="formGeneralValueChanges($event)"></app-estimated-cost-general>
+    </mat-card-content>
+</mat-card>
+<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+        <mat-accordion multi>
+            <mat-expansion-panel class="remove-mat-expansion-panel-padding" [expanded]="true"
+                #panelCalculationBasisState>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h5 class="mb-0">II. <span i18n="@@calculationBasis">Calculation basis</span></h5>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <div style="position: absolute; top: 6px; right: 60px;">
+                    <button [disabled]="checkStatusCompelted()" mat-button color="primary" type="button" class="add-btn"
+                        (click)="summaryData()">
+                        <i class="material-symbols-outlined">
+                            directory_sync
+                        </i>
+                        <span i18n="@@dataSummary">Data Summary</span>
+                    </button>
+                </div>
+                @if (category() === CategoryEnum.DOMESTIC) {
+                <!-- <app-domestic-budget-procurement-flight-rate #domesticFlightRate [data]="planFlightRatesData" /> -->
+                <app-domestic-estimated-cost-flight-rate #domesticFlightRate />
+                } @else {
+                <mat-accordion multi>
+                    <mat-expansion-panel [expanded]="true" #panelFlightOvernightState>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6 class="mb-0">
+                                    <span i18n="@@flightFrequencyStatisticsByNumberOfOvernightStays">
+                                        Flight Frequency Statistics by Number of Overnight Stays (Weekly)
+                                    </span>
+                                </h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            <!-- <app-budget-procurement-flight-overnight #internationalFlightOvernight
+                                [disabled]="checkStatusCompelted()" [data]="internationalFlightOvernightData"
+                                (valueChange)="overnightValueChange($event)" /> -->
+                            <app-international-estimated-cost-overnight #internationalEstimatedCostOvernight
+                                [disabled]="checkStatusCompelted()" [data]="internationalFlightOvernightData"
+                                (valueChange)="overnightValueChange($event)" />
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+                }
+            </mat-expansion-panel>
+        </mat-accordion>
+    </mat-card-content>
+</mat-card>
+<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+        <mat-accordion multi class="mt-10">
+            <mat-expansion-panel [expanded]="true" class="remove-mat-expansion-panel-padding" #panelEstimateCostState>
+                <mat-expansion-panel-header>
+                    <mat-panel-title>
+                        <h5 class="mb-0">III. <span i18n="@@estimateCost">Estimate cost</span></h5>
+                    </mat-panel-title>
+                </mat-expansion-panel-header>
+                <mat-accordion multi>
+                    <mat-expansion-panel [expanded]="true" #panelEstimateCostHotelState>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6 class="mb-0">3.1
+                                    <span i18n="@@estimateCostForHotel">
+                                        Estimate cost for Hotel
+                                    </span>
+                                </h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            @if(category() === CategoryEnum.DOMESTIC){
+                            <!-- <app-domestic-budget-procurement-hotel #domesticBudgetHotel [type]="PlanCategoryEnum.BUDGET"
+                                [disabled]="checkStatusCompelted()" [data]="domesticBudgetHotelData"
+                                [yearPlan]="yearPlan()" [updateBudgetPlan]="dataDetail?.updateBudgetPlan" /> -->
+                            }@else {
+                            <!-- <app-international-budget-procurement-hotel #internationalBudgetHotel
+                                [disabled]="checkStatusCompelted()" [data]="internationalBudgetHotelData"
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" /> -->
+                            <app-international-estimated-cost-hotel #internationalEstimatedCostHotel
+                                [disabled]="checkStatusCompelted()" [data]="internationalEstimatedCostHotelData"
+                                [yearPlan]="yearPlan()" />
+                            }
+                        </div>
+                    </mat-expansion-panel>
+                    <mat-expansion-panel [expanded]="false" #panelEstimateCostCarRentalState>
+                        <mat-expansion-panel-header>
+                            <mat-panel-title>
+                                <h6 class="mb-0">3.2
+                                    <span i18n="@@estimateCostForCarRental">
+                                        Estimate Cost for Car Rental
+                                    </span>
+                                </h6>
+                            </mat-panel-title>
+                        </mat-expansion-panel-header>
+                        <div>
+                            @if(category() === CategoryEnum.DOMESTIC){
+                            <!-- <app-domestic-budget-procurement-car-rental #domesticBudgetCarRental [yearPlan]="yearPlan()"
+                                [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                [data]="domesticBudgetCarRentalData" /> -->
+                            }@else {
+                            <!-- <app-international-budget-procurement-car-rental #internationalBudgetCarRental
+                                [disabled]="checkStatusCompelted()" [data]="internationalBudgetCarRentalData"
+                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
+                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" /> -->
+                            <app-international-estimated-cost-car-rental #internationalEstimatedCostCarRental
+                                [disabled]="checkStatusCompelted()" [data]="internationalEstimatedCostCarRentalData"
+                                [yearPlan]="yearPlan()" />
+                            }
+                        </div>
+                    </mat-expansion-panel>
+                </mat-accordion>
+            </mat-expansion-panel>
+        </mat-accordion>
     </mat-card-content>
 </mat-card>

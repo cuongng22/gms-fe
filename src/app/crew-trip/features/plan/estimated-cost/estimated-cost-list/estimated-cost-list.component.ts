@@ -24,7 +24,7 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
-import { Statuses, years } from '../../budget-procurement/budget-procurement.model';
+import { PlanTypeEnum, Statuses, years } from '../../budget-procurement/budget-procurement.model';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
@@ -167,7 +167,10 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
     }
   }
   override async search<T>(body?: any, isNextPage?: boolean) {
-    let bodySearch = { ...this.formGroupSearch.value, status: this.formGroupSearch.value.status?.map((x: any) => x).join(',') };
+    let bodySearch = {
+      ...this.formGroupSearch.value, status: this.formGroupSearch.value.status?.map((x: any) => x).join(','),
+      type: PlanTypeEnum.UTH
+    };
     super.search(bodySearch, isNextPage);
   }
 
@@ -242,9 +245,9 @@ export class DialogEstimatedCostDetail extends CommonComponent {
       await this.spinner.show();
       let res;
       if (update) {
-        res = await this.baseService.update(this.formGroupDetail.value);
+        res = await this.baseService.update({ ...this.formGroupDetail.value, type: PlanTypeEnum.UTH });
       } else {
-        res = await this.baseService.create(this.formGroupDetail.value);
+        res = await this.baseService.create({ ...this.formGroupDetail.value, type: PlanTypeEnum.UTH });
       }
       console.log(res)
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
