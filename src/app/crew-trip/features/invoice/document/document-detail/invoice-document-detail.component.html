@@ -36,7 +36,7 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Airport code</mat-label>
-              <mat-select formControlName="airportCode" required (valueChange)="airportCodeChange($event)">
+              <mat-select formControlName="airportCode" required (selectionChange)="airportCodeChange($event)">
                 @for (item of listFlightMarket; track item) {
                   <mat-option [value]="item">{{ item }}</mat-option>
                 }

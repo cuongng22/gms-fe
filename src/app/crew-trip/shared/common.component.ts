@@ -17,6 +17,7 @@ import {ShowMessageComponent} from './component/show-message/show-message.compon
 import {FlightMarketService} from "src/app/crew-trip/core/services/flight-market.service";
 import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
 import {VehicleService} from "src/app/crew-trip/core/services/vehicle.service";
+import {ServiceFeeService} from "src/app/crew-trip/core/services/service-fee-service";
 
 
 @Component({
@@ -32,7 +33,7 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
   ultilService = inject(UltilService);
   themeService = inject(CustomizerSettingsService);
   _flightMarketService = inject(FlightMarketService);
-  _serviceFeeService = inject(FlightMarketService);
+  _serviceFeeService = inject(ServiceFeeService);
   _hotelService = inject(HotelService);
   _vehicleService = inject(VehicleService);
   displayedColumns: string[] = [];
@@ -309,6 +310,7 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
       }
     });
   }
+
   async loadListFeeService() {
     await this._serviceFeeService.search({page: 0, limit: 99999}).then(res => {
       if (res.data) {
