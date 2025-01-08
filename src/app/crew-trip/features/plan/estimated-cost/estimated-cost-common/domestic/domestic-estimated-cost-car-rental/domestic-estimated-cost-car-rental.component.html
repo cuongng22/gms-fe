@@ -1,1 +1,100 @@
-<p>estimated-cost-car-rental works!</p>
+<div class="row">
+    <div class="table-responsive max-height-600">
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+            <ng-container matColumnDef="month" sticky>
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.rowspan]="2"
+                    i18n="@@month">
+                    Month
+                </th>
+                <td mat-cell *matCellDef="let element" class="fw-bold">
+                    {{element.periodLabel}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef i18n="@@total" class="fw-bold text-center"> Total </td>
+            </ng-container>
+
+            <ng-container matColumnDef="noOfTripsYearPerform">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom"
+                    [attr.rowspan]="2">
+                    Number of Trips in current year
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.singleRoomYearPerform}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('singleRoomYearPerform') | number}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="noOfTrip">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom"
+                    [attr.rowspan]="2">
+                    Number of Trips in planned year
+                </th>
+                <td mat-cell *matCellDef="let element">
+                    {{element.noOfTrip}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('noOfTrip') | number}}
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="unitPrice">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
+                    i18n="@@unitPrice">
+                    Unit Price
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="unitPriceExcludingVAT">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
+                    Excluding VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;">
+                    {{element.unitPriceExcludingVAT}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('singleRoom') | number}}
+                <td>
+            </ng-container>
+            <ng-container matColumnDef="unitPriceIncludingVAT">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
+                    Including VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;">
+                    {{element.unitPriceIncludingVAT}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('doubleRoom') | number}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="totalAmount">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]=3
+                    i18n="@@totalAmount">
+                    Total Amount
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="totalAmountExcludingVat">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVAT">
+                    Excluding VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;">
+                    {{element.totalAmount}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('totalAmount') | number}}
+                <td>
+            </ng-container>
+            <ng-container matColumnDef="totalAmountIncludingVAT">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVAT">
+                    Including VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;">
+                    {{element.totalAmountVat}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('totalAmountVat') | number}}</td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="headerRowDef1; sticky:true"></tr>
+            <tr mat-header-row *matHeaderRowDef="headerRowDef2; sticky:true"></tr>
+            <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
+            <tr mat-footer-row *matFooterRowDef="rowDef; sticky: true"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell text-center" colspan="12">No data!</td>
+            </tr>
+        </table>
+    </div>
+</div>

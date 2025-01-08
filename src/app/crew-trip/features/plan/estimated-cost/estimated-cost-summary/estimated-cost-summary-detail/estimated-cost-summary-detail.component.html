@@ -65,7 +65,7 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <app-estimated-cost-general #estimatedCostGeneral [category]="CategoryEnum.INTERNATIONAL"
+        <app-estimated-cost-general #estimatedCostGeneral [category]="category()"
             [disabled]="checkStatusCompelted()"
             (formValueChanges)="formGeneralValueChanges($event)"></app-estimated-cost-general>
     </mat-card-content>
@@ -91,7 +91,7 @@
                 </div>
                 @if (category() === CategoryEnum.DOMESTIC) {
                 <!-- <app-domestic-budget-procurement-flight-rate #domesticFlightRate [data]="planFlightRatesData" /> -->
-                <app-domestic-estimated-cost-flight-rate #domesticFlightRate />
+                <app-domestic-estimated-cost-flight-rate #domesticFlightRate [data]="planFlightRatesData" />
                 } @else {
                 <mat-accordion multi>
                     <mat-expansion-panel [expanded]="true" #panelFlightOvernightState>
@@ -144,6 +144,9 @@
                             <!-- <app-domestic-budget-procurement-hotel #domesticBudgetHotel [type]="PlanCategoryEnum.BUDGET"
                                 [disabled]="checkStatusCompelted()" [data]="domesticBudgetHotelData"
                                 [yearPlan]="yearPlan()" [updateBudgetPlan]="dataDetail?.updateBudgetPlan" /> -->
+                            <app-domestic-estimated-cost-hotel #domesticEstimatedCostHotel
+                                [disabled]="checkStatusCompelted()" [data]="domesticEstimatedCostHotelData"
+                                [yearPlan]="yearPlan()" />
                             }@else {
                             <!-- <app-international-budget-procurement-hotel #internationalBudgetHotel
                                 [disabled]="checkStatusCompelted()" [data]="internationalBudgetHotelData"
@@ -155,7 +158,7 @@
                             }
                         </div>
                     </mat-expansion-panel>
-                    <mat-expansion-panel [expanded]="false" #panelEstimateCostCarRentalState>
+                    <mat-expansion-panel [expanded]="true" #panelEstimateCostCarRentalState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">3.2
@@ -171,6 +174,9 @@
                                 [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
                                 [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
                                 [data]="domesticBudgetCarRentalData" /> -->
+                            <app-domestic-estimated-cost-car-rental #domesticEstimatedCostCarRental
+                                [yearPlan]="yearPlan()" [disabled]="checkStatusCompelted()"
+                                [data]="domesticEstimatedCostCarRentalData" />
                             }@else {
                             <!-- <app-international-budget-procurement-car-rental #internationalBudgetCarRental
                                 [disabled]="checkStatusCompelted()" [data]="internationalBudgetCarRentalData"
@@ -187,3 +193,37 @@
         </mat-accordion>
     </mat-card-content>
 </mat-card>
+
+<!-- Dialog summary data  -->
+<div class="add-new-popup" [class.active]="showDialogSummary">
+    <div class="popup-dialog dialog-delete-with">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+            <mat-card-content>
+                <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+                </div>
+                <div class="text-center mb-20">
+                    <h3 class="mb-0" i18n="@@summaryMessage">Are you sure you want to aggregate the data?</h3>
+                </div>
+                <div class="btn-box text-center">
+                    <button type="button" mat-button (click)="toggleDialogSummary()"
+                        class="close-btn  min-with-100 mlr-5">
+                        <i class="material-symbols-outlined">
+                            close
+                        </i>
+                        <span i18n="@@cancel">Cancel</span>
+                    </button>
+                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="confirmSummaryData()">
+                        <i class="material-symbols-outlined">
+                            save
+                        </i>
+                        <span i18n="@@confirm">Confirm</span>
+                    </button>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

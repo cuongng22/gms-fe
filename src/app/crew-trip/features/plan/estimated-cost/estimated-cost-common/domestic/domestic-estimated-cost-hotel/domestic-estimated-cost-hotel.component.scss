@@ -1,0 +1,8 @@
+:host::ng-deep {
+
+    .mat-column-singleRoomExtra,
+    .mat-column-doubleRoomExtra {
+        min-width: 150px !important;
+        max-width: 150px !important;
+    }
+}

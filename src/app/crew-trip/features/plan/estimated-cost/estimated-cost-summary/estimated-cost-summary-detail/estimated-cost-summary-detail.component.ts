@@ -23,6 +23,9 @@ import { InternationalEstimatedCostOvernightComponent } from '../../estimated-co
 import { DomesticEstimatedCostFlightRateComponent } from '../../estimated-cost-common/domestic/domestic-estimated-cost-flight-rate/domestic-estimated-cost-flight-rate.component';
 import { InternationalEstimatedCostHotelComponent } from '../../estimated-cost-common/international/international-estimated-cost-hotel/international-estimated-cost-hotel.component';
 import { InternationalEstimatedCostCarRentalComponent } from '../../estimated-cost-common/international/international-estimated-cost-car-rental/international-estimated-cost-car-rental.component';
+import { DataSummayRequest } from '../../../budget-procurement/budget-procurement-summary/budget-procurement-summary-detail/budget-procurement-summary-detail.model';
+import { DomesticEstimatedCostHotelComponent } from '../../estimated-cost-common/domestic/domestic-estimated-cost-hotel/domestic-estimated-cost-hotel.component';
+import { DomesticEstimatedCostCarRentalComponent } from '../../estimated-cost-common/domestic/domestic-estimated-cost-car-rental/domestic-estimated-cost-car-rental.component';
 
 @Component({
   selector: 'app-estimated-cost-summary-detail',
@@ -33,11 +36,12 @@ import { InternationalEstimatedCostCarRentalComponent } from '../../estimated-co
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule,
     MatExpansionModule, MatExpansionPanelContent,
     EstimatedCostGeneralComponent, InternationalEstimatedCostOvernightComponent, DomesticEstimatedCostFlightRateComponent,
-    InternationalEstimatedCostHotelComponent, InternationalEstimatedCostCarRentalComponent
+    InternationalEstimatedCostHotelComponent, InternationalEstimatedCostCarRentalComponent,
+    DomesticEstimatedCostHotelComponent, DomesticEstimatedCostCarRentalComponent
   ],
   templateUrl: './estimated-cost-summary-detail.component.html',
   styleUrl: './estimated-cost-summary-detail.component.scss',
-  providers: [DataTransformPipe]
+  providers: [DataTransformPipe, DatePipe]
 })
 export class EstimatedCostSummaryDetailComponent extends CommonComponent implements OnInit, AfterViewChecked, AfterViewInit {
 
@@ -74,10 +78,15 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   @ViewChild('internationalEstimatedCostOvernight', { static: false }) internationalEstimatedCostOvernight: InternationalEstimatedCostOvernightComponent; //II
   @ViewChild('internationalEstimatedCostHotel', { static: false }) internationalEstimatedCostHotel: InternationalEstimatedCostHotelComponent;// III 3.1
   @ViewChild('internationalEstimatedCostCarRental', { static: false }) internationalEstimatedCostCarRental: InternationalEstimatedCostCarRentalComponent;  //3.2
+  @ViewChild('domesticEstimatedCostHotel', { static: false }) domesticEstimatedCostHotel: DomesticEstimatedCostHotelComponent; //3.1
+  @ViewChild('domesticEstimatedCostCarRental', { static: true }) domesticEstimatedCostCarRental: DomesticEstimatedCostCarRentalComponent; //3.2
 
+  private _planFlightRatesData: any[] = [];
   private _internationalFlightOvernightData: any[] = [];
-  private _internationalEstimatedCostHotelData: any[] = [];
+  private _internationalEstimatedCostHotelData: any;
   private _internationalEstimatedCostCarRentalData: any[] = [];
+  private _domesticEstimatedCostHotelData: any[] = [];
+  private _domesticEstimatedCostCarRentalData: any[] = [];
 
   constructor() {
     super();
@@ -104,7 +113,6 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
       this.estimatedCostGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
       this.estimatedCostGeneral.setDefaultValueGeneral();
       this.setDataDetail();
-      this.setPanelState();
     } catch (error) {
       console.error('getDetailSummary error: ', error);
     } finally {
@@ -112,14 +120,113 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     }
   }
 
-  summaryData() {
 
+  summaryData() {
+    if (this.dataDetail.planFlightRates
+      || this.dataDetail.planOverightRates
+      || this.dataDetail.planBudgetHotels
+      || this.dataDetail.planBudgetCarentals) {
+      this.showDialogSummary = true;
+    } else {
+      this.confirmSummaryData();
+    }
+  }
+
+  async confirmSummaryData() {
+    try {
+      this.spinner.show();
+      const requestBody = new DataSummayRequest(this.id() ?? 0,
+        this.estCostId() ?? 0,
+        this.yearPlan() ?? 0,
+        this.airportCode() ?? '',
+        '',
+        '',
+        false,
+        false
+      );
+      const response = await this.baseService.dataSummary(requestBody);//summaryDataExample;//summaryDataExample1;//
+      this.dataDetail = {
+        ...this.dataDetail,
+        planFlightRates: response.data.planFlightRates ?? [],
+        planOverightRates: response.data.planOverightRates ?? [],
+        planBudgetHotels: response.data.planBudgetHotels ?? [],
+        planBudgetCarentals: response.data.planBudgetCarentals ?? [],
+        listActype: response.data.listActype ?? [],
+      };
+      this.setDataDetail();
+    } catch (error) {
+    } finally {
+      this.showDialogSummary = false;
+      this.spinner.hide();
+    }
+  }
+
+  override async save(): Promise<any> {
+    try {
+      this.estimatedCostGeneral.formGroupDetail.markAllAsTouched();
+      console.log(this.estimatedCostGeneral.formGroupDetail)
+      if (this.estimatedCostGeneral.formGroupDetail.invalid ||
+        (this.category() === CategoryEnum.INTERNATIONAL && this.internationalEstimatedCostOvernight.invalid())
+      ) {
+        return;
+      }
+      await this.spinner.show();
+      const update = !!this.dataDetail.id;
+
+      let planFlightRates: any[] = [];
+      let planFlightPeriods: any[] = [];
+      let planOverightRates: any[] = [];
+      let planBudgetHotels: any[] = [];
+      let planBudgetCarentals: any[] = [];
+      let planProcurementHotels: any[] = [];
+      let planProcurementCarentals: any[] = [];
+      let planBudgetWetLease: any[] = [];
+      let planProcumentWetLease: any[] = [];
+
+      if (this.category() === CategoryEnum.DOMESTIC) {
+        planFlightRates = [...this.cleanData(this.domesticFlightRate.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.domesticEstimatedCostHotel.dataSource.data ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.domesticEstimatedCostCarRental.dataSource.data ?? [])];
+        // planProcurementHotels = [...this.cleanData(this.domesticProcurementHotel.dataSource.data ?? [])];
+        // planProcurementCarentals = [...this.cleanData(this.domesticProcurementCarRental.dataSource.data ?? [])];
+        // if (this.dataDetail?.wetLeaseFlag) {
+        //   planBudgetWetLease = [...this.cleanData(this.domesticBudgetWetLease.dataSource.data ?? [])];
+        //   planProcumentWetLease = [...this.cleanData(this.domesticProcurementWetLease.dataSource.data ?? [])];
+        // }
+      } else {
+        planOverightRates = [...this.cleanData(this.internationalEstimatedCostOvernight.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.internationalEstimatedCostHotel.dataSource.data ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.internationalEstimatedCostCarRental.dataSource.data ?? [])];
+      }
+
+      const data = {
+        ...this.dataDetail,
+        ...this.estimatedCostGeneral.formGroupDetail.value,
+        planFlightRates: planFlightRates,
+        planOverightRates: planOverightRates,
+        planBudgetHotels: planBudgetHotels,
+        planBudgetCarentals: planBudgetCarentals
+      };
+      console.log('data: ', data);
+      const response = await this.baseService.save(data);
+      this.baseService.showSuccess(update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS);
+      this.getDetailSummary()
+      console.log('response: ', response);
+    } catch (error) {
+      console.error('save error: ', error);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  cleanData(data: any[]): any[] {
+    return data.map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }));
   }
 
   completed() {
     this.baseService.summaryUpdateStatus({ id: this.id(), status: StatusSummaryEnum.COMPLETED }).then(() => {
       this.baseService.showSuccess(this.MESSAGE.UPDATE_SUCCESS);
-      // this.getDetailSummary();
+      this.getDetailSummary();
     });
   }
 
@@ -129,13 +236,57 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     }
   }
 
-  checkStatusCompelted(): boolean {
-    return this.dataDetail?.status === StatusSummaryEnum.COMPLETED;
-  }
 
   overnightValueChange(event: any): void {
     console.log('overnightValueChange: ', event);
-    // this.internationalBudgetHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.internationalFlightOvernight.dataSource.data);
+    this.internationalEstimatedCostHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.internationalEstimatedCostOvernight.dataSource.data);
+  }
+
+  // Lấy data cho các component con
+  setDataDetail() {
+    this.planFlightRatesData = [...this.dataDetail?.planFlightRates ?? []];
+    // this._internationalFlightPeriodData = {
+    //   planFlightPeriods: [...this.dataDetail?.planFlightPeriods ?? []],
+    //   periodRowspan: (this.dataDetail?.listActype ?? []).length
+    // }
+    this.internationalFlightOvernightData = [...this.dataDetail?.planOverightRates ?? []];
+    this.domesticEstimatedCostHotelData = [...this.dataDetail?.planBudgetHotels ?? []];
+    this.internationalEstimatedCostHotelData = {
+      aircraftTypeRowspan: (this.dataDetail?.listActype ?? []).length,
+      overnightRowspan: (this.dataDetail?.planOverightRates ?? []).length,
+      planOverightRates: [...this.dataDetail?.planOverightRates ?? []],
+      planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
+      planHotels: [...this.dataDetail?.planBudgetHotels ?? []],
+      general: this.estimatedCostGeneral.formGroupDetail.value
+    };
+    this.domesticEstimatedCostCarRentalData = [...this.dataDetail?.planBudgetCarentals ?? []];
+    this.internationalEstimatedCostCarRentalData = {
+      planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
+      planCarentals: [...this.dataDetail?.planBudgetCarentals ?? []]
+    }
+    // this.domesticBudgetWetLeaseData = [...this.dataDetail?.planBudgetWetLease ?? []];
+    // this.domesticProcurementHotelData = [...this.dataDetail?.planProcurementHotels ?? []];
+    // this.internationalProcurementHotelData = {
+    //   aircraftTypeRowspan: (this.dataDetail?.listActype ?? []).length,
+    //   overnightRowspan: (this.dataDetail?.planOverightRates ?? []).length,
+    //   planOverightRates: [...this.dataDetail?.planOverightRates ?? []],
+    //   planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
+    //   planHotels: [...this.dataDetail?.planProcurementHotels ?? []],
+    //   general: this.budgetProcurementGeneral.formGroupDetail.value
+    // }
+    // this.domesticProcurementCarRentalData = [...this.dataDetail?.planProcurementCarentals ?? []];
+    // this.internationalProcurementCarRentalData = {
+    //   planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
+    //   planCarentals: [...this.dataDetail?.planProcurementCarentals ?? []]
+    // }
+    // this.domesticProcurementWetLeaseData = [...this.dataDetail?.planProcumentWetLease ?? []];
+  }
+  get planFlightRatesData() {
+    return this._planFlightRatesData;
+  }
+
+  set planFlightRatesData(value: any[]) {
+    this._planFlightRatesData = value;
   }
 
   get internationalFlightOvernightData() {
@@ -149,7 +300,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     return this._internationalEstimatedCostHotelData;
   }
 
-  set internationalEstimatedCostHotelData(value: any[]) {
+  set internationalEstimatedCostHotelData(value: any) {
     this._internationalEstimatedCostHotelData = value
   }
 
@@ -159,5 +310,30 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
   set internationalEstimatedCostCarRentalData(value: any) {
     this._internationalEstimatedCostCarRentalData = value;
+  }
+
+  get domesticEstimatedCostHotelData() {
+    return this._domesticEstimatedCostHotelData;
+  }
+
+  set domesticEstimatedCostHotelData(value: any[]) {
+    this._domesticEstimatedCostHotelData = value;
+  }
+
+  get domesticEstimatedCostCarRentalData() {
+    return this._domesticEstimatedCostCarRentalData;
+  }
+
+  set domesticEstimatedCostCarRentalData(value: any[]) {
+    this._domesticEstimatedCostCarRentalData = value;
+  }
+
+
+  toggleDialogSummary() {
+    this.showDialogSummary = !this.showDialogSummary;
+  }
+
+  checkStatusCompelted(): boolean {
+    return this.dataDetail?.status === StatusSummaryEnum.COMPLETED;
   }
 }
