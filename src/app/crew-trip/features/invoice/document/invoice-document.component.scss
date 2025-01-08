@@ -3,7 +3,27 @@
 }
 
 .mat-column-stt {
-  width: 70px !important;
+  min-width:70px !important;
+}
+
+.mat-column-airportCode,
+.mat-column-invoice,
+.mat-column-periodDate,
+.mat-column-contract,
+.mat-column-description,
+.mat-column-amountFcBeforeVat,
+.mat-column-amountVndBeforeVat,
+.mat-column-vatFc,
+.mat-column-vatVnd,
+.mat-column-totalAmountFc,
+.mat-column-totalAmountVnd,
+.mat-column-reimbursementTotalFc,
+.mat-column-reimbursementTotalVnd,
+.mat-column-status,
+.mat-column-statusEmail,
+.mat-column-statusPayment,
+.mat-column-paymentDueDate, {
+  min-width: 120px !important;
 }
 
 ::ng-deep {
