@@ -31,7 +31,7 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { MatMenuModule } from '@angular/material/menu';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-payment-mail',
@@ -95,8 +95,8 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
   override formGroupDetail = this.formBuilder.group({
     id: [''],
     marketCode: ['', [Validators.required]],
-    emailsInput: ['', [Validators.required]],
-    note: [''],
+    emailsInput: ['', [Validators.required, Validators.maxLength(500)]],
+    note: ['', Validators.maxLength(500)],
     emails: [[''], [Validators.required]]
   });
 
@@ -124,10 +124,15 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
     }
     const res = await super.save();
     if (res instanceof HttpErrorResponse) {
-      if (res.error.status === 400) {
+      if (res.error.status === HttpStatusCode.BadRequest) {
         this.formGroupDetail.get('emailsInput')?.setErrors({
           invalid: true,
           message: res.error.error['emails[]']
+        });
+      } else if (res.error.status === HttpStatusCode.Conflict) {
+        this.formGroupDetail.get('marketCode')?.setErrors({
+          conflict: true,
+          message: res.error.error
         });
       }
     }
@@ -135,9 +140,9 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 
   getListAirport() {
     this.flightMarketService
-      .search({ page: 0, limit: 99999, option: 0, status: 'Operational' })
+      .search({ page: 0, limit: 99999, option: 1, status: 'Operational' })
       .then((res) => {
-        this.markets = res.data.content.map((item: any) => item.marketCode);
+        this.markets = res.data;
       });
   }
 
@@ -151,8 +156,33 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
     );
   }
 
+  override async showDialogDetail(id?: any, type?: string) {
+
+    // const email = this.dataSource.data[id] ? this.dataSource.data[id] : '';
+    if (id != null && type === 'index') {
+      const data = this.dataSource.data[id] as Data;
+      if (typeof data.emails === 'string') {
+        data.emailsInput = data.emails;
+        data.emails = data.emails ? data.emails.split(';') : [];
+      }
+      // data.emailsInput = data.emails;
+      this.formGroupDetail.patchValue(data);
+    } else if (id != null) {
+      await this.detail(id);
+    }
+    this.toggleDialogCreate();
+  }
+
   onFocusMarket(): void {
     this.filteredOptionsMarket = this.markets;
     this.autocompleteTrigger.openPanel();
   }
+}
+
+interface Data {
+  id: any,
+  marketCode: any,
+  emails: any,
+  emailsInput: any,
+  note: any
 }

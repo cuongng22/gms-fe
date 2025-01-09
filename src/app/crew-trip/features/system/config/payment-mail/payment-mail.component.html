@@ -142,6 +142,8 @@
                 </mat-autocomplete>
                 @if (formGroupDetail.controls['marketCode'].hasError('required')) {
                   <mat-error><span i18n>Airport code</span><span i18n> is required</span></mat-error>
+                } @else if (formGroupDetail.controls['marketCode'].hasError('conflict')) {
+                  <mat-error>{{ formGroupDetail.controls['marketCode'].getError('message') }}</mat-error>
                 }
               </mat-form-field>
               <div class="mb-2"></div>
@@ -153,6 +155,9 @@
                   <mat-error><span i18n>Supplier payment email</span><span i18n> is required</span></mat-error>
                 } @else if (formGroupDetail.controls['emailsInput'].hasError('invalid')) {
                   <mat-error><span i18n>Supplier payment email</span><span i18n> is invalid</span></mat-error>
+                } @else if (formGroupDetail.controls['emailsInput'].hasError('maxlength')) {
+                  <mat-error><span i18n>Supplier payment email</span><span i18n> must be less than 500 characters</span>
+                  </mat-error>
                 }
               </mat-form-field>
               <div class="mb-2"></div>
@@ -161,7 +166,7 @@
                 <textarea formControlName="note" matInput></textarea>
                 <mat-hint align="end">{{ formGroupDetail.value.note?.length }} / 500</mat-hint>
                 @if (formGroupDetail.controls['note'].hasError('maxlength')) {
-                  <mat-error><span i18n>Remark</span><span i18n> must be less than 500characters</span></mat-error>
+                  <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
                 }
               </mat-form-field>
             </div>
