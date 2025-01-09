@@ -1,13 +1,18 @@
-import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
+import {
+  AbstractControl,
+  AsyncValidatorFn,
+  ValidationErrors
+} from '@angular/forms';
 import { HotelService } from '../services/hotel-service';
 import { catchError, map, Observable, of } from 'rxjs';
 import { VehicleService } from '../services/vehicle.service';
-import { inject, Inject } from '@angular/core';
-import { FlightMarketDetailComponent } from '../../features/category/flight-market/flight-market-detail/flight-market-detail.component';
 
 export class AlreadyExistsValidator {
-  flightMarketDetailComponent = inject(FlightMarketDetailComponent);
-  static existsHotelCode(hotelService: HotelService, marketCode: string, hotelCodes: string[]): AsyncValidatorFn {
+  static existsHotelCode(
+    hotelService: HotelService,
+    marketCode: string,
+    hotelCodes: string[]
+  ): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
       if (hotelService.isUpdate) {
         return of(null);
@@ -20,7 +25,9 @@ export class AlreadyExistsValidator {
           }
           return hotelService.checkCodeExists(hotelCode).pipe(
             map((res: any) => {
-              return res && res.status == 409 ? { existsHotelCode: true } : null;
+              return res && res.status == 409
+                ? { existsHotelCode: true }
+                : null;
             }),
             catchError((error) => {
               if (error.status === 409) {
@@ -38,10 +45,12 @@ export class AlreadyExistsValidator {
     };
   }
 
-
-  static existsCarRentalCode(carRentalService: VehicleService, marketCode: string, carRentalCodes: string[]): AsyncValidatorFn {
+  static existsCarRentalCode(
+    carRentalService: VehicleService,
+    marketCode: string,
+    carRentalCodes: string[]
+  ): AsyncValidatorFn {
     return (control: AbstractControl): Observable<ValidationErrors | null> => {
-      console.log('marketCode: ', marketCode);
       if (carRentalService.isUpdate) {
         return of(null);
       }
@@ -53,7 +62,9 @@ export class AlreadyExistsValidator {
           }
           return carRentalService.checkCodeExists(code).pipe(
             map((res: any) => {
-              return res && res.status == 409 ? { existsCarRentalCode: true } : null;
+              return res && res.status == 409
+                ? { existsCarRentalCode: true }
+                : null;
             }),
             catchError((error) => {
               if (error.status === 409) {
@@ -70,5 +81,4 @@ export class AlreadyExistsValidator {
       }
     };
   }
-
 }
