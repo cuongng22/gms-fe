@@ -53,7 +53,7 @@ export class SignInComponent implements OnInit {
     this.formGroup = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required],
-      rememberMe: [false]
+      ldapAuth: [false]
     });
   }
 
@@ -80,6 +80,7 @@ export class SignInComponent implements OnInit {
         this.formGroup.patchValue({
           'email': email
         });
+        console.log(this.formGroup.value);
         const resp = await this.usersService.login(this.formGroup.value);
         this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, resp.data.token);
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(resp.data.userInfo));
@@ -115,4 +116,13 @@ export class SignInComponent implements OnInit {
     }
   }
 
+  changeCheck(fn: any) {
+    if (!fn.checked) {
+      this.formGroup.get('email')?.setValidators(Validators.email);
+      this.formGroup.get('email')?.updateValueAndValidity();
+    } else {
+      this.formGroup.get('email')?.setValidators(Validators.required);
+      this.formGroup.get('email')?.updateValueAndValidity();
+    }
+  }
 }
