@@ -1,0 +1,103 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0" i18n="@@hotel">
+        Seasonal Schedules
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
+            Schedules
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@hotel">
+            Seasonal Schedules
+        </li>
+    </ol>
+</div>
+
+
+<!--Search-->
+<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+        <form [formGroup]="formGroupSearch" (ngSubmit)="search()" autocomplete="off">
+            <div class="row">
+
+                <div class="col mb-2">
+                    <app-selection-suggest label="Departure Airport" i18n-label="@@departureAirport"
+                        formControlName="depApSched" [options]="flightMarkets" />
+                </div>
+
+                <div class="col mb-2">
+                    <app-selection-suggest label="Arrival Airport" i18n-label="@@arrivalAirport"
+                        formControlName="arrApSched" [options]="flightMarkets" />
+                </div>
+
+                <div class="col mb-2">
+                    <app-selection-suggest label="Aircraft" i18n-label="@@aircraft" formControlName="acType"
+                        [options]="airplanes" />
+                </div>
+                <div class="col d-sm-flex flex-row  justify-content-lg-start justify-content-md-center">
+                    <mat-card-header class="mb-0 search">
+                        <mat-card-title clas>
+                            <button class="search-btn" type="submit" mat-button>
+                                <i class="material-symbols-outlined">
+                                    search
+                                </i>
+                                <span i18n="@@search">Search</span>
+                            </button>
+                        </mat-card-title>
+                    </mat-card-header>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+
+
+<!-- Start Danh sách Nhà xe -->
+
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="mb-10">
+        <mat-card-title>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button class="add-btn mr-10" type="button" mat-button (click)="exportFile()">
+                <i class="material-symbols-outlined">
+                    download
+                </i>
+                <span i18n="@@export">Export</span>
+            </button>
+            <button class="add-btn " type="button" mat-button>
+                <i class="material-symbols-outlined">
+                    sync
+                </i>
+                <span i18n="@@sync">Sync</span>
+            </button>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+
+                @for (innerColumn of _displayedColumns; track innerColumn.value) {
+                <ng-container matColumnDef="{{innerColumn.value}}">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">{{
+                        innerColumn.label }}
+                    </th>
+                    <td mat-cell *matCellDef="let element" [ngClass]="innerColumn.class">
+                        {{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+                    </td>
+                </ng-container>
+                }
+
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="10">No data!</td>
+                </tr>
+            </table>
+        </div>
+        <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+            [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+            aria-label="Select page" i18n-aria-label="@@selectPage">
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>

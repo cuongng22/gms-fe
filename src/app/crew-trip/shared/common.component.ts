@@ -99,13 +99,13 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
     this.search(null, true);
   }
 
-  async search<T>(body?: any, isNextPage?: boolean) {
+  async search<T = any>(body?: any, isNextPage?: boolean) {
     try {
       await this.spinner.show();
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
-      const res = await this.baseService.search<ListResponse<T>>({
+      const res: ListResponse<T> = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,
         limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
@@ -120,7 +120,7 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
           }));
           this.totalElement = res.data.totalElements;
         }
-        return res;
+        // return res.data.content;
       }
     } catch (e: any) {
       this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);

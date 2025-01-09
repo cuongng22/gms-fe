@@ -59,7 +59,7 @@ export const menu: Menu[] = [
     subMenu: [
       {
         path: 'flight-schedules/seasonal',
-        title: $localize`:@@seasonalFlightSchedule:Seasonal Flight Schedule`,
+        title: $localize`:@@seasonalSchedules:Seasonal Schedules`,
         icon: 'ri-calendar-schedule-line'
       },
       {
