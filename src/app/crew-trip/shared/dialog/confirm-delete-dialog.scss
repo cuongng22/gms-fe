@@ -1,0 +1,10 @@
+.btn-box {
+  display: flex !important;
+  justify-content: center;
+
+  button {
+    display: flex !important;
+    justify-content: center;
+    gap: 8px;
+  }
+}

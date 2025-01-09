@@ -63,6 +63,7 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
   configScrollY = 60;
   listFlightMarket = [];
   listFeeService: any = [];
+  showDeleteDialog: boolean = false;
 
   constructor() {
     super();
@@ -184,14 +185,14 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
     try {
       await this.spinner.show();
       const res = await this.baseService.delete(this.formGroupDetail.getRawValue().id);
-      this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
       await this.search();
+      this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
       return res;
     } catch (e: any) {
       this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
     } finally {
-      await this.spinner.hide();
       await this.closeConfirmDelete();
+      await this.spinner.hide();
     }
   }
 
@@ -205,6 +206,7 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
 
   toggleDialogDelete() {
     this.showDialogDelete = !this.showDialogDelete;
+
   }
 
   async showDialogDetail(id?: any, type?: string) {

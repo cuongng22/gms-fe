@@ -27,6 +27,16 @@ export class InvoiceDocumentService extends BaseService {
     return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
   }
 
+  override create<T = any>(body: any): Promise<T> {
+    const url = `${this.api}/${this.path}`;
+    return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
+  }
+
+  override update<T = any>(body: any): Promise<T> {
+    const url = `${this.api}/${this.path}`;
+    return firstValueFrom(this.http.put<T>(url, body, this.httpOptions));
+  }
+
   async uploadFileData(form: FormData): Promise<any> {
     const url = `${this.api}/${this.path}/upload`;
     const headers = {

@@ -23,7 +23,7 @@
     </i>
     Back
   </button>
-  <button (click)="test()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+  <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
     <i class="material-symbols-outlined">
       save
     </i>
@@ -297,6 +297,14 @@
       <div (click)="$event.stopPropagation();" class="title-no-event">2. Detailed payment information</div>
     </mat-expansion-panel-header>
     <mat-panel-description class="d-block">
+      <div class="w-100 text-end">
+        <button (click)="addDtl()" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n mat-button type="button">
+          <i class="material-symbols-outlined">
+            add
+          </i>
+          Add
+        </button>
+      </div>
       <div class="table-responsive">
         <table [dataSource]="formGroupDetail.getRawValue().invoiceDocumentDtl" class="table-light table-responsive"
                mat-table>
@@ -307,10 +315,10 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="serviceCode">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Code</th>
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Code <span style="color:red">*</span></th>
             <td *matCellDef="let element" mat-cell>
               <div class="input-cell">
-                <mat-form-field class="edit-inline-table">
+                <mat-form-field>
                   <mat-select (selectionChange)="changeServiceFee($event,element,'code')"
                               [(ngModel)]="element.serviceCode"
                               required>
@@ -326,7 +334,7 @@
             <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Name</th>
             <td *matCellDef="let element" mat-cell>
               <div class="input-cell">
-                <mat-form-field class="edit-inline-table">
+                <mat-form-field>
                   <mat-select (selectionChange)="changeServiceFee($event,element,'name')"
                               [(ngModel)]="element.serviceName"
                               required>
@@ -351,28 +359,51 @@
               Occurrence
             </th>
             <td *matCellDef="let element" mat-cell>
-              <app-datepicker-year-month [(ngModel)]="element.periodOccurrence" size="sm">
+              <div class="input-cell">
+              <app-datepicker-year-month  [(ngModel)]="element.periodOccurrence">
               </app-datepicker-year-month>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="nsCode">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">NS Code</th>
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">NS Code <span style="color:red">*</span></th>
             <td *matCellDef="let element" mat-cell>
-              <input [(ngModel)]="element.nsCode" matInput required trim="blur">
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.nsCode" appThousandsSeparator matInput required
+                         trim="blur" type="text">
+                  <mat-error>{{ validField(element, 'nsCode', inputRef) }}</mat-error>
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="unitPrice">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit Price</th>
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit Price <span style="color:red">*</span></th>
             <td *matCellDef="let element" mat-cell>
-              <input [(ngModel)]="element.unitPrice" matInput required trim="blur">
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.unitPrice" appThousandsSeparator matInput required
+                         trim="blur"
+                         type="text">
+                  <mat-error>{{ validField(element, 'unitPrice', inputRef) }}</mat-error>
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="amountFcBeforeVat">
             <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
-              Amount Fc Before Vat
+              Amount Fc Before Vat <span style="color:red">*</span>
             </th>
             <td *matCellDef="let element" mat-cell>
-              <input [(ngModel)]="element.amountFcBeforeVat" matInput required trim="blur">
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.amountFcBeforeVat" appThousandsSeparator matInput
+                         required trim="blur"
+                         type="text">
+                  <mat-error>{{ validField(element, 'amountFcBeforeVat', inputRef) }}</mat-error>
+
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="amountVndBeforeVat">
@@ -380,31 +411,59 @@
               Amount Vnd Before Vat
             </th>
             <td *matCellDef="let element" mat-cell>
-              <input [(ngModel)]="element.amountVndBeforeVat" matInput required trim="blur">
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.amountVndBeforeVat" appThousandsSeparator matInput
+                         required trim="blur"
+                         type="text">
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="amountFcVat">
             <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Fc</th>
             <td *matCellDef="let element" mat-cell>
-              <input [(ngModel)]="element.amountFcVat" matInput required trim="blur">
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.amountFcVat" appThousandsSeparator matInput required
+                         trim="blur"
+                         type="text">
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="amountVndVat">
             <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Vnd</th>
             <td *matCellDef="let element" mat-cell>
-              <input [(ngModel)]="element.amountVndVat" matInput required trim="blur">
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.amountVndVat" appThousandsSeparator matInput required
+                         trim="blur"
+                         type="text">
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="vatType">
             <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Vat Type</th>
             <td *matCellDef="let element" mat-cell>
-              <input [(ngModel)]="element.vatType" matInput required trim="blur">
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.vatType" appThousandsSeparator matInput required
+                         trim="blur" type="text">
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="vat">
             <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">%VAT</th>
             <td *matCellDef="let element" mat-cell>
-              <input [(ngModel)]="element.vat" matInput required trim="blur">
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.vat" appThousandsSeparator matInput required
+                         trim="blur" type="text">
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
           <ng-container matColumnDef="vatHeader">
@@ -503,9 +562,9 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Reimbursement Total Vnd</mat-label>
-              <input appThousandsSeparator formControlName="reimbursementTotalFc" matInput required
+              <input appThousandsSeparator formControlName="reimbursementTotalVnd" matInput required
                      trim="blur" type="text">
-              @if (!!formGroupDetail.controls['reimbursementTotalFc'].hasError('required')) {
+              @if (!!formGroupDetail.controls['reimbursementTotalVnd'].hasError('required')) {
                 <mat-error><span i18n>Reimbursement Total Vnd</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
