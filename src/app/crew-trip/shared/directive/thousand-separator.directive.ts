@@ -1,17 +1,7 @@
-import {
-  AfterContentInit,
-  Directive,
-  ElementRef,
-  EventEmitter,
-  HostListener,
-  Input,
-  OnChanges,
-  OnInit,
-  Renderer2,
-  SimpleChanges
-} from '@angular/core';
+import {AfterContentInit, Directive, ElementRef, HostListener} from '@angular/core';
 import {NgControl} from '@angular/forms';
 import {isNaN, parseInt} from "lodash";
+import {take} from "rxjs";
 
 
 @Directive({
@@ -24,12 +14,12 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
   }
 
   ngAfterContentInit() {
-    this.control.control?.valueChanges.subscribe((value) => {
+    this.control.control?.valueChanges.pipe(take(1)).subscribe((value) => {
       const inputElement = this.el.nativeElement;
-      if (!isNaN(Number(value))) {
-        inputElement.value = this.formatNumber(value); // Định dạng lại giá trị
+      if (value && !isNaN(Number(value))) {
+        inputElement.value = this.formatNumber(value);
       } else {
-        inputElement.value = ''; // Nếu không hợp lệ, xóa giá trị
+        inputElement.value = '0';
       }
     });
   }
@@ -38,10 +28,11 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
   onInput(event: any) {
     const inputElement = this.el.nativeElement;
     const value = inputElement.value.replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
-    if (!isNaN(Number(value))) {
-      inputElement.value = this.formatNumber(value); // Định dạng lại giá trị
+    if (value && !isNaN(Number(value))) {
+      this.control.control?.setValue(Number(value), {emitEvent: false});
+      inputElement.value = this.formatNumber(value);
     } else {
-      inputElement.value = ''; // Nếu không hợp lệ, xóa giá trị
+      inputElement.value = '';
     }
   }
 

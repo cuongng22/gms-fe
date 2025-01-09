@@ -23,7 +23,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
-import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 import {ClickOutside} from 'ngxtension/click-outside';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
 import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
@@ -49,6 +49,7 @@ import {
 } from "src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component";
 import {SeparatorDirective} from "src/app/crew-trip/shared/directive/separator.directive";
 import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
+import {HttpStatusCode} from "@angular/common/http";
 
 
 @Component({
@@ -84,7 +85,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   @Input() formType: any;
   tblAttachedDocument = new MatTableDataSource();
   tblUnitPrice = new MatTableDataSource();
-  expandList = new Set<string>(['tab1', 'tab2']);
+  expandList = new Set<string>(['tab1', 'tab2', 'tab3']);
   formGroupFileUpload!: FormGroup;
   showDialogDeleteFile = false;
 
@@ -351,7 +352,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       type: Constant.NUMBER,
       rowspan: "2"
     }, {label: $localize`Type Room`, value: "typeRoom", rowspan: "2"}];
-  ready:boolean=false;
+  ready: boolean = false;
   protected readonly LOCALE = LOCALE;
   protected readonly transform = transform;
   protected readonly DATE_FORMAT_DD_MM_YYYY = DATE_FORMAT_DD_MM_YYYY;
@@ -398,7 +399,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       reimbursementTotalFc: [],
       reimbursementTotalVnd: [],
       invoiceDocumentDtl: [],
-      fileAttachments: []
+      fileAttachments: [],
+      fileUpload: []
     });
     this.formGroupFileUpload = this.fb.group({
       fileUpload: []
@@ -427,7 +429,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   async setReadMode(form: FormGroup) {
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
-        // v.disable();
+        v.disable();
       }
     });
   }
@@ -478,5 +480,44 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       row.unit = this.listFeeService.find((s: any) => s.name == $event.value)?.unit;
       row.serviceCode = this.listFeeService.find((s: any) => s.name == $event.value)?.code;
     }
+  }
+
+  async actionUpload() {
+    if (this.formGroupFileUpload.value.fileUpload.length > 0) {
+      try {
+        await this.spinner.show();
+        const formUpload = new FormData();
+        const fileUpload = this.formGroupDetail.getRawValue().fileUpload[0];
+        //validate
+        // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
+        if (fileUpload.size > 5 * 1048576) {
+          this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
+          return;
+        }
+        formUpload.append('file', fileUpload, fileUpload.name);
+
+        await this.baseService.uploadFile(formUpload).then(res => {
+          if (res.status == HttpStatusCode.Ok) {
+            this.formGroupDetail.getRawValue().fileAttachments = [...this.formGroupDetail.getRawValue().fileAttachments, {
+              ctype: 'MANUAL',
+              fileName: fileUpload.name,
+              fileSize: fileUpload.size,
+              fileUrl: res.data,
+              fileType: fileUpload.type,
+            }];
+          }
+        });
+        this.formGroupFileUpload.patchValue({fileUpload: []});
+      } catch (e: any) {
+        console.log(e);
+        this.baseService.showError((e.error?.error?.file) ?? (e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
+      } finally {
+        await this.spinner.hide();
+      }
+    }
+  }
+
+  test() {
+    console.log(this.formGroupDetail.getRawValue())
   }
 }
