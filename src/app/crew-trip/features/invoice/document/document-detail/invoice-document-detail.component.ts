@@ -442,7 +442,10 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   async download(fileRow: any) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.getFileData(fileRow.id);
+      let res = await this.baseService.getFileData({
+        id: fileRow.id,
+        url: fileRow.fileUrl
+      });
       this.downloadFile(res, fileRow.fileName + "." + fileRow.fileType);
 
     } catch (e) {
@@ -484,7 +487,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       await this.spinner.show();
       const formUpload = new FormData();
       const fileUpload = this.formGroupDetail.getRawValue().fileUpload[0];
-      console.log(fileUpload,'fileUploadfileUpload')
+      console.log(fileUpload, 'fileUploadfileUpload')
       //validate
       // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
       if (fileUpload.size > 5 * 1048576) {
@@ -502,7 +505,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
             fileName: fileUpload.name,
             fileSize: fileUpload.size,
             fileUrl: res.data,
-            fileType: fileUpload.type,
+            fileType: fileUpload.name.split('.').pop(),
           }];
           console.log(listFile)
           this.formGroupDetail.patchValue({fileAttachments: listFile});
