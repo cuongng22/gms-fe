@@ -1,5 +1,16 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewInit, ChangeDetectionStrategy, Component, ElementRef, inject, Input, model, OnInit, output, ViewChild } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  inject,
+  Input,
+  model,
+  OnInit,
+  output,
+  ViewChild
+} from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -31,12 +42,12 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
   ngAfterViewInit(): void {
     this.auto?.options.changes.subscribe((list: any[]) => {
       if (list) {
-        let findResult = list.find((o) => o.value === this.formControl.value);
+        const findResult = list.find((o) => o.value === this.formControl.value);
         findResult?.focus(null, { preventScroll: true });
-        findResult?.select(false)
+        findResult?.select(false);
       }
 
-    })
+    });
     if (this.requiredControl) {
       this.viewControl.addValidators(Validators.required);
     }
@@ -49,7 +60,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
   @Input() attrDisplay = '';
   selectionChange = output<any>();
 
-  private _options: any[] = []
+  private _options: any[] = [];
   keySearch = new Subject<string>();
   filtered = model<any[]>([]);
 
@@ -60,7 +71,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
 
   protected viewControl = new FormControl();
   protected selectionControl = inject<NgxControlValueAccessor<any>>(
-    NgxControlValueAccessor,
+    NgxControlValueAccessor
   );
 
   get formControl(): FormControl {
@@ -75,11 +86,11 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
     this.keySearch.pipe(
       debounceTime(500),
       distinctUntilChanged(),
-      startWith(''),
+      startWith('')
     ).subscribe(value => {
-      const optionFilter = [...(this.options ?? [])]
+      const optionFilter = [...(this.options ?? [])];
       this.formControl.setValue(null);
-      this.formControl.updateValueAndValidity()
+      this.formControl.updateValueAndValidity();
       if (!value) {
         this.filtered.set(optionFilter);
         return;
@@ -97,7 +108,6 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
   }
 
   setViewValueInit(value: any) {
-    console.log('setViewValueInit: ', value)
     const selected = this.options.filter((option: any) => {
       return value === (this.attrValue ? option[this.attrValue] : option);
     });
@@ -109,26 +119,26 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
   filter(): void {
     const filterValue = this.inputSearch.nativeElement.value;
     this.formControl.setValue(null);
-    this.formControl.updateValueAndValidity()
+    this.formControl.updateValueAndValidity();
     this.keySearch.next(filterValue);
   }
 
   onSelectionChange(event: any) {
     this.viewControl.setValue(event.option.viewValue ?? null);
-    this.viewControl.updateValueAndValidity()
+    this.viewControl.updateValueAndValidity();
     this.selectionControl.writeValue(event.option.value ?? null);
     this.formControl.updateValueAndValidity();
     this.selectionChange.emit({
       value: event.option.value ?? null,
       viewValue: event.option.viewValue ?? null
-    })
+    });
   }
 
 
   @Input() set options(options: any[]) {
     this._options = options;
     this.filtered.set([...(this._options ?? [])]);
-    this.setViewValueInit(this.formControl.value)
+    this.setViewValueInit(this.formControl.value);
   }
 
   get options(): any[] {
@@ -141,8 +151,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
     this.selectionControl.writeValue('');
     this.viewControl.updateValueAndValidity();
     this.formControl.updateValueAndValidity();
-    let findResult = this.auto?.options.find((o) => o.selected);
+    const findResult = this.auto?.options.find((o) => o.selected);
     findResult?.focus(null, { preventScroll: false });
-    findResult?.deselect(false)
+    findResult?.deselect(false);
   }
 }

@@ -1,9 +1,13 @@
 import {
-  Component, ElementRef, Inject, inject, LOCALE_ID, model, OnChanges, OnInit, SimpleChanges,
+  Component,
+  ElementRef,
+  Inject,
+  inject,
+  LOCALE_ID,
+  OnInit,
   ViewChild
 } from '@angular/core';
-import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { MatAutocompleteModule, } from '@angular/material/autocomplete';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatInputModule } from '@angular/material/input';
@@ -28,8 +32,10 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { HttpStatusCode } from '@angular/common/http';
 import { InputComponent } from 'src/app/crew-trip/shared/component/input/input.component';
-import { BehaviorSubject } from "rxjs";
-import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
+import { BehaviorSubject } from 'rxjs';
+import {
+  SelectionSuggestComponent
+} from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 
 interface EmailObj {
   email: string;
@@ -43,8 +49,7 @@ interface EmailObj {
   selector: 'app-group-mail-detail',
   standalone: true,
   imports: [
-    MatCardModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-    MatInputModule, InputSizeComponent, MatDatepickerModule,
+    MatCardModule, ReactiveFormsModule, MatSelectModule, MatButtonModule, MatInputModule, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, CommonModule, InputComponent, SelectionSuggestComponent
   ],
@@ -66,6 +71,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   existCode = false;
   existMessage = '';
   emailListCheck: EmailObj[] = [];
+  formTitle = '';
   override formGroupDetail = this.formBuilder.group({
     id: [],
     groupName: ['', [Validators.required, Validators.maxLength(100)]],
@@ -73,20 +79,36 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
     marketCode: ['', [Validators.required, this.existCodeValidator.bind(this)]],
     groupEmail: [[] as string[], Validators.required]
   });
+  public dialogRef: MatDialogRef<GroupMailDetailComponent>;
+  public locale: string;
+
+  override keyEvent(event: KeyboardEvent) {
+    if (event.keyCode === 27) {
+      this.close();
+    }
+  }
 
   constructor(
-    @Inject(LOCALE_ID) public locale: string,
-    public dialogRef: MatDialogRef<GroupMailDetailComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { grMail: any; mode: string }
-    , private fb: FormBuilder) {
+    @Inject(LOCALE_ID) locale: string,
+      dialogRef: MatDialogRef<GroupMailDetailComponent>,
+    @Inject(MAT_DIALOG_DATA) public data: { grMail: any; mode: string }) {
     super();
-    this.emailForm = this.fb.group({
+    this.locale = locale;
+    this.dialogRef = dialogRef;
+    this.emailForm = this.formBuilder.group({
       email: ['', [Validators.required, Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$')]]
     });
     if (!data?.mode || data.mode !== 'view') {
       this.displayedColumns = ['email', 'actions'];
     } else {
       this.displayedColumns = ['email'];
+    }
+    if (data?.mode === 'view') {
+      this.formTitle = 'View';
+    } else if (data?.mode === 'edit') {
+      this.formTitle = 'Edit';
+    } else {
+      this.formTitle = 'Add new';
     }
   }
 
@@ -106,7 +128,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
       this.markets = res.data;
 
       this.formGroupDetail.patchValue({ marketCode: this.formGroupDetail.value.marketCode });
-    })
+    });
   }
 
 
@@ -137,7 +159,8 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
 
   saveEmail(index: number): void {
     this.emailList[index].isEditing = false;
-    const exist = this.emailListCheck.find((emailObj: EmailObj) => emailObj.email.toLowerCase() === this.emailList[index].email.toLowerCase());
+    const exist = this.emailListCheck
+      .find((emailObj: EmailObj) => emailObj.email.toLowerCase() === this.emailList[index].email.toLowerCase());
     if (exist) {
       this.emailList[index].isDuplicate = true;
     } else {
@@ -171,6 +194,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
         }
       });
     } catch (e: any) {
+
     } finally {
       await this.spinner.hide();
     }
