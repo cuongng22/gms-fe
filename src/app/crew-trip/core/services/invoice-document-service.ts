@@ -82,4 +82,12 @@ export class InvoiceDocumentService extends BaseService {
     };
     return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
   }
+
+  async uploadFileCommon(form: FormData): Promise<any> {
+    const url = `${this.api}/invoice/common/upload`;
+    const headers = {
+      headers: new HttpHeaders()
+    };
+    return firstValueFrom(this.http.post(url, form, headers));
+  }
 }

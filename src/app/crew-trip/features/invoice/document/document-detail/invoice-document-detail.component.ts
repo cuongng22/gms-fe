@@ -402,9 +402,6 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       fileAttachments: [],
       fileUpload: []
     });
-    this.formGroupFileUpload = this.fb.group({
-      fileUpload: []
-    });
   }
 
   override async ngOnInit() {
@@ -483,38 +480,44 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   async actionUpload() {
-    if (this.formGroupFileUpload.value.fileUpload.length > 0) {
-      try {
-        await this.spinner.show();
-        const formUpload = new FormData();
-        const fileUpload = this.formGroupDetail.getRawValue().fileUpload[0];
-        //validate
-        // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
-        if (fileUpload.size > 5 * 1048576) {
-          this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
-          return;
-        }
-        formUpload.append('file', fileUpload, fileUpload.name);
-
-        await this.baseService.uploadFile(formUpload).then(res => {
-          if (res.status == HttpStatusCode.Ok) {
-            this.formGroupDetail.getRawValue().fileAttachments = [...this.formGroupDetail.getRawValue().fileAttachments, {
-              ctype: 'MANUAL',
-              fileName: fileUpload.name,
-              fileSize: fileUpload.size,
-              fileUrl: res.data,
-              fileType: fileUpload.type,
-            }];
-          }
-        });
-        this.formGroupFileUpload.patchValue({fileUpload: []});
-      } catch (e: any) {
-        console.log(e);
-        this.baseService.showError((e.error?.error?.file) ?? (e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
-      } finally {
-        await this.spinner.hide();
+    try {
+      await this.spinner.show();
+      const formUpload = new FormData();
+      const fileUpload = this.formGroupDetail.getRawValue().fileUpload[0];
+      console.log(fileUpload,'fileUploadfileUpload')
+      //validate
+      // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
+      if (fileUpload.size > 5 * 1048576) {
+        this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
+        return;
       }
+      formUpload.append('file', fileUpload, fileUpload.name);
+      formUpload.append('body', JSON.stringify({
+        fileFolder: '/document',
+      }));
+      await this.baseService.uploadFileCommon(formUpload).then(res => {
+        if (res.code == HttpStatusCode.Ok) {
+          let listFile = [...this.formGroupDetail.getRawValue().fileAttachments, {
+            ctype: 'MANUAL',
+            fileName: fileUpload.name,
+            fileSize: fileUpload.size,
+            fileUrl: res.data,
+            fileType: fileUpload.type,
+          }];
+          console.log(listFile)
+          this.formGroupDetail.patchValue({fileAttachments: listFile});
+
+        }
+      });
+    } catch (e: any) {
+      console.log(e);
+      this.baseService.showError((e.error?.error?.file) ?? (e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+      this.formGroupDetail.patchValue({fileUpload: []});
+
     }
+
   }
 
   test() {
