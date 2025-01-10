@@ -65,6 +65,14 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
   listFeeService: any = [];
   showDeleteDialog: boolean = false;
 
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.keyCode === 27) {
+      this.showDialogCreate = false;
+      this.showDialogDelete = false;
+    }
+  }
+
   constructor() {
     super();
     this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
@@ -110,13 +118,13 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
     this.search(null, true);
   }
 
-  async search<T>(body?: any, isNextPage?: boolean) {
+  async search<T = any>(body?: any, isNextPage?: boolean) {
     try {
       await this.spinner.show();
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
-      const res = await this.baseService.search<ListResponse<T>>({
+      const res: ListResponse<T> = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,
         limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
@@ -127,11 +135,12 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
           this.dataSource.data = this.dataSource.data.map((s: any) => ({
             ...s,
             isActiveLabel: s.isActive === true || !!s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
-            activeLabel: s.active === true || !!s.active || s.status === true || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
+            activeLabel: s.active === true || !!s.active || s.status === true || !!s.status
+              ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
           }));
           this.totalElement = res.data.totalElements;
         }
-        return res;
+        // return res.data.content;
       }
     } catch (e: any) {
       this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
@@ -172,7 +181,9 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
       await this.closeDetail();
       return res;
     } catch (e: any) {
-      if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
+      if ((e.status != HttpStatusCode.Conflict)
+        && (e.status != HttpStatusCode.BadRequest && e.error.error['emails[]'])
+        && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
         this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
       }
       return e;
@@ -206,7 +217,6 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
 
   toggleDialogDelete() {
     this.showDialogDelete = !this.showDialogDelete;
-
   }
 
   async showDialogDetail(id?: any, type?: string) {
@@ -247,7 +257,9 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
   async exportFile(body?: any, filename?: string) {
     try {
       await this.spinner.show();
-      const res = await this.baseService.exportData({...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)});
+      const res = await this.baseService.exportData(
+        { ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) }
+      );
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
@@ -262,7 +274,9 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
       this.formGroupSearch.patchValue({
         'export': true
       });
-      const res = await this.baseService.exportDataOptions({...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)}, sourcePath);
+      const res = await this.baseService.exportDataOptions(
+        { ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) }, sourcePath
+      );
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);

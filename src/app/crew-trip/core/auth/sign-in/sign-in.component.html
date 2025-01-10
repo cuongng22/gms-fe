@@ -61,7 +61,8 @@
                                     </span>
                 </button>
               </mat-form-field>
-              <mat-checkbox i18n>Remember me</mat-checkbox>
+              <mat-checkbox i18n formControlName="ldapAuth" (change)="changeCheck($event)">Login with LDAP
+              </mat-checkbox>
               <ngx-spinner bdColor="rgba(0, 0, 0, 0.1)" size="medium" color="#2a6886" type="ball-climbing-dot"
                            [fullScreen]="false"></ngx-spinner>
             </div>

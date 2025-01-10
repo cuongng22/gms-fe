@@ -1,0 +1,9 @@
+tabWidth: 2
+singleQuote: true
+useTabs: true
+bracketSameLine: true
+bracketSpacing: true
+cursorOffset: 1
+plugins:
+  - prettier-plugin-organize-imports
+

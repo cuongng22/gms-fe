@@ -1,225 +1,234 @@
-
-        <!--Search-->
-        <mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
-          <mat-card-content>
-            <form [formGroup]="formGroupSearch" (ngSubmit)="search()" autocomplete="off">
-              <div class="row">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                  <div class="row mb-3">
-                    <div class="col-sm-3" sizeInput='sm'>
-                      <mat-form-field class="mb-1">
-                        <mat-label i18n="@@keyword">Keyword</mat-label>
-                        <input matInput formControlName="s">
-                      </mat-form-field>
-                    </div>
-                    <div class="col-sm-3">
-                      <mat-card-header class="mb-0">
-                        <mat-card-title>
-                          <button class="search-btn" type="submit" mat-button>
-                            <i class="material-symbols-outlined">
-                              search
-                            </i>
-                            <span i18n="@@search">Search</span>
-                          </button>
-                        </mat-card-title>
-                      </mat-card-header>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </form>
-          </mat-card-content>
-        </mat-card>
-
-
-        <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
-          <mat-card-header class="mb-10">
-            <mat-card-title>
-              <!--      <h5 i18n="@@groupMailList">Group mail List</h5>-->
-            </mat-card-title>
-            <mat-card-subtitle>
-              <button class="add-btn" type="button" mat-button (click)="showDialogDetail()">
-                <i class="material-symbols-outlined">
-                  add
-                </i>
-                <span i18n="@@create">Create</span>
-              </button>
-            </mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <div class="table-responsive">
-              <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
-                <ng-container matColumnDef="stt">
-                  <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
-                  <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
-                </ng-container>
-                @for (innerColumn of _displayedColumns; track innerColumn.value) {
-                  <ng-container matColumnDef="{{innerColumn.value}}">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">{{ innerColumn.label}}</th>
-                    <td mat-cell *matCellDef="let element">
-                      {{element[innerColumn.value]|dataTransformPipe:[innerColumn.type,innerColumn.format] }}
-                    </td>
-                  </ng-container>
-                }
-                <ng-container matColumnDef="action" stickyEnd>
-                  <th mat-header-cell *matHeaderCellDef i18n="@@action">
-                    Actions
-                  </th>
-                  <td *matCellDef="let element;let i = dataIndex" mat-cell>
-                    <div class="action-buttons d-flex align-items-center justify-content-end">
-                      <a type="button" mat-button (click)="showDialogDetail(i,'index')">
-                        <i class="material-symbols-outlined text-warning" title="Edit" i18n-title="@@edit">
-                          edit
-                        </i>
-                      </a>
-                      <a>
-                      </a>
-                      <a type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
-                              (click)="showConfirmDelete(element.id)">
-                        <i class="material-symbols-outlined">
-                          delete
-                        </i>
-                      </a>
-                    </div>
-                  </td>
-                </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                <tr *matNoDataRow class="mat-row">
-                  <td [attr.colspan]="displayedColumns.length" class="mat-cell text-center"><span i18n>No data!</span>
-                </tr>
-              </table>
+<!--Search-->
+<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-content>
+    <form [formGroup]="formGroupSearch" (ngSubmit)="search()" autocomplete="off">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <div class="row mb-3">
+            <div class="col-sm-3" sizeInput='sm'>
+              <mat-form-field class="mb-1">
+                <mat-label i18n="@@keyword">Keyword</mat-label>
+                <input matInput formControlName="s">
+              </mat-form-field>
             </div>
-            <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-                           [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
-                           aria-label="Select page" i18n-aria-label="@@selectPage">
-            </mat-paginator>
-          </mat-card-content>
-        </mat-card>
-
-
-        <!-- Add New Popup -->
-        <div
-          [class.active]="showDialogCreate"
-          class="add-new-popup"
-        >
-          <div class="popup-dialog">
-            <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
-              <mat-card-header>
+            <div class="col-sm-3">
+              <mat-card-header class="mb-0">
                 <mat-card-title>
-                  <h5 class="mb-0">
-                    <span *ngIf="!formGroupDetail.value.id" i18n>Add new</span>
-                    <span *ngIf="formGroupDetail.value.id" i18n>Edit</span>
-                  </h5>
+                  <button class="search-btn" type="submit" mat-button>
+                    <i class="material-symbols-outlined">
+                      search
+                    </i>
+                    <span i18n="@@search">Search</span>
+                  </button>
                 </mat-card-title>
-                <mat-card-subtitle>
-                  <button
-                    (click)="closeDetail()"
-                    mat-button
-                  >
-                    <i class="ri-close-fill"></i>
-                  </button>
-                </mat-card-subtitle>
               </mat-card-header>
-              <mat-card-content>
-                <form [formGroup]="formGroupDetail" autocomplete="off">
-                  <div class="row">
-                    <div class="col-sm-12 col-md-12">
-                          <mat-form-field class="mb-1">
-                            <mat-label i18n="@@airportCode">Airport code</mat-label>
-                            <input type="text" #marketCode matInput formControlName="marketCode"
-                                   [matAutocomplete]="marketComplete"  [required]="true"
-                                   (input)="filterMarket()" (focus)="onFocusMarket()">
-                            <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
-                              <mat-option [value]="null">
-                                -- Choose airport code --
-                              </mat-option>
-                              <mat-option *ngFor="let option of filteredOptionsMarket" [value]="option">
-                                {{ option }}
-                              </mat-option>
-                            </mat-autocomplete>
-                            @if (!!formGroupDetail.controls['marketCode'].hasError('required')) {
-                              <mat-error><span i18n>Airport code</span><span i18n> is required</span></mat-error>
-                            }
-                          </mat-form-field>
-                          <div class="mb-2"></div>
-                          <mat-form-field>
-                            <mat-label i18n>Supplier payment email </mat-label>
-                            <input formControlName="emails" [required]="true" matInput >
-                            <mat-hint align="start" i18n>Input multiple email addresses, separated by ;.</mat-hint>
-                            @if (!!formGroupDetail.controls['emails'].hasError('required')) {
-                              <mat-error><span i18n>Supplier payment email</span><span i18n> is required</span></mat-error>
-                            }
-                          </mat-form-field>
-                          <div class="mb-2"></div>
-                          <mat-form-field>
-                            <mat-label i18n>Remark</mat-label>
-                            <textarea formControlName="note" matInput></textarea>
-                            <mat-hint align="end">{{ formGroupDetail.value.note?.length }} / 500</mat-hint>
-                            @if (!!formGroupDetail.controls['note'].hasError('maxlength')) {
-                              <mat-error><span i18n>Remark</span><span i18n> must be less than 500characters</span></mat-error>
-                            }
-                          </mat-form-field>
-                  </div>
-                  </div>
-                </form>
-                <div class="btn-box">
-                  <button (click)="closeDetail()" class="close-btn" i18n mat-button type="button">
-                    <i class="material-symbols-outlined">
-                      close
-                    </i>
-                    Close
-                  </button>
-                  <button
-                    (click)="save()"
-                    class="add-btn"
-                    i18n mat-button
-                  >
-                    <i class="material-symbols-outlined">
-                      save
-                    </i>
-                    Save
-                  </button>
-                </div>
-              </mat-card-content>
-            </mat-card>
+            </div>
           </div>
         </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
 
-        <div class="add-new-popup" [class.active]="showDialogDelete">
-          <div class="popup-dialog dialog-delete-with">
-            <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
-              <mat-card-content>
-                <div class="text-warning text-center">
+
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-header class="mb-10">
+    <mat-card-title>
+      <!--      <h5 i18n="@@groupMailList">Group mail List</h5>-->
+    </mat-card-title>
+    <mat-card-subtitle>
+      <button class="add-btn" type="button" mat-button (click)="showDialogDetail()">
+        <i class="material-symbols-outlined">
+          add
+        </i>
+        <span i18n="@@create">Add new</span>
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+        <ng-container matColumnDef="stt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
+          <td mat-cell *matCellDef="let element; let i = dataIndex"
+              class="text-center">{{ (pageIndex * pageSize) + i + 1 }}
+          </td>
+        </ng-container>
+        @for (innerColumn of _displayedColumns; track innerColumn.value) {
+          <ng-container matColumnDef="{{innerColumn.value}}">
+            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">{{ innerColumn.label }}</th>
+            <td mat-cell *matCellDef="let element">
+              {{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+            </td>
+          </ng-container>
+        }
+        <ng-container matColumnDef="action" stickyEnd>
+          <th mat-header-cell *matHeaderCellDef i18n="@@action">
+            Actions
+          </th>
+          <td *matCellDef="let element;let i = dataIndex" mat-cell>
+            <div class="action-buttons d-flex align-items-center justify-content-end">
+              <a type="button" mat-button (click)="showDialogDetail(i,'index')">
+                <i class="material-symbols-outlined text-warning" title="Edit" i18n-title="@@edit">
+                  edit
+                </i>
+              </a>
+              <a>
+              </a>
+              <a type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
+                 (click)="showConfirmDelete(element.id)">
+                <i class="material-symbols-outlined">
+                  delete
+                </i>
+              </a>
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr *matNoDataRow class="mat-row">
+          <td [attr.colspan]="displayedColumns.length" class="mat-cell text-center"><span i18n>No data!</span>
+        </tr>
+      </table>
+    </div>
+    <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+                   [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
+                   [pageIndex]="pageIndex"
+                   aria-label="Select page" i18n-aria-label="@@selectPage">
+    </mat-paginator>
+  </mat-card-content>
+</mat-card>
+
+
+<!-- Add New Popup -->
+<div
+  [class.active]="showDialogCreate"
+  class="add-new-popup"
+>
+  <div class="popup-dialog">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
+      <mat-card-header>
+        <mat-card-title>
+          <h5 class="mb-0">
+            <span *ngIf="!formGroupDetail.value.id" i18n>Add new</span>
+            <span *ngIf="formGroupDetail.value.id" i18n>Edit</span>
+          </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+          <button
+            (click)="closeDetail()"
+            mat-button
+          >
+            <i class="ri-close-fill"></i>
+          </button>
+        </mat-card-subtitle>
+      </mat-card-header>
+      <mat-card-content>
+        <form [formGroup]="formGroupDetail" autocomplete="off">
+          <div class="row">
+            <div class="col-sm-12 col-md-12">
+              <mat-form-field class="mb-1">
+                <mat-label i18n="@@airportCode">Airport code</mat-label>
+                <input type="text" #marketCode matInput formControlName="marketCode"
+                       [matAutocomplete]="marketComplete" [required]="true"
+                       (input)="filterMarket()" (focus)="onFocusMarket()">
+                <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
+                  <mat-option [value]="null">
+                    -- Choose airport code --
+                  </mat-option>
+                  <mat-option *ngFor="let option of filteredOptionsMarket" [value]="option">
+                    {{ option }}
+                  </mat-option>
+                </mat-autocomplete>
+                @if (formGroupDetail.controls['marketCode'].hasError('required')) {
+                  <mat-error><span i18n>Airport code</span><span i18n> is required</span></mat-error>
+                } @else if (formGroupDetail.controls['marketCode'].hasError('conflict')) {
+                  <mat-error>{{ formGroupDetail.controls['marketCode'].getError('message') }}</mat-error>
+                }
+              </mat-form-field>
+              <div class="mb-2"></div>
+              <mat-form-field>
+                <mat-label i18n>Supplier payment email</mat-label>
+                <input formControlName="emailsInput" [required]="true" matInput>
+                <mat-hint align="start" i18n>Input multiple email addresses, separated by ;.</mat-hint>
+                @if (formGroupDetail.controls['emailsInput'].hasError('required')) {
+                  <mat-error><span i18n>Supplier payment email</span><span i18n> is required</span></mat-error>
+                } @else if (formGroupDetail.controls['emailsInput'].hasError('invalid')) {
+                  <mat-error><span i18n>Supplier payment email</span><span i18n> is invalid</span></mat-error>
+                } @else if (formGroupDetail.controls['emailsInput'].hasError('maxlength')) {
+                  <mat-error><span i18n>Supplier payment email</span><span i18n> must be less than 500 characters</span>
+                  </mat-error>
+                }
+              </mat-form-field>
+              <div class="mb-2"></div>
+              <mat-form-field>
+                <mat-label i18n>Remark</mat-label>
+                <textarea formControlName="note" matInput></textarea>
+                <mat-hint align="end">{{ formGroupDetail.value.note?.length }} / 500</mat-hint>
+                @if (formGroupDetail.controls['note'].hasError('maxlength')) {
+                  <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </div>
+        </form>
+        <div class="btn-box">
+          <button (click)="closeDetail()" class="close-btn" i18n mat-button type="button">
+            <i class="material-symbols-outlined">
+              close
+            </i>
+            Close
+          </button>
+          <button
+            (click)="save()"
+            class="add-btn"
+            i18n mat-button
+          >
+            <i class="material-symbols-outlined">
+              save
+            </i>
+            Save
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
+
+<div class="add-new-popup" [class.active]="showDialogDelete">
+  <div class="popup-dialog dialog-delete-with">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+      <mat-card-content>
+        <div class="text-warning text-center">
                     <span class="material-symbols-outlined font-size-5rem">
                         error
                     </span>
-                </div>
-                <div class="text-center mb-20">
-                  <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
-                </div>
-                <div class="text-center mb-20">
+        </div>
+        <div class="text-center mb-20">
+          <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
+        </div>
+        <div class="text-center mb-20">
                     <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
                         You will not be able to recover the deleted data!</span>
-                </div>
-                <div class="btn-box text-center">
-                  <button type="button" mat-button (click)="closeConfirmDelete()"
-                          class="close-btn  min-with-100 mlr-5">
-                    <i class="material-symbols-outlined">
-                      close
-                    </i>
-                    <span i18n="@@cancel">Cancel</span>
-                  </button>
-                  <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
-                    <i class="material-symbols-outlined">
-                      save
-                    </i>
-                    <span i18n="@@confirm">Confirm</span>
-                  </button>
-
-                </div>
-              </mat-card-content>
-            </mat-card>
-          </div>
         </div>
+        <div class="btn-box text-center">
+          <button type="button" mat-button (click)="closeConfirmDelete()"
+                  class="close-btn  min-with-100 mlr-5">
+            <i class="material-symbols-outlined">
+              close
+            </i>
+            <span i18n="@@cancel">Cancel</span>
+          </button>
+          <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
+            <i class="material-symbols-outlined">
+              save
+            </i>
+            <span i18n="@@confirm">Confirm</span>
+          </button>
+
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
 
