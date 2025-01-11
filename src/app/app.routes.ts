@@ -49,6 +49,7 @@ import { reportcomponent7 } from './crew-trip/features/reports/report7/report7.c
 import { reportcomponent8 } from './crew-trip/features/reports/report8/report8.component';
 import { reportcomponent9 } from './crew-trip/features/reports/report9/report9.component';
 import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.component';
+import {ContractDetailComponent} from "src/app/crew-trip/features/contract/contract-detail/contract-detail.component";
 
 export const routes: Routes = [
 	{
@@ -117,6 +118,7 @@ export const routes: Routes = [
 				children: [
 					{ path: 'vehicle', component: VehicleComponent },
 					{ path: 'contract', component: ContractComponent },
+					{ path: 'contract/detail', component: ContractDetailComponent },
 					{ path: 'act-rate', component: ActRateComponent },
 					{ path: 'hotel', component: HotelComponent },
 					{ path: 'nation', component: NationComponent },

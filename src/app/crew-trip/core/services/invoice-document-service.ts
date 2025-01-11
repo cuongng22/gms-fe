@@ -3,6 +3,7 @@ import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {firstValueFrom} from 'rxjs';
 import {HttpHeaders, HttpParams} from '@angular/common/http';
 import {removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
+import {DetailResponse} from "src/app/crew-trip/shared/models/common.model";
 
 @Injectable({
   providedIn: 'root'
@@ -26,6 +27,16 @@ export class InvoiceDocumentService extends BaseService {
     return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
   }
 
+  override create<T = any>(body: any): Promise<T> {
+    const url = `${this.api}/${this.path}`;
+    return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
+  }
+
+  override update<T = any>(body: any): Promise<T> {
+    const url = `${this.api}/${this.path}`;
+    return firstValueFrom(this.http.put<T>(url, body, this.httpOptions));
+  }
+
   async uploadFileData(form: FormData): Promise<any> {
     const url = `${this.api}/${this.path}/upload`;
     const headers = {
@@ -40,10 +51,9 @@ export class InvoiceDocumentService extends BaseService {
     return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
-  getMarket(body: any): Promise<any> {
-    const url = `${this.api}/${this.path}/load-market`;
-    const params = new HttpParams({fromObject: removeNullValues(body)});
-    return firstValueFrom(this.http.get<any>(url, {params}));
+  getContractByAirport(value: any): Promise<any> {
+    const url = `${this.api}/invoice/common/contract-by-airport/${value}`;
+    return firstValueFrom(this.http.get<any>(url, this.httpOptions));
   }
 
   listMaNghiepVu(): Promise<any> {
@@ -70,16 +80,24 @@ export class InvoiceDocumentService extends BaseService {
 
   }
 
-  async getFileData(id: any) {
-    const url = `${this.api}/invoice/get-file/${id}`;
+  async getFileData(body: any) {
+    const url = `${this.api}/invoice/common/get-file`;
     const httpOptionsExport = {
       headers: new HttpHeaders({
         'Content-Type': 'application/json',
         'Accept': 'application/octet-stream'
       }),
       responseType: 'blob' as any,
-
+      params:new HttpParams({fromObject: removeNullValues(body)})
     };
     return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
+  }
+
+  async uploadFileCommon(form: FormData): Promise<any> {
+    const url = `${this.api}/invoice/common/upload`;
+    const headers = {
+      headers: new HttpHeaders()
+    };
+    return firstValueFrom(this.http.post(url, form, headers));
   }
 }

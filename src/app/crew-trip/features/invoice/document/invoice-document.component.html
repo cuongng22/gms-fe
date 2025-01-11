@@ -101,7 +101,7 @@
     </mat-card-header>
     <mat-card-content>
       <div class="table-responsive">
-        <table [dataSource]="dataSource" class="table-light table-responsive"
+        <table [dataSource]="dataSource" class="table-light table-responsive" style="border-collapse: separate;"
                mat-table>
           <ng-container matColumnDef="stt">
             <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
@@ -218,19 +218,19 @@
                 </a>
                 <a class="text-warning" mat-button
                    type="button">
-                  <i class="material-symbols-outlined" i18n-title title="Edit">
+                  <i (click)="nextStep(element.id,false,2)" class="material-symbols-outlined" i18n-title title="Edit">
                     edit
                   </i>
                 </a>
                 <a class="text-success" mat-button
                    type="button">
-                  <i class="material-symbols-outlined" i18n-title title="Verify">
+                  <i (click)="nextStep(element.id,false,2)" class="material-symbols-outlined" i18n-title title="Verify">
                     task_alt
                   </i>
                 </a>
                 <a class="text-danger" mat-button
                    type="button">
-                  <i class="material-symbols-outlined" i18n-title title="Delete">
+                  <i (click)="showConfirmDelete(element.id)" class="material-symbols-outlined" i18n-title title="Delete">
                     delete
                   </i>
                 </a>
@@ -255,3 +255,8 @@
     </mat-card-content>
   </mat-card>
 </ng-container>
+<app-confirm-delete-dialog
+    [showDialogDelete]="showDialogDelete"
+    (confirmDelete)="delete()"
+    (closeDialog)="closeConfirmDelete()">
+</app-confirm-delete-dialog>

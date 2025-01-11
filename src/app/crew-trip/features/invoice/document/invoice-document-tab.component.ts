@@ -68,6 +68,6 @@ export class InvoiceDocumentTabComponent implements OnInit {
 
   backStepEmit($event: any) {
     this.step = 1;
-    this.tabType = $event[0]
+    this.tabType = 'INVOICE';
   }
 }

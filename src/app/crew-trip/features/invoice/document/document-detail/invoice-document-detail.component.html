@@ -9,7 +9,7 @@
   </div>
   <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
     <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      Detailed Statement
+      Invoice
     </li>
     <li class="breadcrumb-item d-inline-block position-relative" i18n>
       Detail
@@ -22,6 +22,12 @@
       undo
     </i>
     Back
+  </button>
+  <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+    <i class="material-symbols-outlined">
+      save
+    </i>
+    Save
   </button>
 </div>
 <mat-accordion multi>
@@ -36,13 +42,13 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Airport code</mat-label>
-              <mat-select formControlName="airportCode" required>
+              <mat-select (selectionChange)="airportCodeChange($event)" formControlName="airportCode" required>
                 @for (item of listFlightMarket; track item) {
-                <mat-option [value]="item">{{ item }}</mat-option>
+                  <mat-option [value]="item">{{ item }}</mat-option>
                 }
               </mat-select>
               @if (!!formGroupDetail.controls['airportCode'].hasError('required')) {
-              <mat-error><span i18n>Airport Code</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Airport Code</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -51,10 +57,10 @@
               <mat-label i18n>Invoice number</mat-label>
               <input formControlName="invoiceNumber" matInput>
               @if (!!formGroupDetail.controls['invoiceNumber'].hasError('required')) {
-              <mat-error><span i18n>Invoice Number</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Invoice Number</span><span i18n> not empty</span></mat-error>
               }
               @if (!!formGroupDetail.controls['invoiceNumber'].hasError('maxlength')) {
-              <mat-error><span i18n>Invoice Number must be less than 50 characters</span></mat-error>
+                <mat-error><span i18n>Invoice Number must be less than 50 characters</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -63,11 +69,11 @@
               <mat-label i18n>Invoice Type</mat-label>
               <mat-select formControlName="ctype" required>
                 @for (item of listDocumentType; track item) {
-                <mat-option [value]="item.key">{{ item.value }}</mat-option>
+                  <mat-option [value]="item.key">{{ item.value }}</mat-option>
                 }
               </mat-select>
               @if (!!formGroupDetail.controls['ctype'].hasError('required')) {
-              <mat-error><span i18n>Invoice Type</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Invoice Type</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -79,7 +85,7 @@
               <mat-datepicker-toggle [for]="invoiceDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #invoiceDate></mat-datepicker>
               @if (!!formGroupDetail.controls['invoiceDate'].hasError('required')) {
-              <mat-error><span i18n>Invoice Date</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Invoice Date</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -94,7 +100,7 @@
               <mat-datepicker-toggle [for]="invoiceReceiveDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #invoiceReceiveDate></mat-datepicker>
               @if (!!formGroupDetail.controls['invoiceReceiveDate'].hasError('required')) {
-              <mat-error><span i18n>ReceiveDate Date</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>ReceiveDate Date</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -106,7 +112,7 @@
               <mat-datepicker-toggle [for]="periodFrom" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #periodFrom></mat-datepicker>
               @if (!!formGroupDetail.controls['periodFrom'].hasError('required')) {
-              <mat-error><span i18n>Period From</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Period From</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -118,18 +124,14 @@
               <mat-datepicker-toggle [for]="periodTo" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #periodTo></mat-datepicker>
               @if (!!formGroupDetail.controls['periodTo'].hasError('required')) {
-              <mat-error><span i18n>Period To</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Period To</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Period Occurrence</mat-label>
-              <input formControlName="periodOccurrence" matInput trim="blur">
-              @if (!!formGroupDetail.controls['periodOccurrence'].hasError('required')) {
-              <mat-error><span i18n>Period Occurrence</span><span i18n> not empty</span></mat-error>
-              }
-            </mat-form-field>
+            <app-datepicker-year-month formControlName="periodOccurrence" i18n-label label="Period Occurrence"
+                                       size="sm">
+            </app-datepicker-year-month>
           </div>
         </div>
         <!--        dong3-->
@@ -139,7 +141,7 @@
               <mat-label i18n>Payment Due Day</mat-label>
               <input formControlName="paymentDueDay" matInput trim="blur">
               @if (!!formGroupDetail.controls['paymentDueDay'].hasError('required')) {
-              <mat-error><span i18n>Payment Due Day</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Payment Due Day</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -151,7 +153,7 @@
               <mat-datepicker-toggle [for]="paymentDueDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #paymentDueDate></mat-datepicker>
               @if (!!formGroupDetail.controls['paymentDueDate'].hasError('required')) {
-              <mat-error><span i18n>Payment Due Date</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Payment Due Date</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -160,7 +162,7 @@
               <mat-label i18n>BizDocId</mat-label>
               <input formControlName="bizDocId" matInput trim="blur">
               @if (!!formGroupDetail.controls['bizDocId'].hasError('required')) {
-              <mat-error><span i18n>BizDocId</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>BizDocId</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -169,7 +171,7 @@
               <mat-label i18n>Partner Code</mat-label>
               <input formControlName="partnerCode" matInput trim="blur">
               @if (!!formGroupDetail.controls['partnerCode'].hasError('required')) {
-              <mat-error><span i18n>Partner Code</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Partner Code</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -181,7 +183,7 @@
               <mat-label i18n>Partner Name</mat-label>
               <input formControlName="partnerName" matInput trim="blur">
               @if (!!formGroupDetail.controls['partnerName'].hasError('required')) {
-              <mat-error><span i18n>Partner Name</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Partner Name</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -190,7 +192,7 @@
               <mat-label i18n>Partner Type</mat-label>
               <input formControlName="partnerType" matInput trim="blur">
               @if (!!formGroupDetail.controls['partnerType'].hasError('required')) {
-              <mat-error><span i18n>Partner Type</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Partner Type</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -199,7 +201,7 @@
               <mat-label i18n>Currency</mat-label>
               <input formControlName="currency" matInput trim="blur">
               @if (!!formGroupDetail.controls['currency'].hasError('required')) {
-              <mat-error><span i18n>Currency</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Currency</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -211,110 +213,403 @@
               <mat-datepicker-toggle [for]="exchangeRateDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #exchangeRateDate></mat-datepicker>
               @if (!!formGroupDetail.controls['exchangeRateDate'].hasError('required')) {
-              <mat-error><span i18n>Exchange Rate Date</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Exchange Rate Date</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
         </div>
-          <!--        dong5-->
-
-          <div class="row mt-20">
-            <div class="col-3" sizeInput='sm'>
-              <mat-form-field>
-                <mat-label i18n>Exchange Rate</mat-label>
-                <input formControlName="exchangeRate" matInput trim="blur">
-                @if (!!formGroupDetail.controls['exchangeRate'].hasError('required')) {
+        <!--        dong5-->
+        <div class="row mt-20">
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Exchange Rate</mat-label>
+              <input formControlName="exchangeRate" matInput trim="blur">
+              @if (!!formGroupDetail.controls['exchangeRate'].hasError('required')) {
                 <mat-error><span i18n>Exchange Rate</span><span i18n> not empty</span></mat-error>
-                }
-              </mat-form-field>
-            </div>
-            <div class="col-3" sizeInput='sm'>
-              <mat-form-field>
-                <mat-label i18n>Exchange Type</mat-label>
-                <input formControlName="exchangeRateType" matInput trim="blur">
-                @if (!!formGroupDetail.controls['exchangeRateType'].hasError('required')) {
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Exchange Type</mat-label>
+              <input formControlName="exchangeRateType" matInput trim="blur">
+              @if (!!formGroupDetail.controls['exchangeRateType'].hasError('required')) {
                 <mat-error><span i18n>Exchange Type</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'></div>
+          <div class="col-3" sizeInput='sm'></div>
+        </div>
+        <!--        dong6-->
+        <div class="row mt-20">
+          <mat-form-field>
+            <mat-label i18n>Description</mat-label>
+            <textarea cdkAutosizeMaxRows="5" cdkAutosizeMaxRows="5" cdkAutosizeMinRows="2" cdkAutosizeMinRows="2"
+                      cdkTextareaAutosize
+                      formControlName="description" i18n-placeholder matInput
+                      required trim="blur"></textarea>
+            @if (!!formGroupDetail.controls['description'].hasError('required')) {
+              <mat-error><span i18n>Description</span><span i18n> not empty</span></mat-error>
+            }
+          </mat-form-field>
+        </div>
+        <!--        dong7-->
+        <div class="row mt-20">
+          <mat-form-field>
+            <mat-label i18n>Note</mat-label>
+            <textarea cdkAutosizeMaxRows="5" cdkAutosizeMinRows="2" cdkTextareaAutosize formControlName="note"
+                      i18n-placeholder
+                      matInput trim="blur"></textarea>
+          </mat-form-field>
+        </div>
+        <!--        dong8-->
+        <div class="row mt-20">
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Root</mat-label>
+              <input formControlName="idParent" matInput trim="blur">
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Version</mat-label>
+              <input formControlName="version" matInput trim="blur">
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Status</mat-label>
+              <mat-select formControlName="status">
+                <mat-option [value]="null" i18n>-- All Status --</mat-option>
+                @for (item of listInvoiceDocumentStatus; track item) {
+                  <mat-option [value]="item.key">{{ item.value }}</mat-option>
                 }
-              </mat-form-field>
-            </div>
-            <div class="col-3" sizeInput='sm'></div>
-            <div class="col-3" sizeInput='sm'></div>
-            </div>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
       </form>
     </mat-panel-description>
   </mat-expansion-panel>
-<!--  <mat-expansion-panel [expanded]="expandList.has('tab2')">
+  <mat-expansion-panel [expanded]="expandList.has('tab2')">
     <mat-expansion-panel-header i18n>
-      <div (click)="$event.stopPropagation();" class="title-no-event">2. Detailed Statement</div>
+      <div (click)="$event.stopPropagation();" class="title-no-event">2. Detailed payment information</div>
     </mat-expansion-panel-header>
     <mat-panel-description class="d-block">
+      <div class="w-100 text-end">
+        <button (click)="addDtl()" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n mat-button type="button">
+          <i class="material-symbols-outlined">
+            add
+          </i>
+          Add
+        </button>
+      </div>
       <div class="table-responsive">
-        <table [dataSource]="formGroupDetail.getRawValue().invoiceFormDtl" class="table-light table-responsive"
+        <table [dataSource]="formGroupDetail.getRawValue().invoiceDocumentDtl" class="table-light table-responsive"
                mat-table>
           <ng-container matColumnDef="stt">
             <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
             <td *matCellDef="let element; let i = index" class="text-center"
                 mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
             </td>
-            <td *matFooterCellDef [colSpan]="_displayedColumnsHeader2.length+1" class="text-center"
-                mat-footer-cell>
-              Total
+          </ng-container>
+          <ng-container matColumnDef="serviceCode">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Code <span style="color:red">*</span></th>
+            <td *matCellDef="let element" mat-cell>
+              <div class="input-cell">
+                <mat-form-field>
+                  <mat-select (selectionChange)="changeServiceFee($event,element,'code')"
+                              [(ngModel)]="element.serviceCode"
+                              required>
+                    <mat-option *ngFor="let option of listFeeService" [value]="option.code">
+                      {{ option.code }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
             </td>
           </ng-container>
-          <ng-container matColumnDef="checkin2col">
-            <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkin
-            </th>
+          <ng-container matColumnDef="serviceName">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Name</th>
+            <td *matCellDef="let element" mat-cell>
+              <div class="input-cell">
+                <mat-form-field>
+                  <mat-select (selectionChange)="changeServiceFee($event,element,'name')"
+                              [(ngModel)]="element.serviceName"
+                              required>
+                    <mat-option *ngFor="let option of listFeeService" [value]="option.name">
+                      {{ option.name }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </td>
           </ng-container>
-          <ng-container matColumnDef="checkout2col">
-            <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>
-              Checkout
-            </th>
+          <ng-container matColumnDef="unit">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit</th>
+            <td *matCellDef="let element" mat-cell>
+                <span class="label-text">
+            {{ element.unit }}
+            </span>
+            </td>
           </ng-container>
-          <ng-container matColumnDef="checkin3col">
-            <th *matHeaderCellDef class="text-center " colspan="3" mat-header-cell mat-sort-header>Checkin
+          <ng-container matColumnDef="periodOccurrence">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Period
+              Occurrence
             </th>
+            <td *matCellDef="let element" mat-cell>
+              <div class="input-cell">
+              <app-datepicker-year-month  [(ngModel)]="element.periodOccurrence">
+              </app-datepicker-year-month>
+              </div>
+            </td>
           </ng-container>
-          <ng-container matColumnDef="checkout3col">
-            <th *matHeaderCellDef class="text-center " colspan="3" mat-header-cell mat-sort-header>
-              Checkout
+          <ng-container matColumnDef="nsCode">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">NS Code <span style="color:red">*</span></th>
+            <td *matCellDef="let element" mat-cell>
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.nsCode" appThousandsSeparator matInput required
+                         trim="blur" type="text">
+                  <mat-error>{{ validField(element, 'nsCode', inputRef) }}</mat-error>
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="unitPrice">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit Price <span style="color:red">*</span></th>
+            <td *matCellDef="let element" mat-cell>
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.unitPrice" appThousandsSeparator matInput required
+                         trim="blur"
+                         type="text">
+                  <mat-error>{{ validField(element, 'unitPrice', inputRef) }}</mat-error>
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="amountFcBeforeVat">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
+              Amount Fc Before Vat <span style="color:red">*</span>
             </th>
+            <td *matCellDef="let element" mat-cell>
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.amountFcBeforeVat" appThousandsSeparator matInput
+                         required trim="blur"
+                         type="text">
+                  <mat-error>{{ validField(element, 'amountFcBeforeVat', inputRef) }}</mat-error>
+
+                </mat-form-field>
+              </div>
+            </td>
           </ng-container>
-          @for (innerColumn of _displayedColumnsAll; track innerColumn.value) {
-          <ng-container matColumnDef="{{innerColumn.value}}">
-                            <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center"
-                                [rowSpan]="(formType===1 || formType===2)?innerColumn.rowspan:1"
-                                [colSpan]=innerColumn.colspan>
-          {{ innerColumn.label }}
-          </th>
-          <td
-                  [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
-                                    mat-cell *matCellDef="let element">
-                <span [ngClass]="{
-          'badge': innerColumn.value === 'activeLabel',
-          'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
-          'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
-          }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
-                            </td>
-                            <td mat-footer-cell *matFooterCellDef class="text-right"> {{
-          calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format]
-          }}
-          </td>
-      </ng-container>
-          }
-          <tr *matHeaderRowDef="_displayedColumnsHeader1" mat-header-row></tr>
-          <tr *matHeaderRowDef="_displayedColumnsHeader2" mat-header-row></tr>
-          &lt;!&ndash;<tr *matHeaderRowDef="['stt','accessBridge']"
-              mat-header-row></tr>&ndash;&gt;
-          <tr *matRowDef="let row; columns: _displayedColumnsRow;" class="input-row" mat-row></tr>
-          <tr *matFooterRowDef="_displayedColumnsFooter" class="fw-bold" mat-footer-row></tr>
+          <ng-container matColumnDef="amountVndBeforeVat">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
+              Amount Vnd Before Vat
+            </th>
+            <td *matCellDef="let element" mat-cell>
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.amountVndBeforeVat" appThousandsSeparator matInput
+                         required trim="blur"
+                         type="text">
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="amountFcVat">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Fc</th>
+            <td *matCellDef="let element" mat-cell>
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.amountFcVat" appThousandsSeparator matInput required
+                         trim="blur"
+                         type="text">
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="amountVndVat">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Vnd</th>
+            <td *matCellDef="let element" mat-cell>
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.amountVndVat" appThousandsSeparator matInput required
+                         trim="blur"
+                         type="text">
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="vatType">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Vat Type</th>
+            <td *matCellDef="let element" mat-cell>
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.vatType" appThousandsSeparator matInput required
+                         trim="blur" type="text">
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="vat">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">%VAT</th>
+            <td *matCellDef="let element" mat-cell>
+              <div class="input-cell">
+                <mat-form-field>
+                  <input #inputRef="ngModel" [(ngModel)]="element.vat" appThousandsSeparator matInput required
+                         trim="blur" type="text">
+                </mat-form-field>
+              </div>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="vatHeader">
+            <th *matHeaderCellDef class="text-center" colspan="4" i18n mat-header-cell mat-sort-header>VAT
+          </ng-container>
+          <tr
+              *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader']"
+              mat-header-row></tr>
+          <tr
+              *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
+          <tr
+              *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','unitPrice','amountFcBeforeVat','amountVndBeforeVat','amountFcVat','amountVndVat','vatType','vat'];"
+              class="input-row" mat-row></tr>
           <tr *matNoDataRow class="mat-row">
-            <td [attr.colspan]="_displayedColumnsRow.length" class="mat-cell border-none text-center"><span
-              i18n>No data!</span></td>
+            <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
+                i18n>No data!</span></td>
           </tr>
         </table>
       </div>
+      <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
+        <!--        dong1-->
+        <div class="row" style="margin-top: 50px ">
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Amount Fc Before Vat</mat-label>
+              <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput required
+                     trim="blur" type="text">
+              @if (!!formGroupDetail.controls['amountFcBeforeVat'].hasError('required')) {
+                <mat-error><span i18n>Amount Fc Before Vat</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Vat Fc</mat-label>
+              <input appThousandsSeparator formControlName="vatFc" matInput required
+                     trim="blur" type="text">
+              @if (!!formGroupDetail.controls['vatFc'].hasError('required')) {
+                <mat-error><span i18n>Vat Fc</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Amount Vnd Before Vat</mat-label>
+              <input appThousandsSeparator formControlName="amountVndBeforeVat" matInput required
+                     trim="blur" type="text">
+              @if (!!formGroupDetail.controls['amountVndBeforeVat'].hasError('required')) {
+                <mat-error><span i18n>Amount Vnd Before Vat</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Vat Vnd</mat-label>
+              <input appThousandsSeparator formControlName="vatVnd" matInput required
+                     trim="blur" type="text">
+              @if (!!formGroupDetail.controls['vatVnd'].hasError('required')) {
+                <mat-error><span i18n>Vat Vnd</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+        <!--        dong2-->
+        <div class="row mt-25">
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Total Amount Fc</mat-label>
+              <input appThousandsSeparator formControlName="totalAmountFc" matInput required
+                     trim="blur" type="text">
+              @if (!!formGroupDetail.controls['totalAmountFc'].hasError('required')) {
+                <mat-error><span i18n>Total Amount Fc</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Total Amount Vnd</mat-label>
+              <input appThousandsSeparator formControlName="totalAmountVnd" matInput required
+                     trim="blur" type="text">
+              @if (!!formGroupDetail.controls['totalAmountVnd'].hasError('required')) {
+                <mat-error><span i18n>Total Amount Vnd</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Reimbursement Total Fc</mat-label>
+              <input appThousandsSeparator formControlName="reimbursementTotalFc" matInput required
+                     trim="blur" type="text">
+              @if (!!formGroupDetail.controls['reimbursementTotalFc'].hasError('required')) {
+                <mat-error><span i18n>Reimbursement Total Fc</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Reimbursement Total Vnd</mat-label>
+              <input appThousandsSeparator formControlName="reimbursementTotalVnd" matInput required
+                     trim="blur" type="text">
+              @if (!!formGroupDetail.controls['reimbursementTotalVnd'].hasError('required')) {
+                <mat-error><span i18n>Reimbursement Total Vnd</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+        </div>
+      </form>
     </mat-panel-description>
-  </mat-expansion-panel>-->
-
+  </mat-expansion-panel>
+  <mat-expansion-panel [expanded]="expandList.has('tab3')">
+    <mat-expansion-panel-header i18n>
+      <div (click)="$event.stopPropagation();" class="title-no-event">3. File Attachments</div>
+    </mat-expansion-panel-header>
+    <mat-panel-description class="d-block">
+      <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
+        <div class="row">
+          <table [dataSource]="formGroupDetail.getRawValue().fileAttachments" class="table-light" mat-table>
+            <ng-container matColumnDef="stt">
+              <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
+              <td *matCellDef="let element; let i = index" class="text-center"
+                  mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="fileName">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
+              <td *matCellDef="let element" mat-cell>
+                <a (click)="download(element)"
+                   class="d-flex align-items-center justify-content-between position-relative"
+                   style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
+                  {{ element.fileName }}
+                </a>
+              </td>
+            </ng-container>
+            <tr *matHeaderRowDef="['stt','fileName']" mat-header-row></tr>
+            <tr *matRowDef="let row; columns: ['stt','fileName']" mat-row></tr>
+          </table>
+        </div>
+        <div *ngIf="!readMode" class="row mt-25">
+          <div class="col-lg-6" sizeInput='sm'>
+            <file-upload (change)="actionUpload()" [accept]="COMMON_CONFIG.FILE_ACCEPT" [multiple]="false"
+                         class="file-uploader"
+                         formControlName="fileUpload"></file-upload>
+          </div>
+        </div>
+      </form>
+    </mat-panel-description>
+  </mat-expansion-panel>
 </mat-accordion>
 

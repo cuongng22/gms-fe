@@ -9,10 +9,10 @@
   </div>
   <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
     <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      Detailed Statement
+      Invoice
     </li>
     <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      Detail
+      Review
     </li>
   </ol>
 </div>
@@ -22,6 +22,12 @@
       undo
     </i>
     Back
+  </button>
+  <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+    <i class="material-symbols-outlined">
+      save
+    </i>
+    Save
   </button>
 </div>
 <mat-accordion multi>
@@ -33,190 +39,215 @@
       <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
         <!--        dong1-->
         <div class="row">
-          <div class="col-3" sizeInput='sm'>
+          <div class="col-2" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Airport code</mat-label>
-              <input formControlName="airportCode" matInput>
+              <mat-select (selectionChange)="airportCodeChange($event)" formControlName="airportCode" required>
+                @for (item of listFlightMarket; track item) {
+                  <mat-option [value]="item">{{ item }}</mat-option>
+                }
+              </mat-select>
+              @if (!!formGroupDetail.controls['airportCode'].hasError('required')) {
+                <mat-error><span i18n>Airport Code</span><span i18n> not empty</span></mat-error>
+              }
             </mat-form-field>
           </div>
-          <div class="col-3" sizeInput='sm'>
+          <div class="col-2" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Invoice number</mat-label>
               <input formControlName="invoiceNumber" matInput>
+              @if (!!formGroupDetail.controls['invoiceNumber'].hasError('required')) {
+                <mat-error><span i18n>Invoice Number</span><span i18n> not empty</span></mat-error>
+              }
+              @if (!!formGroupDetail.controls['invoiceNumber'].hasError('maxlength')) {
+                <mat-error><span i18n>Invoice Number must be less than 50 characters</span></mat-error>
+              }
             </mat-form-field>
           </div>
-          <div class="col-3" sizeInput='sm'>
+          <div class="col-2" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Invoice date</mat-label>
-              <input
-                [value]="formGroupDetail.getRawValue().invoiceDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]"
-                formControlName="invoiceDate"
-                matInput>
+              <input [matDatepicker]="invoiceDate" formControlName="invoiceDate" matInput
+                     required trim="blur">
+              <mat-datepicker-toggle [for]="invoiceDate" matIconSuffix></mat-datepicker-toggle>
+              <mat-datepicker #invoiceDate></mat-datepicker>
+              @if (!!formGroupDetail.controls['invoiceDate'].hasError('required')) {
+                <mat-error><span i18n>Invoice Date</span><span i18n> not empty</span></mat-error>
+              }
             </mat-form-field>
           </div>
-          <div class="col-3" sizeInput='sm'>
+          <div class="col-2" sizeInput='sm'>
             <mat-form-field>
-              <mat-label i18n>Invoice receive date</mat-label>
-              <input
-                [value]="formGroupDetail.getRawValue().invoiceReceiveDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]"
-                formControlName="invoiceReceiveDate" matInput>
+              <mat-label i18n>Receive Date</mat-label>
+              <input [matDatepicker]="invoiceReceiveDate" formControlName="invoiceReceiveDate" matInput
+                     required trim="blur">
+              <mat-datepicker-toggle [for]="invoiceReceiveDate" matIconSuffix></mat-datepicker-toggle>
+              <mat-datepicker #invoiceReceiveDate></mat-datepicker>
+              @if (!!formGroupDetail.controls['invoiceReceiveDate'].hasError('required')) {
+                <mat-error><span i18n>ReceiveDate Date</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-2" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Period From</mat-label>
+              <input [matDatepicker]="periodFrom" formControlName="periodFrom" matInput
+                     required trim="blur">
+              <mat-datepicker-toggle [for]="periodFrom" matIconSuffix></mat-datepicker-toggle>
+              <mat-datepicker #periodFrom></mat-datepicker>
+              @if (!!formGroupDetail.controls['periodFrom'].hasError('required')) {
+                <mat-error><span i18n>Period From</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-2" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Period To</mat-label>
+              <input [matDatepicker]="periodTo" formControlName="periodTo" matInput
+                     required trim="blur">
+              <mat-datepicker-toggle [for]="periodTo" matIconSuffix></mat-datepicker-toggle>
+              <mat-datepicker #periodTo></mat-datepicker>
+              @if (!!formGroupDetail.controls['periodTo'].hasError('required')) {
+                <mat-error><span i18n>Period To</span><span i18n> not empty</span></mat-error>
+              }
             </mat-form-field>
           </div>
         </div>
         <!--        dong2-->
         <div class="row mt-20">
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Period From</mat-label>
-              <input
-                [value]="formGroupDetail.getRawValue().periodFrom | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]"
-                formControlName="periodFrom"
-                matInput>
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Period To</mat-label>
-              <input
-                [value]="formGroupDetail.getRawValue().periodTo | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]"
-                formControlName="periodTo"
-                matInput>
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
+          <div class="col-2" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>BizDocId</mat-label>
-              <input formControlName="bizDocId" matInput>
+              <input formControlName="bizDocId" matInput trim="blur">
+              @if (!!formGroupDetail.controls['bizDocId'].hasError('required')) {
+                <mat-error><span i18n>BizDocId</span><span i18n> not empty</span></mat-error>
+              }
             </mat-form-field>
           </div>
-          <div class="col-3" sizeInput='sm'>
+          <div class="col-2" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Partner Code</mat-label>
+              <input formControlName="partnerCode" matInput trim="blur">
+              @if (!!formGroupDetail.controls['partnerCode'].hasError('required')) {
+                <mat-error><span i18n>Partner Code</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Partner Name</mat-label>
+              <input formControlName="partnerName" matInput trim="blur">
+              @if (!!formGroupDetail.controls['partnerName'].hasError('required')) {
+                <mat-error><span i18n>Partner Name</span><span i18n> not empty</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Partner Type</mat-label>
-              <input formControlName="partnerType" matInput>
+              <input formControlName="partnerType" matInput trim="blur">
+              @if (!!formGroupDetail.controls['partnerType'].hasError('required')) {
+                <mat-error><span i18n>Partner Type</span><span i18n> not empty</span></mat-error>
+              }
             </mat-form-field>
           </div>
         </div>
         <!--        dong3-->
         <div class="row mt-20">
+          <mat-form-field>
+            <mat-label i18n>Note</mat-label>
+            <textarea cdkAutosizeMaxRows="5" cdkAutosizeMinRows="2" cdkTextareaAutosize formControlName="note"
+                      i18n-placeholder
+                      matInput trim="blur"></textarea>
+          </mat-form-field>
+        </div>
+        <!--        dong4-->
+        <div class="row mt-20">
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
-              <mat-label i18n>Partner Code</mat-label>
-              <input formControlName="partnerCode" matInput>
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Partner Name</mat-label>
-              <input formControlName="partnerName" matInput>
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Total amount</mat-label>
-              <input [value]="formGroupDetail.getRawValue().totalAmount | dataTransformPipe:[Constant.NUMBER]"
-                     formControlName="totalAmount"
-                     matInput type="text">
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Total amount VAT</mat-label>
-              <input [value]="formGroupDetail.getRawValue().totalAmountVat | dataTransformPipe:[Constant.NUMBER]"
-                     formControlName="totalAmountVat"
-                     matInput>
+              <mat-label i18n>Status</mat-label>
+              <mat-select formControlName="status">
+                <mat-option [value]="null" i18n>-- All Status --</mat-option>
+                @for (item of listInvoiceDocumentStatus; track item) {
+                  <mat-option [value]="item.key">{{ item.value }}</mat-option>
+                }
+              </mat-select>
             </mat-form-field>
           </div>
         </div>
-        <!--        dong4-->
-        @if(formGroupDetail.getRawValue().fileAttachments?.length >0){
-        <div class="row mt-20">
-            <span class="fw-bold" i18n>File Attachments</span>
-          <table [dataSource]="formGroupDetail.getRawValue().fileAttachments" class="table-light" mat-table>
-            <ng-container matColumnDef="stt">
-              <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
-              <td *matCellDef="let element; let i = index" class="text-center"
-                  mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
-        </td>
-      </ng-container>
-      <ng-container matColumnDef="fileName">
-        <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
-        <td *matCellDef="let element" mat-cell>
-          <a (click)="download(element)"
-             class="d-flex align-items-center justify-content-between position-relative"
-             style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
-        {{ element.fileName }}
-        </a>
-      </td>
-    </ng-container>
-    <tr *matHeaderRowDef="['stt','fileName']" mat-header-row></tr>
-    <tr *matRowDef="let row; columns: ['stt','fileName']" mat-row></tr>
-  </table>
-</div>
-        }
       </form>
     </mat-panel-description>
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab2')">
     <mat-expansion-panel-header i18n>
-      <div (click)="$event.stopPropagation();" class="title-no-event">2. Detailed Statement</div>
+      <div (click)="$event.stopPropagation();" class="title-no-event">2. Reconciliation information</div>
     </mat-expansion-panel-header>
     <mat-panel-description class="d-block">
-      <div class="table-responsive">
-        <table [dataSource]="formGroupDetail.getRawValue().invoiceFormDtl" class="table-light table-responsive"
-               mat-table>
-          <ng-container matColumnDef="stt">
-            <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
-            <td *matCellDef="let element; let i = index" class="text-center"
-                mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
-            </td>
-            <td mat-footer-cell class ="text-center" *matFooterCellDef [colSpan]="_displayedColumnsHeader2.length+1">Total</td>
-          </ng-container>
-          <ng-container matColumnDef="checkin2col">
-            <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkin</th>
-          </ng-container>
-          <ng-container matColumnDef="checkout2col">
-            <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkout</th>
-          </ng-container>
-          <ng-container matColumnDef="checkin3col">
-            <th *matHeaderCellDef class="text-center " colspan="3" mat-header-cell mat-sort-header>Checkin</th>
-          </ng-container>
-          <ng-container matColumnDef="checkout3col">
-            <th *matHeaderCellDef class="text-center " colspan="3" mat-header-cell mat-sort-header>Checkout</th>
-          </ng-container>
-          @for (innerColumn of _displayedColumnsAll; track innerColumn.value) {
-          <ng-container matColumnDef="{{innerColumn.value}}">
-                            <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center"
-                                [rowSpan]="(formType===1 || formType===2)?innerColumn.rowspan:1"
-                                [colSpan]=innerColumn.colspan>
-          {{ innerColumn.label }}
-          </th>
-          <td
-                  [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
-                                    mat-cell *matCellDef="let element">
-                <span [ngClass]="{
-          'badge': innerColumn.value === 'activeLabel',
-          'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
-          'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
-          }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
-                            </td>
-                            <td mat-footer-cell *matFooterCellDef class="text-right"> {{
-          calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format]}} </td>
-                        </ng-container>
-          }
-          <tr *matHeaderRowDef="_displayedColumnsHeader1" mat-header-row></tr>
-          <tr *matHeaderRowDef="_displayedColumnsHeader2" mat-header-row></tr>
-          <!--<tr *matHeaderRowDef="['stt','accessBridge']"
-              mat-header-row></tr>-->
-          <tr *matRowDef="let row; columns: _displayedColumnsRow;" class="input-row" mat-row></tr>
-          <tr *matFooterRowDef="_displayedColumnsFooter" class="fw-bold" mat-footer-row></tr>
-          <tr *matNoDataRow class="mat-row">
-            <td [attr.colspan]="_displayedColumnsRow.length" class="mat-cell border-none text-center"><span
-              i18n>No data!</span></td>
-          </tr>
-        </table>
+      <div class="w-100 text-end">
+        <button (click)="addDtl()" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n mat-button type="button">
+          <i class="material-symbols-outlined">
+            add
+          </i>
+          Add
+        </button>
       </div>
+      <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
+        <mat-card-content>
+          <mat-tab-group mat-align-tabs="start" mat-stretch-tabs="false">
+            <mat-tab i18n-label label="Đối soát chung">
+              <div>export</div>
+              <div class="table-responsive">
+                <table [dataSource]="formGroupDetail.getRawValue().invoiceDocumentReviewProjection"
+                       class="table-light table-responsive"
+                       mat-table>
+
+                  <ng-container matColumnDef="label">
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Thông tin
+                      đối soát
+                    </th>
+                    <td *matCellDef="let element" mat-cell>
+                      {{ element.label }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="aves">
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Nguồn dữ
+                      liệu AVES
+                    </th>
+                    <td *matCellDef="let element" mat-cell>
+                      {{ element.label }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="form">
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Nguồn
+                      bảng kê chứng từ
+                    </th>
+                    <td *matCellDef="let element" mat-cell>
+                      {{ element.label }}
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="diff">
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Chênh lệch
+                    </th>
+                    <td *matCellDef="let element" mat-cell>
+                      {{ element.label }}
+                    </td>
+                  </ng-container>
+                  <tr *matHeaderRowDef="['label','aves','form','diff']"
+                      mat-header-row></tr>
+                  <tr *matHeaderRowDef="['label','aves','form','diff']" mat-header-row></tr>
+                  <tr *matNoDataRow class="mat-row">
+                    <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
+                        i18n>No data!</span></td>
+                  </tr>
+                </table>
+              </div>
+            </mat-tab>
+            <mat-tab i18n-label label="Đối soát chi tiết">
+            </mat-tab>
+          </mat-tab-group>
+        </mat-card-content>
+      </mat-card>
     </mat-panel-description>
   </mat-expansion-panel>
-
 </mat-accordion>
 

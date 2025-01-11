@@ -241,7 +241,7 @@
                   ></textarea>
                   <mat-hint align="end">{{ formGroupDetail.value.notes?.length }} / 500</mat-hint>
                   @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
-                    <mat-error><span i18n>Remark</span><span i18n> must be less than 500characters</span></mat-error>
+                    <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
                   }
                 </mat-form-field>
                 <mat-checkbox formControlName="active" i18n>Active</mat-checkbox>
