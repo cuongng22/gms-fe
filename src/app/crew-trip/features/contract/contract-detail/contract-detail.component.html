@@ -3,7 +3,7 @@
     <h5 class="mb-0 d-inline ml-10">
       @if (viewType == 'HD') {
         <h5 class="mb-0 ml-10">
-          <span i18n>Contract Detail</span>
+          <span i18n>View contract</span>
         </h5>
       } @else if (viewType == 'PL') {
         <h5 class="mb-0 ml-10">
@@ -42,7 +42,7 @@
   <mat-card-content>
     <form [formGroup]="formGroupDetail" autocomplete="off">
       <div class="row">
-        <div class="col-9" sizeInput='sm'>
+        <div class="col-9" sizeInput="sm">
           <label class="main-label fw-medium text-black pr-15" i18n>
             Service type <span style="color:red">*</span>
           </label>
@@ -51,14 +51,18 @@
               Hotel
             </mat-radio-button>
             <mat-radio-button i18n value="2">
-              Car rental
+              Transportation
             </mat-radio-button>
             <mat-radio-button i18n value="3">
-              Accommodation
+              Hotel & Transportation
             </mat-radio-button>
+            @if (!!formGroupDetail.controls['doiTuongDichVu'].hasError('required')) {
+              <mat-error><span i18n>Service type</span><span i18n> not empty</span></mat-error>
+            }
           </mat-radio-group>
+
         </div>
-        <div class="col-3" sizeInput='sm'>
+        <div class="col-3" sizeInput="sm">
           <mat-form-field>
             <mat-label i18n>Contract category</mat-label>
             <mat-select formControlName="contractSpec" required>
@@ -78,7 +82,9 @@
 <mat-accordion multi>
   <mat-expansion-panel [expanded]="expandList.has('tab1')">
     <mat-expansion-panel-header i18n>
-      <div (click)="$event.stopPropagation();" class="title-no-event">1. General information</div>
+      <div (click)="$event.stopPropagation();" class="title-no-event">1. General information (Data extracted from the
+        CMS)
+      </div>
     </mat-expansion-panel-header>
     <mat-panel-description>
       <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
@@ -184,7 +190,7 @@
         <!--        dong3-->
         <div class="row mt-20">
           <div class="col-4" sizeInput='sm'>
-            <mat-form-field>
+            <mat-form-field matTooltip="{{getContractForm(formGroupDetail.controls['contractForm'].value)}}">
               <mat-label i18n>Contract form</mat-label>
               <mat-select formControlName="contractForm" required>
                 <mat-option *ngFor="let option of listContractForm" [value]="option.key">
@@ -208,7 +214,8 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract name</mat-label>
-              <input formControlName="contractName" matInput required trim="blur">
+              <input formControlName="contractName" matInput required trim="blur"
+                     matTooltip="{{formGroupDetail.controls['contractName'].value}}">
               @if (!!formGroupDetail.controls['contractName'].hasError('required')) {
                 <mat-error><span i18n>Contract name</span><span i18n> not empty</span></mat-error>
               }
@@ -230,7 +237,8 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Supplier name</mat-label>
-              <input formControlName="partnerName" matInput required trim="blur">
+              <input formControlName="partnerName" matInput required trim="blur"
+                     matTooltip="{{formGroupDetail.controls['partnerName'].value}}">
               @if (!!formGroupDetail.controls['partnerName'].hasError('required')) {
                 <mat-error><span i18n>Supplier name</span><span i18n> not empty</span></mat-error>
               }
@@ -239,7 +247,8 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Supplier address</mat-label>
-              <input formControlName="partnerAddress" matInput trim="blur">
+              <input formControlName="partnerAddress" matInput trim="blur"
+                     matTooltip="{{formGroupDetail.controls['partnerAddress'].value}}">
               @if (!!formGroupDetail.controls['partnerAddress'].hasError('required')) {
                 <mat-error><span i18n>Supplier address</span><span i18n> not empty</span></mat-error>
               }
@@ -337,8 +346,8 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Employee</mat-label>
-              <input formControlName="employeeId" matInput trim="blur">
-              @if (!!formGroupDetail.controls['employeeId'].hasError('required')) {
+              <input formControlName="employeeName" matInput trim="blur">
+              @if (!!formGroupDetail.controls['employeeName'].hasError('required')) {
                 <mat-error><span i18n>Employee</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
@@ -403,7 +412,9 @@
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab2')">
     <mat-expansion-panel-header i18n>
-      <div (click)="$event.stopPropagation();" class="title-no-event">2. Remittance Information</div>
+      <div (click)="$event.stopPropagation();" class="title-no-event">2. Remittance Information (Data extracted from the
+        CMS)
+      </div>
     </mat-expansion-panel-header>
     <mat-panel-description>
       <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
@@ -554,7 +565,9 @@
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab3')">
     <mat-expansion-panel-header i18n>
-      <div (click)="$event.stopPropagation();" class="title-no-event">3. Attached Document Information</div>
+      <div (click)="$event.stopPropagation();" class="title-no-event">3. Attached Document Information (Data extracted
+        from the CMS)
+      </div>
     </mat-expansion-panel-header>
     <mat-panel-description>
       <form [formGroup]="formGroupFileUpload" autocomplete="off" class="w-100">
@@ -900,7 +913,8 @@
                 mat-cell>
               <div class="input-cell">
                 <mat-form-field class="edit-inline-table">
-                  <mat-select #inputRef="ngModel" [(ngModel)]="element.serviceFeeCode" required (ngModelChange)="onChangeHHDV(element)">
+                  <mat-select #inputRef="ngModel" [(ngModel)]="element.serviceFeeCode" required
+                              (ngModelChange)="onChangeHHDV(element)">
                     <mat-option *ngFor="let option of listHHDV" [value]="option.code">
                       {{ option.code }}
                     </mat-option>
