@@ -244,6 +244,18 @@
                       <app-selection-suggest i18n-label="@@airportCodes" label="Market code" [options]="markets"
                                              formControlName="airportCodes" size="sm" />
                   </div>
+                <div class="col-sm-3 col-md-3 form-group">
+                  <app-selection-suggest i18n-label="@@airportCodes" label="ORG" [options]="airportList"
+                                         formControlName="arrCode" size="sm" />
+                </div>
+                <div class="col-sm-3 col-md-3 form-group">
+                  <app-selection-suggest i18n-label="@@airportCodes" label="DST" [options]="airportList"
+                                         formControlName="desCode" size="sm" />
+                </div>
+                <div class="col-sm-6 col-md-6 form-group">
+                  <app-selection-suggest i18n-label="@@airportCodes" label="Number of Flight" [options]="markets"
+                                         formControlName="airportCodes" size="sm" />
+                </div>
                 <div class="col-sm-12 col-md-12 form-group">
                   <mat-form-field>
                     <mat-label i18n>Remark</mat-label>

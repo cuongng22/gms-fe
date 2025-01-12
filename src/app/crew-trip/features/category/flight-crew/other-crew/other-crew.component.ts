@@ -70,6 +70,7 @@ export class OtherCrewComponent  extends CommonComponent implements OnInit {
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   markets: any[] = [];
+  airportList: any[] = [];
   countries: any[] = [];
   filteredOptionsMarket: any[];
   fb = inject(FormBuilder);
@@ -87,6 +88,8 @@ export class OtherCrewComponent  extends CommonComponent implements OnInit {
       name: ['', [Validators.required]],
       nation: ['',[Validators.required]],
       airportCodes: [''],
+      desCode :[''],
+      arrCode :[''],
       notes: [''],
       status: [true,]
     });
@@ -121,6 +124,7 @@ export class OtherCrewComponent  extends CommonComponent implements OnInit {
   getAllAirportCode(){
     this.flightMarketSv.search({ option: 1, status: 'Operational' }).then(res => {
       this.markets = res.data;
+      this.airportList = res.data;
     });
   }
 
