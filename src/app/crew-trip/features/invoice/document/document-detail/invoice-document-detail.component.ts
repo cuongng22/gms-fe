@@ -30,7 +30,7 @@ import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocom
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {NgxMatTimepickerFieldComponent} from 'ngx-mat-timepicker';
-import {transform} from 'lodash';
+import {cloneDeep, transform} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lookup';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
@@ -356,9 +356,11 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       }));
       await this.baseService.uploadFileCommon(formUpload).then(res => {
         if (res.code == HttpStatusCode.Ok) {
+          let fileNameClone = fileUpload.name.split('.');
+          fileNameClone.pop();
           let listFile = [...this.formGroupDetail.getRawValue().fileAttachments, {
             ctype: 'MANUAL',
-            fileName: fileUpload.name,
+            fileName: fileNameClone,
             fileSize: fileUpload.size,
             fileUrl: res.data,
             fileType: fileUpload.name.split('.').pop(),
@@ -426,7 +428,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   addDtl() {
-    let listDtl = [...this.formGroupDetail.getRawValue().invoiceDocumentDtl, {}];
+    let listDtl = [...this.formGroupDetail.getRawValue().invoiceDocumentDtl || [], {}];
     this.formGroupDetail.patchValue({invoiceDocumentDtl: listDtl});
   }
 }

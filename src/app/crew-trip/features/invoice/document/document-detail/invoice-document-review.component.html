@@ -183,14 +183,14 @@
       <div (click)="$event.stopPropagation();" class="title-no-event">2. Reconciliation information</div>
     </mat-expansion-panel-header>
     <mat-panel-description class="d-block">
-      <div class="w-100 text-end">
+    <!--  <div class="w-100 text-end">
         <button (click)="addDtl()" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n mat-button type="button">
           <i class="material-symbols-outlined">
             add
           </i>
           Add
         </button>
-      </div>
+      </div>-->
       <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
         <mat-card-content>
           <mat-tab-group mat-align-tabs="start" mat-stretch-tabs="false">
@@ -200,41 +200,43 @@
                 <table [dataSource]="formGroupDetail.getRawValue().invoiceDocumentReviewProjection"
                        class="table-light table-responsive"
                        mat-table>
-
                   <ng-container matColumnDef="label">
-                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Thông tin
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Thông tin
                       đối soát
                     </th>
                     <td *matCellDef="let element" mat-cell>
-                      {{ element.label }}
+                      @if (element.ord?.length == 1) {
+                        <span class="fw-bold">{{ element.label }}</span>
+                      } @else {
+                        <span class="pl-10">{{ '- ' + element.label }}</span>
+                      }
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="aves">
-                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Nguồn dữ
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Nguồn dữ
                       liệu AVES
                     </th>
-                    <td *matCellDef="let element" mat-cell>
-                      {{ element.label }}
+                    <td *matCellDef="let element" [class.text-danger]="+element.diff != 0" class="text-right" mat-cell>
+                      {{ element.aves | dataTransformPipe:[Constant.NUMBER] }}
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="form">
-                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Nguồn
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Nguồn
                       bảng kê chứng từ
                     </th>
-                    <td *matCellDef="let element" mat-cell>
-                      {{ element.label }}
+                    <td *matCellDef="let element" [class.text-danger]="+element.diff != 0" class="text-right" mat-cell>
+                      {{ element.form | dataTransformPipe:[Constant.NUMBER] }}
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="diff">
                     <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Chênh lệch
                     </th>
-                    <td *matCellDef="let element" mat-cell>
-                      {{ element.label }}
+                    <td *matCellDef="let element" [class.text-danger]="+element.diff != 0" class="text-right" mat-cell>
+                      {{ element.diff | dataTransformPipe:[Constant.NUMBER] }}
                     </td>
                   </ng-container>
-                  <tr *matHeaderRowDef="['label','aves','form','diff']"
-                      mat-header-row></tr>
                   <tr *matHeaderRowDef="['label','aves','form','diff']" mat-header-row></tr>
+                  <tr *matRowDef="let row; columns: ['label','aves','form','diff'];" class="input-row" mat-row></tr>
                   <tr *matNoDataRow class="mat-row">
                     <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
                         i18n>No data!</span></td>

@@ -127,6 +127,8 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   @Input() contractId: any;
   formGroupFile!: FormGroup;
   showDialogFile = false;
+  isShowFormHdr: boolean = false;
+  formHdrId: any;
 
   constructor() {
     super();
@@ -297,6 +299,16 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
         templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc nội.xlsx',
         templateNameLabel: 'report-transport-international-template.xlsx'
       })
+    }
+  }
+
+  showFormHdr(formHdrId: any) {
+    // formHdrId = 108;
+    if (+formHdrId > 0) {
+      this.formHdrId = formHdrId;
+      this.isShowFormHdr = true;
+    } else if (+formHdrId < 0) {
+      this.baseService.showError("Không tìm thấy bảng kê chứng từ");
     }
   }
 }
