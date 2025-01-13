@@ -46,7 +46,7 @@
           <label class="main-label fw-medium text-black pr-15" i18n>
             Service type <span style="color:red">*</span>
           </label>
-          <mat-radio-group formControlName="doiTuongDichVu">
+          <mat-radio-group formControlName="doiTuongDichVu" (change)="onChangeDoiTuongDichVu($event)">
             <mat-radio-button i18n value="1">
               Hotel
             </mat-radio-button>
@@ -625,10 +625,17 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Airport Code</mat-label>
-              <input (ngModelChange)="marketCodeChangeDebounce($event);this.marketCodeChangeBrake=false;"
+              <input #input
+                     (ngModelChange)="marketCodeChangeDebounce($event);this.marketCodeChangeBrake=false;"
                      formControlName="marketCode"
                      matInput
-                     required trim="blur">
+                     required trim="blur"
+                     [matAutocomplete]="auto">
+              <mat-autocomplete requireSelection #auto="matAutocomplete">
+                @for (option of listFlightMarket; track option) {
+                  <mat-option [value]="option">{{ option }}</mat-option>
+                }
+              </mat-autocomplete>
               @if (!!formGroupDetail.controls['marketCode'].hasError('required')) {
                 <mat-error><span i18n>Market Code</span><span i18n> not empty</span></mat-error>
               }
@@ -733,6 +740,7 @@
             <mat-form-field>
               <mat-label i18n>Vehicle Type</mat-label>
               <input formControlName="carType" matInput trim="blur">
+              <mat-hint align="start"><i i18n="">Only applicable for car rentals</i></mat-hint>
               @if (!!formGroupDetail.controls['carType'].hasError('required')) {
                 <mat-error><span i18n>Vehicle Type</span><span i18n> not empty</span></mat-error>
               }
@@ -885,7 +893,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="serviceFeeCode">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Service Fee Code</th>
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Code</th>
             <td (click)="editCellUP(element,'serviceFeeCode')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell>
@@ -903,7 +911,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="serviceFeeName">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tên HHDV</th>
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Cost Category Name</th>
             <td *matCellDef="let element" mat-cell>
                 <span class="label-text">
             {{ element.serviceFeeName }}
@@ -911,7 +919,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="serviceFeeUnit">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Đơn vị tính</th>
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Unit</th>
             <td *matCellDef="let element" mat-cell>
                 <span class="label-text">
             {{ element.serviceFeeUnit }}
@@ -919,7 +927,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="codeNghiepVu">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Mã nghiệp vụ</th>
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Business code</th>
             <td (click)="editCellUP(element,'codeNghiepVu')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell
@@ -940,7 +948,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="codeKHNS">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Khoản mục KHNS</th>
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Budget item</th>
             <td (click)="editCellUP(element,'codeKHNS')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell
@@ -961,7 +969,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="priceBeforeTax">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Price Before Tax</th>
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Unit price before tax</th>
             <td (click)="editCellUP(element,'priceBeforeTax')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell
@@ -1003,7 +1011,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="taxRate">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tax Rate</th>
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>% VAT</th>
             <td (click)="editCellUP(element,'taxRate')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell
@@ -1024,7 +1032,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="totalVatTax">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Total Vat Tax</th>
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>VAT amount</th>
             <td (click)="editCellUP(element,'totalVatTax')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell
@@ -1045,7 +1053,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="priceAfterTax">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Price After Tax</th>
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Unit Price After Tax</th>
             <td (click)="editCellUP(element,'priceAfterTax')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell
@@ -1066,7 +1074,7 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="notes">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Note</th>
+            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Remark</th>
             <td (click)="editCellUP(element,'notes')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell
@@ -1086,7 +1094,7 @@
               }
             </td>
           </ng-container>
-          <ng-container matColumnDef="action" stickyEnd>
+          <ng-container matColumnDef="action" stickyEnd *ngIf="readMode">
             <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
               Action
             </th>
