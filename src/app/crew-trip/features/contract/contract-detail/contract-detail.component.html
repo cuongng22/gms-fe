@@ -46,7 +46,7 @@
           <label class="main-label fw-medium text-black pr-15" i18n>
             Service type <span style="color:red">*</span>
           </label>
-          <mat-radio-group formControlName="doiTuongDichVu">
+          <mat-radio-group formControlName="doiTuongDichVu" (change)="serviceTypeChange($event)">
             <mat-radio-button i18n value="1">
               Hotel
             </mat-radio-button>
