@@ -252,9 +252,6 @@
               <div class="col-sm-3 col-md-3 form-group">
                 <app-selection-suggest i18n-label="@@airportCodes" label="DST" [options]="airportList"
                                        formControlName="desCode" size="sm"/>
-                @if (!!formGroupDetail.controls['desCode'].hasError('required')) {
-                  <mat-error><span i18n>DST</span><span i18n> is required</span></mat-error>
-                }
               </div>
               <div class="col-sm-6 col-md-6 form-group">
                 <app-select-multiple size="sm" label="Number of Flight" [required]="false"
