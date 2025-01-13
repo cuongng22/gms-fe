@@ -1,20 +1,27 @@
-import {Component, inject, OnInit, signal} from '@angular/core';
-import {NgScrollbarModule} from 'ngx-scrollbar';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {CommonModule, NgClass} from '@angular/common';
-import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
-import {ToggleService} from 'src/app/common/header/toggle.service';
-import {TranslateModule} from '@ngx-translate/core';
-import {menu} from './sidebar.model';
-
+import { CommonModule, NgClass } from '@angular/common';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { ToggleService } from 'src/app/common/header/toggle.service';
+import { CustomizerSettingsService } from 'src/app/customizer-settings/customizer-settings.service';
+import { menu } from './sidebar.model';
 
 @Component({
   selector: 'app-sidebar',
   standalone: true,
-  imports: [CommonModule, NgScrollbarModule, MatExpansionModule, RouterLinkActive, RouterLink, NgClass, TranslateModule],
+  imports: [
+    CommonModule,
+    NgScrollbarModule,
+    MatExpansionModule,
+    RouterLinkActive,
+    RouterLink,
+    NgClass,
+    TranslateModule,
+  ],
   templateUrl: './sidebar.component.html',
-  styleUrl: './sidebar.component.scss'
+  styleUrl: './sidebar.component.scss',
 })
 export class SidebarComponent implements OnInit {
   router = inject(Router);
@@ -31,20 +38,18 @@ export class SidebarComponent implements OnInit {
   isToggled = false;
 
   constructor(
-    private toggleService: ToggleService,
-    public themeService: CustomizerSettingsService
+		private toggleService: ToggleService,
+		public themeService: CustomizerSettingsService,
   ) {
-    this.toggleService.isSidebarToggled$.subscribe(isSidebarToggled => {
+    this.toggleService.isSidebarToggled$.subscribe((isSidebarToggled) => {
       this.isSidebarToggled = isSidebarToggled;
     });
-    this.themeService.isToggled$.subscribe(isToggled => {
+    this.themeService.isToggled$.subscribe((isToggled) => {
       this.isToggled = isToggled;
     });
   }
 
-  ngOnInit(): void {
-    console.log(this.router);
-  }
+  ngOnInit(): void {}
 
   // Burger Menu Toggle
   toggle() {

@@ -56,7 +56,7 @@
             <mat-radio-button i18n value="3">
               Hotel & Transportation
             </mat-radio-button>
-            @if (!!formGroupDetail.controls['doiTuongDichVu'].hasError('required')) {
+            @if (formGroupDetail.controls['doiTuongDichVu'].hasError('required') && formGroupDetail.controls['doiTuongDichVu'].touched) {
               <mat-error><span i18n>Service type</span><span i18n> not empty</span></mat-error>
             }
           </mat-radio-group>
@@ -162,7 +162,7 @@
               <div class="col-6" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Expiry date</mat-label>
-                  <input [matDatepicker]="expiryDate" formControlName="expiryDate" matInput requiredt
+                  <input [matDatepicker]="expiryDate" formControlName="expiryDate" matInput required
                          trim="blur">
                   <mat-datepicker-toggle [for]="expiryDate" matIconSuffix></mat-datepicker-toggle>
                   <mat-datepicker #expiryDate></mat-datepicker>
@@ -580,12 +580,6 @@
                     mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
                 </td>
               </ng-container>
-              <ng-container matColumnDef="documentType">
-                <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Document Type</th>
-                <td *matCellDef="let element" mat-cell>
-                  {{ element.documentType }}
-                </td>
-              </ng-container>
               <ng-container matColumnDef="fileName">
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
                 <td *matCellDef="let element" mat-cell>
@@ -596,23 +590,9 @@
                   </a>
                 </td>
               </ng-container>
-              <ng-container matColumnDef="action">
-                <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
-                <td *matCellDef="let element; let i = dataIndex" class="text-body text-end" mat-cell>
-                  <div class="action-buttons align-items-center text-center">
-                    @if (!!element.isManual && !readMode && viewType === 'PL') {
-                      <a (click)="_confirmDelete(element,'file','Are you sure you want to delete?')" mat-button
-                         class="text-danger" type="button">
-                        <i class="material-symbols-outlined" i18n-title title="Delete">
-                          delete
-                        </i>
-                      </a>
-                    }
-                  </div>
-                </td>
-              </ng-container>
-              <tr *matHeaderRowDef="['stt','documentType','fileName','action']" mat-header-row></tr>
-              <tr *matRowDef="let row; columns: ['stt','documentType','fileName','action']" mat-row></tr>
+
+              <tr *matHeaderRowDef="['stt','fileName']" mat-header-row></tr>
+              <tr *matRowDef="let row; columns: ['stt','fileName']" mat-row></tr>
             </table>
           </div>
           <!--          <div class="col-4 mt-20" sizeInput='sm'>-->
@@ -644,7 +624,7 @@
         <div class="row">
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
-              <mat-label i18n>Market Code</mat-label>
+              <mat-label i18n>Airport Code</mat-label>
               <input (ngModelChange)="marketCodeChangeDebounce($event);this.marketCodeChangeBrake=false;"
                      formControlName="marketCode"
                      matInput
@@ -668,9 +648,7 @@
               <mat-label i18n>Country</mat-label>
 
               <input #nationName (input)="filterNation()" [matAutocomplete]="nationComplete" formControlName="nation"
-                     matInput
-                     trim="blur"
-                     trim="blur" type="text">
+                     matInput required trim="blur" type="text">
               <mat-autocomplete #nationComplete="matAutocomplete" (optionSelected)="nationSelected($event)"
                                 autoActiveFirstOption
                                 requireSelection>
@@ -699,7 +677,7 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Flight Group</mat-label>
-              <mat-select formControlName="flightGroup" required>
+              <mat-select formControlName="flightGroup">
                 <mat-option *ngFor="let option of listFlightGroup" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
@@ -708,14 +686,14 @@
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
-              <mat-label i18n>Status Usage</mat-label>
+              <mat-label i18n>Airport Status</mat-label>
               <mat-select formControlName="statusUsage" required>
                 <mat-option *ngFor="let option of listStatusUsage" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
               </mat-select>
               @if (!!formGroupDetail.controls['statusUsage'].hasError('required')) {
-                <mat-error><span i18n>Status Usage</span><span i18n> not empty</span></mat-error>
+                <mat-error><span i18n>Airport Status</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -765,7 +743,7 @@
         <div class="row mt-20">
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
-              <mat-label i18n>Giờ checkin chuẩn</mat-label>
+              <mat-label i18n>Standard Check-in Time</mat-label>
               <div class="time-picker">
                 <input [disableClick]="true" [format]="24" [ngxTimepicker]="toggleTimepicker1"
                        formControlName="standardCheckIn"
@@ -783,7 +761,7 @@
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
-              <mat-label i18n>Giờ checkout chuẩn</mat-label>
+              <mat-label i18n>Standard Check-out Time</mat-label>
               <div class="time-picker">
                 <input [disableClick]="true" [format]="24" [ngxTimepicker]="toggleTimepicker2"
                        formControlName="standardCheckOut"
@@ -807,7 +785,7 @@
         <div class="row mt-20">
           <div class="col-12">
             <mat-form-field>
-              <mat-label i18n>Notes</mat-label>
+              <mat-label i18n>Remark</mat-label>
               <textarea formControlName="notes" matInput trim="blur"></textarea>
               <mat-hint align="end">{{ formGroupDetail.getRawValue().notes?.length }} / 500</mat-hint>
               @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
