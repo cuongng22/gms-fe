@@ -213,8 +213,12 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
     }
   }
 
-  onClearInput() {
-    this.acTypeList = this.acTypeListAll;
+  onClearInput(type: any) {
+    if (type == 'ACGROUP') {
+      this.acTypeList = this.acTypeListAll;
+    } else {
+      this.getAllAirportCode();
+    }
   }
 
   override async save() {
@@ -229,7 +233,7 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
       //   desCodeValue?.updateValueAndValidity();
       // }
       this.formGroupDetail.markAllAsTouched();
-      this.formGroup.updateValueAndValidity();
+      this.formGroupDetail.updateValueAndValidity();
       if (this.formGroupDetail.invalid) {
         this.findInvalidControls(this.formGroupDetail);
         return;
@@ -249,20 +253,6 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
       await this.closeDetail();
       return res;
     } catch (e: any) {
-      if (
-        e.status != HttpStatusCode.Conflict &&
-        e.status != HttpStatusCode.BadRequest &&
-        e.error.error['emails[]'] &&
-        !(
-          e.status == HttpStatusCode.InternalServerError &&
-          e.error?.error.includes('UNIQUE')
-        )
-      ) {
-        this.baseService.showError(
-          e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
-        );
-      }
-      return e;
     } finally {
       await this.spinner.hide();
     }

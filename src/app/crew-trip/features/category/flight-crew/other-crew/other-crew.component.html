@@ -237,7 +237,8 @@
                 </mat-form-field>
               </div>
               <div class="col-sm-6 col-md-6 form-group">
-                <app-selection-suggest i18n-label="@@nation" (selectionChange)="changeValueNation($event)" required
+                <app-selection-suggest i18n-label="@@nation" (selectionChange)="changeValueNation($event)"
+                                       (clearInputEvent)="onClearInput('NATION')" required
                                        label="Nation" attrValue="id" attrDisplay="vniName" [options]="countries"
                                        formControlName="nationId" size="sm"/>
               </div>
@@ -260,7 +261,8 @@
                 </app-select-multiple>
               </div>
               <div class="col-sm-6 col-md-6 form-group">
-                <app-selection-suggest (selectionChange)="changeAcGroup($event)" (clearInputEvent)="onClearInput()"
+                <app-selection-suggest (selectionChange)="changeAcGroup($event)"
+                                       (clearInputEvent)="onClearInput('ACGROUP')"
                                        label="AC Group" [options]="acGroupList"
                                        formControlName="acGroup" size="sm"/>
               </div>
