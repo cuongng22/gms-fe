@@ -1,29 +1,29 @@
-import { CommonModule } from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
+  ElementRef, EventEmitter,
   inject,
   Input,
   model,
-  OnInit,
+  OnInit, Output,
   output,
   ViewChild
 } from '@angular/core';
-import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatSelectModule } from '@angular/material/select';
-import { InputSizeComponent } from '../../input/input-size.component';
-import { debounceTime, distinctUntilChanged, startWith, Subject } from 'rxjs';
-import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
-import { MESSAGE } from '../../utils/constant';
-import { NgxControlError } from 'ngxtension/control-error';
-import { Validators } from '@angular/forms';
-import { MatIconModule } from '@angular/material/icon';
+import {FormControl, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatAutocomplete, MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatButtonModule} from '@angular/material/button';
+import {MatFormFieldModule, MatFormField} from '@angular/material/form-field';
+import {MatInputModule} from '@angular/material/input';
+import {MatSelectModule} from '@angular/material/select';
+import {InputSizeComponent} from '../../input/input-size.component';
+import {debounceTime, distinctUntilChanged, startWith, Subject} from 'rxjs';
+import {NgxControlValueAccessor} from 'ngxtension/control-value-accessor';
+import {MESSAGE} from '../../utils/constant';
+import {NgxControlError} from 'ngxtension/control-error';
+import {Validators} from '@angular/forms';
+import {MatIconModule} from '@angular/material/icon';
 
 @Component({
   selector: 'app-selection-suggest',
@@ -43,7 +43,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
     this.auto?.options.changes.subscribe((list: any[]) => {
       if (list) {
         const findResult = list.find((o) => o.value === this.formControl.value);
-        findResult?.focus(null, { preventScroll: true });
+        findResult?.focus(null, {preventScroll: true});
         findResult?.select(false);
       }
 
@@ -58,6 +58,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
   @Input() label = '';
   @Input() attrValue = '';
   @Input() attrDisplay = '';
+  @Output() clearInputEvent = new EventEmitter<void>();
   selectionChange = output<any>();
 
   private _options: any[] = [];
@@ -152,7 +153,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
     this.viewControl.updateValueAndValidity();
     this.formControl.updateValueAndValidity();
     const findResult = this.auto?.options.find((o) => o.selected);
-    findResult?.focus(null, { preventScroll: false });
+    findResult?.focus(null, {preventScroll: false});
     findResult?.deselect(false);
+    this.clearInputEvent.emit();
   }
 }

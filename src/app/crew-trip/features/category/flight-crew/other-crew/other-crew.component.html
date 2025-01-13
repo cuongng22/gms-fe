@@ -18,7 +18,8 @@
               <mat-option i18n [value]="null">-- All type --</mat-option>
               <mat-option i18n value="ALWAYS_USE_HOTEL">Always use hotel</mat-option>
               <mat-option i18n value="NOT_USE_HOTEL">Not use hotel</mat-option>
-              <mat-option i18n value="NOT_MEET_CONDITION_BUT_USE">Not eligible to use hotel, but will use hotel</mat-option>
+              <mat-option i18n value="NOT_MEET_CONDITION_BUT_USE">Not eligible to use hotel, but will use hotel
+              </mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -38,260 +39,303 @@
     </form>
   </mat-card-content>
 </mat-card>
-  <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
-    <mat-card-header class="mb-10">
-      <mat-card-title>
-      </mat-card-title>
-      <mat-card-subtitle>
-        <button class="add-btn mr-10" type="button" mat-button
-                (click)="exportFileOptions(null,'FlightCrewOther.xlsx')">
-          <i class="material-symbols-outlined">
-            download
-          </i>
-          <span i18n="@@export">Export</span>
-        </button>
-        <button (click)="showDialogDetail()"  class="add-btn" i18n mat-button type="button">
-          <i class="material-symbols-outlined">
-            add
-          </i>
-          Add new
-        </button>
-      </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-      <div class="table-responsive">
-        <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
-          <ng-container matColumnDef="stt">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center ">#</th>
-            <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
-              {{ (pageIndex * pageSize) + i + 1 }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="name">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                >
-              Category
-            </th>
-            <td mat-cell *matCellDef="let element" class="text-center">{{ element.name }}</td>
-          </ng-container>
-          <ng-container matColumnDef="nation">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
-              Nation
-            </th>
-            <td mat-cell *matCellDef="let element" class="text-center">
-              {{ element.nation }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="airportCodes">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                >
-              Airport Code
-            </th>
-            <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
-              {{ element.airportCodes }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="des-arr">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-               >
-              Flight
-            </th>
-            <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">{{ element.desCode }}- {{element.arrCode}}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="flightNo">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-            >
-              Flight no
-            </th>
-            <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
-              {{ element.flightNo }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="acGroup">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-            >
-              Ac group
-            </th>
-            <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
-              {{ element.acGroup }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="acType">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-            >
-              Ac type
-            </th>
-            <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
-              {{ element.acType }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="applyFor">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-            >
-             Apply
-            </th>
-            <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
-              {{ element.applyFor }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="time">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-            >
-              Time apply
-            </th>
-            <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
-              {{ element.applyFrom | date:'dd/MM/yyyy' }} - {{element.applyTo | date:'dd/MM/yyyy' }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="remark">
-            <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@remark" class="text-center">Remark</th>
-            <td mat-cell *matCellDef="let element" class="wrap-text-2 text-left">{{ element.notes }}</td>
-          </ng-container>
-          <ng-container matColumnDef="action" stickyEnd>
-            <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
-              Actions
-            </th>
-            <td mat-cell *matCellDef="let element">
-              <div class="action-buttons d-flex align-items-center justify-content-end">
-                <a mat-button type="button">
-                </a>
-                <a   class="text-warning" mat-button type="button">
-                  <i class="material-symbols-outlined" i18n-title title="Edit">
-                    edit
-                  </i>
-                </a>
-                <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">
-                  <i class="material-symbols-outlined" title="Delete">
-                    delete
-                  </i>
-                </a>
-              </div>
-            </td>
-          </ng-container>
-          <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-          <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-          <tr class="mat-row" *matNoDataRow>
-            <td class="mat-cell text-center" colspan="12">No data!</td>
-          </tr>
-        </table>
-      </div>
-      <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-                     [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
-                     [pageIndex]="pageIndex"
-                     aria-label="Select page" i18n-aria-label="@@selectPage">
-      </mat-paginator>
-    </mat-card-content>
-
-
-
-
-    <!-- Add New Popup -->
-    <div
-      [class.active]="showDialogCreate"
-      class="add-new-popup"
-    >
-      <div class="popup-dialog" style="min-width: 700px">
-        <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
-          <mat-card-header>
-            <mat-card-title>
-              <h5 class="mb-0">
-                <span *ngIf="!formGroupDetail.value.id" i18n>Add new</span>
-                <span *ngIf="formGroupDetail.value.id" i18n>Edit</span>
-              </h5>
-            </mat-card-title>
-            <mat-card-subtitle>
-              <button
-                (click)="closeDetail()"
-                mat-button
-              >
-                <i class="ri-close-fill"></i>
-              </button>
-            </mat-card-subtitle>
-          </mat-card-header>
-          <mat-card-content>
-            <form [formGroup]="formGroupDetail" autocomplete="off">
-              <div class="row">
-                <div class="col-sm-12 col-md-12 form-group" sizeInput="sm">
-                  <mat-form-field>
-                    <mat-label>Type</mat-label>
-                    <mat-select formControlName="type">
-                      <mat-option [value]="null">Choose type</mat-option>
-                      <mat-option *ngFor="let type of listType" [value]="type.code">
-                        {{ type.label }}
-                      </mat-option>
-                    </mat-select>
-                    @if (!!formGroupDetail.controls['type'].hasError('required')) {
-                      <mat-error><span i18n>Type</span><span i18n> is required</span></mat-error>
-                    }
-                  </mat-form-field>
-                </div>
-                <div class="col-sm-12 col-md-12 form-group" sizeInput="sm">
-                  <mat-form-field>
-                    <mat-label i18n>Name</mat-label>
-                    <input formControlName="name" matInput
-                          required>
-                    @if (!!formGroupDetail.controls['name'].hasError('required')) {
-                      <mat-error><span i18n>Name</span><span i18n> is required</span></mat-error>
-                    }
-                  </mat-form-field>
-                </div>
-                  <div class="col-sm-6 col-md-6 form-group">
-                      <app-selection-suggest i18n-label="@@nation" (selectionChange)="changeValueNation($event)" label="Nation" attrValue="id" attrDisplay="vniName"  [options]="countries"
-                                             formControlName="nation" size="sm" />
-                  </div>
-                  <div class="col-sm-6 col-md-6 form-group">
-                      <app-selection-suggest i18n-label="@@airportCodes" label="Market code" [options]="markets"
-                                             formControlName="airportCodes" size="sm" />
-                  </div>
-                <div class="col-sm-3 col-md-3 form-group">
-                  <app-selection-suggest i18n-label="@@airportCodes" label="ORG" [options]="airportList"
-                                         formControlName="arrCode" size="sm" />
-                </div>
-                <div class="col-sm-3 col-md-3 form-group">
-                  <app-selection-suggest i18n-label="@@airportCodes" label="DST" [options]="airportList"
-                                         formControlName="desCode" size="sm" />
-                </div>
-                <div class="col-sm-6 col-md-6 form-group">
-                  <app-selection-suggest i18n-label="@@airportCodes" label="Number of Flight" [options]="markets"
-                                         formControlName="airportCodes" size="sm" />
-                </div>
-                <div class="col-sm-12 col-md-12 form-group">
-                  <mat-form-field>
-                    <mat-label i18n>Remark</mat-label>
-                    <textarea formControlName="notes" matInput></textarea>
-                    <mat-hint align="end">{{ formGroupDetail.value.notes?.length }} / 500</mat-hint>
-                    @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
-                      <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
-                    }
-                  </mat-form-field>
-                </div>
-                <mat-checkbox formControlName="status" i18n>Status</mat-checkbox>
-              </div>
-            </form>
-            <div class="btn-box">
-              <button (click)="closeDetail()" class="close-btn" i18n mat-button type="button">
-                <i class="material-symbols-outlined">
-                  close
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-header class="mb-10">
+    <mat-card-title>
+    </mat-card-title>
+    <mat-card-subtitle>
+      <button class="add-btn mr-10" type="button" mat-button
+              (click)="exportFileOptions(null,'FlightCrewOther.xlsx')">
+        <i class="material-symbols-outlined">
+          download
+        </i>
+        <span i18n="@@export">Export</span>
+      </button>
+      <button (click)="showDialogDetail()" class="add-btn" i18n mat-button type="button">
+        <i class="material-symbols-outlined">
+          add
+        </i>
+        Add new
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+        <ng-container matColumnDef="stt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center ">#</th>
+          <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
+            {{ (pageIndex * pageSize) + i + 1 }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="name">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+          >
+            Category
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-center">{{ element.name }}</td>
+        </ng-container>
+        <ng-container matColumnDef="nation">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
+            Nation
+          </th>
+          <td mat-cell *matCellDef="let element" class="text-center">
+            {{ element.nation }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="airportCodes">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+          >
+            Airport Code
+          </th>
+          <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
+            {{ element.airportCodes }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="des-arr">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+          >
+            Flight
+          </th>
+          <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">{{ element.desCode }}
+            - {{ element.arrCode }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="flightNo">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+          >
+            Flight no
+          </th>
+          <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
+            {{ element.flightNo }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="acGroup">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+          >
+            Ac group
+          </th>
+          <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
+            {{ element.acGroup }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="acType">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+          >
+            Ac type
+          </th>
+          <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
+            {{ element.acType }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="applyFor">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+          >
+            Apply
+          </th>
+          <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
+            {{ element.applyFor }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="time">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+          >
+            Time apply
+          </th>
+          <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
+            {{ element.applyFrom | date:'dd/MM/yyyy' }} - {{ element.applyTo | date:'dd/MM/yyyy' }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="remark">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@remark" class="text-center">Remark</th>
+          <td mat-cell *matCellDef="let element" class="wrap-text-2 text-left">{{ element.notes }}</td>
+        </ng-container>
+        <ng-container matColumnDef="action" stickyEnd>
+          <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
+            Actions
+          </th>
+          <td mat-cell *matCellDef="let element">
+            <div class="action-buttons d-flex align-items-center justify-content-end">
+              <a mat-button type="button">
+              </a>
+              <a class="text-warning" mat-button type="button">
+                <i class="material-symbols-outlined" i18n-title title="Edit">
+                  edit
                 </i>
-                Close
-              </button>
-              <button
-                (click)="save()"
-                class="add-btn"
-                i18n mat-button
-              >
-                <i class="material-symbols-outlined">
-                  save
+              </a>
+              <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">
+                <i class="material-symbols-outlined" title="Delete">
+                  delete
                 </i>
-                Save
-              </button>
+              </a>
             </div>
-          </mat-card-content>
-        </mat-card>
-      </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell text-center" colspan="12">No data!</td>
+        </tr>
+      </table>
     </div>
+    <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+                   [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
+                   [pageIndex]="pageIndex"
+                   aria-label="Select page" i18n-aria-label="@@selectPage">
+    </mat-paginator>
+  </mat-card-content>
 
+
+  <!-- Add New Popup -->
+  <div
+    [class.active]="showDialogCreate"
+    class="add-new-popup"
+  >
+    <div class="popup-dialog" style="min-width: 700px">
+      <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
+        <mat-card-header>
+          <mat-card-title>
+            <h5 class="mb-0">
+              <span *ngIf="!formGroupDetail.value.id" i18n>Add new</span>
+              <span *ngIf="formGroupDetail.value.id" i18n>Edit</span>
+            </h5>
+          </mat-card-title>
+          <mat-card-subtitle>
+            <button
+              (click)="closeDetail()"
+              mat-button
+            >
+              <i class="ri-close-fill"></i>
+            </button>
+          </mat-card-subtitle>
+        </mat-card-header>
+        <mat-card-content>
+          <form [formGroup]="formGroupDetail" autocomplete="off">
+            <div class="row">
+              <div class="col-sm-12 col-md-12 form-group" sizeInput="sm">
+                <mat-form-field>
+                  <mat-label>Type</mat-label>
+                  <mat-select formControlName="type">
+                    <mat-option [value]="null">Choose type</mat-option>
+                    <mat-option *ngFor="let type of listType" [value]="type.code">
+                      {{ type.label }}
+                    </mat-option>
+                  </mat-select>
+                  @if (!!formGroupDetail.controls['type'].hasError('required')) {
+                    <mat-error><span i18n>Type</span><span i18n> is required</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 form-group" sizeInput="sm">
+                <mat-form-field>
+                  <mat-label i18n>Name</mat-label>
+                  <input formControlName="name" matInput
+                         required>
+                  @if (!!formGroupDetail.controls['name'].hasError('required')) {
+                    <mat-error><span i18n>Name</span><span i18n> is required</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6 col-md-6 form-group">
+                <app-selection-suggest i18n-label="@@nation" (selectionChange)="changeValueNation($event)"
+                                       label="Nation" attrValue="id" attrDisplay="vniName" [options]="countries"
+                                       formControlName="nation" size="sm"/>
+              </div>
+              <div class="col-sm-6 col-md-6 form-group">
+                <app-selection-suggest i18n-label="@@airportCodes" label="Market code" [options]="markets"
+                                       formControlName="airportCodes" size="sm"/>
+              </div>
+              <div class="col-sm-3 col-md-3 form-group">
+                <app-selection-suggest i18n-label="@@airportCodes" label="ORG" [options]="airportList"
+                                       formControlName="arrCode" size="sm"/>
+              </div>
+              <div class="col-sm-3 col-md-3 form-group">
+                <app-selection-suggest i18n-label="@@airportCodes" label="DST" [options]="airportList"
+                                       formControlName="desCode" size="sm"/>
+              </div>
+              <div class="col-sm-6 col-md-6 form-group">
+                <app-select-multiple size="sm" label="Number of Flight" [required]="false"
+                                     [options]="fltNoList"
+                                     formControlName="flightNo">
+                </app-select-multiple>
+              </div>
+              <div class="col-sm-6 col-md-6 form-group">
+                <app-selection-suggest (selectionChange)="changeAcGroup($event)" (clearInputEvent)="onClearInput()"
+                                       label="AC Group" [options]="acGroupList"
+                                       formControlName="acGroup" size="sm"/>
+              </div>
+              <div class="col-sm-6 col-md-6 form-group">
+                <app-selection-suggest attrDisplay="actype" attrValue="actype"
+                                       label="AC Type" [options]="acTypeList"
+                                       formControlName="acType" size="sm"/>
+              </div>
+              <div class="col-sm-12 col-md-12 form-group">
+                <app-select-multiple size="sm" label="User"
+                                     [required]="true" [options]="targetPersonals" attrValue="code"
+                                     attrDisplay="label"
+                                     [isSearch]="false"
+                                     formControlName="applyFor">
+                </app-select-multiple>
+              </div>
+              <div class="col-sm-6 col-md-6 form-group">
+                <mat-form-field>
+                  <mat-label i18n>Start Date</mat-label>
+                  <input [matDatepicker]="fromDate" formControlName="fromDate" matInput required
+                         trim="blur">
+                  <mat-datepicker-toggle [for]="fromDate" matIconSuffix></mat-datepicker-toggle>
+                  <mat-datepicker #fromDate></mat-datepicker>
+                  @if (!!formGroupDetail.controls['fromDate'].hasError('required')) {
+                    <mat-error><span i18n>Apply from</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="col-sm-6 col-md-6 form-group">
+                <mat-form-field size="sm">
+                  <mat-label i18n>End Date</mat-label>
+                  <input [matDatepicker]="toDate" formControlName="toDate" matInput
+                         trim="blur">
+                  <mat-datepicker-toggle [for]="toDate" matIconSuffix></mat-datepicker-toggle>
+                  <mat-datepicker #toDate></mat-datepicker>
+                  @if (!!formGroupDetail.controls['toDate'].hasError('required')) {
+                    <mat-error><span i18n>Apply to</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <div class="col-sm-12 col-md-12 form-group">
+                <mat-form-field>
+                  <mat-label i18n>Remark</mat-label>
+                  <textarea formControlName="notes" matInput></textarea>
+                  <mat-hint align="end">{{ formGroupDetail.value.notes?.length }} / 500</mat-hint>
+                  @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
+                    <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+              <mat-checkbox formControlName="status" i18n>Status</mat-checkbox>
+            </div>
+          </form>
+          <div class="btn-box">
+            <button (click)="closeDetail()" class="close-btn" i18n mat-button type="button">
+              <i class="material-symbols-outlined">
+                close
+              </i>
+              Close
+            </button>
+            <button
+              (click)="save()"
+              class="add-btn"
+              i18n mat-button
+            >
+              <i class="material-symbols-outlined">
+                save
+              </i>
+              Save
+            </button>
+          </div>
+        </mat-card-content>
+      </mat-card>
+    </div>
+  </div>
 
 
   <div class="add-new-popup" [class.active]="showDialogDelete">
