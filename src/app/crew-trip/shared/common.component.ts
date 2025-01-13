@@ -17,10 +17,11 @@ import { ToggleService } from 'src/app/common/header/toggle.service';
 import { BaseService } from 'src/app/crew-trip/core/services/base-service';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { HotelService } from 'src/app/crew-trip/core/services/hotel-service';
+import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-service';
 import { UltilService } from 'src/app/crew-trip/core/services/ultil-service';
 import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
-import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-service';
 
+import { Router } from '@angular/router';
 import {
   COMMON_CONFIG,
   Constant,
@@ -31,7 +32,6 @@ import { CustomizerSettingsService } from 'src/app/customizer-settings/customize
 import { environment } from 'src/environments/environment';
 import { ShowMessageComponent } from './component/show-message/show-message.component';
 import { ListResponse } from './models/common.model';
-import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-common',
@@ -47,15 +47,15 @@ export class CommonComponent
   Constant = Constant;
   MESSAGE = MESSAGE;
   COMMON_CONFIG = COMMON_CONFIG;
-	_router = inject(Router);
-	spinner = inject(NgxSpinnerService);
+  _router = inject(Router);
+  spinner = inject(NgxSpinnerService);
   toggleService = inject(ToggleService);
   ultilService = inject(UltilService);
   themeService = inject(CustomizerSettingsService);
   _flightMarketService = inject(FlightMarketService);
   _hotelService = inject(HotelService);
   _vehicleService = inject(VehicleService);
-	_serviceFeeService = inject(ServiceFeeService);
+  _serviceFeeService = inject(ServiceFeeService);
   displayedColumns: string[] = [];
   dataSource = new MatTableDataSource();
   selection = new SelectionModel<any>(true, []);
@@ -376,11 +376,14 @@ export class CommonComponent
 	    }
 	  });
 	}
+
 	async loadListFeeService() {
-		await this._serviceFeeService.search({page: 0, limit: 99999}).then(res => {
-			if (res.data) {
-				this.listFeeService = res.data.content;
-			}
-		});
+	  await this._serviceFeeService
+	    .search({ page: 0, limit: 99999 })
+	    .then((res) => {
+	      if (res.data) {
+	        this.listFeeService = res.data.content;
+	      }
+	    });
 	}
 }
