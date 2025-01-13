@@ -647,7 +647,7 @@
             <mat-form-field>
               <mat-label i18n>Country</mat-label>
 
-              <input #nationName (input)="filterNation()" [matAutocomplete]="nationComplete" formControlName="nation"
+              <input #nationName [matAutocomplete]="nationComplete" formControlName="nation"
                      matInput required trim="blur" type="text">
               <mat-autocomplete #nationComplete="matAutocomplete" (optionSelected)="nationSelected($event)"
                                 autoActiveFirstOption
