@@ -42,7 +42,7 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Airport code</mat-label>
-              <mat-select (selectionChange)="airportCodeChange($event)" formControlName="airportCode" required>
+              <mat-select formControlName="airportCode" required>
                 @for (item of listFlightMarket; track item) {
                   <mat-option [value]="item">{{ item }}</mat-option>
                 }
@@ -55,7 +55,7 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Invoice number</mat-label>
-              <input formControlName="invoiceNumber" matInput>
+              <input formControlName="invoiceNumber" matInput required>
               @if (!!formGroupDetail.controls['invoiceNumber'].hasError('required')) {
                 <mat-error><span i18n>Invoice Number</span><span i18n> not empty</span></mat-error>
               }
@@ -129,7 +129,7 @@
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
-            <app-datepicker-year-month formControlName="periodOccurrence" i18n-label label="Period Occurrence"
+            <app-datepicker-year-month formControlName="periodOccurrence" i18n-label label="Period Occurrence" required
                                        size="sm">
             </app-datepicker-year-month>
           </div>

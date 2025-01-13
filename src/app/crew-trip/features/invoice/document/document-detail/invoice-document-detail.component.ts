@@ -50,6 +50,7 @@ import {
 import {SeparatorDirective} from "src/app/crew-trip/shared/directive/separator.directive";
 import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
 import {HttpStatusCode} from "@angular/common/http";
+import moment from "moment";
 
 
 @Component({
@@ -257,6 +258,52 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       fileAttachments: [],
       fileUpload: []
     });
+
+    if (!this.readMode) {
+      this.formGroupDetail.controls['airportCode'].valueChanges.subscribe(async (value) => {
+        if (value) {
+          try {
+            await this.spinner.show();
+            await this.baseService.getContractByAirport(value).then(res => {
+              if (res.data?.bizDocId) {
+                let partnerType = res.data?.isHotel ? 'HOTEL' : 'TRANSPORTATION';
+                this.formGroupDetail.patchValue({
+                  paymentDueDay: res.data?.dueDateNumber,
+                  bizDocId: res.data?.bizDocId,
+                  partnerCode: res.data?.partnerCode,
+                  partnerName: res.data?.partnerName,
+                  partnerType: partnerType,
+                  currency: res.data?.currency,
+                })
+
+                //paymentDueDate
+                let invoiceDate = this.formGroupDetail.getRawValue().invoiceDate;
+                let _value = (moment(invoiceDate)||invoiceDate)?.add(res.data?.dueDateNumber || 0, 'days')
+                this.formGroupDetail.patchValue({
+                  paymentDueDate: _value?.format('YYYY-MM-DD') || ''
+                });
+              }
+            });
+          } catch (e) {
+            console.log(e);
+            this.baseService.showError(MESSAGE.ERROR);
+          } finally {
+            await this.spinner.hide();
+          }
+        }
+      });
+      this.formGroupDetail.controls['periodFrom'].valueChanges.subscribe((value) => {
+        this.formGroupDetail.patchValue({
+          periodOccurrence: (moment(value)||value)?.format('YYYY-MM-DD') || '',
+        });
+      });
+      this.formGroupDetail.controls['invoiceDate'].valueChanges.subscribe((value) => {
+        let _value = (moment(value)||value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
+        this.formGroupDetail.patchValue({
+          paymentDueDate: _value?.format('YYYY-MM-DD') || ''
+        });
+      });
+    }
   }
 
   override async ngOnInit() {
@@ -280,9 +327,14 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   async setReadMode(form: FormGroup) {
+    const disableField = ['paymentDueDay', 'paymentDueDate','bizDocId','partnerCode','partnerName','partnerType','currency'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
+      } else {
+        if (disableField.includes(k)) {
+          v.disable();
+        }
       }
     });
   }
@@ -311,23 +363,27 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     }
   }
 
-  async airportCodeChange($event: any) {
-    if ($event?.value) {
-      try {
-        await this.spinner.show();
-        await this.baseService.getContractByAirport($event.value).then(res => {
-          if (res.data?.bizDocId) {
-            //todo set du lieu thong tin hop dong cho form detail
-          }
-        });
-      } catch (e) {
-        console.log(e);
-        this.baseService.showError(MESSAGE.ERROR);
-      } finally {
-        await this.spinner.hide();
+  /*  async airportCodeChange($event: any) {
+      if ($event?.value) {
+        try {
+          await this.spinner.show();
+          await this.baseService.getContractByAirport($event.value).then(res => {
+            if (res.data?.bizDocId) {
+              //todo set du lieu thong tin hop dong cho form detail
+              this.formGroupDetail.patchValue({
+                paymentDueDay : 15,
+                bizDocId: res.data?.bizDocId,
+              })
+            }
+          });
+        } catch (e) {
+          console.log(e);
+          this.baseService.showError(MESSAGE.ERROR);
+        } finally {
+          await this.spinner.hide();
+        }
       }
-    }
-  }
+    }*/
 
   changeServiceFee($event: any, row: any, type: any) {
     if (type === 'code') {
@@ -379,9 +435,6 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   }
 
-  test() {
-    console.log(this.formGroupDetail.getRawValue())
-  }
 
   override async save(): Promise<any> {
     let res = await super.save();

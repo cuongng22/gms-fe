@@ -114,9 +114,7 @@
             </th>
             <td *matCellDef="let element" mat-cell>
               @if (!!element.invoiceNumber) {
-                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Invoice Number</span>: {{
-                        element.invoiceNumber
-                  }} </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Invoice Number</span>: {{ element.invoiceNumber }} </p>
               }
               @if (!!element.invoiceDate) {
                 <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Invoice Date</span>: {{
