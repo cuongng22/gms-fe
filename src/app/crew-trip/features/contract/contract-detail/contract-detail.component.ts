@@ -178,7 +178,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	          if (res.status == HttpStatusCode.Ok) {
 	            // delete res.data.marketCode;
 	            this.formGroupDetail.patchValue(res.data);
-	            this.filterNation(res.data.nationId);
+	            this.nationSelected(res.data.nationId);
 	            this.marketCodeChangeBrake = true;
 	          }
 	        });
@@ -657,12 +657,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	  return row.cellEdit?.some((s: any) => s == cell) ?? false;
 	}
 
-	async filterNation(nationId: number) {}
+	filterNation(nationId: number) {}
 
 	async nationSelected(event: any) {
 	  const nation = this.listQuocGia.find(
-	    (s: any) => s.id === event.option.value,
-	  );
+	    (s: any) => s.id == (event.option?.value ?? event)
+  );
 	  this.formGroupDetail.patchValue({
 	    nationId: nation?.id,
 	    nation: nation?.engName,

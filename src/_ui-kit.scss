@@ -3191,7 +3191,10 @@ apx-chart {
       }
     }
   }
-
+  .popup-dialog-info {
+    width: 100vw !important;
+    max-width: 100vw !important;
+  }
   &.active {
     opacity: 1;
     visibility: visible;
@@ -4573,6 +4576,55 @@ blockquote {
               }
 
               ;
+            }
+          }
+        }
+      }
+    }
+  }
+
+  // Add New Popup
+  .info-popup {
+    .popup-dialog {
+
+      .mat-mdc-card {
+        .mat-mdc-card-header {
+          padding: 17px;
+
+          margin: {
+            top: -17px;
+            left: -17px;
+            right: -17px;
+          }
+
+        ;
+
+          .mat-mdc-card-header-text {
+            .mat-mdc-card-subtitle {
+              .mat-mdc-button {
+                font-size: 22px;
+              }
+            }
+          }
+        }
+
+        .mat-mdc-card-content {
+          .form-group {
+            margin-bottom: 17px;
+
+            .main-label {
+              margin-bottom: 10px;
+            }
+          }
+
+          .btn-box {
+            .mat-mdc-button {
+              padding: {
+                top: 13px;
+                bottom: 13px;
+              }
+
+            ;
             }
           }
         }
