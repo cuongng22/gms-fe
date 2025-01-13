@@ -68,6 +68,8 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   @Input() action: any;
   @Input() dataObject: any;
   @Input() contractObj: any;
+  @Input() dialogMode: boolean = false;
+  @Output() dialogModeEmit = new EventEmitter<any>();
   @Output() backStepEmit = new EventEmitter<any>();
 
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
@@ -242,6 +244,12 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
       console.log(e);
     } finally {
       await this.spinner.hide();
+    }
+  }
+
+  override ngAfterViewInit() {
+    if (this.dialogMode) {
+      this.dialogModeEmit.emit([this.formGroupDetail.getRawValue().id ? -1 : -2]);
     }
   }
 
