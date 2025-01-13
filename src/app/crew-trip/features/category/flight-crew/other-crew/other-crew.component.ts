@@ -65,6 +65,8 @@ import {FlightMarketService} from "src/app/crew-trip/core/services/flight-market
 import {AirplaneService} from "src/app/crew-trip/core/services/airplane-service";
 import {InfoPlaneService} from "src/app/crew-trip/core/services/InfoPlaneService.service";
 import {MatMomentDateModule} from "@angular/material-moment-adapter";
+import {HttpStatusCode} from "@angular/common/http";
+import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 
 @Component({
   selector: 'app-other-crew',
@@ -91,7 +93,7 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
   acGroupList: any[] = [];
   acTypeList: any[] = [];
   acTypeListAll: any[] = [];
-  targetPersonals: any[] = [{label: 'Pilot', code: 'PILOT'}, {label: 'Attendant', code: 'ATTENDANT'}]
+  targetPersonals: any[] = [{label: 'Pilot', code: 'CC'}, {label: 'Attendant', code: 'FC'}]
   filteredOptionsMarket: any[];
   fb = inject(FormBuilder);
   listType: any[] = SelectOptions.OTHER_CREW_TYPE;
@@ -106,7 +108,7 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
       id: ['',],
       type: ['', [Validators.required]],
       name: ['', [Validators.required]],
-      nation: ['', [Validators.required]],
+      nationId: ['', [Validators.required]],
       airportCodes: [''],
       desCode: [''],
       arrCode: [''],
@@ -118,7 +120,7 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
       toDate: ['', [Validators.required]],
       notes: ['', [Validators.maxLength(500)]],
       status: [true,]
-    }, {validators: this.requiredValidatorArrCode('desCode', 'arrCode')});
+    });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
@@ -215,22 +217,53 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
     this.acTypeList = this.acTypeListAll;
   }
 
-  requiredValidatorArrCode(desCodeField: string, arrCodeField: string): ValidatorFn {
-    return (formGroup: AbstractControl): ValidationErrors | null => {
-      const desCodeControl = formGroup.get(desCodeField);
-      const arrCodeControl = formGroup.get(arrCodeField);
-      if (!desCodeControl || !arrCodeControl) {
-        return null;
+  override async save() {
+    try {
+      const desCodeValue = this.formGroupDetail.get('desCode');
+      const arrCodeControl = this.formGroupDetail.get('arrCode')?.value;
+      if (arrCodeControl) {
+        desCodeValue?.setValidators([Validators.required]);
+        desCodeValue?.updateValueAndValidity();
+      } else {
+        desCodeValue?.clearValidators();
+        desCodeValue?.updateValueAndValidity();
       }
-      // Lắng nghe thay đổi giá trị của desCode
-      desCodeControl.valueChanges.subscribe(() => {
-        if (desCodeControl.value && (!arrCodeControl.value || arrCodeControl.value.trim() === '')) {
-          arrCodeControl.setErrors({required: true});
-        } else {
-          arrCodeControl.setErrors(null);
-        }
-      });
-      return null;
-    };
+      this.formGroupDetail.markAllAsTouched();
+      if (this.formGroupDetail.invalid) {
+        this.findInvalidControls(this.formGroupDetail);
+        return;
+      }
+      const update = !!this.formGroupDetail.getRawValue().id;
+      await this.spinner.show();
+      let res;
+      if (update) {
+        res = await this.baseService.update(this.formGroupDetail.getRawValue());
+      } else {
+        res = await this.baseService.create(this.formGroupDetail.getRawValue());
+      }
+      await this.search();
+      this.baseService.showSuccess(
+        update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,
+      );
+      await this.closeDetail();
+      return res;
+    } catch (e: any) {
+      if (
+        e.status != HttpStatusCode.Conflict &&
+        e.status != HttpStatusCode.BadRequest &&
+        e.error.error['emails[]'] &&
+        !(
+          e.status == HttpStatusCode.InternalServerError &&
+          e.error?.error.includes('UNIQUE')
+        )
+      ) {
+        this.baseService.showError(
+          e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
+        );
+      }
+      return e;
+    } finally {
+      await this.spinner.hide();
+    }
   }
 }
