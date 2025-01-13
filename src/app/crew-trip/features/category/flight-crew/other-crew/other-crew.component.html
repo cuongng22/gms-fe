@@ -237,7 +237,7 @@
                 </mat-form-field>
               </div>
               <div class="col-sm-6 col-md-6 form-group">
-                <app-selection-suggest i18n-label="@@nation" (selectionChange)="changeValueNation($event)"
+                <app-selection-suggest i18n-label="@@nation" (selectionChange)="changeValueNation($event)" required
                                        label="Nation" attrValue="id" attrDisplay="vniName" [options]="countries"
                                        formControlName="nationId" size="sm"/>
               </div>

@@ -219,16 +219,17 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
 
   override async save() {
     try {
-      const desCodeValue = this.formGroupDetail.get('desCode');
-      const arrCodeControl = this.formGroupDetail.get('arrCode')?.value;
-      if (arrCodeControl) {
-        desCodeValue?.setValidators([Validators.required]);
-        desCodeValue?.updateValueAndValidity();
-      } else {
-        desCodeValue?.clearValidators();
-        desCodeValue?.updateValueAndValidity();
-      }
+      // const desCodeValue = this.formGroupDetail.get('desCode');
+      // const arrCodeControl = this.formGroupDetail.get('arrCode')?.value;
+      // if (arrCodeControl) {
+      //   desCodeValue?.setValidators([Validators.required]);
+      //   desCodeValue?.updateValueAndValidity();
+      // } else {
+      //   desCodeValue?.clearValidators();
+      //   desCodeValue?.updateValueAndValidity();
+      // }
       this.formGroupDetail.markAllAsTouched();
+      this.formGroup.updateValueAndValidity();
       if (this.formGroupDetail.invalid) {
         this.findInvalidControls(this.formGroupDetail);
         return;
