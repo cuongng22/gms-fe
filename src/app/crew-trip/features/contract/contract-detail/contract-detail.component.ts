@@ -263,7 +263,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	    standardCheckOut: [],
 	    standardCheckout: [],
 	    notes: [],
-
 	    tempp: [],
 	    id: [],
 	    bizDocId: [],
@@ -330,7 +329,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	    updateDayUse: [],
 	    deleteDayUse: [],
 	    iban: [],
-
 	    appendixCode: [],
 	    appendixName: [],
 	    appendixNo: [],
@@ -357,6 +355,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	      this.loadListQuocGia(),
 	      this.loadListHHDV(),
 	      this.setReadMode(this.formGroupDetail),
+	      this.loadListFlightMarket(),
 	    ]).then(() => {
 	      if (
 	        this.formGroupDetail.getRawValue().isHotel &&
@@ -418,14 +417,56 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
 	      //debounce
 	      this.marketCodeChangeBrake = true;
-	      // this.marketCodeChangeDebounce =
-
 	      this.partnerChangeBrake = true;
 	    });
 	  } catch (e) {
 	  } finally {
 	    await this.spinner.hide();
 	  }
+	}
+
+	async onChangeDoiTuongDichVu(fn?: any) {
+	  switch (this.formGroupDetail.getRawValue().doiTuongDichVu) {
+	  case '1': {
+	    this.formGroupDetail.patchValue({
+	      isHotel: true,
+	      isVehicle: false,
+	    });
+	    break;
+	  }
+	  case '2': {
+	    this.formGroupDetail.patchValue({
+	      isHotel: false,
+	      isVehicle: true,
+	    });
+	    break;
+	  }
+	  case '3': {
+	    this.formGroupDetail.patchValue({
+	      isHotel: true,
+	      isVehicle: true,
+	    });
+	    break;
+	  }
+	  }
+	  await this.baseService
+	    .getPartnerInfo({
+	      partnerCode: this.formGroupDetail.getRawValue().partnerCode,
+	      isHotel: this.formGroupDetail.getRawValue().isHotel,
+	      isVehicle: this.formGroupDetail.getRawValue().isVehicle,
+	    })
+	    .then((res) => {
+	      if (res.status == HttpStatusCode.Ok) {
+	        this.formGroupDetail.patchValue(res.data);
+	        this.formGroupDetail.patchValue({
+	          supplierEmail: res.data.email,
+	          supplierPhone: res.data.phoneNumber,
+	          supplierName: res.data.peopleName,
+	          carType: res.data.carType,
+	        });
+	        this.partnerChangeBrake = true;
+	      }
+	    });
 	}
 
 	goBack() {
@@ -657,12 +698,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	  return row.cellEdit?.some((s: any) => s == cell) ?? false;
 	}
 
-	filterNation(nationId: number) {}
-
 	async nationSelected(event: any) {
 	  const nation = this.listQuocGia.find(
-	    (s: any) => s.id == (event.option?.value ?? event)
-  );
+	    (s: any) => s.id == (event.option?.value ?? event),
+	  );
 	  this.formGroupDetail.patchValue({
 	    nationId: nation?.id,
 	    nation: nation?.engName,
