@@ -82,6 +82,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   @Input() contractObj: any;
   @Output() backStepEmit = new EventEmitter<any>();
 
+  firstLoad: boolean = true;
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   @Input() formType: any;
   tblAttachedDocument = new MatTableDataSource();
@@ -261,7 +262,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
     if (!this.readMode) {
       this.formGroupDetail.controls['airportCode'].valueChanges.subscribe(async (value) => {
-        if (value) {
+        if (value && !this.firstLoad) {
           try {
             await this.spinner.show();
             await this.baseService.getContractByAirport(value).then(res => {
@@ -278,7 +279,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
                 //paymentDueDate
                 let invoiceDate = this.formGroupDetail.getRawValue().invoiceDate;
-                let _value = (moment(invoiceDate)||invoiceDate)?.add(res.data?.dueDateNumber || 0, 'days')
+                let _value = (moment(invoiceDate) || invoiceDate)?.add(res.data?.dueDateNumber || 0, 'days')
                 this.formGroupDetail.patchValue({
                   paymentDueDate: _value?.format('YYYY-MM-DD') || ''
                 });
@@ -293,15 +294,19 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         }
       });
       this.formGroupDetail.controls['periodFrom'].valueChanges.subscribe((value) => {
-        this.formGroupDetail.patchValue({
-          periodOccurrence: (moment(value)||value)?.format('YYYY-MM-DD') || '',
-        });
+        if (value && !this.firstLoad) {
+          this.formGroupDetail.patchValue({
+            periodOccurrence: (moment(value) || value)?.format('YYYY-MM-DD') || '',
+          });
+        }
       });
       this.formGroupDetail.controls['invoiceDate'].valueChanges.subscribe((value) => {
-        let _value = (moment(value)||value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
-        this.formGroupDetail.patchValue({
-          paymentDueDate: _value?.format('YYYY-MM-DD') || ''
-        });
+        if (value && !this.firstLoad) {
+          let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
+          this.formGroupDetail.patchValue({
+            paymentDueDate: _value?.format('YYYY-MM-DD') || ''
+          });
+        }
       });
     }
   }
@@ -316,6 +321,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       console.log(e);
       this.baseService.showError(MESSAGE.ERROR);
     } finally {
+      this.firstLoad = false;
       await this.spinner.hide();
     }
 
@@ -327,7 +333,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   async setReadMode(form: FormGroup) {
-    const disableField = ['paymentDueDay', 'paymentDueDate','bizDocId','partnerCode','partnerName','partnerType','currency'];
+    const disableField = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();

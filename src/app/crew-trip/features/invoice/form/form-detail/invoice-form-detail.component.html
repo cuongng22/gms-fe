@@ -201,10 +201,14 @@
           'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
           }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
               </td>
-              <td mat-footer-cell *matFooterCellDef class="text-right"> {{
-                      calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format]
-                }}
+              <td mat-footer-cell *matFooterCellDef class="text-right">
+                @if (innerColumn.type === Constant.NUMBER) {
+                  <span>
+                    {{ calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+                      </span>
+                }
               </td>
+
             </ng-container>
           }
           <tr *matHeaderRowDef="_displayedColumnsHeader1" mat-header-row></tr>

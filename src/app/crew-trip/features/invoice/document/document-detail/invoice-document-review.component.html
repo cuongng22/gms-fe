@@ -27,7 +27,19 @@
     <i class="material-symbols-outlined">
       save
     </i>
+    Lưu và đối soát
+  </button>
+  <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+    <i class="material-symbols-outlined">
+      save
+    </i>
     Save
+  </button>
+  <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+    <i class="material-symbols-outlined">
+      save
+    </i>
+    Chốt hóa đơn
   </button>
 </div>
 <mat-accordion multi>
@@ -183,14 +195,14 @@
       <div (click)="$event.stopPropagation();" class="title-no-event">2. Reconciliation information</div>
     </mat-expansion-panel-header>
     <mat-panel-description class="d-block">
-    <!--  <div class="w-100 text-end">
-        <button (click)="addDtl()" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n mat-button type="button">
-          <i class="material-symbols-outlined">
-            add
-          </i>
-          Add
-        </button>
-      </div>-->
+      <!--  <div class="w-100 text-end">
+          <button (click)="addDtl()" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n mat-button type="button">
+            <i class="material-symbols-outlined">
+              add
+            </i>
+            Add
+          </button>
+        </div>-->
       <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
         <mat-card-content>
           <mat-tab-group mat-align-tabs="start" mat-stretch-tabs="false">
@@ -245,6 +257,66 @@
               </div>
             </mat-tab>
             <mat-tab i18n-label label="Đối soát chi tiết">
+              <div class="table-responsive">
+                <table [dataSource]="formGroupDetail.getRawValue().invoiceFormDtl" class="table-light table-responsive"
+                       mat-table>
+                  <ng-container matColumnDef="stt">
+                    <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
+                    <td *matCellDef="let element; let i = index" class="text-center"
+                        mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
+                    </td>
+                    <td *matFooterCellDef [colSpan]="_displayedColumnsHeader2.length+1" class="text-center" mat-footer-cell>Total</td>
+                  </ng-container>
+                  <ng-container matColumnDef="checkin2col">
+                    <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkin</th>
+                  </ng-container>
+                  <ng-container matColumnDef="checkout2col">
+                    <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkout</th>
+                  </ng-container>
+                  <ng-container matColumnDef="checkin3col">
+                    <th *matHeaderCellDef class="text-center " colspan="3" mat-header-cell mat-sort-header>Checkin</th>
+                  </ng-container>
+                  <ng-container matColumnDef="checkout3col">
+                    <th *matHeaderCellDef class="text-center " colspan="3" mat-header-cell mat-sort-header>Checkout</th>
+                  </ng-container>
+                  @for (innerColumn of _displayedColumnsAll; track innerColumn.value) {
+                    <ng-container matColumnDef="{{innerColumn.value}}">
+                      <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center"
+                          [rowSpan]="(formType===1 || formType===2)?innerColumn.rowspan:1"
+                          [colSpan]=innerColumn.colspan>
+                        {{ innerColumn.label }}
+                      </th>
+                      <td
+                          [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
+                          mat-cell *matCellDef="let element">
+                <span [ngClass]="{
+          'badge': innerColumn.value === 'activeLabel',
+          'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
+          'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
+          }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef class="text-right">
+                        @if (innerColumn.type === Constant.NUMBER) {
+                          <span>
+                    {{ calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+                      </span>
+                        }
+                      </td>
+
+                    </ng-container>
+                  }
+                  <tr *matHeaderRowDef="_displayedColumnsHeader1" mat-header-row></tr>
+                  <tr *matHeaderRowDef="_displayedColumnsHeader2" mat-header-row></tr>
+                  <!--<tr *matHeaderRowDef="['stt','accessBridge']"
+                      mat-header-row></tr>-->
+                  <tr *matRowDef="let row; columns: _displayedColumnsRow;" class="input-row" mat-row></tr>
+                  <tr *matFooterRowDef="_displayedColumnsFooter" class="fw-bold" mat-footer-row></tr>
+                  <tr *matNoDataRow class="mat-row">
+                    <td [attr.colspan]="_displayedColumnsRow.length" class="mat-cell border-none text-center"><span
+                        i18n>No data!</span></td>
+                  </tr>
+                </table>
+              </div>
             </mat-tab>
           </mat-tab-group>
         </mat-card-content>
