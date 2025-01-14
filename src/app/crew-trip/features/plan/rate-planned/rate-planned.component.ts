@@ -1,24 +1,24 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule,} from '@angular/material/card';
-import {MatTableModule} from '@angular/material/table';
-import {MatDatepickerModule,} from '@angular/material/datepicker';
-import {MatFormField, MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ExchangeRateService} from 'src/app/crew-trip/core/services/exchange-rate.service';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {MatSelectModule} from '@angular/material/select';
-import {MatNativeDateModule} from '@angular/material/core';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {MatAutocompleteModule} from '@angular/material/autocomplete';
-import {FileUploadComponent, FileUploadValidators} from '@iplab/ngx-file-upload';
-import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
-import {Observable, of, take} from 'rxjs';
-import {HttpStatusCode} from '@angular/common/http';
+import { Component, inject, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule, } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
+import { MatDatepickerModule, } from '@angular/material/datepicker';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ExchangeRateService } from 'src/app/crew-trip/core/services/exchange-rate.service';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { MatSelectModule } from '@angular/material/select';
+import { MatNativeDateModule } from '@angular/material/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { FileUploadComponent, FileUploadValidators } from '@iplab/ngx-file-upload';
+import { Constant, MESSAGE, removeNullValues } from 'src/app/crew-trip/shared/utils/constant';
+import { Observable, of, take } from 'rxjs';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-rate-planned',
@@ -35,12 +35,11 @@ import {HttpStatusCode} from '@angular/common/http';
 export class RatePlannedComponent extends CommonComponent implements OnInit {
   override baseService = inject(ExchangeRateService);
 
-  formBuilder = inject(FormBuilder);
   showDialogUpload = false;
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
   listDatasource: Observable<string[]> = of(['Sync', 'Excel']);
-  listYear: Observable<number[]> = of(Array.from({length: 10}, (v, i) => 2024 + i));
+  listYear: Observable<number[]> = of(Array.from({ length: 10 }, (v, i) => 2024 + i));
   listVersion: Observable<string[]> = of([]);
 
   override formGroupSearch = this.formBuilder.group({
@@ -63,12 +62,12 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
   }
 
   async initSearchVersion() {
-    await this.baseService.getListVersion({option: 1}).then(res => {
+    await this.baseService.getListVersion({ option: 1 }).then(res => {
       this.listVersion = of(res.data.map((it: any) => it.version));
       if (this.listVersion) {
         this.listVersion.pipe(take(1)).subscribe(versions => {
           const firstVersion = versions[0];
-          this.formGroupSearch.patchValue({version: firstVersion});
+          this.formGroupSearch.patchValue({ version: firstVersion });
         });
       }
     });
@@ -81,7 +80,7 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
-      this.formGroupSearch.patchValue({export: false});
+      this.formGroupSearch.patchValue({ export: false });
       const res = await this.baseService.search({
         page: this.pageIndex,
         size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
@@ -113,7 +112,7 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
       if (this.fileUpload.valid && this.fileUpload.value) {
         const form = new FormData();
         const file: File = this.fileUpload.value[0];
-        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], {type: file.type}));
+        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
         await this.spinner.show();
         const res = await this.baseService.uploadFile(form);
         this.uploadFileError = res;

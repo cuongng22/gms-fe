@@ -63,7 +63,6 @@ import {MAT_MOMENT_DATE_FORMATS, provideMomentDateAdapter} from '@angular/materi
 export class HotelComponent extends CommonComponent implements OnInit {
   override baseService = inject(HotelService);
   flightMarketService = inject(FlightMarketService);
-  formBuilder = inject(FormBuilder);
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
   markets: any[] = [];

@@ -66,7 +66,6 @@ import {
 })
 export class NotificationComponent extends CommonComponent implements OnInit {
   override baseService = inject(NotificationConfigService);
-  formBuilder = inject(FormBuilder);
   activeTab = 0;
 
 

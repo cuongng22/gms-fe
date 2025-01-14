@@ -1,0 +1,238 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+
+    <div class="d-flex justify-content-start align-items-center">
+        <button type="button" class="btn btn-outline-secondary mr-20" i18n="@@back"
+            [routerLink]="['/flight-schedules/daily']">
+            <i class="material-symbols-outlined">
+                undo
+            </i>
+            Back
+        </button>
+        <h5 class="mb-0" i18n="@@flightList">
+            Flight List
+        </h5>
+    </div>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@flightSchedule">
+            Flight Schedule
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@dailyFlightSchedule">
+            Daily Flight Schedule
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@flightList">
+            Flight List
+        </li>
+    </ol>
+</div>
+
+<!--Search-->
+<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+        <app-daily-flight-schedules-search #dailyFlightSchedulesSearch (search)="onSearch($event)" />
+    </mat-card-content>
+</mat-card>
+
+
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="mb-10">
+        <mat-card-title>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button class="add-btn " type="button" mat-button (click)="add()">
+                <i class="material-symbols-outlined">
+                    add
+                </i>
+                <span i18n="@@sync">New</span>
+            </button>
+
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+                <ng-container matColumnDef="stt" sticky>
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
+                        [attr.rowspan]="2">#</th>
+                    <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
+                        {{ (pageIndex * pageSize) + i + 1 }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="extraCrewCode">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        [attr.rowspan]="2">
+                        Extra Crew Code
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.extraCrewCode }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="extraCrewName">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        [attr.rowspan]="2">
+                        Extra Crew Name
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.extraCrewName }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="type">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        [attr.rowspan]="2">
+                        Type
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.type }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="checkin">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        [attr.colspan]="4">
+                        Checkin
+                    </th>
+                </ng-container>
+                <ng-container matColumnDef="checkinFltNo">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
+                        FLTNO
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.checkinFltNo }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="checkinAcType">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
+                        Ac Type
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.checkinAcType }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="checkinFlightLeg">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
+                        Flight leg
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.checkinFlightLeg }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="checkinDate">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
+                        Date
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.checkinDate }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="checkout">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        [attr.colspan]="4">
+                        Checkout
+                    </th>
+                </ng-container>
+                <ng-container matColumnDef="checkoutFltNo">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
+                        FLTNO
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.checkoutFltNo }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="checkoutAcType">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
+                        Ac Type
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.checkoutAcType }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="checkoutFlightLeg">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
+                        Flight leg
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.checkoutFlightLeg }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="checkoutDate">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
+                        Date
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.checkoutDate }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="action" stickyEnd>
+                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef
+                        class="font-weight-bold text-center" i18n="@@action" [attr.rowspan]="2">
+                        Action
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i = dataIndex">
+                        <div class="action-buttons d-flex align-items-center justify-content-end">
+                            <button type="button" mat-button class="text-warning" (click)="edit(element)">
+                                <i class="material-symbols-outlined text-warning" i18n-title="@@edit" title="Edit"
+                                    i18n-title="@@edit">
+                                    edit
+                                </i>
+                            </button>
+                            <button type="button" mat-button title="Delete" i18n-title="@@delete" class="text-danger"
+                                (click)="showConfirmDelete(element.id)">
+                                <i class="material-symbols-outlined text-danger">
+                                    delete
+                                </i>
+                            </button>
+                        </div>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="headerRowDef1"></tr>
+                <tr mat-header-row *matHeaderRowDef="headerRowDef2"></tr>
+                <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="99">No data!</td>
+                </tr>
+            </table>
+
+        </div>
+        <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+            [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+            aria-label="Select page" i18n-aria-label="@@selectPage">
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>
+
+<!-- Dialog delete  -->
+<div class="add-new-popup" [class.active]="showDialogDelete">
+    <div class="popup-dialog dialog-delete-with">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+            <mat-card-content>
+                <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+                </div>
+                <div class="text-center mb-20">
+                    <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
+                </div>
+                <div class="text-center mb-20">
+                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+                        You will not be able to recover the deleted data!</span>
+                </div>
+                <div class="btn-box text-center">
+                    <button type="button" mat-button (click)="closeConfirmDelete()"
+                        class="close-btn  min-with-100 mlr-5">
+                        <i class="material-symbols-outlined">
+                            close
+                        </i>
+                        <span i18n="@@cancel">Cancel</span>
+                    </button>
+                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
+                        <i class="material-symbols-outlined">
+                            save
+                        </i>
+                        <span i18n="@@confirm">Confirm</span>
+                    </button>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>

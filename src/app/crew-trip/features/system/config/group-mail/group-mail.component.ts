@@ -40,7 +40,6 @@ import {MatDivider} from '@angular/material/divider';
 })
 export class GroupMailComponent extends CommonComponent implements OnInit {
   override baseService = inject(GroupMailService);
-  formBuilder = inject(FormBuilder);
   activeTab = 0;
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
@@ -50,7 +49,7 @@ export class GroupMailComponent extends CommonComponent implements OnInit {
     // { label: $localize`:@@status:Status`, value: 'status' }
   ];
 
-  constructor(public dialog: MatDialog) {
+  constructor() {
     super();
   }
 

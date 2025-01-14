@@ -6,7 +6,7 @@ import { CustomizerSettingsService } from 'src/app/customizer-settings/customize
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToggleService } from 'src/app/common/header/toggle.service';
 import { BaseService } from 'src/app/crew-trip/core/services/base-service';
-import { FormGroup } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { COMMON_CONFIG, Constant, MESSAGE, removeNullValues } from 'src/app/crew-trip/shared/utils/constant';
 import { HttpStatusCode } from '@angular/common/http';
 import { saveAs } from 'file-saver';
@@ -14,6 +14,7 @@ import { UltilService } from 'src/app/crew-trip/core/services/ultil-service';
 import { ListResponse } from './models/common.model';
 import { environment } from 'src/environments/environment';
 import { ShowMessageComponent } from './component/show-message/show-message.component';
+import { MatDialog } from '@angular/material/dialog';
 
 
 @Component({
@@ -53,6 +54,9 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
   showDialogDelete = false;
   isSticky = false;
   configScrollY = 60;
+
+  readonly dialog = inject(MatDialog);
+  formBuilder = inject(FormBuilder);
 
   constructor() {
     super();

@@ -48,7 +48,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
   override baseService = inject(FlightMarketService);
   private readonly destroyRef = inject(DestroyRef);
 
-  formBuilder = inject(FormBuilder);
+
 
   // danh sách thị trường
   markets: any[] = [];
@@ -74,7 +74,7 @@ export class FlightMarketListComponent extends CommonComponent implements OnInit
 
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
 
-  constructor(public dataTransformPipe: DataTransformPipe, public dialog: MatDialog) {
+  constructor(public dataTransformPipe: DataTransformPipe) {
     super();
   }
 

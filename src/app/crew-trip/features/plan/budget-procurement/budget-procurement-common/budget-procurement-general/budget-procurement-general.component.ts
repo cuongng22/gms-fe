@@ -40,7 +40,6 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 })
 export class BudgetProcurementGeneralComponent extends CommonComponent implements OnInit {
   private readonly destroyRef = inject(DestroyRef);
-  private readonly formBuilder = inject(FormBuilder);
   private readonly flightMarketService = inject(FlightMarketService);
 
   category = input<string>(''); //International,Domestic  loại quốc tế hay quốc nội

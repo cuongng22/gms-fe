@@ -47,7 +47,6 @@ import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/sele
   styleUrl: './flight-market-detail.component.scss'
 })
 export class FlightMarketDetailComponent extends CommonComponent implements OnInit, AfterViewInit {
-  formBuilder = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(FlightMarketService);
   serviceFeeService = inject(ServiceFeeService);
@@ -100,7 +99,7 @@ export class FlightMarketDetailComponent extends CommonComponent implements OnIn
 
   });
 
-  constructor(@Inject(LOCALE_ID) public locale: string, public dialog: MatDialog,
+  constructor(@Inject(LOCALE_ID) public locale: string,
     private activeRoute: ActivatedRoute, private router: Router) {
     super();
     console.debug('locale: ', locale);

@@ -1,0 +1,90 @@
+<mat-card class="border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="p-15">
+        <mat-card-title>
+            <h5 class="mb-2" i18n="@@addExtraCrew">
+                Add Extra Crew
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button (click)="close()">
+                <i class="ri-close-fill"></i>
+            </button>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="formGroupDetail" (ngSubmit)="save()" autocomplete="off">
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-20">
+                        <app-selection-suggest size="md" [options]="[]" label="Full Name" i18n-label="fullName"
+                            (selectionChange)="fullNameSelectionChange($event)" formControlName="fullName" />
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@gender">Gender</mat-label>
+                            <input trim="blur" matInput>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@phoneNumber">Phone number</mat-label>
+                            <input trim="blur" matInput>
+                        </mat-form-field>
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="form-group mb-20" sizeInput="md">
+                        <mat-form-field>
+                            <mat-label i18n="@@position">Position</mat-label>
+                            <input trim="blur" matInput>
+                        </mat-form-field>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-20">
+                        <app-selection-suggest size="md" [options]="[]" label="Type" i18n-label="type" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-20">
+                        <app-selection-suggest size="md" [options]="[]" label="Arrive at" i18n-label="arriveAt" />
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-group mb-20">
+                        <app-selection-suggest size="md" [options]="[]" label="Departure at" i18n-label="departureAt" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="btn-box d-flex justify-content-end">
+                <button type="button" mat-button (click)="close()" class="close-btn  min-with-100 mlr-5">
+                    <i class="material-symbols-outlined">
+                        close
+                    </i>
+                    <span i18n="@@close">Close</span>
+                </button>
+                <button mat-button color="primary" type="submit" class="add-btn min-with-100 mlr-5">
+                    <i class="material-symbols-outlined">
+                        save
+                    </i>
+                    <span i18n="@@save">Save</span>
+                </button>
+
+            </div>
+        </form>
+
+    </mat-card-content>
+</mat-card>

@@ -59,7 +59,6 @@ import { HttpStatusCode } from "@angular/common/http";
 export class PaymentEmailComponent extends CommonComponent implements OnInit {
   override baseService = inject(PaymentMailService);
   flightMarketService = inject(FlightMarketService);
-  formBuilder = inject(FormBuilder);
   activeTab = 0;
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
@@ -74,7 +73,7 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
     // { label: $localize`:@@status:Status`, value: 'status' }
   ];
 
-  constructor(public dialog: MatDialog) {
+  constructor() {
     super();
   }
 
