@@ -339,7 +339,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
 	override async exportFile(body?: any, filename?: string) {
 	  try {
 	    await this.spinner.show();
-	    this.formGroupSearch.patchValue({ export: true, exportType: 'ALL' });
+	    this.formGroupSearch.patchValue(body);
 	    this.baseService
 	      .export(removeNullValues(this.formGroupSearch.value))
 	      .then((res) => {
