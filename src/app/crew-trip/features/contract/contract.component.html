@@ -123,12 +123,35 @@
       <mat-card-title>
       </mat-card-title>
       <mat-card-subtitle>
-        <button (click)="exportFile()" class="add-btn mr-10" i18n mat-button type="button">
+        <button [matMenuTriggerFor]="planMenu" class="add-btn mr-10" i18n mat-button type="button">
           <i class="material-symbols-outlined">
             download
           </i>
           Export
         </button>
+        <mat-menu #planMenu="matMenu" yPosition="below" class="card-header-menu">
+          <ul class="p-0 mt-0 mb-0 list-unstyled">
+            <li>
+              <button (click)="exportFile({ export: true, exportType: 'ALL' }, 'Contract-list.xlsx')"
+                      i18n
+                      mat-menu-item
+                      type="button">
+                Contract list
+              </button>
+            </li>
+            <li>
+              <button mat-menu-item type="button"
+                      (click)="exportFile({export: true, exportType: 'BUY'}, 'Contract-to-be-renewed.xlsx')">Contract to
+                be renewed
+              </button>
+            </li>
+            <li>
+              <button mat-menu-item type="button" (click)="exportFile({export: true, exportType: 'PRICE'})">Unit price
+                list
+              </button>
+            </li>
+          </ul>
+        </mat-menu>
         @if (viewType == 'HD') {
           <button (click)="syncDWH()" class="add-btn" mat-button type="button">
             <i class="material-symbols-outlined">

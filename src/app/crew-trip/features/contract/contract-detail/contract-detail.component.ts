@@ -132,7 +132,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	id: any;
 	viewType: any;
 	readMode: any;
-	action: any;
+	action: any = '';
 	dataObject: any;
 	contractObj: any;
 	@Output() backStep = new EventEmitter<any>();
@@ -407,10 +407,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	          ...s,
 	          serviceFeeCode: s.serviceCode,
 	          serviceFeeName: this.listHHDV.find(
-	            (s: any) => s.serviceFeeCode === s.serviceFeeCode,
+	            (i: any) => s.serviceCode === i.code,
 	          )?.name,
 	          serviceFeeUnit: this.listHHDV.find(
-	            (s: any) => s.serviceFeeCode === s.serviceFeeCode,
+	            (i: any) => s.serviceCode === i.code,
 	          )?.unit,
 	        }));
 	      this.tblUnitPrice = new MatTableDataSource(priceUnitInfo);
