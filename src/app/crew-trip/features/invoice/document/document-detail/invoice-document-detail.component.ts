@@ -1,4 +1,4 @@
-import {ChangeDetectorRef, Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, QueryList, ViewChild} from '@angular/core';
 import {RouterLink} from '@angular/router';
 import {AsyncPipe, DecimalPipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
@@ -11,11 +11,15 @@ import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {
-  MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle
+  MatAccordion,
+  MatExpansionPanel,
+  MatExpansionPanelDescription,
+  MatExpansionPanelHeader,
+  MatExpansionPanelTitle
 } from '@angular/material/expansion';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
@@ -30,11 +34,9 @@ import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocom
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {NgxMatTimepickerFieldComponent} from 'ngx-mat-timepicker';
-import {cloneDeep, transform} from 'lodash';
+import {transform} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
-import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lookup';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
-import {InvoiceFormService} from "src/app/crew-trip/core/services/invoice-form-service";
 import {DigitOnlyModule} from "@uiowa/digit-only";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
@@ -43,7 +45,6 @@ import {ContractService} from "src/app/crew-trip/core/services/contract-service"
 import {
   SelectionSuggestComponent
 } from "src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component";
-import {map, Observable, startWith} from "rxjs";
 import {
   DatepickerYearMonthComponent
 } from "src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component";
@@ -51,12 +52,13 @@ import {SeparatorDirective} from "src/app/crew-trip/shared/directive/separator.d
 import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
 import {HttpStatusCode} from "@angular/common/http";
 import moment from "moment";
+import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 
 
 @Component({
   selector: 'app-invoice-document-detail',
   standalone: true,
-  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, SelectionSuggestComponent, AsyncPipe, DatepickerYearMonthComponent, SeparatorDirective, ThousandsSeparatorDirective],
+  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, SelectionSuggestComponent, AsyncPipe, DatepickerYearMonthComponent, SeparatorDirective, ThousandsSeparatorDirective, MatGridTile, MatGridList],
   templateUrl: './invoice-document-detail.component.html',
   styleUrl: './invoice-document-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -210,6 +212,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     label: $localize`Unit Price`, value: "unitPrice", type: Constant.NUMBER, rowspan: "2"
   }, {label: $localize`Type Room`, value: "typeRoom", rowspan: "2"}];
   ready: boolean = false;
+  @ViewChild('inputElementRef1, inputElementRef2, inputElementRef3, inputElementRef4') inputElementRef: QueryList<ElementRef>;
+  @ViewChild('totalab') totalab: ElementRef;
   protected readonly LOCALE = LOCALE;
   protected readonly transform = transform;
   protected readonly DATE_FORMAT_DD_MM_YYYY = DATE_FORMAT_DD_MM_YYYY;
@@ -273,7 +277,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
                   bizDocId: res.data?.bizDocId,
                   partnerCode: res.data?.partnerCode,
                   partnerName: res.data?.partnerName,
-                  partnerType: partnerType,
+                  // partnerType: partnerType,
                   currency: res.data?.currency,
                 })
 
@@ -297,6 +301,14 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         if (value && !this.firstLoad) {
           this.formGroupDetail.patchValue({
             periodOccurrence: (moment(value) || value)?.format('YYYY-MM-DD') || '',
+          });
+        }
+      });
+      this.formGroupDetail.controls['invoiceDate'].valueChanges.subscribe((value) => {
+        if (value && !this.firstLoad) {
+          let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
+          this.formGroupDetail.patchValue({
+            paymentDueDate: _value?.format('YYYY-MM-DD') || ''
           });
         }
       });
@@ -333,7 +345,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   async setReadMode(form: FormGroup) {
-    const disableField = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency'];
+    const disableField = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency',
+      'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -346,11 +359,24 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   calTotal(column: any) {
-    if (column.type === Constant.NUMBER) {
-      return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev: any, cur: any) => prev + cur[column.value], 0)
+    let value = this.formGroupDetail.getRawValue().invoiceDocumentDtl.reduce((prev: any, cur: any) => prev + cur[column], 0)
+    let key: any = {};
+    if (column === 'amountFcVat') {
+      key['vatFc'] = value;
+    } else if (column === 'amountVndVat') {
+      key['vatVnd'] = value;
     } else {
-      return '';
+      key[column] = value;
     }
+    this.formGroupDetail.patchValue({...key});
+    this.formGroupDetail.patchValue({
+      totalAmountFc: (this.formGroupDetail.getRawValue().amountFcBeforeVat || 0) + (this.formGroupDetail.getRawValue().vatFc || 0),
+      totalAmountVnd: (this.formGroupDetail.getRawValue().amountVndBeforeVat || 0) + (this.formGroupDetail.getRawValue().vatVnd || 0),
+    });
+    const inputs = this.totalab.nativeElement.querySelectorAll('input');
+    inputs.forEach((inputRef: any) => {
+      inputRef.dispatchEvent(new Event('focus'));
+    })
   }
 
   async download(fileRow: any) {

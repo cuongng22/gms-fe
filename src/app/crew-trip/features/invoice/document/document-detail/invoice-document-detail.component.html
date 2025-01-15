@@ -315,7 +315,8 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="serviceCode">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Code <span style="color:red">*</span></th>
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Code <span style="color:red">*</span>
+            </th>
             <td *matCellDef="let element" mat-cell>
               <div class="input-cell">
                 <mat-form-field>
@@ -360,8 +361,8 @@
             </th>
             <td *matCellDef="let element" mat-cell>
               <div class="input-cell">
-              <app-datepicker-year-month  [(ngModel)]="element.periodOccurrence">
-              </app-datepicker-year-month>
+                <app-datepicker-year-month [(ngModel)]="element.periodOccurrence">
+                </app-datepicker-year-month>
               </div>
             </td>
           </ng-container>
@@ -378,7 +379,8 @@
             </td>
           </ng-container>
           <ng-container matColumnDef="unitPrice">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit Price <span style="color:red">*</span></th>
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit Price <span style="color:red">*</span>
+            </th>
             <td *matCellDef="let element" mat-cell>
               <div class="input-cell">
                 <mat-form-field>
@@ -397,8 +399,8 @@
             <td *matCellDef="let element" mat-cell>
               <div class="input-cell">
                 <mat-form-field>
-                  <input #inputRef="ngModel" [(ngModel)]="element.amountFcBeforeVat" appThousandsSeparator matInput
-                         required trim="blur"
+                  <input #inputRef="ngModel" (change)="calTotal('amountFcBeforeVat')" [(ngModel)]="element.amountFcBeforeVat" appThousandsSeparator
+                         matInput required trim="blur"
                          type="text">
                   <mat-error>{{ validField(element, 'amountFcBeforeVat', inputRef) }}</mat-error>
 
@@ -413,8 +415,8 @@
             <td *matCellDef="let element" mat-cell>
               <div class="input-cell">
                 <mat-form-field>
-                  <input #inputRef="ngModel" [(ngModel)]="element.amountVndBeforeVat" appThousandsSeparator matInput
-                         required trim="blur"
+                  <input #inputRef="ngModel" (change)="calTotal('amountVndBeforeVat')" [(ngModel)]="element.amountVndBeforeVat" appThousandsSeparator
+                         matInput required trim="blur"
                          type="text">
                 </mat-form-field>
               </div>
@@ -425,8 +427,8 @@
             <td *matCellDef="let element" mat-cell>
               <div class="input-cell">
                 <mat-form-field>
-                  <input #inputRef="ngModel" [(ngModel)]="element.amountFcVat" appThousandsSeparator matInput required
-                         trim="blur"
+                  <input #inputRef="ngModel" (change)="calTotal('amountFcVat')" [(ngModel)]="element.amountFcVat" appThousandsSeparator matInput
+                         required trim="blur"
                          type="text">
                 </mat-form-field>
               </div>
@@ -437,8 +439,8 @@
             <td *matCellDef="let element" mat-cell>
               <div class="input-cell">
                 <mat-form-field>
-                  <input #inputRef="ngModel" [(ngModel)]="element.amountVndVat" appThousandsSeparator matInput required
-                         trim="blur"
+                  <input #inputRef="ngModel" (change)="calTotal('amountVndVat')" [(ngModel)]="element.amountVndVat" appThousandsSeparator matInput
+                         required trim="blur"
                          type="text">
                 </mat-form-field>
               </div>
@@ -475,7 +477,7 @@
           <tr
               *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
           <tr
-              *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','unitPrice','amountFcBeforeVat','amountVndBeforeVat','amountFcVat','amountVndVat','vatType','vat'];"
+              *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat',];"
               class="input-row" mat-row></tr>
           <tr *matNoDataRow class="mat-row">
             <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
@@ -483,93 +485,107 @@
           </tr>
         </table>
       </div>
-      <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
-        <!--        dong1-->
-        <div class="row" style="margin-top: 50px ">
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Amount Fc Before Vat</mat-label>
-              <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput required
-                     trim="blur" type="text">
-              @if (!!formGroupDetail.controls['amountFcBeforeVat'].hasError('required')) {
-                <mat-error><span i18n>Amount Fc Before Vat</span><span i18n> not empty</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Vat Fc</mat-label>
-              <input appThousandsSeparator formControlName="vatFc" matInput required
-                     trim="blur" type="text">
-              @if (!!formGroupDetail.controls['vatFc'].hasError('required')) {
-                <mat-error><span i18n>Vat Fc</span><span i18n> not empty</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Amount Vnd Before Vat</mat-label>
-              <input appThousandsSeparator formControlName="amountVndBeforeVat" matInput required
-                     trim="blur" type="text">
-              @if (!!formGroupDetail.controls['amountVndBeforeVat'].hasError('required')) {
-                <mat-error><span i18n>Amount Vnd Before Vat</span><span i18n> not empty</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Vat Vnd</mat-label>
-              <input appThousandsSeparator formControlName="vatVnd" matInput required
-                     trim="blur" type="text">
-              @if (!!formGroupDetail.controls['vatVnd'].hasError('required')) {
-                <mat-error><span i18n>Vat Vnd</span><span i18n> not empty</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-        </div>
-        <!--        dong2-->
-        <div class="row mt-25">
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Total Amount Fc</mat-label>
-              <input appThousandsSeparator formControlName="totalAmountFc" matInput required
-                     trim="blur" type="text">
-              @if (!!formGroupDetail.controls['totalAmountFc'].hasError('required')) {
-                <mat-error><span i18n>Total Amount Fc</span><span i18n> not empty</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Total Amount Vnd</mat-label>
-              <input appThousandsSeparator formControlName="totalAmountVnd" matInput required
-                     trim="blur" type="text">
-              @if (!!formGroupDetail.controls['totalAmountVnd'].hasError('required')) {
-                <mat-error><span i18n>Total Amount Vnd</span><span i18n> not empty</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Reimbursement Total Fc</mat-label>
-              <input appThousandsSeparator formControlName="reimbursementTotalFc" matInput required
-                     trim="blur" type="text">
-              @if (!!formGroupDetail.controls['reimbursementTotalFc'].hasError('required')) {
-                <mat-error><span i18n>Reimbursement Total Fc</span><span i18n> not empty</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Reimbursement Total Vnd</mat-label>
-              <input appThousandsSeparator formControlName="reimbursementTotalVnd" matInput required
-                     trim="blur" type="text">
-              @if (!!formGroupDetail.controls['reimbursementTotalVnd'].hasError('required')) {
-                <mat-error><span i18n>Reimbursement Total Vnd</span><span i18n> not empty</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-        </div>
+      <form #totalab [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
+        <mat-grid-list class="mt-20" cols="12" gutterSize="24px" rowHeight="50px">
+          @if (formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL') {
+            <mat-grid-tile [colspan]="3">
+              <div class="w-100" sizeInput='sm'>
+                <mat-form-field>
+                  <mat-label i18n>Amount Fc Before Vat</mat-label>
+                  <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput required
+                         trim="blur" type="text">
+                  @if (!!formGroupDetail.controls['amountFcBeforeVat'].hasError('required')) {
+                    <mat-error><span i18n>Amount Fc Before Vat</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="3">
+              <div class="w-100" sizeInput='sm'>
+                <mat-form-field>
+                  <mat-label i18n>Vat Fc</mat-label>
+                  <input appThousandsSeparator formControlName="vatFc" matInput required
+                         trim="blur" type="text">
+                  @if (!!formGroupDetail.controls['vatFc'].hasError('required')) {
+                    <mat-error><span i18n>Vat Fc</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="3">
+              <div class="w-100" sizeInput='sm'>
+                <mat-form-field>
+                  <mat-label i18n>Total Amount Fc</mat-label>
+                  <input #inputElementRef3 appThousandsSeparator formControlName="totalAmountFc" matInput required
+                         trim="blur" type="text">
+                  @if (!!formGroupDetail.controls['totalAmountFc'].hasError('required')) {
+                    <mat-error><span i18n>Total Amount Fc</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </mat-grid-tile>
+            <mat-grid-tile [colspan]="3">
+              <div class="w-100" sizeInput='sm'>
+                <mat-form-field>
+                  <mat-label i18n>Reimbursement Total Fc</mat-label>
+                  <input appThousandsSeparator formControlName="reimbursementTotalFc" matInput required
+                         trim="blur" type="text">
+                  @if (!!formGroupDetail.controls['reimbursementTotalFc'].hasError('required')) {
+                    <mat-error><span i18n>Reimbursement Total Fc</span><span i18n> not empty</span></mat-error>
+                  }
+                </mat-form-field>
+              </div>
+            </mat-grid-tile>
+          }
+          <mat-grid-tile [colspan]="3">
+            <div class="w-100" sizeInput='sm'>
+              <mat-form-field>
+                <mat-label i18n>Amount Vnd Before Vat</mat-label>
+                <input #inputElementRef2 appThousandsSeparator formControlName="amountVndBeforeVat" matInput required
+                       trim="blur" type="text">
+                @if (!!formGroupDetail.controls['amountVndBeforeVat'].hasError('required')) {
+                  <mat-error><span i18n>Amount Vnd Before Vat</span><span i18n> not empty</span></mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="3">
+            <div class="w-100" sizeInput='sm'>
+              <mat-form-field>
+                <mat-label i18n>Vat Vnd</mat-label>
+                <input appThousandsSeparator formControlName="vatVnd" matInput required
+                       trim="blur" type="text">
+                @if (!!formGroupDetail.controls['vatVnd'].hasError('required')) {
+                  <mat-error><span i18n>Vat Vnd</span><span i18n> not empty</span></mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="3">
+            <div class="w-100" sizeInput='sm'>
+              <mat-form-field>
+                <mat-label i18n>Total Amount Vnd</mat-label>
+                <input #inputElementRef4 appThousandsSeparator formControlName="totalAmountVnd" matInput required
+                       trim="blur" type="text">
+                @if (!!formGroupDetail.controls['totalAmountVnd'].hasError('required')) {
+                  <mat-error><span i18n>Total Amount Vnd</span><span i18n> not empty</span></mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+          <mat-grid-tile [colspan]="3">
+            <div class="w-100" sizeInput='sm'>
+              <mat-form-field>
+                <mat-label i18n>Reimbursement Total Vnd</mat-label>
+                <input appThousandsSeparator formControlName="reimbursementTotalVnd" matInput required
+                       trim="blur" type="text">
+                @if (!!formGroupDetail.controls['reimbursementTotalVnd'].hasError('required')) {
+                  <mat-error><span i18n>Reimbursement Total Vnd</span><span i18n> not empty</span></mat-error>
+                }
+              </mat-form-field>
+            </div>
+          </mat-grid-tile>
+        </mat-grid-list>
       </form>
     </mat-panel-description>
   </mat-expansion-panel>
