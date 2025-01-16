@@ -204,7 +204,8 @@
               <td mat-footer-cell *matFooterCellDef class="text-right">
                 @if (innerColumn.type === Constant.NUMBER) {
                   <span>
-                    {{ calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+                    {{ calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format, 'sum'] }}
+<!--                    {{ innerColumn | dataTransformPipe:[innerColumn.type, innerColumn.format, 'sum'] }}-->
                       </span>
                 }
               </td>

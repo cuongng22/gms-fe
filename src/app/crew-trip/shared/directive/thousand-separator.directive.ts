@@ -27,7 +27,6 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
   @HostListener('input', ['$event'])
   @HostListener('focus', ['$event'])
   onInput(event: any) {
-    console.log(event,'event')
     const inputElement = this.el.nativeElement;
     const value = inputElement.value.replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
     if (value && !isNaN(Number(value))) {

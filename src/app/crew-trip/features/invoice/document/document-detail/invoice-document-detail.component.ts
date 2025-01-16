@@ -34,7 +34,7 @@ import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocom
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {NgxMatTimepickerFieldComponent} from 'ngx-mat-timepicker';
-import {transform} from 'lodash';
+import {cloneDeep, transform} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 import {DigitOnlyModule} from "@uiowa/digit-only";
@@ -444,11 +444,11 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       }));
       await this.baseService.uploadFileCommon(formUpload).then(res => {
         if (res.code == HttpStatusCode.Ok) {
-          let fileNameClone = fileUpload.name.split('.');
-          fileNameClone.pop();
+          let lastDotIndex = fileUpload.name.lastIndexOf('.');
+          let fileName = fileUpload.name.substring(0, lastDotIndex);
           let listFile = [...this.formGroupDetail.getRawValue().fileAttachments, {
             ctype: 'MANUAL',
-            fileName: fileNameClone,
+            fileName: fileName,
             fileSize: fileUpload.size,
             fileUrl: res.data,
             fileType: fileUpload.name.split('.').pop(),
