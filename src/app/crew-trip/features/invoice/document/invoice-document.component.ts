@@ -303,7 +303,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   }
 
   showFormHdr(formHdrId: any) {
-    // formHdrId = 108;
+    console.log(+formHdrId,'haha')
     if (+formHdrId > 0) {
       this.formHdrId = formHdrId;
       this.isShowFormHdr = true;

@@ -27,7 +27,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
-import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 import {ClickOutside} from 'ngxtension/click-outside';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
 import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
@@ -40,6 +40,7 @@ import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lo
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 import {InvoiceFormService} from "src/app/crew-trip/core/services/invoice-form-service";
 import {DigitOnlyModule} from "@uiowa/digit-only";
+import {elementAt} from "rxjs";
 
 
 @Component({
@@ -99,7 +100,13 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   _displayedColumnsRow: string[] = [];
   _displayedColumnsFooter: string[] = [];
   _displayedColumnsAll: {
-    label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string
+    label: string;
+    value: string,
+    type?: string,
+    format?: string,
+    rowspan?: string,
+    colspan?: string,
+    displayTotal?: boolean
   }[] = [
     {label: $localize`Access Bridge`, value: "accessBridge", type: Constant.NUMBER, rowspan: "2"},
     {
@@ -126,24 +133,36 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     {label: $localize`Co Date`, value: "coDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Co Fltno`, value: "coFltno"},
     {label: $localize`Co Time`, value: "coTime"},
-    {label: $localize`Cdate`, value: "cdate", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Detail`, value: "detail", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Date`, value: "cdate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`Detail`, value: "detail"},
     {label: $localize`Early Checkin`, value: "earlyCheckin", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Eci Single Room Cc Charge`, value: "eciSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Eci Single Room Fc Charge`, value: "eciSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Eci Twin Room Cc Charge`, value: "eciTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Fc`, value: "fc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Fltno`, value: "fltno", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Fltno`, value: "fltno"},
     {label: $localize`Fullname`, value: "fullname", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Late Checkout`, value: "lateCheckout", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Lco Single Room Cc Charge`, value: "lcoSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Lco Single Room Fc Charge`, value: "lcoSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Lco Twin Room Cc Charge`, value: "lcoTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Night`, value: "night", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Number Of Nights`, value: "numberOfNights", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Number Of Vehicle`, value: "numberOfVehicle", type: Constant.NUMBER, rowspan: "2"},
+    {
+      label: $localize`Number Of Nights`,
+      value: "numberOfNights",
+      type: Constant.NUMBER,
+      rowspan: "2",
+      displayTotal: true
+    },
+    {
+      label: $localize`Number Of Vehicle`,
+      value: "numberOfVehicle",
+      type: Constant.NUMBER,
+      rowspan: "2",
+      displayTotal: true
+    },
     {label: $localize`Price`, value: "price", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Remark`, value: "remark", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Remark`, value: "remark"},
     {label: $localize`Room No`, value: "roomNo", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Service Tax Cc Charge`, value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Service Tax Fc Charge`, value: "serviceTaxFcCharge", type: Constant.NUMBER, rowspan: "2"},
@@ -232,11 +251,11 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
           this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
           this._displayedColumnsHeader2 = [];
           this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
-        } else if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
+        } else if (this.formGroupDetail.getRawValue().ctype === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
           this.formType = 4;
-          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'accessBridge', 'toll', 'transitDuty', 'airportParkingFee', 'totalCharge', 'remark'];
+          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
           this._displayedColumnsHeader2 = [];
-          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'accessBridge', 'toll', 'transitDuty', 'airportParkingFee', 'totalCharge', 'remark'];
+          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
         }
         this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
       });
@@ -249,7 +268,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
 
   override ngAfterViewInit() {
     if (this.dialogMode) {
-      this.dialogModeEmit.emit([this.formGroupDetail.getRawValue().id ? -1 : -2]);
+      this.dialogModeEmit.emit([this.id ? 0 : -1]);
     }
   }
 
@@ -268,7 +287,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
 
   calTotal(column: any) {
     if (column.type === Constant.NUMBER) {
-      return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev: any, cur: any) => prev + cur[column.value], 0)
+      return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev: any, cur: any) => prev + +cur[column.value], 0)
     } else {
       return '';
     }
@@ -277,11 +296,14 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   async download(fileRow: any) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.getFileData(fileRow.id);
+      let res = await this.baseService.getFileData({
+        id: fileRow.id, url: fileRow.fileUrl, fileSize: fileRow.fileSize,
+      });
       this.downloadFile(res, fileRow.fileName + "." + fileRow.fileType);
 
     } catch (e) {
-      console.log(e)
+      console.log(e);
+      this.baseService.showError(MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
