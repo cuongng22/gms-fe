@@ -80,7 +80,6 @@ export class SignInComponent implements OnInit {
         this.formGroup.patchValue({
           'email': email
         });
-        console.log(this.formGroup.value);
         const resp = await this.usersService.login(this.formGroup.value);
         this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, resp.data.token);
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(resp.data.userInfo));

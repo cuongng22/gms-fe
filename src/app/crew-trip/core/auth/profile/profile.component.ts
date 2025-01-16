@@ -69,8 +69,10 @@ export class ProfileComponent implements OnInit {
         skipLocationChange: true
       });
     }
-    this.userCurrent = await this.userService.getUserById(this.userService.getUserLogin()?.id);
-    this.avatarUrl = this.userCurrent?.avartarUrl ?? null;
+    await this.userService.getUserById(this.userService.getUserLogin()?.id).then(data => {
+      this.userCurrent = data.data;
+    });
+    this.avatarUrl = this.userCurrent?.avartarUrl ? `${environment.baseUrl}/` + this.userCurrent?.avartarUrl : null;
     this.formGroup.disable();
 
   }
