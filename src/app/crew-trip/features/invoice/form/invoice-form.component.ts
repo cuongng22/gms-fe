@@ -74,7 +74,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
     {label: $localize`Invoice Number`, value: 'invoiceNumber'},
     {label: $localize`Invoice Date`, value: 'invoiceDate', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {
-      label: $localize`InvoiceReceive Date`,
+      label: $localize`Receive Date`,
       value: 'invoiceReceiveDate',
       type: Constant.DATE,
       format: Constant.DATE_FORMAT
