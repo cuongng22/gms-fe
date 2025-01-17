@@ -1,0 +1,484 @@
+<mat-card class="mb-10 mt-10 pt-15 pl-15 pr-15 pb-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-content>
+    <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
+      <div class="row">
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" sizeInput="sm">
+          <app-selection-suggest i18n-label="@@airportCodes" label="Market code" [options]="markets"
+                                 formControlName="marketCode" size="sm" />
+        </div>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" sizeInput="sm">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label i18n="@@month">Month</mat-label>
+            <mat-select formControlName="month" placeholder="Month">
+              @for (month of monthSelection; track month) {
+                <mat-option [value]="month">{{ month }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" sizeInput="sm">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Year</mat-label>
+            <mat-select formControlName="year" placeholder="Year">
+              @for (year of listYear; track year) {
+                <mat-option [value]="year">{{ year }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" sizeInput="sm">
+          <!--              <mat-card-header class="mb-0">-->
+          <mat-card-title>
+            <button class="search-btn" (click)="search()" mat-button>
+              <i class="material-symbols-outlined">
+                search
+              </i>
+              <span i18n="@@search">Search</span>
+            </button>
+          </mat-card-title>
+          <!--              </mat-card-header>-->
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-header class="mb-10">
+    <mat-card-title class="sub-title">
+    </mat-card-title>
+    <mat-card-subtitle>
+      <button class="add-btn mr-10" type="button" mat-button (click)="exportDownloadFile()">
+        <i class="material-symbols-outlined">
+          download
+        </i>
+        <span i18n="@@export">Export</span>
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+        <ng-container matColumnDef="#">
+          <th mat-header-cell *matHeaderCellDef [attr.rowSpan]="2" class="text-center">#</th>
+          <td mat-cell *matCellDef="let element; let i = dataIndex"
+              class="text-center">{{ i + 1 }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-center"></td>
+        </ng-container>
+        <ng-container matColumnDef="fltnoIn">
+          <th mat-header-cell *matHeaderCellDef class="text-center">Arr Flt No</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fltnoIn }}</td>
+          <td mat-footer-cell *matFooterCellDef>Total</td>
+        </ng-container>
+        <ng-container matColumnDef="checkinDate">
+          <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
+          <td mat-cell *matCellDef="let element"> {{ element.checkinDate | date: 'dd/MM/yyyy' }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="checkinTime">
+          <th mat-header-cell *matHeaderCellDef class="text-center">Time</th>
+          <td mat-cell
+              *matCellDef="let element"> {{ element.checkinDate |  date : 'HH:mm' : '+0000' }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <!-- Header row Check-in group -->
+        <ng-container matColumnDef="checkin">
+          <th mat-header-cell *matHeaderCellDef
+              [attr.colspan]="3" class="text-center">
+            Check-in
+          </th>
+        </ng-container>
+
+        <!-- Header row Check-out group -->
+        <ng-container matColumnDef="checkout">
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="3" class="text-center">
+            Check-out
+          </th>
+        </ng-container>
+        <ng-container matColumnDef="fltnoOut">
+          <th mat-header-cell *matHeaderCellDef class="text-center">Dep Flt No</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fltnoOut }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="checkoutDate">
+          <th mat-header-cell *matHeaderCellDef class="text-center">Date</th>
+          <td mat-cell *matCellDef="let element"> {{ element.checkoutDate | date: 'dd/MM/yyyy' }}</td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+        <ng-container matColumnDef="checkoutTime">
+          <th mat-header-cell *matHeaderCellDef class="text-center">Time</th>
+          <td mat-cell
+              *matCellDef="let element"> {{ element.checkoutDate | date:  'HH:mm' : '+0000' }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef></td>
+        </ng-container>
+
+        <!-- Header row Quantity group -->
+        <ng-container matColumnDef="quantity">
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="3" class="text-center">
+            Quantity
+          </th>
+        </ng-container>
+        <ng-container matColumnDef="quantityfc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcCount }}</td>
+          <td mat-footer-cell *matFooterCellDef>{{ tableData | dataCalculateTotal: 'fcCount' | number }}</td>
+        </ng-container>
+        <ng-container matColumnDef="quantityCcMen">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Men</th>
+          <td mat-cell *matCellDef="let element"> {{ element.maleCcCount }}</td>
+          <td mat-footer-cell *matFooterCellDef>{{ tableData | dataCalculateTotal: 'maleCcCount' | number }}</td>
+        </ng-container>
+        <ng-container matColumnDef="quantityCcWomen">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Women</th>
+          <td mat-cell *matCellDef="let element"> {{ element.femaleCcCount }}</td>
+          <td mat-footer-cell *matFooterCellDef>{{ tableData | dataCalculateTotal: 'femaleCcCount' | number }}</td>
+        </ng-container>
+
+        <!-- Group Standard room -->
+        <ng-container matColumnDef="standardRoom">
+          <th mat-header-cell *matHeaderCellDef [attr.colspan]="3" class="text-center">
+            Standard Room
+          </th>
+        </ng-container>
+        <ng-container matColumnDef="fcSingle">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcCount }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcCount' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="ccSingle">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccSingleRooms }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccSingleRooms' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="ccTwin">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Twin</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccRooms }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccRooms' | number }}
+          </td>
+        </ng-container>
+
+        <!-- Number of nights -->
+        <ng-container matColumnDef="numberOfNights">
+          <th mat-header-cell *matHeaderCellDef [rowSpan]="2" class="text-center">Number of nights</th>
+          <td mat-cell *matCellDef="let element"> {{ element.overnightDays }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'overnightDays' | number }}
+          </td>
+        </ng-container>
+
+        <!-- Early check in -->
+        <ng-container matColumnDef="earlyCheckIn">
+          <th mat-header-cell *matHeaderCellDef [rowSpan]="2" class="text-center">Early check in</th>
+          <td mat-cell *matCellDef="let element"> {{ element.isEarlyCheckin }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'isEarlyCheckin' | number }}
+          </td>
+        </ng-container>
+
+        <!-- Late check in -->
+        <ng-container matColumnDef="lateCheckOut">
+          <th mat-header-cell *matHeaderCellDef [rowSpan]="2" class="text-center">Late check-out</th>
+          <td mat-cell *matCellDef="let element"> {{ element.isLateCheckout }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'isLateCheckout' | number }}
+          </td>
+        </ng-container>
+
+        <!-- On time CI/CO -->
+        <ng-container matColumnDef="onTime">
+          <th mat-header-cell *matHeaderCellDef [rowSpan]="2" class="text-center">On time CI/CO</th>
+          <td mat-cell *matCellDef="let element"> {{ element.isOnTime }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'isOnTime' | number }}
+          </td>
+        </ng-container>
+
+        <!-- earlyCheckInGroup -->
+        <ng-container matColumnDef="earlyCheckInGroup">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="3">Early Check-in</th>
+        </ng-container>
+        <ng-container matColumnDef="earlyCheckInGroupFc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcEarlyCheckin }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcEarlyCheckin' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="earlyCheckInGroupCc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccSingleEarlyCheckin }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccSingleEarlyCheckin' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="earlyCheckInGroupTwin">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Twin</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccTwinsEarlyCheckin }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccTwinsEarlyCheckin' | number }}
+          </td>
+        </ng-container>
+
+        <!-- lateCheckoutGroup -->
+        <ng-container matColumnDef="lateCheckoutGroup">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="3">Early Check-in</th>
+        </ng-container>
+        <ng-container matColumnDef="lateCheckoutGroupFc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcLateCheckout }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcLateCheckout' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="lateCheckoutGroupCc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccSingleLateCheckout }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccSingleLateCheckout' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="lateCheckoutGroupTwin">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Twin</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccTwinsLateCheckout }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccTwinsLateCheckout' | number }}
+          </td>
+        </ng-container>
+
+        <!-- On time CI/CO group -->
+        <ng-container matColumnDef="onTimeGroup">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="3">On time CI/CO</th>
+        </ng-container>
+        <ng-container matColumnDef="onTimeGroupFc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcOnTime }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcOnTime' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="onTimeGroupCc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccSingleOnTime }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccSingleOnTime' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="onTimeGroupTwin">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Twin</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccTwinsOnTime }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccTwinsOnTime' | number }}
+          </td>
+        </ng-container>
+
+        <!-- Breakfast -->
+        <ng-container matColumnDef="breakfast">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="2">Breakfast</th>
+        </ng-container>
+        <ng-container matColumnDef="breakfastFc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcOnTime }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcOnTime' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="breakfastCc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccSingleOnTime }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccSingleOnTime' | number }}
+          </td>
+        </ng-container>
+
+        <!-- earlyCheckInChargeGroup -->
+        <ng-container matColumnDef="earlyCheckInChargeGroup">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="3">Early Check-in Charge</th>
+        </ng-container>
+        <ng-container matColumnDef="earlyCheckInChargeGroupFc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcEarlyCkCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcEarlyCkCharge' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="earlyCheckInChargeGroupCc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccSingleEarlyCkCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccSingleEarlyCkCharge' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="earlyCheckInChargeGroupTwin">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Twin</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccTwinsEarlyCkCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccTwinsEarlyCkCharge' | number }}
+          </td>
+        </ng-container>
+
+        <!-- lateCheckoutChargeGroup -->
+        <ng-container matColumnDef="lateCheckoutChargeGroup">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="3">Late Check-out charge</th>
+        </ng-container>
+        <ng-container matColumnDef="lateCheckoutChargeGroupFc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcLateCoCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcLateCoCharge' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="lateCheckoutChargeGroupCc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Single</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccSingleLateCoCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccSingleLateCoCharge' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="lateCheckoutChargeGroupTwin">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Twin</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccTwinsLateCoCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccTwinsLateCoCharge' | number }}
+          </td>
+        </ng-container>
+
+        <!-- onTimeCharge -->
+        <ng-container matColumnDef="onTimeChargeGroup">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="3">On time CI/CO Charge</th>
+        </ng-container>
+        <ng-container matColumnDef="onTimeChargeFc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC Single</th>
+          <td mat-cell
+              *matCellDef="let element"> {{ element.fcOntimeCharge | number: (element.format || '1.0-10') }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcOntimeCharge' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="onTimeChargeCc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Single</th>
+          <td mat-cell
+              *matCellDef="let element"> {{ element.ccSingleOntimeCharge | number: (element.format || '1.0-10') }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccSingleOntimeCharge' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="onTimeChargeTwin">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC Twin</th>
+          <td mat-cell
+              *matCellDef="let element"> {{ element.ccTwinsOntimeCharge | number: (element.format || '1.0-10') }}
+          </td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccTwinsOntimeCharge' | number }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="breakfastChargeGroup">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="2">Breakfast charge</th>
+        </ng-container>
+        <ng-container matColumnDef="breakfastChargeGroupFc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcBreakfastCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcBreakfastCharge' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="breakfastChargeGroupCc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccBreakfastCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccBreakfastCharge' | number }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="cityTaxCharge">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="2">City Tax Charge</th>
+        </ng-container>
+        <ng-container matColumnDef="cityTaxChargeFc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcCityCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcCityCharge' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="cityTaxChargeCc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccCityCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccCityCharge' | number }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="serviceTaxCharge">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="2">Service Tax Charge</th>
+        </ng-container>
+        <ng-container matColumnDef="serviceTaxChargeFc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcServiceCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcServiceCharge' | number }}
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="serviceTaxChargeCc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccServiceCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccServiceCharge' | number }}
+          </td>
+
+        </ng-container>
+
+        <ng-container matColumnDef="accommodationTaxCharge">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="2">Accommodation Tax Charge</th>
+        </ng-container>
+        <ng-container matColumnDef="accommodationTaxChargeFc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">FC</th>
+          <td mat-cell *matCellDef="let element"> {{ element.fcAccommodationCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'fcAccommodationCharge' | number }}
+          </td>
+
+        </ng-container>
+        <ng-container matColumnDef="accommodationTaxChargeCc">
+          <th mat-header-cell *matHeaderCellDef class="text-center">CC</th>
+          <td mat-cell *matCellDef="let element"> {{ element.ccAccommodationCharge }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'ccAccommodationCharge' | number }}
+          </td>
+        </ng-container>
+
+        <ng-container matColumnDef="totalCharge">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [rowSpan]="2">Total Charge (ngoại tệ)</th>
+          <td mat-cell *matCellDef="let element"> {{ element.totalCharge | number }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'totalCharge' | number }}
+          </td>
+
+        </ng-container>
+
+        <ng-container matColumnDef="totalChargeVnd">
+          <th mat-header-cell *matHeaderCellDef class="text-center" [rowSpan]="2">Total Charge (VND)</th>
+          <td mat-cell *matCellDef="let element"> {{ element.totalVndCharge | number }}</td>
+          <td mat-footer-cell *matFooterCellDef>
+            {{ tableData | dataCalculateTotal: 'totalVndCharge' | number }}
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedFirst"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedSecond"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row [hidden]="tableData.length === 0" *matFooterRowDef="displayedColumns"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell text-center" colspan="47">No data!</td>
+        </tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>
