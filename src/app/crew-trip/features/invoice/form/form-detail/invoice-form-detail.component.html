@@ -171,7 +171,7 @@
             <td *matCellDef="let element; let i = index" class="text-center"
                 mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
             </td>
-            <td *matFooterCellDef [colSpan]="_displayedColumnsHeader2.length+1" class="text-center" mat-footer-cell>Total</td>
+            <td *matFooterCellDef [colSpan]="totalColSpan" class="text-center" mat-footer-cell>Total</td>
           </ng-container>
           <ng-container matColumnDef="checkin2col">
             <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkin</th>
@@ -202,10 +202,9 @@
           }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
               </td>
               <td mat-footer-cell *matFooterCellDef class="text-right">
-                @if (innerColumn.type === Constant.NUMBER) {
+                @if (innerColumn.displayTotal) {
                   <span>
-                    {{ calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format, 'sum'] }}
-<!--                    {{ innerColumn | dataTransformPipe:[innerColumn.type, innerColumn.format, 'sum'] }}-->
+                    {{ calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
                       </span>
                 }
               </td>
