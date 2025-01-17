@@ -5,6 +5,7 @@ import { ResetPasswordComponent } from 'src/app/crew-trip/core/auth/reset-passwo
 import { SignInComponent } from 'src/app/crew-trip/core/auth/sign-in/sign-in.component';
 import { AuthGuard } from 'src/app/crew-trip/core/guards/menu.guard';
 import { RedirectGuard } from 'src/app/crew-trip/core/guards/redirect-guard';
+import { CarCostTrackingComponent } from 'src/app/crew-trip/features/car-room/car-cost-tracking/car-cost-tracking.component';
 import { HotelCostTrackingContainerComponent } from 'src/app/crew-trip/features/car-room/hotel-cost-tracking-container/hotel-cost-tracking-container.component';
 import { ActRateComponent } from 'src/app/crew-trip/features/category/act-rate/act-rate.component';
 import { CrewsComponent } from 'src/app/crew-trip/features/category/crews/crews.component';
@@ -185,6 +186,10 @@ export const routes: Routes = [
 					{
 						path: 'hotel/cost-tracking',
 						component: HotelCostTrackingContainerComponent,
+					},
+					{
+						path: 'car/cost-tracking',
+						component: CarCostTrackingComponent,
 					},
 				],
 			},
