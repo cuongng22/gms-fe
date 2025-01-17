@@ -28,7 +28,7 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
-import { AvesCostTrackingService } from 'src/app/crew-trip/core/services/aves-cost-tracking.service';
+import { AvesCostRoomTrackingService } from 'src/app/crew-trip/core/services/aves-cost-room-tracking.service';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
@@ -78,7 +78,7 @@ export class HotelCostTrackingComponent
   implements OnInit
 {
   flightMarketService = inject(FlightMarketService);
-  override baseService = inject(AvesCostTrackingService);
+  override baseService = inject(AvesCostRoomTrackingService);
   markets: string[] = [];
   monthSelection = [
     '1',
