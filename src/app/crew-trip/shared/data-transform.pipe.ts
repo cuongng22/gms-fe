@@ -1,10 +1,11 @@
-import {Pipe, PipeTransform} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 import moment from 'moment';
-import {Constant} from './utils/constant';
-import {sprintf} from 'sprintf-js';
+import { sprintf } from 'sprintf-js';
+import { Constant } from './utils/constant';
 
 @Pipe({
-  name: 'dataTransformPipe', standalone: true,
+  name: 'dataTransformPipe',
+  standalone: true,
 })
 export class DataTransformPipe implements PipeTransform {
   transform(value: any, args: any[]): any {

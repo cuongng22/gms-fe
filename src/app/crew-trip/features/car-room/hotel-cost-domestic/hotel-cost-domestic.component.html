@@ -1,0 +1,126 @@
+<mat-card class="mb-10 mt-10 pt-15 pl-15 pr-15 pb-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-content>
+    <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
+      <div class="row">
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" sizeInput="sm">
+          <app-selection-suggest i18n-label="@@airportCodes" label="Market code" [options]="markets"
+                                 formControlName="marketCode" size="sm" />
+        </div>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" sizeInput="sm">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label i18n="@@month">Month</mat-label>
+            <mat-select formControlName="month" placeholder="Month">
+              @for (month of monthSelection; track month) {
+                <mat-option [value]="month">{{ month }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" sizeInput="sm">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Year</mat-label>
+            <mat-select formControlName="year" placeholder="Year">
+              @for (year of listYear; track year) {
+                <mat-option [value]="year">{{ year }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" sizeInput="sm">
+          <mat-card-title>
+            <button class="search-btn" (click)="search()" mat-button>
+              <i class="material-symbols-outlined">
+                search
+              </i>
+              <span i18n="@@search">Search</span>
+            </button>
+          </mat-card-title>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-header class="mb-10">
+    <mat-card-title class="sub-title">
+    </mat-card-title>
+    <mat-card-subtitle>
+      <button class="add-btn mr-10" type="button" mat-button (click)="exportDownloadFile()">
+        <i class="material-symbols-outlined">
+          download
+        </i>
+        <span i18n="@@export">Export</span>
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+        @for (col of displayedFirst; track col.name) {
+          <ng-container matColumnDef="{{ col.name }}">
+            <th mat-header-cell *matHeaderCellDef [attr.colspan]="col.colSpan" [attr.rowSpan]="col.rowSpan"
+                class="text-center">{{ col.field }}
+            </th>
+            @if (col.name === '#') {
+              <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
+                {{ i + 1 }}
+              </td>
+              <td mat-footer-cell *matFooterCellDef class="text-center"></td>
+            }
+            @if (col.rowSpan === 2 && col.name !== '#') {
+              <td mat-cell *matCellDef="let element"
+                  class="text-center">
+                @if (col.name === 'totalChargeVnd') {
+                  {{ element[col.key] | number }}
+                } @else {
+                  {{ element[col.key] }}
+                }
+              </td>
+              <td mat-footer-cell *matFooterCellDef class="text-center">
+                @if (['totalChargeVnd', 'numberOfNights', 'earlyCheckin', 'lateCheckout', 'totalNights'].includes(col.name)) {
+                  <span class="fw-bold">
+                    {{ (dataSource.data | dataCalculateTotal: col.key) | number }}
+                  </span>
+                }
+              </td>
+
+            }
+          </ng-container>
+        }
+        @for (col of displayedSecond; track col) {
+          <ng-container matColumnDef="{{ col.name }}">
+            <th mat-header-cell *matHeaderCellDef class="text-center">{{ col.field }}</th>
+            <td mat-cell
+                *matCellDef="let element">
+              @if (col.name === 'checkinDate' || col.name === 'checkoutDate') {
+                {{ element[col.key] | date: 'dd/MM/yyyy' }}
+              } @else if (col.name === 'checkinTime' || col.name === 'checkoutTime') {
+                {{ element[col.key] |  date : 'HH:mm' : '+0000' }}
+              } @else if (['quantityfc', 'quantityCcMen', 'quantityCcWomen', 'fcSingle', 'ccSingle', 'ccTwin', 'roomChargeFc', 'roomChargeCc', 'roomChargeTwin'].includes(col.name)) {
+                {{ element[col.key] | number }}
+              } @else {
+                {{ element[col.key] }}
+              }
+            </td>
+            <td mat-footer-cell *matFooterCellDef class="text-center">
+              @if (col.name === 'fltnoIn') {
+                <span class="fw-bold">Total</span>
+              } @else if (['quantityfc', 'quantityCcMen', 'quantityCcWomen', 'fcSingle', 'ccSingle', 'ccTwin', 'roomChargeFc', 'roomChargeCc', 'roomChargeTwin'].includes(col.name)) {
+                <span class="fw-bold"> {{ (dataSource.data | dataCalculateTotal: col.key) | number }}</span>
+              }
+            </td>
+          </ng-container>
+        }
+        <tr mat-header-row
+            *matHeaderRowDef="displayedFirstArr"></tr>
+        <tr mat-header-row
+            *matHeaderRowDef="displayedSecondArr"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumnsArr;"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedColumnsArr"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell text-center" colspan="10">No data!</td>
+        </tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

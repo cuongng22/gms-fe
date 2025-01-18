@@ -5,6 +5,8 @@ import { ResetPasswordComponent } from 'src/app/crew-trip/core/auth/reset-passwo
 import { SignInComponent } from 'src/app/crew-trip/core/auth/sign-in/sign-in.component';
 import { AuthGuard } from 'src/app/crew-trip/core/guards/menu.guard';
 import { RedirectGuard } from 'src/app/crew-trip/core/guards/redirect-guard';
+import { CarCostTrackingComponent } from 'src/app/crew-trip/features/car-room/car-cost-tracking/car-cost-tracking.component';
+import { HotelCostTrackingContainerComponent } from 'src/app/crew-trip/features/car-room/hotel-cost-tracking-container/hotel-cost-tracking-container.component';
 import { ActRateComponent } from 'src/app/crew-trip/features/category/act-rate/act-rate.component';
 import { CrewsComponent } from 'src/app/crew-trip/features/category/crews/crews.component';
 import { FlightCrewComponent } from 'src/app/crew-trip/features/category/flight-crew/flight-crew.component';
@@ -12,6 +14,7 @@ import { HotelComponent } from 'src/app/crew-trip/features/category/hotel/hotel.
 import { NationComponent } from 'src/app/crew-trip/features/category/nation/nation.component';
 import { ServiceFeeComponent } from 'src/app/crew-trip/features/category/service-fee/service-fee.component';
 import { VehicleComponent } from 'src/app/crew-trip/features/category/vehicle/vehicle.component';
+import { ContractDetailComponent } from 'src/app/crew-trip/features/contract/contract-detail/contract-detail.component';
 import { ContractComponent } from 'src/app/crew-trip/features/contract/contract.component';
 import { FirstPageComponent } from 'src/app/crew-trip/features/first-page/first-page.component';
 import { FunctionsComponent } from 'src/app/crew-trip/features/functions/functions.component';
@@ -49,7 +52,6 @@ import { reportcomponent7 } from './crew-trip/features/reports/report7/report7.c
 import { reportcomponent8 } from './crew-trip/features/reports/report8/report8.component';
 import { reportcomponent9 } from './crew-trip/features/reports/report9/report9.component';
 import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.component';
-import {ContractDetailComponent} from "src/app/crew-trip/features/contract/contract-detail/contract-detail.component";
 
 export const routes: Routes = [
 	{
@@ -178,6 +180,19 @@ export const routes: Routes = [
 				],
 			},
 			{ path: 'profile', component: ProfileComponent },
+			{
+				path: 'service',
+				children: [
+					{
+						path: 'hotel/cost-tracking',
+						component: HotelCostTrackingContainerComponent,
+					},
+					{
+						path: 'car/cost-tracking',
+						component: CarCostTrackingComponent,
+					},
+				],
+			},
 		],
 	},
 	{
