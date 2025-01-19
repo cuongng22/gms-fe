@@ -14,13 +14,7 @@ import {MatInput} from '@angular/material/input';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
-import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelDescription,
-  MatExpansionPanelHeader,
-  MatExpansionPanelTitle
-} from '@angular/material/expansion';
+import {MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {MatRadioModule} from '@angular/material/radio';
@@ -36,29 +30,25 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {NgxMatTimepickerFieldComponent} from 'ngx-mat-timepicker';
 import {transform} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
-import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lookup';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
-import {InvoiceFormService} from "src/app/crew-trip/core/services/invoice-form-service";
 import {DigitOnlyModule} from "@uiowa/digit-only";
 import {CdkTextareaAutosize} from "@angular/cdk/text-field";
-import {
-  DatepickerYearMonthComponent
-} from "src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component";
+import {DatepickerYearMonthComponent} from "src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component";
 import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
 import {InvoiceDocumentService} from "src/app/crew-trip/core/services/invoice-document-service";
 import {ContractService} from "src/app/crew-trip/core/services/contract-service";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {HttpStatusCode} from "@angular/common/http";
 import {InvoiceDocumentComponent} from "src/app/crew-trip/features/invoice/document/invoice-document.component";
-import {
-  InvoiceDocumentRemindComponent
-} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
+import {InvoiceDocumentRemindComponent} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
+import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog";
 
 
 @Component({
   selector: 'app-invoice-document-review',
   standalone: true,
-  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, DatepickerYearMonthComponent, ThousandsSeparatorDirective, InvoiceDocumentComponent, InvoiceDocumentRemindComponent],
+  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, DatepickerYearMonthComponent, ThousandsSeparatorDirective, InvoiceDocumentComponent, InvoiceDocumentRemindComponent, ConfirmDialog],
   templateUrl: './invoice-document-review.component.html',
   styleUrl: './invoice-document-review.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -82,6 +72,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   @Input() action: any;
   @Input() dataObject: any;
   @Input() contractObj: any;
+  @Output() nextStepEmit = new EventEmitter<any>();
   @Output() backStepEmit = new EventEmitter<any>();
 
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
@@ -95,6 +86,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   listDocumentType = InvoiceLookup.InvoiceDocumentType;
   listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
+  totalColSpan: any;
   _displayedColumnsHeader1: string[] = [];
   _displayedColumnsHeader2: string[] = [];
   _displayedColumnsRow: string[] = [];
@@ -108,93 +100,74 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     colspan?: string,
     displayTotal?: boolean
   }[] = [
-    {label: $localize`Access Bridge`, value: "accessBridge", type: Constant.NUMBER, rowspan: "2"},
-    {
-      label: $localize`Accommodation Tax Cc Charge`,
-      value: "accommodationTaxCcCharge",
-      type: Constant.NUMBER,
-      rowspan: "2"
-    },
-    {
-      label: $localize`Accommodation Tax Fc Charge`,
-      value: "accommodationTaxFcCharge",
-      type: Constant.NUMBER,
-      rowspan: "2"
-    },
-    {label: $localize`Airport Parking Fee`, value: "airportParkingFee", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Breakfast Cc`, value: "breakfastCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Breakfast Fc`, value: "breakfastFc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Cc`, value: "cc", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Access Bridge`, value: "accessBridge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Accommodation Tax Cc Charge`, value: "accommodationTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Accommodation Tax Fc Charge`, value: "accommodationTaxFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Airport Parking Fee`, value: "airportParkingFee", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Breakfast Cc`, value: "breakfastCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Breakfast Fc`, value: "breakfastFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Cc`, value: "cc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Ci Date`, value: "ciDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Ci Fltno`, value: "ciFltno"},
     {label: $localize`Ci Time`, value: "ciTime"},
-    {label: $localize`City Tax Cc Charge`, value: "cityTaxCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`City Tax Fc Charge`, value: "cityTaxFcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`City Tax Cc Charge`, value: "cityTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`City Tax Fc Charge`, value: "cityTaxFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Co Date`, value: "coDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Co Fltno`, value: "coFltno"},
     {label: $localize`Co Time`, value: "coTime"},
     {label: $localize`Date`, value: "cdate", type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Detail`, value: "detail"},
-    {label: $localize`Early Checkin`, value: "earlyCheckin", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Eci Single Room Cc Charge`, value: "eciSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Eci Single Room Fc Charge`, value: "eciSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Eci Twin Room Cc Charge`, value: "eciTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Fc`, value: "fc", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Early Checkin`, value: "earlyCheckin", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Eci Single Room Cc Charge`, value: "eciSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Eci Single Room Fc Charge`, value: "eciSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Eci Twin Room Cc Charge`, value: "eciTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Fc`, value: "fc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Fltno`, value: "fltno"},
     {label: $localize`Fullname`, value: "fullname", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Late Checkout`, value: "lateCheckout", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Lco Single Room Cc Charge`, value: "lcoSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Lco Single Room Fc Charge`, value: "lcoSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Lco Twin Room Cc Charge`, value: "lcoTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Night`, value: "night", type: Constant.NUMBER, rowspan: "2"},
-    {
-      label: $localize`Number Of Nights`,
-      value: "numberOfNights",
-      type: Constant.NUMBER,
-      rowspan: "2",
-      displayTotal: true
-    },
-    {
-      label: $localize`Number Of Vehicle`,
-      value: "numberOfVehicle",
-      type: Constant.NUMBER,
-      rowspan: "2",
-      displayTotal: true
-    },
-    {label: $localize`Price`, value: "price", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Late Checkout`, value: "lateCheckout", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Lco Single Room Cc Charge`, value: "lcoSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Lco Single Room Fc Charge`, value: "lcoSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Lco Twin Room Cc Charge`, value: "lcoTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Night`, value: "night", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Number Of Nights`, value: "numberOfNights", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Number Of Vehicle`, value: "numberOfVehicle", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Price`, value: "price", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Remark`, value: "remark"},
     {label: $localize`Room No`, value: "roomNo", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Service Tax Cc Charge`, value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Service Tax Fc Charge`, value: "serviceTaxFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Single Room Cc`, value: "singleRoomCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Single Room Cc Charge`, value: "singleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Single Room Fc`, value: "singleRoomFc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Single Room Fc Charge`, value: "singleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Service Tax Cc Charge`, value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Service Tax Fc Charge`, value: "serviceTaxFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Single Room Cc`, value: "singleRoomCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Single Room Cc Charge`, value: "singleRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Single Room Fc`, value: "singleRoomFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Single Room Fc Charge`, value: "singleRoomFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Time Stay`, value: "timeStay", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Toll`, value: "toll", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Amount Cc`, value: "totalAmountCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Amount Fc`, value: "totalAmountFc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Breakfast Cc Charge`, value: "totalBreakfastCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Breakfast Fc Charge`, value: "totalBreakfastFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Charge`, value: "totalCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Charges`, value: "totalCharges", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Night`, value: "totalNight", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Revenue`, value: "totalRevenue", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Single Rooms Cc`, value: "totalSingleRoomsCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Single Rooms Fc`, value: "totalSingleRoomsFc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Twin Rooms Cc`, value: "totalTwinRoomsCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Total Vat`, value: "totalVat", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Transit Duty`, value: "transitDuty", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Transport Charge`, value: "transportCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Twin Room Cc`, value: "twinRoomCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Twin Room Cc Charge`, value: "twinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: $localize`Unit Price`, value: "unitPrice", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Toll`, value: "toll", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Amount Cc`, value: "totalAmountCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Amount Fc`, value: "totalAmountFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Breakfast Cc Charge`, value: "totalBreakfastCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Breakfast Fc Charge`, value: "totalBreakfastFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Charge`, value: "totalCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Charges`, value: "totalCharges", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Night`, value: "totalNight", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Revenue`, value: "totalRevenue", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Single Rooms Cc`, value: "totalSingleRoomsCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Single Rooms Fc`, value: "totalSingleRoomsFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Twin Rooms Cc`, value: "totalTwinRoomsCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Vat`, value: "totalVat", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Transit Duty`, value: "transitDuty", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Transport Charge`, value: "transportCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Twin Room Cc`, value: "twinRoomCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Twin Room Cc Charge`, value: "twinRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Unit Price`, value: "unitPrice", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Type Room`, value: "typeRoom", rowspan: "2"}
   ];
   ready: boolean = false;
+  showDialogUnMatched = false;
+  showDialogFinish = false;
   protected readonly LOCALE = LOCALE;
   protected readonly transform = transform;
   protected readonly DATE_FORMAT_DD_MM_YYYY = DATE_FORMAT_DD_MM_YYYY;
+  protected readonly InvoiceDocumentStatusEnum = InvoiceDocumentStatusEnum;
 
   constructor() {
     super();
@@ -240,7 +213,9 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
       invoiceDocumentDtl: [],
       fileAttachments: [],
       fileUpload: [],
-      invoiceDocumentReviewProjection:[]
+      invoiceDocumentReviewProjection: [],
+      invoiceDocumentReview: [],
+      invoiceDocumentReviewForm: []
     });
   }
 
@@ -248,7 +223,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     try {
       await this.spinner.show();
       await Promise.all([this.detail(this.id), this.loadListFlightMarket(), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
-        if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
+        if (this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
           this.formType = 1;
           this._displayedColumnsHeader1 = ['stt', 'checkin2col', 'checkout2col', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights', 'earlyCheckin',
             'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge', 'singleRoomCcCharge',
@@ -261,23 +236,33 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
             'singleRoomCcCharge', 'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge',
             'lcoTwinRoomCcCharge', 'totalBreakfastFcCharge', 'totalBreakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge',
             'accommodationTaxFcCharge', 'accommodationTaxCcCharge', 'transportCharge', 'totalCharges', 'remark'];
-        } else if (this.formGroupDetail.getRawValue().ctype === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
+          this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
+          this.totalColSpan = 5;
+        } else if (this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
           this.formType = 2;
           this._displayedColumnsHeader1 = ['stt', 'fullname', 'checkin3col', 'checkout3col', 'roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge', 'remark', 'typeRoom'];
           this._displayedColumnsHeader2 = ['ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime',];
           this._displayedColumnsRow = ['stt', 'fullname', 'ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime', 'roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge', 'remark', 'typeRoom'];
-        } else if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
+          this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item) && item != 'fullname');
+          this.totalColSpan = 8;
+        } else if (this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
           this.formType = 3;
           this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
           this._displayedColumnsHeader2 = [];
           this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
-        } else if (this.formGroupDetail.getRawValue().ctype === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
+          this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
+        } else if (this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
           this.formType = 4;
           this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
           this._displayedColumnsHeader2 = [];
           this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
+          this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
         }
-        this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
+
+        //
+        let filterForm = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((s: any) => s.sourceData == 'FORM');
+        this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm});
+
       });
 
     } catch (e) {
@@ -295,19 +280,17 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   }
 
   async setReadMode(form: FormGroup) {
+    const disableField = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version'];
+    const enableField = ['note', 'status'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
+      } else {
+        if (!enableField.includes(k)) {
+          v.disable();
+        }
       }
     });
-  }
-
-  calTotal(column: any) {
-    if (column.type === Constant.NUMBER) {
-      return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev: any, cur: any) => prev + cur[column.value], 0)
-    } else {
-      return '';
-    }
   }
 
   async download(fileRow: any) {
@@ -443,5 +426,39 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   addDtl() {
     let listDtl = [...this.formGroupDetail.getRawValue().invoiceDocumentDtl, {}];
     this.formGroupDetail.patchValue({invoiceDocumentDtl: listDtl});
+  }
+
+  calTotal(column: any) {
+    if (column.type === Constant.NUMBER) {
+      return this.formGroupDetail.getRawValue().invoiceDocumentReview.reduce((prev: any, cur: any) => prev + +cur[column.value], 0);
+    } else {
+      return '';
+    }
+  }
+
+  saveAndNext() {
+    this.formGroupDetail.patchValue({invoiceDocumentReviewProjection: null});
+    this.save().then(res => {
+      this.nextStepEmit.emit([this.id, this.readMode, 2, this.dataObject]);
+      window.scrollTo({top: 0, behavior: 'instant'});
+    });
+  }
+
+  toggleDialogUnMatched() {
+    this.showDialogUnMatched = !this.showDialogUnMatched;
+
+  }
+
+  toggleDialogFinish() {
+    this.showDialogFinish = !this.showDialogFinish;
+
+  }
+
+  saveAndFinish() {
+    this.formGroupDetail.patchValue({
+      invoiceDocumentReviewProjection: null,
+      status: InvoiceDocumentStatusEnum.FINISHED
+    })
+    this.save();
   }
 }

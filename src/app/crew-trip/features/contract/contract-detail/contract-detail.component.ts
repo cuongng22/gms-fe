@@ -356,6 +356,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         // this.loadListMaNghiepVu(),
         this.loadListQuocGia(),
         this.loadListHHDV(),
+        this.loadListFlightMarket(),
         this.setReadMode(this.formGroupDetail),
       ]).then(() => {
         if (
@@ -761,7 +762,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           id: s.id,
           col631: s.checkinFrom,
           col632: s.checkoutTo,
-          col633: s.lengthTime,
+          col633: s.maxHour,
           col634: s.rate,
           col635: s.rate1,
         }));
@@ -855,7 +856,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         id: s.id,
         checkinFrom: s.col631,
         checkoutTo: s.col632,
-        lengthTime: +s.col633,
+        maxHour: +s.col633,
         rate: s.col634,
         rate1: s.col635,
         action: s.action,
@@ -931,6 +932,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   validField(row: any, cell: any, inputRef?: any) {
+    if(!inputRef) return 'none'
     if (!row[cell]) {
       return 'Not empty';
     } else if (

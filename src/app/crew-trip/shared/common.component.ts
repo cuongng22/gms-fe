@@ -57,7 +57,7 @@ export class CommonComponent
   _vehicleService = inject(VehicleService);
   _serviceFeeService = inject(ServiceFeeService);
   displayedColumns: string[] = [];
-  dataSource = new MatTableDataSource();
+  dataSource = new MatTableDataSource<any, MatPaginator>();
   selection = new SelectionModel<any>(true, []);
   pageSize = Constant.PAGE_SIZE;
   pageIndex = Constant.PAGE;

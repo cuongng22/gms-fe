@@ -13,6 +13,13 @@ export const InvoiceDocumentStatus = [
   {key: 'UNMATCHED', value: $localize`UNMATCHED`},
   {key: 'FINISHED', value: $localize`FINISHED`},
 ];
+export enum InvoiceDocumentStatusEnum {
+  UNVERIFIED = 'UNVERIFIED',
+  VERIFIED = 'VERIFIED',
+  MATCHED = 'MATCHED',
+  UNMATCHED = 'UNMATCHED',
+  FINISHED = 'FINISHED'
+}
 export const InvoiceDocumentStatusEmail = [
   {key: 'SEND', value: $localize`SEND`},
   {key: 'UNSEND', value: $localize`UNSEND`},
