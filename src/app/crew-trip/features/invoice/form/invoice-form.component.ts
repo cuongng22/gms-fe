@@ -185,6 +185,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
       this.baseService.showError(e.error?.message ?? this.MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
+      this.formGroupFile.patchValue({fileUpload:[]});
       this.closeDialogFile();
     }
   }

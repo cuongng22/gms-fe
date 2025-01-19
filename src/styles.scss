@@ -18,6 +18,7 @@
   --purpleColor: #AD63F6;
   --orangeColor: #FD5812;
   --vnaXanhColor: #2a6886;
+  --vnaVangColor: #d3a023;
   //--vnaXanhColor: #006E8C;
 
   --gray-100: #f8f9fa;
@@ -427,6 +428,12 @@ button {
     background-color: var(--lightColor) !important;
     color: var(--vnaXanhColor) !important;
     border: 1px solid var(--vnaXanhColor) !important;
+  }
+
+  &.btn-slot-4 {
+    background-color: var(--vnaVangColor) !important;
+    color: var(--whiteColor) !important;
+
   }
 }
 

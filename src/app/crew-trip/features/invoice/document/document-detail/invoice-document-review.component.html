@@ -23,11 +23,12 @@
     </i>
     Back
   </button>
-  <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+  <button (click)="toggleDialogUnMatched()" *ngIf="!readMode && formGroupDetail.getRawValue().status === InvoiceDocumentStatusEnum.UNMATCHED"
+          class="step-2-menu-button btn-slot-4" extended i18n mat-fab>
     <i class="material-symbols-outlined">
-      save
+      edit
     </i>
-    Lưu và đối soát
+    Lưu và cập nhật chứng từ
   </button>
   <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
     <i class="material-symbols-outlined">
@@ -35,7 +36,7 @@
     </i>
     Save
   </button>
-  <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+  <button (click)="toggleDialogFinish()" *ngIf="!readMode && formGroupDetail.getRawValue().status === InvoiceDocumentStatusEnum.MATCHED" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
     <i class="material-symbols-outlined">
       save
     </i>
@@ -258,14 +259,14 @@
             </mat-tab>
             <mat-tab i18n-label label="Đối soát chi tiết">
               <div class="table-responsive">
-                <table [dataSource]="formGroupDetail.getRawValue().invoiceFormDtl" class="table-light table-responsive"
+                <table [dataSource]="formGroupDetail.getRawValue().invoiceDocumentReviewForm" class="table-light table-responsive"
                        mat-table>
                   <ng-container matColumnDef="stt">
                     <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
                     <td *matCellDef="let element; let i = index" class="text-center"
                         mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
                     </td>
-                    <td *matFooterCellDef [colSpan]="_displayedColumnsHeader2.length+1" class="text-center" mat-footer-cell>Total</td>
+                    <td *matFooterCellDef [colSpan]="totalColSpan" class="text-center" mat-footer-cell>Total</td>
                   </ng-container>
                   <ng-container matColumnDef="checkin2col">
                     <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkin</th>
@@ -296,7 +297,7 @@
           }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
                       </td>
                       <td mat-footer-cell *matFooterCellDef class="text-right">
-                        @if (innerColumn.type === Constant.NUMBER) {
+                        @if (innerColumn.displayTotal) {
                           <span>
                     {{ calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
                       </span>
@@ -307,8 +308,6 @@
                   }
                   <tr *matHeaderRowDef="_displayedColumnsHeader1" mat-header-row></tr>
                   <tr *matHeaderRowDef="_displayedColumnsHeader2" mat-header-row></tr>
-                  <!--<tr *matHeaderRowDef="['stt','accessBridge']"
-                      mat-header-row></tr>-->
                   <tr *matRowDef="let row; columns: _displayedColumnsRow;" class="input-row" mat-row></tr>
                   <tr *matFooterRowDef="_displayedColumnsFooter" class="fw-bold" mat-footer-row></tr>
                   <tr *matNoDataRow class="mat-row">
@@ -325,3 +324,23 @@
   </mat-expansion-panel>
 </mat-accordion>
 
+<app-confirm-dialog
+    i18n-mainText
+    i18n-subText
+    [icon] = "'check_circle'"
+    [mainText]=""
+    [subText]="'Chứng từ hóa đơn đã được đối soát và có chênh lệch, bạn có muốn cập nhật lại thông tin thanh toán của chứng từ này không?'"
+    (closeDialog)="toggleDialogUnMatched()"
+    (confirm)="saveAndNext()"
+    [showDialog]="showDialogUnMatched">
+</app-confirm-dialog>
+<app-confirm-dialog
+    i18n-mainText
+    i18n-subText
+    [icon] = "'check_circle'"
+    [mainText]="'Bạn có chắc chắn chốt số liệu chứng từ hóa đơn này không?'"
+    [subText]="'Số liệu chứng từ hóa đơn này sẽ không được chỉnh sửa sau khi đã chốt!'"
+    (closeDialog)="toggleDialogFinish()"
+    (confirm)="saveAndFinish()"
+    [showDialog]="showDialogFinish">
+</app-confirm-dialog>

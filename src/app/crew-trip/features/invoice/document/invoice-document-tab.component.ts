@@ -44,6 +44,7 @@ export class InvoiceDocumentTabComponent implements OnInit {
   step = 1;
   id: any;
   readMode: any;
+  dataObject: any;
 
   constructor() {
   }
@@ -61,9 +62,10 @@ export class InvoiceDocumentTabComponent implements OnInit {
   }
 
   nextStepEmit($event: any) {
-    this.step = $event[2];;
+    this.step = $event[2];
     this.id = $event[0];
     this.readMode = $event[1];
+    this.dataObject = $event[3];
   }
 
   backStepEmit($event: any) {

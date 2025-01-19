@@ -100,4 +100,10 @@ export class InvoiceDocumentService extends BaseService {
     };
     return firstValueFrom(this.http.post(url, form, headers));
   }
+
+  getListDocumentParent(body: any): Promise<any> {
+    const url = `${this.api}/${this.path}/list-parent`;
+    const params = new HttpParams({fromObject: removeNullValues(body)});
+    return firstValueFrom(this.http.get<any>(url, {params}));
+  }
 }
