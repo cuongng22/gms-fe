@@ -76,15 +76,14 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
         status: 'Operational',
       });
       this.markets = marketCodes.data;
-      this.loadExcelFile();
+      // this.loadExcelFile();
     } catch (error: any) {
       this.showError(error);
     }
     await this.spinner.hide();
   }
 
-  loadExcelFile(): void {
-    const url = 'http://192.168.10.68:8081/source/documents/crew_overnight_stays_in.xlsx';
+  loadExcelFile(url: any): void {
     this.http
       .get(url, {responseType: 'blob'})
       .subscribe(
@@ -99,10 +98,8 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
 
   override async search() {
     await this.spinner.show();
-    const data = await this.roomBookingService.getFile(
-      'documents/crew_overnight_stays_in.xlsx',
-    );
-    // this._loadWorkbook(data);
+    let urlFilePath = 'http://192.168.10.68:8081/source/documents/crew_overnight_stays_in.xlsx';
+    this.loadExcelFile(urlFilePath);
     await this.spinner.hide();
   }
 }
