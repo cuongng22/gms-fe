@@ -1,19 +1,24 @@
-import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatButton } from '@angular/material/button';
-import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
+import {Component, inject, OnInit} from '@angular/core';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {MatButton} from '@angular/material/button';
+import {MatCard, MatCardContent, MatCardModule} from '@angular/material/card';
 import * as wjcXlsx from '@mescius/wijmo.xlsx';
-import { RoomBookingService } from 'src/app/crew-trip/core/services/room-booking.service';
-import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
-import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
-import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { SelectOptions } from 'src/app/crew-trip/shared/select-option';
+import {RoomBookingService} from 'src/app/crew-trip/core/services/room-booking.service';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {
+  SelectionSuggestComponent
+} from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
+import {SelectionComponent} from 'src/app/crew-trip/shared/component/selection/selection.component';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {SelectOptions} from 'src/app/crew-trip/shared/select-option';
+import {ExcelViewerComponent} from "src/app/crew-trip/shared/component/excel-viewer/excel-viewer.component";
+import {CommonModule} from "@angular/common";
 
 @Component({
   selector: 'app-room-booking',
   standalone: true,
   imports: [
+    CommonModule,
     MatCard,
     FormsModule,
     InputSizeComponent,
@@ -23,6 +28,7 @@ import { SelectOptions } from 'src/app/crew-trip/shared/select-option';
     SelectionSuggestComponent,
     MatButton,
     MatCardModule,
+    ExcelViewerComponent,
   ],
   templateUrl: './room-booking.component.html',
   styleUrl: './room-booking.component.scss',
