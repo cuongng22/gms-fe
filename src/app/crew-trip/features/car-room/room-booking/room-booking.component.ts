@@ -13,6 +13,7 @@ import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.comp
 import {SelectOptions} from 'src/app/crew-trip/shared/select-option';
 import {ExcelViewerComponent} from "src/app/crew-trip/shared/component/excel-viewer/excel-viewer.component";
 import {CommonModule} from "@angular/common";
+import {HttpClient} from "@angular/common/http";
 
 @Component({
   selector: 'app-room-booking',
@@ -43,8 +44,9 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
   listYear: number[] = [];
   workbook: wjcXlsx.Workbook;
   sheetIndex: number;
+  excelFile: Blob | null = null;
 
-  constructor() {
+  constructor(private http: HttpClient) {
     super();
     for (let i = 1; i <= 12; i++) {
       this.monthSelection.push(i + '');
@@ -74,10 +76,25 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
         status: 'Operational',
       });
       this.markets = marketCodes.data;
+      this.loadExcelFile();
     } catch (error: any) {
       this.showError(error);
     }
     await this.spinner.hide();
+  }
+
+  loadExcelFile(): void {
+    const url = 'http://192.168.10.68:8081/source/documents/crew_overnight_stays_in.xlsx';
+    this.http
+      .get(url, {responseType: 'blob'})
+      .subscribe(
+        (fileBlob: Blob) => {
+          this.excelFile = fileBlob;
+        },
+        (error) => {
+          console.error('Error loading Excel file:', error);
+        }
+      );
   }
 
   override async search() {

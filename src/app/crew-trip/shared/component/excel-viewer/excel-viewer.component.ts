@@ -1,4 +1,4 @@
-import {AfterViewInit, Component, OnInit} from '@angular/core';
+import {AfterViewInit, Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import * as wjcCore from '@grapecity/wijmo';
 import * as wjcXlsx from '@grapecity/wijmo.xlsx';
 import {CommonModule} from "@angular/common";
@@ -10,7 +10,9 @@ import {CommonModule} from "@angular/common";
   templateUrl: './excel-viewer.component.html',
   styleUrl: './excel-viewer.component.scss'
 })
-export class ExcelViewerComponent {
+export class ExcelViewerComponent implements OnChanges {
+  @Input() file: File | Blob | null = null;
+
   workbook: wjcXlsx.Workbook = new wjcXlsx.Workbook();
   sheetIndex: number = 0;
 
@@ -19,6 +21,12 @@ export class ExcelViewerComponent {
   }
 
   ngOnInit(): void {
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['file'] && this.file) {
+      this._loadWorkbook(this.file);
+    }
   }
 
 
