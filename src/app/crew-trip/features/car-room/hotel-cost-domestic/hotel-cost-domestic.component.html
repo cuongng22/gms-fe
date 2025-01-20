@@ -65,7 +65,7 @@
               <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
                 {{ i + 1 }}
               </td>
-              <td mat-footer-cell *matFooterCellDef class="text-center"></td>
+              <td mat-footer-cell *matFooterCellDef class="text-center fw-bold" [colSpan]="7">Total</td>
             }
             @if (col.rowSpan === 2 && col.name !== '#') {
               <td mat-cell *matCellDef="let element"
@@ -102,13 +102,15 @@
                 {{ element[col.key] }}
               }
             </td>
-            <td mat-footer-cell *matFooterCellDef class="text-center">
-              @if (col.name === 'fltnoIn') {
-                <span class="fw-bold">Total</span>
-              } @else if (['quantityfc', 'quantityCcMen', 'quantityCcWomen', 'fcSingle', 'ccSingle', 'ccTwin', 'roomChargeFc', 'roomChargeCc', 'roomChargeTwin'].includes(col.name)) {
+
+            @if (['quantityfc', 'quantityCcMen', 'quantityCcWomen', 'fcSingle', 'ccSingle', 'ccTwin', 'roomChargeFc', 'roomChargeCc', 'roomChargeTwin'].includes(col.name)) {
+              <td mat-footer-cell *matFooterCellDef class="text-center">
                 <span class="fw-bold"> {{ (dataSource.data | dataCalculateTotal: col.key) | number }}</span>
-              }
-            </td>
+              </td>
+            } @else {
+              <td mat-footer-cell *matFooterCellDef class="text-center">
+              </td>
+            }
           </ng-container>
         }
         <tr mat-header-row
@@ -116,9 +118,10 @@
         <tr mat-header-row
             *matHeaderRowDef="displayedSecondArr"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsArr;"></tr>
-        <tr mat-footer-row *matFooterRowDef="displayedColumnsArr"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedFooterArr" [hidden]="dataSource.data.length === 0">
+        </tr>
         <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell text-center" colspan="10">No data!</td>
+          <td class="mat-cell text-center" colspan="22">No data!</td>
         </tr>
       </table>
     </div>
