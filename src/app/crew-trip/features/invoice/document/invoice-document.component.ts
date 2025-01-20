@@ -11,7 +11,7 @@ import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
@@ -35,11 +35,15 @@ import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {ConfirmDeleteDialog} from "src/app/crew-trip/shared/dialog/confirm-delete-dialog";
+import {DatepickerYearMonthComponent} from "src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component";
+import {NgxTrimDirectiveModule} from "ngx-trim-directive";
+import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
+import {cloneDeep} from "lodash";
 
 @Component({
   selector: 'app-invoice-document',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, ConfirmDeleteDialog],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, ConfirmDeleteDialog, DatepickerYearMonthComponent, NgxTrimDirectiveModule, ThousandsSeparatorDirective, FormsModule],
   templateUrl: './invoice-document.component.html',
   styleUrl: './invoice-document.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -61,10 +65,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   readMode = true;
   action = 'edit';
   id: any;
-  listPartner: any[] = [];
-  listHotel = [];
-  listVehicle = [];
-  listAirportCode = [];
+  dataObject: any;
   listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
 
@@ -129,6 +130,9 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   showDialogFile = false;
   isShowFormHdr: boolean = false;
   formHdrId: any;
+  override pageSize = 10;
+  tblDetail: any[]
+  currentRow: any
 
   constructor() {
     super();
@@ -157,7 +161,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
 
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
     await Promise.all([this.search(), this.loadListFlightMarket()]).then(() => {
-
+      this.showDocumentDtl(this.dataSource.data[0]);
     });
     this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVat',
       'vat', 'totalAmount', 'reimbursementTotal', 'status', 'statusEmail', 'statusPayment', 'paymentDueDate', 'action'];
@@ -168,11 +172,12 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
   }
 
-  async nextStep(id?: any, readMode?: any, step?: any) {
+  async nextStep(id?: any, readMode?: any, step?: any, dataObject?: any) {
     this.id = id;
     this.step = step;
     this.readMode = readMode;
-    this.nextStepEmit.emit([this.id, this.readMode, this.step])
+    this.dataObject = dataObject;
+    this.nextStepEmit.emit([this.id, this.readMode, this.step, this.dataObject])
   }
 
   async backStep() {
@@ -303,7 +308,6 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   }
 
   showFormHdr(formHdrId: any) {
-    console.log(+formHdrId,'haha')
     if (+formHdrId > 0) {
       this.formHdrId = formHdrId;
       this.isShowFormHdr = true;
@@ -311,4 +315,11 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       this.baseService.showError("Không tìm thấy bảng kê chứng từ");
     }
   }
+
+  showDocumentDtl($event: any) {
+    let listHdr = cloneDeep(this.dataSource.data);
+    let currentHdr = listHdr.find((s: any) => s.id = $event.id);
+    this.tblDetail = currentHdr?.invoiceDocumentDtl ?? [];
+  }
+
 }

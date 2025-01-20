@@ -28,7 +28,7 @@
               <mat-label i18n>Airport Code</mat-label>
               <mat-select formControlName="airportCode" multiple>
                 @for (item of listFlightMarket; track item) {
-                <mat-option [value]="item">{{ item }}</mat-option>
+                  <mat-option [value]="item">{{ item }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -44,10 +44,10 @@
               <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
               @if (!!formGroupSearch.controls['periodFrom'].hasError('matStartDateInvalid')) {
-              <mat-error>Invalid start date</mat-error>
+                <mat-error>Invalid start date</mat-error>
               }
               @if (!!formGroupSearch.controls['periodTo'].hasError('matEndDateInvalid')) {
-              <mat-error>Invalid end date</mat-error>
+                <mat-error>Invalid end date</mat-error>
               }
             </mat-form-field>
           </div>
@@ -74,7 +74,7 @@
       <mat-card-title>
       </mat-card-title>
       <mat-card-subtitle>
-        <button  class="add-btn mr-10" i18n mat-button
+        <button class="add-btn mr-10" i18n mat-button
                 type="button">
           <i class="material-symbols-outlined">
             download
@@ -99,7 +99,7 @@
             </td>
           </ng-container>
           @for (innerColumn of _displayedColumns; track innerColumn.value) {
-          <ng-container matColumnDef="{{innerColumn.value}}">
+            <ng-container matColumnDef="{{innerColumn.value}}">
               <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
               <td mat-cell *matCellDef="let element">
               <span [ngClass]="{
@@ -107,15 +107,15 @@
           'text-bg-vna': innerColumn.value === 'isActiveLabel' && element['isActive'] == 1,
           'text-bg-vna-danger': innerColumn.value === 'isActiveLabel' && element['isActive'] == 0
           }">{{
-          element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-          }}</span>
+                      element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+                }}</span>
               </td>
             </ng-container>
           }
           <ng-container matColumnDef="periodDate">
             <th *matHeaderCellDef mat-header-cell mat-sort-header>Period Date</th>
             <td *matCellDef="let element"
-                mat-cell>{{element.periodFrom | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]}}
+                mat-cell>{{ element.periodFrom | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
               - {{ element.periodTo | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
             </td>
           </ng-container>
@@ -139,7 +139,7 @@
           </tr>
           <tr *matNoDataRow class="mat-row">
             <td [attr.colspan]="displayedColumns.length" class="mat-cell border-none text-center"><span
-              i18n>No data!</span></td>
+                i18n>No data!</span></td>
           </tr>
           <!--        <tr mat-row *matRowDef="let row; columns: ['child'];"></tr>-->
 
@@ -157,8 +157,8 @@
 
 <!-- Add New Popup -->
 <div
-  [class.active]="showDialogFile"
-  class="add-new-popup"
+    [class.active]="showDialogFile"
+    class="add-new-popup"
 >
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
@@ -181,7 +181,7 @@
               <label class="main-label fw-medium text-black pr-15" i18n>
                 Type <span style="color:red">*</span>
               </label>
-              <mat-radio-group formControlName="ctype" (ngModelChange)="cookTemplateName()">
+              <mat-radio-group (ngModelChange)="cookTemplateName()" formControlName="ctype">
                 <mat-radio-button i18n value="INTERNATIONAL">
                   International
                 </mat-radio-button>
@@ -191,13 +191,13 @@
               </mat-radio-group>
             </div>
             <div class="col-md-12 mt-20">
-                <span i18n>File Template</span>
-                <button (click)="download('DOWNLOAD')" class="close-btn" i18n mat-button type="button">
-                  <i class="material-symbols-outlined">
-                    download
-                  </i>
-                  {{formGroupFile.getRawValue().templateName}}
-                </button>
+              <span i18n>File Template</span>
+              <button (click)="download('DOWNLOAD')" class="close-btn" i18n mat-button type="button">
+                <i class="material-symbols-outlined">
+                  download
+                </i>
+                {{ formGroupFile.getRawValue().templateName }}
+              </button>
             </div>
             <div class="col-md-12 mt-20" sizeInput='sm'>
               <file-upload [accept]="COMMON_CONFIG.FILE_ACCEPT_EXCEL" [multiple]="false"
@@ -214,9 +214,9 @@
             Close
           </button>
           <button
-            (click)="upload()"
-            class="add-btn"
-            i18n mat-button
+              (click)="upload()" [disabled]="(formGroupFile.value.fileUpload?.length??0) == 0"
+              class="add-btn"
+              i18n mat-button
           >
             <i class="material-symbols-outlined">
               upload

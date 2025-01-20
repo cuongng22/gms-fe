@@ -100,6 +100,7 @@
       </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
+      <span class="fw-bold">List of Invoice</span>
       <div class="table-responsive">
         <table [dataSource]="dataSource" class="table-light table-responsive" mat-table
                style="border-collapse: separate;">
@@ -187,9 +188,12 @@
                   [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
                   mat-cell *matCellDef="let element">
             <span [ngClass]="{
-          'badge': innerColumn.value === 'activeLabel',
-          'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
-          'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
+          'badge': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value),
+          'text-soft-dark': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && (element['status'] === 'UNVERIFIED' || element['statusEmail'] ==='UNSEND'|| element['statusPayment'] === 'UNPAID'),
+          'text-soft-primary': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && element['status'] === 'VERIFIED',
+          'text-soft-info': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && element['status'] === 'MATCHED',
+          'text-soft-danger': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && element['status'] === 'UNMATCHED',
+          'text-soft-success': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && (element['status'] === 'FINISHED' || element['statusEmail'] ==='SEND'|| element['statusPayment'] === 'PAID'),
           }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
               </td>
             </ng-container>
@@ -209,7 +213,7 @@
                 </a>
                 <a class="text-secondary" mat-button
                    type="button">
-                  <i (click)="nextStep(element.id,true,2)" class="material-symbols-outlined" i18n-title title="Detail">
+                  <i (click)="nextStep(element.id,true,2,element)" class="material-symbols-outlined" i18n-title title="Detail">
                     visibility
                   </i>
                 </a>
@@ -221,13 +225,13 @@
                 </a>
                 <a class="text-warning" mat-button
                    type="button">
-                  <i (click)="nextStep(element.id,false,2)" class="material-symbols-outlined" i18n-title title="Edit">
+                  <i (click)="nextStep(element.id,false,2,element)" class="material-symbols-outlined" i18n-title title="Edit">
                     edit
                   </i>
                 </a>
                 <a class="text-success" mat-button
                    type="button">
-                  <i (click)="nextStep(element.id,false,3)" class="material-symbols-outlined" i18n-title title="Verify">
+                  <i (click)="nextStep(element.id,false,3,element)" class="material-symbols-outlined" i18n-title title="Verify">
                     task_alt
                   </i>
                 </a>
@@ -242,7 +246,7 @@
           </ng-container>
           <tr *matHeaderRowDef="_displayedColumnsHeader1" mat-header-row></tr>
           <tr *matHeaderRowDef="_displayedColumnsHeader2" mat-header-row></tr>
-          <tr *matRowDef="let row; columns: _displayedColumnsRow;" class="input-row" mat-row></tr>
+          <tr (click)="showDocumentDtl(row)" *matRowDef="let row; columns: _displayedColumnsRow;" class="input-row" mat-row></tr>
           <tr *matNoDataRow class="mat-row">
             <td [attr.colspan]="_displayedColumnsRow.length" class="mat-cell border-none text-center"><span
                 i18n>No data!</span></td>
@@ -255,6 +259,116 @@
                      [showFirstLastButtons]="showFirstLastButtons"
                      aria-label="Select page">
       </mat-paginator>
+
+      <div class="table-responsive mt-25">
+        <span class="fw-bold">Detailed payment information</span>
+        <table [dataSource]="tblDetail" class="table-light table-responsive"
+               mat-table>
+          <ng-container matColumnDef="stt">
+            <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
+            <td *matCellDef="let element; let i = index" class="text-center"
+                mat-cell>{{ i + 1 }}
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="serviceCode">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Code
+            </th>
+            <td *matCellDef="let element" mat-cell>
+                 <span class="label-text">
+            {{ element.serviceCode }}
+            </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="serviceName">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Name</th>
+            <td *matCellDef="let element" mat-cell>
+                 <span class="label-text">
+            {{ element.serviceName }}
+            </span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="unit">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit</th>
+            <td *matCellDef="let element" mat-cell>
+              <span class="label-text">{{ element.unit }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="periodOccurrence">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Period
+              Occurrence
+            </th>
+            <td *matCellDef="let element" mat-cell>
+              <span class="label-text">{{ element.periodOccurrence | dataTransformPipe:[Constant.DATE, Constant.MONTH_FORMAT] }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="nsCode">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">NS Code</th>
+            <td *matCellDef="let element" mat-cell>
+              <span class="label-text">{{ element.nsCode }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="unitPrice">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit Price
+            </th>
+            <td *matCellDef="let element" mat-cell>
+              <span class="label-text">{{ element.unitPrice | dataTransformPipe:[Constant.NUMBER] }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="amountFcBeforeVat">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
+              Amount Fc Before Vat
+            </th>
+            <td *matCellDef="let element" mat-cell>
+              <span class="label-text">{{ element.amountFcBeforeVat | dataTransformPipe:[Constant.NUMBER] }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="amountVndBeforeVat">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
+              Amount Vnd Before Vat
+            </th>
+            <td *matCellDef="let element" mat-cell>
+              <span class="label-text">{{ element.amountVndBeforeVat | dataTransformPipe:[Constant.NUMBER] }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="amountFcVat">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Fc</th>
+            <td *matCellDef="let element" mat-cell>
+              <span class="label-text">{{ element.amountFcVat | dataTransformPipe:[Constant.NUMBER] }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="amountVndVat">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Vnd</th>
+            <td *matCellDef="let element" mat-cell>
+              <span class="label-text">{{ element.amountVndVat | dataTransformPipe:[Constant.NUMBER] }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="vatType">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Vat Type</th>
+            <td *matCellDef="let element" mat-cell>
+              <span class="label-text">{{ element.vatType }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="vat">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">%VAT</th>
+            <td *matCellDef="let element" mat-cell>
+              <span class="label-text">{{ element.vat | dataTransformPipe:[Constant.NUMBER] }}</span>
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="vatHeader">
+            <th *matHeaderCellDef class="text-center" colspan="4" i18n mat-header-cell mat-sort-header>VAT
+          </ng-container>
+          <tr
+              *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader']"
+              mat-header-row></tr>
+          <tr *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
+          <tr *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat',];"
+              class="input-row" mat-row></tr>
+          <tr *matNoDataRow class="mat-row">
+            <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
+                i18n>No data!</span></td>
+          </tr>
+        </table>
+      </div>
     </mat-card-content>
   </mat-card>
 </ng-container>
