@@ -1,0 +1,85 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+  <h5 class="mb-0" i18n="@@crewList">
+    Room booking
+  </h5>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@system">
+      Accommodation Service
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@config">
+      Hotel Room
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@groupMail">
+      Room Booking
+    </li>
+  </ol>
+</div>
+
+<mat-card class="mb-10 mt-10 pt-15 pl-15 pr-15 pb-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-content>
+    <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
+      <div class="row">
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
+          <app-selection
+            [options]="optionsFlightScheduleType"
+            label="Flight Schedule Type"
+            formControlName="flightScheduleType"
+          >
+
+          </app-selection>
+        </div>
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
+          <app-selection-suggest
+            i18n-label="@@airportCodes"
+            label="Market code"
+            [options]="markets"
+            formControlName="marketCode"
+            size="sm"
+          ></app-selection-suggest>
+        </div>
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
+          <app-selection [options]="optionsServiceApplied" label="FC/CC" formControlName="serviceApplied">
+          </app-selection>
+        </div>
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
+          <app-selection
+            [options]="monthSelection"
+            label="Month"
+            formControlName="month"
+            size="sm"
+            attrDisplay=""
+            attrValue=""
+          ></app-selection>
+        </div>
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
+          <app-selection
+            [options]="listYear"
+            label="Year"
+            formControlName="year"
+            size="sm"
+            attrDisplay=""
+            attrValue=""
+          >
+          </app-selection>
+        </div>
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
+          <mat-card-title>
+            <button class="search-btn" (click)="search()" mat-button>
+              <i class="material-symbols-outlined">
+                search
+              </i>
+              <span i18n="@@search">Search</span>
+            </button>
+          </mat-card-title>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <div class="container-fluid">
+    <!-- Current sheet view -->
+    <div id="tableHost"></div>
+  </div>
+</mat-card>
