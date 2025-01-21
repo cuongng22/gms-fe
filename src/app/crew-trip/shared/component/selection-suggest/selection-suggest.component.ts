@@ -146,6 +146,7 @@ implements OnInit, AfterViewInit, AfterViewChecked
 
 	filter(): void {
 	  const filterValue = this.inputSearch.nativeElement.value;
+	  console.log(filterValue);
 	  this.formControl.setValue(null);
 	  this.formControl.updateValueAndValidity();
 	  this.keySearch.next(filterValue);
@@ -176,11 +177,10 @@ implements OnInit, AfterViewInit, AfterViewChecked
 	  this.viewControl.setValue('');
 	  this.formControl.setValue('');
 	  this.selectionControl.writeValue('');
-	  this.viewControl.updateValueAndValidity();
-	  this.formControl.updateValueAndValidity();
 	  const findResult = this.auto?.options.find((o) => o.selected);
 	  findResult?.focus(null, { preventScroll: false });
 	  findResult?.deselect(false);
+	  this.filtered.set([...(this._options ?? [])]);
 	  this.clearInputEvent.emit();
 	}
 }

@@ -46,8 +46,8 @@
             <mat-label i18n="@@airportCode:category">Category</mat-label>
             <mat-select formControlName="type">
               <mat-option [value]="null" i18n="@@allCategory">-- All Category --</mat-option>
-              <mat-option value="International" i18n="@@international">International</mat-option>
-              <mat-option value="Domestic" i18n="@@domestic">Domestic</mat-option>
+              <mat-option [value]="'International'" i18n="@@international">International</mat-option>
+              <mat-option [value]="'Domestic'" i18n="@@domestic">Domestic</mat-option>
             </mat-select>
           </mat-form-field>
         </div>
@@ -57,11 +57,11 @@
             <mat-label i18n="@@airportStatus">Airport status</mat-label>
             <mat-select formControlName="status">
               <mat-option [value]="null" i18n="@@allStatus">-- All Status --</mat-option>
-              <mat-option value="Not operational" i18n="@@notOperational">Not
+              <mat-option [value]="'Not operational'" i18n="@@notOperational">Not
                 operational
               </mat-option>
-              <mat-option value="Operational" i18n="@@operational">Operational</mat-option>
-              <mat-option value="Suspended" i18n="@@suspended">Suspended</mat-option>
+              <mat-option [value]="'Operational'" i18n="@@operational">Operational</mat-option>
+              <mat-option [value]="'Suspended'" i18n="@@suspended">Suspended</mat-option>
             </mat-select>
           </mat-form-field>
         </div>

@@ -31,6 +31,7 @@ import { AircraftDataComponent } from 'src/app/crew-trip/features/system/config/
 import { EmailSupplierComponent } from 'src/app/crew-trip/features/system/config/email-supplier/email-supplier.component';
 import { GroupMailComponent } from 'src/app/crew-trip/features/system/config/group-mail/group-mail.component';
 import { UsersComponent } from 'src/app/crew-trip/features/system/users/users.component';
+import { WetLeaseComponent } from 'src/app/crew-trip/features/wet-lease-charter/wet-lease/wet-lease.component';
 import { NotFoundComponent } from 'src/app/not-found/not-found.component';
 import { CrewsDetailComponent } from './crew-trip/features/category/crews/crews-detail/crews-detail.component';
 import { FlightMarketDetailComponent } from './crew-trip/features/category/flight-market/flight-market-detail/flight-market-detail.component';
@@ -86,6 +87,10 @@ export const routes: Routes = [
 			{
 				path: 'plan',
 				children: [
+					{
+						path: 'est-plan/wet-lease',
+						component: WetLeaseComponent,
+					},
 					{ path: 'rate/uth', component: RateUthComponent },
 					{ path: 'rate/planned', component: RatePlannedComponent },
 					{
