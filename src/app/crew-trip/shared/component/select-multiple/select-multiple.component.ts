@@ -28,6 +28,7 @@ import {
 import { MatInputModule } from '@angular/material/input';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { NgxControlError } from 'ngxtension/control-error';
 import { debounceTime, tap } from 'rxjs';
 import { InputSizeComponent } from '../../input/input-size.component';
@@ -51,6 +52,7 @@ import { MESSAGE } from '../../utils/constant';
     MatFormFieldModule,
     MatInputModule,
     NgxControlError,
+    NgxTrimDirectiveModule,
   ],
   templateUrl: './select-multiple.component.html',
   styleUrl: './select-multiple.component.scss',

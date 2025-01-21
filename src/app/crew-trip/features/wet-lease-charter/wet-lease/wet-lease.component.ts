@@ -37,6 +37,7 @@ import {
   MatRowDef,
   MatTable,
 } from '@angular/material/table';
+import { RouterLink } from '@angular/router';
 import moment from 'moment';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { NgxControlError } from 'ngxtension/control-error';
@@ -91,6 +92,7 @@ import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant'
     DataCalculateTotal,
     SelectMultipleComponent,
     MatPaginator,
+    RouterLink,
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -127,6 +129,7 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
         colSpan: 1,
       },
       { name: 'totalVnd', field: 'Total amount (VND)', colSpan: 2, rowSan: 1 },
+      { name: 'action', field: 'Action', rowSan: 2, colSpan: 1 },
     ];
   displayedSecond: any[] = [
     { name: 'totalQtySingleRoom', field: 'Single Room' }, //tổng số phòng đơn
@@ -141,7 +144,7 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
-      marketCode: [''],
+      airportCodes: [''],
       startDate: [''],
       endDate: [''],
     });
@@ -157,6 +160,7 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
       'totalForex',
       'totalIncVAT',
       'totalExcVAT',
+      'action',
     ];
     this.displayedFooterColumns = [
       'airportCode',
@@ -166,6 +170,7 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
       'totalForex',
       'totalIncVAT',
       'totalExcVAT',
+      'action',
     ];
   }
 
@@ -195,10 +200,10 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
   }
 
   async exportFileExcel(fileName: string) {
-    const { marketCode, startDate, endDate } =
+    const { airportCodes, startDate, endDate } =
 			this.formGroupSearch.getRawValue();
     const searchParams = {
-      marketCode,
+      airportCodes,
       startDate,
       endDate,
       export: true,

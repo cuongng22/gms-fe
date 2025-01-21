@@ -21,8 +21,8 @@
     <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
       <div class="row">
         <div class="col-3" sizeInput="sm">
-          <app-select-multiple i18n-label="@@airportCodes" label="Market code" [options]="markets"
-                               formControlName="marketCode" size="sm" />
+          <app-select-multiple i18n-label="@@airportCodes" label="Airport code" [options]="markets"
+                               formControlName="airportCodes" size="sm" />
         </div>
         <div class="col-3 mb-2" sizeInput="sm">
           <mat-form-field class="mb-1">
@@ -80,7 +80,7 @@
         </i>
         <span i18n="@@export">Export</span>
       </button>
-      <a class="add-btn" type="button" mat-button>
+      <a class="add-btn" type="button" mat-button [routerLink]="['/plan/est-plan/wet-lease/detail']">
         <i class="material-symbols-outlined">
           add
         </i>
@@ -101,6 +101,32 @@
                 {{ element[col.name] | date: 'dd/MM/yyyy' }}
               } @else if (['totalNumberOfTrip', 'totalForex'].includes(col.name)) {
                 {{ element[col.name] | number }}
+              } @else if (col.name === 'action') {
+                <div class="action-buttons d-flex justify-content-end">
+                  <a mat-button title="View" i18n-title="@@view" class="text-vna">
+                    <!--                     [routerLink]="['/category/flight-market/detail', element.id]"-->
+                    <!--                     [queryParams]="{'view-detail':true}"-->
+                    <!--                  >-->
+                    <i class="material-symbols-outlined " text-primary>
+                      visibility
+                    </i>
+                  </a>
+                  <a type="button" class="text-warning" mat-button>
+                    <!--                     [routerLink]="['/category/flight-market/detail', element.id]"-->
+                    <!--                     [queryParams]="{'view-detail':false}">-->
+                    <i class="material-symbols-outlined " text-warning title="Edit" i18n-title="@@edit">
+                      edit
+                    </i>
+                  </a>
+
+                  <button type="button" mat-button title="Delete" i18n-title="@@delete"
+                          (click)="showConfirmDelete(element.id)">
+                    <i class="material-symbols-outlined " text-danger>
+                      delete
+                    </i>
+                  </button>
+
+                </div>
               } @else {
                 {{ element[col.name] }}
               }
@@ -110,6 +136,9 @@
             } @else if (['totalNumberOfTrip', 'totalForex'].includes(col.name)) {
               <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
                 {{ (dataSource.data | dataCalculateTotal: col.name) | number }}
+              </td>
+            } @else {
+              <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
               </td>
             }
           </ng-container>
