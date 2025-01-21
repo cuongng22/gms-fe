@@ -29,7 +29,6 @@ import {
   MatTable,
 } from '@angular/material/table';
 import { AvesCostRoomTrackingService } from 'src/app/crew-trip/core/services/aves-cost-room-tracking.service';
-import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataCalculateTotal } from 'src/app/crew-trip/shared/data-calculate-total';
@@ -77,7 +76,6 @@ export class HotelCostTrackingComponent
   extends CommonComponent
   implements OnInit
 {
-  flightMarketService = inject(FlightMarketService);
   override baseService = inject(AvesCostRoomTrackingService);
   markets: string[] = [];
   monthSelection = [
@@ -227,7 +225,7 @@ export class HotelCostTrackingComponent
 	override async ngOnInit() {
 	  await this.spinner.show();
 	  this.markets = (
-	    await this.flightMarketService.search({
+	    await this._flightMarketService.search({
 	      option: 1,
 	      type: this.type,
 	      status: 'Operational',

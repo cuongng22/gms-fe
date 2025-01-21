@@ -216,8 +216,8 @@ export const menu: Menu[] = [
                 icon: 'ri-folder-chart-line',
               },
               {
-                path: 'plan/est-plan/five-year-plan',
-                title: $localize`:@@fiveYearPlan:Wet lease & Charter plan`,
+                path: 'plan/est-plan/wet-lease',
+                title: $localize`:@@fiveYearPlan:Wet lease`,
                 icon: 'ri-folder-chart-line',
               },
               {

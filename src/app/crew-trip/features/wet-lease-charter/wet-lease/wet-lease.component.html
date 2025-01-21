@@ -1,0 +1,147 @@
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+  <h5 class="mb-0" i18n="@@crewList">
+    Wet lease
+  </h5>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@system">
+      Plan
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@config">
+      Estimate/Plan
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@groupMail">
+      Wet Lease
+    </li>
+  </ol>
+</div>
+
+
+<mat-card class="mb-10 mt-10 pt-15 pl-15 pr-15 pb-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-content>
+    <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
+      <div class="row">
+        <div class="col-3" sizeInput="sm">
+          <app-select-multiple i18n-label="@@airportCodes" label="Market code" [options]="markets"
+                               formControlName="marketCode" size="sm" />
+        </div>
+        <div class="col-3 mb-2" sizeInput="sm">
+          <mat-form-field class="mb-1">
+            <mat-date-range-input [rangePicker]="contractRangePicker">
+              <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="dd/mm/yyyy"
+                     formControlName="startDate">
+              <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
+                     formControlName="endDate">
+            </mat-date-range-input>
+            <mat-label i18n="@@contractEndDate">Contract end date</mat-label>
+            <mat-datepicker-toggle matIconSuffix [for]="contractRangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #contractRangePicker>
+              <mat-date-range-picker-actions>
+                <button sizeButton="sm" mat-button matDateRangePickerCancel
+                        i18n="@@cancel">Cancel
+                </button>
+                <button sizeButton="sm" mat-raised-button color="primary" matDateRangePickerApply
+                        i18n="@@apply">Apply
+                </button>
+              </mat-date-range-picker-actions>
+            </mat-date-range-picker>
+            <mat-error
+              *ngxControlError="formGroupSearch.controls['startDate']; track: 'matDatepickerParse'"
+              i18n="@@contractPeriodInvalidFormat">
+              Contract period invalid format
+            </mat-error>
+            <mat-error
+              *ngxControlError="formGroupSearch.controls['endDate']; track: 'matDatepickerParse'"
+              i18n="@@contractPeriodInvalidFormat">
+              Contract period invalid format
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col-3 d-flex  justify-content-lg-start justify-content-sm-center" sizeInput="sm">
+          <mat-card-title>
+            <button class="search-btn" type="submit" mat-button>
+              <i class="material-symbols-outlined">
+                search
+              </i>
+              <span i18n="@@search">Search</span>
+            </button>
+          </mat-card-title>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+<mat-card class="mb-10 mt-10 pt-15 pl-15 pr-15 pb-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-header class="mb-10">
+    <mat-card-title></mat-card-title>
+    <mat-card-subtitle>
+      <button class="add-btn mr-10" type="button" mat-button (click)="exportFileExcel('wet-lease.xlsx')">
+        <i class="material-symbols-outlined">
+          download
+        </i>
+        <span i18n="@@export">Export</span>
+      </button>
+      <a class="add-btn" type="button" mat-button>
+        <i class="material-symbols-outlined">
+          add
+        </i>
+        <span i18n="@@addNew">Add new</span>
+      </a>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+        @for (col of displayedFirst; track col.name) {
+          <ng-container matColumnDef="{{ col.name }}">
+            <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="col.colSpan"
+                [rowSpan]="col.rowSan">{{ col.field }}
+            </th>
+            <td mat-cell *matCellDef="let element;" class="text-center">
+              @if (['startDate', 'endDate'].includes(col.name)) {
+                {{ element[col.name] | date: 'dd/MM/yyyy' }}
+              } @else if (['totalNumberOfTrip', 'totalForex'].includes(col.name)) {
+                {{ element[col.name] | number }}
+              } @else {
+                {{ element[col.name] }}
+              }
+            </td>
+            @if (col.name === 'airportCode') {
+              <td mat-footer-cell *matFooterCellDef class="text-center fw-bold" [colSpan]="3">Total</td>
+            } @else if (['totalNumberOfTrip', 'totalForex'].includes(col.name)) {
+              <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
+                {{ (dataSource.data | dataCalculateTotal: col.name) | number }}
+              </td>
+            }
+          </ng-container>
+        }
+        @for (col of displayedSecond; track col.name) {
+          <ng-container matColumnDef="{{ col.name }}">
+            <th mat-header-cell *matHeaderCellDef class="text-center">{{ col.field }}</th>
+            <td mat-cell *matCellDef="let element;" class="text-center">
+              @if (['totalQtySingleRoom', 'totalQtyTwinRoom', 'totalIncVAT', 'totalExcVAT'].includes(col.name)) {
+                {{ element[col.name] | number }}
+              } @else {
+                {{ element[col.name] }}
+              }
+            </td>
+            @if (['totalQtySingleRoom', 'totalQtyTwinRoom', 'totalIncVAT', 'totalExcVAT'].includes(col.name)) {
+              <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
+                {{ (dataSource.data | dataCalculateTotal: col.name) | number }}
+              </td>
+            }
+          </ng-container>
+        }
+        <tr mat-header-row *matHeaderRowDef="displayedFirstArr"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedSecondArr"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr mat-footer-row *matFooterRowDef="displayedFooterColumns" [hidden]="dataSource.data.length === 0"></tr>
+      </table>
+      <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+                     [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
+                     [pageIndex]="pageIndex"
+                     aria-label="Select page" i18n-aria-label="@@selectPage">
+      </mat-paginator>
+    </div>
+  </mat-card-content>
+</mat-card>
+
