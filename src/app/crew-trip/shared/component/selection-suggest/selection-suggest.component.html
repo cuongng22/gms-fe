@@ -4,7 +4,7 @@
     <input type="text" matInput #inputSearch [matAutocomplete]="auto" (input)="filter()" requireSelection
            [required]="requiredControl" [formControl]="viewControl">
     @if (viewControl.value) {
-      <i class="material-symbols-outlined mr-15 pe-clear-input" matSuffix (click)="clearInput()">
+      <i class="material-symbols-outlined mr-15 pe-clear-input cursor-pointer" matSuffix (click)="clearInput()">
         close
       </i>
     }
@@ -16,10 +16,10 @@
       }
     </mat-autocomplete>
 
-    </mat-form-field>
-    @if(viewControl.touched && formControl.hasError('required')){
+  </mat-form-field>
+  @if (viewControl.touched && formControl.hasError('required')) {
     <span class="required">
-        {{ label }} {{MESSAGE.REQUIRED}}
+        {{ label }} {{ MESSAGE.REQUIRED }}
     </span>
-    }
+  }
 </div>
