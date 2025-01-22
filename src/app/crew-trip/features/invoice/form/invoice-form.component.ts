@@ -4,7 +4,7 @@ import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatTableModule} from '@angular/material/table';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
@@ -256,5 +256,42 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
         templateNameLabel: 'report-transport-international-template.xlsx'
       })
     }
+  }
+
+  ///////
+  dataSource11 =[  { room: 101, name: 'HOA' },
+    { room: 101, name: 'BINH' },
+    { room: 102, name: 'LINH' },]
+
+  displayedColumns11: any[any] = ["name", "room"];
+  getRowSpan11(element: any): number {
+    const input = [
+      {
+        room: 101,
+        beg: [{ name: 'HOA' }, { name: 'BINH' }],
+      },
+      {
+        room: 102,
+        beg: [{ name: 'LINH' }],
+      },
+    ];
+
+    const output = input.flatMap((item) =>
+      item.beg.map((b) => ({ room: item.room, name: b.name }))
+    );
+
+    console.log(JSON.stringify(output));
+    return element.beg.length;
+  }
+  getRowSpan(room: number): number {
+    return this.dataSource11.filter((item) => item.room === room).length;
+  }
+
+  shouldShowRowSpan(index: number): boolean {
+    console.log(index, this.dataSource11);
+    return (
+      index === 0 ||
+      this.dataSource11[index].room !== this.dataSource11[index - 1].room
+    );
   }
 }
