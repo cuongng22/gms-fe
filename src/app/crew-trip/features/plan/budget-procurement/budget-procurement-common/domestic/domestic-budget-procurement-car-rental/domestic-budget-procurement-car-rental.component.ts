@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -24,7 +24,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
   providers: [DatePipe, DataTransformPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DomesticBudgetProcurementCarRentalComponent {
+export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChecked {
 
   yearPlan = input<number>(2024); // năm kế hoạch
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
@@ -41,9 +41,8 @@ export class DomesticBudgetProcurementCarRentalComponent {
 
   PlanCategoryEnum = PlanCategoryEnum;
 
-  constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
+  constructor(private readonly datePipe: DatePipe, private readonly cdRef: ChangeDetectorRef) {
     effect(() => {
-      console.log('effect data DomesticBudgetProcurementCarRentalComponent: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
       }
@@ -51,6 +50,10 @@ export class DomesticBudgetProcurementCarRentalComponent {
   }
   ngOnInit(): void {
     this.getRow();
+  }
+
+  ngAfterViewChecked(): void {
+    this.cdRef.detectChanges()
   }
 
   setDataSource(data: any) {

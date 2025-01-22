@@ -32,6 +32,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
+        @if (category() === CategoryEnum.INTERNATIONAL) {
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@rateForSingle">Buffer rate (for single-gender)</mat-label>
@@ -42,10 +43,10 @@
                 </i>
             </mat-form-field>
         </div>
-
+        }
     </div>
     <div class="row">
-        <div class="col col-lg-3">
+        <div class="col " [ngClass]="category() === CategoryEnum.INTERNATIONAL?'col-lg-3':'col-lg-4'">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@singleRoomRate">Single Room Rate</mat-label>
                 <textarea matInput [disabled]="true" [ngModel]="unitPriceSingleHotel"
@@ -62,7 +63,7 @@
                 </mat-error> -->
             </mat-form-field>
         </div>
-        <div class="col col-lg-3">
+        <div class="col " [ngClass]="category() === CategoryEnum.INTERNATIONAL?'col-lg-3':'col-lg-4'">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@doubleRoomRate">Double Room Rate</mat-label>
                 <textarea matInput [disabled]="true" [ngModel]="unitPriceDoubleHotel"
@@ -93,12 +94,12 @@
     @if(formGroupDetail.controls.procurementPlanFlag.value) {
     <div class="row">
         <div class="col">
-            <app-datepicker-year-month class="mb-2" [required]="true" i18n-label="@@startDate" label="Start Date"
+            <app-datepicker-year-month class="mb-2" [requiredLabel]="true" i18n-label="@@startDate" label="Start Date"
                 size="sm" formControlName="procStartDate">
             </app-datepicker-year-month>
         </div>
         <div class="col" sizeInput="sm">
-            <app-datepicker-year-month class="mb-2" [required]="true" i18n-label="@@endDate" label="End Date" size="sm"
+            <app-datepicker-year-month class="mb-2" [requiredLabel]="true" i18n-label="@@endDate" label="End Date" size="sm"
                 formControlName="procEndDate">
             </app-datepicker-year-month>
         </div>
@@ -143,7 +144,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
-        <div class="col" sizeInput="sm">
+        <div class="col " sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@unit">Unit</mat-label>
                 <input type="text" matInput formControlName="unit">
@@ -154,7 +155,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
-        <div class="col" sizeInput="sm">
+        <div class="col " sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@supplierSelectionMethod">Supplier Selection Method</mat-label>
                 <input type="text" matInput formControlName="supplierMethod">
@@ -166,6 +167,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
+        @if (category() === CategoryEnum.INTERNATIONAL) {
         <div class="col" sizeInput="sm">
             <mat-checkbox class="mb-2" i18n="@@earlyCheckInFee" formControlName="earlyCheckinFlag">
                 Early check-in fee
@@ -176,6 +178,15 @@
                 Late check-out fee
             </mat-checkbox>
         </div>
+        }@else {
+        <div class="col " sizeInput="sm">
+            <mat-checkbox class="mb-2" i18n="@@wetLease" formControlName="wetLeaseFlag">
+                Wet Lease
+            </mat-checkbox>
+        </div>
+        <div class="col "></div>
+        }
+
     </div>
     }
 </form>

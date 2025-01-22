@@ -223,15 +223,6 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
 
   override async save() {
     try {
-      // const desCodeValue = this.formGroupDetail.get('desCode');
-      // const arrCodeControl = this.formGroupDetail.get('arrCode')?.value;
-      // if (arrCodeControl) {
-      //   desCodeValue?.setValidators([Validators.required]);
-      //   desCodeValue?.updateValueAndValidity();
-      // } else {
-      //   desCodeValue?.clearValidators();
-      //   desCodeValue?.updateValueAndValidity();
-      // }
       this.formGroupDetail.markAllAsTouched();
       this.formGroupDetail.updateValueAndValidity();
       if (this.formGroupDetail.invalid) {
@@ -256,5 +247,14 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  override async showDialogDetail(id?: any, type?: string) {
+    if (id != null && type === 'index') {
+      this.formGroupDetail.patchValue(this.dataSource.data[id] as JSON);
+    } else if (id != null) {
+      await this.detail(id);
+    }
+    this.toggleDialogCreate();
   }
 }

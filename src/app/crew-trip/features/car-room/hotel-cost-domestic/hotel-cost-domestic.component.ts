@@ -166,6 +166,7 @@ export class HotelCostDomesticComponent
   displayedFirstArr: string[];
   displayedSecondArr: string[];
   displayedColumnsArr: string[];
+  displayedFooterArr: string[];
 
   constructor() {
     super();
@@ -191,6 +192,20 @@ export class HotelCostDomesticComponent
     this.displayedColumnsArr = [
       '#',
       ...this.displayedSecond.slice(0, 12).map((item) => item.name),
+      ...this.displayedFirst
+        .filter(
+          (item) =>
+            item.rowSpan === 2 &&
+						item.name !== '#' &&
+						item.name !== 'totalChargeVnd',
+        )
+        .map((item) => item.name),
+      ...this.displayedSecond.slice(12).map((item) => item.name),
+      this.displayedFirst[this.displayedFirst.length - 1].name,
+    ];
+    this.displayedFooterArr = [
+      '#',
+      ...this.displayedSecond.slice(6, 12).map((item) => item.name),
       ...this.displayedFirst
         .filter(
           (item) =>

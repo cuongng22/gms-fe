@@ -3,8 +3,8 @@
         @if(!!label()){
         <mat-label>{{label()}}</mat-label>
         }
-        <input [required]="required" matInput [matDatepicker]="datePicker" [formControl]="formControl"
-            placeholder="mm/yyyy">
+        <input [required]="requiredControl || requiredLabel()" matInput [matDatepicker]="datePicker"
+            [formControl]="formControl" placeholder="mm/yyyy">
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
         <mat-datepicker #datePicker startView="year" (monthSelected)="setMonthAndYear($event, datePicker)"
             panelClass="example-month-picker">

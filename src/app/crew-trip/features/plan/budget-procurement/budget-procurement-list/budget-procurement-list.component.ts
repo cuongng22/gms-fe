@@ -65,7 +65,7 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
 
   formGroupReject = this.formBuilder.group({
     id: new FormControl(''),
-    reason: new FormControl('', Validators.required)
+    reason: new FormControl('', [Validators.required, Validators.maxLength(500)])
   });
 
 
@@ -78,13 +78,17 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
   override ngOnInit() {
     super.ngOnInit();
     this.years.set(years());
-    this.baseService.versions().then(res => {
-      this.versions.set(res.data);
-    });
+    this.getVersion();
     this.search();
 
     // -----------------List Budget Shopping-------------
     this.displayedColumns = ['select', 'name', 'year', 'version', 'versionProd', 'versionRate', 'time', 'status', 'action'];
+  }
+
+  getVersion() {
+    this.baseService.versions().then(res => {
+      this.versions.set(res.data);
+    });
   }
 
   async showConfirmReject(id: any) {
@@ -138,10 +142,13 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
       budgetProcurementDetail = res;
     }
     const dialogDetailRef = this.dialog.open(DialogBudgetProcurementDetail, {
+      autoFocus: false,
+      minWidth: 500,
       data: { isCreate: isCreate, budgetProcurementDetail: budgetProcurementDetail },
     });
     dialogDetailRef.afterClosed().subscribe(async (res) => {
       if (res) {
+        this.getVersion();
         await this.search();
       }
     });
@@ -198,11 +205,9 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
 
   override formGroupDetail = this.formBuilder.group({
     id: new FormControl(''),
-    name: new FormControl('', Validators.required),
-    year: new FormControl('', Validators.required),
-    version: new FormControl('', {
-      validators: [Validators.required],
-    }),
+    name: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+    year: new FormControl('', [Validators.required, Validators.maxLength(4), Validators.minLength(4)]),
+    version: new FormControl('', [Validators.required, Validators.maxLength(20)]),
     versionProd: new FormControl(''),
     versionRate: new FormControl(''),
     updateBudgetPlan: new FormControl(false)
@@ -222,16 +227,22 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
     if (this.data) {
       console.log(this.data);
       this.isCreate.set(this.data.isCreate);
+      
+      if (this.data.budgetProcurementDetail) {
+        console.log(this.data.budgetProcurementDetail);
+        this.formGroupDetail.patchValue(this.data.budgetProcurementDetail);
+        if(this.formGroupDetail.controls.id.value){
+          this.formGroupDetail.controls.updateBudgetPlan.disable();
+        }
+      }
+
       this.baseService.isUpdate = !this.data.isCreate || !!this.formGroupDetail.controls.id.value;
       if (this.baseService.isUpdate) {
         this.formGroupDetail.controls.versionProd.disable();
         this.formGroupDetail.controls.versionRate.disable();
       }
 
-      if (this.data.budgetProcurementDetail) {
-        console.log(this.data.budgetProcurementDetail);
-        this.formGroupDetail.patchValue(this.data.budgetProcurementDetail);
-      }
+      
     }
   }
 
@@ -245,9 +256,9 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
       await this.spinner.show();
       let res;
       if (update) {
-        res = await this.baseService.update({ ...this.formGroupDetail.value, type: PlanTypeEnum.KHNS });
+        res = await this.baseService.update({ ...this.formGroupDetail.getRawValue(), type: PlanTypeEnum.KHNS });
       } else {
-        res = await this.baseService.create({ ...this.formGroupDetail.value, type: PlanTypeEnum.KHNS });
+        res = await this.baseService.create({ ...this.formGroupDetail.getRawValue(), type: PlanTypeEnum.KHNS });
       }
       console.log(res)
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
@@ -255,10 +266,17 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
     } catch (e: any) {
       if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
         this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
+      } else if (e.status === HttpStatusCode.Conflict) {
+        this.formGroupDetail.controls.version.setErrors({ existsVersion: e }, { emitEvent: true });
+        console.log(this.formGroupDetail.controls.version.errors)
       }
       return e;
     } finally {
       this.spinner.hide();
     }
+  }
+
+  close() {
+    this.dialogRef.close();
   }
 }

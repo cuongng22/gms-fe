@@ -154,11 +154,11 @@
           <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
             Actions
           </th>
-          <td mat-cell *matCellDef="let element">
+          <td *matCellDef="let element;let i = dataIndex" mat-cell>
             <div class="action-buttons d-flex align-items-center justify-content-end">
               <a mat-button type="button">
               </a>
-              <a class="text-warning" mat-button type="button">
+              <a class="text-warning" (click)="showDialogDetail(element.id)" mat-button type="button">
                 <i class="material-symbols-outlined" i18n-title title="Edit">
                   edit
                 </i>
