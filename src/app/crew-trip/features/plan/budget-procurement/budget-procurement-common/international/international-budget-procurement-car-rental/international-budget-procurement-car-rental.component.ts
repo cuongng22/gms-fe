@@ -44,7 +44,6 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
-      console.log('effect data InternationalBudgetProcurementCarRentalComponent: ', this.data())
       if (this.data()) {
         this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
         this.setDataSource(this.data().planCarentals ?? []);
@@ -147,7 +146,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   calculateFormula(data: any, formula: string, key?: string): number {
     // Sử dụng Function để tạo hàm động từ công thức
     const dynamicFunction = new Function(
-      'data',
+      'data','ctz',
       `return ${formula};`    // Công thức cần tính
     );
     //Các tháng đã thực hiện: không tính toán 
@@ -156,7 +155,14 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     if (this.updateBudgetPlan() && periodMonth <= currentMonth && key) {
       return data[key];
     }
-    return Math.round(dynamicFunction(data));
+    return Math.round(dynamicFunction(data, this.ctz));
+  }
+  // convertToZero
+  ctz(value: any) {
+    if (value) {
+      return new Number(value.toString().replace(',','.'));
+    }
+    return 0;
   }
 
   // hàm filter theo group

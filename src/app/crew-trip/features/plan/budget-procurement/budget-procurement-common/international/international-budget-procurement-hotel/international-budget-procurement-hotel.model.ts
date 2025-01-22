@@ -5,110 +5,114 @@ export const formula: any = {
 
   //Số chuyến bay theo tàu (công thức của kế hoạch mua sắm)
   totalFlightByAircraft: {
-    formula: 'data.planFlightPeriod * data.flightOvernightRate'
+    formula: 'ctz(data.planFlightPeriod) * ctz(data.flightOvernightRate)'
   },
 
   //Tổng tiền xe chở tổ bay (ngoại tệ)
   totalAmountForeignTransport: {
-    formula: 'data.totalFlightMonth * 2 * data.priceCrewTransport',
+    formula: 'ctz(data.totalFlightMonth) * 2 * ctz(data.priceCrewTransport)',
     groupFormula: 'aircraftType && period',
   },
   //Số phòng đơn
   singleRoom: {
-    formula: 'data.overnight * data.totalFlightByAircraft * data.pilotNumber + (data.attendantNumber % 2 === 0 ? 0 : data.totalFlightByAircraft)',
+    formula: 'ctz(data.overnight) * ctz(data.totalFlightByAircraft) * ctz(data.pilotNumber) + (ctz(data.attendantNumber) % 2 === 0 ? 0 : ctz(data.totalFlightByAircraft))',
   },
   //Số phòng đôi
   doubleRoom: {
-    formula: 'data.overnight * data.totalFlightByAircraft * (data.attendantNumber % 2 === 0 ? (data.attendantNumber/2) : ((data.attendantNumber - 1)/2)) ',
+    formula: 'ctz(data.overnight) * ctz(data.totalFlightByAircraft) * (ctz(data.attendantNumber) % 2 === 0 ? (ctz(data.attendantNumber)/2) : ((ctz(data.attendantNumber) - 1)/2)) ',
   },
   //Số phòng đơn dự phòng do lẻ nam nữ
   singleRoomReserved: {
-    formula: 'data.singleRoom * generalData.rateForSingle'
+    formula: 'ctz(data.singleRoom) * (ctz(generalData.rateForSingle)/100)'
   },
   //Số phòng đơn early-checkin dự kiến
   singleRoomEarly: {
-    formula: '1 * data.totalFlightEarlyCheckin * data.pilotNumber + (data.attendantNumber % 2 === 0 ? 0 : data.totalFlightByAircraft)'
+    formula: '1 * ctz(data.totalFlightEarlyCheckin) * ctz(data.pilotNumber) + (ctz(data.attendantNumber) % 2 === 0 ? 0 : ctz(data.totalFlightByAircraft))'
   },
   //Số phòng đôi early-checkin dự kiến
   doubleRoomEarly: {
-    formula: '1 * data.totalFlightEarlyCheckin * (data.attendantNumber % 2 === 0 ? (data.attendantNumber/2) : ((data.attendantNumber - 1)/2))'
+    formula: '1 * ctz(data.totalFlightEarlyCheckin) * (ctz(data.attendantNumber) % 2 === 0 ? (ctz(data.attendantNumber)/2) : ((ctz(data.attendantNumber) - 1)/2))'
   },
   //Số phòng đơn early-checkin dự kiến do lẻ nam nữ
   singleRoomEarlyReserved: {
-    formula: 'data.singleRoomEarly * generalData.rateForSingle'
+    formula: 'ctz(data.singleRoomEarly) * (ctz(generalData.rateForSingle)/100)'
   },
   //Số phòng đơn late checkout dự kiến
   singleRoomLate: {
-    formula: '1 * data.totalFlightLateCheckout * data.pilotNumber + (data.attendantNumber % 2 === 0 ? 0 : data.totalFlightByAircraft)'
+    formula: '1 * ctz(data.totalFlightLateCheckout) * ctz(data.pilotNumber) + (ctz(data.attendantNumber) % 2 === 0 ? 0 : ctz(data.totalFlightByAircraft))'
   },
   //Số phòng đôi late checkout dự kiến
   doubleRoomLate: {
-    formula: '1 * data.totalFlightLateCheckout * (data.attendantNumber % 2 === 0 ? (data.attendantNumber/2) : ((data.attendantNumber - 1)/2))'
+    formula: '1 * ctz(data.totalFlightLateCheckout) * (ctz(data.attendantNumber) % 2 === 0 ? (ctz(data.attendantNumber)/2) : ((ctz(data.attendantNumber) - 1)/2))'
   },
   //Số phòng đơn late checkout dự kiến do lẻ nam nữ
   singleRoomLateReserved: {
-    formula: 'data.singleRoomLate * generalData.rateForSingle'
+    formula: 'ctz(data.singleRoomLate) * (ctz(generalData.rateForSingle)/100)'
   },
   //Thành tiền ngoại tệ, - phòng đơn 
   totalAmountForeignSingleRoom: {
-    formula: 'data.singleRoom * data.priceSingleRoom'
+    formula: 'ctz(data.singleRoom) * ctz(data.priceSingleRoom)'
   },
   //Thành tiền ngoại tệ,  - phòng đôi
   totalAmountForeignDoubleRoom: {
-    formula: 'data.doubleRoom * data.priceDoubleRoom'
+    formula: 'ctz(data.doubleRoom) * ctz(data.priceDoubleRoom)'
   },
   //Thành tiền ngoại tệ,  - phòng early-checkin 
   totalAmountForeignEarly: {
-    formula: '(data.singleRoomEarly + data.singleRoomEarlyReserved) * data.priceSingleRoomEarly + data.doubleRoomEarly * data.priceDoubleRoomEarly'
+    formula: '(ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarly) + ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly)'
   },
   //Thành tiền ngoại tệ, - phòng late checkout
   totalAmountForeignLate: {
-    formula: '(data.singleRoomLate + data.singleRoomLateReserved) * data.priceSingleRoomLate + data.doubleRoomLate * data.priceDoubleRoomLate'
+    formula: '(ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLate) + ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate)'
   },
   //Tổng tiền theo loại máy bay
   totalAmountAircraft: {
-    formula: 'data.totalAmountForeignSingleRoom + data.totalAmountForeignDoubleRoom + data.totalAmountForeignEarly + data.totalAmountForeignLate + data.totalAmountForeignTransport'
+    formula: 'ctz(data.totalAmountForeignSingleRoom) + ctz(data.totalAmountForeignDoubleRoom) + ctz(data.totalAmountForeignEarly) + ctz(data.totalAmountForeignLate) + ctz(data.totalAmountForeignTransport)'
   },
   // Tổng tiền ngoại tệ - Chưa bao gồm VAT
   totalAmountForeign: {
-    formula: '(data.singleRoom + data.singleRoomReserved + data.singleRoomOther) * data.priceSingleRoom '
-      + ' + (data.doubleRoom + data.doubleRoomOther ) * data.priceDoubleRoom '
-      + ' + (data.singleRoomEarly + data.singleRoomEarlyReserved) * data.priceSingleRoomEarly '
-      + ' + (data.doubleRoomEarly * data.priceDoubleRoomEarly) '
-      + ' + (data.singleRoomLate + data.singleRoomLateReserved) * data.priceSingleRoomLate '
-      + ' + (data.doubleRoomLate * data.priceDoubleRoomLate) '
-      + ' + (data.totalFlightMonth * 2 * data.priceCrewTransport) ',
-    formulaUpdateBudgetPlan: ' data.singleRoom * data.priceSingleRoom '
-      + ' + data.doubleRoom * data.priceDoubleRoom '
-      + ' + data.singleRoomEarly * data.priceSingleRoomEarly '
-      + ' + data.doubleRoomEarly * data.priceDoubleRoomEarly '
-      + ' + data.singleRoomLate * data.priceSingleRoomLate '
-      + ' + data.doubleRoomLate * data.priceDoubleRoomLate '
-      + ' + (data.totalFlightMonth * 2 * data.priceCrewTransport) ',
+    formula: '(ctz(data.singleRoom) + ctz(data.singleRoomReserved) + ctz(data.singleRoomOther)) * ctz(data.priceSingleRoom) '
+      + ' + (ctz(data.doubleRoom) + ctz(data.doubleRoomOther) ) * ctz(data.priceDoubleRoom) '
+      + ' + (ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarly) '
+      + ' + (ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly)) '
+      + ' + (ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLate) '
+      + ' + (ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate)) '
+      + ' + (ctz(data.totalFlightMonth) * 2 * ctz(data.priceCrewTransport)) ',
+    formulaUpdateBudgetPlan: ' ctz(data.singleRoom) * ctz(data.priceSingleRoom) '
+      + ' + ctz(ata.doubleRoom) * ctz(data.priceDoubleRoom) '
+      + ' + ctz(data.singleRoomEarly) * ctz(data.priceSingleRoomEarly) '
+      + ' + ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly) '
+      + ' + ctz(data.singleRoomLate) * ctz(data.priceSingleRoomLate) '
+      + ' + ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate) '
+      + ' + (ctz(data.totalFlightMonth) * 2 * ctz(data.priceCrewTransport)) ',
     groupFormula: 'period',
   },
   //Tổng tiền ngoại tệ - Bao gồm VAT
   totalAmountForeignVat: {
-    formula: '(data.totalAmountForeignSingleRoom + data.totalAmountForeignDoubleRoom + data.totalAmountForeignEarly + data.totalAmountForeignLate + data.totalAmountForeignTransport)',
+    formula: '(ctz(data.totalAmountForeignSingleRoom) '
+      + '+ ctz(data.totalAmountForeignDoubleRoom)'
+      + '+ ctz(data.totalAmountForeignEarly)'
+      + '+ ctz(data.totalAmountForeignLate) '
+      + '+ ctz(data.totalAmountForeignTransport))',
     groupFormula: 'period',
   },
   //Tổng tiền VND - bao gồm VAT
   totalAmountVat: {
-    formula: 'data.totalAmountForeignVat * data.rateInPeriod',
+    formula: 'ctz(data.totalAmountForeignVat) * ctz(data.rateInPeriod)',
     groupFormula: 'period',
   },
   //Tổng tiền VND - chưa bao gồm VAT
   totalAmount: {
-    formula: 'data.totalAmountForeign * data.rateInPeriod',
+    formula: 'ctz(data.totalAmountForeign) * ctz(data.rateInPeriod)',
     groupFormula: 'period',
   },
   //Tổng số phòng đơn
   totalSingleRoom: {
-    formula: 'data.singleRoom + data.singleRoomReserved + data.singleRoomOther',
+    formula: 'ctz(data.singleRoom) + ctz(data.singleRoomReserved) + ctz(data.singleRoomOther)',
   },
   //Tổng số phòng đôi
   totalDoubleRoom: {
-    formula: 'data.doubleRoom + data.doubleRoomOther',
+    formula: 'ctz(data.doubleRoom) + ctz(data.doubleRoomOther)',
   },
 
 }
@@ -120,11 +124,11 @@ export function getHeaderRowDef1(contractData: any, type: string): string[] {
     { column: "overnight", visible: true },
     { column: "numberOfRooms", visible: true },
     { column: "numberOfRoomsForOthers", visible: true },
-    { column: "numberOfEstimatedEarlyCheckInRooms", visible: !!contractData.earlyCheckinFeeFlag },
-    { column: "numberOfEstimatedLateCheckoutRooms", visible: !!contractData.lateCheckoutFeeFlag },
+    { column: "numberOfEstimatedEarlyCheckInRooms", visible: !!contractData.earlyCheckinFlag },
+    { column: "numberOfEstimatedLateCheckoutRooms", visible: !!contractData.lateCheckoutFlag },
     //start phần kế hoạch mua sắm
     { column: "unitPriceIncludingVat", visible: type === PlanCategoryEnum.PROCUREMENT }, // (Đơn giá bao gồm vat) 
-    { column: "priceCrewTransport", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.priceCrewTransportFlag }, // (Đơn giá xe chở tổ bay/lượt) 
+    { column: "priceCrewTransport", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.crewTransportFeeFlag }, // (Đơn giá xe chở tổ bay/lượt) 
     // end phần kế hoạch mua sắm
     { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
     { column: "totalAmountForeignColspan", visible: true },
@@ -140,19 +144,19 @@ export function getHeaderRowDef2(contractData: any, type: string): string[] {
     { column: "singleRoomReserved", visible: true },
     { column: "singleRoomOther", visible: true },
     { column: "doubleRoomOther", visible: true },
-    { column: "singleRoomEarly", visible: !!contractData.earlyCheckinFeeFlag },
-    { column: "doubleRoomEarly", visible: !!contractData.earlyCheckinFeeFlag },
-    { column: "singleRoomEarlyReserved", visible: !!contractData.earlyCheckinFeeFlag },
-    { column: "singleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
-    { column: "doubleRoomLate", visible: !!contractData.lateCheckoutFeeFlag },
-    { column: "singleRoomLateReserved", visible: !!contractData.lateCheckoutFeeFlag },
+    { column: "singleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
+    { column: "doubleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
+    { column: "singleRoomEarlyReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
+    { column: "singleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
+    { column: "doubleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
+    { column: "singleRoomLateReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
     //start phần kế hoạch mua sắm
     { column: "priceSingleRoom", visible: type === PlanCategoryEnum.PROCUREMENT }, // (Đơn giá phòng đơn) 
     { column: "priceDoubleRoom", visible: type === PlanCategoryEnum.PROCUREMENT }, // (Đơn giá phòng đôi) 
-    { column: "priceSingleRoomEarly", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.earlyCheckinFeeFlag }, // (Đơn giá Early-checkin phòng đơn) 
-    { column: "priceDoubleRoomEarly", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.earlyCheckinFeeFlag }, // (Đơn giá Early-checkin phòng đôi) 
-    { column: "priceSingleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.lateCheckoutFeeFlag }, // (Đơn giá late checkout phòng đơn) 
-    { column: "priceDoubleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.lateCheckoutFeeFlag }, // (Đơn giá late check out phòng đôi) 
+    { column: "priceSingleRoomEarly", visible: type === PlanCategoryEnum.PROCUREMENT && checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.PROCUREMENT) }, // (Đơn giá Early-checkin phòng đơn) 
+    { column: "priceDoubleRoomEarly", visible: type === PlanCategoryEnum.PROCUREMENT && checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.PROCUREMENT) }, // (Đơn giá Early-checkin phòng đôi) 
+    { column: "priceSingleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.PROCUREMENT) }, // (Đơn giá late checkout phòng đơn) 
+    { column: "priceDoubleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.PROCUREMENT) }, // (Đơn giá late check out phòng đôi) 
     // end phần kế hoạch mua sắm
     { column: "totalAmountForeign", visible: true },
     { column: "totalAmountForeignVat", visible: true },
@@ -175,7 +179,7 @@ export function getRowDef(contractData: any, type: string): string[] {
     { column: "singleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
     { column: "doubleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
     { column: "singleRoomEarlyReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
-    { column: "singleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET)  },
+    { column: "singleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
     { column: "doubleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
     { column: "singleRoomLateReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
     //start phần kế hoạch mua sắm
@@ -185,7 +189,7 @@ export function getRowDef(contractData: any, type: string): string[] {
     { column: "priceDoubleRoomEarly", visible: type === PlanCategoryEnum.PROCUREMENT && checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.PROCUREMENT) },
     { column: "priceSingleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.PROCUREMENT) },
     { column: "priceDoubleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.PROCUREMENT) },
-    { column: "priceCrewTransport", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.priceCrewTransportFlag },
+    { column: "priceCrewTransport", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.crewTransportFeeFlag },
     // end phần kế hoạch mua sắm
     { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
     { column: "totalAmountForeign", visible: true },
@@ -197,9 +201,9 @@ export function getRowDef(contractData: any, type: string): string[] {
 }
 
 const FlagTypeEnum = {
-  EARLY_CHECKIN: 'earlyCheckinFeeFlag',
-  LATE_CHECKOUT: 'lateCheckoutFeeFlag',
-  CREW_TRANSPORT: 'priceCrewTransportFlag'
+  EARLY_CHECKIN: 'earlyCheckinFlag',
+  LATE_CHECKOUT: 'lateCheckoutFlag',
+  CREW_TRANSPORT: 'crewTransportFeeFlag'
 }
 
 function checkVisibleColumn(contractData: any, flagType: string, type: string): boolean {
@@ -208,23 +212,22 @@ function checkVisibleColumn(contractData: any, flagType: string, type: string): 
   //   (1) trường hợp có hợp đồng, trong hợp đồng có HHDV = phí ECI, LCO 
   // => có tích 2 checkbox -> bảng KHNS, KHMS hiển thị các cột liên quan đến ECI, LCO
   // => Khi người dùng bỏ tích chọn -> bảng KHNS vẫn hiển thị các cột ECI, LCO. Bảng KHMS k hiển thị các cột ECI, LCO
-
   if (contractData.haveContract) {
-    if (contractData.earlyCheckinContractFlag && flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFeeFlag) {
+    if (contractData.earlyCheckinContractFlag && flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFlag) {
       return true
-    } else if (contractData.earlyCheckinContractFlag && flagType === FlagTypeEnum.EARLY_CHECKIN && !contractData.earlyCheckinFeeFlag && type === PlanCategoryEnum.BUDGET) {
+    } else if (contractData.earlyCheckinContractFlag && flagType === FlagTypeEnum.EARLY_CHECKIN && !contractData.earlyCheckinFlag && type === PlanCategoryEnum.BUDGET) {
       return true
-    } else if (contractData.lateCheckoutContractFlag && flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFeeFlag) {
+    } else if (contractData.lateCheckoutContractFlag && flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFlag) {
       return true;
-    } else if (contractData.lateCheckoutContractFlag && flagType === FlagTypeEnum.LATE_CHECKOUT && !contractData.lateCheckoutFeeFlag && type === PlanCategoryEnum.BUDGET) {
+    } else if (contractData.lateCheckoutContractFlag && flagType === FlagTypeEnum.LATE_CHECKOUT && !contractData.lateCheckoutFlag && type === PlanCategoryEnum.BUDGET) {
       return true
     }
     //   (2) trường hợp có hợp đồng, trong hợp đồng KHÔNG có HHDV = phí ECI, LCO 
     // => không tích 2 checkbox -> bảng KHNS, KHMS KHÔNG hiển thị các cột liên quan đến ECI, LCO
     // => Khi người dùng CÓ tích chọn -> bảng KHNS KHÔNG hiển thị các cột ECI, LCO. Bảng KHMS CÓ hiển thị các cột ECI, LCO
-    else if (!contractData.earlyCheckinContractFlag && flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFeeFlag && type === PlanCategoryEnum.PROCUREMENT) {
+    else if (!contractData.earlyCheckinContractFlag && flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFlag && type === PlanCategoryEnum.PROCUREMENT) {
       return true;
-    } else if (!contractData.lateCheckoutContractFlag && flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFeeFlag && type === PlanCategoryEnum.PROCUREMENT) {
+    } else if (!contractData.lateCheckoutContractFlag && flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFlag && type === PlanCategoryEnum.PROCUREMENT) {
       return true;
     }
 
@@ -236,9 +239,9 @@ function checkVisibleColumn(contractData: any, flagType: string, type: string): 
     // -> cả 2 bảng KHNS, KHMS đều hiện các cột liên quan đến LCO. Khi người dùng bỏ tích chọn -> cả 2 bảng KHNS, KHMS đều không hiện các cột liên quan đến LCO
     // + nếu tất cả các dòng đều có ECI = 0, LCO = 0 -> KHÔNG tích chọn 2 checkbox
     // -> 2 bảng KHNS, KHMS KHÔNG hiện các cột ECI, LCO. Khi người dùng tích chọn check box ECI thì cả 2 bảng KHNS, KHMS đều hiện các cột liên quan đến ECI (LCO cũng tương tự)
-    if (flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFeeFlag) {
+    if (flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFlag) {
       return true;
-    } else if (flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFeeFlag) {
+    } else if (flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFlag) {
       return true
     }
 

@@ -34,8 +34,8 @@ export const StatusSummaryEnum = {
 }
 
 // Trạng thái màn hình summary
-export const StatusesSummary: { code: string, value: string }[] = [
-    { code: '', value: '-- All Status --' },
+export const StatusesSummary: { code: string | null, value: string }[] = [
+    { code: null, value: '-- All Status --' },
     { code: 'draft', value: 'Draft' },//Bản nháp
     { code: 'completed', value: 'Completed' }, //Hoàn thành 
 ];
@@ -43,20 +43,20 @@ export const StatusesSummary: { code: string, value: string }[] = [
 export function years() {
     let arrYears = []
     const currYear = new Date().getFullYear();
-    for (let index = 0; index < 10; index++) {
+    for (let index = -10; index < 11; index++) {
         arrYears.push({ code: currYear + index, value: currYear + index });
     }
     return arrYears;
 }
 
 export const categories = [
-    { code: '', value: $localize`:@@allCategory:-- All Category --` },
+    { code: null, value: $localize`:@@allCategory:-- All Category --` },
     { code: 'International', value: $localize`:@@international:International` },
     { code: 'Domestic', value: $localize`:@@domestic:Domestic` }
 ];
 
 export const categoryOfPlans = [
-    { code: '', value: $localize`:@@allCategory:-- All Category of plan --` },
+    { code: null, value: $localize`:@@allCategory:-- All Category of plan --` },
     { code: 'BUDGET', value: $localize`:@@budgetPlan:Budget Plan` },
     { code: 'PROCUREMENT', value: $localize`:@@procurementPlan:Procurement Plan` }
 ]
@@ -72,7 +72,7 @@ export enum CategoryEnum {
 }
 
 export const Categories = [
-    { code: '', value: $localize`:@@allCategory:-- All Category --` },
+    { code: null, value: $localize`:@@allCategory:-- All Category --` },
     { code: 'International', value: $localize`:@@international:International` },
     { code: 'Domestic', value: $localize`:@@domestic:Domestic` }
 ];
@@ -80,11 +80,15 @@ export const PADDING_0 = '0px !important';
 
 
 export function openPanel(panel: MatExpansionPanel, isCheckData?: boolean, data?: any[]): void {
-    if (isCheckData && !(data && data.length > 0)) {
-        return;
+    if (panel !== undefined && panel !== null) {
+        if (isCheckData && !(data && data.length > 0)) {
+            return;
+        }
+        panel.open();
+        panel.disabled = false;
     }
-    panel.open();
-    panel.disabled = false;
+
+
 }
 
 export function closePanel(panel: MatExpansionPanel): void {

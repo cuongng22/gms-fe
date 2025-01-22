@@ -32,6 +32,7 @@ export class MESSAGE {
   static FORMAT_INVALID = $localize`:@@formatInvalid:invalid format.`;
   static MIN_LENGTH_INVALID = $localize`:@@minLengthInvalid:requires a minimum of %d characters`;
   static MAX_LENGTH_INVALID = $localize`:@@maxLengthInvalid:must be less than %d characters`;
+  static MUST_LENGTH_INVALID = $localize`:@@mustLengthInvalid:must be %d characters`;
   static PASSWORD_FORMAT_INVALID = $localize`:@@passwordFormat:must include number, letter and special character.`;
   static ALREADY_EXISTS = $localize`:@@alreadyExists:already exists`;
   static ACTIVE = $localize`:@@active:Active`;
