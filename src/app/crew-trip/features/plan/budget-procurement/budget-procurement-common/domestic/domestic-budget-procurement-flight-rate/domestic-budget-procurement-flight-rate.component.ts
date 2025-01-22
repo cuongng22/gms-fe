@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, input, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -21,8 +21,8 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
   styleUrl: './domestic-budget-procurement-flight-rate.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class DomesticBudgetProcurementFlightRateComponent implements OnInit {
-
+export class DomesticBudgetProcurementFlightRateComponent implements OnInit, AfterViewChecked {
+  cdRef = inject(ChangeDetectorRef);
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ["year", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9", "t10", "t11", "t12", "value", "total"];
 
@@ -33,11 +33,13 @@ export class DomesticBudgetProcurementFlightRateComponent implements OnInit {
   }
   constructor() {
     effect(() => {
-      console.log('effect data DomesticBudgetProcurementFlightRateComponent: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
       }
     })
+  }
+  ngAfterViewChecked(): void {
+    this.cdRef.detectChanges()
   }
   ngOnInit(): void {
   }

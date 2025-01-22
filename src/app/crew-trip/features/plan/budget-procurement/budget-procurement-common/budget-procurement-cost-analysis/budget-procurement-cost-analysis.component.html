@@ -14,8 +14,8 @@
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@plannedExchangeRateVsEstimatedExchangeRate">
-                    Planned Exchange Rate vs Estimated Exchange Rate
+                <mat-label i18n="@@planExcRateVsEstExcRate">
+                    Plan. Exc. Rate vs Est. Exc. Rate
                 </mat-label>
                 <input type="text" inputmode="numeric" decimalSeparator="," digitOnly [decimal]="true" matInput
                     formControlName="planVsEstimateRate">
@@ -26,8 +26,8 @@
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@roomRatePlannedYearVsCurrentYear">
-                    Room Rate Planned Year vs Current Year
+                <mat-label i18n="@@roomRateThisYearVsLastYear">
+                    Room Rate This Year vs Last Year
                 </mat-label>
                 <input type="text" inputmode="numeric" decimalSeparator="," digitOnly [decimal]="true" matInput
                     formControlName="ratePriceRoomBefore">
@@ -38,8 +38,8 @@
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@carRatePlannedYearVsCurrentYear">
-                    Car Rate Planned Year vs Current Year
+                <mat-label i18n="@@unitPriceTransportThisYearVsLastYear">
+                    Unit Price Transport This Year vs Last Year
                 </mat-label>
                 <input type="text" inputmode="numeric" [pattern]="'^\\d+(\,\\d{1,2})?$'" decimalSeparator="," digitOnly
                     [decimal]="true" matInput formControlName="ratePriceCarBefore">

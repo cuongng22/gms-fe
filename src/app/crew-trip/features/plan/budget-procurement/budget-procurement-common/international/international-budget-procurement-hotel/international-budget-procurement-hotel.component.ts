@@ -14,6 +14,7 @@ import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { PlanCategoryEnum } from '../../../budget-procurement.model';
 import { el } from 'node_modules/@fullcalendar/core/internal-common';
+import { debounceTime, map, startWith, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-international-budget-procurement-hotel',
@@ -51,10 +52,11 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
   PlanCategoryEnum = PlanCategoryEnum;
 
+  singleRoomOtherChange = new Subject<any>();
+  doubleRoomOtherChange = new Subject<any>();
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
-      console.log('effect data InternationalBudgetProcurementHotelComponent: ', this.data());
       if (this.data()) {
         this.calculateSpan(this.data().aircraftTypeRowspan, this.data().overnightRowspan);
         this.setPlanFlightByOvernight(this.data().planOverightRates ?? []);
@@ -68,6 +70,29 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   }
 
   ngOnInit(): void {
+    this.singleRoomOtherChange.pipe(
+      debounceTime(1000),
+      startWith('')).
+      subscribe((element: any) => {
+        if (element) {
+          console.log(element)
+          this.calculate(element, 'totalAmountForeign');
+          this.calculate(element, 'totalSingleRoom');
+          this.calculateTotalByGroup(element, element.index, 'totalAmountForeign', 'totalAmountForeignGroup');
+        }
+      });
+
+      this.doubleRoomOtherChange.pipe(
+        debounceTime(1000),
+        startWith('')).
+        subscribe((element: any) => {
+          if (element) {
+            console.log(element)
+            this.calculate(element, 'totalAmountForeign');
+            this.calculate(element, 'totalDoubleRoom');
+            this.calculateTotalByGroup(element, element.index, 'totalAmountForeign', 'totalAmountForeignGroup');
+          }
+        })
   }
 
   setDataSource(data: any[], generalData?: any) {
@@ -77,6 +102,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
     this.getRow();
 
+    this.aircraftTypes = [];
     this.dataSource.data.forEach((item: any, index) => {
       this.calculatePeriodLabel(item, index);
       this.calculateAirCraftLabel(item, index);
@@ -113,7 +139,6 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     this.periodRowspan = aircraftTypeRowspan * overnightRowspan;
     this.aircraftTypeRowspan = aircraftTypeRowspan;
     this.overnightRowspan = overnightRowspan;
-    console.log('periodRowspan: ', this.periodRowspan, 'aircraftTypeRowspan: ', this.aircraftTypeRowspan, 'overnightRowspan: ', this.overnightRowspan);
   }
 
   setGeneralData(data: any) {
@@ -347,11 +372,18 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   calculateFormula(data: any, formula: string): number {
     // Sử dụng Function để tạo hàm động từ công thức
     const dynamicFunction = new Function(
-      'data', 'generalData',
+      'data', 'generalData', 'ctz',
       `return ${formula};`    // Công thức cần tính
     );
-    const result = dynamicFunction(data, this.generalData);
+    const result = dynamicFunction(data, this.generalData, this.ctz);
     return Math.round(result);
+  }
+  // convertToZero
+  ctz(value: any) {
+    if (value) {
+      return new Number(value.toString().replace(',','.'));
+    }
+    return 0;
   }
 
   // hàm filter theo group
@@ -400,5 +432,21 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     this.headerRowDef1 = getHeaderRowDef1(this.generalData, this.type());
     this.headerRowDef2 = getHeaderRowDef2(this.generalData, this.type());
     this.rowDef = getRowDef(this.generalData, this.type());
+  }
+
+
+
+  vlcSingleRoomOther(index: number, element: any, value: any) {
+    if (value) {
+      element.index = index
+      this.singleRoomOtherChange.next(element);
+    }
+  }
+
+  vlcDoubleRoomOther(index: number, element: any, value: any) {
+    if (value) {
+      element.index = index
+      this.doubleRoomOtherChange.next(element);
+    }
   }
 }

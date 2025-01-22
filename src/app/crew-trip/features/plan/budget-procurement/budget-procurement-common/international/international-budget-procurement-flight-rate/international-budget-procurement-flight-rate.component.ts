@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, Input, input, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, Input, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -19,13 +19,13 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class InternationalBudgetProcurementFlightRateComponent implements OnInit {
+  cdRef = inject(ChangeDetectorRef);
   data = input<any>();
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['year', 'rateOrTotal'];
 
   constructor() {
     effect(() => {
-      console.log('effect data InternationalBudgetProcurementFlightRateComponent: ')
       if (this.data()) {
         this.setDataSource(this.data());
       }
@@ -35,6 +35,9 @@ export class InternationalBudgetProcurementFlightRateComponent implements OnInit
   ngOnInit(): void {
   }
 
+  ngAfterViewChecked(): void {
+    this.cdRef.detectChanges(); // Phát hiện và cập nhật các thay đổi
+  }
 
   setDataSource(data: any[]) {
     this.dataSource.data = [...data];

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, inject, input, output } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, output } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -24,7 +24,8 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
   styleUrl: './budget-procurement-flight-overnight.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BudgetProcurementFlightOvernightComponent extends ShowMessageComponent {
+export class BudgetProcurementFlightOvernightComponent extends ShowMessageComponent implements AfterViewChecked {
+  cdRef = inject(ChangeDetectorRef);
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ["numberOfOvernight", "flightRate", "action"];
   indexDelete = -1;
@@ -38,11 +39,13 @@ export class BudgetProcurementFlightOvernightComponent extends ShowMessageCompon
   constructor() {
     super();
     effect(() => {
-      console.log('effect data BudgetProcurementFlightOvernightComponent: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
       }
     })
+  }
+  ngAfterViewChecked(): void {
+    this.cdRef.detectChanges()
   }
 
   ngOnInit(): void {

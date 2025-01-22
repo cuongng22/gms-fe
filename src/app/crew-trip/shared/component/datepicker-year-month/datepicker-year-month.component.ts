@@ -60,6 +60,8 @@ export class DatepickerYearMonthComponent implements OnInit {
   size = input<string>('');
   label = input<string>();
   readonly = input<boolean>(false);
+  requiredLabel = input<boolean>(false);
+
 
   protected datepickerYearMonth = inject<NgxControlValueAccessor<any>>(
     NgxControlValueAccessor,
@@ -71,7 +73,7 @@ export class DatepickerYearMonthComponent implements OnInit {
 
   ngOnInit(): void {
   }
-  get required(): boolean {
+  get requiredControl(): boolean {
     return this.formControl.hasValidator(Validators.required);
   }
 

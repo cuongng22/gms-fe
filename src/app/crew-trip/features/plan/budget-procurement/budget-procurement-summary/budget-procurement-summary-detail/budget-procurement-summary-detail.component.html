@@ -46,7 +46,7 @@
                     </i>
                     <span i18n="@@close">Close</span>
                 </button>
-                <button class="success-btn" type="button" mat-button [disabled]="checkStatusCompelted()"
+                <button class="add-btn" type="button" mat-button [disabled]="checkStatusCompelted()"
                     (click)="completed()">
                     <i class="material-symbols-outlined">
                         check_circle
@@ -68,9 +68,20 @@
         <app-budget-procurement-general #budgetProcurementGeneral [category]="category()"
             [disabled]="checkStatusCompelted()"
             (formValueChanges)="formGeneralValueChanges($event)"></app-budget-procurement-general>
+        <div class="d-flex justify-content-end">
+            <button [disabled]="checkStatusCompelted()" mat-button color="primary" type="button" class="add-btn"
+                (click)="summaryData()">
+                <i class="material-symbols-outlined">
+                    directory_sync
+                </i>
+                <span i18n="@@dataSummary">Data Summary</span>
+            </button>
+        </div>
     </mat-card-content>
 </mat-card>
-<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
+
+<mat-card class="mb-10 p-0 border-radius  bg-white border-0 shadow-none"
+    [ngClass]="checkDataSummary()?'d-block':'d-none'">
     <mat-card-content>
         <mat-accordion multi>
             <mat-expansion-panel class="remove-mat-expansion-panel-padding" [expanded]="true"
@@ -80,15 +91,7 @@
                         <h5 class="mb-0">II. <span i18n="@@calculationBasis">Calculation basis</span></h5>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <div style="position: absolute; top: 6px; right: 60px;">
-                    <button [disabled]="checkStatusCompelted()" mat-button color="primary" type="button" class="add-btn"
-                        (click)="summaryData()">
-                        <i class="material-symbols-outlined">
-                            directory_sync
-                        </i>
-                        <span i18n="@@dataSummary">Data Summary</span>
-                    </button>
-                </div>
+
                 @if (category() === CategoryEnum.DOMESTIC) {
                 <app-domestic-budget-procurement-flight-rate #domesticFlightRate [data]="planFlightRatesData" />
                 } @else {
@@ -129,8 +132,8 @@
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">2.3
-                                    <span i18n="@@flightFrequencyStatisticsByNumberOfOvernightStays">
-                                        Flight Frequency Statistics by Number of Overnight Stays (Weekly)
+                                    <span i18n="@@flightRateByNumberOfOvernightStays">
+                                        Flight rate by Number of Overnight Stays
                                     </span>
                                 </h6>
                             </mat-panel-title>
@@ -147,7 +150,8 @@
         </mat-accordion>
     </mat-card-content>
 </mat-card>
-<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
+<mat-card class="mb-10 p-0 border-radius bg-white border-0 shadow-none"
+    [ngClass]="checkDataSummary()?'d-block':'d-none'">
     <mat-card-content>
         <mat-accordion multi class="mt-10">
             <mat-expansion-panel [expanded]="true" class="remove-mat-expansion-panel-padding" #panelBudgetPlanState>
@@ -204,8 +208,8 @@
                             }
                         </div>
                     </mat-expansion-panel>
-                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.wetLeaseFlag){
-                    <mat-expansion-panel [expanded]="false" #panelBudgetPlanWetLeaseState>
+                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.haveContract){
+                    <mat-expansion-panel [expanded]="this.dataDetail?.haveContract" #panelBudgetPlanWetLeaseState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">3.3
@@ -228,7 +232,8 @@
         </mat-accordion>
     </mat-card-content>
 </mat-card>
-<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
+<mat-card class="mb-10 p-0 border-radius  bg-white border-0 shadow-none"
+    [ngClass]="checkDataSummary()?'d-block':'d-none'">
     <mat-card-content>
         <mat-accordion multi class="mt-10">
             <mat-expansion-panel [expanded]="true" class="remove-mat-expansion-panel-padding"
@@ -250,6 +255,7 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
+                            @defer{
                             @if(category() === CategoryEnum.DOMESTIC){
                             <app-domestic-budget-procurement-hotel #domesticProcurementHotel
                                 [disabled]="checkStatusCompelted()" [data]="domesticProcurementHotelData"
@@ -261,6 +267,7 @@
                                 [disabled]="checkStatusCompelted()" [data]="internationalProcurementHotelData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
                                 [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                            }
                             }
 
                         </div>
@@ -276,6 +283,7 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
+                            @defer{
                             @if(category() === CategoryEnum.DOMESTIC){
                             <app-domestic-budget-procurement-car-rental #domesticProcurementCarRental
                                 [disabled]="checkStatusCompelted()" [data]="domesticProcurementCarRentalData"
@@ -287,11 +295,12 @@
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
                                 [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
                             }
+                            }
 
                         </div>
                     </mat-expansion-panel>
                     @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.wetLeaseFlag){
-                    <mat-expansion-panel [expanded]="false" #panelProcurementPlanWetLeaseState>
+                    <mat-expansion-panel [expanded]="this.dataDetail?.wetLeaseFlag" #panelProcurementPlanWetLeaseState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">4.3
@@ -302,10 +311,12 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
+                            @defer{
                             <app-domestic-budget-procurement-wet-lease [yearPlan]="yearPlan()"
                                 [disabled]="checkStatusCompelted()" [data]="domesticProcurementWetLeaseData"
                                 [type]="PlanCategoryEnum.PROCUREMENT" [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
                                 #domesticProcurementWetLease />
+                            }
                         </div>
                     </mat-expansion-panel>
                     }
@@ -314,23 +325,28 @@
         </mat-accordion>
     </mat-card-content>
 </mat-card>
-<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
+<mat-card class="mb-10 p-0 border-radius  bg-white border-0 shadow-none"
+    [ngClass]="checkDataSummary()?'d-block':'d-none'">
     <mat-card-content>
         <mat-accordion multi class="mt-10">
-            <mat-expansion-panel class="remove-mat-expansion-panel-padding" #panelBudgetProcurementCostAnalysisState [expanded]="false">
+            <mat-expansion-panel class="remove-mat-expansion-panel-padding" #panelBudgetProcurementCostAnalysisState
+                [expanded]="true">
                 <mat-expansion-panel-header>
                     <mat-panel-title>
                         <h5 class="mb-0">V. <span i18n="@@costAnalysis">Cost Analysis</span></h5>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
                 <div>
+                    @defer{
                     <app-budget-procurement-cost-analysis #budgetProcurementCostAnalysis
                         [disabled]="checkStatusCompelted()" />
+                    }
                 </div>
             </mat-expansion-panel>
         </mat-accordion>
     </mat-card-content>
 </mat-card>
+
 
 <!-- Nút lưu, hủy  -->
 <!-- <mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
@@ -361,7 +377,7 @@
 
 <!-- Dialog summary data  -->
 <div class="add-new-popup" [class.active]="showDialogSummary">
-    <div class="popup-dialog dialog-delete-with">
+    <div class="popup-dialog dialog-delete-with" style="width: 600px !important; max-width: 600px !important;">
         <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
             <mat-card-content>
                 <div class="text-warning text-center">

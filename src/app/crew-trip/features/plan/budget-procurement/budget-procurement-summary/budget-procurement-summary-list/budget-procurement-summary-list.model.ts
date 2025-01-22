@@ -6,12 +6,12 @@
 // #, Phân loại, Danh mục hàng hóa dịch vụ, Khối, Số, Đơn vị, Giá trị kế hoạch mua sắm (chưa bao gồm VAT), 
 // Giá trị kế hoạch mua sắm (bao gồm VAT), Hình thức lựa chọn Nhà cung cấp, Thời điểm dự, Tổng thời gian, Thời gian, % VAT, 
 
-import { HOTEL, PlanCategoryEnum, ServiceType } from "../../budget-procurement.model";
+import { CategoryEnum, HOTEL, PlanCategoryEnum, ServiceType } from "../../budget-procurement.model";
 
 // Ghi chú, Trạng thái, Hành động"
-export function getDisplayedColumns(type: string): string[] {
+export function getDisplayedColumns(type: string, categoryType?: CategoryEnum): string[] {
     const columns: { column: string, visible: boolean }[] = [
-        { column: "select", visible: true },
+        { column: "select", visible: !!categoryType },
         { column: "stt", visible: true },
         { column: "category", visible: true },
         { column: "name", visible: true },
