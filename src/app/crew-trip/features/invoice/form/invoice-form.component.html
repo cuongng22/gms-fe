@@ -1,4 +1,4 @@
-<table mat-table [dataSource]="dataSource11" class="table-light">
+<table mat-table [dataSource]="dataSource11" class="table-light" style="border-collapse: collapse;">
   <!-- <ng-container matColumnDef="priority">
     <th mat-header-cell *matHeaderCellDef>Priority</th>
     <td
@@ -11,21 +11,21 @@
     </td>
   </ng-container> -->
 
-  <ng-container matColumnDef="name">
+  <ng-container matColumnDef="fullname">
     <th mat-header-cell *matHeaderCellDef>test currency</th>
-    <td mat-cell *matCellDef="let data">{{data.name}}</td>
+    <td mat-cell *matCellDef="let data" rowspan="1">{{data.fullname}}</td>
   </ng-container>
 
-  <ng-container matColumnDef="room">
+  <ng-container matColumnDef="roomNo">
     <th mat-header-cell *matHeaderCellDef>test time</th>
 
     <td
-      [attr.rowspan]="getRowSpan(data.room)"
+      [attr.rowspan]="getRowSpan(data.roomNo)"
       [style.display]="shouldShowRowSpan(i) ? '' : 'none'"
       mat-cell
       *matCellDef="let data;let i = index"
     >
-      {{data.room}}
+      {{data.roomNo}}
     </td>
   </ng-container>
 
