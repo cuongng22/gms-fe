@@ -95,7 +95,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   listFlightGroup = ContractLookup.FlightGroup;
   listStatusUsage = ContractLookup.StatusUsage;
 
-  totalColSpan:any;
+  totalColSpan: any;
   _displayedColumnsHeader1: string[] = [];
   _displayedColumnsHeader2: string[] = [];
   _displayedColumnsRow: string[] = [];
@@ -107,23 +107,11 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     format?: string,
     rowspan?: string,
     colspan?: string,
-    displayTotal?: boolean
+    displayTotal?: boolean,
   }[] = [
     {label: $localize`Access Bridge`, value: "accessBridge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {
-      label: $localize`Accommodation Tax Cc Charge`,
-      value: "accommodationTaxCcCharge",
-      type: Constant.NUMBER,
-      rowspan: "2",
-      displayTotal: true
-    },
-    {
-      label: $localize`Accommodation Tax Fc Charge`,
-      value: "accommodationTaxFcCharge",
-      type: Constant.NUMBER,
-      rowspan: "2",
-      displayTotal: true
-    },
+    {label: $localize`Accommodation Tax Cc Charge`, value: "accommodationTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Accommodation Tax Fc Charge`, value: "accommodationTaxFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Airport Parking Fee`, value: "airportParkingFee", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Breakfast Cc`, value: "breakfastCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Breakfast Fc`, value: "breakfastFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -150,20 +138,8 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     {label: $localize`Lco Single Room Fc Charge`, value: "lcoSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Lco Twin Room Cc Charge`, value: "lcoTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Night`, value: "night", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {
-      label: $localize`Number Of Nights`,
-      value: "numberOfNights",
-      type: Constant.NUMBER,
-      rowspan: "2",
-      displayTotal: true
-    },
-    {
-      label: $localize`Number Of Vehicle`,
-      value: "numberOfVehicle",
-      type: Constant.NUMBER,
-      rowspan: "2",
-      displayTotal: true
-    },
+    {label: $localize`Number Of Nights`, value: "numberOfNights", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Number Of Vehicle`, value: "numberOfVehicle", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Price`, value: "price", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Remark`, value: "remark"},
     {label: $localize`Room No`, value: "roomNo", type: Constant.NUMBER, rowspan: "2"},
@@ -316,5 +292,22 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  getRowSpan(room: number, innerColumn: any): number {
+    if (['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
+      let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl
+      return (dtl.filter((item: any) => item.roomNo === room && item.typeRoom === 'CC Twin room').length) || 1;
+    } else {return 1}
+  }
+
+  shouldShowRowSpan(index: number, innerColumn: any): boolean {
+    if (['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
+      let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl
+      return (
+        index === 0 || dtl[index]?.typeRoom !== 'CC Twin room' ||
+        dtl[index]?.roomNo !== dtl[index - 1]?.roomNo
+      );
+    } else return true;
   }
 }
