@@ -4,7 +4,7 @@ import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
@@ -26,9 +26,7 @@ import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ListResponse} from 'src/app/crew-trip/shared/models/common.model';
 import {HttpStatusCode} from '@angular/common/http';
 import {InvoiceFormService} from 'src/app/crew-trip/core/services/invoice-form-service';
-import {
-  InvoiceFormDetailComponent
-} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
+import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
@@ -675,21 +673,5 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
         templateNameLabel: 'report-transport-international-template.xlsx'
       })
     }
-  }
-
-  getRowSpan(room: number): number {
-    let ok = this.dataSource11.filter((item: any) => {
-      console.log(item)
-      return item.roomNo === room && item.typeRoom === 'CC Twin room'
-    }).length
-    console.log(ok || 1, '---', room)
-    return ok || 1;
-  }
-
-  shouldShowRowSpan(index: number): boolean {
-    return (
-      index === 0 || this.dataSource11[index]?.typeRoom !== 'CC Twin room' ||
-      this.dataSource11[index]?.roomNo !== this.dataSource11[index - 1]?.roomNo
-    );
   }
 }
