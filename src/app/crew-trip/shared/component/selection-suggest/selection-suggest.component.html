@@ -4,7 +4,7 @@
         <input type="text" matInput #inputSearch [matAutocomplete]="auto" (input)="filter()" requireSelection
             [required]="requiredControl" [formControl]="viewControl">
         @if (viewControl.value) {
-        <i class="material-symbols-outlined mr-15" matSuffix (click)="clearInput()">
+        <i class="material-symbols-outlined mr-15 cursor-pointer" matSuffix (click)="clearInput()">
             close
         </i>
         }
@@ -14,13 +14,8 @@
                 [value]="attrValue?option[attrValue]:option">{{attrDisplay?option[attrDisplay]:option}}</mat-option>
             }
         </mat-autocomplete>
-        <mat-error *ngxControlError="viewControl; track: 'required'">
+        <mat-error *ngxControlError="selectionControl.ngControl?.control??undefined; track: 'required'">
             {{ label }} {{MESSAGE.REQUIRED}}
         </mat-error>
     </mat-form-field>
-    <!-- @if(viewControl.touched && formControl.hasError('required')){
-    <span class="required">
-        {{ label }} {{MESSAGE.REQUIRED}}
-    </span>
-    } -->
 </div>

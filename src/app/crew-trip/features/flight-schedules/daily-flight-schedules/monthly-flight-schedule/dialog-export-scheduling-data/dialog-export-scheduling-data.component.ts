@@ -48,7 +48,7 @@ import { DialogData } from 'src/app/ui-elements/dialog/basic-dialog/basic-dialog
 })
 export class DialogExportSchedulingDataComponent extends CommonComponent {
   readonly dialogRef = inject(MatDialogRef<DialogExportSchedulingDataComponent>);
-  readonly data = inject<DialogData>(MAT_DIALOG_DATA);
+  readonly data = inject(MAT_DIALOG_DATA);
   flightMarketService = inject(FlightMarketService)
 
   override formGroupDetail = this.formBuilder.group({

@@ -22,6 +22,9 @@ import { DialogExtraCrewComponent } from './dialog-extra-crew/dialog-extra-crew.
 import { DialogExportSchedulingDataComponent } from './dialog-export-scheduling-data/dialog-export-scheduling-data.component';
 import { RouterLink } from '@angular/router';
 import { DialogMonthlyFlightScheduleDetailComponent } from './dialog-monthly-flight-schedule-detail/dialog-monthly-flight-schedule-detail.component';
+import { Constant, removeNullValues } from 'src/app/crew-trip/shared/utils/constant';
+import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-monthly-flight-schedule',
@@ -49,10 +52,10 @@ export class MonthlyFlightScheduleComponent extends CommonComponent {
     { label: $localize`:@@acType:AC TYPE`, value: 'acType', class: 'text-left' },
     { label: $localize`:@@org:ORG`, value: 'org', class: 'text-center' },
     { label: $localize`:@@dst:DST`, value: 'dst', class: 'text-center' },
-    { label: $localize`:@@std:STD`, value: 'std', class: 'text-center' },
-    { label: $localize`:@@sta:STA`, value: 'sta', class: 'text-center' },
-    { label: $localize`:@@etd:ETD`, value: 'etd', class: 'text-center' },
-    { label: $localize`:@@eta:ETA`, value: 'eta', class: 'text-center' },
+    { label: $localize`:@@std:STD`, value: 'std', type: this.Constant.DATE, format: this.Constant.DATE_TIME_FORMAT, class: 'text-center' },
+    { label: $localize`:@@sta:STA`, value: 'sta', type: this.Constant.DATE, format: this.Constant.DATE_TIME_FORMAT, class: 'text-center' },
+    { label: $localize`:@@etd:ETD`, value: 'etd', type: this.Constant.DATE, format: this.Constant.DATE_TIME_FORMAT, class: 'text-center' },
+    { label: $localize`:@@eta:ETA`, value: 'eta', type: this.Constant.DATE, format: this.Constant.DATE_TIME_FORMAT, class: 'text-center' },
   ];
 
 
@@ -61,28 +64,46 @@ export class MonthlyFlightScheduleComponent extends CommonComponent {
     super.ngOnInit();
 
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'numberOfCrew', 'remark', 'action'];
-    this.dataSource.data = [
-      {
-        flightNo: 'ABC',
-        acType: 'ABC'
-      }
-    ]
   }
+
   onSearch(event: any) {
-    super.search(event);
+    this.search(event, false, this.baseService.searchInMonth.bind(this.baseService));
   }
 
   override onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    // super.search(this.dailyFlightSchedulesSearch().formGroupSearch.value, true);
-
+    this.search(this.dailyFlightSchedulesSearch().formGroupSearch.value, true, this.baseService.searchInMonth.bind(this.baseService));
   }
 
-  addOther() {
-    this.dialog.open(DialogExtraCrewComponent, {
-      minWidth: 750,
-      minHeight: 500
+  override async exportFile(body?: any, filename?: string) {
+    super.exportFile(this.dailyFlightSchedulesSearch().formGroupSearch.value, filename, 'export-flight-crew-in-month')
+  }
+
+
+  getColorByRemark(row: any) {
+    if (row) {
+      if (row.changeCrew?.toLowerCase().includes('phi công') &&
+        row.changeCrew?.toLowerCase().includes('tiếp viên')) {
+        return 'bg-purple-100';
+      } else if (row.changeCrew?.toLowerCase().includes('phi công')) {
+        return 'bg-warning-100';
+      } else if (row.changeCrew?.toLowerCase().includes('tiếp viên')) {
+        return 'bg-orange-100';
+      }
+    }
+    return null;
+  }
+
+
+  addOther(element: any) {
+    this.dialog.open(DialogMonthlyFlightScheduleDetailComponent, {
+      minWidth: 1300,
+      data: {
+        isUpdate: true,
+        ...this.dailyFlightSchedulesSearch().formGroupSearch.value,
+        ...element
+      }
     })
   }
 
@@ -93,10 +114,14 @@ export class MonthlyFlightScheduleComponent extends CommonComponent {
     })
   }
 
-  flightCrewDetail(){
+  flightCrewDetail(element: any) {
     this.dialog.open(DialogMonthlyFlightScheduleDetailComponent, {
-      minWidth: 900,
-      minHeight: 300
+      minWidth: 1300,
+      data: {
+        isUpdate: false,
+        ...this.dailyFlightSchedulesSearch().formGroupSearch.value,
+        ...element
+      }
     })
   }
 }

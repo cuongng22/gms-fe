@@ -8,7 +8,7 @@ import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatPaginatorModule, PageEvent } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
@@ -51,34 +51,75 @@ export class OtherFlightScheduleComponent extends CommonComponent {
   ]
 
   override formGroupDetail = this.formBuilder.group({
-    id: []
+    fltIdIn: [],
+    fltIdOut: [],
+    persCode: []
   })
 
 
+  truncMonth = new Date((new Date().getFullYear()), (new Date().getMonth()), 1);
+
   override ngOnInit(): void {
-    this.dataSource.data = [
-      {
-        extraCrewCode: '4234',
-        checkinFltNo: '234234',
-        checkoutDate: '32423'
-      }
-    ]
   }
   onSearch(event: any) {
+    this.search(event, false, this.baseService.searchExtraCrews.bind(this.baseService));
+  }
 
+  override onPageChange(event: PageEvent) {
+    this.pageSize = event.pageSize;
+    this.pageIndex = event.pageIndex;
+    this.search(this.dailyFlightSchedulesSearch().formGroupSearch.value, true, this.baseService.searchExtraCrews.bind(this.baseService));
   }
 
   add() {
-    this.dialog.open(DialogExtraCrewComponent, {
-      minWidth: 750,
-      minHeight: 500
-    })
+    this.dailyFlightSchedulesSearch().formGroupSearch.markAllAsTouched();
+    if (this.dailyFlightSchedulesSearch().formGroupSearch.valid) {
+      this.dialog.open(DialogExtraCrewComponent, {
+        minWidth: 750,
+        minHeight: 500,
+        data: this.dailyFlightSchedulesSearch().formGroupSearch.value
+      })
+    }
+
   }
 
   edit(item: any) {
     this.dialog.open(DialogExtraCrewComponent, {
       minWidth: 750,
-      minHeight: 500
+      minHeight: 500,
+      data: {
+        dataUpdate: item
+      }
     })
+  }
+
+  visibleAdd() {
+    const year = this.dailyFlightSchedulesSearch().formGroupSearch.controls.year.value || 0;
+    const month = new Number(this.dailyFlightSchedulesSearch().formGroupSearch.controls.month.value);
+    const selectDate = new Date(year, +month - 1, 1);
+    if (selectDate >= this.truncMonth) {
+      return true;
+    }
+    return false;
+  }
+
+  override async showConfirmDelete(element: any) {
+    this.formGroupDetail.patchValue({ ...element });
+    this.toggleDialogDelete();
+  }
+
+  override  async delete() {
+    try {
+      await this.spinner.show();
+      const res = await this.baseService.deleteCrewsExtra(this.formGroupDetail.getRawValue());
+      this.baseService.showSuccess(this.MESSAGE.DELETE_SUCCESS);
+      await this.search();
+      return res;
+    } catch (e: any) {
+      this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? this.MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+      await this.closeConfirmDelete();
+    }
   }
 }

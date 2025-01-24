@@ -103,17 +103,24 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
     this.search(null, true);
   }
 
-  async search<T>(body?: any, isNextPage?: boolean) {
+  async search<T>(body?: any, isNextPage?: boolean, fnSearch?: (bodySearch: any) => (ListResponse<T> | any)) {
     try {
       await this.spinner.show();
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
-      const res = await this.baseService.search<ListResponse<T>>({
+      const buildBodySearch = {
         page: this.pageIndex,
         size: this.pageSize,
         limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
-      });
+      }
+      let res;
+      if (fnSearch) {
+        res = await fnSearch(buildBodySearch);
+      } else {
+        res = await this.baseService.search<ListResponse<T>>(buildBodySearch);
+      }
+      // const 
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;
@@ -236,10 +243,10 @@ export class CommonComponent extends ShowMessageComponent implements OnInit, Aft
     saveAs(blob, filename);
   }
 
-  async exportFile(body?: any, filename?: string) {
+  async exportFile(body?: any, filename?: string, sourcePath?: string) {
     try {
       await this.spinner.show();
-      const res = await this.baseService.exportData({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) });
+      const res = await this.baseService.exportData({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) }, sourcePath);
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);

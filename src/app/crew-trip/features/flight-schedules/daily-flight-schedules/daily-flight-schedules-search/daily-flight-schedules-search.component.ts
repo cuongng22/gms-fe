@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit, output } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { Component, inject, OnInit, output, viewChild } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -14,6 +14,7 @@ import { getYear, months } from '../daily-flight-schedules.model';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { FlightMarketStatusEnum } from '../../../category/flight-market/flight-market.model';
 import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 
 @Component({
   selector: 'app-daily-flight-schedules-search',
@@ -22,7 +23,7 @@ import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
     MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent,
     MatNativeDateModule, MatAutocompleteModule, CommonModule,
-    SelectionSuggestComponent
+    SelectionSuggestComponent, SelectionComponent
   ],
   templateUrl: './daily-flight-schedules-search.component.html',
   styleUrl: './daily-flight-schedules-search.component.scss'
@@ -33,36 +34,53 @@ export class DailyFlightSchedulesSearchComponent implements OnInit {
   formBuilder = inject(FormBuilder);
 
   airports: any[] = [];
-  months = months;
-  years = getYear();
+  months: any[] = []
+  years: any[] = []
 
 
   formGroupSearch = this.formBuilder.group({
-    s: '',
-    airport: '',
+    airport: ['', Validators.required],
     month: '',
-    year: ''
+    year: 0,
+    timeZone: ''
   });
 
-  ngOnInit(): void {
-    this.flightMarketService.search<any>({ option: 0, page: 0, size: 999999, status: FlightMarketStatusEnum.OPERATIONAL }).then((res: ListResponse<any>) => {
-      this.airports = res.data.content.map((item: any) => {
-        return {
-          marketCode: item.marketCode,
-          marketName: item.marketName,
-          timezone: item.timezone
-        }
-      });
-    });
+  async ngOnInit() {
+    const airportResponse = await this.flightMarketService.search<any>({ option: 0, page: 0, size: 999999, status: FlightMarketStatusEnum.OPERATIONAL });
+    this.airports = [...airportResponse.data.content.map((item: any) => {
+      return {
+        marketCode: item.marketCode,
+        marketName: item.marketName,
+        timezone: item.timezone
+      }
+    })];
+    this.months = months;
+    this.years = getYear();
+
+    this.formGroupSearch.controls.airport.setValue(this.airports[0].marketCode);
+    this.formGroupSearch.controls.timeZone.setValue(this.airports[0].timezone);
+
+    const currentMonth = new Date().getMonth() + 1;
+    this.formGroupSearch.controls.month.setValue(currentMonth < 10 ? '0' + currentMonth.toString() : currentMonth.toString());
+    this.formGroupSearch.controls.year.setValue(new Date().getFullYear());
+
+    this.onSearch()
+
+  }
+
+  airportChange(value: any) {
+    const airportFilter = this.airports.find(item => item.marketCode === value.value);
+    this.formGroupSearch.controls.timeZone.setValue(airportFilter?.timezone);
   }
 
 
   onSearch() {
-    const bodySearch= {
+    const bodySearch = {
       ...this.formGroupSearch.value,
-      timezone:this.airports.find((item:any)=> item.marketCode === this.formGroupSearch.value.airport)?.timezone
+      timezone: this.airports.find((item: any) => item.marketCode === this.formGroupSearch.value.airport)?.timezone
     }
     console.log(bodySearch)
-    // this.search.emit(this.formGroupSearch.value);
+    this.search.emit(this.formGroupSearch.value);
   }
+
 }

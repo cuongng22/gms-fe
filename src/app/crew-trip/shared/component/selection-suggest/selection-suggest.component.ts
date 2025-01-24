@@ -1,13 +1,14 @@
 import { CommonModule } from '@angular/common';
 import {
+  AfterViewChecked,
   AfterViewInit,
   ChangeDetectionStrategy,
   Component,
-  ElementRef,
+  ElementRef, EventEmitter,
   inject,
   Input,
   model,
-  OnInit,
+  OnInit, Output,
   output,
   ViewChild
 } from '@angular/core';
@@ -38,7 +39,8 @@ import { MatIconModule } from '@angular/material/icon';
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class SelectionSuggestComponent implements OnInit, AfterViewInit {
+export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterViewChecked {
+
   ngAfterViewInit(): void {
     this.auto?.options.changes.subscribe((list: any[]) => {
       if (list) {
@@ -51,13 +53,23 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
     if (this.requiredControl) {
       this.viewControl.addValidators(Validators.required);
     }
+    if (this.formControl.disabled) {
+      this.viewControl.disable();
+    }
 
+  }
+  ngAfterViewChecked(): void {
+    if (this.formControl.touched) {
+      this.viewControl.markAsTouched();
+      this.viewControl.updateValueAndValidity()
+    }
   }
 
   @Input() size = 'sm';
   @Input() label = '';
   @Input() attrValue = '';
   @Input() attrDisplay = '';
+  @Output() clearInputEvent = new EventEmitter<void>();
   selectionChange = output<any>();
 
   private _options: any[] = [];
@@ -72,7 +84,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
   protected viewControl = new FormControl();
   protected selectionControl = inject<NgxControlValueAccessor<any>>(
     NgxControlValueAccessor
-  );
+  )
+
 
   get formControl(): FormControl {
     return (this.selectionControl?.ngControl?.control as FormControl) ?? new FormControl();
@@ -101,11 +114,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
       }));
     });
 
-    // this.formControl.valueChanges.subscribe((value: any) => {
-    //   this.setViewValueInit(value)
-    // })
-
   }
+
 
   setViewValueInit(value: any) {
     const selected = this.options.filter((option: any) => {
@@ -135,6 +145,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
   }
 
 
+
+
   @Input() set options(options: any[]) {
     this._options = options;
     this.filtered.set([...(this._options ?? [])]);
@@ -151,8 +163,10 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit {
     this.selectionControl.writeValue('');
     this.viewControl.updateValueAndValidity();
     this.formControl.updateValueAndValidity();
-    const findResult = this.auto?.options.find((o) => o.selected);
-    findResult?.focus(null, { preventScroll: false });
-    findResult?.deselect(false);
+    this.keySearch.next('');
+    // const findResult = this.auto?.options.find((o) => o.selected);
+    // findResult?.focus(null, { preventScroll: false });
+    // findResult?.deselect(false);
+    this.clearInputEvent.emit();
   }
 }

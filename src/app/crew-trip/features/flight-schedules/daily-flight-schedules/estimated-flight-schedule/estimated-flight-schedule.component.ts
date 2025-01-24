@@ -45,24 +45,17 @@ export class EstimatedFlightScheduleComponent extends CommonComponent {
     { label: $localize`:@@acType:AC TYPE`, value: 'acType', class: 'text-left' },
     { label: $localize`:@@org:ORG`, value: 'org', class: 'text-center' },
     { label: $localize`:@@dst:DST`, value: 'dst', class: 'text-center' },
-    { label: $localize`:@@std:STD`, value: 'std', class: 'text-center' },
-    { label: $localize`:@@sta:STA`, value: 'sta', class: 'text-center' },
-    { label: $localize`:@@etd:ETD`, value: 'etd', class: 'text-center' },
-    { label: $localize`:@@eta:ETA`, value: 'eta', class: 'text-center' },
+    { label: $localize`:@@std:STD`, value: 'std', type: this.Constant.DATE, format: this.Constant.DATE_TIME_FORMAT, class: 'text-center' },
+    { label: $localize`:@@sta:STA`, value: 'sta', type: this.Constant.DATE, format: this.Constant.DATE_TIME_FORMAT, class: 'text-center' },
+    { label: $localize`:@@etd:ETD`, value: 'etd', type: this.Constant.DATE, format: this.Constant.DATE_TIME_FORMAT, class: 'text-center' },
+    { label: $localize`:@@eta:ETA`, value: 'eta', type: this.Constant.DATE, format: this.Constant.DATE_TIME_FORMAT, class: 'text-center' },
   ];
-
 
 
   override async ngOnInit() {
     super.ngOnInit();
 
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'numberOfCrew'];
-    this.dataSource.data = [
-      {
-        flightNo: 'ABC',
-        acType: 'ABC'
-      }
-    ]
   }
   onSearch(event: any) {
     super.search(event);
@@ -71,7 +64,11 @@ export class EstimatedFlightScheduleComponent extends CommonComponent {
   override onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    // super.search(this.dailyFlightSchedulesSearch().formGroupSearch.value, true);
-    
+    super.search(this.dailyFlightSchedulesSearch().formGroupSearch.value, true);
   }
+
+  override async exportFile(body?: any, filename?: string) {
+    super.exportFile(this.dailyFlightSchedulesSearch().formGroupSearch.value, filename, 'export-flight-crew-plan')
+  }
+
 }

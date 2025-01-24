@@ -38,15 +38,18 @@
     <mat-card-header class="mb-10">
         <mat-card-title>
         </mat-card-title>
-        <mat-card-subtitle>
-            <button class="add-btn " type="button" mat-button (click)="add()">
-                <i class="material-symbols-outlined">
-                    add
-                </i>
-                <span i18n="@@sync">New</span>
-            </button>
-
-        </mat-card-subtitle>
+        @if (visibleAdd()) {
+            <mat-card-subtitle>
+                <button class="add-btn " type="button" mat-button (click)="add()">
+                    <i class="material-symbols-outlined">
+                        add
+                    </i>
+                    <span i18n="@@sync">New</span>
+                </button>
+    
+            </mat-card-subtitle>
+        }
+        
     </mat-card-header>
     <mat-card-content>
         <div class="table-responsive">
@@ -175,7 +178,7 @@
                                 </i>
                             </button>
                             <button type="button" mat-button title="Delete" i18n-title="@@delete" class="text-danger"
-                                (click)="showConfirmDelete(element.id)">
+                                (click)="showConfirmDelete(element)">
                                 <i class="material-symbols-outlined text-danger">
                                     delete
                                 </i>
