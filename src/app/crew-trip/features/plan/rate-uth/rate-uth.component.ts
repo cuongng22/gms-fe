@@ -51,7 +51,6 @@ import {HttpStatusCode} from '@angular/common/http';
 export class RateUthComponent extends CommonComponent implements OnInit {
   override baseService = inject(ExchangeRateService);
 
-  formBuilder = inject(FormBuilder);
   showDialogUpload = false;
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};

@@ -53,6 +53,9 @@ import { reportcomponent7 } from './crew-trip/features/reports/report7/report7.c
 import { reportcomponent8 } from './crew-trip/features/reports/report8/report8.component';
 import { reportcomponent9 } from './crew-trip/features/reports/report9/report9.component';
 import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.component';
+import { DailyFlightSchedulesComponent } from './crew-trip/features/flight-schedules/daily-flight-schedules/daily-flight-schedules.component';
+import { OtherFlightScheduleComponent } from './crew-trip/features/flight-schedules/daily-flight-schedules/monthly-flight-schedule/other-flight-schedule/other-flight-schedule.component';
+
 
 export const routes: Routes = [
 	{
@@ -157,7 +160,11 @@ export const routes: Routes = [
 			},
 			{
 				path: 'flight-schedules',
-				children: [{ path: 'seasonal', component: SeasonalSchedulesComponent }],
+				children: [
+					{ path: 'seasonal', component: SeasonalSchedulesComponent },
+					{ path: 'daily', component: DailyFlightSchedulesComponent },
+					{ path: 'other', component: OtherFlightScheduleComponent }
+				],
 			},
 			{
 				path: 'invoice',

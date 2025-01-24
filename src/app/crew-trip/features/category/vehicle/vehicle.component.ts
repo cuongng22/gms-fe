@@ -43,7 +43,6 @@ import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 export class VehicleComponent extends CommonComponent implements OnInit {
   override baseService = inject(VehicleService);
   flightMarketService = inject(FlightMarketService);
-  formBuilder = inject(FormBuilder);
 
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;

@@ -39,7 +39,6 @@ export class CrewsComponent extends CommonComponent implements OnInit {
   override baseService = inject(CrewsService);
   usersService = inject(UsersService);
   flightMarketService = inject(FlightMarketService);
-  formBuilder = inject(FormBuilder);
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string, class?: string }[] = [
     // { label: $localize`:@@pid:PID`, value: 'pid' },
@@ -72,7 +71,7 @@ export class CrewsComponent extends CommonComponent implements OnInit {
 
   filteredOptionsMarket: Observable<any[]>;
 
-  constructor(public dialog: MatDialog) {
+  constructor() {
     super();
   }
 

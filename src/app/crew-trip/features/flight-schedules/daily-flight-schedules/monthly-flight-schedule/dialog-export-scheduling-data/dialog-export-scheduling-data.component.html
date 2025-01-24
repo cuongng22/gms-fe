@@ -1,0 +1,90 @@
+<mat-card class="border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="p-15">
+        <mat-card-title>
+            <h5 class="mb-2" i18n="@@addExtraCrew">
+                Export scheduling Hotel/Car rental
+            </h5>
+        </mat-card-title>
+        <mat-card-subtitle>
+            <button mat-button (click)="close()">
+                <i class="ri-close-fill"></i>
+            </button>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+        <form [formGroup]="formGroupDetail" (ngSubmit)="save()" autocomplete="off">
+            <div class="row mb-2">
+                <mat-radio-group>
+                    <mat-radio-button value="1" i18n="@@pilot">Pilot</mat-radio-button>
+                    <mat-radio-button value="2" i18n="@@flightAttendant">Flight Attendant</mat-radio-button>
+                </mat-radio-group>
+            </div>
+            <div class="row mb-2">
+                <app-selection-suggest i18n-label="@@airportCode" label="Airport code" [options]="airports"
+                    formControlName="airport" attrValue="marketCode" attrDisplay="marketCode" />
+            </div>
+
+            <div class="row mb-2">
+                <div class="col" sizeInput="sm">
+                    <mat-form-field class="mb-1">
+                        <mat-date-range-input [rangePicker]="exportRangePicker">
+                            <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="dd/mm/yyyy"
+                                formControlName="exportStartDate">
+                            <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
+                                formControlName="exportEndDate">
+                        </mat-date-range-input>
+                        <mat-label i18n="@@contractPeriod">Date</mat-label>
+                        <mat-datepicker-toggle matIconSuffix [for]="exportRangePicker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #exportRangePicker>
+                            <mat-date-range-picker-actions>
+                                <button sizeButton="sm" mat-button matDateRangePickerCancel
+                                    i18n="@@cancel">Cancel</button>
+                                <button sizeButton="sm" mat-raised-button color="primary" matDateRangePickerApply
+                                    i18n="@@apply">Apply
+                                </button>
+                            </mat-date-range-picker-actions>
+                        </mat-date-range-picker>
+                        <mat-error *ngxControlError="formGroupDetail.controls.exportStartDate; track: 'required'">
+                            {{MESSAGE.MESSAGE_START_DATE_REQUIRED}}
+                        </mat-error>
+                        <mat-error *ngxControlError="formGroupDetail.controls.exportEndDate; track: 'required'">
+                            {{MESSAGE.MESSAGE_END_DATE_REQUIRED}}
+                        </mat-error>
+                        @if (formGroupDetail.controls.exportStartDate.value &&
+                        formGroupDetail.controls.exportEndDate.value
+                        && formGroupDetail.controls.exportEndDate.value <
+                            formGroupDetail.controls.exportStartDate.value) { 
+                            <mat-error>
+                            {{MESSAGE.END_DATE_LESS_THAN_START_DATE}}
+                            </mat-error>
+                        }
+                    </mat-form-field>
+                </div>
+            </div>
+
+
+            <div class="btn-box d-flex justify-content-end">
+                <button type="button" mat-button (click)="close()" class="close-btn  min-with-100 mlr-5">
+                    <i class="material-symbols-outlined">
+                        close
+                    </i>
+                    <span i18n="@@close">Close</span>
+                </button>
+                <button mat-button color="primary" type="submit" class="add-btn min-with-100 mlr-5">
+                    <i class="material-symbols-outlined">
+                        download
+                    </i>
+                    <span i18n="@@save">Export</span>
+                </button>
+
+            </div>
+        </form>
+
+    </mat-card-content>
+    <mat-card-footer>
+        <div class="mt-5">
+           <span class="text-danger">Note:</span> Don't forget to send a notification email to your hotel/car rental partners about the flight changes. Go to
+            the <b>'Email Tracking'</b> screen after exporting the updated schedule.
+        </div>
+    </mat-card-footer>
+</mat-card>
