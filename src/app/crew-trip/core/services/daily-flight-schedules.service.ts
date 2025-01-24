@@ -44,13 +44,13 @@ export class DailyFlightSchedulesService extends BaseService {
     return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
   }
   updateCrewsExtra<T = any>(body: any): Promise<T> {
-    const url = `${this.api}/${this.path}/update-crews-extra/${body.id}`;
+    const url = `${this.api}/${this.path}/update-crews-extra`;
     return firstValueFrom(this.http.put<T>(url, body, this.httpOptions));
   }
   deleteCrewsExtra<T = any>(body: any): Promise<T> {
     const params = new HttpParams({ fromObject: body });
     const url = `${this.api}/${this.path}/delete-crews-extra`;
-    return firstValueFrom(this.http.delete<T>(url, { ...params, ...this.httpOptions }));
+    return firstValueFrom(this.http.delete<T>(url, { params, ...this.httpOptions }));
   }
 
 

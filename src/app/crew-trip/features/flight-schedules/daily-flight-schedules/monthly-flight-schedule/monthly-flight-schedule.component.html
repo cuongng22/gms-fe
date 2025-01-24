@@ -102,7 +102,7 @@
                     </th>
                     <td *matCellDef="let element;let i = dataIndex" mat-cell [ngClass]="getColorByRemark(element)">
                         <div class="action-buttons d-flex align-items-center justify-content-end">
-                            <a mat-button type="button">
+                            <a mat-button type="button" (click)="flightCrewDetail(element)">
                                 <i class="material-symbols-outlined" i18n-title title="View">
                                     visibility
                                 </i>

@@ -70,29 +70,50 @@ export class DialogExtraCrewComponent extends CommonComponent {
 
   airport: string;
   timeZone: string;
+  updateFlag = false;
 
 
-  override ngOnInit(): void {
+  override async ngOnInit() {
     this.formGroupDetail.controls.gender.disable();
     this.formGroupDetail.controls.phoneNumber.disable();
     this.formGroupDetail.controls.position.disable();
 
     this.airport = this.data.airport;
     this.timeZone = this.data.timeZone;
+    try {
+      await this.spinner.show();
 
-    this.crewsService.search<ListResponse<any>>({ type: 'Extra Crew' }).then((res: ListResponse<any>) => {
-      this.crews = res.data.content.map(item => {
+      const crewsResponse = await this.crewsService.search<ListResponse<any>>({ type: 'Extra Crew' });
+      this.crews = crewsResponse.data.content.map((item: any) => {
         return { ...item, fullNameDisplay: `${item.persCode}-${item.fullName}` }
       });
-    });
 
-    this.baseService.flightsList<DetailResponse<any[]>>({ type: 'in', airport: this.airport, timeZone: this.timeZone }).then((res: DetailResponse<any[]>) => {
-      this.arrives = res.data;
-    });
+      if (this.data.dataUpdate) {
+        this.formGroupDetail.patchValue({
+          persCode: this.data.dataUpdate.PERSCODE,
+          extra: this.data.dataUpdate.FUNC,
+          fltIdOut: this.data.dataUpdate.FLT_ID_OUT,
+          fltIdIn: this.data.dataUpdate.FLT_ID_IN,
+          gender: this.data.dataUpdate.GENDER,
+          phoneNumber: this.data.dataUpdate.FULLNAME,
+          position: this.crews.find(item => item.persCode === this.data.dataUpdate.PERSCODE).function
+        });
+        this.updateFlag = true
+      } else {
+        this.updateFlag = false
+      }
 
-    this.baseService.flightsList<DetailResponse<any[]>>({ type: 'out', airport: this.airport, timeZone: this.timeZone }).then((res: DetailResponse<any[]>) => {
-      this.departure = res.data;
-    });
+      const flightsInResponse = await this.baseService.flightsList<DetailResponse<any[]>>({ type: 'in', airport: this.airport, timeZone: this.timeZone });
+      this.arrives = flightsInResponse.data;
+
+      const flightsOutResponse = await this.baseService.flightsList<DetailResponse<any[]>>({ type: 'out', airport: this.airport, timeZone: this.timeZone });
+      this.departure = flightsOutResponse.data;
+
+    } catch (e: any) {
+      this.baseService.showError(e?.error?.data?.message ?? e.error?.data ?? e.error?.error ?? e.error ?? this.MESSAGE.ERROR);
+    } finally {
+      this.spinner.hide()
+    }
 
   }
 
@@ -118,14 +139,13 @@ export class DialogExtraCrewComponent extends CommonComponent {
         this.findInvalidControls(this.formGroupDetail);
         return;
       }
-      const update = !!this.data.persCode;
       await this.spinner.show();
       let res;
-      if (update) {
+      if (this.updateFlag) {
         const bodyUpdate = {
-          persCode: this.data.persCode,
-          oldFltIdIn: this.data.fltIdIn,
-          oldFltIdOut: this.data.fltIdOut,
+          persCode: this.data.dataUpdate.PERSCODE,
+          oldFltIdIn: this.data.dataUpdate.FLT_ID_IN,
+          oldFltIdOut: this.data.dataUpdate.FLT_ID_OUT,
           newFltIdIn: this.formGroupDetail.getRawValue().fltIdIn,
           newFltIdOut: this.formGroupDetail.getRawValue().fltIdOut,
           extra: this.formGroupDetail.getRawValue().extra
@@ -135,11 +155,10 @@ export class DialogExtraCrewComponent extends CommonComponent {
         res = await this.baseService.createExtraCrews(this.formGroupDetail.getRawValue());
       }
       await this.search();
-      this.baseService.showSuccess(update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS);
+      this.baseService.showSuccess(this.updateFlag ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS);
       await this.closeDetail();
       return res;
     } catch (e: any) {
-      debugger
       if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
         this.baseService.showError(e?.error?.data?.message ?? e.error?.data ?? e.error?.error ?? e.error ?? this.MESSAGE.ERROR);
       }

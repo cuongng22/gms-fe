@@ -1,7 +1,7 @@
 <!--Search-->
 <mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
-        <app-daily-flight-schedules-search #dailyFlightSchedulesSearch  (search)="onSearch($event)"/>
+        <app-daily-flight-schedules-search #dailyFlightSchedulesSearch (search)="onSearch($event)" />
     </mat-card-content>
 </mat-card>
 
@@ -54,14 +54,18 @@
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@fc">
                                 FC
                             </span>:
-                            {{element.pilotCount}}
+                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element)">
+                                {{element.pilotCount}}
+                            </a>
                         </span>
                         <br>
                         <span>
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@cc">
                                 CC
                             </span>:
-                            {{element.cabinCrewCount}}
+                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element)">
+                                {{element.cabinCrewCount}}
+                            </a>
                         </span>
                     </td>
                 </ng-container>

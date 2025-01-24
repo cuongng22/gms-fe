@@ -61,14 +61,16 @@ export class OtherFlightScheduleComponent extends CommonComponent {
 
   override ngOnInit(): void {
   }
-  onSearch(event: any) {
-    this.search(event, false, this.baseService.searchExtraCrews.bind(this.baseService));
+  async onSearch(event: any) {
+    const response = await this.search(event, false, this.baseService.searchExtraCrews.bind(this.baseService));
+    this.dataSource.data = response.data;
   }
 
-  override onPageChange(event: PageEvent) {
+  override async onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    this.search(this.dailyFlightSchedulesSearch().formGroupSearch.value, true, this.baseService.searchExtraCrews.bind(this.baseService));
+    const response = await this.search(this.dailyFlightSchedulesSearch().formGroupSearch.value, true, this.baseService.searchExtraCrews.bind(this.baseService));
+    this.dataSource.data = response.data;
   }
 
   add() {
@@ -88,7 +90,8 @@ export class OtherFlightScheduleComponent extends CommonComponent {
       minWidth: 750,
       minHeight: 500,
       data: {
-        dataUpdate: item
+        dataUpdate: item,
+        ...this.dailyFlightSchedulesSearch().formGroupSearch.value
       }
     })
   }
@@ -104,7 +107,11 @@ export class OtherFlightScheduleComponent extends CommonComponent {
   }
 
   override async showConfirmDelete(element: any) {
-    this.formGroupDetail.patchValue({ ...element });
+    this.formGroupDetail.patchValue({
+      fltIdIn: element.FLT_ID_IN,
+      fltIdOut: element.FLT_ID_OUT,
+      persCode: element.PERSCODE
+    });
     this.toggleDialogDelete();
   }
 
@@ -113,7 +120,7 @@ export class OtherFlightScheduleComponent extends CommonComponent {
       await this.spinner.show();
       const res = await this.baseService.deleteCrewsExtra(this.formGroupDetail.getRawValue());
       this.baseService.showSuccess(this.MESSAGE.DELETE_SUCCESS);
-      await this.search();
+      await this.search(this.dailyFlightSchedulesSearch().formGroupSearch.value, true, this.baseService.searchExtraCrews.bind(this.baseService));
       return res;
     } catch (e: any) {
       this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? this.MESSAGE.ERROR);

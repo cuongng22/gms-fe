@@ -67,7 +67,7 @@
                         Extra Crew Code
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.extraCrewCode }}
+                        {{ element.PERSCODE }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="extraCrewName">
@@ -76,7 +76,10 @@
                         Extra Crew Name
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.extraCrewName }}
+                        {{ element.FULLNAME }} <br/>
+                        <span class="text-secondary-bootstrap font-size-14" i18n="@@fc">
+                            Gender
+                        </span>: {{element.GENDER}}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="type">
@@ -85,7 +88,7 @@
                         Type
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.type }}
+                        {{ element.FUNC }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="checkin">
@@ -99,7 +102,7 @@
                         FLTNO
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.checkinFltNo }}
+                        {{ element.FLTNO_IN }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="checkinAcType">
@@ -107,7 +110,7 @@
                         Ac Type
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.checkinAcType }}
+                        {{ element.AC_TYPE_IN }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="checkinFlightLeg">
@@ -115,7 +118,7 @@
                         Flight leg
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.checkinFlightLeg }}
+                        {{ element.FLIGHT_LEG_IN }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="checkinDate">
@@ -123,7 +126,7 @@
                         Date
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.checkinDate }}
+                        {{ element.FLIGHT_DATE_IN }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="checkout">
@@ -137,7 +140,7 @@
                         FLTNO
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.checkoutFltNo }}
+                        {{ element.FLTNO_OUT }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="checkoutAcType">
@@ -145,7 +148,7 @@
                         Ac Type
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.checkoutAcType }}
+                        {{ element.AC_TYPE_OUT }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="checkoutFlightLeg">
@@ -153,7 +156,7 @@
                         Flight leg
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.checkoutFlightLeg }}
+                        {{ element.FLIGHT_LEG_OUT }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="checkoutDate">
@@ -161,7 +164,7 @@
                         Date
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{ element.checkoutDate }}
+                        {{ element.FLIGHT_DATE_OUT }}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="action" stickyEnd>

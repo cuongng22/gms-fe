@@ -18,6 +18,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { DailyFlightSchedulesService } from 'src/app/crew-trip/core/services/daily-flight-schedules.service';
 import { DailyFlightSchedulesSearchComponent } from '../daily-flight-schedules-search/daily-flight-schedules-search.component';
+import { DialogMonthlyFlightScheduleDetailComponent } from '../monthly-flight-schedule/dialog-monthly-flight-schedule-detail/dialog-monthly-flight-schedule-detail.component';
 
 @Component({
   selector: 'app-estimated-flight-schedule',
@@ -70,5 +71,16 @@ export class EstimatedFlightScheduleComponent extends CommonComponent {
   override async exportFile(body?: any, filename?: string) {
     super.exportFile(this.dailyFlightSchedulesSearch().formGroupSearch.value, filename, 'export-flight-crew-plan')
   }
+
+    flightCrewDetail(element: any) {
+      this.dialog.open(DialogMonthlyFlightScheduleDetailComponent, {
+        minWidth: 1300,
+        data: {
+          isUpdate: false,
+          ...this.dailyFlightSchedulesSearch().formGroupSearch.value,
+          ...element
+        }
+      })
+    }
 
 }
