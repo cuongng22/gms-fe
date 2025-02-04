@@ -15,7 +15,7 @@ module.exports = tseslint.config(
 		rules: {
 			quotes: ['error', 'single'],
 			semi: ['error', 'always'],
-			indent: ['error', 2],
+			indent: 'off',
 			'no-unused-vars': 'warn',
 			'max-len': ['warn', { code: 120 }],
 			'no-console': 'error',
