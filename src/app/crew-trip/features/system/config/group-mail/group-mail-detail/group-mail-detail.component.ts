@@ -181,27 +181,23 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   }
 
   saveEmail(index: number): void {
-    console.log("this.emailListCheck:", this.emailListCheck)
-    const exist = this.emailListCheck.find(
-      (emailObj: EmailObj) =>
-        emailObj.email.toLowerCase() ===
-        this.emailList[index].email.toLowerCase(),
-    );
-    console.log("existexist:", exist)
+    const emailValue = this.emailList[index]?.email.toLowerCase();
+    if (!emailValue) return;
+    const exist = this.emailListCheck.some(emailObj => emailObj.email.toLowerCase() === emailValue);
     if (exist) {
       this.emailList[index].isDuplicate = true;
       this.emailList[index].isEditing = true;
     } else {
-      this.emailList = [...this.emailList];
-      this.emailListCheck.push(this.emailList[index]);
-      this.emailList[index].isEmpty = this.emailList[index].email === '';
+      this.emailListCheck.push({ ...this.emailList[index] });
+      this.emailList[index].isEmpty = !emailValue;
       this.emailList[index].isEditing = false;
     }
   }
 
   deleteEmail(index: number): void {
-    this.emailList.splice(index, 1);
-    this.emailList = [...this.emailList];
+    const emailToDelete = this.emailList[index]?.email.toLowerCase();
+    this.emailList = this.emailList.filter((_, i) => i !== index);
+    this.emailListCheck = this.emailListCheck.filter(emailObj => emailObj.email.toLowerCase() !== emailToDelete);
   }
 
   override async save() {
