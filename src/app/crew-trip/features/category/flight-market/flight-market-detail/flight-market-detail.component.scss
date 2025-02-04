@@ -7,9 +7,9 @@
     .mat-column-name {
         word-wrap: break-word !important;
         white-space: unset !important;
-        width: 250px !important;
+        min-width: 250px !important;
+        max-width: 250px !important;
         overflow-wrap: break-word;
-        word-wrap: break-word;
 
         word-break: break-word;
 
@@ -23,9 +23,9 @@
     .mat-column-code {
         word-wrap: break-word !important;
         white-space: unset !important;
-        width: 150px !important;
+        min-width: 250px !important;
+        max-width: 250px !important;
         overflow-wrap: break-word;
-        word-wrap: break-word;
 
         word-break: break-word;
 
@@ -35,4 +35,18 @@
         hyphens: auto;
     }
 
+    .mat-column-address {
+        word-wrap: break-word !important;
+        white-space: unset !important;
+        min-width: 250px !important;
+        max-width: 500px !important;
+        overflow-wrap: break-word;
+
+        word-break: break-word;
+
+        -ms-hyphens: auto;
+        -moz-hyphens: auto;
+        -webkit-hyphens: auto;
+        hyphens: auto;
+    }
 }

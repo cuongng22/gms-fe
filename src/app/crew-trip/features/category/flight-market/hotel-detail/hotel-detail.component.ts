@@ -33,7 +33,6 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
   styleUrl: './hotel-detail.component.scss'
 })
 export class HotelDetailComponent extends CommonComponent implements OnInit {
-  formBuilder = inject(FormBuilder);
   hotelService = inject(HotelService);
 
   readonlyDetail = model<boolean>(false);

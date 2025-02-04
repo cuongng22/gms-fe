@@ -32,7 +32,6 @@ import {LOCALE} from 'src/app/crew-trip/shared/utils/constant';
 })
 export class CrewsDetailComponent extends CommonComponent implements OnInit {
   LOCALE = LOCALE;
-  formBuilder = inject(FormBuilder);
   override baseService = inject(CrewsService);
   nationService = inject(NationService);
 

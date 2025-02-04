@@ -1,0 +1,11 @@
+<div [sizeInput]="size()">
+    <mat-form-field>
+        <mat-label>{{label()}}</mat-label>
+        <input matInput [matDatepicker]="picker" [required]="requiredControl" [formControl]="formControl">
+        <mat-datepicker-toggle matIconSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+        <mat-error *ngxControlError="formControl; track: 'required'">
+            {{ label() }} {{MESSAGE.REQUIRED}}
+        </mat-error>
+    </mat-form-field>
+</div>

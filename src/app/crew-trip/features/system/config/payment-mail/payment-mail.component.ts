@@ -63,8 +63,7 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 export class PaymentEmailComponent extends CommonComponent implements OnInit {
   override baseService = inject(PaymentMailService);
   flightMarketService = inject(FlightMarketService);
-  formBuilder = inject(FormBuilder);
-  dialog: MatDialog = inject(MatDialog);
+  activeTab = 0;
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocompleteTrigger)
     autocompleteTrigger!: MatAutocompleteTrigger;

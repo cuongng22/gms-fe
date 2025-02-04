@@ -84,7 +84,7 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
     notes: ['']
   });
 
-  constructor(public dialog: MatDialog) {
+  constructor() {
     super();
     this.formGroupSearch = this.fb.group({
       marketCode: ['',]

@@ -39,9 +39,7 @@ import { PaymentEmailComponent } from 'src/app/crew-trip/features/system/config/
 })
 export class GroupMailComponent extends CommonComponent implements OnInit {
   override baseService = inject(GroupMailService);
-  formBuilder = inject(FormBuilder);
   activeTab = 0;
-  dialog: MatDialog = inject(MatDialog);
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     { label: $localize`:@@name:Name`, value: 'groupName' },
     { label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },

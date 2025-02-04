@@ -60,7 +60,6 @@ import {HttpStatusCode} from '@angular/common/http';
   styleUrl: './flight-crew-detail.component.scss'
 })
 export class FlightCrewDetailComponent extends CommonComponent implements OnInit {
-  formBuilder = inject(FormBuilder);
   override baseService = inject(FlightCrewService);
   flightMarketService = inject(FlightMarketService);
   filteredOptionsMarket: any[];

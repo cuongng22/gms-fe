@@ -102,7 +102,7 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
   });
 
 
-  constructor(public dialog: MatDialog) {
+  constructor() {
     super();
     this.formGroupSearch = this.fb.group({
       marketCode: ['',], status: ['',], acType: ['',],

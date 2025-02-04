@@ -1,0 +1,136 @@
+import { CommonModule } from '@angular/common';
+import { Component, inject } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatChipsModule } from '@angular/material/chips';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { RouterLink, RouterModule } from '@angular/router';
+import { FileUploadModule } from '@iplab/ngx-file-upload';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { DatepickerComponent } from 'src/app/crew-trip/shared/component/datepicker/datepicker.component';
+import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { categories } from '../../plan/budget-procurement/budget-procurement.model';
+import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
+import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
+import { getCategoryName, getEmailDeliveryStatus, getSendMailName } from './email-tracking.model';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { BaseService } from 'src/app/crew-trip/core/services/base-service';
+import { EmailTrackingService } from 'src/app/crew-trip/core/services/email-tracking.service';
+import { DialogSendMailComponent } from './dialog-send-mail/dialog-send-mail.component';
+import { DialogUploadFileComponent } from './dialog-upload-file/dialog-upload-file.component';
+
+@Component({
+  selector: 'app-email-tracking',
+  standalone: true,
+  imports: [
+    MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
+    MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
+    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, FileUploadModule, NgxTrimDirectiveModule,
+    SelectionComponent, SelectionSuggestComponent, DatepickerComponent, DataTransformPipe
+  ],
+  templateUrl: './email-tracking.component.html',
+  styleUrl: './email-tracking.component.scss',
+  providers: [DataTransformPipe]
+})
+export class EmailTrackingComponent extends CommonComponent {
+  override baseService: BaseService = inject(EmailTrackingService);
+  flightMarketService = inject(FlightMarketService)
+  dataTransformPipe = inject(DataTransformPipe);
+  flightScheduleTypes = [
+    { code: 'ESTIMATED_FLIGHT', value: $localize`:@@estimatedFlightSchedule:Estimated Flight Schedule` },
+    { code: 'MONTHLY_FLIGHT', value: $localize`:@@monthlyFlightSchedule:Monthly Flight Schedule` }
+  ];
+  categorys = categories;
+  airports: any[] = [];
+  emailSendingStatus = [
+    { code: false, value: $localize`:@@notSent:Not sent` },
+    { code: true, value: $localize`:@@sent:Sent` }
+  ];
+  emailDeliveryStatus = [
+    { code: true, value: $localize`:@@successful:Successful` },
+    { code: false, value: $localize`:@@failed:Failed` }
+  ]
+  getCategoryName = getCategoryName;
+  getSendMailName = getSendMailName;
+  getEmailDeliveryStatus = getEmailDeliveryStatus;
+
+  override displayedColumns: string[] = [
+    'stt', 'marketCode', 'category', 'fcFile', 'ccFile', 'totalFile', 'exportTime', 'emailTime', 'isEmailSent', 'isSendSuccess', 'action'
+  ];
+
+  override formGroupSearch = this.formBuilder.group({
+    airport: [],
+    date: []
+  })
+
+  override ngOnInit(): void {
+    Promise.all([
+      this.flightMarketService.search<any>({ option: 0, page: 0, size: 999999 }).then((res: ListResponse<any>) => {
+        this.airports = res.data.content.map((item: any) => {
+          return {
+            marketCode: item.marketCode,
+            marketName: item.marketName
+          }
+        });
+      }),
+      this.search(),
+    ]).then(() => {
+    });
+
+  }
+
+  showPopSendMail(data: any) {
+    const attachment = [];
+    if (data.fcFile) attachment.push(data.fcFile);
+    if (data.ccFile) attachment.push(data.ccFile);
+
+    console.log(attachment)
+    this.dialog.open(DialogSendMailComponent, {
+      minWidth: 900,
+      autoFocus: false,
+      disableClose: true,
+      data: {
+        marketCode: data.marketCode,
+        id: data.id,
+        attachment: attachment.join(';')
+      }
+    }).afterClosed().subscribe(res => {
+      this.search()
+    })
+  }
+
+  getArrayFile(file: string) {
+    if (file) {
+      const arrFile = file?.split(';')
+      return arrFile;
+    }
+    return [];
+  }
+
+  showPopUpload(data: any) {
+    this.dialog.open(DialogUploadFileComponent, {
+      minWidth: 900,
+      autoFocus: false,
+      disableClose: true,
+      data: {
+        marketCode: data.marketCode,
+        id: data.id,
+      }
+    }).afterClosed().subscribe(res => {
+      this.search()
+    })
+  }
+}
