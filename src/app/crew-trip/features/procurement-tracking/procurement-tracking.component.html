@@ -1,0 +1,111 @@
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+  <h5 class="mb-0" i18n="@@estimatedExchange">
+    Procurement tracking
+  </h5>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@plan">
+      Plan
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@exchangeRate">
+      Estimate/Plan
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@estimatedExchangeRate">
+      Procurement tracking
+    </li>
+  </ol>
+</div>
+
+<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-content>
+    <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
+      <div class="row">
+        <div class="col">
+          <app-select-multiple size="sm" label="Market Code" i18n-label="@@actype"
+                               [options]="listFlightMarket" formControlName="airportCodes">
+          </app-select-multiple>
+        </div>
+        <div class="col">
+          <app-selection size="sm" label="Type" i18n-label="@@type" [options]="optionsType" attrDisplay="name"
+                         attrValue="value" formControlName="type">
+
+          </app-selection>
+        </div>
+        <div class="col">
+          <app-selection size="sm" label="Field" i18n-label="@@field" [options]="['KT', 'CQ', 'TO']"
+                         formControlName="field" attrDisplay>
+          </app-selection>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="mb-1">
+            <mat-date-range-input [rangePicker]="contractRangePicker">
+              <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="dd/mm/yyyy"
+                     formControlName="startDate">
+              <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
+                     formControlName="endDate">
+            </mat-date-range-input>
+            <mat-label i18n="@@contractEndDate">Contract period</mat-label>
+            <mat-datepicker-toggle matIconSuffix [for]="contractRangePicker"></mat-datepicker-toggle>
+            <mat-date-range-picker #contractRangePicker>
+              <mat-date-range-picker-actions>
+                <button sizeButton="sm" mat-button matDateRangePickerCancel
+                        i18n="@@cancel">Cancel
+                </button>
+                <button sizeButton="sm" mat-raised-button color="primary" matDateRangePickerApply
+                        i18n="@@apply">Apply
+                </button>
+              </mat-date-range-picker-actions>
+            </mat-date-range-picker>
+            <mat-error
+              *ngxControlError="formGroupSearch.controls['startDate']; track: 'matDatepickerParse'"
+              i18n="@@contractPeriodInvalidFormat">
+              Contract period invalid format
+            </mat-error>
+            <mat-error
+              *ngxControlError="formGroupSearch.controls['endDate']; track: 'matDatepickerParse'"
+              i18n="@@contractPeriodInvalidFormat">
+              Contract period invalid format
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <!--        <div class="col" sizeInput="sm">-->
+        <!--          <button class="search-btn" type="submit" mat-button>-->
+        <!--            <i class="material-symbols-outlined">-->
+        <!--              search-->
+        <!--            </i>-->
+        <!--            <span i18n="@@search">Search</span>-->
+        <!--          </button>-->
+        <!--        </div>-->
+      </div>
+      <div class="row pb-2">
+        <div class="col d-flex justify-content-end">
+          <button class="search-btn" type="submit" mat-button>
+            <i class="material-symbols-outlined">
+              search
+            </i>
+            <span i18n="@@search">Search</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="mb-10 mt-10 pt-15 pl-15 pr-15 pb-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-header class="mb-10">
+    <mat-card-title></mat-card-title>
+    <mat-card-subtitle>
+      <button class="add-btn mr-10" type="button" mat-button>
+        <i class="material-symbols-outlined">
+          download
+        </i>
+        <span i18n="@@export">Export</span>
+      </button>
+      <a class="add-btn" type="button" mat-button [routerLink]="'detail'">
+        <i class="material-symbols-outlined">
+          add
+        </i>
+        <span i18n="@@addNew">Add new</span>
+      </a>
+    </mat-card-subtitle>
+  </mat-card-header>
+</mat-card>

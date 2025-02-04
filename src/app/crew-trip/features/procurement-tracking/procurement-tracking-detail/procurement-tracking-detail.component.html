@@ -1,0 +1,75 @@
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center justify-content-between mt-2">
+    <button type="button" class="btn btn-outline-secondary mr-20" i18n="@@back"
+            routerLink="/plan/est-plan/procurement-tracking">
+      <i class="material-symbols-outlined">
+        undo
+      </i>
+      Back
+    </button>
+    @if (isCreate) {
+      <h5 class="mb-0">
+        Add new
+      </h5>
+    } @else if (readonlyDetail) {
+      <h5 class="mb-0">
+        View detail
+      </h5>
+    } @else {
+      <h5 class="mb-0">
+        Edit
+      </h5>
+    }
+  </div>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
+      Plan
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" style="padding-right: 8px;;">
+      Estimate/Plan
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" style="padding-right: 8px;;">
+      Procurement tracking
+    </li>
+    @if (isCreate) {
+      <li class="breadcrumb-item d-inline-block position-relative">
+        Add new
+      </li>
+    } @else if (readonlyDetail) {
+      <li class="breadcrumb-item d-inline-block position-relative">
+        View
+      </li>
+    } @else {
+      <li class="breadcrumb-item d-inline-block position-relative">
+        Edit
+      </li>
+    }
+  </ol>
+</div>
+
+<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+  <form [formGroup]="formGroupDetail" autocomplete="off">
+    <mat-card-title>
+      <span class="text-vna">I. General Information</span>
+    </mat-card-title>
+    <mat-card-content>
+      <div class="row mt-10">
+        <div class="col">
+          <mat-radio-group formControlName="type">
+            <mat-radio-button i18n value="HOTEL">
+              Hotel
+            </mat-radio-button>
+            <mat-radio-button i18n value="CAR">
+              Transportation
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div class="row mt-10">
+        <div class="col"></div>
+        <div class="col"></div>
+        <div class="col"></div>
+      </div>
+    </mat-card-content>
+  </form>
+</mat-card>

@@ -42,6 +42,8 @@ import { BudgetProcurementListComponent } from './crew-trip/features/plan/budget
 import { BudgetProcurementSummaryDetailComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary-detail/budget-procurement-summary-detail.component';
 import { BudgetProcurementSummaryComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary.component';
 import { BudgetProcurementComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement.component';
+import { ProcurementTrackingDetailComponent } from './crew-trip/features/procurement-tracking/procurement-tracking-detail/procurement-tracking-detail.component';
+import { ProcurementTrackingComponent } from './crew-trip/features/procurement-tracking/procurement-tracking.component';
 import { reportcomponent } from './crew-trip/features/reports/report1/report1.component';
 import { reportcomponent10 } from './crew-trip/features/reports/report10/report10.component';
 import { reportcomponent2 } from './crew-trip/features/reports/report2/report2.component';
@@ -90,6 +92,16 @@ export const routes: Routes = [
 					{
 						path: 'est-plan/wet-lease',
 						component: WetLeaseComponent,
+					},
+					{
+						path: 'est-plan/procurement-tracking',
+						children: [
+							{ path: '', component: ProcurementTrackingComponent },
+							{
+								path: 'detail',
+								component: ProcurementTrackingDetailComponent,
+							},
+						],
 					},
 					{ path: 'rate/uth', component: RateUthComponent },
 					{ path: 'rate/planned', component: RatePlannedComponent },

@@ -221,7 +221,7 @@ export const menu: Menu[] = [
                 icon: 'ri-folder-chart-line',
               },
               {
-                path: 'plan/est-plan/five-year-plan',
+                path: 'plan/est-plan/procurement-tracking',
                 title: $localize`:@@fiveYearPlan:Procurement tracking`,
                 icon: 'ri-folder-chart-line',
               },
