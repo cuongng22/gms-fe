@@ -289,7 +289,9 @@
                       </th>
                       <td
                           [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
-                          mat-cell *matCellDef="let element">
+                          [attr.rowspan]="getRowSpan(i,innerColumn,element)"
+                          [style.display]="shouldShowRowSpan(i,innerColumn) ? '' : 'none'"
+                          mat-cell *matCellDef="let element; let i = index">
                 <span [ngClass]="{
           'badge': innerColumn.value === 'activeLabel',
           'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,

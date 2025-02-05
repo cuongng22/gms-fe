@@ -269,21 +269,20 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     });
   }
 
-  calTotal(column: any, rowSpan:any) {
-    console.log()
-    // if (column.type === Constant.NUMBER) {
-    //   return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev: any, cur: any) => {
-    //     prev + +cur[column.value]
-    //     if (cur.typeRoom !== 'CC Twin room' ||
-    //       cur?.roomNo !== dtl[index - 1]?.roomNo ||
-    //       (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
-    //     ) {
-    //       return prev + +cur[column.value]
-    //     } else return 0
-    //   }, 0)
-    // } else {
-    //   return '';
-    // }
+  calTotal(column: any) {
+    if (column.type === Constant.NUMBER) {
+      return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev: any, cur: any) => {
+        // prev + +cur[column.value]
+        let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl;
+        if (cur.typeRoom === 'CC Twin room') {
+          return prev + +(cur[column.value] / 2);
+        } else {
+          return prev + +cur[column.value];
+        }
+      }, 0)
+    } else {
+      return '';
+    }
   }
 
   async download(fileRow: any) {

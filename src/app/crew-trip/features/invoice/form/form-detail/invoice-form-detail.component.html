@@ -203,10 +203,10 @@
           'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
           }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
               </td>
-              <td mat-footer-cell *matFooterCellDef="let element;let i = index" class="text-right">
+              <td mat-footer-cell *matFooterCellDef class="text-right">
                 @if (innerColumn.displayTotal) {
                   <span>
-                    {{ calTotal(innerColumn,getRowSpan(i,innerColumn,element)) | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+                    {{ calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
                       </span>
                 }
               </td>

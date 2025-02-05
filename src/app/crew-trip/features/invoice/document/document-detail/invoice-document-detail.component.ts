@@ -521,11 +521,33 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   override async save(): Promise<any> {
-    let removeNull = this.formGroupDetail.getRawValue().invoiceDocumentDtl.filter((s: any) => s.serviceCode);
-    this.formGroupDetail.patchValue({invoiceDocumentDtl: removeNull});
-    let res = await super.save();
-    if (res) {
-      this.goBack();
+    try {
+      let removeNull = this.formGroupDetail.getRawValue().invoiceDocumentDtl.filter((s: any) => s.serviceCode);
+      this.formGroupDetail.patchValue({invoiceDocumentDtl: removeNull});
+      this.formGroupDetail.markAllAsTouched();
+      if (this.formGroupDetail.invalid) {
+        this.findInvalidControls(this.formGroupDetail);
+        return;
+      }
+      const update = !!this.formGroupDetail.getRawValue().id;
+      await this.spinner.show();
+      let res;
+      if (update) {
+        res = await this.baseService.update(this.formGroupDetail.getRawValue());
+      } else {
+        res = await this.baseService.create(this.formGroupDetail.getRawValue());
+      }
+      this.baseService.showSuccess(
+        update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,
+      );
+        return res;
+
+    } catch (e: any) {
+      this.baseService.showError(
+        e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
+      );
+    } finally {
+      await this.spinner.hide();
     }
   }
 
