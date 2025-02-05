@@ -90,7 +90,7 @@ export class UsersService extends BaseService {
     this.http.get<string[]>(`${this.api}/${this.path}/${userId}/permissions`).subscribe(
       (permissions) => {
         this.permissionsSubject.next(permissions);
-        localStorage.setItem('permissions', JSON.stringify(permissions));
+        localStorage.setItem(STORAGE_KEY.PERMISSION, JSON.stringify(permissions));
       }
     );
   }
