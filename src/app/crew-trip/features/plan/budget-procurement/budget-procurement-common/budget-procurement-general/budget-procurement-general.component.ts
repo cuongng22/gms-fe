@@ -27,14 +27,18 @@ import { ValidationErrors } from '@iplab/ngx-file-upload';
 import moment from 'moment';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { el } from 'node_modules/@fullcalendar/core/internal-common';
+import { BudgetProcurementPriceComponent } from '../budget-procurement-price/budget-procurement-price.component';
 
 @Component({
   selector: 'app-budget-procurement-general',
   standalone: true,
-  imports: [MatCardModule, FormsModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+  imports: [
+    MatCardModule, FormsModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
-    NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent],
+    NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent,
+    BudgetProcurementPriceComponent
+  ],
   templateUrl: './budget-procurement-general.component.html',
   styleUrl: './budget-procurement-general.component.scss',
   providers: [DataTransformPipe]
@@ -43,8 +47,10 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   cdRef = inject(ChangeDetectorRef);
   private readonly destroyRef = inject(DestroyRef);
   private readonly flightMarketService = inject(FlightMarketService);
+  @ViewChild('budgetProcurementPrice', { static: false }) budgetProcurementPrice: BudgetProcurementPriceComponent;
 
-  category = input<string>(''); //International,Domestic  loại quốc tế hay quốc nội
+
+  category = input.required<CategoryEnum>(); //International,Domestic  loại quốc tế hay quốc nội
   formValueChanges = output<any>();
 
   categorys: any[] = categories.filter((item: any) => !!item.code).map((item: any) => item.code);
@@ -223,5 +229,14 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
       }
     }
     this._unitPriceSingleHotel = result.join('\n');
+  }
+
+  private _inputPrice: string = '';
+  get inputPrice(): string {
+    return this._inputPrice
+  }
+
+  set inputPrice(value: string) {
+    this._inputPrice = value;
   }
 }
