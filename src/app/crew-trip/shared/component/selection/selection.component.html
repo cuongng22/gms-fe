@@ -4,6 +4,9 @@
       {{ label }}
     </mat-label>
     <mat-select [formControl]="formControl" [required]="required">
+      @if(isFirstBlank){
+      <mat-option value="">{{labelFirst}}</mat-option>
+      }
       <mat-option *ngFor="let item of options" [value]="attrValue?item[attrValue]:item">
         {{ attrDisplay?item[attrDisplay]:item }}
       </mat-option>

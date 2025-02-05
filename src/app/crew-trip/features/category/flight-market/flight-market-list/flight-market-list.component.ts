@@ -49,6 +49,7 @@ import {
 import { CustomMatPaginatorIntl } from 'src/app/customizer-settings/paginator-intl.service';
 import { CarRentalDetailComponent } from '../car-rental-detail/car-rental-detail.component';
 import { HotelDetailComponent } from '../hotel-detail/hotel-detail.component';
+import { MatListModule } from '@angular/material/list';
 
 @Component({
   selector: 'app-flight-market-list',
@@ -75,6 +76,7 @@ import { HotelDetailComponent } from '../hotel-detail/hotel-detail.component';
     FileUploadModule,
     NgxTrimDirectiveModule,
     NgxControlError,
+    MatListModule
   ],
   providers: [
     DataTransformPipe,
@@ -92,7 +94,7 @@ export class FlightMarketListComponent
   override baseService = inject(FlightMarketService);
   private readonly destroyRef = inject(DestroyRef);
 
-  formBuilder = inject(FormBuilder);
+
 
   // danh sách thị trường
   markets: any[] = [];
@@ -124,7 +126,6 @@ export class FlightMarketListComponent
 
 	constructor(
 		public dataTransformPipe: DataTransformPipe,
-		public dialog: MatDialog,
 	) {
 	  super();
 	}
@@ -132,7 +133,8 @@ export class FlightMarketListComponent
 	override ngOnInit(): void {
 	  this.displayedColumns = [
 	    'stt',
-	    'airport',
+	    'airportCode',
+	    'airportName',
 	    'hotelName',
 	    'carRentalCompany',
 	    'country',

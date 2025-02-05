@@ -50,7 +50,7 @@ export class DialogUploadFileComponent extends CommonComponent implements OnInit
 
   readonly dialogRef = inject(MatDialogRef<DialogUploadFileComponent>);
   readonly data = inject<any>(MAT_DIALOG_DATA);
-  override baseService = inject(EmailTrackingService);
+  override baseService: BaseService = inject(EmailTrackingService);
 
 
   override formGroupDetail = this.formBuilder.group({

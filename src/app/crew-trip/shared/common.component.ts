@@ -8,7 +8,7 @@ import {
   OnInit,
   ViewChild,
 } from '@angular/core';
-import {FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup} from '@angular/forms';
 import {MatPaginator, PageEvent} from '@angular/material/paginator';
 import {MatTableDataSource} from '@angular/material/table';
 import {saveAs} from 'file-saver';
@@ -32,6 +32,7 @@ import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-
 import {environment} from 'src/environments/environment';
 import {ShowMessageComponent} from './component/show-message/show-message.component';
 import {ListResponse} from './models/common.model';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-common',
@@ -91,6 +92,9 @@ export class CommonComponent
     }
   }
 
+  readonly dialog = inject(MatDialog);
+  formBuilder = inject(FormBuilder);
+
   constructor() {
     super();
     this.toggleService.isSidebarToggled$.subscribe((isSidebarToggled) => {
@@ -136,21 +140,24 @@ export class CommonComponent
     this.search(null, true);
   }
 
-  async search<T = any>(body?: any, isNextPage?: boolean) {
+  async search<T>(body?: any, isNextPage?: boolean, fnSearch?: (bodySearch: any) => (ListResponse<T> | any)) {
     try {
       await this.spinner.show();
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
-      const res: ListResponse<T> = await this.baseService.search<
-        ListResponse<T>
-      >({
+      const buildBodySearch = {
         page: this.pageIndex,
         size: this.pageSize,
-        limit: this.pageSize,
-        ...(removeNullValues(body) ||
-          removeNullValues(this.formGroupSearch.value)),
-      });
+        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+      }
+      let res;
+      if (fnSearch) {
+        res = await fnSearch(buildBodySearch);
+      } else {
+        res = await this.baseService.search<ListResponse<T>>(buildBodySearch);
+      }
+      // const 
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;
@@ -167,7 +174,7 @@ export class CommonComponent
           }));
           this.totalElement = res.data.totalElements;
         }
-        // return res.data.content;
+        return res
       }
     } catch (e: any) {
       this.baseService.showError(
@@ -299,13 +306,10 @@ export class CommonComponent
     saveAs(blob, filename);
   }
 
-  async exportFile(body?: any, filename?: string) {
+  async exportFile(body?: any, filename?: string, sourcePath?: string) {
     try {
       await this.spinner.show();
-      const res = await this.baseService.exportData({
-        ...(removeNullValues(body) ||
-          removeNullValues(this.formGroupSearch.value)),
-      });
+      const res = await this.baseService.exportData({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) }, sourcePath);
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       this.baseService.showError(e.error?.error?.code ?? MESSAGE.ERROR);

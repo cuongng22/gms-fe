@@ -47,7 +47,6 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(PlanBudgetProcurementService);
 
-  formBuilder = inject(FormBuilder);
   versions = model<any[]>([]);
   statuses = Statuses;
   years = model<any[]>([]);
@@ -71,7 +70,7 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
 
   showDialogReject = false;
 
-  constructor(public dialog: MatDialog) {
+  constructor() {
     super();
   }
 
@@ -200,7 +199,6 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
   ],
 })
 export class DialogBudgetProcurementDetail extends CommonComponent {
-  formBuilder = inject(FormBuilder);
   override baseService = inject(PlanBudgetProcurementService);
 
   override formGroupDetail = this.formBuilder.group({

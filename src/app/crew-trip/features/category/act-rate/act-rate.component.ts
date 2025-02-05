@@ -48,7 +48,6 @@ import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 
 export class ActRateComponent extends CommonComponent implements OnInit {
   override baseService = inject(ExchangeRateService);
-  formBuilder = inject(FormBuilder);
   showDialogHistory = false;
   itemDetail: any;
   listHistoryData = [];

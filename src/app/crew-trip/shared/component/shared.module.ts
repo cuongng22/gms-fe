@@ -4,6 +4,7 @@ import { InputComponent } from 'src/app/crew-trip/shared/component/input/input.c
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 import { SelectionSuggestComponent } from './selection-suggest/selection-suggest.component';
 import { DatepickerYearMonthComponent } from './datepicker-year-month/datepicker-year-month.component';
+import { DatepickerComponent } from './datepicker/datepicker.component';
 
 @NgModule({
   declarations: [],
@@ -18,12 +19,12 @@ import { DatepickerYearMonthComponent } from './datepicker-year-month/datepicker
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: [InputComponent, SelectionComponent, SelectionSuggestComponent, DatepickerYearMonthComponent],
+      useExisting: [InputComponent, SelectionComponent, SelectionSuggestComponent, DatepickerYearMonthComponent, DatepickerComponent],
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: [InputComponent, SelectionComponent, SelectionSuggestComponent, DatepickerYearMonthComponent],
+      useExisting: [InputComponent, SelectionComponent, SelectionSuggestComponent, DatepickerYearMonthComponent, DatepickerComponent],
       multi: true,
     },
   ]

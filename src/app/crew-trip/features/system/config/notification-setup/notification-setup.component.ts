@@ -13,5 +13,4 @@ import {NotificationSetupService} from 'src/app/crew-trip/core/services/notifica
 })
 export class NotificationSetupComponent extends CommonComponent implements OnInit {
   override baseService = inject(NotificationSetupService);
-  formBuilder = inject(FormBuilder);
 }
