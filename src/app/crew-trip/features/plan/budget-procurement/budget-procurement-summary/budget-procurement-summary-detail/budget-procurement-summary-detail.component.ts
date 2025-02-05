@@ -136,6 +136,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       this.budgetProcurementGeneral.formGroupDetail.controls.airportCode.disable();
       this.budgetProcurementGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
       this.budgetProcurementGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
+      this.budgetProcurementGeneral.inputPrice = this.dataDetail?.inputPrice;
       this.budgetProcurementGeneral.setDefaultValueGeneral();
       this.setDataDetail();
       this.setPanelState();
@@ -227,6 +228,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       let planProcurementCarentals: any[] = [];
       let planBudgetWetLease: any[] = [];
       let planProcumentWetLease: any[] = [];
+      let inputPrice: string = '';
 
       if (this.category() === CategoryEnum.DOMESTIC) {
         planFlightRates = [...this.cleanData(this.domesticFlightRate.dataSource.data ?? [])];
@@ -247,6 +249,9 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
         planProcurementHotels = [...this.cleanData(this.internationalProcurementHotel.dataSource.data ?? [])];
         planProcurementCarentals = [...this.cleanData(this.internationalProcurementCarRental.dataSource.data ?? [])];
       }
+      if (this.budgetProcurementGeneral.budgetProcurementPrice?.dataSource.data) {
+        inputPrice = JSON.stringify(this.budgetProcurementGeneral.budgetProcurementPrice?.dataSource.data);
+      }
 
       const data = {
         ...this.dataDetail,
@@ -260,7 +265,8 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
         planProcurementCarentals: planProcurementCarentals,
         planBudgetWetLease: planBudgetWetLease,
         planProcumentWetLease: planProcumentWetLease,
-        ...this.budgetProcurementCostAnalysis.formGroupDetail.value
+        ...this.budgetProcurementCostAnalysis.formGroupDetail.value,
+        inputPrice: inputPrice
       };
       console.log('data: ', data);
       const response = await this.baseService.save(data);
@@ -366,6 +372,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     // set đơn giá phòng đơn, đơn giá phòng đôi
     this.budgetProcurementGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
     this.budgetProcurementGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
+    this.budgetProcurementGeneral.inputPrice = this.dataDetail?.inputPrice;
     this.budgetProcurementGeneral.cdRef.detectChanges()
 
     this.planFlightRatesData = [...this.dataDetail?.planFlightRates ?? []];
