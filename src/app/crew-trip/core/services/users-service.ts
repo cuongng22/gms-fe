@@ -86,11 +86,14 @@ export class UsersService extends BaseService {
     return !!localStorage.getItem(STORAGE_KEY.USER_INFO); // Trả về true nếu có token
   }
 
-  loadUserPermissions(userId: string) {
-    this.http.get<string[]>(`${this.api}/${this.path}/${userId}/permissions`).subscribe(
-      (permissions) => {
-        this.permissionsSubject.next(permissions);
-        localStorage.setItem(STORAGE_KEY.PERMISSION, JSON.stringify(permissions));
+  async loadUserPermissions(email: string) {
+    this.http.get<any>(`${this.api}/${this.path}/user-roles?email=${email}`).subscribe(
+      (data) => {
+        if (data && data?.data && data?.data?.roles) {
+          let permissions = data?.data?.roles;
+          this.permissionsSubject.next(permissions);
+          localStorage.setItem(STORAGE_KEY.PERMISSION, JSON.stringify(permissions));
+        }
       }
     );
   }
