@@ -500,7 +500,6 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
         "no": "4"
       }
     ]
-  displayedColumns11: any[any] = ["fullname", "roomNo"];
 
   constructor() {
     super();

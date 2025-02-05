@@ -133,7 +133,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     {label: $localize`Number Of Vehicle`, value: "numberOfVehicle", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Price`, value: "price", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Remark`, value: "remark"},
-    {label: $localize`Room No`, value: "roomNo", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Room No`, value: "roomNo", rowspan: "2"},
     {label: $localize`Service Tax Cc Charge`, value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Service Tax Fc Charge`, value: "serviceTaxFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Single Room Cc`, value: "singleRoomCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},

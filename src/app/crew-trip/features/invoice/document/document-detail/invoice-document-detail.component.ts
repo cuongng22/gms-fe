@@ -175,7 +175,6 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }, {label: "Remark", value: "remark", type: Constant.NUMBER, rowspan: "2"}, {
     label: "Room No",
     value: "roomNo",
-    type: Constant.NUMBER,
     rowspan: "2"
   }, {label: "Service Tax Cc Charge", value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2"}, {
     label: "Service Tax Fc Charge",
