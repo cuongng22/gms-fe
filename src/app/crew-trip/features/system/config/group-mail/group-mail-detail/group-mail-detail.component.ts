@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common';
-import { HttpStatusCode } from '@angular/common/http';
+import {CommonModule} from '@angular/common';
+import {HttpStatusCode} from '@angular/common/http';
 import {
   Component,
   ElementRef,
@@ -17,22 +17,22 @@ import {
   ValidationErrors,
   Validators,
 } from '@angular/forms';
-import { MatAutocompleteModule } from '@angular/material/autocomplete';
-import { MatButtonModule } from '@angular/material/button';
-import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatInputModule } from '@angular/material/input';
-import { MatPaginatorModule } from '@angular/material/paginator';
-import { MatSelectModule } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
-import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { BehaviorSubject } from 'rxjs';
-import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
-import { GroupMailService } from 'src/app/crew-trip/core/services/group-mail.service';
-import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { InputComponent } from 'src/app/crew-trip/shared/component/input/input.component';
+import {MatAutocompleteModule} from '@angular/material/autocomplete';
+import {MatButtonModule} from '@angular/material/button';
+import {MatCardModule} from '@angular/material/card';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatDatepickerModule} from '@angular/material/datepicker';
+import {MAT_DIALOG_DATA, MatDialogRef} from '@angular/material/dialog';
+import {MatInputModule} from '@angular/material/input';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatSelectModule} from '@angular/material/select';
+import {MatTableModule} from '@angular/material/table';
+import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
+import {BehaviorSubject} from 'rxjs';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
+import {GroupMailService} from 'src/app/crew-trip/core/services/group-mail.service';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
 import {
   SelectionSuggestComponent
 } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
@@ -71,7 +71,7 @@ interface EmailObj {
 export class GroupMailDetailComponent extends CommonComponent implements OnInit {
   override baseService = inject(GroupMailService);
   flightMarketSv = inject(FlightMarketService);
-  @ViewChild('marketCode', { static: true }) marketCode!: ElementRef;
+  @ViewChild('marketCode', {static: true}) marketCode!: ElementRef;
   markets: any[] = [];
   filteredOptionsMarket: BehaviorSubject<string[]> = new BehaviorSubject<
     string[]
@@ -136,7 +136,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
 
   override async ngOnInit(): Promise<void> {
     await this.flightMarketSv
-      .search({ option: 1, status: 'Operational' })
+      .search({option: 1, status: 'Operational'})
       .then((res) => {
         this.markets = res.data;
         if (this.formGroupDetail.value.marketCode) {
@@ -161,7 +161,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   }
 
   addEmailRow(): void {
-    this.emailList.push({ email: '', isEditing: true });
+    this.emailList.push({email: '', isEditing: true});
     this.emailList = [...this.emailList];
   }
 
@@ -183,14 +183,16 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   saveEmail(index: number): void {
     const emailValue = this.emailList[index]?.email.toLowerCase();
     if (!emailValue) return;
-    const exist = this.emailListCheck.some(emailObj => emailObj.email.toLowerCase() === emailValue);
+    const exist = this.emailListCheck.some((emailObj, i) =>
+      emailObj.email.toLowerCase() === emailValue && i !== index
+    );
     if (exist) {
       this.emailList[index].isDuplicate = true;
       this.emailList[index].isEditing = true;
     } else {
-      this.emailListCheck.push({ ...this.emailList[index] });
       this.emailList[index].isEmpty = !emailValue;
       this.emailList[index].isEditing = false;
+      this.emailListCheck = this.emailList;
     }
   }
 
@@ -211,7 +213,7 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
       this.baseService.showError('List email is required!');
       return;
     }
-    this.formGroupDetail.patchValue({ groupEmail: this.emailListStr });
+    this.formGroupDetail.patchValue({groupEmail: this.emailListStr});
     this.formGroupDetail.markAllAsTouched();
     this.formGroupDetail.updateValueAndValidity();
     if (this.formGroupDetail.invalid) {
@@ -240,6 +242,6 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
   }
 
   existCodeValidator(control: AbstractControl): ValidationErrors | null {
-    return this.existCode ? { existCode: true } : null;
+    return this.existCode ? {existCode: true} : null;
   }
 }
