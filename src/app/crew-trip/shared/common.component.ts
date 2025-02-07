@@ -149,7 +149,7 @@ export class CommonComponent
       const buildBodySearch = {
         page: this.pageIndex,
         size: this.pageSize,
-        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch?.value)
       }
       let res;
       if (fnSearch) {
@@ -157,7 +157,7 @@ export class CommonComponent
       } else {
         res = await this.baseService.search<ListResponse<T>>(buildBodySearch);
       }
-      // const 
+      // const
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;

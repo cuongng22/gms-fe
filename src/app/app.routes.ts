@@ -56,6 +56,7 @@ import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.c
 import { DailyFlightSchedulesComponent } from './crew-trip/features/flight-schedules/daily-flight-schedules/daily-flight-schedules.component';
 import { OtherFlightScheduleComponent } from './crew-trip/features/flight-schedules/daily-flight-schedules/monthly-flight-schedule/other-flight-schedule/other-flight-schedule.component';
 import { EmailTrackingComponent } from './crew-trip/features/flight-schedules/email-tracking/email-tracking.component';
+import {InvoiceActualCostTabComponent} from "src/app/crew-trip/features/invoice/actual-cost/invoice-actual-cost-tab.component";
 
 
 export const routes: Routes = [
@@ -176,6 +177,7 @@ export const routes: Routes = [
 						path: 'invoice-document-tab',
 						component: InvoiceDocumentTabComponent,
 					},
+          { path: 'invoice-actual-cost-tab', component: InvoiceActualCostTabComponent },
 				],
 			},
 			{
