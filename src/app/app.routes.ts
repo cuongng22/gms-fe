@@ -173,10 +173,7 @@ export const routes: Routes = [
 				path: 'invoice',
 				children: [
 					{ path: 'invoice-form-tab', component: InvoiceFormTabComponent },
-					{
-						path: 'invoice-document-tab',
-						component: InvoiceDocumentTabComponent,
-					},
+          { path: 'invoice-document-tab', component: InvoiceDocumentTabComponent,},
           { path: 'invoice-actual-cost-tab', component: InvoiceActualCostTabComponent },
 				],
 			},
