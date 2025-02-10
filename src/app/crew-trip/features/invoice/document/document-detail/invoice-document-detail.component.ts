@@ -78,7 +78,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   @Input() contractObj: any;
   @Output() nextStepEmit = new EventEmitter<any>();
   @Output() backStepEmit = new EventEmitter<any>();
-
+  @Input() dialogMode: boolean = false;
+  @Output() dialogModeEmit = new EventEmitter<any>();
   firstLoad: boolean = true;
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   @Input() formType: any;

@@ -85,7 +85,8 @@
     </mat-card-header>
     <mat-card-content>
       <div class="table-responsive">
-        <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true">
+        <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true"
+               style="border-collapse: separate;">
           <ng-container matColumnDef="stt">
             <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
             <td *matCellDef="let element; let i = dataIndex" class="text-center"
@@ -120,13 +121,40 @@
             </th>
             <td *matCellDef="let element;let i = index" mat-cell>
               <div class="action-buttons d-flex align-items-center justify-content-end">
-                <a (click)="nextStep(element.id,true)" class="text-secondary" mat-button type="button">
+                <a [matMenuTriggerFor]="listAnnex" class="text-secondary" mat-button type="button">
                   <i class="material-symbols-outlined" i18n-title title="Detail">
                     visibility
                   </i>
                 </a>
               </div>
             </td>
+            <mat-menu #listAnnex="matMenu" xPosition="before">
+              <div class="basic-table table-responsive">
+                <table [dataSource]="listInvoice" class="table-light" mat-table>
+                  <ng-container matColumnDef="stt">
+                    <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
+                    <td *matCellDef="let element; let i = index" mat-cell>{{ i + 1 }}</td>
+                  </ng-container>
+                  <ng-container matColumnDef="invoiceNumber">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Invoice Number</th>
+                    <td *matCellDef="let element" mat-cell>
+                      <a (click)="showDocumentHdr(element.invoiceNumber||-1)"
+                         style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
+                        {{ element.invoiceNumber }}
+                      </a>
+                    </td>
+                  </ng-container>
+                  <ng-container matColumnDef="invoiceDate">
+                    <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Invoice Date</th>
+                    <td *matCellDef="let element" mat-cell>
+                      {{ element.invoiceDate }}
+                    </td>
+                  </ng-container>
+                  <tr *matHeaderRowDef="['stt','invoiceNumber','invoiceDate']" mat-header-row></tr>
+                  <tr *matRowDef="let row; columns: ['stt','invoiceNumber','invoiceDate'];" mat-row></tr>
+                </table>
+              </div>
+            </mat-menu>
           </ng-container>
           <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
           <tr *matRowDef="let row; columns: displayedColumns;" mat-row>
@@ -148,3 +176,29 @@
     </mat-card-content>
   </mat-card>
 </ng-container>
+<div [class.active]="isShowDocumentHdr" class="add-new-popup">
+  <div class="popup-dialog popup-dialog-info" style="margin-top: 80px">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
+      <mat-card-header>
+        <mat-card-title>
+          <h5 class="mb-0">
+            <span i18n>Detailed Statement</span>
+          </h5>
+        </mat-card-title>
+        <mat-card-content>
+          <div class="btn-box text-right mb-20">
+            <button (click)="isShowDocumentHdr=false;" class="close-btn  min-with-100 mlr-5" mat-button
+                    type="button">
+              <i class="material-symbols-outlined">
+                close
+              </i>
+              <span i18n>Close</span>
+            </button>
+          </div>
+          <app-invoice-document-detail (dialogModeEmit)="showDocumentHdr($event)" *ngIf="documentHdrId" [dialogMode]=true [id]="documentHdrId"
+                                       [readMode]="true"></app-invoice-document-detail>
+        </mat-card-content>
+      </mat-card-header>
+    </mat-card>
+  </div>
+</div>

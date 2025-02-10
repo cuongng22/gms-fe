@@ -91,7 +91,8 @@
     </mat-card-header>
     <mat-card-content>
       <div class="table-responsive">
-        <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true">
+        <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true"
+               style="border-collapse: separate;">
           <ng-container matColumnDef="stt">
             <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
             <td *matCellDef="let element; let i = dataIndex" class="text-center"

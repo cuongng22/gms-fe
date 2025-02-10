@@ -32,12 +32,13 @@ import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {InvoiceActualCostService} from "src/app/crew-trip/core/services/invoice-actual-cost-service";
 import moment from "moment";
+import {InvoiceDocumentDetailComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-detail.component";
 
 
 @Component({
   selector: 'app-invoice-actual-cost',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, InvoiceDocumentDetailComponent],
   templateUrl: './invoice-actual-cost.component.html',
   styleUrl: './invoice-actual-cost.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -64,6 +65,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   listHotel = [];
   listVehicle = [];
   listAirportCode = [];
+  listInvoice : any[];
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
   _displayedColumns: {
@@ -95,6 +97,8 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   showDialogFile = false;
 
   range: FormGroup
+  isShowDocumentHdr: boolean = false;
+  documentHdrId: any;
 
   constructor() {
     super();
@@ -131,6 +135,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
         this.displayedColumns = ['stt', ...this._displayedColumns.filter(s => !['singleRoomFc', 'singleRoomCc', 'twinRoomCc'].includes(s.value)).map(s => s.value), 'action'];
 
       }
+      this.listInvoice = [{invoiceNumber:1123213}]
     });
   }
 
@@ -229,6 +234,16 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
         templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc nội.xlsx',
         templateNameLabel: 'report-transport-international-template.xlsx'
       })
+    }
+  }
+
+  showDocumentHdr(documentHdrId: any) {
+    documentHdrId = 42;
+    if (+documentHdrId > 0) {
+      this.documentHdrId = documentHdrId;
+      this.isShowDocumentHdr = true;
+    } else if (+documentHdrId < 0) {
+      this.baseService.showError("Không tìm thấy hóa đơn");
     }
   }
 }

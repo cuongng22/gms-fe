@@ -1,3 +1,4 @@
+@if (!dialogMode) {
 <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
   <div class="d-md-flex align-items-center">
     <h5 class="mb-0 d-inline ml-10">
@@ -16,6 +17,7 @@
     </li>
   </ol>
 </div>
+
 <div (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'" class="w-100 text-end mb-10">
   <button (click)="goBack()" class="step-2-menu-button btn-slot-3" extended i18n mat-fab>
     <i class="material-symbols-outlined">
@@ -42,6 +44,7 @@
     Chốt hóa đơn
   </button>
 </div>
+}
 <mat-accordion multi>
   <mat-expansion-panel [expanded]="expandList.has('tab1')">
     <mat-expansion-panel-header i18n>
