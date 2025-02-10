@@ -31,6 +31,7 @@ import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {InvoiceActualCostService} from "src/app/crew-trip/core/services/invoice-actual-cost-service";
+import moment from "moment";
 
 
 @Component({
@@ -74,19 +75,20 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
     {label: $localize`Period Occurrence`, value: 'periodOccurrence', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Currency`, value: 'currency'},
     {label: $localize`Exchange Rate`, value: 'exchangeRate'},
-    {label: $localize`singleRoomFc`, value: 'singleRoomFc', type: Constant.NUMBER},
-    {label: $localize`singleRoomCc`, value: 'singleRoomCc', type: Constant.NUMBER},
-    {label: $localize`TwinRoomCc`, value: 'twinRoomCc', type: Constant.NUMBER},
-    {label: $localize`totalAmount`, value: 'totalAmount', type: Constant.NUMBER},
-    {label: $localize`actualPayment`, value: 'actualPayment', type: Constant.NUMBER},
-    {label: $localize`actualPaymentFc`, value: 'actualPaymentFc', type: Constant.NUMBER},
-    {label: $localize`actualPaymentVnd`, value: 'actualPaymentVnd', type: Constant.NUMBER},
-    {label: $localize`differenceFc`, value: 'differenceFc', type: Constant.NUMBER},
-    {label: $localize`differenceVnd`, value: 'differenceVnd', type: Constant.NUMBER},
-    {label: $localize`taxRefundFc`, value: 'taxRefundFc', type: Constant.NUMBER},
-    {label: $localize`taxRefundVnd`, value: 'taxRefundVnd', type: Constant.NUMBER},
-    {label: $localize`budgetAmount`, value: 'budgetAmount', type: Constant.NUMBER},
-    {label: $localize`remainingAmount`, value: 'remainingAmount', type: Constant.NUMBER},
+    {label: $localize`Number Trip`, value: 'numberTrip', type: Constant.NUMBER},
+    {label: $localize`Single Room Fc`, value: 'singleRoomFc', type: Constant.NUMBER},
+    {label: $localize`Single Room Cc`, value: 'singleRoomCc', type: Constant.NUMBER},
+    {label: $localize`Twin Room Cc`, value: 'twinRoomCc', type: Constant.NUMBER},
+    {label: $localize`Total Amount`, value: 'totalAmount', type: Constant.NUMBER},
+    {label: $localize`Actual Payment`, value: 'actualPayment', type: Constant.NUMBER},
+    {label: $localize`Actual Payment (Fc)`, value: 'actualPaymentFc', type: Constant.NUMBER},
+    {label: $localize`Actual Payment (Vnd)`, value: 'actualPaymentVnd', type: Constant.NUMBER},
+    {label: $localize`Difference (Fc)`, value: 'differenceFc', type: Constant.NUMBER},
+    {label: $localize`Difference (Vnd)`, value: 'differenceVnd', type: Constant.NUMBER},
+    {label: $localize`Tax Refund (Fc)`, value: 'taxRefundFc', type: Constant.NUMBER},
+    {label: $localize`Tax Refund (Vnd)`, value: 'taxRefundVnd', type: Constant.NUMBER},
+    {label: $localize`Budget Amount`, value: 'budgetAmount', type: Constant.NUMBER},
+    {label: $localize`Remaining Amount`, value: 'remainingAmount', type: Constant.NUMBER},
   ]
   @Input() contractId: any;
   formGroupFile!: FormGroup;
@@ -117,9 +119,13 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
     this.formGroupFile.patchValue({partnerType: this.partnerType});
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
     await Promise.all([this.loadListFlightMarket(), this.search(),]).then(() => {
+      if (this.partnerType == 'HOTEL') {
+        this.displayedColumns = ['stt', ...this._displayedColumns.filter(s=> !['numberTrip'].includes(s.value)).map(s => s.value), 'action'];
+      } else if (this.partnerType == 'TRANSPORTATION') {
+        this.displayedColumns = ['stt', ...this._displayedColumns.filter(s=> !['singleRoomFc','singleRoomCc','twinRoomCc'].includes(s.value)).map(s => s.value), 'action'];
 
+      }
     });
-    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'periodDate', 'action'];
   }
 
   async nextStep(id?: any, readMode?: any, action?: any) {
@@ -142,6 +148,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
         listAirportCode: this.formGroupSearch.getRawValue().airportCode,
         partnerType: this.partnerType
       });
+
       await this.spinner.show();
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
