@@ -30,6 +30,7 @@ import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/for
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
+import moment from "moment";
 
 
 @Component({
@@ -556,11 +557,14 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
         this.pageIndex = Constant.PAGE;
       }
       let res;
+      let req = body || this.formGroupSearch.getRawValue();
+      req.periodFrom = moment.isMoment(req.periodFrom) ? req.periodFrom.format(Constant.DATE_REQUEST_YYYYMMDD) : null;
+      req.periodTo = moment.isMoment(req.periodTo) ? req.periodTo.format(Constant.DATE_REQUEST_YYYYMMDD) : null;
       this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'periodDate', 'action'];
       res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,
-        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+        limit: this.pageSize, ...removeNullValues(req)
       });
 
       if (res) {
