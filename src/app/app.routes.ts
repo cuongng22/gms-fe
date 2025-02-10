@@ -56,6 +56,7 @@ import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.c
 import { DailyFlightSchedulesComponent } from './crew-trip/features/flight-schedules/daily-flight-schedules/daily-flight-schedules.component';
 import { OtherFlightScheduleComponent } from './crew-trip/features/flight-schedules/daily-flight-schedules/monthly-flight-schedule/other-flight-schedule/other-flight-schedule.component';
 import { EmailTrackingComponent } from './crew-trip/features/flight-schedules/email-tracking/email-tracking.component';
+import {NotificationComponent} from "src/app/crew-trip/features/system/config/notification/notification.component";
 import {InvoiceActualCostTabComponent} from "src/app/crew-trip/features/invoice/actual-cost/invoice-actual-cost-tab.component";
 
 
@@ -87,6 +88,7 @@ export const routes: Routes = [
 					{ path: 'group-mail', component: GroupMailComponent },
 					{ path: 'information-plane', component: AircraftDataComponent },
 					{ path: 'email-supplier', component: EmailSupplierComponent },
+          { path: 'noti-warning', component: NotificationComponent },
 				],
 			},
 			{
