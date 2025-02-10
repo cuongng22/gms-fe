@@ -157,7 +157,7 @@ export class CommonComponent
       } else {
         res = await this.baseService.search<ListResponse<T>>(buildBodySearch);
       }
-      // const 
+      // const
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;
