@@ -94,8 +94,14 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   formGroupFile!: FormGroup;
   showDialogFile = false;
 
+  range: FormGroup
+
   constructor() {
     super();
+    this.range = this.fb.group({
+      start: [],
+      end: [],
+    })
     this.formGroupSearch = this.fb.group({
       searchString: [],
       ctype: [],
@@ -120,9 +126,9 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
     await Promise.all([this.loadListFlightMarket(), this.search(),]).then(() => {
       if (this.partnerType == 'HOTEL') {
-        this.displayedColumns = ['stt', ...this._displayedColumns.filter(s=> !['numberTrip'].includes(s.value)).map(s => s.value), 'action'];
+        this.displayedColumns = ['stt', ...this._displayedColumns.filter(s => !['numberTrip'].includes(s.value)).map(s => s.value), 'action'];
       } else if (this.partnerType == 'TRANSPORTATION') {
-        this.displayedColumns = ['stt', ...this._displayedColumns.filter(s=> !['singleRoomFc','singleRoomCc','twinRoomCc'].includes(s.value)).map(s => s.value), 'action'];
+        this.displayedColumns = ['stt', ...this._displayedColumns.filter(s => !['singleRoomFc', 'singleRoomCc', 'twinRoomCc'].includes(s.value)).map(s => s.value), 'action'];
 
       }
     });
@@ -143,6 +149,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   }
 
   override async search<T>(body?: any, isNextPage?: boolean) {
+    console.log(this.formGroupSearch)
     try {
       this.formGroupSearch.patchValue({
         listAirportCode: this.formGroupSearch.getRawValue().airportCode,
@@ -154,11 +161,13 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
         this.pageIndex = Constant.PAGE;
       }
       let res;
-      this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'periodDate', 'action'];
+      let req = body || this.formGroupSearch.getRawValue();
+      req.periodFrom = moment.isMoment(req.periodFrom) ? req.periodFrom.format(Constant.DATE_REQUEST_YYYYMMDD) : null;
+      req.periodTo = moment.isMoment(req.periodTo) ? req.periodTo.format(Constant.DATE_REQUEST_YYYYMMDD) : null;
       res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,
-        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+        limit: this.pageSize, ...removeNullValues(req)
       });
 
       if (res) {
