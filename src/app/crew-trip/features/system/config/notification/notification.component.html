@@ -102,16 +102,11 @@
               </th>
               <td mat-cell *matCellDef="let element">
                 <div class="action-buttons d-flex align-items-center justify-content-end">
-                  <!--                  <a type="button" mat-button (click)="grMailDetail(element.id,'view')">-->
-                  <!--                    <i class="material-symbols-outlined" title="Edit" i18n-title="@@edit">-->
-                  <!--                      visibility-->
-                  <!--                    </i>-->
-                  <!--                  </a>-->
-<!--                  <a type="button" mat-button (click)="grMailDetail(element.id,'edit')">-->
-<!--                    <i class="material-symbols-outlined text-warning" title="Edit" i18n-title="@@edit">-->
-<!--                      edit-->
-<!--                    </i>-->
-<!--                  </a>-->
+                  <a type="button" mat-button (click)="showDialogDetail(element.id)">
+                    <i class="material-symbols-outlined text-warning" title="Edit" i18n-title="@@edit">
+                      edit
+                    </i>
+                  </a>
                   <a type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
                      (click)="showConfirmDelete(element.id)">
                     <i class="material-symbols-outlined text-danger">
@@ -143,7 +138,7 @@
       [class.active]="showDialogCreate"
       class="add-new-popup"
     >
-      <div class="popup-dialog" style="min-width: 600px;">
+      <div class="popup-dialog" style="min-width: 500px;">
         <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
           <mat-card-header>
             <mat-card-title>
@@ -167,64 +162,47 @@
           <mat-card-content>
             <form [formGroup]="formGroupDetail" autocomplete="off">
               <div class="row">
-                <div class="col-md-8">
-                  <div class="form-group mb-20" sizeInput="md">
+                  <div class="form-group mb-20" sizeInput="sm">
                     <mat-form-field>
-                      <mat-label i18n="@@type">
-                        Type
-                      </mat-label>
-                      <mat-select formControlName="type">
-                        <mat-option value="ESTIMATED_SCHEDULE" i18n>
-                          Estimated schedule
-                        </mat-option>
-                        <mat-option value="INVOICE_REMINDER" i18n="@@confirmation">Invoice reminder</mat-option>
-                        <mat-option value="CHANGED_SCHEDULE" i18n>
-                          Changed schedule
-                        </mat-option>
-                        <mat-option value="INVOICE_CONFIRMATION" i18n>
-                          Invoice confirmation
+                      <mat-label>Type</mat-label>
+                      <mat-select formControlName="type" required>
+                        <mat-option [value]="null">Choose type</mat-option>
+                        <mat-option *ngFor="let type of notiConfigType" [value]="type.code">
+                          {{ type.label }}
                         </mat-option>
                       </mat-select>
-                      @if (formGroupDetail.controls.type.hasError('required') &&
-                      formGroupDetail.controls.type.touched) {
-                        <mat-error i18n="@@fullNameRequired">Email type {{ MESSAGE.REQUIRED }}</mat-error>
+                      @if (!!formGroupDetail.controls['type'].hasError('required')) {
+                        <mat-error><span i18n>Type</span><span i18n> is required</span></mat-error>
                       }
                     </mat-form-field>
                   </div>
-                </div>
-<!--                <div class="col-sm-4 col-md-4">-->
-<!--                  <div class="form-group mb-20" sizeInput="md">-->
-<!--                    <mat-form-field>-->
-<!--                      <mat-label>-->
-<!--                        Airport type-->
-<!--                      </mat-label>-->
-<!--                      <mat-select formControlName="marketClass">-->
-<!--                        <mat-option value="DOMESTIC" i18n>-->
-<!--                          Domestic-->
-<!--                        </mat-option>-->
-<!--                        <mat-option value="INTERNATIONAL" i18n>-->
-<!--                          International-->
-<!--                        </mat-option>-->
-<!--                      </mat-select>-->
-<!--                      @if (formGroupDetail.controls.marketClass.hasError('required') &&-->
-<!--                      formGroupDetail.controls.marketClass.touched) {-->
-<!--                        <mat-error i18n="@@fullNameRequired"> Airport type {{ MESSAGE.REQUIRED }}</mat-error>-->
-<!--                      }-->
-<!--                    </mat-form-field>-->
-<!--                  </div>-->
-<!--                </div>-->
-                <div class="col-md-8">
                   <div class="form-group mb-20" sizeInput="md">
-                    <app-select-multiple size="sm" label="Subjects of application"
-                                         [required]="true" [options]="targetPersonals" attrValue="code"
-                                         attrDisplay="label"
-                                         [readonly]="formGroupDetail.get('targetObject')?.disabled ?? false"
+                    <mat-form-field>
+                      <mat-label>
+                        Notification channel
+                      </mat-label>
+                      <mat-select formControlName="notiChannel" required>
+                        <mat-option value="EMAIL" i18n>
+                          Email
+                        </mat-option>
+                        <mat-option value="NOTIFICATION" i18n>
+                          Notification
+                        </mat-option>
+                      </mat-select>
+                      @if (formGroupDetail.controls['notiChannel'].hasError('required') &&
+                      formGroupDetail.controls['notiChannel'].touched) {
+                        <mat-error i18n="@@fullNameRequired"> Notification channel {{ MESSAGE.REQUIRED }}</mat-error>
+                      }
+                    </mat-form-field>
+                  </div>
+                  <div class="form-group mb-20" sizeInput="sm">
+                    <app-select-multiple size="sm" label="User"
+                                         [required]="true" [options]="users"
+                                         [readonly]="formGroupDetail.get('users')?.disabled ?? false"
                                          [isSearch]="false"
-                                         formControlName="targetObject">
+                                         formControlName="users">
                     </app-select-multiple>
                   </div>
-                </div>
-                <div class="col-md-8">
                   <mat-form-field>
                     <mat-label i18n>Remark</mat-label>
                     <textarea formControlName="note" matInput></textarea>
@@ -234,7 +212,6 @@
                     }
                   </mat-form-field>
                   <mat-checkbox class="mt-10" formControlName="active" i18n>Active</mat-checkbox>
-                </div>
               </div>
             </form>
             <div class="btn-box">

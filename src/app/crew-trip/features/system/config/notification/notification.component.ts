@@ -43,6 +43,9 @@ import {RouterModule} from "@angular/router";
 import {MatCheckbox} from "@angular/material/checkbox";
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {SelectMultipleComponent} from "src/app/crew-trip/shared/component/select-multiple/select-multiple.component";
+import {SelectOptions} from "src/app/crew-trip/shared/select-option";
+import {UsersService} from "src/app/crew-trip/core/services/users-service";
+import {MESSAGE} from "src/app/crew-trip/shared/utils/constant";
 
 @Component({
   selector: 'app-notification',
@@ -77,9 +80,12 @@ import {SelectMultipleComponent} from "src/app/crew-trip/shared/component/select
 })
 export class NotificationComponent extends CommonComponent implements OnInit {
   override baseService = inject(NotificationConfigService);
+  userService =  inject(UsersService);
   activeTab = 0;
   isView = false;
-  targetPersonals = [];
+  notiConfigType = SelectOptions.NOTI_CONFIG_TYPE;
+
+  users = [];
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     {label: $localize`:@@name:Type`, value: 'type'},
     {label: $localize`:@@airportCode:Notification channel`, value: 'notiChannel'},
@@ -90,6 +96,15 @@ export class NotificationComponent extends CommonComponent implements OnInit {
 
   constructor(public override dialog: MatDialog) {
     super();
+    this.formGroupDetail = this.formBuilder.group({
+      id: [],
+      type: ['', Validators.required],
+      notiChannel: ['', Validators.required],
+      users: ['', Validators.required],
+      note: [''],
+      active: [true],
+    });
+    this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
 
   override formGroupSearch = this.formBuilder.group({
@@ -97,26 +112,24 @@ export class NotificationComponent extends CommonComponent implements OnInit {
     active: ['']
   });
 
-
-  override formGroupDetail = this.formBuilder.group({
-    id: [],
-    type: ['', Validators.required],
-    notiChannel: ['', Validators.required],
-    users: ['', Validators.required],
-    note: [''],
-    active: [''],
-  });
-
-  override ngOnInit(): void {
-    console.log("aaaaaaaa")
+  override async  ngOnInit() {
+    super.ngOnInit();
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
-    console.log("aaaa", this.displayedColumns )
-    this.search();
-
+    await Promise.all([
+      this.getListUser(),
+      this.search(),
+    ]).then(() => {
+    });
   }
 
   onTabChange(event: MatTabChangeEvent): void {
     this.activeTab = event.index;
+  }
+
+  async getListUser() {
+    this.userService.search({page: 0, limit: 99999, active: true}).then(res => {
+      this.users = res.data.content.map((data: { email: any; }) => data.email);
+    });
   }
 
   override async showDialogDetail(id?: any, type?: string) {
@@ -127,5 +140,32 @@ export class NotificationComponent extends CommonComponent implements OnInit {
       await this.detail(id);
     }
     this.toggleDialogCreate();
+  }
+
+  override async detail(id: any) {
+    try {
+      await this.spinner.show();
+      const res = await this.baseService.detail(id);
+      if (res?.data) {
+        if (typeof res.data.users === "string") {
+          try {
+            res.data.users = res.data.users.includes(",")
+              ? res.data.users.split(",").map((item: string) => item.trim())
+              : [res.data.users.trim()];
+          } catch (error) {
+            console.error("Failed to parse items field:", error);
+            res.data.users = [];
+          }
+        }
+        console.log("res?.data:",res?.data)
+        this.formGroupDetail.patchValue(res?.data || res);
+      }
+    } catch (e: any) {
+      this.baseService.showError(
+        e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
+      );
+    } finally {
+      await this.spinner.hide();
+    }
   }
 }
