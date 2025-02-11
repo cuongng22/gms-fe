@@ -3,7 +3,7 @@ import {RouterLink} from '@angular/router';
 import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule} from '@angular/material/menu';
+import {MatMenuModule, MatMenuTrigger} from '@angular/material/menu';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -33,6 +33,7 @@ import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {InvoiceActualCostService} from "src/app/crew-trip/core/services/invoice-actual-cost-service";
 import moment from "moment";
 import {InvoiceDocumentDetailComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-detail.component";
+import {InvoiceDocumentService} from "src/app/crew-trip/core/services/invoice-document-service";
 
 
 @Component({
@@ -49,6 +50,7 @@ import {InvoiceDocumentDetailComponent} from "src/app/crew-trip/features/invoice
 export class InvoiceActualCostComponent extends CommonComponent implements OnInit {
   viewType = 'HD';//HD-PL
   override baseService = inject(InvoiceActualCostService);
+  invoiceDocumentService = inject(InvoiceDocumentService);
   flightMarketService = inject(FlightMarketService);
   hotelService = inject(HotelService);
   vehicleService = inject(VehicleService);
@@ -65,7 +67,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   listHotel = [];
   listVehicle = [];
   listAirportCode = [];
-  listInvoice : any[];
+  listInvoice: any[];
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
   _displayedColumns: {
@@ -135,7 +137,6 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
         this.displayedColumns = ['stt', ...this._displayedColumns.filter(s => !['singleRoomFc', 'singleRoomCc', 'twinRoomCc'].includes(s.value)).map(s => s.value), 'action'];
 
       }
-      this.listInvoice = [{invoiceNumber:1123213}]
     });
   }
 
@@ -246,4 +247,49 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
       this.baseService.showError("Không tìm thấy hóa đơn");
     }
   }
+
+  async getListInvoiceDocument(item: any) {
+    try {
+      await this.spinner.show();
+      this.listInvoice = [];
+      await this.invoiceDocumentService.search({
+        page: this.pageIndex,
+        size: this.pageSize,
+        limit: this.pageSize,
+      }).then((res: any) => {
+        this.listInvoice = res?.data?.content;
+      });
+    } catch (e: any) {
+      this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+
+  /*override async search<T>(body?: any, isNextPage?: boolean) {
+    try {
+      await this.spinner.show();
+      if (!isNextPage) {
+        this.pageIndex = Constant.PAGE;
+      }
+      let res = await this.baseService.search<ListResponse<T>>({
+        page: this.pageIndex,
+        size: this.pageSize,
+        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+      });
+
+      if (res) {
+        if (res.code === HttpStatusCode.Ok) {
+          this.dataSource.data = res.data.content;
+          this.totalElement = res.data.totalElements;
+        }
+        return res;
+      }
+    } catch (e: any) {
+      this.baseService.showError(e.error?.message ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }*/
 }
