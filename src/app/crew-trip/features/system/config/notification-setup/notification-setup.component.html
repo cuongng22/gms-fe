@@ -145,7 +145,7 @@
                   <mat-label>Type</mat-label>
                   <mat-select formControlName="type" required>
                     <mat-option [value]="null">Choose type</mat-option>
-                    <mat-option *ngFor="let type of notiConfigType" [value]="type.code">
+                    <mat-option *ngFor="let type of notiSetupType" [value]="type.code">
                       {{ type.label }}
                     </mat-option>
                   </mat-select>
@@ -155,15 +155,62 @@
                 </mat-form-field>
               </div>
             </div>
-            <!--            -->
-            <!--            <div class="form-group mb-20" sizeInput="sm">-->
-            <!--              <app-select-multiple size="sm" label="User"-->
-            <!--                                   [required]="true" [options]="users"-->
-            <!--                                   [readonly]="formGroupDetail.get('users')?.disabled ?? false"-->
-            <!--                                   [isSearch]="false"-->
-            <!--                                   formControlName="users">-->
-            <!--              </app-select-multiple>-->
-            <!--            </div>-->
+            <div class="col-sm-12 col-md-12 mb-2 text-dark">
+              <mat-label i18n>Notification settings</mat-label>
+            </div>
+            <div class="col-sm-6 col-md-6">
+              <div class="form-group mb-20" sizeInput="sm">
+                <mat-form-field>
+                  <mat-label>By type</mat-label>
+                  <mat-select formControlName="type">
+                    <mat-option [value]="null">Choose type</mat-option>
+                    <mat-option *ngFor="let type of notiSettingValueType" [value]="type.code">
+                      {{ type.label }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-6">
+              <div class="form-group mb-20" sizeInput="sm">
+                <mat-form-field>
+                  <mat-label i18n>No. of day</mat-label>
+                  <input formControlName="notiSetting" matInput
+                         min="1" max="909" type="number">
+                  <!--                  @if (!!formGroupDetail.controls['notiSettingValueType'].hasError('required')) {-->
+                  <!--                    <mat-error><span i18n>By type</span><span i18n> is required</span></mat-error>-->
+                  <!--                  }-->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-12 mb-2 text-dark">
+              <mat-label i18n>Regular notification</mat-label>
+            </div>
+            <div class="col-sm-6 col-md-6 mt-2">
+              <div class="form-group mb-20" sizeInput="sm">
+                <mat-form-field>
+                  <mat-label>By type</mat-label>
+                  <mat-select formControlName="type">
+                    <mat-option [value]="null">Choose type</mat-option>
+                    <mat-option *ngFor="let type of notiRegularType" [value]="type.code">
+                      {{ type.label }}
+                    </mat-option>
+                  </mat-select>
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-6 col-md-6">
+              <div class="form-group mb-20" sizeInput="sm">
+                <mat-form-field>
+                  <mat-label i18n>No. of day</mat-label>
+                  <input formControlName="notiSetting" matInput
+                         min="1" max="99" type="number">
+                  <!--                  @if (!!formGroupDetail.controls['notiSettingValueType'].hasError('required')) {-->
+                  <!--                    <mat-error><span i18n>By type</span><span i18n> is required</span></mat-error>-->
+                  <!--                  }-->
+                </mat-form-field>
+              </div>
+            </div>
             <mat-form-field>
               <mat-label i18n>Remark</mat-label>
               <textarea formControlName="note" matInput></textarea>
