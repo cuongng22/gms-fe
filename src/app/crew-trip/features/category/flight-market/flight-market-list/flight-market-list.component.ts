@@ -1,20 +1,6 @@
 import { CommonModule } from '@angular/common';
-import {
-  Component,
-  DestroyRef,
-  ElementRef,
-  OnInit,
-  ViewChild,
-  inject,
-  model,
-} from '@angular/core';
-import {
-  FormBuilder,
-  FormControl,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
-} from '@angular/forms';
+import { Component, DestroyRef, ElementRef, OnInit, ViewChild, inject, model } from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,10 +11,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialog } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import {
-  MatPaginatorIntl,
-  MatPaginatorModule,
-} from '@angular/material/paginator';
+import { MatPaginatorIntl, MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink, RouterModule } from '@angular/router';
@@ -42,266 +25,260 @@ import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-mark
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import {
-  Constant,
-  DATE_FORMAT_DD_MM_YYYY,
-} from 'src/app/crew-trip/shared/utils/constant';
+import { Constant, DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant';
 import { CustomMatPaginatorIntl } from 'src/app/customizer-settings/paginator-intl.service';
 import { CarRentalDetailComponent } from '../car-rental-detail/car-rental-detail.component';
 import { HotelDetailComponent } from '../hotel-detail/hotel-detail.component';
 import { MatListModule } from '@angular/material/list';
 
 @Component({
-  selector: 'app-flight-market-list',
-  standalone: true,
-  imports: [
-    MatCardModule,
-    FormsModule,
-    MatFormFieldModule,
-    ReactiveFormsModule,
-    MatSelectModule,
-    MatButtonModule,
-    MatInputModule,
-    InputSizeComponent,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    NgxMaterialTimepickerModule,
-    MatAutocompleteModule,
-    CommonModule,
-    MatTableModule,
-    MatPaginatorModule,
-    MatChipsModule,
-    RouterLink,
-    RouterModule,
-    FileUploadModule,
-    NgxTrimDirectiveModule,
-    NgxControlError,
-    MatListModule
-  ],
-  providers: [
-    DataTransformPipe,
-    { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl },
-    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
-    provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
-  ],
-  templateUrl: './flight-market-list.component.html',
-  styleUrl: './flight-market-list.component.scss',
+	selector: 'app-flight-market-list',
+	standalone: true,
+	imports: [
+		MatCardModule,
+		FormsModule,
+		MatFormFieldModule,
+		ReactiveFormsModule,
+		MatSelectModule,
+		MatButtonModule,
+		MatInputModule,
+		InputSizeComponent,
+		MatDatepickerModule,
+		MatNativeDateModule,
+		NgxMaterialTimepickerModule,
+		MatAutocompleteModule,
+		CommonModule,
+		MatTableModule,
+		MatPaginatorModule,
+		MatChipsModule,
+		RouterLink,
+		RouterModule,
+		FileUploadModule,
+		NgxTrimDirectiveModule,
+		NgxControlError,
+		MatListModule
+	],
+	providers: [
+		DataTransformPipe,
+		{ provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl },
+		{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
+		provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+	],
+	templateUrl: './flight-market-list.component.html',
+	styleUrl: './flight-market-list.component.scss',
 })
 export class FlightMarketListComponent
-  extends CommonComponent
-  implements OnInit
-{
-  override baseService = inject(FlightMarketService);
-  private readonly destroyRef = inject(DestroyRef);
+	extends CommonComponent
+	implements OnInit {
+	override baseService = inject(FlightMarketService);
+	private readonly destroyRef = inject(DestroyRef);
 
-
-
-  // danh sách thị trường
-  markets: any[] = [];
-  filteredOptionsMarket = model<any[]>([]);
-  keySearchMarket = new Subject<string>();
+	// danh sách thị trường
+	markets: any[] = [];
+	filteredOptionsMarket = model<any[]>([]);
+	keySearchMarket = new Subject<string>();
 	@ViewChild('airport') airport: ElementRef<HTMLInputElement>;
 
 	showDialogUpload = false;
 
 	uploadFileError: { blob?: Blob; fileName?: string; totalErrors?: string } =
-	  {};
+		{};
 
 	override formGroupDetail = this.formBuilder.group({
-	  id: [''],
+		id: [''],
 	});
 	override formGroupSearch = this.formBuilder.group({
-	  s: [''], //Keyword Search
-	  code: [''], // Mã thị trường
-	  type: [''], // Phân Loại
-	  status: [''], // Trạng thái thị trường
-	  startDate: [''], // Ngày hợp đồng từ
-	  endDate: [''], // Ngày hợp đồng đến
+		s: [''], //Keyword Search
+		code: [''], // Mã thị trường
+		type: [''], // Phân Loại
+		status: [''], // Trạng thái thị trường
+		startDate: [''], // Ngày hợp đồng từ
+		endDate: [''], // Ngày hợp đồng đến
 	});
 
 	fileUpload = new FormControl<File[]>(
-	  [],
-	  [Validators.required, FileUploadValidators.filesLimit(1)],
+		[],
+		[Validators.required, FileUploadValidators.filesLimit(1)],
 	);
 
 	constructor(
 		public dataTransformPipe: DataTransformPipe,
 	) {
-	  super();
+		super();
 	}
 
 	override ngOnInit(): void {
-	  this.displayedColumns = [
-	    'stt',
-	    'airportCode',
-	    'airportName',
-	    'hotelName',
-	    'carRentalCompany',
-	    'country',
-	    'category',
-	    'flightGroup',
-	    'costCategory',
-	    'status',
-	    'action',
-	  ];
+		this.displayedColumns = [
+			'stt',
+			'airportCode',
+			'airportName',
+			'hotelName',
+			'carRentalCompany',
+			'country',
+			'category',
+			'flightGroup',
+			'costCategory',
+			'status',
+			'action',
+		];
 
-	  // Danh sách thị trường
-	  this.search();
+		// Danh sách thị trường
+		this.search();
 
-	  // Lấy danh sách thị trường cho ô search
-	  this.baseService.search({ option: 1 }).then((res) => {
-	    this.markets = res.data;
+		// Lấy danh sách thị trường cho ô search
+		this.baseService.search({ option: 1 }).then((res) => {
+			this.markets = res.data;
 
-	    this.keySearchMarket
-	      .pipe(
-	        debounceTime(500), // Đợi 300ms sau lần nhập cuối cùng
-	        startWith(''),
-	      )
-	      .subscribe((value: string) => this._filterMarket(value ?? ''));
-	  });
+			this.keySearchMarket
+				.pipe(
+					debounceTime(500), // Đợi 300ms sau lần nhập cuối cùng
+					startWith(''),
+				)
+				.subscribe((value: string) => this._filterMarket(value ?? ''));
+		});
 
-	  this.destroyRef.onDestroy(() => {
-	    this.keySearchMarket.unsubscribe();
-	  });
+		this.destroyRef.onDestroy(() => {
+			this.keySearchMarket.unsubscribe();
+		});
 
-	  this.fileUpload.valueChanges.subscribe((value) => {
-	    this.uploadFileError = {};
-	  });
+		this.fileUpload.valueChanges.subscribe((value) => {
+			this.uploadFileError = {};
+		});
 	}
 
 	override search(body?: any, isNextPage?: boolean): any {
-	  if (this.formGroupSearch.valid) {
-	    const contractStartDate = this.formGroupSearch.controls.startDate.value;
-	    const contractEndDate = this.formGroupSearch.controls.endDate.value;
-	    const searchValue = {
-	      ...this.formGroupSearch.value,
-	      option: 0,
-	      startDate: contractStartDate
-	        ? this.dataTransformPipe.transform(contractStartDate, [
-	          'date',
-	          Constant.DATE_FORMAT_YYYYMMDD,
-	        ])
-	        : null,
-	      endDate: contractEndDate
-	        ? this.dataTransformPipe.transform(contractEndDate, [
-	          'date',
-	          Constant.DATE_FORMAT_YYYYMMDD,
-	        ])
-	        : null,
-	    };
-	    super.search(searchValue, isNextPage);
-	  }
+		if (this.formGroupSearch.valid) {
+			const contractStartDate = this.formGroupSearch.controls.startDate.value;
+			const contractEndDate = this.formGroupSearch.controls.endDate.value;
+			const searchValue = {
+				...this.formGroupSearch.value,
+				option: 0,
+				startDate: contractStartDate
+					? this.dataTransformPipe.transform(contractStartDate, [
+						'date',
+						Constant.DATE_FORMAT_YYYYMMDD,
+					])
+					: null,
+				endDate: contractEndDate
+					? this.dataTransformPipe.transform(contractEndDate, [
+						'date',
+						Constant.DATE_FORMAT_YYYYMMDD,
+					])
+					: null,
+			};
+			super.search(searchValue, isNextPage);
+		}
 	}
 
 	private _filterMarket(value: string): void {
-	  if (!value) {
-	    this.filteredOptionsMarket.set(this.markets);
-	    return;
-	  }
-	  const filterValue = value.toLowerCase();
-	  this.filteredOptionsMarket.set(
-	    this.markets.filter((market) =>
-	      market?.toLowerCase().includes(filterValue),
-	    ),
-	  );
+		if (!value) {
+			this.filteredOptionsMarket.set(this.markets);
+			return;
+		}
+		const filterValue = value.toLowerCase();
+		this.filteredOptionsMarket.set(
+			this.markets.filter((market) =>
+				market?.toLowerCase().includes(filterValue),
+			),
+		);
 	}
 
 	showHotelDetail(isViewDetail?: boolean, hotel?: any, marketCode?: string) {
-	  if (hotel) {
-	    hotel = {
-	      ...hotel,
-	      activeLable: hotel.active ? this.MESSAGE.ACTIVE : this.MESSAGE.INACTIVE,
-	      marketCode: marketCode,
-	    };
-	  }
-	  this.dialog.open(HotelDetailComponent, {
-	    data: { hotel: hotel, isViewDetail: isViewDetail },
-	  });
+		if (hotel) {
+			hotel = {
+				...hotel,
+				activeLable: hotel.active ? this.MESSAGE.ACTIVE : this.MESSAGE.INACTIVE,
+				marketCode: marketCode,
+			};
+		}
+		this.dialog.open(HotelDetailComponent, {
+			data: { hotel: hotel, isViewDetail: isViewDetail },
+		});
 	}
 
 	showCarRentalDetail(
-	  isViewDetail?: boolean,
-	  carRental?: any,
-	  marketCode?: string,
+		isViewDetail?: boolean,
+		carRental?: any,
+		marketCode?: string,
 	) {
-	  if (carRental) {
-	    carRental = {
-	      ...carRental,
-	      activeLable: carRental.active
-	        ? this.MESSAGE.ACTIVE
-	        : this.MESSAGE.INACTIVE,
-	      marketCode: marketCode,
-	    };
-	  }
-	  this.dialog.open(CarRentalDetailComponent, {
-	    data: { carRental: carRental, isViewDetail: isViewDetail },
-	  });
+		if (carRental) {
+			carRental = {
+				...carRental,
+				activeLable: carRental.active
+					? this.MESSAGE.ACTIVE
+					: this.MESSAGE.INACTIVE,
+				marketCode: marketCode,
+			};
+		}
+		this.dialog.open(CarRentalDetailComponent, {
+			data: { carRental: carRental, isViewDetail: isViewDetail },
+		});
 	}
 
 	override async delete() {
-	  if (this.formGroupDetail.value.id) {
-	    super.delete();
-	    this.baseService.search({ option: 1 }).then((res) => {
-	      this.markets = res.data;
-	    });
-	  }
+		if (this.formGroupDetail.value.id) {
+			super.delete();
+			this.baseService.search({ option: 1 }).then((res) => {
+				this.markets = res.data;
+			});
+		}
 	}
 
 	async uploadFile() {
-	  try {
-	    this.fileUpload.markAllAsTouched();
-	    if (this.fileUpload.valid && this.fileUpload.value) {
-	      const form = new FormData();
-	      const file: File = this.fileUpload.value[0];
-	      form.append(
-	        'file',
-	        new Blob([new Uint8Array(await file.arrayBuffer())], {
-	          type: file.type,
-	        }),
-	      );
-	      await this.spinner.show();
-	      const res = await this.baseService.uploadFile(form);
-	      this.uploadFileError = res;
-	      if (!res.totalErrors) {
-	        this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
-	        this.resetFileUpload();
-	        this.toggleDialogUpload();
-	        this.baseService.search({ option: 1 }).then((res) => {
-	          this.markets = res.data;
-	        });
-	      }
-	    }
-	  } finally {
-	    await this.spinner.hide();
-	    this.search();
-	  }
+		try {
+			this.fileUpload.markAllAsTouched();
+			if (this.fileUpload.valid && this.fileUpload.value) {
+				const form = new FormData();
+				const file: File = this.fileUpload.value[0];
+				form.append(
+					'file',
+					new Blob([new Uint8Array(await file.arrayBuffer())], {
+						type: file.type,
+					}),
+				);
+				await this.spinner.show();
+				const res = await this.baseService.uploadFile(form);
+				this.uploadFileError = res;
+				if (!res.totalErrors) {
+					this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
+					this.resetFileUpload();
+					this.toggleDialogUpload();
+					this.baseService.search({ option: 1 }).then((res) => {
+						this.markets = res.data;
+					});
+				}
+			}
+		} finally {
+			await this.spinner.hide();
+			this.search();
+		}
 	}
 
 	async downloadFileError() {
-	  if (this.uploadFileError.blob) {
-	    this.downloadFile(
-	      this.uploadFileError.blob,
-	      this.uploadFileError.fileName ?? 'file-error.xlsx',
-	    );
-	  }
+		if (this.uploadFileError.blob) {
+			this.downloadFile(
+				this.uploadFileError.blob,
+				this.uploadFileError.fileName ?? 'file-error.xlsx',
+			);
+		}
 	}
 
 	toggleDialogUpload() {
-	  this.showDialogUpload = !this.showDialogUpload;
+		this.showDialogUpload = !this.showDialogUpload;
 	}
 
 	filterMarket(): void {
-	  const filterdValue = this.airport.nativeElement.value;
-	  if (!filterdValue) {
-	    this.filteredOptionsMarket.set(this.markets);
-	    return;
-	  }
-	  this.keySearchMarket.next(filterdValue);
+		const filterdValue = this.airport.nativeElement.value;
+		if (!filterdValue) {
+			this.filteredOptionsMarket.set(this.markets);
+			return;
+		}
+		this.keySearchMarket.next(filterdValue);
 	}
 
 	resetFileUpload() {
-	  this.uploadFileError = {};
-	  this.fileUpload.setValue([]);
-	  this.fileUpload.reset();
+		this.uploadFileError = {};
+		this.fileUpload.setValue([]);
+		this.fileUpload.reset();
 	}
 }

@@ -44,7 +44,6 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
   private readonly flightMarketService = inject(FlightMarketService);
   private readonly airplaneService = inject(AirplaneService);
 
-
   @ViewChild('ori') ori: ElementRef<HTMLInputElement>;
   oriList: string[] = []; // danh sách chọn sân bay đi
   filteredOptionsOri = model<string[]>([]); // filterd Ori

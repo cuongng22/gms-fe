@@ -1,21 +1,11 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
-import {
-  MatError,
-  MatFormFieldModule,
-  MatLabel
-} from '@angular/material/form-field';
+import { MatError, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CommonModule, NgIf } from '@angular/common';
@@ -23,10 +13,7 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentMailService } from 'src/app/crew-trip/core/services/payment-mail.service';
 import { MatOption } from '@angular/material/select';
-import {
-  MatAutocomplete,
-  MatAutocompleteTrigger
-} from '@angular/material/autocomplete';
+import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { MatMenuModule } from '@angular/material/menu';
@@ -66,7 +53,7 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
   activeTab = 0;
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocompleteTrigger)
-    autocompleteTrigger!: MatAutocompleteTrigger;
+  autocompleteTrigger!: MatAutocompleteTrigger;
   markets: string[] = [];
   filteredOptionsMarket: any[];
 
@@ -79,7 +66,7 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
       { label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
       { label: $localize`:@@name:Email`, value: 'emails' },
       { label: $localize`:@@note:Remark`, value: 'note' }
-    // { label: $localize`:@@status:Status`, value: 'status' }
+      // { label: $localize`:@@status:Status`, value: 'status' }
     ];
 
   constructor() {
