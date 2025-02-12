@@ -7,6 +7,7 @@ import { AuthGuard } from 'src/app/crew-trip/core/guards/menu.guard';
 import { RedirectGuard } from 'src/app/crew-trip/core/guards/redirect-guard';
 import { CarCostTrackingComponent } from 'src/app/crew-trip/features/car-room/car-cost-tracking/car-cost-tracking.component';
 import { HotelCostTrackingContainerComponent } from 'src/app/crew-trip/features/car-room/hotel-cost-tracking-container/hotel-cost-tracking-container.component';
+import { RoomBookingComponent } from 'src/app/crew-trip/features/car-room/room-booking/room-booking.component';
 import { ActRateComponent } from 'src/app/crew-trip/features/category/act-rate/act-rate.component';
 import { CrewsComponent } from 'src/app/crew-trip/features/category/crews/crews.component';
 import { FlightCrewComponent } from 'src/app/crew-trip/features/category/flight-crew/flight-crew.component';
@@ -202,6 +203,10 @@ export const routes: Routes = [
 					{
 						path: 'hotel/cost-tracking',
 						component: HotelCostTrackingContainerComponent,
+					},
+					{
+						path: 'hotel/room-booking',
+						component: RoomBookingComponent,
 					},
 					{
 						path: 'car/cost-tracking',

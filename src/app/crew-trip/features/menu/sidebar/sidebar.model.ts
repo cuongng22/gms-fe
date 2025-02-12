@@ -90,7 +90,7 @@ export const menu: Menu[] = [
     ]
   },
   {
-    title: $localize`:@@hotelCarService:HOTEL & CAR SERVICE`,
+    title: $localize`:@@hotelCarService:Accommodation Service`,
     rootPath: 'service',
     subMenu: [
       {
