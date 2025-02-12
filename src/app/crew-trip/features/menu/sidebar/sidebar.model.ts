@@ -1,14 +1,14 @@
 export interface Menu {
-	title: string;
-	rootPath: string;
-	subMenu: subMenu[];
+  title: string;
+  rootPath: string;
+  subMenu: subMenu[];
 }
 
 export interface subMenu {
-	path: string;
-	title: string;
-	icon: string;
-	menu?: Menu[];
+  path: string;
+  title: string;
+  icon: string;
+  menu?: Menu[];
 }
 
 export const menu: Menu[] = [

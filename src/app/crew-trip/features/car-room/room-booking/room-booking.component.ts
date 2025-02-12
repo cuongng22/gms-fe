@@ -99,7 +99,7 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
   override async search() {
     await this.spinner.show();
     try {
-      let urlFilePath = 'http://192.168.10.68:8081/source/documents/crew_overnight_stays_in.xlsx';
+      let urlFilePath = 'http://192.168.10.68:8081/source/documents/crew_overnight_stays.xlsx';
       this.loadExcelFile(urlFilePath);
     } catch (error: any) {
       this.showError(error);
