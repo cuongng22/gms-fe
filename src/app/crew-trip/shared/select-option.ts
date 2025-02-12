@@ -24,6 +24,14 @@ export const SelectOptions = {
       label: 'Not eligible to use hotel, but will use hotel', code: 'NOT_MEET_CONDITION_BUT_USE'
     }
   ],
+  FLIGHT_SCHEDULE_TYPE: [
+    {value: '1', display: 'Scheduled Flights'},
+    {value: '2', display: 'Monthly Flight Schedule'},
+  ],
+  SERVICE_APPLIED: [
+    {value: 'FC', display: 'Pilot'},
+    {value: 'CC', display: 'Attendant'},
+  ],
   NOTI_CONFIG_TYPE: [
     {
       label: 'Notification: Budget and procurement plan completed', code: 'BUDGET_PLAN_COMPLETE'
