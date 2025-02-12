@@ -558,8 +558,8 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
       }
       let res;
       let req = body || this.formGroupSearch.getRawValue();
-      req.periodFrom = moment.isMoment(req.periodFrom) ? req.periodFrom.format(Constant.DATE_REQUEST_YYYYMMDD) : null;
-      req.periodTo = moment.isMoment(req.periodTo) ? req.periodTo.format(Constant.DATE_REQUEST_YYYYMMDD) : null;
+      req.periodFrom = moment.isMoment(req.periodFrom) ? req.periodFrom.format(Constant.LOCAL_DATE_FORMAT) : null;
+      req.periodTo = moment.isMoment(req.periodTo) ? req.periodTo.format(Constant.LOCAL_DATE_FORMAT) : null;
       this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'periodDate', 'action'];
       res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,

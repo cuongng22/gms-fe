@@ -51,6 +51,13 @@ export class InvoiceDocumentService extends BaseService {
     return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
+  getDocumentNotSent(body: any): Promise<any> {
+    const url = `${this.api}/${this.path}/not-sent`;
+    const params = new HttpParams({fromObject: removeNullValues(body)});
+    return firstValueFrom(this.http.get<any>(url, {params}));
+  }
+
+
   getContractByAirport(value: any): Promise<any> {
     const url = `${this.api}/invoice/common/contract-by-airport/${value}`;
     return firstValueFrom(this.http.get<any>(url, this.httpOptions));

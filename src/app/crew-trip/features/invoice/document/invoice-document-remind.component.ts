@@ -32,6 +32,7 @@ import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {ConfirmDeleteDialog} from "src/app/crew-trip/shared/dialog/confirm-delete-dialog";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
+import { InvoiceDocumentService } from 'src/app/crew-trip/core/services/invoice-document-service';
 
 
 @Component({
@@ -47,7 +48,7 @@ import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-looku
 
 export class InvoiceDocumentRemindComponent extends CommonComponent implements OnInit {
   viewType = 'HD';//HD-PL
-  override baseService = inject(InvoiceFormService);
+  override baseService = inject(InvoiceDocumentService);
   flightMarketService = inject(FlightMarketService);
   hotelService = inject(HotelService);
   vehicleService = inject(VehicleService);
@@ -101,28 +102,23 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
   }
 
   override async ngOnInit() {
-    await Promise.all([this.search(),]).then(() => {
+    await Promise.all([this.getDocumentNotSent(),]).then(() => {
 
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
   }
 
-  override async search<T>(body?: any, isNextPage?: boolean) {
+  async getDocumentNotSent<T>(body?: any, isNextPage?: boolean) {
     try {
-      this.formGroupSearch.patchValue({
-        listAirportCode: this.formGroupSearch.getRawValue().airportCode,
-        partnerType: this.partnerType
-      });
       await this.spinner.show();
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
       let res;
-      this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
-      res = await this.baseService.search<ListResponse<T>>({
+      res = await this.baseService.getDocumentNotSent({
         page: this.pageIndex,
         size: this.pageSize,
-        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+        limit: this.pageSize, ...removeNullValues(body)
       });
 
       if (res) {
