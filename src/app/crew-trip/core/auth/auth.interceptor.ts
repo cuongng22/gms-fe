@@ -18,6 +18,7 @@ import { LanguageService } from 'src/app/crew-trip/core/services/language.servic
 import { UsersService } from 'src/app/crew-trip/core/services/users-service';
 import { MIMEType } from 'util';
 import { el } from 'node_modules/@fullcalendar/core/internal-common';
+import { NgxSpinnerService } from 'ngx-spinner';
 
 
 export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
@@ -26,6 +27,7 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
   const baseService = inject(BaseService);
   const usersService = inject(UsersService);
   const languageService = inject(LanguageService);
+  const spinner = inject(NgxSpinnerService);
   const token = localStorage.getItem(STORAGE_KEY.ACCESS_TOKEN);
   let headers = new HttpHeaders({
     'Accept-Language': languageService.getLanguage()
@@ -45,6 +47,7 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
       // console.log(req.url, 'returned a response with status', event.status);
     }
   }), catchError((error: any) => {
+    spinner.hide();
     const silentError = req.headers.get('X-Silent-Error') === 'true';
     if (silentError) {
       return throwError(() => error);
