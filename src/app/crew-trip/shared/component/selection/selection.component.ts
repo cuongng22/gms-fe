@@ -34,6 +34,9 @@ export class SelectionComponent implements ControlValueAccessor {
   @Input() options: any[] = [];
   @Input() attrValue = 'value';
   @Input() attrDisplay = 'display';
+  @Input() isFirstBlank = false;
+  @Input() labelFirst = '';
+
 
   get formControl(): FormControl {
     return (this.ngControl?.control as FormControl) ?? new FormControl();

@@ -31,6 +31,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
   providers: [DataTransformPipe]
 })
 export class BudgetProcurementSummaryListComponent extends CommonComponent implements OnInit {
+
   readonly serviceType = ServiceType;
   PlanCategoryEnum = PlanCategoryEnum;
   StatusEnum = StatusEnum;
@@ -42,6 +43,8 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
   planBudgetProcurementId = input<number>(); // id của kế hoạch
 
   displayedColumnTotals: string[] = [];
+
+  bodySearch: any;
 
   override formGroupDetail = this.formBuilder.group({
     id: ''
@@ -58,53 +61,53 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
   }
 
   setDisplayedColumns(type: string) {
-    this.displayedColumns = getDisplayedColumns(type);
+    this.displayedColumns = getDisplayedColumns(type, this.categoryType());
+    console.log(this.displayedColumns)
     this.displayedColumnTotals = getDisplayedColumnTotals(type);
   }
 
   override async search(bodySearch?: any) {
     try {
-      this.spinner.show();
-      this.setDisplayedColumns(bodySearch?.categoryOfPlan);
+      await this.spinner.show();
       const body = {
+        ...bodySearch,
         planBudgetProcurementId: this.planBudgetProcurementId(),
-        category: this.categoryType(),
-        ...bodySearch
+        category: this.categoryType()
       }
-      this.baseService.summarySearch(body).then((data: any) => {
-        let firstHotelIndex = -1;
-        let firstCarRentalIndex = -1;
-        let lastHotelIndex = -1;
-        let lastCarRentalIndex = -1;
+      this.bodySearch = body;
+      const response = await this.baseService.summarySearch(body);
+      let firstHotelIndex = -1;
+      let firstCarRentalIndex = -1;
+      let lastHotelIndex = -1;
+      let lastCarRentalIndex = -1;
 
-        data.data.forEach((item: any, index: number) => {
-          if (item.serviceType === this.serviceType.HOTEL) {
-            lastHotelIndex = index;
-            if (firstHotelIndex === -1) {
-              firstHotelIndex = index;
-            }
-          } else if (item.serviceType === this.serviceType.CAR_RENTAL) {
-            lastCarRentalIndex = index;
-            if (firstCarRentalIndex === -1) {
-              firstCarRentalIndex = index;
-            }
+      response.data.forEach((item: any, index: number) => {
+        if (item.serviceType === this.serviceType.HOTEL) {
+          lastHotelIndex = index;
+          if (firstHotelIndex === -1) {
+            firstHotelIndex = index;
           }
-        });
-        if (firstHotelIndex !== -1) {
-          data.data[firstHotelIndex].isFirst = true;
+        } else if (item.serviceType === this.serviceType.CAR_RENTAL) {
+          lastCarRentalIndex = index;
+          if (firstCarRentalIndex === -1) {
+            firstCarRentalIndex = index;
+          }
         }
-        if (firstCarRentalIndex !== -1) {
-          data.data[firstCarRentalIndex].isFirst = true;
-        }
-        if (lastHotelIndex !== -1) {
-          data.data[lastHotelIndex].isLast = true;
-        }
-        if (lastCarRentalIndex !== -1) {
-          data.data[lastCarRentalIndex].isLast = true;
-        }
+      });
+      if (firstHotelIndex !== -1) {
+        response.data[firstHotelIndex].isFirst = true;
+      }
+      if (firstCarRentalIndex !== -1) {
+        response.data[firstCarRentalIndex].isFirst = true;
+      }
+      if (lastHotelIndex !== -1) {
+        response.data[lastHotelIndex].isLast = true;
+      }
+      if (lastCarRentalIndex !== -1) {
+        response.data[lastCarRentalIndex].isLast = true;
+      }
 
-        this.dataSource.data = data.data;
-      })
+      this.dataSource.data = response.data;
     } finally {
       this.spinner.hide();
     }
@@ -153,15 +156,22 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
     return this.selection.hasValue() && !this.isAllSelected();
   }
 
-  completed() {
-    this.spinner.show();
+  async completed() {
     const selected = this.selection.selected;
-    this.spinner.show();
-    // this.baseService.completed(selected.map((item: any) => item.id)).then(() => {
-    //   this.loadData();
-    // }).finally(() => {
-    //   this.spinner.hide();
-    // })
+    if (selected.length > 0) {
+      try {
+        await this.spinner.show();
+        const response = await this.baseService.summaryUpdateStatusMulti({ idsSummary: selected.map((item: any) => item.id) });
+        this.showSuccess(this.MESSAGE.UPDATE_SUCCESS)
+        this.search(this.bodySearch);
+      } catch (error) {
+
+      } finally {
+        this.spinner.hide();
+      }
+    } else {
+      this.showError($localize`:@@cannotUpdateCompletionStatusIfNoPlanIsSelected:Cannot update completion status if no plan is selected`)
+    }
   }
 
   getUnitPrice(unitPrice: any) {
@@ -195,7 +205,7 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
       await this.spinner.show();
       const res = await this.baseService.summaryDelete(this.formGroupDetail.getRawValue().id);
       this.baseService.showSuccess(this.MESSAGE.DELETE_SUCCESS);
-      await this.search();
+      await this.search(this.bodySearch);
       return res;
     } catch (e: any) {
       this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? this.MESSAGE.ERROR);

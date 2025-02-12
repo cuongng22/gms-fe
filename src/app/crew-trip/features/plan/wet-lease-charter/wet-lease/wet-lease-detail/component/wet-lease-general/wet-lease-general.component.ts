@@ -47,8 +47,7 @@ import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant'
   styleUrl: './wet-lease-general.component.scss',
   providers: [DataTransformPipe,
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+  ]
 })
 export class WetLeaseGeneralComponent extends CommonComponent implements OnInit, AfterViewChecked {
   flightMarketService = inject(FlightMarketService);

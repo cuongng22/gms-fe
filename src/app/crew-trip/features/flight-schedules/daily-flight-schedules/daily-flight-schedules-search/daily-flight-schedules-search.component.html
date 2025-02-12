@@ -1,0 +1,30 @@
+<form [formGroup]="formGroupSearch" (ngSubmit)="onSearch()" autocomplete="off">
+    <div class="row">
+        <div class="col mb-2">
+            <app-selection-suggest i18n-label="@@airportCode" label="Airport code" [options]="airports"
+                formControlName="airport" attrValue="marketCode" attrDisplay="marketCode"
+                (selectionChange)="airportChange($event)"/>
+        </div>
+
+        <div class="col mb-2">
+            <app-selection i18n-label="@@month" label="Month" [options]="months" attrValue="code"
+                attrDisplay="value" formControlName="month" />
+        </div>
+
+        <div class="col mb-2">
+            <app-selection i18n-label="@@year" label="Year" [options]="years" attrValue="" attrDisplay="" formControlName="year" />
+        </div>
+        <div class="col d-sm-flex flex-row  justify-content-lg-start justify-content-md-center">
+            <mat-card-header class="mb-0 search">
+                <mat-card-title clas>
+                    <button class="search-btn" type="submit" mat-button>
+                        <i class="material-symbols-outlined">
+                            search
+                        </i>
+                        <span i18n="@@search">Search</span>
+                    </button>
+                </mat-card-title>
+            </mat-card-header>
+        </div>
+    </div>
+</form>

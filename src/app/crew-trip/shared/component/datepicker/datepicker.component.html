@@ -3,11 +3,10 @@
         @if(!!label()){
         <mat-label>{{label()}}</mat-label>
         }
-        <input [required]="required" matInput [matDatepicker]="datePicker" [formControl]="formControl"
+        <input [required]="requiredControl" matInput [matDatepicker]="datePicker" [formControl]="formControl"
             placeholder="dd/mm/yyyy">
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
-        <mat-datepicker #datePicker startView="month"
-            panelClass="example-month-picker">
+        <mat-datepicker #datePicker startView="month" panelClass="example-month-picker">
         </mat-datepicker>
 
         @if(formControl.errors && formControl.errors['matDatepickerParse']){
@@ -19,6 +18,6 @@
             {{ label() }} {{MESSAGE.REQUIRED}}
         </mat-error>
         }
-        
+
     </mat-form-field>
 </div>

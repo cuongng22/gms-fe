@@ -97,9 +97,7 @@ import {
   templateUrl: './flight-market-detail.component.html',
   styleUrl: './flight-market-detail.component.scss',
 })
-export class FlightMarketDetailComponent
-  extends CommonComponent
-  implements OnInit, AfterViewInit
+export class FlightMarketDetailComponent extends CommonComponent implements OnInit, AfterViewInit
 {
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(FlightMarketService);

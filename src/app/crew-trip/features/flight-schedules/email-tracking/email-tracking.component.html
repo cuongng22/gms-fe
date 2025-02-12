@@ -1,0 +1,206 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0" i18n="@@airportCode">
+        Email Tracking
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@flightSchedule">
+            Flight Schedule
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@dailyFlightSchedule">
+            Daily Flight Schedule
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@emailTracking">
+            Email Tracking
+        </li>
+    </ol>
+</div>
+
+<!--Search-->
+<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+        <form [formGroup]="formGroupSearch" (ngSubmit)="search()" autocomplete="off">
+            <div class="row">
+                <div class="col mb-2">
+                    <app-selection [options]="flightScheduleTypes" label="Flight Schedule Type"
+                        i18n-label="@@flightScheduleType" attrValue="code" attrDisplay="value" [isFirstBlank]="true"
+                        labelFirst="-- Flight Schedule Type --" i18n-labelFirst="@@flightScheduleType" />
+                </div>
+
+                <div class="col mb-2">
+                    <app-selection [options]="categorys" label="Category" i18n-label="@@category" attrValue="code"
+                        attrDisplay="value" />
+                </div>
+                <div class="col mb-2">
+                    <app-selection-suggest i18n-label="@@airportCode" label="Airport code" [options]="airports"
+                        formControlName="airport" attrValue="marketCode" attrDisplay="marketCode" />
+                </div>
+                <div class="col mb-2">
+                    <app-selection [options]="emailSendingStatus" label="Email sending status"
+                        labelFirst="-- Email sending status --" i18n-labelFirst="@@emailSendingStatus"
+                        i18n-label="@@emailSendingStatus" attrValue="code" attrDisplay="value" [isFirstBlank]="true" />
+                </div>
+                <div class="col mb-2">
+                    <app-selection [options]="emailDeliveryStatus" label="Email delivery status"
+                        labelFirst="-- Email delivery status --" i18n-labelFirst="@@emailDeliveryStatus"
+                        i18n-label="@@emailDeliveryStatus" attrValue="code" attrDisplay="value" [isFirstBlank]="true" />
+                </div>
+                <div class="col mb-2">
+                    <app-datepicker label="File export time" i18n-label="@@fileExportTime" formControlName="date" />
+                </div>
+                <div class="col d-flex  justify-content-xl-center justify-content-lg-start">
+                    <mat-card-header class="mb-0 search">
+                        <mat-card-title>
+                            <button class="search-btn" type="submit" mat-button>
+                                <i class="material-symbols-outlined">
+                                    search
+                                </i>
+                                <span i18n="@@search">Search</span>
+                            </button>
+                        </mat-card-title>
+                    </mat-card-header>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
+
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+
+    <mat-card-content>
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+                <ng-container matColumnDef="stt">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center">#</th>
+                    <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
+                        {{ (pageIndex * pageSize) + i + 1 }}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="marketCode">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@airportCode">
+                        Airport code
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.marketCode}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="category">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@category">
+                        Category
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{getCategoryName(element.marketType)}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="fcFile">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@pilotDataFiles">
+                        Pilot data files
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        @for (item of getArrayFile(element.fcFile); track $index) {
+                        <a (click)="true" [href]="environment.baseUrl+'/'+item" class="text-secondary">
+                            - {{ item }}
+                        </a>
+                        <br />
+                        }
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="ccFile">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@flightAttendantDataFiles">
+                        Flight attendant data files
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        @for (item of getArrayFile(element.ccFile); track $index) {
+                        <a (click)="true" [href]="environment.baseUrl+'/'+item" class="text-secondary">
+                            - {{ item }}
+                        </a>
+                        <br />
+                        }
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="totalFile">
+                    <th mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" mat-sort-header
+                        i18n="@@totalFiles">
+                        Total files
+                    </th>
+                    <td mat-cell *matCellDef="let element;">
+                        {{element.totalFile}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="exportTime">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@fileExportTime"
+                        class="font-weight-bold text-center">File export time</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.exportTime | dataTransformPipe:[Constant.DATE,Constant.DATE_FORMAT]}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="emailTime">
+                    <th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@emailSentTime"
+                        class="font-weight-bold text-center">Email sent time</th>
+                    <td mat-cell *matCellDef="let element">
+                        {{ element.emailTime | dataTransformPipe:[Constant.DATE,Constant.DATE_FORMAT]}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="isEmailSent">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@emailSendingStatus">
+                        Email sending status
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{getSendMailName(element.isEmailSent)}}
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="isSendSuccess">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@emailDeliveryStatus">
+                        Email delivery status
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{getEmailDeliveryStatus(element.isSendSuccess)}}
+                    </td>
+                </ng-container>
+
+
+                <ng-container matColumnDef="action" stickyEnd>
+                    <th mat-header-cell *matHeaderCellDef i18n="@@actions" class="font-weight-bold text-center">
+                        Actions
+                    </th>
+                    <td mat-cell *matCellDef="let element;let i = dataIndex">
+                        <div class="action-buttons d-flex justify-content-end">
+                            <button mat-button title="View" i18n-title="@@view" class="text-vna"
+                                (click)="showPopSendMail(element)">
+                                <i class="material-symbols-outlined " text-primary>
+                                    mail
+                                </i>
+                            </button>
+                            @if(!element.isSendSuccess){
+                            <button mat-button title="View" i18n-title="@@view" class="text-vna"
+                                (click)="showPopUpload(element)">
+                                <i class="material-symbols-outlined " text-primary>
+                                    upload
+                                </i>
+                            </button>
+                            }
+
+
+                        </div>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="10">No data!</td>
+                </tr>
+            </table>
+        </div>
+        <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+            [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+            aria-label="Select page" i18n-aria-label="@@selectPage">
+        </mat-paginator>
+    </mat-card-content>
+</mat-card>

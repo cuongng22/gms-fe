@@ -325,6 +325,7 @@
         </button>
       </div>
       <div class="table-responsive">
+        @defer (on timer(1000)){
         <table [dataSource]="formGroupDetail.getRawValue().invoiceDocumentDtl" class="table-light table-responsive"
                mat-table>
           <ng-container matColumnDef="stt">
@@ -503,6 +504,7 @@
                 i18n>No data!</span></td>
           </tr>
         </table>
+        }
       </div>
       <form #totalab [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
         <mat-grid-list class="mt-20" cols="12" gutterSize="24px" rowHeight="50px">

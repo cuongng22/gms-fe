@@ -36,7 +36,9 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
     headers = headers.set('Authorization', `Bearer ${token}`);
   }
   let requestTimeout = COMMON_CONFIG.TIMEOUT;
-  if (req.url.includes('/api/productivity')) {
+  if (
+    req.url.includes('/api/productivity') ||
+    req.url.includes('api/plan-budget-procurement/summary')) {
     requestTimeout = 1000000;
   }
   const authReq = req.clone({ headers });

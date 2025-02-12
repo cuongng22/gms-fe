@@ -44,7 +44,6 @@ export class DomesticBudgetProcurementWetLeaseComponent {
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
-      console.log('effect data DomesticBudgetProcurementWetLeaseComponent: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
       }

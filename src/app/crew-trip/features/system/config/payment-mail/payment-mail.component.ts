@@ -1,21 +1,11 @@
-import {
-  Component,
-  ElementRef,
-  inject,
-  OnInit,
-  ViewChild
-} from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
-import {
-  MatError,
-  MatFormFieldModule,
-  MatLabel
-} from '@angular/material/form-field';
+import { MatError, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatInput } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { CommonModule, NgIf } from '@angular/common';
@@ -23,10 +13,7 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { MatDialog } from '@angular/material/dialog';
 import { PaymentMailService } from 'src/app/crew-trip/core/services/payment-mail.service';
 import { MatOption } from '@angular/material/select';
-import {
-  MatAutocomplete,
-  MatAutocompleteTrigger
-} from '@angular/material/autocomplete';
+import { MatAutocomplete, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { MatMenuModule } from '@angular/material/menu';
@@ -63,8 +50,7 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 export class PaymentEmailComponent extends CommonComponent implements OnInit {
   override baseService = inject(PaymentMailService);
   flightMarketService = inject(FlightMarketService);
-  override formBuilder = inject(FormBuilder);
-  override dialog: MatDialog = inject(MatDialog);
+  activeTab = 0;
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocompleteTrigger)
   autocompleteTrigger!: MatAutocompleteTrigger;

@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { ChangeDetectionStrategy, Component, effect, input, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
@@ -21,8 +21,8 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
   providers: [DatePipe, DataTransformPipe],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class BudgetProcurementFlightPeriodComponent implements OnInit {
-
+export class BudgetProcurementFlightPeriodComponent implements OnInit, AfterViewChecked {
+  cdRef = inject(ChangeDetectorRef);
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['period', 'aircraftType', 'numberOfFlight'];
   periodRowspan = 0;
@@ -31,7 +31,6 @@ export class BudgetProcurementFlightPeriodComponent implements OnInit {
 
   constructor(private datePipe: DatePipe, private dataTransformPipe: DataTransformPipe) {
     effect(() => {
-      console.log('effect data BudgetProcurementFlightPeriodComponent: ', this.data())
       if (this.data()) {
         // this.periodRowspan = this.data().periodRowspan;
         this.setDataSource(this.data().planFlightPeriods ?? []);
@@ -41,6 +40,9 @@ export class BudgetProcurementFlightPeriodComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+  ngAfterViewChecked(): void {
+    this.cdRef.detectChanges()
   }
 
   setDataSource(data: any[]) {

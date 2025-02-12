@@ -4,58 +4,43 @@ import {
 	AfterViewInit,
 	ChangeDetectionStrategy,
 	Component,
-	ElementRef,
-	EventEmitter,
+	ElementRef, EventEmitter,
 	inject,
 	Input,
 	model,
-	OnInit,
-	Output,
+	OnInit, Output,
 	output,
-	ViewChild,
+	ViewChild
 } from '@angular/core';
-import {
-	FormControl,
-	FormsModule,
-	ReactiveFormsModule,
-	Validators,
-} from '@angular/forms';
-import {
-	MatAutocomplete,
-	MatAutocompleteModule,
-} from '@angular/material/autocomplete';
+import { FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MatAutocomplete, MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatIconModule } from '@angular/material/icon';
+import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
-import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
-import { debounceTime, distinctUntilChanged, startWith, Subject } from 'rxjs';
 import { InputSizeComponent } from '../../input/input-size.component';
+import { debounceTime, distinctUntilChanged, startWith, Subject } from 'rxjs';
+import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
 import { MESSAGE } from '../../utils/constant';
+import { NgxControlError } from 'ngxtension/control-error';
+import { Validators } from '@angular/forms';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
 	selector: 'app-selection-suggest',
 	standalone: true,
-	imports: [
-		FormsModule,
-		MatFormFieldModule,
-		ReactiveFormsModule,
-		MatSelectModule,
-		MatButtonModule,
-		MatInputModule,
-		InputSizeComponent,
-		MatAutocompleteModule,
-		CommonModule,
-		MatIconModule,
+	imports: [FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+		MatFormField, MatInputModule, InputSizeComponent, MatAutocompleteModule, CommonModule, NgxControlError,
+		MatIconModule
 	],
 	templateUrl: './selection-suggest.component.html',
 	styleUrl: './selection-suggest.component.scss',
 	hostDirectives: [NgxControlValueAccessor],
-	changeDetection: ChangeDetectionStrategy.OnPush,
+	changeDetection: ChangeDetectionStrategy.OnPush
+
 })
-export class SelectionSuggestComponent
-	implements OnInit, AfterViewInit, AfterViewChecked {
+export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterViewChecked {
+
 	ngAfterViewInit(): void {
 		this.auto?.options.changes.subscribe((list: any[]) => {
 			if (list) {
@@ -67,18 +52,15 @@ export class SelectionSuggestComponent
 		if (this.requiredControl) {
 			this.viewControl.addValidators(Validators.required);
 		}
+		if (this.formControl.disabled) {
+			this.viewControl.disable();
+		}
 
 	}
-
 	ngAfterViewChecked(): void {
 		if (this.formControl.touched) {
 			this.viewControl.markAsTouched();
-			this.viewControl.updateValueAndValidity();
-		}
-		this.setViewValueInit(this.formControl.value);
-
-		if (this.formControl.disabled) {
-			this.viewControl.disable();
+			this.viewControl.updateValueAndValidity()
 		}
 	}
 
@@ -118,29 +100,26 @@ export class SelectionSuggestComponent
 	}
 
 	ngOnInit(): void {
-		this.keySearch
-			.pipe(debounceTime(500), distinctUntilChanged(), startWith(''))
-			.subscribe((value) => {
-				const optionFilter = [...(this.options ?? [])];
-				// this.formControl.setValue(null);
-				// this.formControl.updateValueAndValidity();
-				if (!value) {
-					this.filtered.set(optionFilter);
-					return;
-				}
-				this.filtered.set(
-					optionFilter.filter((option) => {
-						const valueAttrDisplay = (
-							this.attrDisplay ? option[this.attrDisplay] : option
-						)
-							?.toString()
-							.toLowerCase();
-						return valueAttrDisplay.includes(value.toLowerCase());
-					}),
-				);
-			});
-		this.setViewValueInit(this.formControl.value)
+		this.keySearch.pipe(
+			debounceTime(500),
+			distinctUntilChanged(),
+			startWith('')
+		).subscribe(value => {
+			const optionFilter = [...(this.options ?? [])];
+			this.formControl.setValue(null);
+			this.formControl.updateValueAndValidity();
+			if (!value) {
+				this.filtered.set(optionFilter);
+				return;
+			}
+			this.filtered.set(optionFilter.filter(option => {
+				const valueAttrDisplay = (this.attrDisplay ? option[this.attrDisplay] : option)?.toString().toLowerCase();
+				return valueAttrDisplay.includes(value.toLowerCase());
+			}));
+		});
+
 	}
+
 
 	setViewValueInit(value: any) {
 		if (!this.setInitValue) {
@@ -166,7 +145,6 @@ export class SelectionSuggestComponent
 
 	filter(): void {
 		const filterValue = this.inputSearch.nativeElement.value;
-		console.log(filterValue);
 		this.formControl.setValue(null);
 		this.formControl.updateValueAndValidity();
 		this.keySearch.next(filterValue);
@@ -197,10 +175,12 @@ export class SelectionSuggestComponent
 		this.viewControl.setValue('');
 		this.formControl.setValue('');
 		this.selectionControl.writeValue('');
-		const findResult = this.auto?.options.find((o) => o.selected);
-		findResult?.focus(null, { preventScroll: false });
-		findResult?.deselect(false);
-		this.filtered.set([...(this._options ?? [])]);
+		this.viewControl.updateValueAndValidity();
+		this.formControl.updateValueAndValidity();
+		this.keySearch.next('');
+		// const findResult = this.auto?.options.find((o) => o.selected);
+		// findResult?.focus(null, { preventScroll: false });
+		// findResult?.deselect(false);
 		this.clearInputEvent.emit();
 	}
 }

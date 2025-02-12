@@ -29,8 +29,11 @@
         </div>
         <div class="col-sm-6 col-md-6">
           <div class="form-group mb-20">
-            <app-selection-suggest i18n-label="@@marketCode" label="Airport code" [options]="markets"
+            <app-selection-suggest i18n-label="@@marketCode" label="Airport code" required [options]="markets"
                                    formControlName="marketCode" size="sm"/>
+            @if (!!formGroupDetail.controls['marketCode'].hasError('existCode')) {
+              <span class="required">There has already been a mail group in this airport code</span>
+            }
           </div>
         </div>
       </div>
@@ -127,7 +130,8 @@
           </i>
           <span i18n="@@cancel">Close</span>
         </button>
-        <button mat-button color="primary" (click)="save()" type="submit" class="add-btn min-with-100 mlr-5"
+        <button mat-button color="primary" (click)="save()" type="submit" [disabled]="hasEditingEmail"
+                class="add-btn min-with-100 mlr-5"
                 *ngIf="!data?.mode || data.mode !== 'view'">
           <i class="material-symbols-outlined">
             save

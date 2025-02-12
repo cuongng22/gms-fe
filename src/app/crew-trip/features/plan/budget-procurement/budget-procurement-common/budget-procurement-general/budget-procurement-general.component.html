@@ -32,6 +32,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
+        @if (category() === CategoryEnum.INTERNATIONAL) {
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@rateForSingle">Buffer rate (for single-gender)</mat-label>
@@ -42,49 +43,59 @@
                 </i>
             </mat-form-field>
         </div>
-
+        }
     </div>
+    @if (!formGroupDetail.controls.haveContract.value) {
     <div class="row">
-        <div class="col col-lg-3">
+        <div class="col-xl-8">
+            <app-budget-procurement-price #budgetProcurementPrice [category]="category()" [data]="inputPrice"></app-budget-procurement-price>
+        </div>
+    </div>
+    } @else {
+    <div class="row">
+        <div class="col " [ngClass]="category() === CategoryEnum.INTERNATIONAL?'col-lg-3':'col-lg-4'">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@singleRoomRate">Single Room Rate</mat-label>
                 <textarea matInput [disabled]="true" [ngModel]="unitPriceSingleHotel"
                     [ngModelOptions]="{standalone: true}" matTextareaAutosize cdkAutosizeMinRows="2" cdkTextareaAutosize
                     #autosize="cdkTextareaAutosize">
-                    </textarea>
+                        </textarea>
                 <!-- <input type="text" matInput formControlName="unitPriceHotel" decimalSeparator="," digitOnly
-                    appSeparator>
-                <mat-error *ngxControlError="formGroupDetail.controls.unitPriceHotel; track: 'maxlength'"
-                    i18n="@@singleRoomRateMaxlength">
-                    Single Room Rate {{MESSAGE.MAX_LENGTH_INVALID|
-                    dataTransformPipe:[Constant.STRING_FORMAT,20]
-                    }}
-                </mat-error> -->
+                        appSeparator>
+                    <mat-error *ngxControlError="formGroupDetail.controls.unitPriceHotel; track: 'maxlength'"
+                        i18n="@@singleRoomRateMaxlength">
+                        Single Room Rate {{MESSAGE.MAX_LENGTH_INVALID|
+                        dataTransformPipe:[Constant.STRING_FORMAT,20]
+                        }}
+                    </mat-error> -->
             </mat-form-field>
         </div>
-        <div class="col col-lg-3">
+        <div class="col " [ngClass]="category() === CategoryEnum.INTERNATIONAL?'col-lg-3':'col-lg-4'">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@doubleRoomRate">Double Room Rate</mat-label>
                 <textarea matInput [disabled]="true" [ngModel]="unitPriceDoubleHotel"
                     [ngModelOptions]="{standalone: true}" matTextareaAutosize cdkAutosizeMinRows="2" cdkTextareaAutosize
                     #autosize="cdkTextareaAutosize">
-                    </textarea>
+                        </textarea>
             </mat-form-field>
 
             <!-- <mat-form-field class="mb-2">
-                <mat-label i18n="@@doubleRoomRate">Double Room Rate</mat-label>
-                <input type="text" matInput formControlName="unitPriceDoubleHotel" decimalSeparator="," digitOnly
-                    appSeparator>
-                <mat-error *ngxControlError="formGroupDetail.controls.unitPriceDoubleHotel; track: 'maxlength'"
-                    i18n="@@doubleRoomRateMaxlength">
-                    Double Room Rate {{MESSAGE.MAX_LENGTH_INVALID|
-                    dataTransformPipe:[Constant.STRING_FORMAT,20]
-                    }}
-                </mat-error>
-            </mat-form-field> -->
+                    <mat-label i18n="@@doubleRoomRate">Double Room Rate</mat-label>
+                    <input type="text" matInput formControlName="unitPriceDoubleHotel" decimalSeparator="," digitOnly
+                        appSeparator>
+                    <mat-error *ngxControlError="formGroupDetail.controls.unitPriceDoubleHotel; track: 'maxlength'"
+                        i18n="@@doubleRoomRateMaxlength">
+                        Double Room Rate {{MESSAGE.MAX_LENGTH_INVALID|
+                        dataTransformPipe:[Constant.STRING_FORMAT,20]
+                        }}
+                    </mat-error>
+                </mat-form-field> -->
 
         </div>
     </div>
+    }
+
+
     <div class="row">
         <mat-checkbox class="mb-2" i18n="@@procurementPlan" formControlName="procurementPlanFlag">
             Procurement Plan
@@ -93,13 +104,13 @@
     @if(formGroupDetail.controls.procurementPlanFlag.value) {
     <div class="row">
         <div class="col">
-            <app-datepicker-year-month class="mb-2" [required]="true" i18n-label="@@startDate" label="Start Date"
+            <app-datepicker-year-month class="mb-2" [requiredLabel]="true" i18n-label="@@startDate" label="Start Date"
                 size="sm" formControlName="procStartDate">
             </app-datepicker-year-month>
         </div>
         <div class="col" sizeInput="sm">
-            <app-datepicker-year-month class="mb-2" [required]="true" i18n-label="@@endDate" label="End Date" size="sm"
-                formControlName="procEndDate">
+            <app-datepicker-year-month class="mb-2" [requiredLabel]="true" i18n-label="@@endDate" label="End Date"
+                size="sm" formControlName="procEndDate">
             </app-datepicker-year-month>
         </div>
         <div class="col" sizeInput="sm">
@@ -143,7 +154,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
-        <div class="col" sizeInput="sm">
+        <div class="col " sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@unit">Unit</mat-label>
                 <input type="text" matInput formControlName="unit">
@@ -154,7 +165,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
-        <div class="col" sizeInput="sm">
+        <div class="col " sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@supplierSelectionMethod">Supplier Selection Method</mat-label>
                 <input type="text" matInput formControlName="supplierMethod">
@@ -166,6 +177,7 @@
                 </mat-error>
             </mat-form-field>
         </div>
+        @if (category() === CategoryEnum.INTERNATIONAL) {
         <div class="col" sizeInput="sm">
             <mat-checkbox class="mb-2" i18n="@@earlyCheckInFee" formControlName="earlyCheckinFlag">
                 Early check-in fee
@@ -176,6 +188,15 @@
                 Late check-out fee
             </mat-checkbox>
         </div>
+        }@else {
+        <div class="col " sizeInput="sm">
+            <mat-checkbox class="mb-2" i18n="@@wetLease" formControlName="wetLeaseFlag">
+                Wet Lease
+            </mat-checkbox>
+        </div>
+        <div class="col "></div>
+        }
+
     </div>
     }
 </form>

@@ -13,6 +13,8 @@ import {HttpParams} from '@angular/common/http';
 export class UsersService extends BaseService {
   userInfoSubject = new BehaviorSubject<any>(this.getUserLogin());
   userInfo$ = this.userInfoSubject.asObservable();
+  permissionsSubject = new BehaviorSubject<string[]>([]);
+  permissions$ = this.permissionsSubject.asObservable();
 
   constructor(private storageService: StorageService) {
     super();
@@ -82,5 +84,22 @@ export class UsersService extends BaseService {
 
   isLoggedIn(): boolean {
     return !!localStorage.getItem(STORAGE_KEY.USER_INFO); // Trả về true nếu có token
+  }
+
+  async loadUserPermissions(email: string) {
+    this.http.get<any>(`${this.api}/${this.path}/user-roles?email=${email}`).subscribe(
+      (data) => {
+        if (data && data?.data && data?.data?.roles) {
+          let permissions = data?.data?.roles;
+          this.permissionsSubject.next(permissions);
+          localStorage.setItem(STORAGE_KEY.PERMISSION, JSON.stringify(permissions));
+        }
+      }
+    );
+  }
+
+  hasPermission(permission: string): boolean {
+    const permissions = this.permissionsSubject.getValue();
+    return permissions.includes(permission);
   }
 }

@@ -98,7 +98,6 @@ import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant'
     provideNativeDateAdapter(),
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
   ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './wet-lease.component.html',
   styleUrl: './wet-lease.component.scss',
 })

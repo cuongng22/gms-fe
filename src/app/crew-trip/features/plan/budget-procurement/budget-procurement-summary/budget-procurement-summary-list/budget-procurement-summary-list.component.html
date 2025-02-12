@@ -5,7 +5,7 @@
         </mat-card-title>
         <mat-card-subtitle>
             @if (categoryType()){
-            <button class="success-btn mr-10" type="button" mat-button>
+            <button class="success-btn mr-10" type="button" mat-button (click)="completed()">
                 <i class="material-symbols-outlined">
                     check_circle
                 </i>
@@ -30,17 +30,19 @@
         <div class="table-responsive">
             <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
                 <ng-container matColumnDef="select">
-                    <th mat-header-cell *matHeaderCellDef class="text-center">
+                    <th mat-header-cell *matHeaderCellDef="let element" class="text-center">
                         <mat-checkbox (change)="$event ? toggleAllRows() : null"
                             [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="indeterminateSelection()" [aria-label]="checkboxLabel()">
+                            [indeterminate]="indeterminateSelection()" [aria-label]="checkboxLabel()"
+                            >
                         </mat-checkbox>
                     </th>
-                    <ng-container *matCellDef="let row">
-                        <td class="text-center" mat-cell>
+                    <ng-container>
+                        <td class="text-center" mat-cell *matCellDef="let row">
                             <mat-checkbox (click)="$event.stopPropagation()"
                                 (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
-                                [disabled]="row.disable">
+                                [disabled]="row.disable"
+                                [disabled]="row.status === StatusSummaryEnum.COMPLETED">
                             </mat-checkbox>
                         </td>
                     </ng-container>
@@ -242,7 +244,7 @@
                         Status
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{element.status}}
+                        {{element.statusName}}
                     </td>
                 </ng-container>
 
@@ -254,14 +256,14 @@
                     <td mat-cell *matCellDef="let element; let i = dataIndex">
                         <div class="action-buttons d-flex align-items-center justify-content-end">
                             @if (categoryType() && element.status !== StatusSummaryEnum.COMPLETED) {
-                            <button type="button" mat-button class="text-primary" (click)="changeStatus(element.id, StatusSummaryEnum.COMPLETED)">
+                            <button type="button" mat-button class="text-vna" (click)="changeStatus(element.id, StatusSummaryEnum.COMPLETED)">
                                 <i class="material-symbols-outlined " title="Completed" i18n-title="@@completed">
                                     check_circle
                                 </i>
                             </button>
                             }
     
-                            <button type="button" mat-button class="text-primary"
+                            <button type="button" mat-button class="text-vna"
                                 [routerLink]="['/plan/est-plan/budget-procurement',element.planBudgetProcurementId,'summary',element.id,'detail']"
                                 [queryParams]="{'year-plan': element.yearPlan,'airport-code': element.airportCode,'category':element.category}"
                                 routerLinkActive="router-link-active">
@@ -269,7 +271,7 @@
                                     zoom_in
                                 </i>
                             </button>
-                            <button type="button" mat-button class="text-primary" [matMenuTriggerFor]="planMenu">
+                            <button type="button" mat-button class="text-vna" [matMenuTriggerFor]="planMenu">
                                 <i class="material-symbols-outlined">
                                     more_vert
                                 </i>
@@ -290,7 +292,7 @@
                                     </li>
                                 </ul>
                             </mat-menu>
-                            @if (categoryType()) {
+                            @if (categoryType() && element.status !== StatusSummaryEnum.COMPLETED) {
                                 <button type="button" mat-button title="Delete" i18n-title="@@delete" class="text-danger"
                                 (click)="showConfirmDelete(element.id)">
                                 <i class="material-symbols-outlined text-danger">
@@ -306,24 +308,31 @@
                     <ng-container *matCellDef="let element">
                         @if(element?.isFirst){
                         @if(element.serviceType === 'Hotel'){
-                        <td class="text-center" mat-cell>
-                            <mat-checkbox (change)="$event ? toggleAllRows(serviceType.HOTEL) : null"
-                                [checked]="selection.hasValue() && isAllSelected(serviceType.HOTEL)"
-                                [indeterminate]="indeterminateSelection(serviceType.HOTEL)">
-                            </mat-checkbox>
-                        </td>
+                            @if (!!categoryType()) {
+                                <td class="text-center" mat-cell>
+                                    <mat-checkbox (change)="$event ? toggleAllRows(serviceType.HOTEL) : null"
+                                        [checked]="selection.hasValue() && isAllSelected(serviceType.HOTEL)"
+                                        [indeterminate]="indeterminateSelection(serviceType.HOTEL)"
+                                        >
+                                    </mat-checkbox>
+                                </td>
+                            }
                         <td mat-cell class="" [attr.colspan]="22" class="bg-success-200">
                             <span class="fw-bold">A. <span i18n="@@hotel">Hotel</span></span>
                         </td>
                         }@else if (element.serviceType === 'CarRental') {
-                        <td class="text-center" mat-cell>
-                            <mat-checkbox (change)="$event ? toggleAllRows(serviceType.CAR_RENTAL) : null"
-                                [checked]="selection.hasValue() && isAllSelected(serviceType.CAR_RENTAL)"
-                                [indeterminate]="indeterminateSelection(serviceType.CAR_RENTAL)">
-                            </mat-checkbox>
-                        </td>
+                            @if (!!categoryType()) {
+                                <td class="text-center" mat-cell>
+                                    <mat-checkbox (change)="$event ? toggleAllRows(serviceType.CAR_RENTAL) : null"
+                                        [checked]="selection.hasValue() && isAllSelected(serviceType.CAR_RENTAL)"
+                                        [indeterminate]="indeterminateSelection(serviceType.CAR_RENTAL)"
+                                        >
+                                    </mat-checkbox>
+                                </td>
+                            }
+                        
                         <td mat-cell class="fw-bold" [attr.colspan]="22" class="bg-success-200">
-                            <span class="fw-bold"> B. <span i18n="@@carRental">Car rental</span></span>
+                            <span class="fw-bold"> B. <span i18n="@@transportation">Transportation</span></span>
                         </td>
                         }
 
@@ -335,7 +344,7 @@
                 <ng-container matColumnDef="total" >
                     <ng-container *matCellDef="let element" >
                         @if(element?.isLast){
-                        <td class="text-center " mat-cell [attr.colspan]="4">
+                        <td class="text-center " mat-cell [attr.colspan]="categoryType()?4:3">
                             <span class="fw-bold">Total</span>
                         </td>
 

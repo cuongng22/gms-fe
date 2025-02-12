@@ -87,8 +87,8 @@
     .sidebar-inner {
       padding: {
         top: 90px;
-        left: 25px;
-        right: 25px;
+        left: 5px; //25px;
+        right: 5px;//25px;
         bottom: 20px;
       };
 
@@ -274,9 +274,10 @@
                 padding: {
                   bottom: 8px;
                   right: 10px;
-                  left: 38px;
+                  // left: 38px;
                   top: 8px;
                 };
+                margin-left: 10px;
 
                 // hienbv bỏ dấu chấm ở menu
                 // &::after {
@@ -347,8 +348,9 @@
               .mat-expansion-panel-body {
                 padding: {
                   top: 6px;
-                  left: 20px;
+                  // left: 20px;
                 };
+                margin-left: 10px;
               }
 
               .sidebar-sub-menu {
@@ -1259,7 +1261,7 @@
                 padding: {
                   bottom: 8px;
                   right: 25px;
-                  left: 37px;
+                  left: 10px;//37px;
                   top: 8px;
                 };
 
@@ -1291,9 +1293,10 @@
                   padding: {
                     bottom: 7px;
                     right: 10px;
-                    left: 35px;
+                    // left: 35px;
                     top: 7px;
                   };
+                  margin-left: 10px;
 
                   &::after {
                     left: 16px;
@@ -1307,7 +1310,7 @@
                       padding: {
                         bottom: 7px;
                         right: 10px;
-                        left: 35px;
+                        left: 15px;//35px;
                         top: 7px;
                       };
 

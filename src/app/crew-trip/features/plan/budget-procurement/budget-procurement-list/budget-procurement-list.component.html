@@ -7,8 +7,8 @@
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@plan">
             Plan
         </li>
-        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@production">
-            UTH/Kế hoạch
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@estimatedPlan">
+            Estimated/Plan
         </li>
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@budget&ProcurementPlan">
             Budget & Procurement plan
@@ -209,10 +209,11 @@
                             @if(element.status === 'draft' ||
                             element.status === 'international_completed' ||
                             element.status === 'dom_int_completed' ||
+                            element.status === 'domestic_completed' ||
                             element.status === 'confirmed' ||
                             element.status === 'rejected' ||
                             element.status === 'approved'){
-                            <button type="button" mat-button class="text-primary" [routerLink]="[element.id,'summary']"
+                            <button type="button" mat-button class="text-vna" [routerLink]="[element.id,'summary']"
                                 routerLinkActive="router-link-active">
                                 <i class="material-symbols-outlined " title="Detail" i18n-title="@@detail">
                                     zoom_in
@@ -220,7 +221,7 @@
                             </button>
                             }
                             @if(element.status === 'confirmed'){
-                            <button type="button" mat-button class="text-primary"
+                            <button type="button" mat-button class="text-vna"
                                 (click)="changeStatus(element.id,'approved')">
                                 <i class="material-symbols-outlined " title="Approved" i18n-title="@@approved">
                                     check
@@ -228,7 +229,7 @@
                             </button>
                             }
                             @if(element.status === 'dom_int_completed'){
-                            <button type="button" mat-button class="text-primary"
+                            <button type="button" mat-button class="text-vna"
                                 (click)="changeStatus(element.id,'confirmed')">
                                 <i class="material-symbols-outlined " title="Confirm" i18n-title="@@confirm">
                                     select_check_box
@@ -341,14 +342,14 @@
                                     <mat-label i18n="@@reason">Reason</mat-label>
                                     <textarea required matInput formControlName="reason" cdkAutosizeMinRows="3"
                                         cdkAutosizeMaxRows="10" matTextareaAutosize cdkTextareaAutosize
-                                        #autosize="cdkTextareaAutosize" maxlength="500"></textarea>
+                                        #autosize="cdkTextareaAutosize"></textarea>
                                     <mat-error *ngxControlError="formGroupReject.controls.reason; track: 'maxlength'"
-                                        i18n="@@noteMaxlength">
+                                        i18n="@@reasonMaxlength">
                                         Reason {{ MESSAGE.MAX_LENGTH_INVALID |
                                         dataTransformPipe:[Constant.STRING_FORMAT,500]}}
                                     </mat-error>
                                     <mat-error *ngxControlError="formGroupReject.controls.reason; track: 'required'"
-                                        i18n="@@planNameRequired">
+                                        i18n="@@reasonRequired">
                                         Reason {{MESSAGE.REQUIRED}}
                                     </mat-error>
                                 </mat-form-field>

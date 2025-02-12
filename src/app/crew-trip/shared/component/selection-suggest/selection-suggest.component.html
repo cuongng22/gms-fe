@@ -1,27 +1,23 @@
 <div [sizeInput]="size">
   <mat-form-field [ngClass]="{'edit-inline-table':editInlineTable}">
     @if (label) {
-      <mat-label i18n>{{ label }}</mat-label>
+    <mat-label i18n>{{ label }}</mat-label>
     }
     <input type="text" matInput #inputSearch [matAutocomplete]="auto" (input)="filter()" requireSelection
-           [required]="requiredControl" [formControl]="viewControl">
+      [required]="requiredControl" [formControl]="viewControl">
     @if (viewControl.value) {
-      <i class="material-symbols-outlined mr-15 pe-clear-input" matSuffix (click)="clearInput()">
-        close
-      </i>
+    <i class="material-symbols-outlined mr-15 pe-clear-input" matSuffix (click)="clearInput()">
+      close
+    </i>
     }
     <mat-autocomplete requireSelection #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
       @for (option of filtered(); track option) {
-        <mat-option
-          [value]="attrValue?option[attrValue]:option">{{ attrDisplay ? option[attrDisplay] : option }}
-        </mat-option>
+      <mat-option [value]="attrValue?option[attrValue]:option">{{ attrDisplay ? option[attrDisplay] : option }}
+      </mat-option>
       }
     </mat-autocomplete>
-
+    <mat-error *ngxControlError="viewControl; track: 'required'">
+      {{ label }} {{MESSAGE.REQUIRED}}
+    </mat-error>
   </mat-form-field>
-  @if (viewControl.touched && viewControl.hasError('required')) {
-    <span class="required">
-        {{ label }} {{ MESSAGE.REQUIRED }}
-    </span>
-  }
 </div>

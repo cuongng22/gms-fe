@@ -235,8 +235,8 @@ export class WetLeaseDetailComponent extends CommonComponent {
         this.baseService.showSuccess(
           update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS,
         );
-        if (res.id && !this.id()) {
-          this.router.navigate(['/plan/est-plan/wet-lease/detail', res.id])
+        if (res.data && !this.id()) {
+          this.router.navigate(['/plan/est-plan/wet-lease/detail', res.data])
         }
       } finally {
         this.spinner.hide()
