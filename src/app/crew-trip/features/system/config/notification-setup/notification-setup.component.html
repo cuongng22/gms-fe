@@ -162,7 +162,7 @@
               <div class="form-group mb-20" sizeInput="sm">
                 <mat-form-field>
                   <mat-label>By type</mat-label>
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="notiSettingValueType">
                     <mat-option [value]="null">Choose type</mat-option>
                     <mat-option *ngFor="let type of notiSettingValueType" [value]="type.code">
                       {{ type.label }}
@@ -190,7 +190,7 @@
               <div class="form-group mb-20" sizeInput="sm">
                 <mat-form-field>
                   <mat-label>By type</mat-label>
-                  <mat-select formControlName="type">
+                  <mat-select formControlName="regularType">
                     <mat-option [value]="null">Choose type</mat-option>
                     <mat-option *ngFor="let type of notiRegularType" [value]="type.code">
                       {{ type.label }}
@@ -203,11 +203,26 @@
               <div class="form-group mb-20" sizeInput="sm">
                 <mat-form-field>
                   <mat-label i18n>No. of day</mat-label>
-                  <input formControlName="notiSetting" matInput
+                  <input formControlName="regularNoti" matInput
                          min="1" max="99" type="number">
-                  <!--                  @if (!!formGroupDetail.controls['notiSettingValueType'].hasError('required')) {-->
-                  <!--                    <mat-error><span i18n>By type</span><span i18n> is required</span></mat-error>-->
-                  <!--                  }-->
+                </mat-form-field>
+              </div>
+            </div>
+            <div class="col-sm-12 col-md-12">
+              <div class="form-group mb-20" sizeInput="md">
+                <mat-form-field class="mb-1">
+                  <mat-label i18n="@@airportCode">Airport code</mat-label>
+                  <input type="text" #airportCode matInput formControlName="airportCode"
+                         [matAutocomplete]="marketComplete"
+                         (input)="filterMarket()" (focus)="onFocusMarket()">
+                  <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
+                    <mat-option [value]="null">
+                      -- Choose airport code --
+                    </mat-option>
+                    <mat-option *ngFor="let option of filteredOptionsMarket" [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
                 </mat-form-field>
               </div>
             </div>

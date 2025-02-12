@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {NotificationConfigService} from 'src/app/crew-trip/core/services/notification-config.service';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
@@ -33,7 +33,7 @@ import {MatDialog} from "@angular/material/dialog";
 import {NgxEditorModule, Validators} from "ngx-editor";
 import {MatDatepickerModule} from "@angular/material/datepicker";
 import {NgxMaterialTimepickerModule} from "ngx-material-timepicker";
-import {MatAutocompleteModule} from "@angular/material/autocomplete";
+import {MatAutocompleteModule, MatAutocompleteTrigger} from "@angular/material/autocomplete";
 import {RouterModule} from "@angular/router";
 import {MatTab, MatTabGroup} from "@angular/material/tabs";
 import {MatCheckbox} from "@angular/material/checkbox";
@@ -80,6 +80,9 @@ export class NotificationSetupComponent extends CommonComponent implements OnIni
   notiSettingValueType = SelectOptions.NOTI_SETTING_VALUE_TYPE;
   notiRegularType = SelectOptions.NOTI_REGULAR_TYPE;
   listAirrportCode = [];
+  filteredOptionsMarket: any[];
+  @ViewChild('airportCode') airportCode: ElementRef<HTMLInputElement>;
+  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     {label: $localize`:@@name:Type`, value: 'type'},
@@ -126,4 +129,18 @@ export class NotificationSetupComponent extends CommonComponent implements OnIni
     this.listAirrportCode = res.data.content.map((item: any) => item.marketCode);
   }
 
+  filterMarket(): void {
+    const filterValue = this.airportCode.nativeElement.value.toLowerCase();
+    if (!filterValue) {
+      this.filteredOptionsMarket = this.listAirrportCode;
+    }
+    this.filteredOptionsMarket = this.listAirrportCode.filter((market: any) => {
+      return market.toLowerCase().includes(filterValue);
+    });
+  }
+
+  onFocusMarket(): void {
+    this.filteredOptionsMarket = this.listAirrportCode;
+    this.autocompleteTrigger.openPanel();
+  }
 }
