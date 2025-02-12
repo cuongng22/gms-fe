@@ -1,16 +1,4 @@
 <div class="container">
-  <!--  <h3>Excel Viewer</h3>-->
-  <!-- Upload Excel File -->
-  <!--  <div class="mb-3">-->
-  <!--    <input-->
-  <!--      type="file"-->
-  <!--      id="fileInput"-->
-  <!--      class="form-control"-->
-  <!--      (change)="onFileChange($event)"-->
-  <!--      accept=".xlsx, .xls"-->
-  <!--    />-->
-  <!--  </div>-->
-  <!-- Tabs for Sheets -->
   <div class="mb-3">
     <ul class="nav nav-tabs">
       <li class="nav-item" *ngFor="let sheet of workbook.sheets; let i = index">
@@ -25,6 +13,5 @@
       </li>
     </ul>
   </div>
-  <!-- Excel Content Rendered as HTML Table -->
-  <div id="tableHost" class="table-responsive"></div>
+  <div id="tableHost" class="table-responsive table-light"></div>
 </div>
