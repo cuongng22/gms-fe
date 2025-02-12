@@ -41,6 +41,7 @@ import { forEach } from 'lodash';
   providers: [DataTransformPipe]
 })
 export class WetLeaseHotelComponent extends CommonComponent {
+  CategoryEnum = CategoryEnum;
   headerRowDef1Common = ['stt', 'leaseDate', 'totalRoom', 'totalCountForeign', 'totalAmount'];
   headerRowDef2Common = ['totalQtySingleRoom', 'totalQtyTwinRoom', 'totalExcVAT', 'totalIncVAT'];
   rowDefCommon = ['stt', 'leaseDate', 'totalQtySingleRoom', 'totalQtyTwinRoom', 'totalCountForeign', 'totalExcVAT', 'totalIncVAT'];

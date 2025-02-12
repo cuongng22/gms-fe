@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnInit, output } from '@angular/core';
 import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -74,6 +74,8 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   carRentals: any[] = [];
   maxDate: any;
   errorDiffMonth = false;
+
+  airportCodeChange = output<string>();
 
   override formGroupDetail = this.formBuilder.group({
     airportCode: ['', [Validators.required]],
@@ -157,7 +159,8 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     this.dataSourceHotel.data = []
     this.getHotelByAirport(data.value);
     this.getCaRentalByAirport(data.value);
-    this.getExchangeRate()
+    this.getExchangeRate();
+    this.airportCodeChange.emit(data.value);
   }
 
   async getHotelByAirport(airportCode: string) {

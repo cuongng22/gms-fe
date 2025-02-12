@@ -37,7 +37,7 @@
                         <mat-form-field
                             (clickOutside)="clickOutside(element.hotelItem[item.hotelCode],'totalSingleRoomEditing',element)"
                             class="edit-inline-table">
-                            <input  matInput type="number" digitOnly
+                            <input matInput type="number" digitOnly
                                 [(ngModel)]="element.hotelItem[item.hotelCode].totalSingleRoom">
                         </mat-form-field>
                     </div>
@@ -114,7 +114,9 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
                     i18n="@@totalAmountForeignExchange" rowspan="2">Total amount <br />(Foreign exchange)</th>
                 <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
+                    @if (category() === CategoryEnum.INTERNATIONAL) {
                     {{ element.totalCountForeign | number }}
+                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-center"></td>
                 <!-- <td mat-footer-cell *matFooterCellDef class="fw-bold text-center" >23</td> -->

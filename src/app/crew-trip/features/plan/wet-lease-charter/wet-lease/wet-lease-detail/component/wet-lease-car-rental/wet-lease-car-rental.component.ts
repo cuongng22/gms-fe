@@ -40,6 +40,7 @@ import { formula } from './wet-lease-car-rental.model';
   providers: [DataTransformPipe]
 })
 export class WetLeaseCarRentalComponent extends CommonComponent {
+  CategoryEnum = CategoryEnum;
   headerRowDef1 = ['transportName', 'numberOfTrip', 'totalAmountForex', 'totalAmount'];
   headerRowDef2 = ['totalAmountExcVAT', 'totalAmountIncVAT'];
   rowDef = ['transportName', 'numberOfTrip', 'totalAmountForex', 'totalAmountExcVAT', 'totalAmountIncVAT'];
