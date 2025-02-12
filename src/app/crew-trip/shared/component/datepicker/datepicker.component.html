@@ -1,0 +1,24 @@
+<div [sizeInput]="size()">
+    <mat-form-field>
+        @if(!!label()){
+        <mat-label>{{label()}}</mat-label>
+        }
+        <input [required]="required" matInput [matDatepicker]="datePicker" [formControl]="formControl"
+            placeholder="dd/mm/yyyy">
+        <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
+        <mat-datepicker #datePicker startView="month"
+            panelClass="example-month-picker">
+        </mat-datepicker>
+
+        @if(formControl.errors && formControl.errors['matDatepickerParse']){
+        <mat-error *ngxControlError="formControl; track: 'matDatepickerParse'">
+            {{ label() }} {{MESSAGE.FORMAT_INVALID}}
+        </mat-error>
+        }@else if(formControl.errors && formControl.errors['required']){
+        <mat-error *ngxControlError="formControl; track: 'required'">
+            {{ label() }} {{MESSAGE.REQUIRED}}
+        </mat-error>
+        }
+        
+    </mat-form-field>
+</div>

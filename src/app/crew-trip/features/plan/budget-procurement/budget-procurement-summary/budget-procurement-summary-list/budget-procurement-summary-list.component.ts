@@ -31,8 +31,6 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
   providers: [DataTransformPipe]
 })
 export class BudgetProcurementSummaryListComponent extends CommonComponent implements OnInit {
-  formBuilder = inject(FormBuilder);
-
   readonly serviceType = ServiceType;
   PlanCategoryEnum = PlanCategoryEnum;
   StatusEnum = StatusEnum;

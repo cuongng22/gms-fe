@@ -43,7 +43,6 @@ export class SeasonalSchedulesComponent extends CommonComponent {
   flightMarketService = inject(FlightMarketService);
   dataTransformPipe = inject(DataTransformPipe);
   airplaneService = inject(AirplaneService);
-  formBuilder = inject(FormBuilder);
   flightMarkets: any[] = [];
   airplanes: any[] = []
 

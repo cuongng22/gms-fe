@@ -63,11 +63,11 @@ import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 export class PaymentEmailComponent extends CommonComponent implements OnInit {
   override baseService = inject(PaymentMailService);
   flightMarketService = inject(FlightMarketService);
-  formBuilder = inject(FormBuilder);
-  dialog: MatDialog = inject(MatDialog);
+  override formBuilder = inject(FormBuilder);
+  override dialog: MatDialog = inject(MatDialog);
   @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
   @ViewChild(MatAutocompleteTrigger)
-    autocompleteTrigger!: MatAutocompleteTrigger;
+  autocompleteTrigger!: MatAutocompleteTrigger;
   markets: string[] = [];
   filteredOptionsMarket: any[];
 
@@ -80,7 +80,7 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
       { label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
       { label: $localize`:@@name:Email`, value: 'emails' },
       { label: $localize`:@@note:Remark`, value: 'note' }
-    // { label: $localize`:@@status:Status`, value: 'status' }
+      // { label: $localize`:@@status:Status`, value: 'status' }
     ];
 
   constructor() {

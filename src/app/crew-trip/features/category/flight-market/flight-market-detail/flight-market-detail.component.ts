@@ -101,7 +101,6 @@ export class FlightMarketDetailComponent
   extends CommonComponent
   implements OnInit, AfterViewInit
 {
-  formBuilder = inject(FormBuilder);
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(FlightMarketService);
   serviceFeeService = inject(ServiceFeeService);
@@ -175,7 +174,6 @@ export class FlightMarketDetailComponent
 
 	constructor(
 		@Inject(LOCALE_ID) public locale: string,
-		public dialog: MatDialog,
 		private activeRoute: ActivatedRoute,
 		private router: Router,
 	) {

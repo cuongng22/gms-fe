@@ -5,7 +5,7 @@ import {
   OnInit,
   inject,
 } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAnchor, MatButton } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
@@ -107,11 +107,11 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
   fb: FormBuilder = inject(FormBuilder);
   override baseService: WetLeaseService = inject(WetLeaseService);
   displayedFirst: {
-		name: string;
-		field: string;
-		rowSan: number;
-		colSpan: number;
-	}[] = [
+    name: string;
+    field: string;
+    rowSan: number;
+    colSpan: number;
+  }[] = [
       { name: 'airportCode', field: 'Airport Code', rowSan: 2, colSpan: 1 },
       {
         name: 'startDate',
@@ -132,14 +132,18 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
       { name: 'action', field: 'Action', rowSan: 2, colSpan: 1 },
     ];
   displayedSecond: any[] = [
-    { name: 'totalQtySingleRoom', field: 'Single Room' }, //tổng số phòng đơn
-    { name: 'totalQtyTwinRoom', field: 'Twin room' }, //tổng số phòng đôi
+    { name: 'totalSingleRoom', field: 'Single Room' }, //tổng số phòng đơn
+    { name: 'totalTwinRoom', field: 'Twin room' }, //tổng số phòng đôi
     { name: 'totalIncVAT', field: 'Including VAT' },
     { name: 'totalExcVAT', field: 'Excluding VAT' },
   ];
   displayedFirstArr: string[];
   displayedSecondArr: string[];
   displayedFooterColumns: string[];
+
+  override formGroupDetail: FormGroup<any> = this.formBuilder.group({
+    id: []
+  });
 
   constructor() {
     super();
@@ -154,8 +158,8 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
       'airportCode',
       'startDate',
       'endDate',
-      'totalQtySingleRoom',
-      'totalQtyTwinRoom',
+      'totalSingleRoom',
+      'totalTwinRoom',
       'totalNumberOfTrip',
       'totalForex',
       'totalIncVAT',
@@ -164,8 +168,8 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
     ];
     this.displayedFooterColumns = [
       'airportCode',
-      'totalQtySingleRoom',
-      'totalQtyTwinRoom',
+      'totalSingleRoom',
+      'totalTwinRoom',
       'totalNumberOfTrip',
       'totalForex',
       'totalIncVAT',
@@ -201,7 +205,7 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
 
   async exportFileExcel(fileName: string) {
     const { airportCodes, startDate, endDate } =
-			this.formGroupSearch.getRawValue();
+      this.formGroupSearch.getRawValue();
     const searchParams = {
       airportCodes,
       startDate,

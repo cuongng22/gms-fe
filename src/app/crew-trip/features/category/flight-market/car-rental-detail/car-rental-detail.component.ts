@@ -33,7 +33,6 @@ import { MatIcon } from '@angular/material/icon';
   styleUrl: './car-rental-detail.component.scss'
 })
 export class CarRentalDetailComponent extends CommonComponent implements OnInit {
-  formBuilder = inject(FormBuilder);
   carRentalService = inject(VehicleService);
 
   readonlyDetail = model<boolean>(false);

@@ -45,7 +45,6 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
   private readonly airplaneService = inject(AirplaneService);
 
 
-  formBuilder = inject(FormBuilder);
 
   @ViewChild('ori') ori: ElementRef<HTMLInputElement>;
   oriList: string[] = []; // danh sách chọn sân bay đi

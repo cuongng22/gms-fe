@@ -70,7 +70,6 @@ export class GroupMailDetailComponent
   extends CommonComponent
   implements OnInit
 {
-  formBuilder = inject(FormBuilder);
   override baseService = inject(GroupMailService);
   flightMarketSv = inject(FlightMarketService);
 	@ViewChild('marketCode', { static: true }) marketCode!: ElementRef;

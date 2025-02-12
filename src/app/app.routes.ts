@@ -31,8 +31,8 @@ import { AircraftDataComponent } from 'src/app/crew-trip/features/system/config/
 import { EmailSupplierComponent } from 'src/app/crew-trip/features/system/config/email-supplier/email-supplier.component';
 import { GroupMailComponent } from 'src/app/crew-trip/features/system/config/group-mail/group-mail.component';
 import { UsersComponent } from 'src/app/crew-trip/features/system/users/users.component';
-import { WetLeaseDetailComponent } from 'src/app/crew-trip/features/wet-lease-charter/wet-lease-detail/wet-lease-detail.component';
-import { WetLeaseComponent } from 'src/app/crew-trip/features/wet-lease-charter/wet-lease/wet-lease.component';
+import { WetLeaseDetailComponent } from 'src/app/crew-trip/features/plan/wet-lease-charter/wet-lease/wet-lease-detail/wet-lease-detail.component';
+import { WetLeaseComponent } from 'src/app/crew-trip/features/plan/wet-lease-charter/wet-lease/wet-lease.component';
 import { NotFoundComponent } from 'src/app/not-found/not-found.component';
 import { CrewsDetailComponent } from './crew-trip/features/category/crews/crews-detail/crews-detail.component';
 import { FlightMarketDetailComponent } from './crew-trip/features/category/flight-market/flight-market-detail/flight-market-detail.component';
@@ -95,6 +95,7 @@ export const routes: Routes = [
 								path: 'wet-lease',
 								children: [
 									{ path: '', component: WetLeaseComponent },
+									{ path: 'detail/:id', component: WetLeaseDetailComponent },
 									{ path: 'detail', component: WetLeaseDetailComponent },
 								],
 							},

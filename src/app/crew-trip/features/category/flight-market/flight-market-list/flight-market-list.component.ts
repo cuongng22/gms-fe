@@ -92,7 +92,6 @@ export class FlightMarketListComponent
   override baseService = inject(FlightMarketService);
   private readonly destroyRef = inject(DestroyRef);
 
-  formBuilder = inject(FormBuilder);
 
   // danh sách thị trường
   markets: any[] = [];
@@ -124,7 +123,6 @@ export class FlightMarketListComponent
 
 	constructor(
 		public dataTransformPipe: DataTransformPipe,
-		public dialog: MatDialog,
 	) {
 	  super();
 	}

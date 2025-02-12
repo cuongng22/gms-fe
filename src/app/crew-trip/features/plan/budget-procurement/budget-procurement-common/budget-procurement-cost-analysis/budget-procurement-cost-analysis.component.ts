@@ -30,7 +30,6 @@ import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.c
   styleUrl: './budget-procurement-cost-analysis.component.scss'
 })
 export class BudgetProcurementCostAnalysisComponent extends CommonComponent implements OnInit {
-  private readonly formBuilder = inject(FormBuilder);
   disabled = input<boolean>(false);
 
   override formGroupDetail = this.formBuilder.group({
