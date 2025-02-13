@@ -65,7 +65,6 @@ import { NationService } from 'src/app/crew-trip/core/services/nation-service';
 import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-service';
 import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lookup';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import {
@@ -117,7 +116,7 @@ import {
 		NgForOf,
 		NgxMaterialTimepickerModule,
 		MatTooltipModule,
-		SelectionSuggestComponent,
+		DecimalPipe,
 	],
 	templateUrl: './contract-detail.component.html',
 	styleUrl: './contract-detail.component.scss',
@@ -690,6 +689,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 		if (!this.validField(row, cell)) {
 			cur.delete(cell);
 			row.cellEdit = Array.from(cur);
+		} else {
+			if (['priceBeforeTax', 'totalVatTax', 'priceAfterTax'].includes(cell)) {
+				row[cell] = this.numberPipe.transform(row[cell]);
+			}
 		}
 	}
 
