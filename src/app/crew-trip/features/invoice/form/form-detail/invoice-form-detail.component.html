@@ -194,7 +194,7 @@
               </th>
               <td
                   [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
-                  [attr.rowspan]="getRowSpan(element.roomNo,innerColumn)"
+                  [attr.rowspan]="getRowSpan(i,innerColumn,element)"
                   [style.display]="shouldShowRowSpan(i,innerColumn) ? '' : 'none'"
                   mat-cell *matCellDef="let element;let i = index">
                 <span [ngClass]="{

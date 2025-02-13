@@ -42,6 +42,7 @@ export class MESSAGE {
   static NEXT_PAGE = $localize`:@@nextPage:Next page`;
   static PRIVIOUS_PAGE = $localize`:@@priviousPage:Privious page`;
   static MAX_FILE_SIZE = $localize`Invalid file`;
+  static SEND_EMAIL = $localize`Send email successfully`;
 
   static LABEL_START_DATE = $localize`:@@startDate:Start Date`;
   static MESSAGE_START_DATE_REQUIRED = $localize`:@@startDateRequired:Start Date is required`;

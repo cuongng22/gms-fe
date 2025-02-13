@@ -149,7 +149,7 @@ export const menu: Menu[] = [
         icon: 'ri-folder-chart-line',
       },
       {
-        path: 'invoice/actual-expense-tracking',
+        path: 'invoice/invoice-actual-cost-tab',
         title: $localize`:@@actualExpenseTracking:Actual expense tracking`,
         icon: 'ri-shopping-cart-line',
       },

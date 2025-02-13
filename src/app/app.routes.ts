@@ -60,6 +60,7 @@ import { OtherFlightScheduleComponent } from './crew-trip/features/flight-schedu
 import { EmailTrackingComponent } from './crew-trip/features/flight-schedules/email-tracking/email-tracking.component';
 import { NotificationComponent } from "src/app/crew-trip/features/system/config/notification/notification.component";
 import { CarBookingComponent } from "src/app/crew-trip/features/car-room/car-booking/car-booking.component";
+import {InvoiceActualCostTabComponent} from "src/app/crew-trip/features/invoice/actual-cost/invoice-actual-cost-tab.component";
 
 
 export const routes: Routes = [
@@ -190,6 +191,7 @@ export const routes: Routes = [
             path: 'invoice-document-tab',
             component: InvoiceDocumentTabComponent,
           },
+          { path: 'invoice-actual-cost-tab', component: InvoiceActualCostTabComponent },
         ],
       },
       {
