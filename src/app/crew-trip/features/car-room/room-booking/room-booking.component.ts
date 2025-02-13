@@ -13,7 +13,10 @@ import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.comp
 import {SelectOptions} from 'src/app/crew-trip/shared/select-option';
 import {ExcelViewerComponent} from "src/app/crew-trip/shared/component/excel-viewer/excel-viewer.component";
 import {CommonModule} from "@angular/common";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpStatusCode} from "@angular/common/http";
+import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
+import {ListResponse} from "src/app/crew-trip/shared/models/common.model";
+import {MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
 
 @Component({
   selector: 'app-room-booking',
@@ -35,11 +38,11 @@ import {HttpClient} from "@angular/common/http";
   styleUrl: './room-booking.component.scss',
 })
 export class RoomBookingComponent extends CommonComponent implements OnInit {
+  override baseService = inject(RoomBookingService);
   optionsFlightScheduleType = SelectOptions.FLIGHT_SCHEDULE_TYPE;
   optionsServiceApplied = SelectOptions.SERVICE_APPLIED;
   monthSelection: string[] = [];
   fb: FormBuilder = inject(FormBuilder);
-  roomBookingService: RoomBookingService = inject(RoomBookingService);
   markets: string[] = [];
   listYear: number[] = [];
   workbook: wjcXlsx.Workbook;
@@ -80,6 +83,7 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
     } catch (error: any) {
       this.showError(error);
     }
+    this.search();
     await this.spinner.hide();
   }
 
@@ -96,15 +100,54 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
       );
   }
 
-  override async search() {
-    await this.spinner.show();
+  // override async search() {
+  //   await this.spinner.show();
+  //   try {
+  //     let urlFilePath = 'http://192.168.10.68:8081/source/documents/crew_overnight_stays.xlsx';
+  //     this.loadExcelFile(urlFilePath);
+  //   } catch (error: any) {
+  //     this.showError(error);
+  //     await this.spinner.hide();
+  //   }
+  //   await this.spinner.hide();
+  // }
+
+
+  override async search<T>(body?: any, isNextPage?: boolean, fnSearch?: (bodySearch: any) => (ListResponse<T> | any)) {
     try {
-      let urlFilePath = 'http://192.168.10.68:8081/source/documents/crew_overnight_stays.xlsx';
-      this.loadExcelFile(urlFilePath);
-    } catch (error: any) {
-      this.showError(error);
+      await this.spinner.show();
+      const buildBodySearch = {
+        ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+      }
+      let res;
+      if (fnSearch) {
+        res = await fnSearch(buildBodySearch);
+      } else {
+        res = await this.baseService.search<ListResponse<T>>(buildBodySearch);
+      }
+      if (res) {
+        if (res.status === HttpStatusCode.Ok) {
+          this.dataSource.data = res.data.content;
+          this.dataSource.data = this.dataSource.data.map((s: any) => ({
+            ...s,
+            isActiveLabel:
+              s.isActive === true || !!s.isActive
+                ? MESSAGE.ACTIVE
+                : MESSAGE.INACTIVE,
+            activeLabel:
+              s.active === true || !!s.active || s.status === true || !!s.status
+                ? MESSAGE.ACTIVE
+                : MESSAGE.INACTIVE,
+          }));
+        }
+        return res
+      }
+    } catch (e: any) {
+      this.baseService.showError(
+        e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
+      );
+    } finally {
       await this.spinner.hide();
     }
-    await this.spinner.hide();
   }
 }
