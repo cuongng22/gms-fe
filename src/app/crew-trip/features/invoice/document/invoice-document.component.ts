@@ -134,6 +134,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   override pageSize = 10;
   tblDetail: any[]
   currentRow: any
+  selectedRow: any = null;
 
   constructor() {
     super();
@@ -318,10 +319,13 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   }
 
   showDocumentDtl($event: any) {
+    this.selectedRow = $event.id;
     let listHdr = cloneDeep(this.dataSource.data);
     let currentHdr = listHdr.find((s: any) => s.id = $event.id);
     this.tblDetail = currentHdr?.invoiceDocumentDtl ?? [];
+
   }
+
   sendEmail() {
     this.baseService.sendEmail(this.formGroupDetail.getRawValue()).then(res => {
       this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
@@ -337,5 +341,9 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       id: data.id
     })
     this.toggleDialogCreate();
+  }
+
+  isSelected(row: any): boolean {
+    return this.selectedRow === row.id;
   }
 }
