@@ -11,7 +11,6 @@ import {
 import {SelectionComponent} from 'src/app/crew-trip/shared/component/selection/selection.component';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {SelectOptions} from 'src/app/crew-trip/shared/select-option';
-import {ExcelViewerComponent} from "src/app/crew-trip/shared/component/excel-viewer/excel-viewer.component";
 import {CommonModule} from "@angular/common";
 import {HttpClient, HttpStatusCode} from "@angular/common/http";
 import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
@@ -32,7 +31,6 @@ import {MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant
     SelectionSuggestComponent,
     MatButton,
     MatCardModule,
-    ExcelViewerComponent,
   ],
   templateUrl: './room-booking.component.html',
   styleUrl: './room-booking.component.scss',

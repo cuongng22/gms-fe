@@ -1,5 +1,4 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {ExcelViewerComponent} from "src/app/crew-trip/shared/component/excel-viewer/excel-viewer.component";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
@@ -18,7 +17,6 @@ import {HttpClient} from "@angular/common/http";
   selector: 'app-car-booking',
   standalone: true,
   imports: [
-    ExcelViewerComponent,
     InputSizeComponent,
     MatButton,
     MatCard,
