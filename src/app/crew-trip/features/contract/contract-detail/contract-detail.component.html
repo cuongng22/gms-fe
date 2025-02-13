@@ -64,7 +64,8 @@
               </mat-radio-button>
             </mat-radio-group>
             @if (formGroupDetail.controls['doiTuongDichVu'].hasError('required') && formGroupDetail.controls['doiTuongDichVu'].touched) {
-              <mat-error class="mat-mdc-form-field-error custom-mat-error"><span i18n>Service type</span><span i18n> is required</span></mat-error>
+              <mat-error class="mat-mdc-form-field-error custom-mat-error"><span i18n>Service type</span><span i18n> is required</span>
+              </mat-error>
             }
           </div>
         </div>
@@ -85,7 +86,7 @@
     </form>
   </mat-card-content>
 </mat-card>
-<mat-accordion multi >
+<mat-accordion multi>
   <mat-expansion-panel [expanded]="expandList.has('tab1')">
     <mat-expansion-panel-header i18n>
       <div (click)="$event.stopPropagation();" class="title-no-event">1. General information (Data extracted from the
@@ -429,8 +430,8 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Beneficiary</mat-label>
-              <input formControlName="peopleName" matInput trim="blur">
-              @if (!!formGroupDetail.controls['peopleName'].hasError('required')) {
+              <input formControlName="bankAccountNoB" matInput trim="blur">
+              @if (!!formGroupDetail.controls['bankAccountNoB'].hasError('required')) {
                 <mat-error><span i18n>Beneficiary</span><span i18n> is required</span></mat-error>
               }
             </mat-form-field>
@@ -438,7 +439,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Transfer to</mat-label>
-              <input formControlName="bankAccountNoB" matInput trim="blur">
+              <input formControlName="peopleName" matInput trim="blur">
               @if (!!formGroupDetail.controls['bankAccountNoB'].hasError('required')) {
                 <mat-error><span i18n>Transfer to</span><span i18n> is required</span></mat-error>
               }
@@ -589,7 +590,7 @@
               <ng-container matColumnDef="fileName">
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
                 <td *matCellDef="let element" mat-cell>
-                  <a (click)="true" [href]="environment.baseUrl+element.fileUrl"
+                  <a (click)="true" [href]="environment.baseUrl+element.fileUrl" target="_blank"
                      class="d-flex align-items-center justify-content-between position-relative"
                      style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                     {{ element.fileName }}
@@ -821,12 +822,12 @@
     <mat-panel-description class="d-block">
       <div class="w-100 text-end">
         @if (formGroupDetail.getRawValue().doiTuongDichVu === '3') {
-          <mat-checkbox checked class="mr-20" formControlName="isTaxHotel" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
-          <mat-checkbox checked class="mr-20" formControlName="isTaxVehicle" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
+          <mat-checkbox checked class="mr-20" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
+          <mat-checkbox checked class="mr-20" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
         } @else if (formGroupDetail.getRawValue().doiTuongDichVu === '1') {
-          <mat-checkbox checked class="mr-20" formControlName="isTaxHotel" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
+          <mat-checkbox checked class="mr-20" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
         } @else {
-          <mat-checkbox checked class="mr-20" formControlName="isTaxVehicle" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
+          <mat-checkbox checked class="mr-20" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
         }
 
         <button (click)="addUnitPrice()" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n mat-button type="button">
@@ -864,8 +865,8 @@
                 </div>
               } @else {
                 <span class="label-text">
-            {{ element.fromDate ? (element.fromDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]) : '' }}
-            </span>
+                  {{ element.fromDate ? (element.fromDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]) : '' }}
+                </span>
               }
             </td>
           </ng-container>
@@ -889,8 +890,8 @@
                 </div>
               } @else {
                 <span class="label-text">
-            {{ element.toDate ? (element.toDate| dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]) : '' }}
-            </span>
+                  {{ element.toDate ? (element.toDate| dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]) : '' }}
+                </span>
               }
             </td>
           </ng-container>
@@ -901,16 +902,6 @@
                 mat-cell>
               <div class="input-cell">
                 <mat-form-field class="edit-inline-table">
-                  <app-selection-suggest
-                    [options]="listHHDV"
-                    formControlName="">
-<!--                    [list]="listServiceFeeCode"-->
-<!--                    [placeholder]="'Please select'"-->
-<!--                    [required]="true"-->
-<!--                    [type]="'serviceFeeCode'"-->
-<!--                    (change)="changeSuggestUP(element,'serviceFeeCode')"-->
-
-                  </app-selection-suggest>
                   <mat-select #inputRef="ngModel" [(ngModel)]="element.serviceFeeCode" required [disabled]="readMode"
                               (ngModelChange)="onChangeHHDV(element)">
                     <mat-option *ngFor="let option of listHHDV" [value]="option.code">
@@ -996,8 +987,8 @@
                 </div>
               } @else {
                 <span class="label-text">
-            {{ element.priceBeforeTax }}
-            </span>
+                  {{ element.priceBeforeTax | number }}
+                </span>
               }
             </td>
           </ng-container>
@@ -1009,16 +1000,15 @@
             >
               @if (checkCellUP(element, 'taxCode')) {
                 <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table">
+                  <mat-form-field class="edit-inline-table">
                     <input trim="blur" [(ngModel)]="element.taxCode" matInput required
                            (clickOutside)="readCellUP(element,'taxCode')">
                   </mat-form-field>
                 </div>
               } @else {
                 <span class="label-text">
-            {{ element.taxCode }}
-            </span>
+                  {{ element.taxCode }}
+                </span>
               }
             </td>
           </ng-container>
@@ -1059,7 +1049,7 @@
                 </div>
               } @else {
                 <span class="label-text">
-            {{ element.totalVatTax }}
+            {{ element.totalVatTax | number }}
             </span>
               }
             </td>
@@ -1080,8 +1070,8 @@
                 </div>
               } @else {
                 <span class="label-text">
-            {{ element.priceAfterTax }}
-            </span>
+                  {{ element.priceAfterTax | number }}
+                </span>
               }
             </td>
           </ng-container>
