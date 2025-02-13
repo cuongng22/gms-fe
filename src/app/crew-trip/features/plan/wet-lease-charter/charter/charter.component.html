@@ -1,1 +1,123 @@
-<p>charter works!</p>
+<mat-card class="border-radius p-3 d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+      <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
+        <div class="row">
+          <div class="col-3" sizeInput="sm">
+            <app-select-multiple i18n-label="@@airportCodes" label="Airport code" [options]="listFlightMarket"
+              formControlName="airportCodes" size="sm" />
+          </div>
+          <div class="col-3 mb-2" sizeInput="sm">
+            <mat-form-field class="mb-1">
+              <mat-date-range-input [rangePicker]="contractRangePicker">
+                <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="dd/mm/yyyy"
+                  formControlName="startDate">
+                <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
+                  formControlName="endDate">
+              </mat-date-range-input>
+              <mat-label i18n="@@contractEndDate">Contract end date</mat-label>
+              <mat-datepicker-toggle matIconSuffix [for]="contractRangePicker"></mat-datepicker-toggle>
+              <mat-date-range-picker #contractRangePicker>
+                <mat-date-range-picker-actions>
+                  <button sizeButton="sm" mat-button matDateRangePickerCancel i18n="@@cancel">Cancel
+                  </button>
+                  <button sizeButton="sm" mat-raised-button color="primary" matDateRangePickerApply i18n="@@apply">Apply
+                  </button>
+                </mat-date-range-picker-actions>
+              </mat-date-range-picker>
+              <mat-error *ngxControlError="formGroupSearch.controls['startDate']; track: 'matDatepickerParse'"
+                i18n="@@contractPeriodInvalidFormat">
+                Contract period invalid format
+              </mat-error>
+              <mat-error *ngxControlError="formGroupSearch.controls['endDate']; track: 'matDatepickerParse'"
+                i18n="@@contractPeriodInvalidFormat">
+                Contract period invalid format
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-3 d-flex  justify-content-lg-start justify-content-sm-center" sizeInput="sm">
+            <mat-card-title>
+              <button class="search-btn" type="submit" mat-button>
+                <i class="material-symbols-outlined">
+                  search
+                </i>
+                <span i18n="@@search">Search</span>
+              </button>
+            </mat-card-title>
+          </div>
+        </div>
+      </form>
+    </mat-card-content>
+  </mat-card>
+  <mat-card class="mb-10 mt-10 p-0 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="mb-10">
+      <mat-card-title></mat-card-title>
+      <mat-card-subtitle>
+        <button class="add-btn mr-10" type="button" mat-button (click)="exportFileExcel('charter.xlsx')">
+          <i class="material-symbols-outlined">
+            download
+          </i>
+          <span i18n="@@export">Export</span>
+        </button>
+        <a class="add-btn" type="button" mat-button [routerLink]="['/plan/est-plan/charter/detail']">
+          <i class="material-symbols-outlined">
+            add
+          </i>
+          <span i18n="@@addNew">Add new</span>
+        </a>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <div class="table-responsive">
+        <!-- <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+          
+          <tr mat-header-row *matHeaderRowDef="headerRowDef1"></tr>
+          <tr mat-header-row *matHeaderRowDef="headerRowDef2"></tr>
+          <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
+          <tr mat-footer-row *matFooterRowDef="footerRowDef" [hidden]="dataSource.data.length === 0"></tr>
+        </table>
+        <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+          [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+          aria-label="Select page" i18n-aria-label="@@selectPage">
+        </mat-paginator> -->
+      </div>
+    </mat-card-content>
+  </mat-card>
+  
+  
+  
+  <!-- dialog Delete -->
+  <div class="add-new-popup" [class.active]="showDialogDelete">
+    <div class="popup-dialog dialog-delete-with">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+            <mat-card-content>
+                <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+                </div>
+                <div class="text-center mb-20">
+                    <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
+                </div>
+                <div class="text-center mb-20">
+                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+                        You will not be able to recover the deleted data!</span>
+                </div>
+                <div class="btn-box text-center">
+                    <button type="button" mat-button (click)="toggleDialogDelete()"
+                        class="close-btn  min-with-100 mlr-5">
+                        <i class="material-symbols-outlined">
+                            close
+                        </i>
+                        <span i18n="@@cancel">Cancel</span>
+                    </button>
+                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
+                        <i class="material-symbols-outlined">
+                            save
+                        </i>
+                        <span i18n="@@confirm">Confirm</span>
+                    </button>
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+  </div>

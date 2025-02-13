@@ -249,7 +249,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
 
   invalidCarRental() {
     if (this.dataSourceCarRental.data) {
-      return this.dataSourceCarRental.data.some((item, index) => this.dataSourceCarRental.data.map(mapItem => mapItem.carRentalCode).indexOf(item.carRentalCode) !== index);
+      return this.dataSourceCarRental.data.map(item => item.carRentalCode).some((item, index, array) => array.indexOf(item) !== index);
     }
     return false;
   }

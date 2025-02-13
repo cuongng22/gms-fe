@@ -167,8 +167,8 @@
             <tr mat-header-row *matHeaderRowDef="headerRowDef1"></tr>
             <tr mat-header-row *matHeaderRowDef="headerRowDef2"></tr>
             <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
-            <tr mat-footer-row *matFooterRowDef="totalRowDef; sticky: true"></tr>
-            <tr mat-footer-row *matFooterRowDef="totalPlannedBudgetRowDef; sticky: true"></tr>
+            <tr mat-footer-row *matFooterRowDef="totalRowDef; sticky: true" [hidden]="dataSource.data.length === 0"></tr>
+            <tr mat-footer-row *matFooterRowDef="totalPlannedBudgetRowDef; sticky: true" [hidden]="dataSource.data.length === 0"></tr>
             <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell text-center" colspan="999999">No data!</td>
             </tr>

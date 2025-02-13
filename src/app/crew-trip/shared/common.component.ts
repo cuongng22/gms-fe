@@ -359,8 +359,8 @@ export class CommonComponent
 		}
 	}
 
-	async loadListFlightMarket() {
-		await this._flightMarketService.search({ option: 1 }).then((res) => {
+	async loadListFlightMarket(param?: any) {
+		await this._flightMarketService.search({ option: 1, ...param }).then((res) => {
 			if (res.data) {
 				this.listFlightMarket = res.data;
 			}

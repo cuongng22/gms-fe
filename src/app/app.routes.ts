@@ -60,6 +60,8 @@ import { OtherFlightScheduleComponent } from './crew-trip/features/flight-schedu
 import { EmailTrackingComponent } from './crew-trip/features/flight-schedules/email-tracking/email-tracking.component';
 import { NotificationComponent } from "src/app/crew-trip/features/system/config/notification/notification.component";
 import { CarBookingComponent } from "src/app/crew-trip/features/car-room/car-booking/car-booking.component";
+import { WetLeaseCharterComponent } from './crew-trip/features/plan/wet-lease-charter/wet-lease-charter.component';
+import { CharterDetailComponent } from './crew-trip/features/plan/wet-lease-charter/charter/charter-detail/charter-detail.component';
 
 
 export const routes: Routes = [
@@ -102,9 +104,17 @@ export const routes: Routes = [
               {
                 path: 'wet-lease',
                 children: [
-                  { path: '', component: WetLeaseComponent },
+                  { path: '', component: WetLeaseCharterComponent },
                   { path: 'detail/:id', component: WetLeaseDetailComponent },
                   { path: 'detail', component: WetLeaseDetailComponent },
+                ],
+              },
+              {
+                path: 'charter',
+                children: [
+                  { path: '', component: WetLeaseCharterComponent },
+                  { path: 'detail/:id', component: CharterDetailComponent },
+                  { path: 'detail', component: CharterDetailComponent },
                 ],
               },
             ],
