@@ -21,16 +21,15 @@
     <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
       <div class="row">
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection
+          <app-selection [required]="true"
             [options]="optionsFlightScheduleType"
             label="Flight Schedule Type"
-            formControlName="flightScheduleType"
+            formControlName="scheduleType"
           >
-
           </app-selection>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection-suggest
+          <app-selection-suggest required
             i18n-label="@@airportCodes"
             label="Market code"
             [options]="markets"
@@ -39,13 +38,14 @@
           ></app-selection-suggest>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection [options]="optionsServiceApplied" label="FC/CC" formControlName="serviceApplied">
+          <app-selection [options]="optionsServiceApplied" [required]="true" label="FC/CC" formControlName="type">
           </app-selection>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
           <app-selection
             [options]="monthSelection"
             label="Month"
+            [required]="true"
             formControlName="month"
             size="sm"
             attrDisplay=""
@@ -57,7 +57,7 @@
             [options]="listYear"
             label="Year"
             formControlName="year"
-            size="sm"
+            size="sm" [required]="true"
             attrDisplay=""
             attrValue=""
           >
@@ -77,11 +77,32 @@
     </form>
   </mat-card-content>
 </mat-card>
-<mat-card>
-  <div class="container-fluid">
-    <!-- Current sheet view -->
-    <div id="tableHost">
-      <!--      <app-excel-viewer [file]="excelFile"></app-excel-viewer>-->
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-header class="mb-10">
+    <mat-card-title class="sub-title">
+    </mat-card-title>
+    <mat-card-subtitle>
+      <button class="add-btn mr-10" type="button" mat-button>
+        <i class="material-symbols-outlined">
+          download
+        </i>
+        <span i18n="@@export">Export</span>
+      </button>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+        <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+          <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
+          <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr *matNoDataRow class="mat-row">
+          <td [attr.colspan]="displayedColumns.length" class="mat-cell text-center"><span i18n>No data!</span>
+        </tr>
+      </table>
     </div>
-  </div>
+  </mat-card-content>
 </mat-card>

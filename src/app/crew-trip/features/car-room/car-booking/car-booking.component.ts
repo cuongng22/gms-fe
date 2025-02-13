@@ -10,7 +10,6 @@ import {
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 import {SelectOptions} from "src/app/crew-trip/shared/select-option";
 import {RoomBookingService} from "src/app/crew-trip/core/services/room-booking.service";
-import * as wjcXlsx from "@mescius/wijmo.xlsx";
 import {HttpClient} from "@angular/common/http";
 
 @Component({
@@ -37,7 +36,6 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
   roomBookingService: RoomBookingService = inject(RoomBookingService);
   markets: string[] = [];
   listYear: number[] = [];
-  workbook: wjcXlsx.Workbook;
   sheetIndex: number;
   excelFile: Blob | null = null;
 
