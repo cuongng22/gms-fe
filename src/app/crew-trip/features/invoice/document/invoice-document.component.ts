@@ -39,11 +39,12 @@ import {DatepickerYearMonthComponent} from "src/app/crew-trip/shared/component/d
 import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
 import {cloneDeep} from "lodash";
+import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 
 @Component({
   selector: 'app-invoice-document',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, ConfirmDeleteDialog, DatepickerYearMonthComponent, NgxTrimDirectiveModule, ThousandsSeparatorDirective, FormsModule],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, ConfirmDeleteDialog, DatepickerYearMonthComponent, NgxTrimDirectiveModule, ThousandsSeparatorDirective, FormsModule, MatGridTile, MatGridList],
   templateUrl: './invoice-document.component.html',
   styleUrl: './invoice-document.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -148,7 +149,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       statusEmail: [],
     });
     this.formGroupDetail = this.fb.group({
-      id: [], bizDocId: [], bizDocIdC1: [], contractName: [], contractCode: []
+      id: [], emailTo: ['chien12345aabb@gmail.com'], emailCc: ['chien12345aabb@gmail.com'], emailSubject: ['test'], emailContent: ['test1']
     });
     this.formGroupFile = this.fb.group({
       ctype: ['INTERNATIONAL'], partnerType: [], fileUpload: [], templateName: [], templateNameLabel: []
@@ -321,5 +322,20 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     let currentHdr = listHdr.find((s: any) => s.id = $event.id);
     this.tblDetail = currentHdr?.invoiceDocumentDtl ?? [];
   }
+  sendEmail() {
+    this.baseService.sendEmail(this.formGroupDetail.getRawValue()).then(res => {
+      this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
+      let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
+      current.statusEmail = 'SEND';
+      this.closeDetail();
+    });
 
+  }
+
+  showDialogSendEmail(data: any) {
+    this.formGroupDetail.patchValue({
+      id: data.id
+    })
+    this.toggleDialogCreate();
+  }
 }

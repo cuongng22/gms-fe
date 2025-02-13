@@ -95,7 +95,7 @@ export class InvoiceDocumentService extends BaseService {
         'Accept': 'application/octet-stream'
       }),
       responseType: 'blob' as any,
-      params:new HttpParams({fromObject: removeNullValues(body)})
+      params: new HttpParams({fromObject: removeNullValues(body)})
     };
     return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
   }
@@ -112,5 +112,13 @@ export class InvoiceDocumentService extends BaseService {
     const url = `${this.api}/${this.path}/list-parent`;
     const params = new HttpParams({fromObject: removeNullValues(body)});
     return firstValueFrom(this.http.get<any>(url, {params}));
+  }
+
+  async sendEmail(body: any): Promise<any> {
+    const url = `${this.api}/invoice/common/send-email`;
+    const headers = {
+      headers: new HttpHeaders()
+    };
+    return firstValueFrom(this.http.post(url, body, headers));
   }
 }

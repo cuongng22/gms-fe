@@ -32,13 +32,15 @@ import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {ConfirmDeleteDialog} from "src/app/crew-trip/shared/dialog/confirm-delete-dialog";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
-import { InvoiceDocumentService } from 'src/app/crew-trip/core/services/invoice-document-service';
+import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
+import moment from "moment";
+import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 
 
 @Component({
   selector: 'app-invoice-document-remind',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, ConfirmDeleteDialog],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, ConfirmDeleteDialog, MatGridList, MatGridTile],
   templateUrl: './invoice-document-remind.component.html',
   styleUrl: './invoice-document-remind.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -84,7 +86,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
-      searchString: [],
+      searchString: [moment().format('YYYY-MM-DD')],
       ctype: [],
       partnerType: [],
       airportCode: [],
@@ -94,7 +96,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
       statusEmail: [],
     });
     this.formGroupDetail = this.fb.group({
-      id: [], bizDocId: [], bizDocIdC1: [], contractName: [], contractCode: []
+      id: [], emailTo: ['chien12345aabb@gmail.com'], emailCc: ['chien12345aabb@gmail.com'], emailSubject: ['test'], emailContent: ['test1']
     });
 
     this.formGroupSearchInit = {...this.formGroupSearch.value};
@@ -102,7 +104,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
   }
 
   override async ngOnInit() {
-    await Promise.all([this.getDocumentNotSent(),]).then(() => {
+    await Promise.all([this.getDocumentNotSent(this.formGroupSearch.getRawValue()),]).then(() => {
 
     });
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
@@ -133,5 +135,22 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  sendEmail() {
+    this.baseService.sendEmail(this.formGroupDetail.getRawValue()).then(res => {
+      this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
+      let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
+      current.statusEmail = 'SEND';
+      this.closeDetail();
+    });
+
+  }
+
+  showDialogSendEmail(data: any) {
+    this.formGroupDetail.patchValue({
+      id: data.id
+    })
+    this.toggleDialogCreate();
   }
 }
