@@ -83,6 +83,7 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
         } else if (errorResponse.status === HttpStatusCode.Conflict ||
           errorResponse.status === HttpStatusCode.NotFound) {
         } else {
+          console.log("errorResponse", errorResponse)
           baseService.showError(errorResponse?.error?.error ?? MESSAGE.ERROR);
         }
       });
