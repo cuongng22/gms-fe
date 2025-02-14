@@ -57,12 +57,6 @@ export class InvoiceDocumentService extends BaseService {
     return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
-
-  getContractByAirport(value: any): Promise<any> {
-    const url = `${this.api}/invoice/common/contract-by-airport/${value}`;
-    return firstValueFrom(this.http.get<any>(url, this.httpOptions));
-  }
-
   listMaNghiepVu(): Promise<any> {
     const url = `${this.api}/${this.path}/list-ma-nghiep-vu`;
     return firstValueFrom(this.http.get<any>(url, this.httpOptions));
@@ -116,6 +110,14 @@ export class InvoiceDocumentService extends BaseService {
 
   async sendEmail(body: any): Promise<any> {
     const url = `${this.api}/invoice/common/send-email`;
+    const headers = {
+      headers: new HttpHeaders()
+    };
+    return firstValueFrom(this.http.post(url, body, headers));
+  }
+
+  findContract(body: any): Promise<any> {
+    const url = `${this.api}/invoice/common/find-contract`;
     const headers = {
       headers: new HttpHeaders()
     };

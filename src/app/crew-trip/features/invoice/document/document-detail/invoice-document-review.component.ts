@@ -309,24 +309,6 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     }
   }
 
-  async airportCodeChange($event: any) {
-    if ($event?.value) {
-      try {
-        await this.spinner.show();
-        await this.baseService.getContractByAirport($event.value).then(res => {
-          if (res.data?.bizDocId) {
-            //todo set du lieu thong tin hop dong cho form detail
-          }
-        });
-      } catch (e) {
-        console.log(e);
-        this.baseService.showError(MESSAGE.ERROR);
-      } finally {
-        await this.spinner.hide();
-      }
-    }
-  }
-
   changeServiceFee($event: any, row: any, type: any) {
     if (type === 'code') {
       row.unit = this.listFeeService.find((s: any) => s.code == $event.value)?.unit;
