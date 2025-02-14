@@ -224,31 +224,13 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
           try {
             await this.spinner.show();
             const [res, res2, res3] = await Promise.all([
-              this.baseService.getContractByAirport(value),
               this.contractService.getMarket({marketCode: value.toUpperCase()}),
+              this.findContract(),
               this.loadListDocumentParent()
             ]);
-            if (res.data?.bizDocId) {
+            if (res.data) {
               this.formGroupDetail.patchValue({
-                paymentDueDay: res.data?.dueDateNumber,
-                bizDocId: res.data?.bizDocId,
-                partnerCode: res.data?.partnerCode,
-                partnerName: res.data?.partnerName,
-                currency: res.data?.currency,
-                partnerType: res.data?.isHotel ? 'HOTEL' : 'TRANSPORTATION'
-              })
-
-              //paymentDueDate
-              let invoiceDate = this.formGroupDetail.getRawValue().invoiceDate;
-              let _value = (moment(invoiceDate) || invoiceDate)?.add(res.data?.dueDateNumber || 0, 'days')
-              this.formGroupDetail.patchValue({
-                paymentDueDate: _value?.format('YYYY-MM-DD') || ''
-              });
-            }
-
-            if(res2.data){
-              this.formGroupDetail.patchValue({
-                contractServiceType: res2.data.marketType.toUpperCase(),
+                contractServiceType: res.data.marketType.toUpperCase(),
               })
             }
           } catch (e) {
@@ -257,6 +239,18 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
           } finally {
             await this.spinner.hide();
           }
+        }
+      });
+
+      this.formGroupDetail.controls['partnerType'].valueChanges.subscribe((value) => {
+        if (value && !this.firstLoad) {
+          this.findContract();
+        }
+      });
+
+      this.formGroupDetail.controls['periodTo'].valueChanges.subscribe((value) => {
+        if (value && !this.firstLoad) {
+          this.findContract();
         }
       });
 
@@ -333,8 +327,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   async setReadMode(form: FormGroup) {
-    const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version','contractServiceType'];
-    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version','contractServiceType'];
+    const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType'];
+    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -556,5 +550,42 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         invoiceNumber: this.formGroupDetail.getRawValue()._invoiceNumber,
         invoiceDate: this.formGroupDetail.getRawValue()._invoiceDate,
       }];
+  }
+
+  findContract() {
+    this.formGroupDetail.patchValue({
+      paymentDueDay: '',
+      bizDocId: '',
+      partnerCode: '',
+      partnerName: '',
+      currency: '',
+      paymentDueDate: ''
+    });
+    if (this.formGroupDetail.getRawValue().airportCode &&
+      this.formGroupDetail.getRawValue().partnerType &&
+      this.formGroupDetail.getRawValue().periodTo
+    ) {
+      this.baseService.findContract({
+        airportCode: this.formGroupDetail.getRawValue().airportCode,
+        partnerType: this.formGroupDetail.getRawValue().partnerType,
+        periodTo: this.formGroupDetail.getRawValue().periodTo
+      }).then((res: any) => {
+        if (res.data?.bizDocId) {
+          this.formGroupDetail.patchValue({
+            paymentDueDay: res.data?.dueDateNumber,
+            bizDocId: res.data?.bizDocId,
+            partnerCode: res.data?.partnerCode,
+            partnerName: res.data?.partnerName,
+            currency: res.data?.currency,
+          })
+          //paymentDueDate
+          let invoiceDate = this.formGroupDetail.getRawValue().invoiceDate;
+          let _value = (moment(invoiceDate) || invoiceDate)?.add(res.data?.dueDateNumber || 0, 'days')
+          this.formGroupDetail.patchValue({
+            paymentDueDate: _value?.format('YYYY-MM-DD') || ''
+          });
+        }
+      })
+    }
   }
 }
