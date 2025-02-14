@@ -153,7 +153,7 @@ export class CommonComponent
 				size: this.pageSize,
 				limit: this.pageSize,
 				...(removeNullValues(body) ||
-					removeNullValues(this.formGroupSearch.value)),
+					removeNullValues(this.formGroupSearch?.value)),
 			};
 			let res;
 			if (fnSearch) {
@@ -181,6 +181,7 @@ export class CommonComponent
 				return res;
 			}
 		} catch (e: any) {
+      console.log(e)
 			this.baseService.showError(
 				e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
 			);

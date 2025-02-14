@@ -246,6 +246,9 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       await this.spinner.show();
       let filename = '';
       if (type === 'EXPORT') {
+        const res = await this.baseService.exportFileData({
+        });
+        this.downloadFile(res, this.formGroupFile.getRawValue().templateNameLabel);
       } else if (type === 'DOWNLOAD') {
         const res = await this.baseService.exportFileData({
           fileExportType: '1'
@@ -321,7 +324,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   showDocumentDtl($event: any) {
     this.selectedRow = $event.id;
     let listHdr = cloneDeep(this.dataSource.data);
-    let currentHdr = listHdr.find((s: any) => s.id = $event.id);
+    let currentHdr = listHdr.find((s: any) => s.id === $event.id);
     this.tblDetail = currentHdr?.invoiceDocumentDtl ?? [];
 
   }
