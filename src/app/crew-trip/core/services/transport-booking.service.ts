@@ -5,15 +5,9 @@ import {environment} from 'src/environments/environment';
 @Injectable({
   providedIn: 'root',
 })
-export class RoomBookingService extends BaseService {
+export class TransportBookingService extends BaseService {
   constructor() {
     super();
-    this.path = 'aves/room-tracking';
+    this.path = 'aves/transport-tracking';
   }
-
-  async getFile(filePath: string): Promise<any> {
-    const url = `${environment.baseUrl}/source/${filePath}`;
-    return url;
-  }
-
 }
