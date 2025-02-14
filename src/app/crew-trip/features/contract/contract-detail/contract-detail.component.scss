@@ -1985,3 +1985,20 @@
   font-style: italic;
   font-size: 12px;
 }
+
+.custom-dialog-center .mat-dialog-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* Nếu cần màn hình nền hoặc padding */
+  margin: 0;
+  height: auto;
+  overflow: hidden;
+}
+
+@media (max-width: 600px) {
+  .custom-dialog-center .mat-dialog-container {
+    width: 90vw; /* 90% chiều rộng viewport */
+    height: 90vh; /* 90% chiều cao viewport */
+  }
+}
