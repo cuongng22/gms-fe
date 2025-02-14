@@ -590,11 +590,20 @@
               <ng-container matColumnDef="fileName">
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
                 <td *matCellDef="let element" mat-cell>
-                  <a (click)="true" [href]="environment.baseUrl+element.fileUrl" target="_blank"
-                     class="d-flex align-items-center justify-content-between position-relative"
-                     style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
-                    {{ element.fileName }}
-                  </a>
+                  @if (element.fileUrl?.substr(element.fileUrl.length - 4) == '.pdf') {
+                    <a mat-button (click)="pdfViewer(environment.baseUrl+element.fileUrl)" target="_blank"
+                       class="d-flex align-items-center justify-content-between position-relative"
+                       style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
+                      {{ element.fileName }}
+                    </a>
+                  } @else {
+                    <a mat-button (click)="true" [href]="environment.baseUrl+element.fileUrl" target="_blank"
+                       class="d-flex align-items-center justify-content-between position-relative"
+                       style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
+                      {{ element.fileName }}
+                    </a>
+                  }
+
                 </td>
               </ng-container>
 
@@ -1598,7 +1607,6 @@
   </div>
 </div>
 
-
 <!--template button style-->
 <ng-template #cancelBtn class="btn-box">
   <button class="close-btn" i18n mat-button type="button">
@@ -1616,3 +1624,5 @@
     Choose
   </button>
 </ng-template>
+
+

@@ -34,6 +34,7 @@ import {
 	MatDatepickerModule,
 	MatDatepickerToggle,
 } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
 import {
 	MatAccordion,
 	MatExpansionPanel,
@@ -67,6 +68,7 @@ import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lo
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { PdfViewerComponent } from 'src/app/crew-trip/shared/pdf-viewer/pdf-viewer.component';
 import {
 	DATE_FORMAT_DD_MM_YYYY,
 	LOCALE,
@@ -117,6 +119,7 @@ import {
 		NgxMaterialTimepickerModule,
 		MatTooltipModule,
 		DecimalPipe,
+		MatDialogModule,
 	],
 	templateUrl: './contract-detail.component.html',
 	styleUrl: './contract-detail.component.scss',
@@ -130,6 +133,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	//control
 	@ViewChild('nationName') nationName: ElementRef<HTMLInputElement>;
 	filteredNation = model<any[]>([]);
+	isHiddenPdf: boolean;
 
 	//variable
 	id: any;
@@ -242,11 +246,13 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	deletePriceUnitInfo: any = [];
 	deleteNotAllDay: any = [];
 	deleteDayUse: any = [];
+	pdfSrc: string;
 	protected readonly LOCALE = LOCALE;
 
 	// private filesControl = new FormControl(null, );
 	constructor(private readonly numberPipe: DecimalPipe) {
 		super();
+		this.isHiddenPdf = true;
 		window.scrollTo({ top: 0, behavior: 'instant' });
 		const navigation = this._router.getCurrentNavigation();
 		const state = navigation?.extras.state as { data: any };
@@ -486,7 +492,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 				);
 				//validate
 				// if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
-				if (fileUpload.size > 5 * 1048576) {
+				if (fileUpload.size > 10 * 1048576) {
 					this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
 					return;
 				}
@@ -498,7 +504,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 							...this.tblAttachedDocument.data,
 							{
 								fileName: fileUpload.name,
-								fileUrl: res.data,
+								fileUrl: `source/${res.data}`,
 								isManual: true,
 							},
 						];
@@ -1074,5 +1080,15 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 				isTaxVehicle: false,
 			});
 		}
+	}
+
+	pdfViewer(url: string) {
+		const dialogRef = this.dialog.open(PdfViewerComponent, {
+			height: '90vh',
+			minHeight: '90vh',
+			minWidth: '80vw',
+			data: { pdfSrc: url },
+		});
+		dialogRef.afterClosed().subscribe(() => {});
 	}
 }

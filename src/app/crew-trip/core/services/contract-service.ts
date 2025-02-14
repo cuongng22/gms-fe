@@ -4,11 +4,14 @@ import { firstValueFrom } from 'rxjs';
 import { BaseService } from 'src/app/crew-trip/core/services/base-service';
 import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
 import { removeNullValues } from 'src/app/crew-trip/shared/utils/constant';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
 	providedIn: 'root',
 })
 export class ContractService extends BaseService {
+	baseUrl = environment.baseUrl;
+
 	constructor() {
 		super();
 		this.path = 'contract';
@@ -43,7 +46,7 @@ export class ContractService extends BaseService {
 	}
 
 	override uploadFile(form: FormData): Promise<any> {
-		const url = `${this.api}/${this.path}/attachment`;
+		const url = `${this.baseUrl}/api/${this.path}/attachment`;
 		const headers = {
 			headers: new HttpHeaders(),
 		};
