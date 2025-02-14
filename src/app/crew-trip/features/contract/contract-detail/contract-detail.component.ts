@@ -204,10 +204,22 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 								});
 								return;
 							}
-							// delete res.data.marketCode;
 							this.formGroupDetail.patchValue(res.data);
 							this.nationSelected(res.data.nationId);
 							this.marketCodeChangeBrake = true;
+							const fieldContract = [
+								'marketName',
+								'nation',
+								'marketType',
+								'flightGroup',
+							];
+							Object.entries(this.formGroupDetail.controls).forEach(
+								([k, v]) => {
+									if (fieldContract.includes(k)) {
+										v.disable();
+									}
+								},
+							);
 						}
 					});
 			} catch (e) {
@@ -245,7 +257,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	deletePriceUnitInfo: any = [];
 	deleteNotAllDay: any = [];
 	deleteDayUse: any = [];
-	pdfSrc: string;
 	protected readonly LOCALE = LOCALE;
 
 	// private filesControl = new FormControl(null, );
@@ -503,8 +514,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 						this.tblAttachedDocument.data = [
 							...this.tblAttachedDocument.data,
 							{
-								fileName: fileUpload.name,
-								fileUrl: `source/${res.data}`,
+								id: res.data.id,
+								fileName: res.data.filename,
+								fileUrl: `source/${res.data.url}`,
 								isManual: true,
 							},
 						];
@@ -765,6 +777,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 			'notes',
 			'doiTuongDichVu',
 			'contractSpec',
+			'marketType',
 		];
 		const fieldAnnex = ['partnerName'];
 		Object.entries(form.controls).forEach(([k, v]) => {
