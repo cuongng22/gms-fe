@@ -134,8 +134,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	@ViewChild('nationName') nationName: ElementRef<HTMLInputElement>;
 	filteredNation = model<any[]>([]);
 	isHiddenPdf: boolean;
-
 	//variable
+	documentId: number;
 	id: any;
 	viewType: any;
 	readMode: any;
@@ -143,7 +143,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	dataObject: any;
 	contractObj: any;
 	@Output() backStep = new EventEmitter<any>();
-
 	tblAttachedDocument = new MatTableDataSource();
 	tblUnitPrice = new MatTableDataSource();
 	tbl61 = new MatTableDataSource();
@@ -378,6 +377,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	getContractForm(key: string) {
 		return this.listContractForm.find((s) => s.key == key)?.value;
 	}
+
 	override async ngOnInit() {
 		try {
 			await this.spinner.show();
@@ -562,13 +562,13 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	async _doDelete() {
 		try {
 			if (this.deleteObj?.deleteType == 'file') {
-				await this.baseService
-					.deleteFile(this.deleteObj.fileName, this.id)
-					.then((res: any) => {
-						if (res.status == HttpStatusCode.Ok) {
-							this.baseService.showSuccess('Delete file successfully.');
-						}
-					});
+				// await this.baseService
+				// 	.deleteFile(this.deleteObj.fileName, this.id)
+				// 	.then((res: any) => {
+				// 		if (res.status == HttpStatusCode.Ok) {
+				// 			this.baseService.showSuccess('Delete file successfully.');
+				// 		}
+				// 	});
 				this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter(
 					(item: any) => item.fileName !== this.curFile.fileName,
 				);
@@ -625,14 +625,15 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 		this._showDialogDelete = true;
 	}
 
-	async confirmDeleteFile(element: any) {
+	async confirmDeleteFile(element: any, id: number) {
 		this.curFile = element;
+		this.documentId = id;
 		this.showDialogDeleteFile = true;
 	}
 
 	async deleteFile() {
 		await this.baseService
-			.deleteFile(this.curFile.fileName, this.id)
+			.deleteFile(this.curFile.fileName, this.id, this.documentId)
 			.then((res: any) => {
 				if (res.status == HttpStatusCode.Ok) {
 					this.baseService.showSuccess('Delete file successfully.');

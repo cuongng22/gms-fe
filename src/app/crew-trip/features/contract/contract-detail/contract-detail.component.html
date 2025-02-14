@@ -606,9 +606,23 @@
 
                 </td>
               </ng-container>
-
-              <tr *matHeaderRowDef="['stt','fileName']" mat-header-row></tr>
-              <tr *matRowDef="let row; columns: ['stt','fileName']" mat-row></tr>
+              <ng-container matColumnDef="action">
+                <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
+                <td *matCellDef="let element"  mat-cell>
+                  @if (element.isManual) {
+                    <div class="action-buttons d-flex justify-content-center">
+                      <a type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
+                         (click)="confirmDeleteFile(element, element.id)">
+                        <i class="material-symbols-outlined text-danger">
+                          delete
+                        </i>
+                      </a>
+                    </div>
+                  }
+                </td>
+              </ng-container>
+              <tr *matHeaderRowDef="['stt','fileName', 'action']" mat-header-row></tr>
+              <tr *matRowDef="let row; columns: ['stt','fileName', 'action']" mat-row></tr>
             </table>
           </div>
           <!--          <div class="col-4 mt-20" sizeInput='sm'>-->
@@ -1570,6 +1584,42 @@
 </mat-accordion>
 <!-- POPUP-->
 <!-- Delete file confirm Popup -->
+<div [class.active]="showDialogDeleteFile" class="add-new-popup">
+  <div class="popup-dialog dialog-delete-with">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+      <mat-card-content>
+        <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+        </div>
+        <div class="text-center mb-20">
+          <h3 class="mb-0" i18n>Are you sure you want to delete?</h3>
+        </div>
+        <div class="text-center mb-20">
+                    <span class="font-weight-normal color-black font-size-19" i18n>
+                        You will not be able to recover the deleted data!</span>
+        </div>
+        <div class="btn-box text-center">
+          <button (click)="closeConfirmDeleteFile()" class="close-btn  min-with-100 mlr-5" mat-button
+                  type="button">
+            <i class="material-symbols-outlined">
+              close
+            </i>
+
+            <span i18n>Cancel</span>
+          </button>
+          <button (click)="deleteFile()" class="add-btn min-with-100 mlr-5" mat-button type="button">
+            <i class="material-symbols-outlined">
+              save
+            </i>
+            <span i18n>Confirm</span>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
 <div [class.active]="confirmDeleteMessage" class="add-new-popup">
   <div class="popup-dialog dialog-delete-with">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
