@@ -704,10 +704,13 @@
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
-              <mat-label i18n>Market Type</mat-label>
-              <input formControlName="marketType" matInput required trim="blur">
+              <mat-label i18n>Airport Type</mat-label>
+              <mat-select formControlName="marketType">
+                <mat-option value="International">International</mat-option>
+                <mat-option value="Domestic">Domestic</mat-option>
+              </mat-select>
               @if (!!formGroupDetail.controls['marketType'].hasError('required')) {
-                <mat-error><span i18n>Classification</span><span i18n> is required</span></mat-error>
+                <mat-error><span i18n>Airport Type</span><span i18n> is required</span></mat-error>
               }
             </mat-form-field>
           </div>
