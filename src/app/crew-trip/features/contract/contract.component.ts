@@ -33,34 +33,37 @@ import {
   MESSAGE,
   removeNullValues,
 } from 'src/app/crew-trip/shared/utils/constant';
+import {RouterLink, RouterLinkActive} from "@angular/router";
 
 @Component({
   selector: 'app-contract',
   standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatButtonModule,
-    MatMenuModule,
-    MatTableModule,
-    MatPaginatorModule,
-    NgIf,
-    MatCheckboxModule,
-    TitleCasePipe,
-    DataTransformPipe,
-    NgClass,
-    MatFormFieldModule,
-    MatInput,
-    MatLabel,
-    ReactiveFormsModule,
-    InputSizeComponent,
-    MatError,
-    MatSuffix,
-    MatDatepickerModule,
-    NgxTrimDirectiveModule,
-    SelectMultipleComponent,
-    NgxControlError,
-  ],
+	imports: [
+		CommonModule,
+		MatCardModule,
+		MatButtonModule,
+		MatMenuModule,
+		MatTableModule,
+		MatPaginatorModule,
+		NgIf,
+		MatCheckboxModule,
+		TitleCasePipe,
+		DataTransformPipe,
+		NgClass,
+		MatFormFieldModule,
+		MatInput,
+		MatLabel,
+		ReactiveFormsModule,
+		InputSizeComponent,
+		MatError,
+		MatSuffix,
+		MatDatepickerModule,
+		NgxTrimDirectiveModule,
+		SelectMultipleComponent,
+		NgxControlError,
+		RouterLink,
+		RouterLinkActive,
+	],
   templateUrl: './contract.component.html',
   styleUrl: './contract.component.scss',
   providers: [
@@ -244,7 +247,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
 	async syncDWH() {}
 
 	async showListAnnex(id: any) {
-	  this.viewType = 'PL';
+		await this._router.navigate([], {fragment: 'annex',});
+		this.viewType = 'PL';
 	  this.formGroupSearch.patchValue({ contractId: id });
 	  this.contractObj = this.dataSource.data.find(
 	    (value: any) => value.bizDocId == id,
@@ -254,7 +258,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
 	    contractName: this.contractObj.contractName,
 	    contractCode: this.contractObj.contractCode,
 	  });
-
 	  await this.search();
 	}
 
