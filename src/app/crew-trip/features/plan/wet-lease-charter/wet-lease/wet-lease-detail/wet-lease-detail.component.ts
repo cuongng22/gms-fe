@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, input, ViewChild } from '@angular/core';
+import { Component, effect, inject, input, signal, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -53,6 +53,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
   id = input<number>();
   viewDetail = input<string>("true", { alias: 'view-detail' });
   isCompleted: boolean = false;
+  category = signal<CategoryEnum>(CategoryEnum.DOMESTIC);
 
   override formGroupDetail = this.formBuilder.group({
     id: [],
@@ -96,8 +97,8 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.planHotel.forEach((element: any) => {
       Object.entries(element.hotelItem).forEach((elementHotel: any[]) => {
         const _itemPrice = _priceHotelsList.find(item => item.hotelCode === elementHotel[0]);
-        elementHotel[1].singleRoomPrice = _itemPrice.singleRoomPrice;
-        elementHotel[1].twinRoomPrice = _itemPrice.twinRoomPrice;
+        elementHotel[1].singleRoomPrice = Number(_itemPrice.singleRoomPrice);
+        elementHotel[1].twinRoomPrice = Number(_itemPrice.twinRoomPrice);
       })
     });
   }
@@ -154,8 +155,8 @@ export class WetLeaseDetailComponent extends CommonComponent {
           hotelName: element.hotelName,
           totalSingleRoom: 0,
           totalTwinRoom: 0,
-          twinRoomPrice: element.twinRoomPrice,
-          singleRoomPrice: element.singleRoomPrice,
+          twinRoomPrice: Number(element.twinRoomPrice),
+          singleRoomPrice: Number(element.singleRoomPrice),
         };
         planHotelItem.hotelItem[element.hotelCode] = hotelItem;
       })
@@ -173,7 +174,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
         transportCode: element.carRentalCode,
         transportName: element.carRentalName,
         numberOfTrip: 0,
-        unitPrice: element.unitPrice,
+        unitPrice: Number(element.unitPrice),
         totalAmountForex: 0,
         totalAmountIncVAT: 0,
         totalAmountExcVAT: 0
@@ -246,6 +247,13 @@ export class WetLeaseDetailComponent extends CommonComponent {
 
     this.spinner.hide()
 
+  }
+
+  async airportCodeChange(event: string) {
+    const res = await this._flightMarketService.search({ code: event, option: 0 });
+    if(res.data.content[0].marketType === CategoryEnum.INTERNATIONAL){
+      this.category.set(CategoryEnum.INTERNATIONAL)
+    }
   }
 
   get planHotel() {

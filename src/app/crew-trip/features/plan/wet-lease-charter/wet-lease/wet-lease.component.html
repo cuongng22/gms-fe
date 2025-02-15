@@ -1,22 +1,4 @@
-<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
-  <h5 class="mb-0" i18n="@@crewList">
-    Wet lease
-  </h5>
-  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
-    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@system">
-      Plan
-    </li>
-    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@config">
-      Estimate/Plan
-    </li>
-    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@groupMail">
-      Wet Lease
-    </li>
-  </ol>
-</div>
-
-
-<mat-card class="mb-10 mt-10 pt-15 pl-15 pr-15 pb-15 border-radius d-block bg-white border-0 shadow-none">
+<mat-card class="border-radius p-3 d-block bg-white border-0 shadow-none">
   <mat-card-content>
     <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
       <div class="row">
@@ -66,7 +48,7 @@
     </form>
   </mat-card-content>
 </mat-card>
-<mat-card class="mb-10 mt-10 pt-15 pl-15 pr-15 pb-15 border-radius d-block bg-white border-0 shadow-none">
+<mat-card class="mb-10 mt-10 p-0 border-radius d-block bg-white border-0 shadow-none">
   <mat-card-header class="mb-10">
     <mat-card-title></mat-card-title>
     <mat-card-subtitle>
@@ -76,7 +58,7 @@
         </i>
         <span i18n="@@export">Export</span>
       </button>
-      <a class="add-btn" type="button" mat-button [routerLink]="['/plan/est-plan/wet-lease/detail']">
+      <a class="add-btn" type="button" mat-button [routerLink]="['/plan/est-plan/wet-lease-charter/wet-lease-detail']">
         <i class="material-symbols-outlined">
           add
         </i>
@@ -100,13 +82,15 @@
             } @else if (col.name === 'action') {
             <div class="action-buttons d-flex justify-content-end">
               <a mat-button title="View" i18n-title="@@view" class="text-vna"
-                [routerLink]="['/plan/est-plan/wet-lease/detail', element.id]" [queryParams]="{'view-detail':true}">
+                [routerLink]="['/plan/est-plan/wet-lease-charter/wet-lease-detail', element.id]"
+                [queryParams]="{'view-detail':true}">
                 <i class="material-symbols-outlined " text-primary>
                   visibility
                 </i>
               </a>
               <a type="button" class="text-warning" mat-button
-                [routerLink]="['/plan/est-plan/wet-lease/detail', element.id]" [queryParams]="{'view-detail':false}">
+                [routerLink]="['/plan/est-plan/wet-lease-charter/wet-lease-detail', element.id]"
+                [queryParams]="{'view-detail':false}">
                 <i class="material-symbols-outlined " text-warning title="Edit" i18n-title="@@edit">
                   edit
                 </i>
@@ -157,6 +141,9 @@
         <tr mat-header-row *matHeaderRowDef="displayedSecondArr"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <tr mat-footer-row *matFooterRowDef="displayedFooterColumns" [hidden]="dataSource.data.length === 0"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell text-center" colspan="999999">No data!</td>
+        </tr>
       </table>
       <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
         [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
@@ -171,36 +158,35 @@
 <!-- dialog Delete -->
 <div class="add-new-popup" [class.active]="showDialogDelete">
   <div class="popup-dialog dialog-delete-with">
-      <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
-          <mat-card-content>
-              <div class="text-warning text-center">
-                  <span class="material-symbols-outlined font-size-5rem">
-                      error
-                  </span>
-              </div>
-              <div class="text-center mb-20">
-                  <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
-              </div>
-              <div class="text-center mb-20">
-                  <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
-                      You will not be able to recover the deleted data!</span>
-              </div>
-              <div class="btn-box text-center">
-                  <button type="button" mat-button (click)="toggleDialogDelete()"
-                      class="close-btn  min-with-100 mlr-5">
-                      <i class="material-symbols-outlined">
-                          close
-                      </i>
-                      <span i18n="@@cancel">Cancel</span>
-                  </button>
-                  <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
-                      <i class="material-symbols-outlined">
-                          save
-                      </i>
-                      <span i18n="@@confirm">Confirm</span>
-                  </button>
-              </div>
-          </mat-card-content>
-      </mat-card>
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+      <mat-card-content>
+        <div class="text-warning text-center">
+          <span class="material-symbols-outlined font-size-5rem">
+            error
+          </span>
+        </div>
+        <div class="text-center mb-20">
+          <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
+        </div>
+        <div class="text-center mb-20">
+          <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+            You will not be able to recover the deleted data!</span>
+        </div>
+        <div class="btn-box text-center">
+          <button type="button" mat-button (click)="toggleDialogDelete()" class="close-btn  min-with-100 mlr-5">
+            <i class="material-symbols-outlined">
+              close
+            </i>
+            <span i18n="@@cancel">Cancel</span>
+          </button>
+          <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
+            <i class="material-symbols-outlined">
+              save
+            </i>
+            <span i18n="@@confirm">Confirm</span>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
   </div>
 </div>

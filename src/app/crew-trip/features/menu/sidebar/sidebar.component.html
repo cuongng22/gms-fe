@@ -39,7 +39,7 @@
               @for (subMenu1 of menu1.subMenu; track $index) {
               @if (subMenu1.path != null && subMenu1.path !== '') {
               <li class="sidemenu-item">
-                <a [routerLink]="subMenu1.path" class="sidemenu-link" [ngClass]="subMenu1.icon"
+                <a [routerLink]="subMenu1.path" class="sidemenu-link" [ngClass]="subMenu1.icon" (click)="reloadByFragment(subMenu1.path)"
                   [class.active]="isActive(subMenu1.path)">
                   <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
                     {{ subMenu1.title }}

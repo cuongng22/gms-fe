@@ -8,7 +8,7 @@
   <div class="row">
     <div class="col mb-2">
       <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="airports" formControlName="airportCode"
-        (selectionChange)="airportChange($event)" [required]="true"  />
+        (selectionChange)="airportChange($event)" [required]="true" />
     </div>
     <div class="col mb-2" sizeInput="sm">
       <mat-form-field class="mb-1">
@@ -63,6 +63,7 @@
     </div>
   </div>
 
+  @if(this.formGroupDetail.controls.isHotel.value){
   @defer {
   <div class="row">
     <!-- Bảng khách sạn  -->
@@ -73,7 +74,7 @@
           background-color: transparent;
           border: none !important;" class="pt-0 pl-0">
             <div class="d-flex justify-content-between align-items-center">
-              <h5 class="mb-0">Hotel</h5>
+              <h6 class="mb-0 fw-medium-extra">Hotel</h6>
               @if(!!!disabled()){
               @if(invalidHotel()){
               <span class="text-danger">Duplicate Number of Supplier name</span>
@@ -94,7 +95,8 @@
             Supplier name
           </th>
           <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="mat-column-200"
-            [style.padding]="element.hotelEditing && !!!disabled() ?'0px !important':''" (click)="clickEdit(element,'hotelEditing')">
+            [style.padding]="element.hotelEditing && !!!disabled() ?'0px !important':''"
+            (click)="clickEdit(element,'hotelEditing')">
             @if(!element.hotelEditing || !!disabled()){
             <div class="d-flex justify-content-between">
               {{element.hotelName}}
@@ -120,18 +122,17 @@
             i18n="@@unitPriceForSingleRoom">
             Unit price for single room
           </th>
-          <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex"
+          <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="text-right"
             [style.padding]="element.singleRoomPriceEditing  && !!!disabled()?'0px !important':''"
             (click)="clickEdit(element,'singleRoomPriceEditing')">
             @if(!element.singleRoomPriceEditing || !!disabled()){
-            <div class="d-flex justify-content-between">
               {{element.singleRoomPrice | number}}
-            </div>
             }@else {
             <div sizeInput="xs">
               <mat-form-field (clickOutside)="clickOutside(element,'singleRoomPriceEditing')" class="edit-inline-table">
-                <input type="number" matInput [(ngModel)]="element.singleRoomPrice" [ngModelOptions]="{standalone: true}" [min]="0"
-                  [max]="999999999999" digitOnly [disabled]="!!disabled()" decimalSeparator="." [decimal]="true">
+                <input type="number" matInput [(ngModel)]="element.singleRoomPrice"
+                  [ngModelOptions]="{standalone: true}" [min]="0" [max]="999999999999" digitOnly
+                  [disabled]="!!disabled()" decimalSeparator="." [decimal]="true">
               </mat-form-field>
             </div>
             }
@@ -142,18 +143,17 @@
             i18n="@@unitPriceForTwinRoom">
             Unit price for twin room
           </th>
-          <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex"
+          <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="text-right"
             [style.padding]="element.twinRoomPriceEditing  && !!!disabled()?'0px !important':''"
             (click)="clickEdit(element,'twinRoomPriceEditing')">
             @if(!element.twinRoomPriceEditing || !!disabled()){
-            <div class="d-flex justify-content-between">
               {{element.twinRoomPrice | number}}
-            </div>
             }@else {
             <div sizeInput="xs">
               <mat-form-field (clickOutside)="clickOutside(element,'twinRoomPriceEditing')" class="edit-inline-table">
-                <input matInput type="number" [(ngModel)]="element.twinRoomPrice" [ngModelOptions]="{standalone: true}" [min]="0"
-                  [max]="999999999999" digitOnly [decimal]="true" decimalSeparator="." [disabled]="!!disabled()">
+                <input matInput type="text" [(ngModel)]="element.twinRoomPrice" [ngModelOptions]="{standalone: true}"
+                  [min]="0" [max]="999999999999" digitOnly [decimal]="true" decimalSeparator="."
+                  [disabled]="!!disabled()">
               </mat-form-field>
             </div>
             }
@@ -188,6 +188,8 @@
     </div>
   </div>
   }
+  }
+  @if(this.formGroupDetail.controls.isTransport.value){
   @defer {
   <div class="row mt-2">
     <!-- Bảng nhà xe  -->
@@ -199,7 +201,7 @@
           background-color: transparent;
           border: none !important;" class="pt-0 pl-0">
             <div class="d-flex justify-content-between align-items-center">
-              <h5 class="mb-0">Car rental</h5>
+              <h6 class="mb-0 fw-medium-extra">Car rental</h6>
               @if(!!!disabled()){
               @if(invalidCarRental()){
               <span class="text-danger">Duplicate Number of Supplier name</span>
@@ -246,18 +248,17 @@
             i18n="@@unitPrice">
             Unit price
           </th>
-          <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="mat-column-200"
+          <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="mat-column-200 text-right"
             [style.padding]="element.unitPriceEditing  && !!!disabled()?'0px !important':''"
             (click)="clickEdit(element,'unitPriceEditing')">
             @if(!element.unitPriceEditing || !!disabled()){
-            <div class="d-flex justify-content-between">
               {{element.unitPrice | number}}
-            </div>
             }@else {
             <div sizeInput="xs">
               <mat-form-field (clickOutside)="clickOutside(element,'unitPriceEditing')" class="edit-inline-table">
-                <input matInput type="number" [(ngModel)]="element.unitPrice" [ngModelOptions]="{standalone: true}" [min]="0"
-                  [max]="999999999999" digitOnly [disabled]="!!disabled()" decimalSeparator="." [decimal]="true">
+                <input matInput type="text" [(ngModel)]="element.unitPrice" [ngModelOptions]="{standalone: true}"
+                  [min]="0" [max]="999999999999" digitOnly [disabled]="!!disabled()" decimalSeparator="."
+                  [decimal]="true">
               </mat-form-field>
             </div>
             }
@@ -292,6 +293,7 @@
       </table>
     </div>
   </div>
+  }
   }
 </form>
 
