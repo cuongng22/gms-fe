@@ -144,6 +144,7 @@ export const routes: Routes = [
         children: [
           { path: 'vehicle', component: VehicleComponent },
           { path: 'contract', component: ContractComponent },
+          { path: 'contract/annex', component: ContractComponent },
           { path: 'contract/detail', component: ContractDetailComponent },
           { path: 'act-rate', component: ActRateComponent },
           { path: 'hotel', component: HotelComponent },
