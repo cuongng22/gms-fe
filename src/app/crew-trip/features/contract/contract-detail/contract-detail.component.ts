@@ -176,6 +176,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	marketCodeChangeBrake: any;
 	//debounce
 	marketCodeChangeDebounce = debounce(async (value: any) => {
+		this.formGroupDetail.controls['marketCode'].setValidators([
+			Validators.maxLength(3),
+			Validators.minLength(3),
+		]);
 		if (value && !this.marketCodeChangeBrake) {
 			try {
 				await this.spinner.show();
