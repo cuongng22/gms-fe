@@ -1,0 +1,10 @@
+:host::ng-deep {
+
+    .mat-column-totalNormalRoom,
+    .mat-column-totalECIRoom,
+    .mat-column-totalLCORoom
+    {
+    max-width: 150px !important;
+    min-width: 150px !important;
+}
+}

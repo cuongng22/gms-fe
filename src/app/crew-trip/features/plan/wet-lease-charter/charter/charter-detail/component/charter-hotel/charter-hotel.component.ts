@@ -23,10 +23,10 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { SeparatorDirective } from 'src/app/crew-trip/shared/directive/separator.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.component';
-import { formula } from './wet-lease-car-rental.model';
+import { getHeaderRowDef1, getRowDef, planHotels } from './charter-hotel.model';
 
 @Component({
-  selector: 'app-wet-lease-car-rental',
+  selector: 'app-charter-hotel',
   standalone: true,
   imports: [
     MatCardModule, FormsModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
@@ -35,58 +35,73 @@ import { formula } from './wet-lease-car-rental.model';
     NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent,
     DatepickerComponent, MatDatepickerModule, NgxControlError, ClickOutside
   ],
-  templateUrl: './wet-lease-car-rental.component.html',
-  styleUrl: './wet-lease-car-rental.component.scss',
-  providers: [DataTransformPipe]
+  templateUrl: './charter-hotel.component.html',
+  styleUrl: './charter-hotel.component.scss'
 })
-export class WetLeaseCarRentalComponent extends CommonComponent {
-  CategoryEnum = CategoryEnum;
-  headerRowDef1 = ['transportName', 'numberOfTrip', 'totalAmountForex', 'totalAmount'];
-  headerRowDef2 = ['totalAmountExcVAT', 'totalAmountIncVAT'];
-  rowDef = ['transportName', 'numberOfTrip', 'totalAmountForex', 'totalAmountExcVAT', 'totalAmountIncVAT'];
-  totalRowDef = ['total', 'numberOfTrip', 'totalAmountForex', 'totalAmountExcVAT', 'totalAmountIncVAT'];
-  totalPlanRowDef = ['totalPlan', 'totalAmountForexPlan', 'totalAmountExcVATPlan', 'totalAmountIncVATPlan'];
-  data = input<any[]>()
-  category = input.required<CategoryEnum>(); // quốc tế hoặc quốc nội
-  dataGeneral = input<any>();
+export class CharterHotelComponent extends CommonComponent {
   disabled = input<boolean>(false);
+  category = input.required<CategoryEnum>(); // quốc tế hoặc quốc nội
+  dataGeneral = input<any>()
+  CategoryEnum = CategoryEnum;
+  headerRowDef1: string[] = [];
+  headerRowDef2 = ['totalIncVAT', 'totalExcVAT'];
+  rowDef: string[] = [];
+  totalRowDef = ['total', 'totalForex', 'totalExcVAT', 'totalIncVAT',];
+  data = input<any[]>();
 
   constructor() {
     super();
     effect(() => {
-      if (this.data() && (this.data()?.length ?? 0) > 0) {
-        this.setDataSource(this.data() ?? []);
+      if (this.data()) {
+        this.setDataSource(this.data() ?? {});
       }
     });
+
+    effect(() => {
+      if (this.dataGeneral()) {
+        this.headerRowDef1 = getHeaderRowDef1(this.dataGeneral());
+        this.rowDef = getRowDef(this.dataGeneral());
+      }
+    })
+  }
+  override ngOnInit(): void {
+    // this.dataSource.data = Object.entries(planHotels);
   }
 
-
-  setDataSource(value: any[]) {
-    this.dataSource.data = [...value];
+  setDataSource(value: any) {
+    this.dataSource.data = Object.entries(value);
     this.dataSource.data.forEach(element => {
-      this.calculation('totalAmountForex', element)
-      this.calculation('totalAmountIncVAT', element)
-      this.calculation('totalAmountExcVAT', element)
+      this.calTotalCountForeign(element[1]);
+      this.calTotalAmount(element[1]);
     })
   }
 
-  getTotal(control: string) {
+
+  getTotal(formula: string) {
     return Math.round(this.dataSource.data.map((item: any) => {
-      return Number(this.calWithFormula(`item.${control}`, item));
+      return Number(this.calWithFormula(formula, item));
     }).reduce((acc, value) => acc + value, 0));
   }
 
-  calWithFormula(formula: string, item: any) {
+  calWithFormula(formula: string, item: any, dataGeneral?: any) {
     const formulaFunction = new Function(
       'item', 'dataGeneral',
       `return ${formula};`
     );
-    return formulaFunction(item, this.dataGeneral());
+    return formulaFunction(item, dataGeneral);
   }
 
-  calculation(control: string, item: any) {
-    const _formula = formula[control].formula;
-    item[control] = this.calWithFormula(_formula, item)
+  // tính tiền ngoại tệ
+  calTotalCountForeign(element: any) {
+    element.totalForex = Number(element.priceRoom ?? 0) * Number(element.totalNormalRoom ?? 0) * Number(element.numberOfNight ?? 0)
+      + Number(element.priceRoomECI ?? 0) * Number(element.totalECIRoom ?? 0)
+      + Number(element.priceRoomLCO ?? 0) * Number(element.totalLCORoom ?? 0);
+  }
+
+  // tính thành tiền chưa vat và có vat					
+  calTotalAmount(element: any) {
+    element.totalExcVAT = element.totalForex * (element.exchangeRate ?? 1);
+    element.totalIncVAT = (element.totalExcVAT) + (element.totalExcVAT * (element.rateVat ?? 0) / 100)
   }
 
   clickEdit(data: any, control: string) {
@@ -94,8 +109,10 @@ export class WetLeaseCarRentalComponent extends CommonComponent {
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
-    this.calculation('totalAmountForex', data)
-    this.calculation('totalAmountIncVAT', data)
-    this.calculation('totalAmountExcVAT', data)
+    this.calTotalCountForeign(data);
+    this.calTotalAmount(data);
   }
+
+
+
 }

@@ -23,10 +23,10 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { SeparatorDirective } from 'src/app/crew-trip/shared/directive/separator.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.component';
-import { formula } from './wet-lease-car-rental.model';
+import { formula } from './charter-car-rental.model';
 
 @Component({
-  selector: 'app-wet-lease-car-rental',
+  selector: 'app-charter-car-rental',
   standalone: true,
   imports: [
     MatCardModule, FormsModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
@@ -35,21 +35,20 @@ import { formula } from './wet-lease-car-rental.model';
     NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent,
     DatepickerComponent, MatDatepickerModule, NgxControlError, ClickOutside
   ],
-  templateUrl: './wet-lease-car-rental.component.html',
-  styleUrl: './wet-lease-car-rental.component.scss',
-  providers: [DataTransformPipe]
+  templateUrl: './charter-car-rental.component.html',
+  styleUrl: './charter-car-rental.component.scss'
 })
-export class WetLeaseCarRentalComponent extends CommonComponent {
+export class CharterCarRentalComponent extends CommonComponent {
+
   CategoryEnum = CategoryEnum;
-  headerRowDef1 = ['transportName', 'numberOfTrip', 'totalAmountForex', 'totalAmount'];
-  headerRowDef2 = ['totalAmountExcVAT', 'totalAmountIncVAT'];
-  rowDef = ['transportName', 'numberOfTrip', 'totalAmountForex', 'totalAmountExcVAT', 'totalAmountIncVAT'];
-  totalRowDef = ['total', 'numberOfTrip', 'totalAmountForex', 'totalAmountExcVAT', 'totalAmountIncVAT'];
-  totalPlanRowDef = ['totalPlan', 'totalAmountForexPlan', 'totalAmountExcVATPlan', 'totalAmountIncVATPlan'];
+  headerRowDef1 = ['carType', 'numberOfTrip', 'totalAmountForex', 'totalAmount'];
+  headerRowDef2 = ['totalAmountExcVat', 'totalAmountIncVat'];
+  rowDef = ['carType', 'numberOfTrip', 'totalAmountForex', 'totalAmountExcVat', 'totalAmountIncVat'];
+  totalRowDef = ['total', 'totalAmountForex', 'totalAmountExcVat', 'totalAmountIncVat'];
+
+  disabled = input<boolean>(false);
   data = input<any[]>()
   category = input.required<CategoryEnum>(); // quốc tế hoặc quốc nội
-  dataGeneral = input<any>();
-  disabled = input<boolean>(false);
 
   constructor() {
     super();
@@ -60,14 +59,28 @@ export class WetLeaseCarRentalComponent extends CommonComponent {
     });
   }
 
+  override ngOnInit(): void { }
+
 
   setDataSource(value: any[]) {
     this.dataSource.data = [...value];
     this.dataSource.data.forEach(element => {
       this.calculation('totalAmountForex', element)
-      this.calculation('totalAmountIncVAT', element)
-      this.calculation('totalAmountExcVAT', element)
+      this.calculation('totalAmountIncVat', element)
+      this.calculation('totalAmountExcVat', element)
     })
+  }
+  calWithFormula(formula: string, item: any) {
+    const formulaFunction = new Function(
+      'item',
+      `return ${formula};`
+    );
+    return formulaFunction(item);
+  }
+
+  calculation(control: string, item: any) {
+    const _formula = formula[control].formula;
+    item[control] = this.calWithFormula(_formula, item)
   }
 
   getTotal(control: string) {
@@ -76,26 +89,13 @@ export class WetLeaseCarRentalComponent extends CommonComponent {
     }).reduce((acc, value) => acc + value, 0));
   }
 
-  calWithFormula(formula: string, item: any) {
-    const formulaFunction = new Function(
-      'item', 'dataGeneral',
-      `return ${formula};`
-    );
-    return formulaFunction(item, this.dataGeneral());
-  }
-
-  calculation(control: string, item: any) {
-    const _formula = formula[control].formula;
-    item[control] = this.calWithFormula(_formula, item)
-  }
-
   clickEdit(data: any, control: string) {
     data[control] = true;
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
     this.calculation('totalAmountForex', data)
-    this.calculation('totalAmountIncVAT', data)
-    this.calculation('totalAmountExcVAT', data)
+    this.calculation('totalAmountIncVat', data)
+    this.calculation('totalAmountExcVat', data)
   }
 }
