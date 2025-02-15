@@ -655,7 +655,7 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Airport Code</mat-label>
-              <input #input
+              <input
                      (ngModelChange)="marketCodeChangeDebounce($event);this.marketCodeChangeBrake=false;"
                      formControlName="marketCode"
                      matInput
@@ -721,6 +721,7 @@
             <mat-form-field>
               <mat-label i18n>Flight Group</mat-label>
               <mat-select formControlName="flightGroup">
+                <mat-option value="">Choose Flight Group</mat-option>
                 <mat-option *ngFor="let option of listFlightGroup" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
