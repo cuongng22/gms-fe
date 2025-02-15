@@ -76,6 +76,7 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
     }
     //Create list year
     const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1 + '';
     const startYear = 2020;
     const endYear = startYear + 20;
 
@@ -83,11 +84,11 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
       this.listYear.push(year);
     }
     this.formGroupSearch = this.fb.group({
-      scheduleType: [''],
-      marketCode: ['',[Validators.required()]],
-      month: [''],
-      year: [],
-      type: ['CC'],
+      scheduleType: ['',[Validators.required]],
+      marketCode: ['', [Validators.required]],
+      month: [currentMonth, [Validators.required]],
+      year: [currentYear, [Validators.required]],
+      type: ['', [Validators.required]],
       timezone:['CC']
     });
   }
@@ -103,7 +104,7 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
     } catch (error: any) {
       this.showError(error);
     }
-    this.search();
+    // this.search();
     await this.spinner.hide();
   }
 
