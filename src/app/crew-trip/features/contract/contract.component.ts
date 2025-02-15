@@ -247,7 +247,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
 	async syncDWH() {}
 
 	async showListAnnex(id: any) {
-	  this.viewType = 'PL';
+		await this._router.navigate([], {fragment: 'annex',});
+		this.viewType = 'PL';
 	  this.formGroupSearch.patchValue({ contractId: id });
 	  this.contractObj = this.dataSource.data.find(
 	    (value: any) => value.bizDocId == id,
@@ -257,7 +258,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
 	    contractName: this.contractObj.contractName,
 	    contractCode: this.contractObj.contractCode,
 	  });
-
 	  await this.search();
 	}
 

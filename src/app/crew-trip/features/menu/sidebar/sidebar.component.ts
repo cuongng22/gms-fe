@@ -1,12 +1,13 @@
-import { CommonModule, NgClass } from '@angular/common';
-import { Component, inject, OnInit, signal } from '@angular/core';
-import { MatExpansionModule } from '@angular/material/expansion';
-import { Router, RouterLink, RouterLinkActive } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import { NgScrollbarModule } from 'ngx-scrollbar';
-import { ToggleService } from 'src/app/common/header/toggle.service';
-import { CustomizerSettingsService } from 'src/app/customizer-settings/customizer-settings.service';
-import { menu } from './sidebar.model';
+import {CommonModule, NgClass} from '@angular/common';
+import {Component, inject, OnInit, signal} from '@angular/core';
+import {MatExpansionModule} from '@angular/material/expansion';
+import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
+import {TranslateModule} from '@ngx-translate/core';
+import {NgScrollbarModule} from 'ngx-scrollbar';
+import {ToggleService} from 'src/app/common/header/toggle.service';
+import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
+import {menu} from './sidebar.model';
+import {take} from 'rxjs';
 
 @Component({
   selector: 'app-sidebar',
@@ -38,8 +39,9 @@ export class SidebarComponent implements OnInit {
   isToggled = false;
 
   constructor(
-		private toggleService: ToggleService,
-		public themeService: CustomizerSettingsService,
+    private toggleService: ToggleService,
+    public themeService: CustomizerSettingsService,
+    private route: ActivatedRoute
   ) {
     this.toggleService.isSidebarToggled$.subscribe((isSidebarToggled) => {
       this.isSidebarToggled = isSidebarToggled;
@@ -49,7 +51,8 @@ export class SidebarComponent implements OnInit {
     });
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+  }
 
   // Burger Menu Toggle
   toggle() {
@@ -59,5 +62,15 @@ export class SidebarComponent implements OnInit {
   isActive(path: string): boolean {
     return this.router.url.includes(path);
     // return this.router.url === '/' + path;
+  }
+
+  reloadByFragment(uri: any) {
+    this.route.fragment.pipe(take(1)).subscribe(fragment => {
+      if (fragment) {
+        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+          this.router.navigate([uri])
+        });
+      }
+    });
   }
 }
