@@ -246,9 +246,9 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       await this.spinner.show();
       let filename = '';
       if (type === 'EXPORT') {
-        const res = await this.baseService.exportFileData({
+        const res = await this.baseService.exportListData({
         });
-        this.downloadFile(res, this.formGroupFile.getRawValue().templateNameLabel);
+        this.downloadFile(res, 'export.xlsx');
       } else if (type === 'DOWNLOAD') {
         const res = await this.baseService.exportFileData({
           fileExportType: '1'
