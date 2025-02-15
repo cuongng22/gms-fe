@@ -173,4 +173,11 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
       await this.spinner.hide();
     }
   }
+
+  formatNewLine(value: string): string {
+    if (value) {
+      return value.replace(/\n/g, '<br/>');
+    }
+    return value;
+  }
 }

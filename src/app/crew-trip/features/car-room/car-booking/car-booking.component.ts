@@ -167,4 +167,12 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
   isMergedRow(row: any): boolean {
     return Object.values(row).slice(1).every(value => value === "");
   }
+
+
+  formatNewLine(value: string): string {
+    if (value) {
+      return value.replace(/\n/g, '<br/>');
+    }
+    return value;
+  }
 }
