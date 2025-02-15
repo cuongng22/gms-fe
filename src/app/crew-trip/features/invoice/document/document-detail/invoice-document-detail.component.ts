@@ -98,146 +98,68 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   _displayedColumnsFooter: string[] = [];
   _displayedColumnsAll: {
     label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string
-  }[] = [{label: "Access Bridge", value: "accessBridge", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Accommodation Tax Cc Charge",
-    value: "accommodationTaxCcCharge",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Accommodation Tax Fc Charge", value: "accommodationTaxFcCharge", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Airport Parking Fee",
-    value: "airportParkingFee",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Breakfast Cc", value: "breakfastCc", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Breakfast Fc",
-    value: "breakfastFc",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Cc", value: "cc", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Ci Date",
-    value: "ciDate",
-    type: Constant.DATE,
-    format: Constant.DATE_FORMAT
-  }, {label: "Ci Fltno", value: "ciFltno"}, {label: "Ci Time", value: "ciTime"}, {
-    label: "City Tax Cc Charge",
-    value: "cityTaxCcCharge",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "City Tax Fc Charge", value: "cityTaxFcCharge", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Co Date",
-    value: "coDate",
-    type: Constant.DATE,
-    format: Constant.DATE_FORMAT
-  }, {label: "Co Fltno", value: "coFltno"}, {label: "Co Time", value: "coTime"}, {
-    label: "Cdate",
-    value: "cdate",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Detail", value: "detail", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Early Checkin",
-    value: "earlyCheckin",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Eci Single Room Cc Charge", value: "eciSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Eci Single Room Fc Charge",
-    value: "eciSingleRoomFcCharge",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Eci Twin Room Cc Charge", value: "eciTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Fc",
-    value: "fc",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Fltno", value: "fltno", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Fullname",
-    value: "fullname",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Late Checkout", value: "lateCheckout", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Lco Single Room Cc Charge",
-    value: "lcoSingleRoomCcCharge",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Lco Single Room Fc Charge", value: "lcoSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Lco Twin Room Cc Charge",
-    value: "lcoTwinRoomCcCharge",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Night", value: "night", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Number Of Nights",
-    value: "numberOfNights",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Number Of Vehicle", value: "numberOfVehicle", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Price",
-    value: "price",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Remark", value: "remark", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Room No",
-    value: "roomNo",
-    rowspan: "2"
-  }, {label: "Service Tax Cc Charge", value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Service Tax Fc Charge",
-    value: "serviceTaxFcCharge",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Single Room Cc", value: "singleRoomCc", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Single Room Cc Charge",
-    value: "singleRoomCcCharge",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Single Room Fc", value: "singleRoomFc", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Single Room Fc Charge",
-    value: "singleRoomFcCharge",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Time Stay", value: "timeStay", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Toll",
-    value: "toll",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Total Amount Cc", value: "totalAmountCc", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Total Amount Fc",
-    value: "totalAmountFc",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Total Breakfast Cc Charge", value: "totalBreakfastCcCharge", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Total Breakfast Fc Charge",
-    value: "totalBreakfastFcCharge",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Total Charge", value: "totalCharge", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Total Charges",
-    value: "totalCharges",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Total Night", value: "totalNight", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Total Revenue",
-    value: "totalRevenue",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Total Single Rooms Cc", value: "totalSingleRoomsCc", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Total Single Rooms Fc",
-    value: "totalSingleRoomsFc",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Total Twin Rooms Cc", value: "totalTwinRoomsCc", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Total Vat",
-    value: "totalVat",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Transit Duty", value: "transitDuty", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Transport Charge",
-    value: "transportCharge",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Twin Room Cc", value: "twinRoomCc", type: Constant.NUMBER, rowspan: "2"}, {
-    label: "Twin Room Cc Charge",
-    value: "twinRoomCcCharge",
-    type: Constant.NUMBER,
-    rowspan: "2"
-  }, {label: "Unit Price", value: "unitPrice", type: Constant.NUMBER, rowspan: "2"}, {label: "Type Room", value: "typeRoom", rowspan: "2"},];
+  }[] = [
+    {label: "Access Bridge", value: "accessBridge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Accommodation Tax Cc Charge", value: "accommodationTaxCcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Accommodation Tax Fc Charge", value: "accommodationTaxFcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Airport Parking Fee", value: "airportParkingFee", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Breakfast Cc", value: "breakfastCc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Breakfast Fc", value: "breakfastFc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Cc", value: "cc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Ci Date", value: "ciDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: "Ci Fltno", value: "ciFltno"},
+    {label: "Ci Time", value: "ciTime"},
+    {label: "City Tax Cc Charge", value: "cityTaxCcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "City Tax Fc Charge", value: "cityTaxFcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Co Date", value: "coDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: "Co Fltno", value: "coFltno"},
+    {label: "Co Time", value: "coTime"},
+    {label: "Cdate", value: "cdate", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Detail", value: "detail", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Early Checkin", value: "earlyCheckin", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Eci Single Room Cc Charge", value: "eciSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Eci Single Room Fc Charge", value: "eciSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Eci Twin Room Cc Charge", value: "eciTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Fc", value: "fc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Fltno", value: "fltno", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Fullname", value: "fullname", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Late Checkout", value: "lateCheckout", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Lco Single Room Cc Charge", value: "lcoSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Lco Single Room Fc Charge", value: "lcoSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Lco Twin Room Cc Charge", value: "lcoTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Night", value: "night", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Number Of Nights", value: "numberOfNights", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Number Of Vehicle", value: "numberOfVehicle", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Price", value: "price", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Remark", value: "remark", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Room No", value: "roomNo", rowspan: "2"},
+    {label: "Service Tax Cc Charge", value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Service Tax Fc Charge", value: "serviceTaxFcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Single Room Cc", value: "singleRoomCc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Single Room Cc Charge", value: "singleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Single Room Fc", value: "singleRoomFc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Single Room Fc Charge", value: "singleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Time Stay", value: "timeStay", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Toll", value: "toll", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Amount Cc", value: "totalAmountCc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Amount Fc", value: "totalAmountFc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Breakfast Cc Charge", value: "totalBreakfastCcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Breakfast Fc Charge", value: "totalBreakfastFcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Charge", value: "totalCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Charges", value: "totalCharges", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Night", value: "totalNight", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Revenue", value: "totalRevenue", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Single Rooms Cc", value: "totalSingleRoomsCc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Single Rooms Fc", value: "totalSingleRoomsFc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Twin Rooms Cc", value: "totalTwinRoomsCc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Vat", value: "totalVat", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Transit Duty", value: "transitDuty", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Transport Charge", value: "transportCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Twin Room Cc", value: "twinRoomCc", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Twin Room Cc Charge", value: "twinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Unit Price", value: "unitPrice", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Type Room", value: "typeRoom", rowspan: "2"},
+  ];
   ready: boolean = false;
   @ViewChild('inputElementRef1, inputElementRef2, inputElementRef3, inputElementRef4') inputElementRef: QueryList<ElementRef>;
   @ViewChild('totalab') totalab: ElementRef;
@@ -270,7 +192,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       airportName: [],
       partnerCode: [],
       partnerName: [],
-      partnerType: [],
+      partnerType: ['HOTEL'],
       contractServiceType: [],
       currency: [],
       exchangeRate: [],
@@ -301,26 +223,15 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         if (value && !this.firstLoad) {
           try {
             await this.spinner.show();
-            const [res, res2] = await Promise.all([
-              this.baseService.getContractByAirport(value),
+            const [res, res2, res3] = await Promise.all([
+              this.contractService.getMarket({marketCode: value.toUpperCase()}),
+              this.findContract(),
               this.loadListDocumentParent()
             ]);
-            if (res.data?.bizDocId) {
-              let partnerType = res.data?.isHotel ? 'HOTEL' : 'TRANSPORTATION';
+            if (res.data) {
               this.formGroupDetail.patchValue({
-                paymentDueDay: res.data?.dueDateNumber,
-                bizDocId: res.data?.bizDocId,
-                partnerCode: res.data?.partnerCode,
-                partnerName: res.data?.partnerName, // partnerType: partnerType,
-                currency: res.data?.currency,
+                contractServiceType: res.data.marketType.toUpperCase(),
               })
-
-              //paymentDueDate
-              let invoiceDate = this.formGroupDetail.getRawValue().invoiceDate;
-              let _value = (moment(invoiceDate) || invoiceDate)?.add(res.data?.dueDateNumber || 0, 'days')
-              this.formGroupDetail.patchValue({
-                paymentDueDate: _value?.format('YYYY-MM-DD') || ''
-              });
             }
           } catch (e) {
             console.log(e);
@@ -328,6 +239,18 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
           } finally {
             await this.spinner.hide();
           }
+        }
+      });
+
+      this.formGroupDetail.controls['partnerType'].valueChanges.subscribe((value) => {
+        if (value && !this.firstLoad) {
+          this.findContract();
+        }
+      });
+
+      this.formGroupDetail.controls['periodTo'].valueChanges.subscribe((value) => {
+        if (value && !this.firstLoad) {
+          this.findContract();
         }
       });
 
@@ -404,14 +327,25 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   async setReadMode(form: FormGroup) {
-    const disableField = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version'];
+    const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType'];
+    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
       } else {
-        if (disableField.includes(k)) {
-          v.disable();
+        //add
+        if (this.id === 0) {
+          if (disableFieldAdd.includes(k)) {
+            v.disable();
+          }
         }
+        //edit
+        else {
+          if (disableFieldEdit.includes(k)) {
+            v.disable();
+          }
+        }
+
       }
     });
   }
@@ -523,7 +457,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   override async save(): Promise<any> {
     try {
-      let removeNull = this.formGroupDetail.getRawValue().invoiceDocumentDtl.filter((s: any) => s.serviceCode);
+      let removeNull = this.formGroupDetail.getRawValue().invoiceDocumentDtl?.filter((s: any) => s.serviceCode);
       this.formGroupDetail.patchValue({invoiceDocumentDtl: removeNull});
       this.formGroupDetail.markAllAsTouched();
       if (this.formGroupDetail.invalid) {
@@ -541,9 +475,10 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       this.baseService.showSuccess(
         update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,
       );
-        return res;
-
+      this.goBack();
+      return res;
     } catch (e: any) {
+      console.log(e)
       this.baseService.showError(
         e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
       );
@@ -595,7 +530,6 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   async loadListDocumentParent() {
-    console.log(this.dataObject, 'dataObject')
     if (!this.readMode) {
       await this.baseService.getListDocumentParent({airportCode: this.dataObject?.airportCode}).then((res) => {
         if (res.data) {
@@ -616,5 +550,42 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         invoiceNumber: this.formGroupDetail.getRawValue()._invoiceNumber,
         invoiceDate: this.formGroupDetail.getRawValue()._invoiceDate,
       }];
+  }
+
+  findContract() {
+    this.formGroupDetail.patchValue({
+      paymentDueDay: '',
+      bizDocId: '',
+      partnerCode: '',
+      partnerName: '',
+      currency: '',
+      paymentDueDate: ''
+    });
+    if (this.formGroupDetail.getRawValue().airportCode &&
+      this.formGroupDetail.getRawValue().partnerType &&
+      this.formGroupDetail.getRawValue().periodTo
+    ) {
+      this.baseService.findContract({
+        airportCode: this.formGroupDetail.getRawValue().airportCode,
+        partnerType: this.formGroupDetail.getRawValue().partnerType,
+        periodTo: this.formGroupDetail.getRawValue().periodTo
+      }).then((res: any) => {
+        if (res.data?.bizDocId) {
+          this.formGroupDetail.patchValue({
+            paymentDueDay: res.data?.dueDateNumber,
+            bizDocId: res.data?.bizDocId,
+            partnerCode: res.data?.partnerCode,
+            partnerName: res.data?.partnerName,
+            currency: res.data?.currency,
+          })
+          //paymentDueDate
+          let invoiceDate = this.formGroupDetail.getRawValue().invoiceDate;
+          let _value = (moment(invoiceDate) || invoiceDate)?.add(res.data?.dueDateNumber || 0, 'days')
+          this.formGroupDetail.patchValue({
+            paymentDueDate: _value?.format('YYYY-MM-DD') || ''
+          });
+        }
+      })
+    }
   }
 }

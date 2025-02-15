@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 import {MatButton} from "@angular/material/button";
-import {MatCard, MatCardContent, MatCardTitle} from "@angular/material/card";
+import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
 import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
 import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
 import {
@@ -10,8 +10,21 @@ import {
 import {CommonComponent} from "src/app/crew-trip/shared/common.component";
 import {SelectOptions} from "src/app/crew-trip/shared/select-option";
 import {RoomBookingService} from "src/app/crew-trip/core/services/room-booking.service";
-import * as wjcXlsx from "@mescius/wijmo.xlsx";
-import {HttpClient} from "@angular/common/http";
+import {HttpClient, HttpStatusCode} from "@angular/common/http";
+import {
+  MatCell,
+  MatCellDef, MatColumnDef,
+  MatHeaderCell, MatHeaderCellDef,
+  MatHeaderRow,
+  MatHeaderRowDef,
+  MatRow,
+  MatRowDef, MatTable
+} from "@angular/material/table";
+import {NgForOf, NgIf} from "@angular/common";
+import {ListResponse} from "src/app/crew-trip/shared/models/common.model";
+import {MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
+import {Validators} from "ngx-editor";
+import {TransportBookingService} from "src/app/crew-trip/core/services/transport-booking.service";
 
 @Component({
   selector: 'app-car-booking',
@@ -24,20 +37,34 @@ import {HttpClient} from "@angular/common/http";
     MatCardTitle,
     ReactiveFormsModule,
     SelectionComponent,
-    SelectionSuggestComponent
+    SelectionSuggestComponent,
+    MatCardHeader,
+    MatCardSubtitle,
+    MatCell,
+    MatCellDef,
+    MatHeaderCell,
+    MatHeaderRow,
+    MatHeaderRowDef,
+    MatRow,
+    MatRowDef,
+    MatTable,
+    NgForOf,
+    MatColumnDef,
+    MatHeaderCellDef,
+    NgIf
   ],
   templateUrl: './car-booking.component.html',
   styleUrl: './car-booking.component.scss'
 })
 export class CarBookingComponent extends CommonComponent implements OnInit {
+  override baseService = inject(TransportBookingService);
   optionsFlightScheduleType = SelectOptions.FLIGHT_SCHEDULE_TYPE;
   optionsServiceApplied = SelectOptions.SERVICE_APPLIED;
+  transportType = SelectOptions.TRANSPORT_TYPE;
   monthSelection: string[] = [];
   fb: FormBuilder = inject(FormBuilder);
-  roomBookingService: RoomBookingService = inject(RoomBookingService);
   markets: string[] = [];
   listYear: number[] = [];
-  workbook: wjcXlsx.Workbook;
   sheetIndex: number;
   excelFile: Blob | null = null;
 
@@ -48,18 +75,20 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
     }
     //Create list year
     const currentYear = new Date().getFullYear();
-    const startYear = Math.floor(currentYear / 100) * 100;
-    const endYear = startYear + 99;
+    const startYear = 2020;
+    const endYear = startYear + 20;
 
     for (let year = startYear; year <= endYear; year++) {
       this.listYear.push(year);
     }
     this.formGroupSearch = this.fb.group({
-      flightScheduleType: [''],
-      serviceApplied: [''],
-      marketCode: [''],
-      month: [''],
-      year: [],
+      scheduleType: ['',[Validators.required()]],
+      marketCode: ['',[Validators.required()]],
+      month: ['',[Validators.required()]],
+      year: ['',[Validators.required()]],
+      type: ['CC',[Validators.required()]],
+      timezone:['CC',[Validators.required()]],
+      transportType: ['',[Validators.required()]]
     });
   }
 
@@ -71,10 +100,10 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
         status: 'Operational',
       });
       this.markets = marketCodes.data;
-      // this.loadExcelFile();
     } catch (error: any) {
       this.showError(error);
     }
+    this.search();
     await this.spinner.hide();
   }
 
@@ -91,15 +120,51 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
       );
   }
 
-  override async search() {
-    await this.spinner.show();
+
+  override async search<T>(body?: any, isNextPage?: boolean, fnSearch?: (bodySearch: any) => (ListResponse<T> | any)) {
     try {
-      let urlFilePath = 'http://192.168.10.68:8081/source/documents/Pickup_FC_HOTEL_CXR_202411.xlsx';
-      this.loadExcelFile(urlFilePath);
-    } catch (error: any) {
-      this.showError(error);
+      this.formGroupSearch.markAllAsTouched();
+      if (this.formGroupSearch.invalid) {
+        this.findInvalidControls(this.formGroupSearch);
+        return;
+      }
+      await this.spinner.show();
+      const buildBodySearch = {
+        ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+      }
+      let res;
+      if (fnSearch) {
+        res = await fnSearch(buildBodySearch);
+      } else {
+        res = await this.baseService.search<ListResponse<T>>(buildBodySearch);
+      }
+      if (res) {
+        if (res.status === HttpStatusCode.Ok) {
+          this.displayedColumns = [
+            "No.",
+            "Arr. Date",
+            "Flight Number",
+            "Arr. Time",
+            "Dep. Date",
+            "Flight Number11",
+            "Dep. Time",
+            "Crew Count",
+            "Crews Info",
+            "Note"
+          ];
+          this.dataSource.data = res.data.data;
+        }
+        return res
+      }
+    } catch (e: any) {
+      this.baseService.showError(
+        e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
+      );
+    } finally {
       await this.spinner.hide();
     }
-    await this.spinner.hide();
+  }
+  isMergedRow(row: any): boolean {
+    return Array.isArray(row) && row.length === 1 && row[0] !== '';
   }
 }

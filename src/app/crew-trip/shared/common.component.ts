@@ -1,9 +1,18 @@
 import { SelectionModel } from '@angular/cdk/collections';
 import { HttpStatusCode } from '@angular/common/http';
-import { AfterViewInit, Component, HostListener, inject, OnInit, ViewChild } from '@angular/core';
+import {
+	AfterViewInit,
+	Component,
+	HostListener,
+	inject,
+	OnInit,
+	ViewChild,
+} from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
+import { MatDialog } from '@angular/material/dialog';
 import { MatPaginator, PageEvent } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { saveAs } from 'file-saver';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToggleService } from 'src/app/common/header/toggle.service';
@@ -13,13 +22,16 @@ import { HotelService } from 'src/app/crew-trip/core/services/hotel-service';
 import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-service';
 import { UltilService } from 'src/app/crew-trip/core/services/ultil-service';
 import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
-import { Router } from '@angular/router';
-import { COMMON_CONFIG, Constant, MESSAGE, removeNullValues } from 'src/app/crew-trip/shared/utils/constant';
+import {
+	COMMON_CONFIG,
+	Constant,
+	MESSAGE,
+	removeNullValues,
+} from 'src/app/crew-trip/shared/utils/constant';
 import { CustomizerSettingsService } from 'src/app/customizer-settings/customizer-settings.service';
 import { environment } from 'src/environments/environment';
 import { ShowMessageComponent } from './component/show-message/show-message.component';
 import { ListResponse } from './models/common.model';
-import { MatDialog } from '@angular/material/dialog';
 
 @Component({
 	selector: 'app-common',
@@ -29,7 +41,8 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class CommonComponent
 	extends ShowMessageComponent
-	implements OnInit, AfterViewInit {
+	implements OnInit, AfterViewInit
+{
 	environment = environment;
 	Constant = Constant;
 	MESSAGE = MESSAGE;
@@ -92,7 +105,7 @@ export class CommonComponent
 		});
 	}
 
-	ngOnInit(): void { }
+	ngOnInit(): void {}
 
 	/** Whether the number of selected elements matches the total number of rows. */
 	isAllSelected() {
@@ -101,7 +114,7 @@ export class CommonComponent
 		return numSelected === numRows;
 	}
 
-	ngAfterViewInit() { }
+	ngAfterViewInit() {}
 
 	/** Selects all rows if they are not all selected; otherwise clear selection. */
 	toggleAllRows() {
@@ -125,7 +138,11 @@ export class CommonComponent
 		this.search(null, true);
 	}
 
-	async search<T>(body?: any, isNextPage?: boolean, fnSearch?: (bodySearch: any) => (ListResponse<T> | any)) {
+	async search<T>(
+		body?: any,
+		isNextPage?: boolean,
+		fnSearch?: (bodySearch: any) => ListResponse<T> | any,
+	) {
 		try {
 			await this.spinner.show();
 			if (!isNextPage) {
@@ -134,8 +151,10 @@ export class CommonComponent
 			const buildBodySearch = {
 				page: this.pageIndex,
 				size: this.pageSize,
-				limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
-			}
+				limit: this.pageSize,
+				...(removeNullValues(body) ||
+					removeNullValues(this.formGroupSearch?.value)),
+			};
 			let res;
 			if (fnSearch) {
 				res = await fnSearch(buildBodySearch);
@@ -159,9 +178,10 @@ export class CommonComponent
 					}));
 					this.totalElement = res.data.totalElements;
 				}
-				return res
+				return res;
 			}
 		} catch (e: any) {
+      console.log(e)
 			this.baseService.showError(
 				e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
 			);
@@ -294,7 +314,13 @@ export class CommonComponent
 	async exportFile(body?: any, filename?: string, sourcePath?: string) {
 		try {
 			await this.spinner.show();
-			const res = await this.baseService.exportData({ ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value) }, sourcePath);
+			const res = await this.baseService.exportData(
+				{
+					...(removeNullValues(body) ||
+						removeNullValues(this.formGroupSearch.value)),
+				},
+				sourcePath,
+			);
 			this.downloadFile(res.blob, filename ?? res.fileName);
 		} catch (e: any) {
 			this.baseService.showError(e.error?.error?.code ?? MESSAGE.ERROR);

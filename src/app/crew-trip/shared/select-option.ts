@@ -94,4 +94,8 @@ export const SelectOptions = {
       label: 'Notification: Cost status compared to the planned budget', code: 'COST_PLAN_STATUS'
     }
   ],
+  TRANSPORT_TYPE: [
+    {value: 'TO_HOTEL', display: 'To hotel'},
+    {value: 'TO_AIRPORT', display: 'To airport'},
+  ],
 };

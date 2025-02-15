@@ -34,6 +34,7 @@ import {
 	MatDatepickerModule,
 	MatDatepickerToggle,
 } from '@angular/material/datepicker';
+import { MatDialogModule } from '@angular/material/dialog';
 import {
 	MatAccordion,
 	MatExpansionPanel,
@@ -67,6 +68,7 @@ import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lo
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { PdfViewerComponent } from 'src/app/crew-trip/shared/pdf-viewer/pdf-viewer.component';
 import {
 	DATE_FORMAT_DD_MM_YYYY,
 	LOCALE,
@@ -117,6 +119,7 @@ import {
 		NgxMaterialTimepickerModule,
 		MatTooltipModule,
 		DecimalPipe,
+		MatDialogModule,
 	],
 	templateUrl: './contract-detail.component.html',
 	styleUrl: './contract-detail.component.scss',
@@ -130,8 +133,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	//control
 	@ViewChild('nationName') nationName: ElementRef<HTMLInputElement>;
 	filteredNation = model<any[]>([]);
-
+	isHiddenPdf: boolean;
 	//variable
+	documentId: number;
 	id: any;
 	viewType: any;
 	readMode: any;
@@ -139,7 +143,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	dataObject: any;
 	contractObj: any;
 	@Output() backStep = new EventEmitter<any>();
-
 	tblAttachedDocument = new MatTableDataSource();
 	tblUnitPrice = new MatTableDataSource();
 	tbl61 = new MatTableDataSource();
@@ -201,10 +204,22 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 								});
 								return;
 							}
-							// delete res.data.marketCode;
 							this.formGroupDetail.patchValue(res.data);
 							this.nationSelected(res.data.nationId);
 							this.marketCodeChangeBrake = true;
+							const fieldContract = [
+								'marketName',
+								'nation',
+								'marketType',
+								'flightGroup',
+							];
+							Object.entries(this.formGroupDetail.controls).forEach(
+								([k, v]) => {
+									if (fieldContract.includes(k)) {
+										v.disable();
+									}
+								},
+							);
 						}
 					});
 			} catch (e) {
@@ -247,6 +262,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	// private filesControl = new FormControl(null, );
 	constructor(private readonly numberPipe: DecimalPipe) {
 		super();
+		this.isHiddenPdf = true;
 		window.scrollTo({ top: 0, behavior: 'instant' });
 		const navigation = this._router.getCurrentNavigation();
 		const state = navigation?.extras.state as { data: any };
@@ -372,6 +388,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	getContractForm(key: string) {
 		return this.listContractForm.find((s) => s.key == key)?.value;
 	}
+
 	override async ngOnInit() {
 		try {
 			await this.spinner.show();
@@ -486,7 +503,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 				);
 				//validate
 				// if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
-				if (fileUpload.size > 5 * 1048576) {
+				if (fileUpload.size > 10 * 1048576) {
 					this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
 					return;
 				}
@@ -497,8 +514,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 						this.tblAttachedDocument.data = [
 							...this.tblAttachedDocument.data,
 							{
-								fileName: fileUpload.name,
-								fileUrl: res.data,
+								id: res.data.id,
+								fileName: res.data.filename,
+								fileUrl: `source/${res.data.url}`,
 								isManual: true,
 							},
 						];
@@ -556,13 +574,13 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 	async _doDelete() {
 		try {
 			if (this.deleteObj?.deleteType == 'file') {
-				await this.baseService
-					.deleteFile(this.deleteObj.fileName, this.id)
-					.then((res: any) => {
-						if (res.status == HttpStatusCode.Ok) {
-							this.baseService.showSuccess('Delete file successfully.');
-						}
-					});
+				// await this.baseService
+				// 	.deleteFile(this.deleteObj.fileName, this.id)
+				// 	.then((res: any) => {
+				// 		if (res.status == HttpStatusCode.Ok) {
+				// 			this.baseService.showSuccess('Delete file successfully.');
+				// 		}
+				// 	});
 				this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter(
 					(item: any) => item.fileName !== this.curFile.fileName,
 				);
@@ -619,14 +637,15 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 		this._showDialogDelete = true;
 	}
 
-	async confirmDeleteFile(element: any) {
+	async confirmDeleteFile(element: any, id: number) {
 		this.curFile = element;
+		this.documentId = id;
 		this.showDialogDeleteFile = true;
 	}
 
 	async deleteFile() {
 		await this.baseService
-			.deleteFile(this.curFile.fileName, this.id)
+			.deleteFile(this.curFile.fileName, this.id, this.documentId)
 			.then((res: any) => {
 				if (res.status == HttpStatusCode.Ok) {
 					this.baseService.showSuccess('Delete file successfully.');
@@ -758,6 +777,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 			'notes',
 			'doiTuongDichVu',
 			'contractSpec',
+			'marketType',
 		];
 		const fieldAnnex = ['partnerName'];
 		Object.entries(form.controls).forEach(([k, v]) => {
@@ -1074,5 +1094,15 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 				isTaxVehicle: false,
 			});
 		}
+	}
+
+	pdfViewer(url: string) {
+		const dialogRef = this.dialog.open(PdfViewerComponent, {
+			height: '90vh',
+			minHeight: '90vh',
+			minWidth: '80vw',
+			data: { pdfSrc: url },
+		});
+		dialogRef.afterClosed().subscribe(() => {});
 	}
 }
