@@ -52,9 +52,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 		if (this.requiredControl) {
 			this.viewControl.addValidators(Validators.required);
 		}
-		if (this.formControl.disabled) {
-			this.viewControl.disable();
-		}
+		
 
 	}
 	ngAfterViewChecked(): void {
@@ -63,6 +61,10 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 			this.viewControl.updateValueAndValidity()
 		}
 		this.setViewValueInit(this.formControl.value);
+
+		if (this.formControl.disabled) {
+			this.viewControl.disable();
+		}
 	}
 
 	@Input() size = 'sm';
