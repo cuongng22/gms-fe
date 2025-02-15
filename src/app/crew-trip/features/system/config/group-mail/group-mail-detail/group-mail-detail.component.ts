@@ -46,7 +46,6 @@ interface EmailObj {
     CommonModule,
     MatTableModule,
     MatPaginatorModule,
-    CommonModule,
     InputComponent,
     SelectionSuggestComponent,
   ],

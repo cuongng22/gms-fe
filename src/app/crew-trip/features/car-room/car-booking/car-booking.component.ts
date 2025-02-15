@@ -16,7 +16,7 @@ import {
   MatCellDef, MatColumnDef,
   MatHeaderCell, MatHeaderCellDef,
   MatHeaderRow,
-  MatHeaderRowDef,
+  MatHeaderRowDef, MatNoDataRow,
   MatRow,
   MatRowDef, MatTable
 } from "@angular/material/table";
@@ -51,7 +51,8 @@ import {TransportBookingService} from "src/app/crew-trip/core/services/transport
     NgForOf,
     MatColumnDef,
     MatHeaderCellDef,
-    NgIf
+    NgIf,
+    MatNoDataRow
   ],
   templateUrl: './car-booking.component.html',
   styleUrl: './car-booking.component.scss'
@@ -75,20 +76,20 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
     }
     //Create list year
     const currentYear = new Date().getFullYear();
+    const currentMonth = new Date().getMonth() + 1 + '';
     const startYear = 2020;
     const endYear = startYear + 20;
-
     for (let year = startYear; year <= endYear; year++) {
       this.listYear.push(year);
     }
     this.formGroupSearch = this.fb.group({
-      scheduleType: ['',[Validators.required()]],
-      marketCode: ['',[Validators.required()]],
-      month: ['',[Validators.required()]],
-      year: ['',[Validators.required()]],
-      type: ['CC',[Validators.required()]],
-      timezone:['CC',[Validators.required()]],
-      transportType: ['',[Validators.required()]]
+      scheduleType: [null,[Validators.required]],
+      marketCode: [null,[Validators.required]],
+      month: [currentMonth,[Validators.required]],
+      year: [currentYear,[Validators.required]],
+      type: [null,[Validators.required]],
+      timezone:['CC',[Validators.required]],
+      transportType: [null,[Validators.required]]
     });
   }
 
@@ -103,7 +104,7 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
     } catch (error: any) {
       this.showError(error);
     }
-    this.search();
+    // this.search();
     await this.spinner.hide();
   }
 
@@ -140,19 +141,18 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
       }
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
-          this.displayedColumns = [
-            "No.",
-            "Arr. Date",
-            "Flight Number",
-            "Arr. Time",
-            "Dep. Date",
-            "Flight Number11",
-            "Dep. Time",
-            "Crew Count",
-            "Crews Info",
-            "Note"
-          ];
+          this.displayedColumns = res.data.columns;
+          console.log(this.displayedColumns)
           this.dataSource.data = res.data.data;
+          this.dataSource.data = this.dataSource.data.map(row => {
+            const rowData: any = {};
+            this.displayedColumns.forEach((col, index) => {
+              rowData[col] = row[index] || '';
+            });
+            rowData.isMergedRow = this.isMergedRow(rowData);
+            return rowData;
+          });
+          console.log("  this.dataSource.data:",  this.dataSource.data)
         }
         return res
       }
@@ -165,6 +165,6 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
     }
   }
   isMergedRow(row: any): boolean {
-    return Array.isArray(row) && row.length === 1 && row[0] !== '';
+    return Object.values(row).slice(1).every(value => value === "");
   }
 }

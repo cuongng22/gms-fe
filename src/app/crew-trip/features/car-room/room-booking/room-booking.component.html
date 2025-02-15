@@ -28,17 +28,12 @@
           >
           </app-selection>
         </div>
-        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection-suggest required
-            i18n-label="@@airportCodes"
-            label="Market code"
-            [options]="markets"
-            formControlName="marketCode"
-            size="sm"
-          ></app-selection-suggest>
+        <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2">
+          <app-selection-suggest i18n-label="@@marketCode" label="Market code" required [options]="markets"
+                                 formControlName="marketCode" size="sm"/>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection [options]="optionsServiceApplied" [required]="true" label="FC/CC" formControlName="type">
+          <app-selection [options]="optionsServiceApplied" [required]="true" label="FC/CC" formControlName="type" >
           </app-selection>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
@@ -92,15 +87,15 @@
   </mat-card-header>
   <mat-card-content>
     <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="mat-elevation-z8 table-light">
         <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
           <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
           <td mat-cell *matCellDef="let element">{{ element[column] }}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-        <tr *matNoDataRow class="mat-row">
-          <td [attr.colspan]="displayedColumns.length" class="mat-cell text-center"><span i18n>No data!</span>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell text-center" [attr.colspan]="displayedColumns.length">No data!</td>
         </tr>
       </table>
     </div>
