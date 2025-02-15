@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, input, output } from '@angular/core';
+import { Component, effect, inject, input, output, AfterViewChecked } from '@angular/core';
 import { AbstractControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -17,6 +17,7 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import moment from 'moment';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { NgxControlError } from 'ngxtension/control-error';
+import { ifValidator } from 'ngxtension/if-validator';
 import { BaseService } from 'src/app/crew-trip/core/services/base-service';
 import { CharterService } from 'src/app/crew-trip/core/services/charter.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
@@ -44,15 +45,18 @@ import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.c
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
   ]
 })
-export class CharterGeneralComponent extends CommonComponent {
+export class CharterGeneralComponent extends CommonComponent implements AfterViewChecked {
   override baseService: CharterService = inject(CharterService);
   airportCodeChange = output<string>();
+  formValueChange = output<any>();
   dataTransformPipe = inject(DataTransformPipe);
+  dataGeneral = input<any>();
 
   disabled = input<boolean>(false);
   override displayedColumns: string[] = ['carType', 'priceIncVat', 'action'];
   errorDiffMonth = false;
   indexDeleteCarRental: any;
+  isHotel = false;
 
   override formGroupDetail = this.formBuilder.group({
     airportCode: ['', [Validators.required]],
@@ -65,28 +69,60 @@ export class CharterGeneralComponent extends CommonComponent {
     isLCO: [false],
     rateVat: [],
     priceHotel: this.formBuilder.group({
-      numberOfNight: [0, [Validators.required]],
-      priceSingleRoom: [0, [Validators.required]],
-      priceTwinRoom: [0, [Validators.required]],
-      priceSingleRoomECI: [0, [Validators.required]],
-      priceTwinRoomECI: [0, [Validators.required]],
-      priceSingleRoomLCO: [0, [Validators.required]],
-      priceTwinRoomLCO: [0, [Validators.required]],
+      numberOfNight: [null, ifValidator(() => this.isHotel, [Validators.required])],
+      priceSingleRoom: [null, ifValidator(() => this.isHotel, [Validators.required])],
+      priceTwinRoom: [null, ifValidator(() => this.isHotel, [Validators.required])],
+      priceSingleRoomECI: [null, ifValidator(() => this.isHotel, [Validators.required])],
+      priceTwinRoomECI: [null, ifValidator(() => this.isHotel, [Validators.required])],
+      priceSingleRoomLCO: [null, ifValidator(() => this.isHotel, [Validators.required])],
+      priceTwinRoomLCO: [null, ifValidator(() => this.isHotel, [Validators.required])],
     })
   });
+
+  constructor() {
+    super();
+    effect(() => {
+      if (this.dataGeneral()) {
+        const data = { ...this.dataGeneral() }
+        this.formGroupDetail.patchValue(data, { emitEvent: false });
+
+        if (data.priceTransports) {
+          this.dataSource.data = [...data.priceTransports];
+        }
+      }
+    }, { allowSignalWrites: true });
+  }
 
 
   override ngOnInit(): void {
     this.loadListFlightMarket({ status: 'Operational' });
+    this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
+      this.getExchangeRate()
+    });
+
+    this.formGroupDetail.controls.isHotel.valueChanges.subscribe(value => {
+      this.isHotel = !!value;
+      this.formGroupDetail.controls.priceHotel.updateValueAndValidity();
+      this.formGroupDetail.controls.priceHotel.reset();
+      this.formValueChange.emit(this.formGroupDetail.getRawValue())
+    });
+    this.isHotel = !!this.formGroupDetail.controls.isHotel.value;
+    this.formGroupDetail.controls.priceHotel.updateValueAndValidity();
+
+    this.formGroupDetail.controls.isTransport.valueChanges.subscribe(value => {
+      this.dataSource.data = [];
+      this.formValueChange.emit(this.formGroupDetail.getRawValue())
+    });
+
   }
 
-
-
+  ngAfterViewChecked(): void {
+    if (this.disabled() && !this.formGroupDetail.disabled) {
+      this.formGroupDetail.disable()
+    }
+  }
 
   airportChange(data: any) {
-    // this.dataSourceHotel.data = []
-    // this.getHotelByAirport(data.value);
-    // this.getCaRentalByAirport(data.value);
     this.getExchangeRate();
     this.airportCodeChange.emit(data.value);
   }
@@ -126,14 +162,14 @@ export class CharterGeneralComponent extends CommonComponent {
 
   invalidCarRental() {
     if (this.dataSource.data) {
-      return this.dataSource.data.map(item => item.cartType.toLowerCase()).some((item, index, array) => array.indexOf(item) !== index);
+      return this.dataSource.data.map(item => item.carType.toLowerCase()).some((item, index, array) => array.indexOf(item) !== index);
     }
     return false;
   }
 
   addCarRental() {
     const addItem = {
-      cartType: null,
+      carType: '',
       priceIncVat: 0
     }
     this.dataSource.data.push(addItem);

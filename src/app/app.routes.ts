@@ -102,21 +102,15 @@ export const routes: Routes = [
             path: 'est-plan',
             children: [
               {
-                path: 'wet-lease',
+                path: 'wet-lease-charter',
                 children: [
                   { path: '', component: WetLeaseCharterComponent },
-                  { path: 'detail/:id', component: WetLeaseDetailComponent },
-                  { path: 'detail', component: WetLeaseDetailComponent },
+                  { path: 'wet-lease-detail/:id', component: WetLeaseDetailComponent },
+                  { path: 'wet-lease-detail', component: WetLeaseDetailComponent },
+                  { path: 'charter-detail/:id', component: CharterDetailComponent },
+                  { path: 'charter-detail', component: CharterDetailComponent },
                 ],
-              },
-              {
-                path: 'charter',
-                children: [
-                  { path: '', component: WetLeaseCharterComponent },
-                  { path: 'detail/:id', component: CharterDetailComponent },
-                  { path: 'detail', component: CharterDetailComponent },
-                ],
-              },
+              }
             ],
           },
           { path: 'rate/uth', component: RateUthComponent },

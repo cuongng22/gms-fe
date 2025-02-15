@@ -132,6 +132,14 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
       this.getExchangeRate()
     });
 
+    this.formGroupDetail.controls.isHotel.valueChanges.subscribe(value => {
+      this.dataSourceHotel.data = [];
+    });
+
+    this.formGroupDetail.controls.isTransport.valueChanges.subscribe(value => {
+      this.dataSourceCarRental.data = [];
+    });
+
   }
 
   submit(): void {

@@ -7,7 +7,7 @@
             <mat-checkbox formControlName="isLCO" class="mb-2" i18n="@@carRental">Late checkout</mat-checkbox>
         </div>
     </div>
-    <div class="row">
+    <div class="row row-cols-5">
         <div class="col mb-2">
             <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="listFlightMarket"
                 formControlName="airportCode" (selectionChange)="airportChange($event)" [required]="true" />
@@ -66,63 +66,108 @@
                 <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput formControlName="rateVat">
             </mat-form-field>
         </div>
-        <div class="col"></div>
+        <!-- <div class="col"></div> -->
     </div>
 
-    <h5 i18n="hotel">Hotel</h5>
-    <div class="row" formGroupName="priceHotel">
+
+    @if(this.formGroupDetail.controls.isHotel.value){
+    <h6 i18n="hotel">Hotel</h6>
+    <div class="row row-cols-5" formGroupName="priceHotel">
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@noOfNight">No. of night</mat-label>
-                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput
-                    formControlName="numberOfNight">
+                <mat-label i18n="@@noOfNight">No. of night<span class="text-red"> *</span></mat-label>
+                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput [min]="0"
+                    [max]="999999999999" formControlName="numberOfNight">
+                <mat-error
+                    *ngxControlError="formGroupDetail.controls.priceHotel.controls.numberOfNight; track: 'required'"
+                    i18n="@@numberOfNightRequired">
+                    No. of night {{ MESSAGE.REQUIRED }}
+                </mat-error>
             </mat-form-field>
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@unitPriceForSingleRoom">Unit price for single room</mat-label>
-                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput
-                    formControlName="priceSingleRoom">
+                <mat-label i18n="@@unitPriceForSingleRoom">Unit price for single room<span class="text-red">
+                        *</span></mat-label>
+                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput [min]="0"
+                    [max]="999999999999" formControlName="priceSingleRoom">
+                <mat-error
+                    *ngxControlError="formGroupDetail.controls.priceHotel.controls.priceSingleRoom; track: 'required'"
+                    i18n="@@unitPriceForSingleRoomRequired">
+                    Unit price for single room {{ MESSAGE.REQUIRED }}
+                </mat-error>
             </mat-form-field>
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@unitPriceForTwinRoom">Unit price for twin room</mat-label>
-                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput
-                    formControlName="priceTwinRoom">
+                <mat-label i18n="@@unitPriceForTwinRoom">Unit price for twin room<span class="text-red">
+                        *</span></mat-label>
+                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput [min]="0"
+                    [max]="999999999999" formControlName="priceTwinRoom">
+                <mat-error
+                    *ngxControlError="formGroupDetail.controls.priceHotel.controls.priceTwinRoom; track: 'required'"
+                    i18n="@@unitPriceForTwinRoomRequired">
+                    Unit price for twin room {{ MESSAGE.REQUIRED }}
+                </mat-error>
             </mat-form-field>
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@unitPriceForSingleRoomECI">Unit price for single room - ECI</mat-label>
-                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput
-                    formControlName="priceSingleRoomECI">
+                <mat-label i18n="@@unitPriceForSingleRoomECI">Unit price for single room - ECI<span class="text-red">
+                        *</span></mat-label>
+                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput [min]="0"
+                    [max]="999999999999" formControlName="priceSingleRoomECI">
+                <mat-error
+                    *ngxControlError="formGroupDetail.controls.priceHotel.controls.priceSingleRoomECI; track: 'required'"
+                    i18n="@@unitPriceForSingleRoomECIRequired">
+                    Unit price for single room - ECI {{ MESSAGE.REQUIRED }}
+                </mat-error>
             </mat-form-field>
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@unitPriceForTwinRoomECI">Unit price for twin room - ECI</mat-label>
-                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput
-                    formControlName="priceTwinRoomECI">
+                <mat-label i18n="@@unitPriceForTwinRoomECI">Unit price for twin room - ECI<span class="text-red">
+                        *</span></mat-label>
+                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput [min]="0"
+                    [max]="999999999999" formControlName="priceTwinRoomECI">
+                <mat-error
+                    *ngxControlError="formGroupDetail.controls.priceHotel.controls.priceTwinRoomECI; track: 'required'"
+                    i18n="@@unitPriceForTwinRoomECIRequired">
+                    Unit price for twin room - ECI {{ MESSAGE.REQUIRED }}
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <!-- <div class="w-100"></div> -->
+        <div class="col" sizeInput="sm">
+            <mat-form-field class="mb-2">
+                <mat-label i18n="@@unitPriceForSingleRoomLCO">Unit price for single room - LCO<span class="text-red">
+                        *</span></mat-label>
+                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput [min]="0"
+                    [max]="999999999999" formControlName="priceSingleRoomLCO">
+                <mat-error
+                    *ngxControlError="formGroupDetail.controls.priceHotel.controls.priceSingleRoomLCO; track: 'required'"
+                    i18n="@@unitPriceForSingleRoomLCORequired">
+                    Unit price for single room - LCO {{ MESSAGE.REQUIRED }}
+                </mat-error>
             </mat-form-field>
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@unitPriceForSingleRoomLCO">Unit price for single room - LCO</mat-label>
-                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput
-                    formControlName="priceSingleRoomLCO">
-            </mat-form-field>
-        </div>
-        <div class="col" sizeInput="sm">
-            <mat-form-field class="mb-2">
-                <mat-label i18n="@@unitPriceForTwinRoomLCO">Unit price for twin room - LCO</mat-label>
-                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput
-                    formControlName="priceTwinRoomLCO">
+                <mat-label i18n="@@unitPriceForTwinRoomLCO">Unit price for twin room - LCO<span class="text-red">
+                        *</span></mat-label>
+                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput [min]="0"
+                    [max]="999999999999" formControlName="priceTwinRoomLCO">
+                <mat-error
+                    *ngxControlError="formGroupDetail.controls.priceHotel.controls.priceTwinRoomLCO; track: 'required'"
+                    i18n="@@unitPriceForTwinRoomLCORequired">
+                    Unit price for twin room - LCO {{ MESSAGE.REQUIRED }}
+                </mat-error>
             </mat-form-field>
         </div>
     </div>
+    }
 
-    <h5 i18n="@@carRental">Car rental</h5>
+    @if(this.formGroupDetail.controls.isTransport.value){
     @defer {
     <div class="row mt-2">
         <!-- Bảng nhà xe  -->
@@ -130,11 +175,10 @@
 
             <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
                 <ng-container matColumnDef="addBtn">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef colspan="3" style="
-            background-color: transparent;
-            border: none !important;" class="pt-0 pl-0">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef colspan="3"
+                        style="background-color: transparent;border: none !important;" class="pt-0 pl-0">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h5 class="mb-0">Car rental</h5>
+                            <h6 class="mb-0 text-black" i18n="@@carRental">Car rental</h6>
                             @if(!!!disabled()){
                             @if(invalidCarRental()){
                             <span class="text-danger">Duplicate Number of Supplier name</span>
@@ -160,7 +204,7 @@
                         (click)="clickEdit(element,'carTypeEditing')">
                         @if(!element.carTypeEditing || !!disabled()){
                         <div class="d-flex justify-content-between">
-                            {{element.carTypeName}}
+                            {{element.carType}}
                         </div>
                         }@else {
                         <div sizeInput="xs">
@@ -178,7 +222,7 @@
                         class="font-weight-bold text-center mat-column-200" i18n="@@unitPriceIncludingVAT">
                         Unit price (Including VAT)
                     </th>
-                    <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="mat-column-200"
+                    <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="mat-column-200 text-right"
                         [style.padding]="element.priceIncVatEditing  && !!!disabled()?'0px !important':''"
                         (click)="clickEdit(element,'priceIncVatEditing')">
                         @if(!element.priceIncVatEditing || !!disabled()){
@@ -189,7 +233,7 @@
                         <div sizeInput="xs">
                             <mat-form-field (clickOutside)="clickOutside(element,'priceIncVatEditing')"
                                 class="edit-inline-table">
-                                <input matInput type="number" [(ngModel)]="element.priceIncVat"
+                                <input matInput type="text" [(ngModel)]="element.priceIncVat"
                                     [ngModelOptions]="{standalone: true}" [min]="0" [max]="999999999999" digitOnly
                                     [disabled]="!!disabled()" decimalSeparator="." [decimal]="true">
                             </mat-form-field>
@@ -226,6 +270,7 @@
             </table>
         </div>
     </div>
+    }
     }
 </form>
 

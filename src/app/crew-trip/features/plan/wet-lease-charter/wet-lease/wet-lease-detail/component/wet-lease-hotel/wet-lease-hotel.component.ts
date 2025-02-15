@@ -196,11 +196,11 @@ export class WetLeaseHotelComponent extends CommonComponent {
 
   // tính tiền ngoại tệ
   calTotalCountForeign(element: any) {
-    if (this.category() === CategoryEnum.INTERNATIONAL) {
-      element.totalCountForeign = Object.entries(element.hotelItem).map((item: any[]) => {
-        return Number(item[1].singleRoomPrice ?? 0) * Number(item[1].totalSingleRoom ?? 0) + Number(item[1].twinRoomPrice ?? 0) * Number(item[1].totalTwinRoom ?? 0)
-      }).reduce((acc, value) => acc + value, 0)
-    }
+    // if (this.category() === CategoryEnum.INTERNATIONAL) {
+    element.totalCountForeign = Object.entries(element.hotelItem).map((item: any[]) => {
+      return Number(item[1].singleRoomPrice ?? 0) * Number(item[1].totalSingleRoom ?? 0) + Number(item[1].twinRoomPrice ?? 0) * Number(item[1].totalTwinRoom ?? 0)
+    }).reduce((acc, value) => acc + value, 0)
+    // }
   }
 
   // tính thành tiền chưa vat và có vat

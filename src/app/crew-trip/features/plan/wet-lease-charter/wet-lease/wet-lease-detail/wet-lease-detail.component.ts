@@ -97,8 +97,8 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.planHotel.forEach((element: any) => {
       Object.entries(element.hotelItem).forEach((elementHotel: any[]) => {
         const _itemPrice = _priceHotelsList.find(item => item.hotelCode === elementHotel[0]);
-        elementHotel[1].singleRoomPrice = _itemPrice.singleRoomPrice;
-        elementHotel[1].twinRoomPrice = _itemPrice.twinRoomPrice;
+        elementHotel[1].singleRoomPrice = Number(_itemPrice.singleRoomPrice);
+        elementHotel[1].twinRoomPrice = Number(_itemPrice.twinRoomPrice);
       })
     });
   }
@@ -155,8 +155,8 @@ export class WetLeaseDetailComponent extends CommonComponent {
           hotelName: element.hotelName,
           totalSingleRoom: 0,
           totalTwinRoom: 0,
-          twinRoomPrice: element.twinRoomPrice,
-          singleRoomPrice: element.singleRoomPrice,
+          twinRoomPrice: Number(element.twinRoomPrice),
+          singleRoomPrice: Number(element.singleRoomPrice),
         };
         planHotelItem.hotelItem[element.hotelCode] = hotelItem;
       })
@@ -174,7 +174,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
         transportCode: element.carRentalCode,
         transportName: element.carRentalName,
         numberOfTrip: 0,
-        unitPrice: element.unitPrice,
+        unitPrice: Number(element.unitPrice),
         totalAmountForex: 0,
         totalAmountIncVAT: 0,
         totalAmountExcVAT: 0
