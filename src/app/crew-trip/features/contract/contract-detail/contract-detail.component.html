@@ -249,6 +249,9 @@
               @if (!!formGroupDetail.controls['partnerName'].hasError('required')) {
                 <mat-error><span i18n>Supplier name</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['partnerName']; track: 'maxlength'">
+                <span i18n>Supplier name</span><span i18n> must be less than 250 character</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -661,7 +664,7 @@
                      matInput
                      required trim="blur"
                      [matAutocomplete]="auto">
-              <mat-autocomplete requireSelection #auto="matAutocomplete">
+              <mat-autocomplete #auto="matAutocomplete">
                 @for (option of listFlightMarket; track option) {
                   <mat-option [value]="option">{{ option }}</mat-option>
                 }
@@ -672,6 +675,12 @@
               @if (!!formGroupDetail.controls['marketCode'].hasError('invalid')) {
                 <mat-error><span i18n>Airport Code is not match with Currency</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['marketCode']; track: 'minlength'">
+                <span i18n>Airport Code</span><span i18n> must be equal 3 character</span>
+              </mat-error>
+              <mat-error *ngxControlError="formGroupDetail.controls['marketCode']; track: 'maxlength'">
+                <span i18n>Airport Code</span><span i18n> must be equal 3 character</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
@@ -757,6 +766,9 @@
               @if (!!formGroupDetail.controls['supplierPhone'].hasError('required')) {
                 <mat-error><span i18n>Supplier Phone</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['supplierPhone']; track: 'maxlength'">
+                <span i18n>Supplier Phone</span><span i18n> must be less than 20 character</span>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -771,6 +783,9 @@
               } @else if (!!formGroupDetail.controls['supplierEmail'].hasError('email') && formGroupDetail.get('supplierEmail')!.touched) {
                 <mat-error><span i18n>Email</span><span i18n> invalid</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['supplierEmail']; track: 'maxlength'">
+                <span i18n>Supplier Booking Email</span><span i18n> must be less than 250 character</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-6" sizeInput='sm'>
@@ -781,6 +796,10 @@
               @if (!!formGroupDetail.controls['carType'].hasError('required')) {
                 <mat-error><span i18n>Vehicle Type</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['carType']; track: 'maxlength'">
+                <span i18n>Vehicle Type</span><span i18n> must be less than 150 character</span>
+              </mat-error>
+
             </mat-form-field>
           </div>
         </div>
@@ -836,6 +855,9 @@
               @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
                 <mat-error><span i18n>Notes</span><span i18n> too long</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['notes']; track: 'maxlength'">
+                <span i18n>Remark</span><span i18n> must be less than 500 character</span>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
