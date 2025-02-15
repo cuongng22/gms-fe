@@ -1,0 +1,37 @@
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+    <h5 class="mb-0" i18n="@@crewList">
+        Wet lease
+    </h5>
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@system">
+            Plan
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@config">
+            Estimate/Plan
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@wetLease&CharterPlan">
+            Wet Lease&Charter Plan
+        </li>
+    </ol>
+</div>
+
+
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+
+            <mat-tab label="Wet Lease" i18n="@@wetLease">
+                <ng-template matTabContent>
+                    <app-wet-lease></app-wet-lease>
+                </ng-template>
+
+            </mat-tab>
+            <mat-tab label="Charter" i18n="@@charter">
+                <ng-template matTabContent>
+                    <app-charter></app-charter>
+                </ng-template>
+
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card-content>
+</mat-card>

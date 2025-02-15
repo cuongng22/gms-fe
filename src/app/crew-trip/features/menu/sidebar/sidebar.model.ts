@@ -216,7 +216,7 @@ export const menu: Menu[] = [
                 icon: 'ri-folder-chart-line',
               },
               {
-                path: 'plan/est-plan/wet-lease',
+                path: 'plan/est-plan/wet-lease-charter',
                 title: $localize`:@@fiveYearPlan:Wet lease`,
                 icon: 'ri-folder-chart-line',
               },

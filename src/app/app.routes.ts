@@ -61,6 +61,8 @@ import { EmailTrackingComponent } from './crew-trip/features/flight-schedules/em
 import { NotificationComponent } from "src/app/crew-trip/features/system/config/notification/notification.component";
 import { CarBookingComponent } from "src/app/crew-trip/features/car-room/car-booking/car-booking.component";
 import {InvoiceActualCostTabComponent} from "src/app/crew-trip/features/invoice/actual-cost/invoice-actual-cost-tab.component";
+import { WetLeaseCharterComponent } from './crew-trip/features/plan/wet-lease-charter/wet-lease-charter.component';
+import { CharterDetailComponent } from './crew-trip/features/plan/wet-lease-charter/charter/charter-detail/charter-detail.component';
 
 
 export const routes: Routes = [
@@ -101,13 +103,15 @@ export const routes: Routes = [
             path: 'est-plan',
             children: [
               {
-                path: 'wet-lease',
+                path: 'wet-lease-charter',
                 children: [
-                  { path: '', component: WetLeaseComponent },
-                  { path: 'detail/:id', component: WetLeaseDetailComponent },
-                  { path: 'detail', component: WetLeaseDetailComponent },
+                  { path: '', component: WetLeaseCharterComponent },
+                  { path: 'wet-lease-detail/:id', component: WetLeaseDetailComponent },
+                  { path: 'wet-lease-detail', component: WetLeaseDetailComponent },
+                  { path: 'charter-detail/:id', component: CharterDetailComponent },
+                  { path: 'charter-detail', component: CharterDetailComponent },
                 ],
-              },
+              }
             ],
           },
           { path: 'rate/uth', component: RateUthComponent },

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnInit } from '@angular/core';
+import { AfterViewChecked, ChangeDetectionStrategy, ChangeDetectorRef, Component, effect, inject, input, OnInit, output } from '@angular/core';
 import { AbstractControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -75,6 +75,8 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   maxDate: any;
   errorDiffMonth = false;
 
+  airportCodeChange = output<string>();
+
   override formGroupDetail = this.formBuilder.group({
     airportCode: ['', [Validators.required]],
     startDate: ['', [Validators.required]],
@@ -130,6 +132,14 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
       this.getExchangeRate()
     });
 
+    this.formGroupDetail.controls.isHotel.valueChanges.subscribe(value => {
+      this.dataSourceHotel.data = [];
+    });
+
+    this.formGroupDetail.controls.isTransport.valueChanges.subscribe(value => {
+      this.dataSourceCarRental.data = [];
+    });
+
   }
 
   submit(): void {
@@ -157,7 +167,8 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     this.dataSourceHotel.data = []
     this.getHotelByAirport(data.value);
     this.getCaRentalByAirport(data.value);
-    this.getExchangeRate()
+    this.getExchangeRate();
+    this.airportCodeChange.emit(data.value);
   }
 
   async getHotelByAirport(airportCode: string) {
@@ -246,7 +257,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
 
   invalidCarRental() {
     if (this.dataSourceCarRental.data) {
-      return this.dataSourceCarRental.data.some((item, index) => this.dataSourceCarRental.data.map(mapItem => mapItem.carRentalCode).indexOf(item.carRentalCode) !== index);
+      return this.dataSourceCarRental.data.map(item => item.carRentalCode).some((item, index, array) => array.indexOf(item) !== index);
     }
     return false;
   }

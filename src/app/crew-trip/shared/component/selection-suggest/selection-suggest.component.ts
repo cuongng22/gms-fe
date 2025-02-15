@@ -62,6 +62,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 			this.viewControl.markAsTouched();
 			this.viewControl.updateValueAndValidity()
 		}
+		this.setViewValueInit(this.formControl.value);
 	}
 
 	@Input() size = 'sm';
