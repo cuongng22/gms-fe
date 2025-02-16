@@ -142,7 +142,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     {label: $localize`Number Of Vehicle`, value: "numberOfVehicle", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Price`, value: "price", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Remark`, value: "remark"},
-    {label: $localize`Room No`, value: "roomNo", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Room No`, value: "roomNo", rowspan: "2"},
     {label: $localize`Service Tax Cc Charge`, value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Service Tax Fc Charge`, value: "serviceTaxFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Single Room Cc`, value: "singleRoomCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -242,7 +242,6 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
           this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
         }
-
       });
     } catch (e) {
       console.log(e);
@@ -272,7 +271,15 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
 
   calTotal(column: any) {
     if (column.type === Constant.NUMBER) {
-      return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev: any, cur: any) => prev + +cur[column.value], 0)
+      return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev: any, cur: any) => {
+        // prev + +cur[column.value]
+        let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl;
+        if (cur.typeRoom === 'CC Twin room') {
+          return prev + +(cur[column.value] / 2);
+        } else {
+          return prev + +cur[column.value];
+        }
+      }, 0)
     } else {
       return '';
     }
@@ -294,11 +301,16 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     }
   }
 
-  getRowSpan(room: number, innerColumn: any): number {
-    if (['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
-      let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl
-      return (dtl.filter((item: any) => item.roomNo === room && item.typeRoom === 'CC Twin room').length) || 1;
-    } else {return 1}
+  getRowSpan(index: number, innerColumn: any, data: any): number {
+    if (data.typeRoom === 'CC Twin room' &&
+      ['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
+      let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl.filter((item: any) => item.typeRoom === 'CC Twin room');
+      let currentRow = dtl[index];
+      let nextRow = dtl[index + 1];
+      if (nextRow?.roomNo === currentRow?.roomNo && nextRow?.ciDate === currentRow?.ciDate) {
+        return 2;
+      } else return 1;
+    } else {return 1;}
   }
 
   shouldShowRowSpan(index: number, innerColumn: any): boolean {
@@ -306,7 +318,8 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
       let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl
       return (
         index === 0 || dtl[index]?.typeRoom !== 'CC Twin room' ||
-        dtl[index]?.roomNo !== dtl[index - 1]?.roomNo
+        dtl[index]?.roomNo !== dtl[index - 1]?.roomNo ||
+        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
       );
     } else return true;
   }

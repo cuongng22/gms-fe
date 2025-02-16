@@ -27,6 +27,18 @@ export class InvoiceDocumentService extends BaseService {
     return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
   }
 
+  async exportListData(body: any) {
+    const url = `${this.api}/${this.path}/export-data`;
+    const httpOptionsExport = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/octet-stream'
+      }),
+      responseType: 'blob' as any,
+    };
+    return firstValueFrom(this.http.post<Blob>(url,body, httpOptionsExport));
+  }
+
   override create<T = any>(body: any): Promise<T> {
     const url = `${this.api}/${this.path}`;
     return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
@@ -51,9 +63,10 @@ export class InvoiceDocumentService extends BaseService {
     return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
-  getContractByAirport(value: any): Promise<any> {
-    const url = `${this.api}/invoice/common/contract-by-airport/${value}`;
-    return firstValueFrom(this.http.get<any>(url, this.httpOptions));
+  getDocumentNotSent(body: any): Promise<any> {
+    const url = `${this.api}/${this.path}/not-sent`;
+    const params = new HttpParams({fromObject: removeNullValues(body)});
+    return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
   listMaNghiepVu(): Promise<any> {
@@ -88,7 +101,7 @@ export class InvoiceDocumentService extends BaseService {
         'Accept': 'application/octet-stream'
       }),
       responseType: 'blob' as any,
-      params:new HttpParams({fromObject: removeNullValues(body)})
+      params: new HttpParams({fromObject: removeNullValues(body)})
     };
     return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
   }
@@ -105,5 +118,21 @@ export class InvoiceDocumentService extends BaseService {
     const url = `${this.api}/${this.path}/list-parent`;
     const params = new HttpParams({fromObject: removeNullValues(body)});
     return firstValueFrom(this.http.get<any>(url, {params}));
+  }
+
+  async sendEmail(body: any): Promise<any> {
+    const url = `${this.api}/invoice/common/send-email`;
+    const headers = {
+      headers: new HttpHeaders()
+    };
+    return firstValueFrom(this.http.post(url, body, headers));
+  }
+
+  findContract(body: any): Promise<any> {
+    const url = `${this.api}/invoice/common/find-contract`;
+    const headers = {
+      headers: new HttpHeaders()
+    };
+    return firstValueFrom(this.http.post(url, body, headers));
   }
 }

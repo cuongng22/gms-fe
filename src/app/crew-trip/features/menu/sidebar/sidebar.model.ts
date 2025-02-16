@@ -1,14 +1,14 @@
 export interface Menu {
-	title: string;
-	rootPath: string;
-	subMenu: subMenu[];
+  title: string;
+  rootPath: string;
+  subMenu: subMenu[];
 }
 
 export interface subMenu {
-	path: string;
-	title: string;
-	icon: string;
-	menu?: Menu[];
+  path: string;
+  title: string;
+  icon: string;
+  menu?: Menu[];
 }
 
 export const menu: Menu[] = [
@@ -90,7 +90,7 @@ export const menu: Menu[] = [
     ]
   },
   {
-    title: $localize`:@@hotelCarService:HOTEL & CAR SERVICE`,
+    title: $localize`:@@hotelCarService:Accommodation Service`,
     rootPath: 'service',
     subMenu: [
       {
@@ -149,7 +149,7 @@ export const menu: Menu[] = [
         icon: 'ri-folder-chart-line',
       },
       {
-        path: 'invoice/actual-expense-tracking',
+        path: 'invoice/invoice-actual-cost-tab',
         title: $localize`:@@actualExpenseTracking:Actual expense tracking`,
         icon: 'ri-shopping-cart-line',
       },
@@ -216,7 +216,7 @@ export const menu: Menu[] = [
                 icon: 'ri-folder-chart-line',
               },
               {
-                path: 'plan/est-plan/wet-lease',
+                path: 'plan/est-plan/wet-lease-charter',
                 title: $localize`:@@fiveYearPlan:Wet lease`,
                 icon: 'ri-folder-chart-line',
               },

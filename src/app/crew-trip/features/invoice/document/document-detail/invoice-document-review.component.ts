@@ -133,7 +133,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     {label: $localize`Number Of Vehicle`, value: "numberOfVehicle", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Price`, value: "price", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Remark`, value: "remark"},
-    {label: $localize`Room No`, value: "roomNo", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Room No`, value: "roomNo", rowspan: "2"},
     {label: $localize`Service Tax Cc Charge`, value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Service Tax Fc Charge`, value: "serviceTaxFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Single Room Cc`, value: "singleRoomCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -309,24 +309,6 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     }
   }
 
-  async airportCodeChange($event: any) {
-    if ($event?.value) {
-      try {
-        await this.spinner.show();
-        await this.baseService.getContractByAirport($event.value).then(res => {
-          if (res.data?.bizDocId) {
-            //todo set du lieu thong tin hop dong cho form detail
-          }
-        });
-      } catch (e) {
-        console.log(e);
-        this.baseService.showError(MESSAGE.ERROR);
-      } finally {
-        await this.spinner.hide();
-      }
-    }
-  }
-
   changeServiceFee($event: any, row: any, type: any) {
     if (type === 'code') {
       row.unit = this.listFeeService.find((s: any) => s.code == $event.value)?.unit;
@@ -428,9 +410,25 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     this.formGroupDetail.patchValue({invoiceDocumentDtl: listDtl});
   }
 
-  calTotal(column: any) {
+/*  calTotal(column: any) {
     if (column.type === Constant.NUMBER) {
       return this.formGroupDetail.getRawValue().invoiceDocumentReview.reduce((prev: any, cur: any) => prev + +cur[column.value], 0);
+    } else {
+      return '';
+    }
+  }*/
+
+  calTotal(column: any) {
+    if (column.type === Constant.NUMBER) {
+      return this.formGroupDetail.getRawValue().invoiceDocumentReview.reduce((prev: any, cur: any) => {
+        // prev + +cur[column.value]
+        let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReview;
+        if (cur.typeRoom === 'CC Twin room') {
+          return prev + +(cur[column.value] / 2);
+        } else {
+          return prev + +cur[column.value];
+        }
+      }, 0)
     } else {
       return '';
     }
@@ -460,5 +458,28 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
       status: InvoiceDocumentStatusEnum.FINISHED
     })
     this.save();
+  }
+
+  getRowSpan(index: number, innerColumn: any, data: any): number {
+    if (data.typeRoom === 'CC Twin room' &&
+      ['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
+      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((item: any) => item.typeRoom === 'CC Twin room');
+      let currentRow = dtl[index];
+      let nextRow = dtl[index + 1];
+      if (nextRow?.roomNo === currentRow?.roomNo && nextRow?.ciDate === currentRow?.ciDate) {
+        return 2;
+      } else return 1;
+    } else {return 1;}
+  }
+
+  shouldShowRowSpan(index: number, innerColumn: any): boolean {
+    if (['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
+      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReview
+      return (
+        index === 0 || dtl[index]?.typeRoom !== 'CC Twin room' ||
+        dtl[index]?.roomNo !== dtl[index - 1]?.roomNo ||
+        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
+      );
+    } else return true;
   }
 }

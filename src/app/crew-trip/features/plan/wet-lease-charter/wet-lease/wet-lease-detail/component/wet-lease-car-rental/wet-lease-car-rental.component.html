@@ -1,0 +1,98 @@
+<div class="row">
+    <div class="table-responsive">
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+            <ng-container matColumnDef="transportName">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " rowspan="2"
+                    i18n="@@supplierName">Supplier name</th>
+                <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
+                    {{ element.transportName }}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="total">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-left" i18n="@@total">Total</td>
+            </ng-container>
+            <ng-container matColumnDef="numberOfTrip">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center" rowspan="2"
+                    i18n="@@noOfTrip">No. of trip</th>
+                <td mat-cell *matCellDef="let element" class="text-right"
+                    [style.padding]="element['numberOfTripEditing'] && !!!disabled()?'0px !important':''"
+                    (click)="clickEdit(element, 'numberOfTripEditing')">
+                    @if(!element['numberOfTripEditing'] || !!disabled()){
+                    {{ element.numberOfTrip | number }}
+                    }@else {
+                    <div sizeInput="xs">
+                        <mat-form-field (clickOutside)="clickOutside(element,'totalSingleRoomEditing')"
+                            class="edit-inline-table">
+                            <input matInput type="number" digitOnly [(ngModel)]="element.numberOfTrip">
+                        </mat-form-field>
+                    </div>
+                    }
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotal('numberOfTrip') | number}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="totalAmountForex">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " rowspan="2"
+                    i18n="@@totalAmountForeignExchange">Total amount<br />(Foreign exchange)</th>
+                <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
+                    @if (category() === CategoryEnum.INTERNATIONAL) {
+                    {{ element.totalAmountForex | number}}
+                    }
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right"></td>
+            </ng-container>
+            <ng-container matColumnDef="totalAmount">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " colspan="2"
+                    i18n="@@totalAmountVND">Total amount (VND)</th>
+            </ng-container>
+            <ng-container matColumnDef="totalAmountExcVAT">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
+                    i18n="@@excludingVAT">Excluding VAT</th>
+                <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
+                    {{ element.totalAmountExcVAT | number }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right"></td>
+            </ng-container>
+            <ng-container matColumnDef="totalAmountIncVAT">
+                <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
+                    i18n="@@includingVAT">Including VAT</th>
+                <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
+                    {{ element.totalAmountIncVAT | number }}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right"></td>
+            </ng-container>
+
+            <!-- Footer 2 -->
+
+            <ng-container matColumnDef="totalPlan">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-left" colspan="2" i18n="@@plannedBudget">
+                    Planned budget
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="totalAmountForexPlan">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-center">
+
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="totalAmountExcVATPlan">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    {{getTotal('totalAmountExcVAT') | number}}
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="totalAmountIncVATPlan">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    {{getTotal('totalAmountIncVAT') | number}}
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="headerRowDef1"></tr>
+            <tr mat-header-row *matHeaderRowDef="headerRowDef2"></tr>
+            <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
+            <tr mat-footer-row *matFooterRowDef="totalRowDef; sticky: true" [hidden]="dataSource.data.length === 0"></tr>
+            <tr mat-footer-row *matFooterRowDef="totalPlanRowDef; sticky: true" [hidden]="dataSource.data.length === 0"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell text-center" colspan="999999">No data!</td>
+            </tr>
+        </table>
+    </div>
+</div>

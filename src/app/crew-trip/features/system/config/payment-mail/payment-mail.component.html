@@ -149,7 +149,7 @@
               <div class="mb-2"></div>
               <mat-form-field>
                 <mat-label i18n>Supplier payment email</mat-label>
-                <input formControlName="emailsInput" [required]="true" matInput>
+                <input formControlName="emailsInput" [required]="true" matInput [maxlength]="500">
                 <mat-hint align="start" i18n>Input multiple email addresses, separated by ;.</mat-hint>
                 @if (formGroupDetail.controls['emailsInput'].hasError('required')) {
                   <mat-error><span i18n>Supplier payment email</span><span i18n> is required</span></mat-error>
@@ -163,7 +163,7 @@
               <div class="mb-2"></div>
               <mat-form-field>
                 <mat-label i18n>Remark</mat-label>
-                <textarea formControlName="note" matInput></textarea>
+                <textarea formControlName="note" matInput [maxlength]="500"></textarea>
                 <mat-hint align="end">{{ formGroupDetail.value.note?.length }} / 500</mat-hint>
                 @if (formGroupDetail.controls['note'].hasError('maxlength')) {
                   <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
