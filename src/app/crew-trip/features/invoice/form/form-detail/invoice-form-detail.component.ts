@@ -307,7 +307,8 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
       let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl.filter((item: any) => item.typeRoom === 'CC Twin room');
       let currentRow = dtl[index];
       let nextRow = dtl[index + 1];
-      if (nextRow?.roomNo === currentRow?.roomNo && nextRow?.ciDate === currentRow?.ciDate) {
+      // if (nextRow?.roomNo === currentRow?.roomNo && nextRow?.ciDate === currentRow?.ciDate) {
+      if (nextRow?.roomNo === currentRow?.roomNo) {
         return 2;
       } else return 1;
     } else {return 1;}
@@ -318,8 +319,8 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
       let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl
       return (
         index === 0 || dtl[index]?.typeRoom !== 'CC Twin room' ||
-        dtl[index]?.roomNo !== dtl[index - 1]?.roomNo ||
-        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
+        dtl[index]?.roomNo !== dtl[index - 1]?.roomNo
+        //|| (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
       );
     } else return true;
   }
