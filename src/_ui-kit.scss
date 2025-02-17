@@ -4071,6 +4071,16 @@ blockquote {
   background-color: #adb5bd !important;
 }
 
+.text-soft-dark {
+  color: RGBA(33, 37, 41, var(--bg-opacity, 1)) !important;
+  background-color: #adb5bd !important;
+}
+
+.text-soft-vna {
+  color: white !important;
+  background-color: #2a6886d9 !important;
+}
+
 .text-soft-dark-hover {
   color: RGBA(33, 37, 41, var(--bg-opacity, 1)) !important;
   background-color: #ced4da !important;

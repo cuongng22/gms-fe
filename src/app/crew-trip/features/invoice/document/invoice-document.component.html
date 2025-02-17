@@ -190,16 +190,18 @@
                   mat-cell *matCellDef="let element">
             <span [ngClass]="{
           'badge': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value),
-          'text-soft-dark': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && (element['status']
-          === 'UNVERIFIED' || element['statusEmail'] ==='UNSEND'|| element['statusPayment'] === 'UNPAID'),
+          'text-soft-dark': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && (
+          element['statusEmail'] ==='UNSEND'|| element['statusPayment'] === 'UNPAID'),
           'text-soft-primary': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
           element['status'] === 'VERIFIED',
           'text-soft-info': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && element['status']
           === 'MATCHED',
-          'text-soft-danger': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
+          'text-soft-warning': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
           element['status'] === 'UNMATCHED',
-          'text-soft-success': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
-          (element['status'] === 'FINISHED' || element['statusEmail'] ==='SEND'|| element['statusPayment'] === 'PAID'),
+          'text-soft-danger': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
+          element['status'] === 'UNVERIFIED',
+          'text-soft-vna': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
+          ['FINISHED','SEND','CLEARED','RECONCILED','PAID',].includes(element[innerColumn.value]),
           }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
               </td>
             </ng-container>
@@ -333,6 +335,13 @@
               <span class="label-text">{{ element.nsCode }}</span>
             </td>
           </ng-container>
+          <ng-container matColumnDef="quantity">
+            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Quantity
+            </th>
+            <td *matCellDef="let element" mat-cell>
+              <span class="label-text">{{ element.quantity | dataTransformPipe:[Constant.NUMBER] }}</span>
+            </td>
+          </ng-container>
           <ng-container matColumnDef="unitPrice">
             <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit Price
             </th>
@@ -384,11 +393,11 @@
             <th *matHeaderCellDef class="text-center" colspan="4" i18n mat-header-cell mat-sort-header>VAT
           </ng-container>
           <tr
-            *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader']"
+            *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader']"
             mat-header-row></tr>
           <tr *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
           <tr
-            *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat',];"
+            *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat',];"
             class="input-row" mat-row></tr>
           <tr *matNoDataRow class="mat-row">
             <td [attr.colspan]="1" class="mat-cell border-none text-center"><span

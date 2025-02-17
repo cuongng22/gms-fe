@@ -11,7 +11,7 @@ import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validator, Validators} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
@@ -26,6 +26,7 @@ import {ClickOutside} from 'ngxtension/click-outside';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
 import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {NgxUpperCaseDirectiveModule} from 'ngx-upper-case-directive';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {NgxMatTimepickerFieldComponent} from 'ngx-mat-timepicker';
 import {transform} from 'lodash';
@@ -46,13 +47,15 @@ import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {CdkVirtualScrollViewport} from "@angular/cdk/scrolling";
 import {ConfirmDeleteDialog} from "src/app/crew-trip/shared/dialog/confirm-delete-dialog";
 import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog";
-import {InvoiceDocumentStatus, InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentStatus, InvoiceDocumentStatusEnum, InvoiceDocumentTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
+import {NgxControlError} from "ngxtension/control-error";
 
 
 @Component({
   selector: 'app-invoice-document-detail',
   standalone: true,
-  imports: [CommonModule, DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, SelectionSuggestComponent, AsyncPipe, DatepickerYearMonthComponent, SeparatorDirective, ThousandsSeparatorDirective, MatGridTile, MatGridList, NgTemplateOutlet, CdkVirtualScrollViewport, ConfirmDeleteDialog, ConfirmDialog],
+  imports: [CommonModule, DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, SelectionSuggestComponent, AsyncPipe, DatepickerYearMonthComponent, SeparatorDirective, ThousandsSeparatorDirective, MatGridTile, MatGridList, NgTemplateOutlet, CdkVirtualScrollViewport, ConfirmDeleteDialog, ConfirmDialog, NgxControlError, NgxUpperCaseDirectiveModule],
   templateUrl: './invoice-document-detail.component.html',
   styleUrl: './invoice-document-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -83,8 +86,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   firstLoad: boolean = true;
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   @Input() formType: any;
-  tblAttachedDocument = new MatTableDataSource();
-  tblUnitPrice = new MatTableDataSource();
+  @Input() titleHeader = $localize`Detailed Statement`;
   expandList = new Set<string>(['tab1', 'tab2', 'tab3']);
   formGroupFileUpload!: FormGroup;
   showDialogDeleteFile = false;
@@ -178,8 +180,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       idContract: [],
       idInvoiceForm: [],
       version: [],
-      ctype: [],
-      invoiceNumber: [],
+      ctype: [InvoiceDocumentTypeEnum.STANDARD],
+      invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(/^[a-zA-Z0-9]*$/)]],
       invoiceDate: [],
       invoiceReceiveDate: [],
       periodFrom: [],
@@ -292,7 +294,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     try {
       await this.spinner.show();
       await this.loadListDocumentParent();
-      await Promise.all([this.detail(this.id), this.loadListFlightMarket(), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
+      await Promise.all([this.detail(this.id), this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
         this.formGroupDetail.patchValue({idParent: this.formGroupDetail.getRawValue().idParent})
       });
     } catch (e) {
@@ -542,7 +544,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   override async detail(id: any) {
     await super.detail(id);
     if (!!!id) {
-      this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.UNVERIFIED});
+      this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.UNMATCHED});
     }
     this.listDocumentParent = [...this.listDocumentParent,
       {
