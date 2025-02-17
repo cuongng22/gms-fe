@@ -40,6 +40,7 @@ import {NgxTrimDirectiveModule} from "ngx-trim-directive";
 import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
 import {cloneDeep} from "lodash";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
+import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 
 @Component({
   selector: 'app-invoice-document',
@@ -67,7 +68,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   action = 'edit';
   id: any;
   dataObject: any;
-  listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
+  listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus.filter(s=>s.key!='MATCHED');
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
 
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
@@ -162,7 +163,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   override async ngOnInit() {
 
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.search(), this.loadListFlightMarket()]).then(() => {
+    await Promise.all([this.search(), this.loadListFlightMarket({status:FlightMarketStatusEnum.OPERATIONAL})]).then(() => {
       this.showDocumentDtl(this.dataSource.data[0]);
     });
     this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVat',
