@@ -21,12 +21,12 @@
                      mat-align-tabs="start" mat-stretch-tabs="false">
         <mat-tab label="Invoice">
           @if (tabType === 'INVOICE') {
-            <app-invoice-document [tabType]="tabType" (nextStepEmit)="nextStepEmit($event)"/>
+          <app-invoice-document [tabType]="tabType" (nextStepEmit)="nextStepEmit($event)"/>
           }
         </mat-tab>
         <mat-tab label="Reminder">
           @if (tabType === 'REMINDER') {
-            <app-invoice-document-remind/>
+          <app-invoice-document-remind/>
           }
         </mat-tab>
       </mat-tab-group>
@@ -35,10 +35,11 @@
 </ng-container>
 <!-- Detail -->
 <ng-container *ngIf="step==2">
-  <app-invoice-document-detail (backStepEmit)="backStepEmit($event)"
-                               (nextStepEmit)="nextStepEmit($event)"
+  <app-invoice-document-detail (backStepEmit)="backStepEmit($event)" (nextStepEmit)="nextStepEmit($event)"
                                [dataObject]="dataObject"
-                               [id]="id" [readMode]="readMode">
+                               [id]="id"
+                               [readMode]="readMode"
+                               [titleHeader]="id?'Detailed Statement':'Add new invoice'" i18n-titleHeader>
   </app-invoice-document-detail>
 </ng-container>
 <!-- review -->

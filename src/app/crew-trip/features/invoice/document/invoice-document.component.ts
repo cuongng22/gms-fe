@@ -68,7 +68,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   action = 'edit';
   id: any;
   dataObject: any;
-  listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus.filter(s=>s.key!='MATCHED');
+  listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus.filter(s => s.key != 'MATCHED');
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
 
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
@@ -119,13 +119,8 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     {label: $localize`Status`, value: 'status', rowspan: "2"},
     {label: $localize`Email Status`, value: 'statusEmail', rowspan: "2"},
     {label: $localize`Payment Status`, value: 'statusPayment', rowspan: "2"},
-    {
-      label: $localize`Payment Due Date`,
-      value: 'paymentDueDate',
-      type: Constant.DATE,
-      format: Constant.DATE_FORMAT,
-      rowspan: "2"
-    },
+    {label: $localize`Payment Note`, value: 'statusPaymentDescription', rowspan: "2"},
+    {label: $localize`Payment Due Date`, value: 'paymentDueDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
   ];
   @Input() contractId: any;
   formGroupFile!: FormGroup;
@@ -163,15 +158,15 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   override async ngOnInit() {
 
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.search(), this.loadListFlightMarket({status:FlightMarketStatusEnum.OPERATIONAL})]).then(() => {
+    await Promise.all([this.search(), this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL})]).then(() => {
       this.showDocumentDtl(this.dataSource.data[0]);
     });
     this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVat',
-      'vat', 'totalAmount', 'reimbursementTotal', 'status', 'statusEmail', 'statusPayment', 'paymentDueDate', 'action'];
+      'vat', 'totalAmount', 'reimbursementTotal', 'status', 'statusEmail', 'statusPayment', 'statusPaymentDescription', 'paymentDueDate', 'action'];
     this._displayedColumnsHeader2 = ['amountFcBeforeVat', 'amountVndBeforeVat', 'vatFc', 'vatVnd', 'totalAmountFc',
       'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd'];
     this._displayedColumnsRow = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountFcBeforeVat', 'amountVndBeforeVat', 'vatFc', 'vatVnd', 'totalAmountFc',
-      'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd', 'status', 'statusEmail', 'statusPayment', 'paymentDueDate', 'action'];
+      'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd', 'status', 'statusEmail', 'statusPayment', 'statusPaymentDescription', 'paymentDueDate', 'action'];
     this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
   }
 
@@ -190,14 +185,19 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
 
   override async search<T>(body?: any, isNextPage?: boolean) {
     try {
+      this.formGroupSearch.patchValue({
+        listAirportCode: this.formGroupSearch.getRawValue().airportCode,
+      });
       await this.spinner.show();
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
+      let req = body || this.formGroupSearch.getRawValue();
+
       let res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,
-        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+        limit: this.pageSize, ...removeNullValues(req)
       });
 
       if (res) {
@@ -247,8 +247,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       await this.spinner.show();
       let filename = '';
       if (type === 'EXPORT') {
-        const res = await this.baseService.exportListData({
-        });
+        const res = await this.baseService.exportListData({});
         this.downloadFile(res, 'export.xlsx');
       } else if (type === 'DOWNLOAD') {
         const res = await this.baseService.exportFileData({
