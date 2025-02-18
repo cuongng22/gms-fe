@@ -70,21 +70,28 @@ export class WetLeaseDetailComponent extends CommonComponent {
   }
 
   async getDetailById(id: number | undefined) {
-    if (id) {
-      let resDetail = await this.baseService.detail(this.id());
-      this.formGroupDetail.patchValue({ ...resDetail.data })
-      this.dataGeneral = { ...resDetail.data };
-      this.planHotel = [...resDetail.data.planHotel];
-      this.planTransports = [...resDetail.data.planTransports];
-      this.setPriceHotel();
-      this.setPriceCarRental();
-      this.priceHotel = [...resDetail.data.priceHotelsList];
+    try {
+      await this.spinner.show();
+      if (id) {
+        let resDetail = await this.baseService.detail(this.id());
+        this.formGroupDetail.patchValue({ ...resDetail.data })
+        this.dataGeneral = { ...resDetail.data };
+        this.wetLeaseGeneral.setData(this.dataGeneral)
+        this.planHotel = [...resDetail.data.planHotel];
+        this.planTransports = [...resDetail.data.planTransports];
+        this.setPriceHotel();
+        this.setPriceCarRental();
+        this.priceHotel = [...resDetail.data.priceHotelsList];
 
-      this.isCompleted = !!this.formGroupDetail.controls.isCompleted.value;
-      if (this.disable) {
-        this.formGroupDetail.controls.isCompleted.disable()
+        this.isCompleted = !!this.formGroupDetail.controls.isCompleted.value;
+        if (this.disable) {
+          this.formGroupDetail.controls.isCompleted.disable()
+        }
       }
+    } finally {
+      this.spinner.hide()
     }
+
   }
 
   get disable(): boolean {
@@ -251,7 +258,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
 
   async airportCodeChange(event: string) {
     const res = await this._flightMarketService.search({ code: event, option: 0 });
-    if(res.data.content[0].marketType === CategoryEnum.INTERNATIONAL){
+    if (res.data.content[0].marketType === CategoryEnum.INTERNATIONAL) {
       this.category.set(CategoryEnum.INTERNATIONAL)
     }
   }
