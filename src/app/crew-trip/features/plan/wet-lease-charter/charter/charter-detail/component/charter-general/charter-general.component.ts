@@ -50,7 +50,7 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
   airportCodeChange = output<string>();
   formValueChange = output<any>();
   dataTransformPipe = inject(DataTransformPipe);
-  dataGeneral = input<any>();
+
 
   disabled = input<boolean>(false);
   override displayedColumns: string[] = ['carType', 'priceIncVat', 'action'];
@@ -81,16 +81,16 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
 
   constructor() {
     super();
-    effect(() => {
-      if (this.dataGeneral()) {
-        const data = { ...this.dataGeneral() }
-        this.formGroupDetail.patchValue(data, { emitEvent: false });
+  }
 
-        if (data.priceTransports) {
-          this.dataSource.data = [...data.priceTransports];
-        }
+  setData(data: any) {
+    if (data) {
+      const _data = { ...data }
+      this.formGroupDetail.patchValue(_data, { emitEvent: false });
+      if (_data.priceTransports) {
+        this.dataSource.data = [..._data.priceTransports];
       }
-    }, { allowSignalWrites: true });
+    }
   }
 
 

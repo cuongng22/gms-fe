@@ -72,42 +72,49 @@ export class CharterDetailComponent extends CommonComponent {
   }
 
   async getDetailById(id: number | undefined) {
-    if (id) {
-      let resDetail = await this.baseService.detail(this.id());
-      this.formGroupDetail.patchValue({ ...resDetail.data })
-      this.formGroupDetail.controls.id.setValue(id as any)
-      this.dataGeneral = { ...resDetail.data };
-      this.airportCodeChange(this.dataGeneral.airportCode);
+    try {
+      await this.spinner.show();
+      if (id) {
+        let resDetail = await this.baseService.detail(this.id());
+        this.formGroupDetail.patchValue({ ...resDetail.data })
+        this.formGroupDetail.controls.id.setValue(id as any)
+        this.dataGeneral = { ...resDetail.data };
+        this.charterGeneral.setData(this.dataGeneral);
+        this.airportCodeChange(this.dataGeneral.airportCode);
 
-      resDetail.data.planHotels.single.numberOfNight = this.dataGeneral.priceHotel.numberOfNight;
-      resDetail.data.planHotels.single.priceRoom = this.dataGeneral.priceHotel.priceSingleRoom;
-      resDetail.data.planHotels.single.priceRoomECI = this.dataGeneral.priceHotel.priceSingleRoomECI;
-      resDetail.data.planHotels.single.priceRoomLCO = this.dataGeneral.priceHotel.priceSingleRoomLCO;
-      resDetail.data.planHotels.single.exchangeRate = this.dataGeneral.exchangeRate;
-      resDetail.data.planHotels.single.rateVat = this.dataGeneral.rateVat;
+        resDetail.data.planHotels.single.numberOfNight = this.dataGeneral.priceHotel.numberOfNight;
+        resDetail.data.planHotels.single.priceRoom = this.dataGeneral.priceHotel.priceSingleRoom;
+        resDetail.data.planHotels.single.priceRoomECI = this.dataGeneral.priceHotel.priceSingleRoomECI;
+        resDetail.data.planHotels.single.priceRoomLCO = this.dataGeneral.priceHotel.priceSingleRoomLCO;
+        resDetail.data.planHotels.single.exchangeRate = this.dataGeneral.exchangeRate;
+        resDetail.data.planHotels.single.rateVat = this.dataGeneral.rateVat;
 
-      resDetail.data.planHotels.twin.numberOfNight = this.dataGeneral.priceHotel.numberOfNight;
-      resDetail.data.planHotels.twin.priceRoom = this.dataGeneral.priceHotel.priceTwinRoom;
-      resDetail.data.planHotels.twin.priceRoomECI = this.dataGeneral.priceHotel.priceTwinRoomECI;
-      resDetail.data.planHotels.twin.priceRoomLCO = this.dataGeneral.priceHotel.priceTwinRoomLCO;
-      resDetail.data.planHotels.twin.exchangeRate = this.dataGeneral.exchangeRate;
-      resDetail.data.planHotels.twin.rateVat = this.dataGeneral.rateVat;
-      this.planHotel = { ...resDetail.data.planHotels };
+        resDetail.data.planHotels.twin.numberOfNight = this.dataGeneral.priceHotel.numberOfNight;
+        resDetail.data.planHotels.twin.priceRoom = this.dataGeneral.priceHotel.priceTwinRoom;
+        resDetail.data.planHotels.twin.priceRoomECI = this.dataGeneral.priceHotel.priceTwinRoomECI;
+        resDetail.data.planHotels.twin.priceRoomLCO = this.dataGeneral.priceHotel.priceTwinRoomLCO;
+        resDetail.data.planHotels.twin.exchangeRate = this.dataGeneral.exchangeRate;
+        resDetail.data.planHotels.twin.rateVat = this.dataGeneral.rateVat;
+        this.planHotel = { ...resDetail.data.planHotels };
 
 
-      this.planTransports = [...resDetail.data.planTransports];
-      this.planTransports.forEach(element => {
-        const _priceTransport = resDetail.data.priceTransports.find((item: any) => item.carType === element.carType)
-        element.unitPrice = _priceTransport.priceIncVat;
-        element.exchangeRate = this.dataGeneral.exchangeRate;
-        element.rateVat = this.dataGeneral.rateVat;
-      })
+        this.planTransports = [...resDetail.data.planTransports];
+        this.planTransports.forEach(element => {
+          const _priceTransport = resDetail.data.priceTransports.find((item: any) => item.carType === element.carType)
+          element.unitPrice = _priceTransport.priceIncVat;
+          element.exchangeRate = this.dataGeneral.exchangeRate;
+          element.rateVat = this.dataGeneral.rateVat;
+        })
 
-      this.isCompleted = !!this.formGroupDetail.controls.completed.value;
-      if (this.disable) {
-        this.formGroupDetail.controls.completed.disable()
+        this.isCompleted = !!this.formGroupDetail.controls.completed.value;
+        if (this.disable) {
+          this.formGroupDetail.controls.completed.disable()
+        }
       }
+    } finally {
+      this.spinner.hide()
     }
+
   }
 
   createData() {
