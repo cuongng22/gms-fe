@@ -124,6 +124,10 @@ export const routes: Routes = [
                 path: 'detail',
                 component: ProcurementTrackingDetailComponent,
               },
+              {
+                path: 'detail/:id',
+                component: ProcurementTrackingDetailComponent,
+              },
             ],
           },
           { path: 'rate/uth', component: RateUthComponent },

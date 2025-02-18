@@ -203,20 +203,21 @@ export class CommonComponent
 		}
 	}
 
-	async save() {
+	async save(body?: any) {
 		try {
 			this.formGroupDetail.markAllAsTouched();
 			if (this.formGroupDetail.invalid) {
 				this.findInvalidControls(this.formGroupDetail);
 				return;
 			}
-			const update = !!this.formGroupDetail.getRawValue().id;
+			const _body = body ?? this.formGroupDetail.getRawValue();
+			const update = !!_body.id;
 			await this.spinner.show();
 			let res;
 			if (update) {
-				res = await this.baseService.update(this.formGroupDetail.getRawValue());
+				res = await this.baseService.update(_body);
 			} else {
-				res = await this.baseService.create(this.formGroupDetail.getRawValue());
+				res = await this.baseService.create(_body);
 			}
 			await this.search();
 			this.baseService.showSuccess(
@@ -238,7 +239,7 @@ export class CommonComponent
 					e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
 				);
 			}
-			return e;
+			throw e;
 		} finally {
 			await this.spinner.hide();
 		}
