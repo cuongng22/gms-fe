@@ -16,8 +16,6 @@ import {MESSAGE, COMMON_CONFIG} from '../../shared/utils/constant';
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 import {LanguageService} from 'src/app/crew-trip/core/services/language.service';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
-import {MIMEType} from 'util';
-import {el} from 'node_modules/@fullcalendar/core/internal-common';
 import {NgxSpinnerService} from 'ngx-spinner';
 
 
