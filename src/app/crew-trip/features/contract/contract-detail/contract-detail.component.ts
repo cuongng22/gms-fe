@@ -747,7 +747,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     this.formGroupDetail.patchValue({
       nationId: nation?.id,
       nation: nation?.engName,
-      marketType: nation.code === 'VN' ? 'Domestic' : 'International'
+      marketType: nation?.code === 'VN' ? 'Domestic' : 'International' || ''
     });
   }
 
@@ -781,25 +781,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async setReadMode(form: FormGroup) {
-    const fieldContract = [
-      'marketCode',
-      'marketName',
-      'nation',
-      'classification',
-      'flightGroup',
-      'statusUsage',
-      'supplierName',
-      'supplierPhone',
-      'supplierEmail',
-      'carType',
-      'standardCheckIn',
-      'standardCheckOut',
-      'notes',
-      'doiTuongDichVu',
-      'contractSpec',
-      'marketType',
+    const fieldContract = ['marketCode', 'marketName', 'nation', 'classification', 'flightGroup', 'statusUsage',
+      'supplierName', 'supplierPhone', 'supplierEmail',
+      'carType', 'standardCheckIn', 'standardCheckOut', 'notes', 'doiTuongDichVu', 'contractSpec', 'marketType',
     ];
-    const fieldAnnex = ['partnerName'];
+    const fieldAnnex = ['partnerName', 'currency', 'hdPlRoot'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
