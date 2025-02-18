@@ -75,6 +75,7 @@ import {
   MESSAGE,
 } from 'src/app/crew-trip/shared/utils/constant';
 import {NgxControlError} from "ngxtension/control-error";
+import {SelectionSuggestComponent} from "src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component";
 
 @Component({
   selector: 'app-contract-detail',
@@ -122,6 +123,7 @@ import {NgxControlError} from "ngxtension/control-error";
     DecimalPipe,
     MatDialogModule,
     NgxControlError,
+    SelectionSuggestComponent,
   ],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
@@ -740,11 +742,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   async nationSelected(event: any) {
     const nation = this.listQuocGia.find(
-      (s: any) => s.id == (event.option?.value ?? event),
+      (s: any) => s.id === event.value,
     );
     this.formGroupDetail.patchValue({
       nationId: nation?.id,
       nation: nation?.engName,
+      marketType: nation.code === 'VN' ? 'Domestic' : 'International'
     });
   }
 
@@ -800,9 +803,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
-      } else if (this.viewType == 'HD' && !fieldContract.includes(k)) {
+      } else if (this.isHD() && !fieldContract.includes(k)) {
         v.disable();
-      } else if (this.viewType == 'PL' && fieldAnnex.includes(k)) {
+      } else if (this.isPL() && fieldAnnex.includes(k)) {
         v.disable();
       }
     });
@@ -843,7 +846,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           col634: s.rate,
           col635: s.rate1,
         }));
-    } else if (this.viewType === 'PL') {
+    } else if (this.isPL()) {
       const resContract = await this.baseService.detail(
         this.contractObj.bizDocId,
       );
@@ -1122,5 +1125,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     });
     dialogRef.afterClosed().subscribe(() => {
     });
+  }
+
+
+  isHD() {
+    return this.viewType === 'HD';
+  }
+
+  isPL() {
+    return this.viewType === 'PL';
   }
 }

@@ -1,7 +1,7 @@
 <!-- Breadcrumb -->
 <ng-container *ngIf="step==1">
   <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
-    @if (viewType == 'HD') {
+    @if (isHD()) {
       <h5 class="mb-0" i18n>
         Contract
       </h5>
@@ -28,7 +28,7 @@
       <li class="breadcrumb-item d-inline-block position-relative" i18n="@@contract">
         Contract
       </li>
-      @if (viewType == 'PL') {
+      @if (isPL()) {
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@contract">
           Annex
         </li>
@@ -49,13 +49,13 @@
               </i>
             </mat-form-field>
           </div>
-          <div *ngIf="this.viewType==='HD'" class="col-2" sizeInput="md">
+          <div *ngIf="isHD()" class="col-2" sizeInput="md">
             <app-select-multiple size="md" label="Airport code"
                                  [required]="false" [options]="listFlightMarket"
                                  formControlName="marketCodes" attrValue="">
             </app-select-multiple>
           </div>
-          <div *ngIf="this.viewType==='HD'" class="col-3" sizeInput='md'>
+          <div *ngIf="isHD()" class="col-3" sizeInput='md'>
             <app-select-multiple size="md"
                                  label="Supplier"
                                  [required]="false"
@@ -151,7 +151,7 @@
             </li>
           </ul>
         </mat-menu>
-        @if (viewType == 'HD') {
+        @if (isHD()) {
           <button (click)="syncDWH()" class="add-btn" mat-button type="button">
             <i class="material-symbols-outlined">
               sync
@@ -159,7 +159,7 @@
             <span i18n>Sync</span>
           </button>
         }
-        @if (viewType == 'PL') {
+        @if (isPL()) {
           <button (click)="nextStep(null,false)" class="add-btn" mat-button type="button">
             <i class="material-symbols-outlined">
               add
@@ -252,7 +252,7 @@
               *matCellDef="let element;let i = index"
               [class]="{'status-color-1':element.optionOutput == 1,'status-color-2':element.optionOutput == 2,'status-color-3':element.optionOutput == 3}"
               mat-cell>
-              @if (viewType == 'HD') {
+              @if (isHD()) {
                 <div class="action-buttons d-flex align-items-center justify-content-end">
                   <a (click)="showListAnnex(element.bizDocId)"
                      class="text-vna"
@@ -272,7 +272,7 @@
                     </i>
                   </a>
                 </div>
-              } @else if (viewType == 'PL') {
+              } @else if (isPL()) {
                 <div class="action-buttons d-flex align-items-center justify-content-end">
                   <a (click)="nextStep(element.bizDocId,false,'edit')" class="text-warning" mat-button type="button">
                     <i class="material-symbols-outlined" i18n-title title="Edit">
@@ -307,9 +307,10 @@
                      [showFirstLastButtons]="showFirstLastButtons"
                      aria-label="Select page">
       </mat-paginator>
+      @if (isHD()) {
       <div class="caption-panel">
         <div class="caption-item">Status:</div>
-        <div class="caption-item">
+        <div class="caption-item">s
           <div class="status-color status-color-1"></div>
           <span i18n>Expiring contract</span></div>
         <div class="caption-item">
@@ -319,6 +320,7 @@
           <div class="status-color status-color-3"></div>
           <span i18n>Contract to be renewed</span></div>
       </div>
+      }
     </mat-card-content>
   </mat-card>
 </ng-container>
