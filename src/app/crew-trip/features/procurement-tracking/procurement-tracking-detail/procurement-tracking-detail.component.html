@@ -1,0 +1,475 @@
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+  <div class="d-flex align-items-center justify-content-between mt-2">
+    <button type="button" class="btn btn-outline-secondary mr-20" i18n="@@back"
+      routerLink="/plan/est-plan/procurement-tracking">
+      <i class="material-symbols-outlined">
+        undo
+      </i>
+      Back
+    </button>
+    @if (!formGroupDetail.controls.id.value) {
+    <h5 class="mb-0">
+      Add new
+    </h5>
+    } @else if (disable) {
+    <h5 class="mb-0">
+      View detail
+    </h5>
+    } @else {
+    <h5 class="mb-0">
+      Edit
+    </h5>
+    }
+  </div>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
+      Plan
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" style="padding-right: 8px;;">
+      Estimate/Plan
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" style="padding-right: 8px;;">
+      Procurement tracking
+    </li>
+    @if (!formGroupDetail.controls.id.value) {
+    <li class="breadcrumb-item d-inline-block position-relative">
+      Add new
+    </li>
+    } @else if (disable) {
+    <li class="breadcrumb-item d-inline-block position-relative">
+      View
+    </li>
+    } @else {
+    <li class="breadcrumb-item d-inline-block position-relative">
+      Edit
+    </li>
+    }
+  </ol>
+</div>
+
+<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+  <form [formGroup]="formGroupDetail" autocomplete="off">
+    <mat-card-title>
+    </mat-card-title>
+    <mat-card-content>
+      <div class="d-flex justify-content-between align-items-center ">
+        <h5>
+          I. <span i18n="@@generalInformation">General Information</span>
+        </h5>
+      </div>
+      <div class="row">
+        <div class="col">
+          <mat-radio-group formControlName="type">
+            <mat-radio-button i18n value="HOTEL">
+              Hotel
+            </mat-radio-button>
+            <mat-radio-button i18n value="CAR">
+              Transportation
+            </mat-radio-button>
+          </mat-radio-group>
+        </div>
+      </div>
+      <div class="row row-cols-3">
+        <div class="col mb-2">
+          <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="listFlightMarket"
+            formControlName="airportCode" [required]="true" />
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@servicePackageName">Service Package Name</mat-label>
+            <input matInput formControlName="servicePkgName">
+            <mat-error *ngxControlError="formGroupDetail.controls.servicePkgName; track: 'required'"
+              i18n="@@servicePackageNameRequired">
+              Service Package Name {{MESSAGE.REQUIRED}}
+            </mat-error>
+            <mat-error *ngxControlError="formGroupDetail.controls.servicePkgName; track: 'maxlength'"
+              i18n="@@servicePackageNameMaxlength">
+              Service Package Name {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,100] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@currency">Currency</mat-label>
+            <input matInput formControlName="currency">
+            <mat-error *ngxControlError="formGroupDetail.controls.currency; track: 'maxlength'"
+              i18n="@@currencyMaxlength">
+              Currency {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,100] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2">
+          <app-selection formControlName="authority" i18n-label="@@authority" label="Authority" [options]="authoritys"
+            attrValue="code" attrDisplay="value" [required]="true" />
+        </div>
+        <div class="col mb-2">
+          <app-selection formControlName="field" i18n-label="@@field" label="Field" [options]="fields"
+            [required]="false" [isFirstBlank]="true" i18n-labelFirst="@@selectField" labelFirst="---Select field---"
+            attrValue="code" attrDisplay="value" />
+        </div>
+        <div class="col mb-2">
+          <div class="col mb-2" sizeInput="sm">
+            <mat-form-field class="">
+              <mat-label i18n="@@department">Department</mat-label>
+              <input appThousandsSeparator matInput formControlName="department" digitOnly [min]="0" [max]="9999999999">
+              <mat-error *ngxControlError="formGroupDetail.controls.department; track: 'maxlength'"
+                i18n="@@departmentMaxlength">
+                Department {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,100] }}
+              </mat-error>
+            </mat-form-field>
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col mb-2">
+          <mat-form-field>
+            <mat-label i18n="@@note">
+              Note
+            </mat-label>
+            <textarea matInput formControlName="note" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5" matTextareaAutosize
+              cdkTextareaAutosize #autosize="cdkTextareaAutosize">
+              </textarea>
+            <mat-error *ngxControlError="formGroupDetail.controls.note; track: 'required'" i18n="@@noteRequired">
+              Note {{MESSAGE.REQUIRED}}
+            </mat-error>
+            <mat-error *ngxControlError="formGroupDetail.controls.note; track: 'maxlength'" i18n="@@noteMaxlength">
+              Note {{ MESSAGE.MAX_LENGTH_INVALID |
+              dataTransformPipe:[Constant.STRING_FORMAT,500]}}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <h5>
+          II. <span i18n="@@planForSupplierSelection">Plan for supplier selection</span>
+        </h5>
+      </div>
+      <div class="row row-cols-3">
+        <div class="col mb-2">
+          <app-datepicker formControlName="startDate" label="Contract Start-Date"
+            i18n-label="@@contractStartDate"></app-datepicker>
+        </div>
+        <div class="col mb-2">
+          <app-selection formControlName="selectionMethod" i18n-label="@@supplierSelectionMethod"
+            label="Supplier selection method" [options]="selectionMethods" [required]="false" [isFirstBlank]="true"
+            attrValue="code" attrDisplay="value" i18n-labelFirst="@@selectSupplierSelectionMethod"
+            labelFirst="---Select Supplier selection method---" />
+        </div>
+        <div class="col mb-2">
+          <app-selection formControlName="contractPeriod" i18n-label="@@contractPeriodForServicePackage"
+            label="Contract period for service package" [options]="contractPeriods" [required]="false"
+            [isFirstBlank]="true" attrValue="code" attrDisplay="value"
+            i18n-labelFirst="@@selectContractPeriodForServicePackage"
+            labelFirst="---Select Contract period for service package---" />
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@number">Number</mat-label>
+            <input matInput formControlName="planNumber" appThousandsSeparator digitOnly [min]="0" [max]="9999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.planNumber; track: 'maxlength'"
+              i18n="@@numberMaxlength">
+              Number {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,10] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2">
+          <app-selection formControlName="planSelectionUnit" i18n-label="@@unit" label="Unit" [options]="selectionUnits"
+            attrValue="code" attrDisplay="value" [required]="false" [isFirstBlank]="true" i18n-labelFirst="@@selectUnit"
+            labelFirst="---Select Unit---" />
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@unitePriceIncludingVAT">Unite Price (Including VAT)</mat-label>
+            <input matInput formControlName="planUnitPriceIncVAT" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.planUnitPriceIncVAT; track: 'maxlength'"
+              i18n="@@unitePriceIncludingVATMaxlength">
+              Unite Price (Including VAT) {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@totalValueForeignCurrency">Total value (foreign currency)</mat-label>
+            <input id="planTotalValueFore" matInput formControlName="planTotalValueFore" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.planTotalValueFore; track: 'maxlength'"
+              i18n="@@totalValueForeignCurrencyMaxlength">
+              Total value (foreign currency) {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,12]
+              }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@totalValueVND">Total value (VND)</mat-label>
+            <input matInput formControlName="planTotalValueVND" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.planTotalValueVND; track: 'maxlength'"
+              i18n="@@totalValueVNDMaxlength">
+              Total value (VND) {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <h5>
+          III. <span i18n="@@proposal">Proposal</span>
+        </h5>
+      </div>
+      <div class="row row-cols-3">
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@unitePriceIncludingVAT">Unite Price (Including VAT)</mat-label>
+            <input matInput formControlName="proposalUnitPriceIncVAT" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.proposalUnitPriceIncVAT; track: 'maxlength'"
+              i18n="@@unitePriceIncludingVATMaxlength">
+              Unite Price (Including VAT) {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@totalValueForeignCurrency">Total value (foreign currency)</mat-label>
+            <input id="proposalTotalValueFore" matInput formControlName="proposalTotalValueFore" appThousandsSeparator
+              digitOnly [min]="0" [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.proposalTotalValueFore; track: 'maxlength'"
+              i18n="@@totalValueForeignCurrencyMaxlength">
+              Total value (foreign currency) {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,12]
+              }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@totalValueVND">Total value (VND)</mat-label>
+            <input matInput formControlName="proposalTotalValueVND" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.proposalTotalValueVND; track: 'maxlength'"
+              i18n="@@totalValueVNDMaxlength">
+              Total value (VND) {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <h5>
+          IV. <span i18n="@@supplierSelectionResults">Supplier selection results</span>
+        </h5>
+      </div>
+      <div class="row row-cols-3">
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@number">Number</mat-label>
+            <input matInput formControlName="resultNumber" appThousandsSeparator digitOnly [min]="0" [max]="9999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.resultNumber; track: 'maxlength'"
+              i18n="@@numberMaxlength">
+              Number {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,10] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2">
+          <app-selection formControlName="resultSelectionUnit" i18n-label="@@unit" label="Unit"
+            [options]="selectionUnits" attrValue="code" attrDisplay="value" [required]="false" [isFirstBlank]="true"
+            i18n-labelFirst="@@selectUnit" labelFirst="---Select Unit---" />
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@unitePriceIncludingVAT">Unite Price (Including VAT)</mat-label>
+            <input matInput formControlName="resultUnitPriceIncVAT" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.resultUnitPriceIncVAT; track: 'maxlength'"
+              i18n="@@unitePriceIncludingVATMaxlength">
+              Unite Price (Including VAT) {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@totalValueForeignCurrency">Total value (foreign currency)</mat-label>
+            <input matInput formControlName="resultTotalValueFore" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.resultTotalValueFore; track: 'maxlength'"
+              i18n="@@totalValueForeignCurrencyMaxlength">
+              Total value (foreign currency) {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,12]
+              }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@totalValueVND">Total value (VND)</mat-label>
+            <input matInput formControlName="resultTotalValueVND" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.resultTotalValueVND; track: 'maxlength'"
+              i18n="@@totalValueVNDMaxlength">
+              Total value (VND) {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <h5>
+          V. <span i18n="@@contract">Contract</span>
+        </h5>
+      </div>
+      <div class="row row-cols-3">
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@supplierName">Supplier name</mat-label>
+            <input matInput formControlName="supplierName">
+            <mat-error *ngxControlError="formGroupDetail.controls.supplierName; track: 'maxlength'"
+              i18n="@@supplierNameMaxlength">
+              Supplier name {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,100] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      <div class="row row-cols-3">
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@unitPriceUnderContractVATInclusive">Unit price under contract (VAT inclusive)</mat-label>
+            <input matInput formControlName="contractUnitPriceIncVAT" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.contractUnitPriceIncVAT; track: 'maxlength'"
+              i18n="@@unitPriceUnderContractVATInclusiveMaxlength">
+              Unit price under contract (VAT inclusive) {{MESSAGE.MAX_LENGTH_INVALID|
+              dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@totalContractValueForeignCurrency">Total contract value (foreign currency)</mat-label>
+            <input matInput formControlName="contractTotalValueFore" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.contractTotalValueFore; track: 'maxlength'"
+              i18n="@@totalContractValueForeignCurrencyMaxlength">
+              Total contract value (foreign currency) {{MESSAGE.MAX_LENGTH_INVALID|
+              dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@totalContractValueVND">Total contract value (VND)</mat-label>
+            <input matInput formControlName="contractTotalValueVND" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.contractTotalValueVND; track: 'maxlength'"
+              i18n="@@totalContractValueVNDMaxlength">
+              Total contract value (VND) {{MESSAGE.MAX_LENGTH_INVALID| dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-between align-items-center mt-4">
+        <h5>
+          VI. <span i18n="@@comparison">Comparison</span>
+        </h5>
+      </div>
+      <div class="row row-cols-3">
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@differenceBetweenHSĐXKHLCForeignCurrency">Difference between HSĐX - KHLC (foreign
+              currency)</mat-label>
+            <input #diffHSDXKHLCFore matInput formControlName="diff_HSDX_KHLC_fore" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.diff_HSDX_KHLC_fore; track: 'maxlength'"
+              i18n="@@differenceBetweenHSĐXKHLCForeignCurrencyMaxlength">
+              Difference between HSĐX - KHLC (foreign currency) {{MESSAGE.MAX_LENGTH_INVALID|
+              dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@differenceBetweenHSĐXKHLCVND">Difference between HSĐX - KHLC (VND)</mat-label>
+            <input #diffHSDXKHLCVnd matInput formControlName="diff_HSDX_KHLC_vnd" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.diff_HSDX_KHLC_vnd; track: 'maxlength'"
+              i18n="@@differenceBetweenHSĐXKHLCVNDMaxlength">
+              Difference between HSĐX - KHLC (VND) {{MESSAGE.MAX_LENGTH_INVALID|
+              dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@differenceBetweenKHLCHSĐXVND">Difference between KHLC - HSĐX (VND)</mat-label>
+            <input #diffKHLCHSDXVnd matInput formControlName="diff_KHLC_HSDX_vnd" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.diff_KHLC_HSDX_vnd; track: 'maxlength'"
+              i18n="@@differenceBetweenKHLCHSĐXVNDMaxlength">
+              Difference between HSĐX - KHLC (VND) {{MESSAGE.MAX_LENGTH_INVALID|
+              dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@differenceBetweenKHLCHSĐXForeignCurrency">Difference between KHLC - HSĐX (foreign
+              currency)</mat-label>
+            <input #diffKHLCHSDXFore matInput formControlName="diff_KHLC_HSDX_fore" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.diff_KHLC_HSDX_fore; track: 'maxlength'"
+              i18n="@@differenceBetweenKHLCHSĐXForeignCurrencyMaxlength">
+              Difference between KHLC - HSĐX (foreign currency) {{MESSAGE.MAX_LENGTH_INVALID|
+              dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@differenceBetweenHĐKHLCForeignCurrency">Difference between HĐ - KHLC (foreign
+              currency)</mat-label>
+            <input #diffHDKHLCFore matInput formControlName="diff_HD_KHLC_fore" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.diff_HD_KHLC_fore; track: 'maxlength'"
+              i18n="@@differenceBetweenHĐKHLCForeignCurrencyMaxlength">
+              Difference between HĐ - KHLC (foreign currency) {{MESSAGE.MAX_LENGTH_INVALID|
+              dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <mat-form-field class="">
+            <mat-label i18n="@@differenceBetweenHĐKHLCVND">Difference between HĐ - KHLC (VND)</mat-label>
+            <input #diffHDKHLCVnd matInput formControlName="diff_HD_KHLC_vnd" appThousandsSeparator digitOnly [min]="0"
+              [max]="999999999999">
+            <mat-error *ngxControlError="formGroupDetail.controls.diff_HD_KHLC_vnd; track: 'maxlength'"
+              i18n="@@differenceBetweenHĐKHLCVNDMaxlength">
+              Difference between HĐ - KHLC (VND) {{MESSAGE.MAX_LENGTH_INVALID|
+              dataTransformPipe:[Constant.STRING_FORMAT,12] }}
+            </mat-error>
+          </mat-form-field>
+        </div>
+      </div>
+      @if(!disable){
+      <div class="row mt-2 pb-2">
+        <div class="btn-box text-right">
+          <button type="button" mat-button [routerLink]="['/plan/est-plan/procurement-tracking']"
+            class="close-btn  min-with-100 mlr-5">
+            <i class="material-symbols-outlined">
+              close
+            </i>
+            <span i18n="@@close">Close</span>
+          </button>
+          <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="save()">
+            <i class="material-symbols-outlined">
+              save
+            </i>
+            <span i18n="@@save">Save</span>
+          </button>
+        </div>
+      </div>
+      }
+
+    </mat-card-content>
+  </form>
+</mat-card>

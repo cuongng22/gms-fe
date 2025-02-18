@@ -1,0 +1,138 @@
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+  <h5 class="mb-0" i18n="@@estimatedExchange">
+    Procurement tracking
+  </h5>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@plan">
+      Plan
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@exchangeRate">
+      Estimate/Plan
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@estimatedExchangeRate">
+      Procurement tracking
+    </li>
+  </ol>
+</div>
+
+<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-content>
+    <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
+      <div class="row">
+        <div class="col">
+          <app-select-multiple size="sm" label="Market Code" i18n-label="@@actype" [options]="listFlightMarket"
+            formControlName="airportCodes">
+          </app-select-multiple>
+        </div>
+        <div class="col">
+          <app-selection size="sm" label="Type" i18n-label="@@type" [options]="optionsType" attrDisplay="name"
+            attrValue="value" formControlName="type" [isFirstBlank]="true" labelFirst="---Select Type---"
+            i18n-labelFirst="@@selectType">
+
+          </app-selection>
+        </div>
+        <div class="col">
+          <app-selection size="sm" label="Field" i18n-label="@@field" [options]="fields"  attrValue="code" attrDisplay="value"
+            formControlName="field" [isFirstBlank]="true" labelFirst="---Select Field---"
+            i18n-labelFirst="@@selectField">
+          </app-selection>
+        </div>
+        <div class="col mb-2" sizeInput="sm">
+          <app-selection formControlName="contractPeriod" i18n-label="@@contractPeriodForServicePackage"
+            label="Contract period for service package" [options]="contractPeriods" [required]="false"
+            [isFirstBlank]="true" attrValue="code" attrDisplay="value"
+            i18n-labelFirst="@@selectContractPeriodForServicePackage"
+            labelFirst="---Select Contract period for service package---" />
+        </div>
+      </div>
+      <div class="row pb-2">
+        <div class="col d-flex justify-content-end">
+          <button class="search-btn" type="submit" mat-button type="submit">
+            <i class="material-symbols-outlined">
+              search
+            </i>
+            <span i18n="@@search">Search</span>
+          </button>
+        </div>
+      </div>
+    </form>
+  </mat-card-content>
+</mat-card>
+
+<mat-card class="mb-10 mt-10 pt-15 pl-15 pr-15 pb-15 border-radius d-block bg-white border-0 shadow-none">
+  <mat-card-header class="mb-10">
+    <mat-card-title></mat-card-title>
+    <mat-card-subtitle>
+      <button class="add-btn mr-10" type="button" mat-button (click)="exportFileOptions(null,'wet-lease.xlsx')">
+        <i class="material-symbols-outlined">
+          download
+        </i>
+        <span i18n="@@export">Export</span>
+      </button>
+      <a class="add-btn" type="button" mat-button [routerLink]="'detail'">
+        <i class="material-symbols-outlined">
+          add
+        </i>
+        <span i18n="@@addNew">Add new</span>
+      </a>
+    </mat-card-subtitle>
+  </mat-card-header>
+  <mat-card-content>
+    <div class="table-responsive">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+        <ng-container matColumnDef="stt">
+          <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center">#</th>
+          <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">{{ (pageIndex * pageSize) + i +
+            1 }}
+          </td>
+        </ng-container>
+        @for (innerColumn of _displayedColumns; track innerColumn.value) {
+        <ng-container matColumnDef="{{innerColumn.value}}">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">{{
+            innerColumn.label }}
+          </th>
+          <td mat-cell *matCellDef="let element" [ngClass]="innerColumn.class">
+            {{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+          </td>
+        </ng-container>
+        }
+        <ng-container matColumnDef="action" stickyEnd>
+          <th mat-header-cell *matHeaderCellDef i18n="@@action" class="font-weight-bold text-center">
+            Actions
+          </th>
+          <td mat-cell *matCellDef="let element;" class="text-center">
+            <div class="action-buttons d-flex justify-content-end">
+              <a mat-button title="View" i18n-title="@@view" class="text-vna"
+                [routerLink]="['/plan/est-plan/procurement-tracking/detail', element.id]"
+                [queryParams]="{'view-detail':true}">
+                <i class="material-symbols-outlined " text-primary>
+                  visibility
+                </i>
+              </a>
+              <a type="button" class="text-warning" mat-button
+                [routerLink]="['/plan/est-plan/procurement-tracking/detail', element.id]"
+                [queryParams]="{'view-detail':false}">
+                <i class="material-symbols-outlined " text-warning title="Edit" i18n-title="@@edit">
+                  edit
+                </i>
+              </a>
+
+              <button type="button" mat-button title="Delete" i18n-title="@@delete"
+                (click)="showConfirmDelete(element.id)">
+                <i class="material-symbols-outlined " text-danger>
+                  delete
+                </i>
+              </button>
+
+            </div>
+          </td>
+        </ng-container>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+        <tr class="mat-row" *matNoDataRow>
+          <td class="mat-cell text-center" colspan="10">No data!</td>
+        </tr>
+      </table>
+    </div>
+  </mat-card-content>
+</mat-card>

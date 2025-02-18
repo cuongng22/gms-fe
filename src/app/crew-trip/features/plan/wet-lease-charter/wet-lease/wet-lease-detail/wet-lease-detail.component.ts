@@ -69,6 +69,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.getDetailById(this.id());
   }
 
+
   async getDetailById(id: number | undefined) {
     if (id) {
       let resDetail = await this.baseService.detail(this.id());

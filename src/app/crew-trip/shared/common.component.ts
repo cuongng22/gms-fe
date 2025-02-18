@@ -41,8 +41,7 @@ import { ListResponse } from './models/common.model';
 })
 export class CommonComponent
 	extends ShowMessageComponent
-	implements OnInit, AfterViewInit
-{
+	implements OnInit, AfterViewInit {
 	environment = environment;
 	Constant = Constant;
 	MESSAGE = MESSAGE;
@@ -105,7 +104,7 @@ export class CommonComponent
 		});
 	}
 
-	ngOnInit(): void {}
+	ngOnInit(): void { }
 
 	/** Whether the number of selected elements matches the total number of rows. */
 	isAllSelected() {
@@ -114,7 +113,7 @@ export class CommonComponent
 		return numSelected === numRows;
 	}
 
-	ngAfterViewInit() {}
+	ngAfterViewInit() { }
 
 	/** Selects all rows if they are not all selected; otherwise clear selection. */
 	toggleAllRows() {
@@ -181,7 +180,7 @@ export class CommonComponent
 				return res;
 			}
 		} catch (e: any) {
-      console.log(e)
+			console.log(e)
 			this.baseService.showError(
 				e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
 			);
@@ -204,20 +203,21 @@ export class CommonComponent
 		}
 	}
 
-	async save() {
+	async save(body?: any) {
 		try {
 			this.formGroupDetail.markAllAsTouched();
 			if (this.formGroupDetail.invalid) {
 				this.findInvalidControls(this.formGroupDetail);
 				return;
 			}
-			const update = !!this.formGroupDetail.getRawValue().id;
+			const _body = body ?? this.formGroupDetail.getRawValue();
+			const update = !!_body.id;
 			await this.spinner.show();
 			let res;
 			if (update) {
-				res = await this.baseService.update(this.formGroupDetail.getRawValue());
+				res = await this.baseService.update(_body);
 			} else {
-				res = await this.baseService.create(this.formGroupDetail.getRawValue());
+				res = await this.baseService.create(_body);
 			}
 			await this.search();
 			this.baseService.showSuccess(
@@ -239,7 +239,7 @@ export class CommonComponent
 					e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
 				);
 			}
-			return e;
+			throw e;
 		} finally {
 			await this.spinner.hide();
 		}
