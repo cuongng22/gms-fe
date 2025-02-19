@@ -52,7 +52,7 @@
             </label>
           </div>
           <div class="col-10" sizeInput="sm">
-            <mat-radio-group formControlName="doiTuongDichVu" (change)="serviceTypeChange($event)">
+            <mat-radio-group (change)="serviceTypeChange($event)" formControlName="doiTuongDichVu">
               <mat-radio-button i18n value="1">
                 Hotel
               </mat-radio-button>
@@ -63,7 +63,8 @@
                 Hotel & Transportation
               </mat-radio-button>
             </mat-radio-group>
-            @if (formGroupDetail.controls['doiTuongDichVu'].hasError('required') && formGroupDetail.controls['doiTuongDichVu'].touched) {
+            @if (formGroupDetail.controls['doiTuongDichVu'].hasError('required') &&
+            formGroupDetail.controls['doiTuongDichVu'].touched) {
             <mat-error class="mat-mdc-form-field-error custom-mat-error"><span i18n>Service type</span><span i18n> is required</span>
             </mat-error>
             }
@@ -109,6 +110,9 @@
               @if (!!formGroupDetail.controls['contractCode'].hasError('required')) {
               <mat-error><span i18n>Contract number</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['contractCode']; track: 'maxlength'">
+                <span i18n>Contract number</span><span i18n> must be less than 50 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -123,6 +127,9 @@
               @if (!!formGroupDetail.controls['contractNo'].hasError('required')) {
               <mat-error><span i18n>Contract No</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['contractNo']; track: 'maxlength'">
+                <span i18n>Contract No</span><span i18n> must be less than 50 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -236,11 +243,14 @@
               @else{
               <mat-label i18n>Appendix name</mat-label>
               }
-              <input formControlName="contractName" matInput required trim="blur"
-                     matTooltip="{{formGroupDetail.controls['contractName'].value}}">
+              <input formControlName="contractName" matInput matTooltip="{{formGroupDetail.controls['contractName'].value}}" required
+                     trim="blur">
               @if (!!formGroupDetail.controls['contractName'].hasError('required')) {
               <mat-error><span i18n>Contract name</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['contractName']; track: 'maxlength'">
+                <span i18n>Contract name</span><span i18n> must be less than 250 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -259,21 +269,21 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Supplier name</mat-label>
-              <input formControlName="partnerName" matInput required trim="blur"
-                     matTooltip="{{formGroupDetail.controls['partnerName'].value}}">
+              <input formControlName="partnerName" matInput matTooltip="{{formGroupDetail.controls['partnerName'].value}}" required
+                     trim="blur">
               @if (!!formGroupDetail.controls['partnerName'].hasError('required')) {
               <mat-error><span i18n>Supplier name</span><span i18n> is required</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['partnerName']; track: 'maxlength'">
-                <span i18n>Supplier name</span><span i18n> must be less than 250 character</span>
+                <span i18n>Supplier name</span><span i18n> must be less than 250 characters</span>
               </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Supplier address</mat-label>
-              <input formControlName="partnerAddress" matInput trim="blur"
-                     matTooltip="{{formGroupDetail.controls['partnerAddress'].value}}">
+              <input formControlName="partnerAddress" matInput matTooltip="{{formGroupDetail.controls['partnerAddress'].value}}"
+                     trim="blur">
               @if (!!formGroupDetail.controls['partnerAddress'].hasError('required')) {
               <mat-error><span i18n>Supplier address</span><span i18n> is required</span></mat-error>
               }
@@ -452,6 +462,12 @@
               @if (!!formGroupDetail.controls['bankAccountNoB'].hasError('required')) {
               <mat-error><span i18n>Beneficiary</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['bankAccountNoB']; track: 'maxlength'">
+                <span i18n>Beneficiary</span><span i18n> must be less than 40 characters</span>
+              </mat-error>
+              <mat-error *ngxControlError="formGroupDetail.controls['bankAccountNoB']; track: 'pattern'">
+                <span i18n>Beneficiary</span><span i18n> format is invalid</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -461,6 +477,9 @@
               @if (!!formGroupDetail.controls['bankAccountNoB'].hasError('required')) {
               <mat-error><span i18n>Transfer to</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['peopleName']; track: 'maxlength'">
+                <span i18n>Transfer to</span><span i18n> must be less than 250 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -470,6 +489,9 @@
               @if (!!formGroupDetail.controls['bankNameB'].hasError('required')) {
               <mat-error><span i18n>Bank Name</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['bankNameB']; track: 'maxlength'">
+                <span i18n>Bank Name</span><span i18n> must be less than 190 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -482,6 +504,9 @@
               @if (!!formGroupDetail.controls['bankAddressB'].hasError('required')) {
               <mat-error><span i18n>Bank Address</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['bankAddressB']; track: 'maxlength'">
+                <span i18n>Bank Address</span><span i18n> must be less than 512 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -491,6 +516,9 @@
               @if (!!formGroupDetail.controls['cityB'].hasError('required')) {
               <mat-error><span i18n>Province/City</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['cityB']; track: 'maxlength'">
+                <span i18n>Province/City</span><span i18n> must be less than 45 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -500,6 +528,9 @@
               @if (!!formGroupDetail.controls['bankBranchNameB'].hasError('required')) {
               <mat-error><span i18n>Branch name</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['bankBranchNameB']; track: 'maxlength'">
+                <span i18n>Branch name</span><span i18n> must be less than 190 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -512,6 +543,9 @@
               @if (!!formGroupDetail.controls['iban'].hasError('required')) {
               <mat-error><span i18n>IBAN</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['iban']; track: 'maxlength'">
+                <span i18n>IBAN</span><span i18n> must be less than 120 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -521,6 +555,9 @@
               @if (!!formGroupDetail.controls['swiftCodeB'].hasError('required')) {
               <mat-error><span i18n>Swift code</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['swiftCodeB']; track: 'maxlength'">
+                <span i18n>Swift code</span><span i18n> must be less than 190 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -530,6 +567,9 @@
               @if (!!formGroupDetail.controls['bankLocalCode'].hasError('required')) {
               <mat-error><span i18n>Bank code#Local code</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['bankLocalCode']; track: 'maxlength'">
+                <span i18n>Bank code#Local code</span><span i18n> must be less than 190 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -563,6 +603,12 @@
               @if (!!formGroupDetail.controls['bankAccountNoB1'].hasError('required')) {
               <mat-error><span i18n>Transfer middle to</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['bankAccountNoB1']; track: 'maxlength'">
+                <span i18n>Transfer middle to</span><span i18n> must be less than 40 characters</span>
+              </mat-error>
+              <mat-error *ngxControlError="formGroupDetail.controls['bankAccountNoB1']; track: 'partern'">
+                <span i18n>Transfer middle to</span><span i18n> format is invalid</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -572,6 +618,9 @@
               @if (!!formGroupDetail.controls['bankNameB1'].hasError('required')) {
               <mat-error><span i18n>At intermediary bank name</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['bankNameB1']; track: 'maxlength'">
+                <span i18n>At intermediary bank name</span><span i18n> must be less than 190 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -582,6 +631,9 @@
               @if (!!formGroupDetail.controls['swiftCodeB1'].hasError('required')) {
               <mat-error><span i18n>Swift code intermediary bank</span><span i18n> is required</span></mat-error>
               }
+              <mat-error *ngxControlError="formGroupDetail.controls['swiftCodeB1']; track: 'maxlength'">
+                <span i18n>Swift code intermediary bank</span><span i18n> must be less than 190 characters</span>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -626,7 +678,7 @@
               </ng-container>
               <ng-container matColumnDef="action">
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
-                <td *matCellDef="let element"  mat-cell>
+                <td *matCellDef="let element" mat-cell>
                   @if (element.isManual) {
                   <div class="action-buttons d-flex justify-content-center">
                     <a type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
@@ -675,10 +727,10 @@
               <mat-label i18n>Airport Code</mat-label>
               <input
                 (ngModelChange)="marketCodeChangeDebounce($event);this.marketCodeChangeBrake=false;"
+                [matAutocomplete]="auto"
                 formControlName="marketCode"
-                matInput
-                required trim="blur"
-                [matAutocomplete]="auto">
+                matInput required
+                trim="blur">
               <mat-autocomplete #auto="matAutocomplete">
                 @for (option of listFlightMarket; track option) {
                 <mat-option [value]="option">{{ option }}</mat-option>
@@ -691,10 +743,13 @@
               <mat-error><span i18n>Airport Code is not match with Currency</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['marketCode']; track: 'minlength'">
-                <span i18n>Airport Code</span><span i18n> must be equal 3 character</span>
+                <span i18n>Airport Code</span><span i18n> must be equal 3 characters</span>
               </mat-error>
               <mat-error *ngxControlError="formGroupDetail.controls['marketCode']; track: 'maxlength'">
-                <span i18n>Airport Code</span><span i18n> must be equal 3 character</span>
+                <span i18n>Airport Code</span><span i18n> must be equal 3 characters</span>
+              </mat-error>
+              <mat-error *ngxControlError="formGroupDetail.controls['marketCode']; track: 'partern'">
+                <span i18n>Airport Code</span><span i18n> format is invalid</span>
               </mat-error>
             </mat-form-field>
           </div>
@@ -708,10 +763,10 @@
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
-            <app-selection-suggest i18n-label (selectionChange)="nationSelected($event)"
-                                   required
-                                   label="Nation" attrValue="id" attrDisplay="vniName" [options]="listQuocGia"
-                                   formControlName="nation" size="sm"/>
+            <app-selection-suggest (selectionChange)="nationSelected($event)" [options]="listQuocGia"
+                                   attrDisplay="vniName"
+                                   attrValue="id" formControlName="nation" i18n-label label="Nation"
+                                   required size="sm"/>
             <!--<mat-form-field>
               <mat-label i18n>Country</mat-label>
 
@@ -786,7 +841,7 @@
               <mat-error><span i18n>Supplier Phone</span><span i18n> is required</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['supplierPhone']; track: 'maxlength'">
-                <span i18n>Supplier Phone</span><span i18n> must be less than 20 character</span>
+                <span i18n>Supplier Phone</span><span i18n> must be less than 20 characters</span>
               </mat-error>
             </mat-form-field>
           </div>
@@ -799,11 +854,12 @@
               <input formControlName="supplierEmail" matInput required trim="blur">
               @if (!!formGroupDetail.controls['supplierEmail'].hasError('required')) {
               <mat-error><span i18n>Supplier Booking Email</span><span i18n> is required</span></mat-error>
-              } @else if (!!formGroupDetail.controls['supplierEmail'].hasError('email') && formGroupDetail.get('supplierEmail')!.touched) {
+              } @else if (!!formGroupDetail.controls['supplierEmail'].hasError('email') &&
+              formGroupDetail.get('supplierEmail')!.touched) {
               <mat-error><span i18n>Email</span><span i18n> invalid</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['supplierEmail']; track: 'maxlength'">
-                <span i18n>Supplier Booking Email</span><span i18n> must be less than 250 character</span>
+                <span i18n>Supplier Booking Email</span><span i18n> must be less than 250 characters</span>
               </mat-error>
             </mat-form-field>
           </div>
@@ -816,7 +872,7 @@
               <mat-error><span i18n>Vehicle Type</span><span i18n> is required</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['carType']; track: 'maxlength'">
-                <span i18n>Vehicle Type</span><span i18n> must be less than 150 character</span>
+                <span i18n>Vehicle Type</span><span i18n> must be less than 150 characters</span>
               </mat-error>
 
             </mat-form-field>
@@ -875,7 +931,7 @@
               <mat-error><span i18n>Notes</span><span i18n> too long</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['notes']; track: 'maxlength'">
-                <span i18n>Remark</span><span i18n> must be less than 500 character</span>
+                <span i18n>Remark</span><span i18n> must be less than 500 characters</span>
               </mat-error>
             </mat-form-field>
           </div>
@@ -970,8 +1026,8 @@
                 mat-cell>
               <div class="input-cell">
                 <mat-form-field class="edit-inline-table">
-                  <mat-select #inputRef="ngModel" [(ngModel)]="element.serviceFeeCode" required [disabled]="readMode"
-                              (ngModelChange)="onChangeHHDV(element)">
+                  <mat-select #inputRef="ngModel" (ngModelChange)="onChangeHHDV(element)" [(ngModel)]="element.serviceFeeCode" [disabled]="readMode"
+                              required>
                     <mat-option *ngFor="let option of listHHDV" [value]="option.code">
                       {{ option.code }} - {{ option.name }}
                     </mat-option>
@@ -1164,7 +1220,7 @@
               }
             </td>
           </ng-container>
-          <ng-container matColumnDef="action" stickyEnd *ngIf="!readMode">
+          <ng-container *ngIf="!readMode" matColumnDef="action" stickyEnd>
             <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
               Action
             </th>
@@ -1546,7 +1602,7 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="col634">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header id="gt_max">Ratio (stay duration <= maximum
+              <th *matHeaderCellDef i18n id="gt_max" mat-header-cell mat-sort-header>Ratio (stay duration <= maximum
                 stay
                 duration)
               </th>
@@ -1572,7 +1628,7 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="col635">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header id="lt_max">Ratio (stay duration > maximum stay
+              <th *matHeaderCellDef i18n id="lt_max" mat-header-cell mat-sort-header>Ratio (stay duration > maximum stay
                 duration)
               </th>
               <td (click)="editCellUP(element,'col635')" *matCellDef="let element"

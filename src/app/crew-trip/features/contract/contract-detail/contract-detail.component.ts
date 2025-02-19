@@ -271,9 +271,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   _showDialogDelete = false;
   confirmDeleteMessage = '';
   deleteObj: any;
-  deletePriceUnitInfo: any = [];
-  deleteNotAllDay: any = [];
-  deleteDayUse: any = [];
   protected readonly LOCALE = LOCALE;
 
   // private filesControl = new FormControl(null, );
@@ -303,7 +300,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       doiTuongDichVu: ['', Validators.required],
       contractSpec: [],
       //tab4
-      marketCode: [, [Validators.minLength(3), Validators.maxLength(3)]],
+      marketCode: [, [Validators.minLength(3), Validators.maxLength(3), Validators.pattern('^[a-zA-Z0-9]+$')]],
       marketName: [, [Validators.maxLength(250)]],
       marketType: [],
       nation: [],
@@ -326,8 +323,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       id: [],
       bizDocId: [],
       bizDocIdC1: [],
-      contractCode: [],
-      contractNo: [],
+      contractCode: [, [Validators.maxLength(50)]],
+      contractNo: [, [Validators.maxLength(50)]],
       currency: [],
       currencyCode: [],
       exchangeRate: [],
@@ -337,7 +334,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       contractType: [],
       contractForm: [],
       hdPlRoot: [],
-      contractName: [],
+      contractName: [, [Validators.maxLength(250)]],
       partnerCode: [],
       partnerName: [],
       partnerAddress: [],
@@ -356,39 +353,27 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       dueDateNumber: [],
       handoverDate: [],
       documentsList: [],
-      bankAccountNoB: [],
-      peopleName: [],
-      bankNameB: [],
-      bankAddressB: [],
-      cityB: [],
-      bankBranchNameB: [],
-      bankLocalCode: [],
-      swiftCodeB: [],
+      bankAccountNoB: [, [Validators.maxLength(40), Validators.pattern('^[a-zA-Z0-9]+$')]],
+      peopleName: [, [Validators.maxLength(250)]],
+      bankNameB: [, [Validators.maxLength(190)]],
+      bankAddressB: [, [Validators.maxLength(512)]],
+      cityB: [, [Validators.maxLength(45)]],
+      bankBranchNameB: [, [Validators.maxLength(190)]],
+      bankLocalCode: [, [Validators.maxLength(190)]],
+      swiftCodeB: [, [Validators.maxLength(190)]],
       bankCharge: [],
       bankCharge1: [],
-      bankAccountNoB1: [],
-      bankNameB1: [],
-      swiftCodeB1: [],
+      bankAccountNoB1: [[Validators.maxLength(40), Validators.pattern('^[a-zA-Z0-9]+$')]],
+      bankNameB1: [, [Validators.maxLength(190)]],
+      swiftCodeB1: [, [Validators.maxLength(190)]],
+      iban: [, [Validators.maxLength(120)]],
       isHotel: [],
       isVehicle: [],
       hotel: [],
       vehicle: [],
       priceUnitInfo: [],
-      insertPriceUnitInfo: [],
-      updatePriceUnitInfo: [],
-      deletePriceUnitInfo: [],
       priceUnitNotAllDay: [],
-      priceUnitInfoRequests: [],
-      priceNotAllDayRequests: [],
-      insertNotAllDay: [],
-      updateNotAllDay: [],
-      deleteNotAllDay: [],
       dayUses: [],
-      insertDayUse: [],
-      updateDayUse: [],
-      deleteDayUse: [],
-      iban: [],
-
       appendixCode: [],
       appendixName: [],
       appendixNo: [],
@@ -607,40 +592,29 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         const findRow = this.tblUnitPrice.data.find((s: any) =>
           isEqual(s, this.deleteObj),
         ) as any;
-        if (findRow) {
-          this.deletePriceUnitInfo = [...this.deletePriceUnitInfo, findRow.id];
-        }
         remove(this.tblUnitPrice.data, (item: any) => item === findRow);
-        // this.tblUnitPrice.data = this.tblUnitPrice.data;
+        this.tblUnitPrice.data = this.tblUnitPrice.data;
       } else if (this.deleteObj.deleteType == 'tbl61') {
         delete this.deleteObj.deleteType;
         const findRow = this.tbl61.data.find((s: any) =>
           isEqual(s, this.deleteObj),
         ) as any;
-        if (findRow) {
-          this.deleteNotAllDay = [...this.deleteNotAllDay, findRow.id];
-        }
         remove(this.tbl61.data, (item: any) => item === findRow);
-        // this.tbl61.data = this.tbl61.data;
+        this.tbl61.data = this.tbl61.data;
       } else if (this.deleteObj.deleteType == 'tbl62') {
         delete this.deleteObj.deleteType;
         const findRow = this.tbl62.data.find((s: any) =>
           isEqual(s, this.deleteObj),
         ) as any;
-        if (findRow) {
-          this.deleteNotAllDay = [...this.deleteNotAllDay, findRow.id];
-        }
         remove(this.tbl62.data, (item: any) => item === findRow);
+        this.tbl62.data = this.tbl62.data;
       } else if (this.deleteObj.deleteType == 'tbl63') {
         delete this.deleteObj.deleteType;
         const findRow = this.tbl63.data.find((s: any) =>
           isEqual(s, this.deleteObj),
         ) as any;
-        if (findRow) {
-          this.deleteDayUse = [...this.deleteDayUse, findRow.id];
-        }
         remove(this.tbl63.data, (item: any) => item === findRow);
-        // this.tbl63.data = this.tbl63.data;
+        this.tbl63.data = this.tbl63.data;
       }
     } catch (e) {
     } finally {
@@ -742,7 +716,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   async nationSelected(event: any) {
     const nation = this.listQuocGia.find(
-      (s: any) => s.id === event.value,
+      (s: any) => s.id === (event?.value || event),
     );
     this.formGroupDetail.patchValue({
       nationId: nation?.id,
@@ -785,7 +759,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       'supplierName', 'supplierPhone', 'supplierEmail',
       'carType', 'standardCheckIn', 'standardCheckOut', 'notes', 'doiTuongDichVu', 'contractSpec', 'marketType',
     ];
-    const fieldAnnex = ['partnerName', 'currency', 'hdPlRoot'];
+    const fieldAnnex = ['partnerName', 'partnerAddress', 'currency', 'hdPlRoot', 'signedDepartmentName', 'budgetDepartmentName', 'proceedDepartmentName',
+      'paidDepartmentName', 'paymentType', 'budgetCode', 'fieldCode2'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -917,7 +892,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         type1: type1UpdateNotAllDay,
         type2: type2UpdateNotAllDay,
       };
-
       const dayUses = this.tbl63.data.map((s: any) => ({
         id: s.id,
         checkinFrom: s.col631,
@@ -944,22 +918,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           this.formGroupDetail.getRawValue().doiTuongDichVu == 3,
         email: this.formGroupDetail.getRawValue().supplierEmail,
         priceUnitInfo: this.tblUnitPrice.data,
-        insertPriceUnitInfo: this.tblUnitPrice.data.filter(
-          (s: any) => s.action == 'ADD',
-        ),
-        updatePriceUnitInfo: this.tblUnitPrice.data.filter(
-          (s: any) => s.action != 'ADD',
-        ),
-        deletePriceUnitInfo: this.deletePriceUnitInfo,
-        priceNotAllDayRequests: priceNotAllDayRequests,
-        insertNotAllDay: insertNotAllDay,
-        updateNotAllDay: updateNotAllDay,
-        deleteNotAllDay: this.deleteNotAllDay,
-        dayUses: dayUses,
-        insertDayUse: dayUses?.filter((s: any) => s.action == 'ADD'),
-        updateDayUse: dayUses?.filter((s: any) => s.action != 'ADD'),
-        deleteDayUse: this.deleteDayUse,
-        priceUnitInfoRequests: this.tblUnitPrice.data,
       });
       this.formGroupDetailInit = {...this.formGroupDetail.getRawValue()};
       this.formGroupDetail.markAllAsTouched();
@@ -975,9 +933,15 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.formGroupDetail.patchValue({
           id: this.formGroupDetail.getRawValue().bizDocId,
         });
-        res = await this.baseService.update(this.formGroupDetail.getRawValue());
+        let body = this.formGroupDetail.getRawValue();
+        body.priceUnitNotAllDay = {type1: type1, type2: type2}
+        body.dayUses = dayUses[0];
+        body.priceUnitInfo.forEach((s: any) => s.priceBeforeTax = s.priceNoTax);
+        res = await this.baseService.update(body);
       } else {
-        res = await this.baseService.create(this.formGroupDetail.getRawValue());
+        let body = this.formGroupDetail.getRawValue();
+        body.priceUnitNotAllDay = {}
+        res = await this.baseService.create(body);
       }
       await this.search();
       this.baseService.showSuccess(
