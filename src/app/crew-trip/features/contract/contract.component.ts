@@ -100,6 +100,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   tblAnnexData = new MatTableDataSource();
   _displayedColumns: {
     label: string;
+    label1?: string;
     value: string;
     type?: string;
     format?: string;
@@ -107,9 +108,9 @@ export class ContractComponent extends CommonComponent implements OnInit {
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Airport code`, value: 'marketCode'},
     {label: $localize`bizDocId`, value: 'bizDocId',},
-    {label: this.isHD() ? $localize`Contract Code` : $localize`Appendix Code`, value: 'contractCode'},
+    {label: $localize`Contract Code`,label1 : $localize`Appendix Code`, value: 'contractCode'},
     {label: $localize`Contract No`, value: 'contractNo',},
-    {label: this.isHD() ? $localize`Contract Name` : $localize`Appendix Name`, value: 'contractName'},
+    {label: $localize`Contract Name`, label1: $localize`Appendix Name`, value: 'contractName'},
     {label: $localize`Supplier`, value: 'partnerName',},
     {label: $localize`Service Type`, value: 'serviceObject'},
     {label: $localize`Signed Date`, value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT,},
