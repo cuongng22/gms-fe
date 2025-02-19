@@ -936,11 +936,13 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         let body = this.formGroupDetail.getRawValue();
         body.priceUnitNotAllDay = {type1: type1, type2: type2}
         body.dayUses = dayUses[0];
-        body.priceUnitInfo.forEach((s: any) => s.priceBeforeTax = s.priceNoTax);
+        body.priceUnitInfo.forEach((s: any) => s.priceNoTax = s.priceBeforeTax);
         res = await this.baseService.update(body);
       } else {
         let body = this.formGroupDetail.getRawValue();
-        body.priceUnitNotAllDay = {}
+        body.priceUnitNotAllDay = {type1: type1, type2: type2}
+        body.dayUses = dayUses[0] || {};
+        body.priceUnitInfo.forEach((s: any) => s.priceNoTax = s.priceBeforeTax);
         res = await this.baseService.create(body);
       }
       await this.search();
