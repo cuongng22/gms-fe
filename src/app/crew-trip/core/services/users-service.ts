@@ -87,19 +87,26 @@ export class UsersService extends BaseService {
   }
 
   async loadUserPermissions(email: string) {
-    this.http.get<any>(`${this.api}/${this.path}/user-roles?email=${email}`).subscribe(
-      (data) => {
-        if (data && data?.data && data?.data?.roles) {
-          let permissions = data?.data?.roles;
-          this.permissionsSubject.next(permissions);
-          localStorage.setItem(STORAGE_KEY.PERMISSION, JSON.stringify(permissions));
-        }
+    try {
+      const data = await firstValueFrom(this.http.get<any>(`${this.api}/${this.path}/user-roles?email=${email}`));
+      if (data?.data?.permissionCode) {
+        const permissions = data.data.permissionCode;
+        this.permissionsSubject.next(permissions);
+        localStorage.setItem(STORAGE_KEY.PERMISSION, JSON.stringify(permissions));
       }
-    );
+    } catch (error) {
+      console.error('Error load permissions:', error);
+    }
   }
 
   hasPermission(permission: string): boolean {
-    const permissions = this.permissionsSubject.getValue();
-    return permissions.includes(permission);
+    let permissions = this.permissionsSubject.getValue();
+    if (permissions.length === 0) {
+      const storedPermissions = localStorage.getItem(STORAGE_KEY.PERMISSION);
+      if (storedPermissions) {
+        permissions = JSON.parse(storedPermissions);
+      }
+    }
+    return permissions && permissions.includes(permission);
   }
 }

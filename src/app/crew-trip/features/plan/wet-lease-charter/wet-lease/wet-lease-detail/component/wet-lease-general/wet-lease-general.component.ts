@@ -67,7 +67,6 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   indexDeleteCarRental: any;
 
   disabled = input<boolean>(false);
-  dataGeneral = input<any>();
 
   airports: any[] = [];
   hotels: any[] = [];
@@ -89,18 +88,19 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
 
   constructor() {
     super();
-    effect(() => {
-      if (this.dataGeneral()) {
-        const data = { ...this.dataGeneral() }
-        this.formGroupDetail.patchValue(data);
-        if (data.priceHotelsList) {
-          this.dataSourceHotel.data = [...data.priceHotelsList];
-        }
-        if (data.priceTransports) {
-          this.dataSourceCarRental.data = [...data.priceTransports];
-        }
+  }
+
+  setData(data:any){
+    if (data) {
+      const _data = { ...data }
+      this.formGroupDetail.patchValue(_data);
+      if (_data.priceHotelsList) {
+        this.dataSourceHotel.data = [..._data.priceHotelsList];
       }
-    }, { allowSignalWrites: true });
+      if (_data.priceTransports) {
+        this.dataSourceCarRental.data = [..._data.priceTransports];
+      }
+    }
   }
 
   ngAfterViewChecked(): void {

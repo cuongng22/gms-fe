@@ -49,11 +49,11 @@
                                 matTextareaAutosize cdkTextareaAutosize #autosize="cdkTextareaAutosize">
                         </textarea>
                             <mat-error *ngxControlError="formGroupDetail.controls.title; track: 'required'"
-                                i18n="@@emailBooking:emailRequired">
+                                i18n="@@subjectRequired">
                                 Subject {{MESSAGE.REQUIRED}}
                             </mat-error>
                             <mat-error *ngxControlError="formGroupDetail.controls.title; track: 'maxlength'"
-                                i18n="@@noteMaxlength">
+                                i18n="@@subjectMaxlength">
                                 Subject {{ MESSAGE.MAX_LENGTH_INVALID |
                                 dataTransformPipe:[Constant.STRING_FORMAT,500]}}
                             </mat-error>

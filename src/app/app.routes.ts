@@ -44,6 +44,8 @@ import { BudgetProcurementListComponent } from './crew-trip/features/plan/budget
 import { BudgetProcurementSummaryDetailComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary-detail/budget-procurement-summary-detail.component';
 import { BudgetProcurementSummaryComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement-summary/budget-procurement-summary.component';
 import { BudgetProcurementComponent } from './crew-trip/features/plan/budget-procurement/budget-procurement.component';
+import { ProcurementTrackingDetailComponent } from './crew-trip/features/procurement-tracking/procurement-tracking-detail/procurement-tracking-detail.component';
+import { ProcurementTrackingComponent } from './crew-trip/features/procurement-tracking/procurement-tracking.component';
 import { reportcomponent } from './crew-trip/features/reports/report1/report1.component';
 import { reportcomponent10 } from './crew-trip/features/reports/report10/report10.component';
 import { reportcomponent2 } from './crew-trip/features/reports/report2/report2.component';
@@ -60,7 +62,7 @@ import { OtherFlightScheduleComponent } from './crew-trip/features/flight-schedu
 import { EmailTrackingComponent } from './crew-trip/features/flight-schedules/email-tracking/email-tracking.component';
 import { NotificationComponent } from "src/app/crew-trip/features/system/config/notification/notification.component";
 import { CarBookingComponent } from "src/app/crew-trip/features/car-room/car-booking/car-booking.component";
-import {InvoiceActualCostTabComponent} from "src/app/crew-trip/features/invoice/actual-cost/invoice-actual-cost-tab.component";
+import { InvoiceActualCostTabComponent } from "src/app/crew-trip/features/invoice/actual-cost/invoice-actual-cost-tab.component";
 import { WetLeaseCharterComponent } from './crew-trip/features/plan/wet-lease-charter/wet-lease-charter.component';
 import { CharterDetailComponent } from './crew-trip/features/plan/wet-lease-charter/charter/charter-detail/charter-detail.component';
 
@@ -112,6 +114,20 @@ export const routes: Routes = [
                   { path: 'charter-detail', component: CharterDetailComponent },
                 ],
               }
+            ],
+          },
+          {
+            path: 'est-plan/procurement-tracking',
+            children: [
+              { path: '', component: ProcurementTrackingComponent },
+              {
+                path: 'detail',
+                component: ProcurementTrackingDetailComponent,
+              },
+              {
+                path: 'detail/:id',
+                component: ProcurementTrackingDetailComponent,
+              },
             ],
           },
           { path: 'rate/uth', component: RateUthComponent },
