@@ -1,48 +1,48 @@
 @if (!dialogMode) {
 <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
-  <div class="d-md-flex align-items-center">
-    <h5 class="mb-0 d-inline ml-10">
-      <h5 class="mb-0 ml-10">
-        <span i18n>{{titleHeader}}</span>
-      </h5>
-    </h5>
+<div class="d-md-flex align-items-center">
+<h5 class="mb-0 d-inline ml-10">
+<h5 class="mb-0 ml-10">
+<span i18n>{{titleHeader}}</span>
+</h5>
+</h5>
 
-  </div>
-  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
-    <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      Invoice
-    </li>
-    <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      {{titleHeader}}
-    </li>
-  </ol>
+</div>
+<ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+<li class="breadcrumb-item d-inline-block position-relative" i18n>
+Invoice
+</li>
+<li class="breadcrumb-item d-inline-block position-relative" i18n>
+{{titleHeader}}
+</li>
+</ol>
 </div>
 
 <div (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'" class="w-100 text-end mb-10">
-  <button (click)="goBack()" class="step-2-menu-button btn-slot-3" extended i18n mat-fab>
-    <i class="material-symbols-outlined">
-      undo
-    </i>
-    Back
-  </button>
-  <button (click)="saveAndNext()" *ngIf="!readMode" class="step-2-menu-button btn-slot-4" extended i18n mat-fab>
-    <i class="material-symbols-outlined">
-      redo
-    </i>
-      Save and reconcile
-  </button>
-  <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
-    <i class="material-symbols-outlined">
-      save
-    </i>
-    Save
-  </button>
-  <button (click)="toggleDialogFinish()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
-    <i class="material-symbols-outlined">
-      task_alt
-    </i>
-    Chốt hóa đơn
-  </button>
+<button (click)="goBack()" class="step-2-menu-button btn-slot-3" extended i18n mat-fab>
+<i class="material-symbols-outlined">
+undo
+</i>
+Back
+</button>
+<button (click)="saveAndNext()" *ngIf="!readMode" class="step-2-menu-button btn-slot-4" extended i18n mat-fab>
+<i class="material-symbols-outlined">
+redo
+</i>
+Save and reconcile
+</button>
+<button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+<i class="material-symbols-outlined">
+save
+</i>
+Save
+</button>
+<button (click)="toggleDialogFinish()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+<i class="material-symbols-outlined">
+task_alt
+</i>
+Chốt hóa đơn
+</button>
 </div>
 }
 <mat-accordion multi>
@@ -92,10 +92,10 @@
               <mat-error><span i18n>Invoice Number</span><span i18n> not empty</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['invoiceNumber']; track: 'maxlength'">
-                <mat-error><span i18n>Invoice Number must be less than 50 characters</span></mat-error>
+                <span i18n>Invoice Number</span><span i18n> must be less than 50 characters</span>
               </mat-error>
               <mat-error *ngxControlError="formGroupDetail.controls['invoiceNumber']; track: 'pattern'">
-                <mat-error><span i18n>Invoice Number format invalid</span></mat-error>
+                <span i18n>Invoice Number</span><span i18n> format is invalid</span>
               </mat-error>
             </mat-form-field>
           </div>
@@ -225,9 +225,9 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract Service Type</mat-label>
-              <input formControlName="contractServiceType" matInput trim="blur" required>
+              <input formControlName="contractServiceType" matInput required trim="blur">
               @if (!!formGroupDetail.controls['contractServiceType'].hasError('required')) {
-                <mat-error><span i18n>Contract Service Type</span><span i18n> not empty</span></mat-error>
+              <mat-error><span i18n>Contract Service Type</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
