@@ -76,6 +76,8 @@ import {
 } from 'src/app/crew-trip/shared/utils/constant';
 import {NgxControlError} from "ngxtension/control-error";
 import {SelectionSuggestComponent} from "src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component";
+import {BankCharge} from "src/app/crew-trip/features/contract/contract-lookup";
+import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog";
 
 @Component({
   selector: 'app-contract-detail',
@@ -124,6 +126,7 @@ import {SelectionSuggestComponent} from "src/app/crew-trip/shared/component/sele
     MatDialogModule,
     NgxControlError,
     SelectionSuggestComponent,
+    ConfirmDialog,
   ],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
@@ -177,6 +180,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   listBudgetCode = ContractLookup.BudgetCode;
   listFlightGroup = ContractLookup.FlightGroup;
   listStatusUsage = ContractLookup.StatusUsage;
+  listBankCharge = ContractLookup.BankCharge;
   marketCodeChangeBrake: any;
   //debounce
   marketCodeChangeDebounce = debounce(async (value: any) => {
@@ -269,7 +273,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     }
   }, 1000);
   _showDialogDelete = false;
-  confirmDeleteMessage = '';
   deleteObj: any;
   protected readonly LOCALE = LOCALE;
 
@@ -618,12 +621,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       }
     } catch (e) {
     } finally {
-      this.confirmDeleteMessage = '';
+      this._showDialogDelete = false;
     }
   }
 
   async _confirmDelete(element: any, type: any, message?: any) {
-    this.confirmDeleteMessage = message;
     this.deleteObj = {...element, deleteType: type};
     //this.curFile = element;
     this._showDialogDelete = true;

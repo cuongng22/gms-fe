@@ -243,7 +243,8 @@
               @else{
               <mat-label i18n>Appendix name</mat-label>
               }
-              <input formControlName="contractName" matInput matTooltip="{{formGroupDetail.controls['contractName'].value}}" required
+              <input formControlName="contractName" matInput
+                     matTooltip="{{formGroupDetail.controls['contractName'].value}}" required
                      trim="blur">
               @if (!!formGroupDetail.controls['contractName'].hasError('required')) {
               <mat-error><span i18n>Contract name</span><span i18n> is required</span></mat-error>
@@ -269,7 +270,8 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Supplier name</mat-label>
-              <input formControlName="partnerName" matInput matTooltip="{{formGroupDetail.controls['partnerName'].value}}" required
+              <input formControlName="partnerName" matInput
+                     matTooltip="{{formGroupDetail.controls['partnerName'].value}}" required
                      trim="blur">
               @if (!!formGroupDetail.controls['partnerName'].hasError('required')) {
               <mat-error><span i18n>Supplier name</span><span i18n> is required</span></mat-error>
@@ -282,7 +284,8 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Supplier address</mat-label>
-              <input formControlName="partnerAddress" matInput matTooltip="{{formGroupDetail.controls['partnerAddress'].value}}"
+              <input formControlName="partnerAddress" matInput
+                     matTooltip="{{formGroupDetail.controls['partnerAddress'].value}}"
                      trim="blur">
               @if (!!formGroupDetail.controls['partnerAddress'].hasError('required')) {
               <mat-error><span i18n>Supplier address</span><span i18n> is required</span></mat-error>
@@ -578,7 +581,11 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Bank domestic Charge</mat-label>
-              <input formControlName="bankCharge" matInput trim="blur">
+              <mat-select formControlName="bankCharge" required>
+                <mat-option *ngFor="let option of listBankCharge" [value]="option.key">
+                  {{ option.value }}
+                </mat-option>
+              </mat-select>
               @if (!!formGroupDetail.controls['bankCharge'].hasError('required')) {
               <mat-error><span i18n>Bank domestic Charge</span><span i18n> is required</span></mat-error>
               }
@@ -587,7 +594,11 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Bank aboard Charge</mat-label>
-              <input formControlName="bankCharge1" matInput trim="blur">
+              <mat-select formControlName="bankCharge1" required>
+                <mat-option *ngFor="let option of listBankCharge" [value]="option.key">
+                  {{ option.value }}
+                </mat-option>
+              </mat-select>
               @if (!!formGroupDetail.controls['bankCharge1'].hasError('required')) {
               <mat-error><span i18n>Bank aboard Charge</span><span i18n> is required</span></mat-error>
               }
@@ -946,12 +957,12 @@
     <mat-panel-description class="d-block">
       <div class="w-100 text-end">
         @if (formGroupDetail.getRawValue().doiTuongDichVu === '3') {
-        <mat-checkbox checked class="mr-20" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
-        <mat-checkbox checked class="mr-20" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
+        <mat-checkbox [disabled]="readMode || isPL()" checked class="mr-20" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
+        <mat-checkbox [disabled]="readMode || isPL()" checked class="mr-20" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
         } @else if (formGroupDetail.getRawValue().doiTuongDichVu === '1') {
-        <mat-checkbox checked class="mr-20" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
+        <mat-checkbox [disabled]="readMode || isPL()" checked class="mr-20" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
         } @else {
-        <mat-checkbox checked class="mr-20" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
+        <mat-checkbox [disabled]="readMode || isPL()" checked class="mr-20" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
         }
 
         <button (click)="addUnitPrice()" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n mat-button type="button">
@@ -1026,7 +1037,8 @@
                 mat-cell>
               <div class="input-cell">
                 <mat-form-field class="edit-inline-table">
-                  <mat-select #inputRef="ngModel" (ngModelChange)="onChangeHHDV(element)" [(ngModel)]="element.serviceFeeCode" [disabled]="readMode"
+                  <mat-select #inputRef="ngModel" (ngModelChange)="onChangeHHDV(element)"
+                              [(ngModel)]="element.serviceFeeCode" [disabled]="readMode"
                               required>
                     <mat-option *ngFor="let option of listHHDV" [value]="option.code">
                       {{ option.code }} - {{ option.name }}
@@ -1685,79 +1697,26 @@
 </mat-accordion>
 <!-- POPUP-->
 <!-- Delete file confirm Popup -->
-<div [class.active]="showDialogDeleteFile" class="add-new-popup">
-  <div class="popup-dialog dialog-delete-with">
-    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
-      <mat-card-content>
-        <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
-        </div>
-        <div class="text-center mb-20">
-          <h3 class="mb-0" i18n>Are you sure you want to delete?</h3>
-        </div>
-        <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n>
-                        You will not be able to recover the deleted data!</span>
-        </div>
-        <div class="btn-box text-center">
-          <button (click)="closeConfirmDeleteFile()" class="close-btn  min-with-100 mlr-5" mat-button
-                  type="button">
-            <i class="material-symbols-outlined">
-              close
-            </i>
-
-            <span i18n>Cancel</span>
-          </button>
-          <button (click)="deleteFile()" class="add-btn min-with-100 mlr-5" mat-button type="button">
-            <i class="material-symbols-outlined">
-              save
-            </i>
-            <span i18n>Confirm</span>
-          </button>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div>
-<div [class.active]="confirmDeleteMessage" class="add-new-popup">
-  <div class="popup-dialog dialog-delete-with">
-    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
-      <mat-card-content>
-        <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
-        </div>
-        <div class="text-center mb-20">
-          <h3 class="mb-0" i18n>Are you sure you want to delete?</h3>
-        </div>
-        <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n>
-                        You will not be able to recover the deleted data!</span>
-        </div>
-        <div class="btn-box text-center">
-          <button (click)="_closeConfirmDelete()" class="close-btn  min-with-100 mlr-5" mat-button
-                  type="button">
-            <i class="material-symbols-outlined">
-              close
-            </i>
-
-            <span i18n>Cancel</span>
-          </button>
-          <button (click)="_doDelete()" class="add-btn min-with-100 mlr-5" mat-button type="button">
-            <i class="material-symbols-outlined">
-              save
-            </i>
-            <span i18n>Confirm</span>
-          </button>
-        </div>
-      </mat-card-content>
-    </mat-card>
-  </div>
-</div>
-
+<app-confirm-dialog
+  (closeDialog)="closeConfirmDeleteFile()"
+  (confirm)="deleteFile()"
+  [icon]="'check_circle'"
+  [mainText]="'Are you sure you want to delete?'"
+  [showDialog]="showDialogDeleteFile"
+  [subText]="'You will not be able to recover the deleted data!'"
+  i18n-mainText
+  i18n-subText>
+</app-confirm-dialog>
+<app-confirm-dialog
+  (closeDialog)="_closeConfirmDelete()"
+  (confirm)="_doDelete()"
+  [icon]="'check_circle'"
+  [mainText]="'Are you sure you want to delete?'"
+  [showDialog]="_showDialogDelete"
+  [subText]="'You will not be able to recover the deleted data!'"
+  i18n-mainText
+  i18n-subText>
+</app-confirm-dialog>
 <!--template button style-->
 <ng-template #cancelBtn class="btn-box">
   <button class="close-btn" i18n mat-button type="button">

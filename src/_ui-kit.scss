@@ -3084,7 +3084,7 @@ apx-chart {
   .popup-dialog {
     display: flex;
     transition: .3s;
-    max-width: 550px;
+    max-width: 900px;
     min-height: 100%;
     align-items: center;
     transform: translate(0, -20px);
@@ -4870,6 +4870,7 @@ blockquote {
   // Add New Popup
   .add-new-popup {
     .popup-dialog {
+      max-width: 900px !important;
       .mat-mdc-card {
         .mat-mdc-card-header {
           padding: 20px;
