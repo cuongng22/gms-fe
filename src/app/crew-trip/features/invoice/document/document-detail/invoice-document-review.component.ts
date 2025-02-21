@@ -38,7 +38,7 @@ import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/th
 import {InvoiceDocumentService} from "src/app/crew-trip/core/services/invoice-document-service";
 import {ContractService} from "src/app/crew-trip/core/services/contract-service";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentExportType, InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {HttpStatusCode} from "@angular/common/http";
 import {InvoiceDocumentComponent} from "src/app/crew-trip/features/invoice/document/invoice-document.component";
 import {InvoiceDocumentRemindComponent} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
@@ -293,17 +293,16 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     });
   }
 
-  async download(fileRow: any) {
+  async download(type?: any) {
     try {
       await this.spinner.show();
-      let res = await this.baseService.getFileData({
-        id: fileRow.id, url: fileRow.fileUrl, fileSize: fileRow.fileSize,
+      const res = await this.baseService.exportListData({
+        id: this.id,
+        exportType: InvoiceDocumentExportType.DOCUMENT_REVIEW
       });
-      this.downloadFile(res, fileRow.fileName + "." + fileRow.fileType);
-
+      this.downloadFile(res, 'export.xlsx');
     } catch (e) {
-      console.log(e);
-      this.baseService.showError(MESSAGE.ERROR);
+      console.log(e)
     } finally {
       await this.spinner.hide();
     }
@@ -410,13 +409,13 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     this.formGroupDetail.patchValue({invoiceDocumentDtl: listDtl});
   }
 
-/*  calTotal(column: any) {
-    if (column.type === Constant.NUMBER) {
-      return this.formGroupDetail.getRawValue().invoiceDocumentReview.reduce((prev: any, cur: any) => prev + +cur[column.value], 0);
-    } else {
-      return '';
-    }
-  }*/
+  /*  calTotal(column: any) {
+      if (column.type === Constant.NUMBER) {
+        return this.formGroupDetail.getRawValue().invoiceDocumentReview.reduce((prev: any, cur: any) => prev + +cur[column.value], 0);
+      } else {
+        return '';
+      }
+    }*/
 
   calTotal(column: any) {
     if (column.type === Constant.NUMBER) {

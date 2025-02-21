@@ -11,6 +11,7 @@ import {
   model,
 } from '@angular/core';
 import {
+  FormArray,
   FormBuilder,
   FormGroup,
   FormsModule,
@@ -78,6 +79,7 @@ import {NgxControlError} from "ngxtension/control-error";
 import {SelectionSuggestComponent} from "src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component";
 import {BankCharge} from "src/app/crew-trip/features/contract/contract-lookup";
 import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog";
+import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
 
 @Component({
   selector: 'app-contract-detail',
@@ -127,6 +129,7 @@ import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/conf
     NgxControlError,
     SelectionSuggestComponent,
     ConfirmDialog,
+    ThousandsSeparatorDirective,
   ],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
@@ -374,7 +377,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       isVehicle: [],
       hotel: [],
       vehicle: [],
-      priceUnitInfo: [],
+      priceUnitInfo: [this.fb.array([])],
       priceUnitNotAllDay: [],
       dayUses: [],
       appendixCode: [],
@@ -384,12 +387,32 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       effectiveAppendix: [],
       expiryAppendix: [],
       notesAppendix: [],
+
+      //table
+      priceUnit: this.fb.array([])
     });
+    this.addRow();
     this.formGroupFileUpload = this.fb.group({
       fileUpload: [],
     });
   }
+  get ok1(): FormArray {
+    return this.formGroupDetail.get('test') as FormArray;
+  }
+  dataSource123 = new MatTableDataSource<any>([]);
 
+  addRow() {
+    const row = this.fb.group({
+      name: [,[Validators.maxLength(5)]],
+      quantity: [],
+      price: [],
+    });
+
+    this.ok1.push(row);
+    console.log(this.formGroupDetail,'ok')
+    this.dataSource123.data = this.ok1.controls;
+
+  }
   getContractForm(key: string) {
     return this.listContractForm.find((s) => s.key == key)?.value;
   }
@@ -542,14 +565,15 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async addUnitPrice() {
-    this.tblUnitPrice.data = [
-      ...this.tblUnitPrice.data,
-      {
-        fromDate: this.formGroupDetail.getRawValue().effectiveDate,
-        toDate: this.formGroupDetail.getRawValue().expiryDate,
-        action: 'ADD',
-      },
-    ];
+
+    let newData = {
+      fromDate: this.formGroupDetail.getRawValue().effectiveDate,
+      toDate: this.formGroupDetail.getRawValue().expiryDate,
+      action: 'ADD',
+      serviceFeeCode: this.listHHDV[0]?.code
+    };
+    await this.onChangeHHDV(newData);
+    this.tblUnitPrice.data = [...this.tblUnitPrice.data, newData];
   }
 
   async addTbl61() {

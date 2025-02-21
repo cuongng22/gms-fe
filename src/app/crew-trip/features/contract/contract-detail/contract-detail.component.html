@@ -1,3 +1,30 @@
+<form [formGroup]="formGroupDetail">
+  <table mat-table [dataSource]="dataSource123" class="mat-elevation-z8">
+    <!-- Cột Tên -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Tên </th>
+      <td mat-cell *matCellDef="let row1; let i = index" [formGroup]="row1">
+        <input matInput formControlName="name" required>
+        <mat-error *ngxControlError="row1.controls['name']; track: 'maxlength'">
+          <span i18n>Contract number</span><span i18n> must be less than 50 characters</span>
+        </mat-error>
+      </td>
+    </ng-container>
+
+
+    <thead>
+    <tr mat-header-row *matHeaderRowDef="['name']"></tr>
+    </thead>
+    <tbody>
+    <tr mat-row *matRowDef="let row; columns: ['name'];"></tr>
+    </tbody>
+  </table>
+
+  <!-- Nút Thêm dòng và Lưu -->
+  <button mat-button color="primary" (click)="addRow()">➕ Thêm dòng</button>
+<!--  <button mat-raised-button color="accent" (click)="submit()">💾 Lưu</button>-->
+</form>
+
 <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
   <div class="d-md-flex align-items-center">
     <h5 class="mb-0 d-inline ml-10">
@@ -1039,7 +1066,7 @@
                 <mat-form-field class="edit-inline-table">
                   <mat-select #inputRef="ngModel" (ngModelChange)="onChangeHHDV(element)"
                               [(ngModel)]="element.serviceFeeCode" [disabled]="readMode"
-                              required>
+                              [matTooltip]="element.serviceFeeName" required>
                     <mat-option *ngFor="let option of listHHDV" [value]="option.code">
                       {{ option.code }} - {{ option.name }}
                     </mat-option>
@@ -1109,7 +1136,7 @@
           </ng-container>
           <ng-container matColumnDef="priceBeforeTax">
             <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Unit price before tax</th>
-            <td (click)="editCellUP(element,'priceBeforeTax')" *matCellDef="let element"
+<!--            <td (click)="editCellUP(element,'priceBeforeTax')" *matCellDef="let element"
                 [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
                 mat-cell
             >
@@ -1126,6 +1153,9 @@
               {{ element.priceBeforeTax | number }}
               </span>
               }
+            </td>-->
+            <td *matCellDef="let element">
+              <input trim="blur" [(ngModel)]="element.priceBeforeTax" matInput required appThousandsSeparator>
             </td>
           </ng-container>
           <ng-container matColumnDef="taxCode">
