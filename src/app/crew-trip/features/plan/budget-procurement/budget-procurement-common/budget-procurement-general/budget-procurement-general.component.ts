@@ -28,6 +28,7 @@ import moment from 'moment';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { el } from 'node_modules/@fullcalendar/core/internal-common';
 import { BudgetProcurementPriceComponent } from '../budget-procurement-price/budget-procurement-price.component';
+import { CurrencyService } from 'src/app/crew-trip/core/services/currency.service';
 
 @Component({
   selector: 'app-budget-procurement-general',
@@ -47,19 +48,25 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   cdRef = inject(ChangeDetectorRef);
   private readonly destroyRef = inject(DestroyRef);
   private readonly flightMarketService = inject(FlightMarketService);
+  private readonly currencyService = inject(CurrencyService);
   @ViewChild('budgetProcurementPrice', { static: false }) budgetProcurementPrice: BudgetProcurementPriceComponent;
 
 
   category = input.required<CategoryEnum>(); //International,Domestic  loại quốc tế hay quốc nội
   formValueChanges = output<any>();
+  exchangeRateChange = output<any>();
+  priceChange = output<any[]>();
 
   categorys: any[] = categories.filter((item: any) => !!item.code).map((item: any) => item.code);
+  version: string;
+  _exchangeRate: any
 
   @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
   airports = model<any[]>([]);
   disabled = input<boolean>(false);
 
   CategoryEnum = CategoryEnum;
+  currencyCodes: any[] = []
 
   constructor(private dataTransformPipe: DataTransformPipe) {
     super();
@@ -100,15 +107,19 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     earlyCheckinContractFlag: new FormControl(false),
     lateCheckoutContractFlag: new FormControl(false),
     haveContract: new FormControl(false),
-    wetLeaseFlag: new FormControl(false)
+    wetLeaseFlag: new FormControl(false),
+    currencyCode: new FormControl('', [ifValidator(() => this.haveContract, Validators.required)])
+
   });
   _procurementPlanFlag: boolean = false;
+  _haveContract: boolean = false;
 
 
   override ngOnInit(): void {
     this.flightMarketService.search({ option: 0, type: this.category(), page: 0, size: 99999 }).then((res: any) => {
       this.airports.set(res.data.content.map((item: any) => item.marketCode));
     });
+
     this.formGroupDetail.controls.procurementPlanFlag.valueChanges.subscribe((value: any) => {
       this.procurementPlanFlag = !!value;
     });
@@ -125,6 +136,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     this.formGroupDetail.valueChanges.pipe(debounceTime(1000)).subscribe((value: any) => {
       this.formValueChanges.emit(value);
     });
+
   }
 
 
@@ -138,6 +150,27 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     console.log(this.formGroupDetail);
   }
 
+  // cái này để lấy version để lấy tỉ giá
+  setVerionRate(version: string) {
+    if (version) {
+      this.version = version;
+      this.currencyService.getAllCurrencyCode(version, 'P').then((res: any) => {
+        this.currencyCodes = res.data;
+      })
+    }
+  }
+
+  async currencyCodeChange(event: any, eventEmitter?: boolean) {
+    if (event) {
+      const res = await this.currencyService.getExchangeRateByCurrencyCode(event.value, this.version, 'P');
+      if (res.data) {
+        if (eventEmitter) {
+          this.exchangeRateChange.emit(res.data);
+        }
+        this.exchangeRate = res.data
+      }
+    }
+  }
 
   get procurementPlanFlag(): boolean {
     return this._procurementPlanFlag;
@@ -145,6 +178,10 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   set procurementPlanFlag(value: boolean) {
     this._procurementPlanFlag = value;
     this.setDefaultValueGeneral(this._procurementPlanFlag);
+  }
+
+  get haveContract(): boolean {
+    return !!this.formGroupDetail?.controls.haveContract.value;
   }
 
   endDateLessThanStartDate(control: AbstractControl): ValidationErrors | null {
@@ -231,6 +268,12 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     this._unitPriceSingleHotel = result.join('\n');
   }
 
+  priceChangeEvent(data: any[]) {
+    if (data && data.length > 0) {
+      this.priceChange.emit(data)
+    }
+  }
+
   private _inputPrice: string = '';
   get inputPrice(): string {
     return this._inputPrice
@@ -238,5 +281,13 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
 
   set inputPrice(value: string) {
     this._inputPrice = value;
+  }
+
+  get exchangeRate() {
+    return this._exchangeRate;
+  }
+
+  set exchangeRate(value: any) {
+    this._exchangeRate = value;
   }
 }

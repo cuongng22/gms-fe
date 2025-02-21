@@ -160,28 +160,28 @@
                         ){
                         <span>
                             <span class="text-secondary-bootstrap" i18n="@@completionDate">Completion Date</span>:
-                            {{element.completionDate | date: 'dd/MM/yyyy'}}
+                            {{element.completionDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT, 420 ]}}
                         </span>
                         <br>
                         }
                         @if(element.status === 'confirmed' || element.status === 'approved'){
                         <span>
                             <span class="text-secondary-bootstrap" i18n="@@confirmationDate">Confirmation Date</span>:
-                            {{element.confirmationDate | date: 'dd/MM/yyyy'}}
+                            {{element.confirmationDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT, 420 ]}}
                         </span>
                         <br>
                         }
                         @if(element.status === 'approved'){
                         <span>
                             <span class="text-secondary-bootstrap" i18n="@@approvalDate">Approval Date</span>:
-                            {{element.approvalDate | date: 'dd/MM/yyyy'}}
+                            {{element.approvalDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT, 420 ]}}
                         </span>
                         <br>
                         }
                         @if(element.status === 'rejected'){
                         <span>
                             <span class="text-secondary-bootstrap" i18n="@@rejectionDate">Rejection Date</span>:
-                            {{element.rejectionDate | date: 'dd/MM/yyyy'}}
+                            {{element.rejectionDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT, 420 ]}}
                         </span>
                         <br>
                         <span>

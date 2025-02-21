@@ -13,6 +13,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { PlanCategoryEnum } from '../../../budget-procurement.model';
+import moment from 'moment';
 
 @Component({
   selector: 'app-international-budget-procurement-car-rental',
@@ -70,6 +71,32 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
       item.period = period;
       this.calculateData(item, index);
     });
+  }
+
+  setExchangeRate(exchangeRateData: any) {
+    this.dataSource.data.forEach((item: any, index) => {
+      if (PlanCategoryEnum.BUDGET === this.type()) {
+
+        const _periodStart = moment(item.periodStart);
+        const _exchangeRate = exchangeRateData[_periodStart.format('MMM').toLowerCase()]
+        console.log(_periodStart, _exchangeRate);
+        if (_exchangeRate) {
+          item.rateInPeriod = _exchangeRate;
+        }
+      } else {
+        item.rateInPeriod = exchangeRateData.average
+      }
+      this.calculateData(item, index);
+    });
+  }
+
+  setPrice(priceData: any[]) {
+    const _priceTransportation = priceData.find((item: any) => item.code === 'transportation') as any;
+    this.dataSource.data.forEach((item: any, index: number) => {
+      item.unitPrice = _priceTransportation.priceBeforeTax;
+      item.unitPriceVat = _priceTransportation.priceAfterTax;
+      this.calculateData(item, index);
+    })
   }
 
   private calculateData(item: any, index: number) {
@@ -146,7 +173,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   calculateFormula(data: any, formula: string, key?: string): number {
     // Sử dụng Function để tạo hàm động từ công thức
     const dynamicFunction = new Function(
-      'data','ctz',
+      'data', 'ctz',
       `return ${formula};`    // Công thức cần tính
     );
     //Các tháng đã thực hiện: không tính toán 
@@ -160,7 +187,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   // convertToZero
   ctz(value: any) {
     if (value) {
-      return new Number(value.toString().replace(',','.'));
+      return new Number(value.toString().replace(',', '.'));
     }
     return 0;
   }

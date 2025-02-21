@@ -43,7 +43,7 @@ export const StatusesSummary: { code: string | null, value: string }[] = [
 export function years() {
     let arrYears = []
     const currYear = new Date().getFullYear();
-    for (let index = -10; index < 11; index++) {
+    for (let index = -5; index < 6; index++) {
         arrYears.push({ code: currYear + index, value: currYear + index });
     }
     return arrYears;

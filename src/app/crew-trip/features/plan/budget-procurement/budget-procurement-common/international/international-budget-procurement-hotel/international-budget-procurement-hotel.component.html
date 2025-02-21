@@ -250,8 +250,8 @@
 
             <!-- start phần kế hoạch mua sắm -->
             <ng-container matColumnDef="unitPriceIncludingVat">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="!!generalData?.earlyCheckinFeeFlag && !!generalData?.lateCheckoutFeeFlag ? 6 :
-                            (!!generalData?.earlyCheckinFeeFlag || !!generalData?.lateCheckoutFeeFlag ? 4 : 2)"
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="!!generalData?.earlyCheckinFlag && !!generalData?.lateCheckoutFlag ? 6 :
+                            (!!generalData?.earlyCheckinFlag || !!generalData?.lateCheckoutFlag ? 4 : 2)"
                     i18n="@@unitPriceIncludingVat">
                     Unit Price (Including VAT)
                 </th>

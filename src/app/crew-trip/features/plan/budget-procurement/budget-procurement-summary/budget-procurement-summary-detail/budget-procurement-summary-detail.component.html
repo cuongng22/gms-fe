@@ -67,7 +67,10 @@
     <mat-card-content>
         <app-budget-procurement-general #budgetProcurementGeneral [category]="category()"
             [disabled]="checkStatusCompelted()"
-            (formValueChanges)="formGeneralValueChanges($event)"></app-budget-procurement-general>
+            (formValueChanges)="formGeneralValueChanges($event)"
+            (exchangeRateChange)="exchangeRateChange($event)"
+            (priceChange)="priceChange($event)"
+            />
         <div class="d-flex justify-content-end">
             <button [disabled]="checkStatusCompelted()" mat-button color="primary" type="button" class="add-btn"
                 (click)="summaryData()">

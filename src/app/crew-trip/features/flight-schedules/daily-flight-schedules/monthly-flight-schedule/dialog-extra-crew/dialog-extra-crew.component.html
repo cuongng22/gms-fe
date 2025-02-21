@@ -60,7 +60,7 @@
                     <div class="form-group mb-20">
                         <app-selection-suggest size="md" [options]="arrives" [label]="'Arrive at '+airport"
                             i18n-label="arriveAt" attrValue="FLIGHTID" attrDisplay="FULLNAME"
-                            formControlName="fltIdOut" />
+                            formControlName="fltIdIn" />
                     </div>
                 </div>
             </div>
@@ -69,7 +69,7 @@
                     <div class="form-group mb-20">
                         <app-selection-suggest size="md" [options]="departure" [label]="'Departure at '+airport"
                             i18n-label="departureAt" attrValue="FLIGHTID" attrDisplay="FULLNAME"
-                            formControlName="fltIdIn" />
+                            formControlName="fltIdOut" />
                     </div>
                 </div>
             </div>

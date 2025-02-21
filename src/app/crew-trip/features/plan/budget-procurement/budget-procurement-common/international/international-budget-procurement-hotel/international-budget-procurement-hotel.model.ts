@@ -5,12 +5,13 @@ export const formula: any = {
 
   //Số chuyến bay theo tàu (công thức của kế hoạch mua sắm)
   totalFlightByAircraft: {
-    formula: 'ctz(data.planFlightPeriod) * ctz(data.flightOvernightRate)'
+    formula: 'ctz(data.totalFlightMonth) * ctz(data.flightOvernightRate)',
+    formulaProcurement: 'ctz(data.planFlightPeriod) * ctz(data.flightOvernightRate)'
   },
 
   //Tổng tiền xe chở tổ bay (ngoại tệ)
   totalAmountForeignTransport: {
-    formula: 'ctz(data.totalFlightMonth) * 2 * ctz(data.priceCrewTransport)',
+    formula: 'ctz(data.totalFlightMonth) * 2 * ctz(data.priceCrewTransportVat)',
     groupFormula: 'aircraftType && period',
   },
   //Số phòng đơn
@@ -51,19 +52,19 @@ export const formula: any = {
   },
   //Thành tiền ngoại tệ, - phòng đơn 
   totalAmountForeignSingleRoom: {
-    formula: 'ctz(data.singleRoom) * ctz(data.priceSingleRoom)'
+    formula: 'ctz(data.singleRoom) * ctz(data.priceSingleRoomVat)'
   },
   //Thành tiền ngoại tệ,  - phòng đôi
   totalAmountForeignDoubleRoom: {
-    formula: 'ctz(data.doubleRoom) * ctz(data.priceDoubleRoom)'
+    formula: 'ctz(data.doubleRoom) * ctz(data.priceDoubleRoomVat)'
   },
   //Thành tiền ngoại tệ,  - phòng early-checkin 
   totalAmountForeignEarly: {
-    formula: '(ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarly) + ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly)'
+    formula: '(ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarlyVat) + ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarlyVat)'
   },
   //Thành tiền ngoại tệ, - phòng late checkout
   totalAmountForeignLate: {
-    formula: '(ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLate) + ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate)'
+    formula: '(ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLateVat) + ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLateVat)'
   },
   //Tổng tiền theo loại máy bay
   totalAmountAircraft: {

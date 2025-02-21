@@ -12,9 +12,10 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { checkChange, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './international-budget-procurement-hotel.model';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
-import { PlanCategoryEnum } from '../../../budget-procurement.model';
+import { CategoryEnum, PlanCategoryEnum } from '../../../budget-procurement.model';
 import { el } from 'node_modules/@fullcalendar/core/internal-common';
 import { debounceTime, map, startWith, Subject } from 'rxjs';
+import moment from 'moment';
 
 @Component({
   selector: 'app-international-budget-procurement-hotel',
@@ -82,23 +83,24 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         }
       });
 
-      this.doubleRoomOtherChange.pipe(
-        debounceTime(1000),
-        startWith('')).
-        subscribe((element: any) => {
-          if (element) {
-            console.log(element)
-            this.calculate(element, 'totalAmountForeign');
-            this.calculate(element, 'totalDoubleRoom');
-            this.calculateTotalByGroup(element, element.index, 'totalAmountForeign', 'totalAmountForeignGroup');
-          }
-        })
+    this.doubleRoomOtherChange.pipe(
+      debounceTime(1000),
+      startWith('')).
+      subscribe((element: any) => {
+        if (element) {
+          console.log(element)
+          this.calculate(element, 'totalAmountForeign');
+          this.calculate(element, 'totalDoubleRoom');
+          this.calculateTotalByGroup(element, element.index, 'totalAmountForeign', 'totalAmountForeignGroup');
+        }
+      })
   }
 
   setDataSource(data: any[], generalData?: any) {
     this.periods = []
     this.dataSource.data = [...data];
     this.generalData = { ...generalData };
+    console.log('dataSource.data in hotel: ', this.dataSource.data)
 
     this.getRow();
 
@@ -158,7 +160,58 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
   }
 
+  setExchangeRate(exchangeRateData: any) {
+    this.dataSource.data.forEach((item: any, index) => {
+      if (PlanCategoryEnum.BUDGET === this.type()) {
+
+        const _periodStart = moment(item.periodStart).locale('en');
+        const _exchangeRate = exchangeRateData[_periodStart.format('MMMM').toLowerCase()]
+        console.log(_periodStart, _exchangeRate);
+        if (_exchangeRate) {
+          item.rateInPeriod = _exchangeRate;
+        }
+      } else {
+        item.rateInPeriod = exchangeRateData.average
+      }
+      this.calculateData(item, index);
+    });
+  }
+
+  setPrice(priceData: any[]) {
+    const _priceSingleRoom = priceData.find((item: any) => item.code === 'singleRoom') as any;
+    const _priceDoubleRoom = priceData.find((item: any) => item.code === 'doubleRoom') as any;
+    const _priceEarlyCheckinSingleRoom = priceData.find((item: any) => item.code === 'earlyCheckinSingleRoom') as any;
+    const _priceEarlyCheckinDoubleRoom = priceData.find((item: any) => item.code === 'earlyCheckinDoubleRoom') as any;
+    const _priceLateCheckoutSingleRoom = priceData.find((item: any) => item.code === 'lateCheckoutSingleRoom') as any;
+    const _priceLateCheckoutDoubleRoom = priceData.find((item: any) => item.code === 'lateCheckoutDoubleRoom') as any;
+    const _priceTransportation = priceData.find((item: any) => item.code === 'transportation') as any;
+    this.dataSource.data.forEach((item: any, index: number) => {
+      item.priceSingleRoom = _priceSingleRoom.priceBeforeTax;
+      item.priceSingleRoomVat = _priceSingleRoom.priceAfterTax
+
+      item.priceDoubleRoom = _priceDoubleRoom.priceBeforeTax;
+      item.priceDoubleRoomVat = _priceDoubleRoom.priceAfterTax
+
+      item.priceSingleRoomEarly = _priceEarlyCheckinSingleRoom.priceBeforeTax;
+      item.priceSingleRoomEarlyVat = _priceEarlyCheckinSingleRoom.priceAfterTax;
+
+      item.priceDoubleRoomEarly = _priceEarlyCheckinDoubleRoom.priceBeforeTax;
+      item.priceDoubleRoomEarlyVat = _priceEarlyCheckinDoubleRoom.priceAfterTax;
+
+      item.priceSingleRoomLate = _priceLateCheckoutSingleRoom.priceBeforeTax;
+      item.priceSingleRoomLateVat = _priceLateCheckoutSingleRoom.priceAfterTax;
+
+      item.priceDoubleRoomLate = _priceLateCheckoutDoubleRoom.priceBeforeTax;
+      item.priceDoubleRoomLateVat = _priceLateCheckoutDoubleRoom.priceAfterTax;
+
+      item.priceCrewTransport = _priceTransportation.priceBeforeTax;
+      item.priceCrewTransportVat = _priceTransportation.priceAfterTax;
+      this.calculateData(item, index);
+    })
+  }
+
   setOvernightRates(data: any, actionType: string, length?: number, planFlightByOvernight?: any[]) {
+    debugger
     let checkExists: boolean;
     switch (actionType) {
       case 'edit':
@@ -235,16 +288,16 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
    * @param item Giá trị từng dòng của dataSource theo công thức
    */
   private calculateData(item: any, index: number) {
-
+    // thêm tỉ lệ chuyến bay nghỉ đêm
+    const _flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOverNight === item.overnight).map(item => item.flightRate);
+    item.flightOvernightRate = Number(_flightOvernightRate)
     if (this.type() === PlanCategoryEnum.PROCUREMENT) {
-      // thêm tỉ lệ chuyến bay nghỉ đêm
-      item.flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOvernight === item.overnight).map(item => item.flightRate);
-
       // thêm số chuyến bay theo giai đoạn
-      item.planFlightPeriod = this.planFlightPeriods.filter(itemFilter => itemFilter.periodStart === item.periodStart && itemFilter.periodEnd === item.periodEnd && itemFilter.aircraftType === item.aircraftType).map(item => item.numberOfFlight).reduce((acc, value) => acc + value, 0);
-      //Số chuyến bay theo tàu 
-      this.calculate(item, 'totalFlightByAircraft');
+      const _planFlightPeriod = this.planFlightPeriods.filter(itemFilter => itemFilter.periodStart === item.periodStart && itemFilter.periodEnd === item.periodEnd && itemFilter.aircraftType === item.aircraftType).map(item => item.numberOfFlight).reduce((acc, value) => acc + value, 0);
+      item.planFlightPeriod = Number(_planFlightPeriod)
     }
+    //Số chuyến bay theo tàu 
+    this.calculate(item, 'totalFlightByAircraft');
     //Số phòng đơn
     this.calculate(item, 'singleRoom');
     //Số phòng đôi
@@ -344,6 +397,11 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     // Tháng nào đã thực hiện thì tính theo công thưc mới
     const objFormula = formula[key];
     let strFomular = objFormula.formula;
+    if (this.type() === PlanCategoryEnum.PROCUREMENT) {
+      if (objFormula.formulaProcurement) {
+        strFomular = objFormula.formulaProcurement;
+      }
+    }
     if (this.updateBudgetPlan() && item.monthIsPerform) {
       if (objFormula.formulaUpdateBudgetPlan) {
         strFomular = objFormula.formulaUpdateBudgetPlan;
@@ -381,7 +439,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   // convertToZero
   ctz(value: any) {
     if (value) {
-      return new Number(value.toString().replace(',','.'));
+      return new Number(value.toString().replace(',', '.'));
     }
     return 0;
   }
