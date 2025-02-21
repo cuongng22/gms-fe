@@ -1,0 +1,68 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+    <div class="d-flex align-items-center justify-content-between mt-2">
+        <button type="button" class="btn btn-outline-secondary mr-20" i18n="@@back"
+            [routerLink]="['/plan/est-plan/budget-procurement']">
+            <i class="material-symbols-outlined">
+                undo
+            </i>
+            Back
+        </button>
+        <h5 class="mb-0" i18n="@@estimatedCostSummary">
+            Estimated cost summary
+        </h5>
+    </div>
+
+    <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@plan">
+            Plan
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@estimatedPlan">
+            Estimated/Plan
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@budgetProcurementPlan">
+            Budget & Procurement plan
+        </li>
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@estimatedCostSummary">
+            Estimated cost summary
+        </li>
+    </ol>
+</div>
+
+<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+            <mat-tab label="All" i18n="@@all">
+                <ng-template matTabContent>
+                    <app-estimated-cost-summary-search [categoryType]="CategoriesEnum.ALL" (search)="searchSummary($event,'All')">
+                    </app-estimated-cost-summary-search>
+                    <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.ALL" [planBudgetProcurementId]="id()"
+                        #budgetProcurementSummaryListAll>
+                    </app-estimated-cost-summary-list>
+                </ng-template>
+            </mat-tab>
+            <mat-tab label="International" i18n="@@international">
+                <ng-template matTabContent>
+                    <app-estimated-cost-summary-search [categoryType]="CategoriesEnum.INTERNATIONAL"
+                        (search)="searchSummary($event,CategoriesEnum.INTERNATIONAL)">
+                    </app-estimated-cost-summary-search>
+                    <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.INTERNATIONAL"
+                        [planBudgetProcurementId]="id()" #budgetProcurementSummaryListInternational>
+                    </app-estimated-cost-summary-list>
+                </ng-template>
+
+            </mat-tab>
+            <mat-tab label="Domestic" i18n="@@domestic">
+                <ng-template matTabContent>
+                    <app-estimated-cost-summary-search [categoryType]="CategoriesEnum.DOMESTIC"
+                        (search)="searchSummary($event,CategoriesEnum.DOMESTIC)">
+                    </app-estimated-cost-summary-search>
+                    <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.DOMESTIC"
+                        [planBudgetProcurementId]="id()" #budgetProcurementSummaryListDomestic>
+                    </app-estimated-cost-summary-list>
+                </ng-template>
+
+            </mat-tab>
+        </mat-tab-group>
+    </mat-card-content>
+</mat-card>

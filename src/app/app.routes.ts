@@ -65,6 +65,10 @@ import { CarBookingComponent } from "src/app/crew-trip/features/car-room/car-boo
 import { InvoiceActualCostTabComponent } from "src/app/crew-trip/features/invoice/actual-cost/invoice-actual-cost-tab.component";
 import { WetLeaseCharterComponent } from './crew-trip/features/plan/wet-lease-charter/wet-lease-charter.component';
 import { CharterDetailComponent } from './crew-trip/features/plan/wet-lease-charter/charter/charter-detail/charter-detail.component';
+import { EstimatedCostComponent } from './crew-trip/features/plan/estimated-cost/estimated-cost.component';
+import { EstimatedCostListComponent } from './crew-trip/features/plan/estimated-cost/estimated-cost-list/estimated-cost-list.component';
+import { EstimatedCostSummaryComponent } from './crew-trip/features/plan/estimated-cost/estimated-cost-summary/estimated-cost-summary.component';
+import { EstimatedCostSummaryDetailComponent } from './crew-trip/features/plan/estimated-cost/estimated-cost-summary/estimated-cost-summary-detail/estimated-cost-summary-detail.component';
 
 
 export const routes: Routes = [
@@ -81,6 +85,7 @@ export const routes: Routes = [
     canActivate: [AuthGuard],
     children: [
       { path: 'ke-hoach', component: KeHoachComponent },
+      { path: 'contract', component: ContractComponent },
       {
         path: 'system/admin',
         children: [
@@ -157,7 +162,20 @@ export const routes: Routes = [
               },
             ],
           },
-        ],
+          {
+            path: 'est-plan/est-cost', component: EstimatedCostComponent,
+            children: [
+              { path: '', component: EstimatedCostListComponent },
+              {
+                path: ':id/summary', component: EstimatedCostSummaryComponent, pathMatch: 'full',
+              },
+              {
+                path: ':est-cost-id/summary/:id/detail',
+                component: EstimatedCostSummaryDetailComponent
+              }
+            ]
+          }
+        ]
       },
       {
         path: 'category',
