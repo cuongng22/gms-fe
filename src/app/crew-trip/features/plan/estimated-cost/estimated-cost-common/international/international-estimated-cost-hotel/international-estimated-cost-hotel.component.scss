@@ -1,0 +1,21 @@
+
+
+:host::ng-deep {
+    .mat-mdc-table.mdc-data-table__table .mat-mdc-footer-row .mat-mdc-footer-cell {
+        font-weight: 600 !important;
+    }
+    
+    .max-height-600 {
+        max-height: 600px;
+    }
+
+    .mat-column-singleRoomOther {
+        min-width: 140px !important;
+        max-width: 140px !important;
+    }
+
+    .mat-column-doubleRoomOther {
+        min-width: 140px !important;
+        max-width: 140px !important;
+    }
+}

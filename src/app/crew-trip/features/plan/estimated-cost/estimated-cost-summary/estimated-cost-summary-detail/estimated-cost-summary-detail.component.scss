@@ -1,0 +1,22 @@
+// .mat-expansion-panel:not([class*=mat-elevation-z]) {
+//     box-shadow: none;
+// }
+
+:host::ng-deep {
+    .remove-mat-expansion-panel-padding .mat-expansion-panel-content .mat-expansion-panel-body {
+        padding: 10px !important;
+
+        mat-expansion-panel-header {
+            padding: 0 12px !important;
+        }
+    }
+
+    .remove-mat-expansion-panel-padding {
+        mat-expansion-panel-header {
+            padding: 0 12px !important;
+        }
+    }
+    // .mat-expansion-panel-header:hover{
+    //     border: 1px solid var(--mat-expansion-header-hover-state-layer-color);
+    // }
+}

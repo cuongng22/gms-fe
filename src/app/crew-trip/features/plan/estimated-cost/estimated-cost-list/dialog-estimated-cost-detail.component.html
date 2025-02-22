@@ -11,33 +11,24 @@
             </h5>
             }
         </mat-card-title>
-        <mat-card-subtitle>
-            <button mat-button (click)="close()">
-                <i class="ri-close-fill"></i>
-            </button>
-        </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
         <form [formGroup]="formGroupDetail" (ngSubmit)="save()" autocomplete="off">
             <div class="row">
                 <div class="col-md-12">
                     <div class="form-group mb-20" sizeInput="md">
-                        <mat-checkbox formControlName="updateBudgetPlan"
-                            i18n="@@planningForFluctuatingProduction">Planning for fluctuating production</mat-checkbox>
-                    </div>
-                    <div class="form-group mb-20" sizeInput="md">
                         <mat-form-field>
-                            <mat-label i18n="@@planName">
-                                Plan name
+                            <mat-label i18n="@@name">
+                                Name
                             </mat-label>
-                            <input matInput formControlName="name" required>
+                            <input matInput formControlName="name" required maxlength="500">
                             <mat-error *ngxControlError="formGroupDetail.controls.name; track: 'required'"
-                                i18n="@@planNameRequired">
-                                Plan name {{MESSAGE.REQUIRED}}
+                                i18n="@@nameRequired">
+                                Name {{MESSAGE.REQUIRED}}
                             </mat-error>
                             <mat-error *ngxControlError="formGroupDetail.controls.name; track: 'maxlength'"
-                                i18n="@@planNameMaxlength">
-                                Plan name {{ MESSAGE.MAX_LENGTH_INVALID |
+                                i18n="@@nameMaxlength">
+                                Name {{ MESSAGE.MAX_LENGTH_INVALID |
                                 dataTransformPipe:[Constant.STRING_FORMAT,500]}}
                             </mat-error>
                         </mat-form-field>
@@ -47,20 +38,15 @@
                             <mat-label i18n="@@year">
                                 Year
                             </mat-label>
-                            <input matInput digitOnly formControlName="year" required>
+                            <input matInput digitOnly formControlName="year" required maxlength="5">
                             <mat-error *ngxControlError="formGroupDetail.controls.year; track: 'required'"
                                 i18n="@@yearRequired">
                                 Year {{MESSAGE.REQUIRED}}
                             </mat-error>
                             <mat-error *ngxControlError="formGroupDetail.controls.year; track: 'maxlength'"
-                                i18n="@@yearMaxlength">
-                                Year {{ MESSAGE.MUST_LENGTH_INVALID |
-                                dataTransformPipe:[Constant.STRING_FORMAT,4]}}
-                            </mat-error>
-                            <mat-error *ngxControlError="formGroupDetail.controls.year; track: 'minlength'"
-                                i18n="@@yearMaxlength">
-                                Year {{ MESSAGE.MUST_LENGTH_INVALID |
-                                dataTransformPipe:[Constant.STRING_FORMAT,4]}}
+                                i18n="@@noteMaxlength">
+                                Year {{ MESSAGE.MAX_LENGTH_INVALID |
+                                dataTransformPipe:[Constant.STRING_FORMAT,5]}}
                             </mat-error>
                         </mat-form-field>
                     </div>
@@ -69,7 +55,7 @@
                             <mat-label i18n="@@version">
                                 Version
                             </mat-label>
-                            <input matInput formControlName="version" required>
+                            <input matInput formControlName="version" required maxlength="20">
                             <mat-error *ngxControlError="formGroupDetail.controls.version; track: 'required'"
                                 i18n="@@versionRequired">
                                 Version {{MESSAGE.REQUIRED}}
@@ -78,10 +64,6 @@
                                 i18n="@@noteMaxlength">
                                 Version {{ MESSAGE.MAX_LENGTH_INVALID |
                                 dataTransformPipe:[Constant.STRING_FORMAT,20]}}
-                            </mat-error>
-                            <mat-error *ngxControlError="formGroupDetail.controls.version; track: 'existsVersion'"
-                                i18n="@@noteMaxlength">
-                                Exists
                             </mat-error>
                         </mat-form-field>
                     </div>
