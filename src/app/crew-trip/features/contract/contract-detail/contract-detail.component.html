@@ -1413,7 +1413,7 @@
                 <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                   <div class="input-cell">
                     <mat-form-field class="edit-inline-table">
-                      <input formControlName="rate" matInput readonly required trim="blur">
+                      <input formControlName="rate" matInput required trim="blur">
                       <mat-error *ngxControlError="row.controls['rate']; track: 'required'">
                         <span i18n>Ratio</span><span i18n> is required</span>
                       </mat-error>
