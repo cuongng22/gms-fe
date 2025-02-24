@@ -87,4 +87,10 @@ export class ContractService extends BaseService {
     const url = `${this.api}/${this.path}/appendix/${id}`;
     return firstValueFrom(this.http.delete<T>(url, this.httpOptions));
   }
+
+  syncContract(body: any): Promise<any> {
+    const url = `${this.api}/${this.path}/sync`;
+    const params = new HttpParams({fromObject: removeNullValues(body)});
+    return firstValueFrom(this.http.get<any>(url, {params}));
+  }
 }

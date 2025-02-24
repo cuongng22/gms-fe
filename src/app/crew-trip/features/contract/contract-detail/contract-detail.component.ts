@@ -48,13 +48,14 @@ import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {PdfViewerComponent} from 'src/app/crew-trip/shared/pdf-viewer/pdf-viewer.component';
 import {
-  DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE,
+  DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE, PARTERN,
 } from 'src/app/crew-trip/shared/utils/constant';
 import {NgxControlError} from "ngxtension/control-error";
 import {SelectionSuggestComponent} from "src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component";
 import {BankCharge} from "src/app/crew-trip/features/contract/contract-lookup";
 import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog";
 import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
+import {beforeValidator, lessThanValidator, timeBeforeValidator} from "src/app/crew-trip/shared/utils/common";
 
 @Component({
   selector: 'app-contract-detail',
@@ -90,7 +91,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   listMaNghiepVu: any = [];
   listKhoanMucKhns: any = [];
   listQuocGia: any = [];
-  listHHDV: any = [];
   listContractSpec = ContractLookup.ContractSpec;
   listContractType = ContractLookup.ContractType;
   listContractForm = ContractLookup.ContractForm;
@@ -115,7 +115,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         await this.baseService
           .getMarket({marketCode: value.toUpperCase()})
           .then((res) => {
-            const fieldContract = ['marketName', 'nation', 'marketType', 'flightGroup',];
+            const fieldContract = ['marketName', 'nation', 'marketType', 'flightGroup'];
             if (res.status == HttpStatusCode.Ok) {
               //Kiểm tra thị trường nếu là quốc tế mà mã tiền tệ là VND thì báo lỗi
               if (res.data.marketType == 'International' && this.formGroupDetail.getRawValue()['currency'] === 'VND') {
@@ -200,7 +200,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     this.formGroupDetail = this.fb.group({
       doiTuongDichVu: ['', Validators.required],
       contractSpec: [], //tab4
-      marketCode: [, [Validators.minLength(3), Validators.maxLength(3), Validators.pattern('^[a-zA-Z0-9]+$')]],
+      marketCode: [, [Validators.minLength(3), Validators.maxLength(3), Validators.pattern(PARTERN.STRING)]],
       marketName: [, [Validators.maxLength(250)]],
       marketType: [],
       nation: [],
@@ -209,16 +209,16 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       flightGroup: [],
       statusUsage: [],
       supplierName: [, [Validators.maxLength(250)]],
-      supplierPhone: [, [Validators.maxLength(20)]],
-      supplierEmail: ['', [Validators.email, Validators.maxLength(250)]],
+      supplierPhone: [, [Validators.maxLength(20), Validators.pattern(PARTERN.PHONE)]],
+      supplierEmail: ['', [Validators.maxLength(250), Validators.pattern(PARTERN.EMAIL)]],
       email: [],
       carType: [, [Validators.maxLength(150)]],
-      standardCheckIn: [],
+      standardCheckIn: [, [Validators.pattern(PARTERN.HOUR24)]],
       standardCheckOut: [],
       standardCheckout: [],
       notes: [, [Validators.maxLength(500)]],
-      isTaxVehicle: [],
-      isTaxHotel: [],
+      isTaxHotelRevert: [true],
+      isTaxCarRevert: [],
       tempp: [],
       id: [],
       bizDocId: [],
@@ -253,7 +253,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       dueDateNumber: [],
       handoverDate: [],
       documentsList: [],
-      bankAccountNoB: [, [Validators.maxLength(40), Validators.pattern('^[a-zA-Z0-9]+$')]],
+      bankAccountNoB: [, [Validators.maxLength(40), Validators.pattern(PARTERN.STRING)]],
       peopleName: [, [Validators.maxLength(250)]],
       bankNameB: [, [Validators.maxLength(190)]],
       bankAddressB: [, [Validators.maxLength(512)]],
@@ -263,7 +263,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       swiftCodeB: [, [Validators.maxLength(190)]],
       bankCharge: [],
       bankCharge1: [],
-      bankAccountNoB1: [[Validators.maxLength(40), Validators.pattern('^[a-zA-Z0-9]+$')]],
+      bankAccountNoB1: [[Validators.maxLength(40), Validators.pattern(PARTERN.STRING)]],
       bankNameB1: [, [Validators.maxLength(190)]],
       swiftCodeB1: [, [Validators.maxLength(190)]],
       iban: [, [Validators.maxLength(120)]],
@@ -271,7 +271,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       isVehicle: [],
       hotel: [],
       vehicle: [],
-      priceUnitInfo: [this.fb.array([])],
+      priceUnitInfo: [],
       priceUnitNotAllDay: [],
       dayUses: [],
       appendixCode: [],
@@ -333,12 +333,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     this.dsDayUse.data = this.tblDayUse.controls;
   }
 
-  addRow(table: any, addType: any) {
+  addRow(table: any, addType: any, init?: any) {
     let row: FormGroup = this.fb.group({})
     if (addType === 'tblPriceUnit') {
       row = this.fb.group({
         id: [],
-        serviceCode: [this.listHHDV[0]?.code],
+        serviceCode: [this.listFeeService[0]?.code],
         vnaTransId: [, [Validators.maxLength(50)]],
         expenseCatgId: [, [Validators.maxLength(50)]],
         priceNoTax: [],
@@ -349,27 +349,35 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         notes: [, [Validators.maxLength(50)]],
         bizDocId: [],
         fromDate: [this.formGroupDetail.getRawValue().effectiveDate || ''],
-        toDate: [this.formGroupDetail.getRawValue().expiryDate||''],
+        toDate: [this.formGroupDetail.getRawValue().expiryDate || ''],
         active: [],
-        serviceName: [this.listHHDV[0]?.name],
-        serviceUnit: [this.listHHDV[0]?.unit],
+        serviceName: [this.listFeeService[0]?.name],
+        serviceUnit: [this.listFeeService[0]?.unit],
       });
+      row.controls['toDate'].setValidators(beforeValidator(row.controls['fromDate']));
+      init && row.patchValue(init);
       table.push(row);
       this.dsPriceUnit.data = table.controls;
     } else if (addType === 'tblEciLco' || addType === 'tblOvernightStay') {
       row = this.fb.group({
         id: [,], type: [,], fromHour: [,], rate: [,], toHour: [,], active: [,], typeCheck: [,], bizdocId: [,],
       });
+      row.controls['rate'].setValidators(lessThanValidator(2));
+      row.controls['toHour'].setValidators(timeBeforeValidator(row.controls['fromHour']));
       table.push(row);
       if (addType === 'tblEciLco') {
+        init && row.patchValue(init);
         this.dsEciLco.data = table.controls;
       } else if (addType === 'tblOvernightStay') {
+        init && row.patchValue(init);
         this.dsOvernightStay.data = table.controls;
       }
     } else if (addType === 'tblDayUse') {
       row = this.fb.group({
         id: [,], bizdocId: [,], checkinFrom: [,], checkoutTo: [,], maxHour: [,], rate: [,], rate1: [,], active: [,],
       });
+      row.controls['checkoutTo'].setValidators(timeBeforeValidator(row.controls['checkinFrom']));
+      init && row.patchValue(init);
       table.push(row);
       this.dsDayUse.data = table.controls;
     }
@@ -391,20 +399,23 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   override async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
-        // this.loadListMaNghiepVu(),
-        this.loadListQuocGia(), this.loadListHHDV(), this.loadListFlightMarket(), this.setReadMode(this.formGroupDetail),]).then(() => {
+      await Promise.all([
+        this.detail(this.id),
+        this.loadListQuocGia(), this.loadListFeeService(),
+        this.loadListFlightMarket(),
+        this.setReadMode(this.formGroupDetail),
+      ]).then((res) => {
         if (this.formGroupDetail.getRawValue().isHotel && this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({
-            doiTuongDichVu: '3', isTaxHotel: true, isTaxVehicle: true,
+            doiTuongDichVu: '3',
           });
         } else if (this.formGroupDetail.getRawValue().isHotel) {
           this.formGroupDetail.patchValue({
-            doiTuongDichVu: '1', isTaxHotel: true,
+            doiTuongDichVu: '1'
           });
         } else if (this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({
-            doiTuongDichVu: '2', isTaxVehicle: true,
+            doiTuongDichVu: '2'
           });
         }
         this.formGroupDetail.patchValue({
@@ -429,6 +440,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.partnerChangeBrake = true;
       });
     } catch (e) {
+      console.log(e)
     } finally {
       await this.spinner.hide();
     }
@@ -544,16 +556,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     });
   }
 
-  async loadListHHDV() {
-    await this.serviceFeeService
-      .search({page: 0, limit: 99999})
-      .then((res) => {
-        if (res.data) {
-          this.listHHDV = res.data.content;
-        }
-      });
-  }
-
   async loadListKhoanMucKhns() {
     await this.baseService.listKhoanMucKhns().then((res) => {
       if (res.data) {
@@ -590,18 +592,17 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async nationSelected(event: any) {
-    const nation = this.listQuocGia.find((s: any) => s.id === (event?.value || event),);
+    const nation = this.listQuocGia.find((s: any) => s.code === (event?.value || event),);
     this.formGroupDetail.patchValue({
-      nationId: nation?.id, nation: nation?.engName, marketType: nation?.code === 'VN' ? 'Domestic' : 'International' || ''
+      nationId: nation?.id,
+      marketType: nation?.code === 'VN' ? 'Domestic' : 'International' || ''
     });
   }
 
   async getPartnerInfo() {
     await this.baseService
       .getPartnerInfo({
-        partnerCode: this.formGroupDetail.getRawValue().partnerCode,
-        isHotel: this.formGroupDetail.getRawValue().isHotel,
-        isVehicle: this.formGroupDetail.getRawValue().isVehicle,
+        partnerCode: this.formGroupDetail.getRawValue().partnerCode, isHotel: this.formGroupDetail.getRawValue().isHotel, isVehicle: this.formGroupDetail.getRawValue().isVehicle,
       })
       .then((res) => {
         if (res.status == HttpStatusCode.Ok && res.data) {
@@ -688,29 +689,27 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     } else {
       this.formGroupDetail.patchValue({});
     }
-    this.formGroupDetail.getRawValue()?.priceUnitInfo.forEach((s: any) => {
-      let row = this.addRow(this.tblPriceUnit, 'tblPriceUnit');
+
+    this.formGroupDetail.getRawValue().priceUnitInfo?.forEach((s: any) => {
       s = {
         ...s, //serviceFeeCode: s.serviceCode,
-        serviceName: this.listHHDV.find((s1: any) => s1.code === s.serviceCode,)?.name,
-        serviceUnit: this.listHHDV.find((s1: any) => s1.code === s.serviceCode,)?.unit,
+        serviceName: this.listFeeService.find((s1: any) => s1.code === s.serviceCode,)?.name,
+        serviceUnit: this.listFeeService.find((s1: any) => s1.code === s.serviceCode,)?.unit,
       }
-      row.patchValue(s);
+      this.addRow(this.tblPriceUnit, 'tblPriceUnit', s);
     });
 
-    this.formGroupDetail.getRawValue()?.priceUnitNotAllDay.forEach((s: any) => {
+    this.formGroupDetail.getRawValue().priceUnitNotAllDay?.forEach((s: any) => {
       let row: FormGroup = this.fb.group({});
       if (s.type === '1') {
-        row = this.addRow(this.tblEciLco, 'tblEciLco');
+        row = this.addRow(this.tblEciLco, 'tblEciLco', s);
       } else if (s.type === '2') {
-        row = this.addRow(this.tblOvernightStay, 'tblOvernightStay');
+        row = this.addRow(this.tblOvernightStay, 'tblOvernightStay', s);
       }
-      row.patchValue(s);
     });
 
-    this.formGroupDetail.getRawValue()?.dayUses.forEach((s: any) => {
-      let row = this.addRow(this.tblDayUse, 'tblDayUse');
-      row.patchValue(s);
+    this.formGroupDetail.getRawValue().dayUses?.forEach((s: any) => {
+      let row = this.addRow(this.tblDayUse, 'tblDayUse', s);
     });
   }
 
@@ -756,22 +755,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.formGroupDetail.patchValue({
           id: this.formGroupDetail.getRawValue().bizDocId,
         });
-        let body = this.formGroupDetail.getRawValue();
-        body.priceUnitNotAllDay = {type1: this.tblEciLco.value, type2: this.tblOvernightStay.value}
-        body.dayUses = this.tblDayUse.value[0];
-        body.priceUnitInfo.forEach((s: any) => {
-          s.priceBeforeTax = s.priceNoTax;
-          s.serviceFeeCode = s.serviceCode
-        });
+        let body = this.bodyBuilder();
         res = await this.baseService.update(body);
       } else {
-        let body = this.formGroupDetail.getRawValue();
-        body.priceUnitNotAllDay = {type1: this.tblEciLco.value, type2: this.tblOvernightStay.value}
-        body.dayUses = this.tblDayUse.value[0];
-        body.priceUnitInfo.forEach((s: any) => {
-          s.priceBeforeTax = s.priceNoTax;
-          s.serviceFeeCode = s.serviceCode
-        });
+        let body = this.bodyBuilder()
         res = await this.baseService.create(body);
       }
       await this.search();
@@ -781,6 +768,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.goBack();
       }
     } catch (e: any) {
+      console.log(e)
       this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,);
       return e;
     } finally {
@@ -829,8 +817,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   async onChangeHHDV(row: any) {
     let data = row.getRawValue();
     row.patchValue({
-      serviceName: this.listHHDV.find((s: any) => s.code == data.serviceCode,)?.name,
-      serviceUnit: this.listHHDV.find((s: any) => s.code == data.serviceCode,)?.unit,
+      serviceName: this.listFeeService.find((s: any) => s.code == data.serviceCode,)?.name || null,
+      serviceUnit: this.listFeeService.find((s: any) => s.code == data.serviceCode,)?.unit || null,
     })
   }
 
@@ -838,15 +826,15 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     if ($event) {
       if ($event.value == 1) {
         this.formGroupDetail.patchValue({
-          isHotel: true, isVehicle: false, isTaxHotel: true, isTaxVehicle: false,
+          isHotel: true, isVehicle: false, isTaxHotelRevert: true, isTaxCarRevert: false,
         });
       } else if ($event.value == 2) {
         this.formGroupDetail.patchValue({
-          isHotel: false, isVehicle: true, isTaxVehicle: true, isTaxHotel: false,
+          isHotel: false, isVehicle: true, isTaxCarRevert: true, isTaxHotelRevert: false,
         });
       } else if ($event.value == 3) {
         this.formGroupDetail.patchValue({
-          isHotel: true, isVehicle: true, isTaxVehicle: true, isTaxHotel: true,
+          isHotel: true, isVehicle: true, isTaxCarRevert: true, isTaxHotelRevert: true,
         });
       }
       this.getPartnerInfo();
@@ -856,11 +844,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   onChangeTaxHotel(event: MatCheckboxChange) {
     if (event.checked) {
       this.formGroupDetail.patchValue({
-        isTaxHotel: true,
+        isTaxHotelRevert: true,
       });
     } else {
       this.formGroupDetail.patchValue({
-        isTaxHotel: false,
+        isTaxHotelRevert: false,
       });
     }
   }
@@ -868,11 +856,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   onChangeTaxCar(event: MatCheckboxChange) {
     if (event.checked) {
       this.formGroupDetail.patchValue({
-        isTaxVehicle: true,
+        isTaxCarRevert: true,
       });
     } else {
       this.formGroupDetail.patchValue({
-        isTaxVehicle: false,
+        isTaxCarRevert: false,
       });
     }
   }
@@ -892,5 +880,25 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
 
   isPL() {
     return this.viewType === 'PL';
+  }
+
+  bodyBuilder() {
+    let body = this.formGroupDetail.getRawValue();
+    body.priceUnitNotAllDay = {type1: this.tblEciLco.value, type2: this.tblOvernightStay.value}
+    body.dayUses = this.tblDayUse.value[0];
+    body.dayUses.lengthTime = body.dayUses?.maxHour || 0;
+    body.priceUnitInfo = this.tblPriceUnit.value;
+    body.priceUnitInfo.forEach((s: any) => {
+      s.priceBeforeTax = s.priceNoTax;
+      s.priceAfterTax = s.priceWithTax;
+      s.serviceFeeCode = s.serviceCode
+      s.codeNghiepVu = s.vnaTransId
+      s.codeKHNS = s.expenseCatgId
+      s.totalVatTax = s.originalAmount3
+    });
+    body.isTaxHotel = body.isTaxHotelRevert;
+    body.isTaxVehicle = body.isTaxCarRevert;
+    console.log(body, 'body')
+    return body;
   }
 }

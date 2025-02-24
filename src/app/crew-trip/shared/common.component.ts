@@ -398,7 +398,7 @@ export class CommonComponent
 			.search({ page: 0, limit: 99999 })
 			.then((res) => {
 				if (res.data) {
-					this.listFeeService = res.data.content;
+          this.listFeeService = res.data.content.filter((s: any) => s.active == true);
 				}
 			});
 	}

@@ -232,6 +232,10 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }
 
   async syncDWH() {
+    await this.baseService.syncContract({}).then(res=>{
+      console.log(res);
+      this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
+    });
   }
 
   async showListAnnex(id: any) {

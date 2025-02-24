@@ -52,7 +52,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 		if (this.requiredControl) {
 			this.viewControl.addValidators(Validators.required);
 		}
-		
+
 
 	}
 	ngAfterViewChecked(): void {
@@ -71,6 +71,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 	@Input() label = '';
 	@Input() attrValue = '';
 	@Input() attrDisplay = '';
+	@Input() attrDisplay2 = '';
 	@Input() editInlineTable = false
 	@Output() clearInputEvent = new EventEmitter<void>();
 	selectionChange = output<any>();
