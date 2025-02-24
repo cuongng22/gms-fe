@@ -771,10 +771,9 @@
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
-            <app-selection-suggest (selectionchange)="nationSelected(formGroupDetail.getRawValue().nation)" [options]="listQuocGia"
+            <app-selection-suggest (selectionchange)="nationSelected(formGroupDetail.getRawValue().nationId)" [options]="listQuocGia"
                                    attrDisplay="vniName"
-                                   [isDisabled]="false"
-                                   attrValue="code" formControlName="nation" i18n-label label="Nation"
+                                   attrValue="id" formControlName="nationId" i18n-label label="Nation"
                                    required size="sm"/>
             <!--<mat-form-field>
               <mat-label i18n>Country</mat-label>
@@ -875,68 +874,68 @@
               </mat-error>
             </mat-form-field>
           </div>
-          @if(formGroupDetail.getRawValue().isVehicle){
-          <div class="col-6" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Vehicle Type</mat-label>
-              <input formControlName="carType" matInput trim="blur">
-              <mat-hint align="start"><i i18n="">Only applicable for car rentals</i></mat-hint>
-              @if (!!formGroupDetail.controls['carType'].hasError('required')) {
-                <mat-error><span i18n>Vehicle Type</span><span i18n> is required</span></mat-error>
-              }
-              <mat-error *ngxControlError="formGroupDetail.controls['carType']; track: 'maxlength'">
-                <span i18n>Vehicle Type</span><span i18n> must be less than 150 characters</span>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        }
+          @if (formGroupDetail.getRawValue().isVehicle) {
+            <div class="col-6" sizeInput='sm'>
+              <mat-form-field>
+                <mat-label i18n>Vehicle Type</mat-label>
+                <input formControlName="carType" matInput trim="blur">
+                <mat-hint align="start"><i i18n="">Only applicable for car rentals</i></mat-hint>
+                @if (!!formGroupDetail.controls['carType'].hasError('required')) {
+                  <mat-error><span i18n>Vehicle Type</span><span i18n> is required</span></mat-error>
+                }
+                <mat-error *ngxControlError="formGroupDetail.controls['carType']; track: 'maxlength'">
+                  <span i18n>Vehicle Type</span><span i18n> must be less than 150 characters</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+          }
         </div>
         <!--        dong4-->
-        @if(formGroupDetail.getRawValue().isHotel){
-        <div class="row mt-20">
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Standard Check-in Time</mat-label>
-              <div class="time-picker">
-                <input [disableClick]="true" [format]="24" [ngxTimepicker]="toggleTimepicker1"
-                       formControlName="standardCheckIn"
-                       matInput [required] = "formGroupDetail.getRawValue().isHotel" trim="blur">
-                <ngx-material-timepicker-toggle [for]="toggleTimepicker1"
-                                                class="time-picker-clock"></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #toggleTimepicker1 [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                         [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                ></ngx-material-timepicker>
-              </div>
-              @if (!!formGroupDetail.controls['standardCheckIn'].hasError('required')) {
-                <mat-error><span i18n>Standard Checkin</span><span i18n> is required</span></mat-error>
-              }
-              <mat-error *ngxControlError="formGroupDetail.controls['standardCheckIn']; track: 'pattern'">
-                <span i18n>Standard Check-in Time</span><span i18n> must be from 00:00 to 23:59</span>
-              </mat-error>
-            </mat-form-field>
+        @if (formGroupDetail.getRawValue().isHotel) {
+          <div class="row mt-20">
+            <div class="col-3" sizeInput='sm'>
+              <mat-form-field>
+                <mat-label i18n>Standard Check-in Time</mat-label>
+                <div class="time-picker">
+                  <input [disableClick]="true" [format]="24" [ngxTimepicker]="toggleTimepicker1"
+                         formControlName="standardCheckIn"
+                         matInput [required]="formGroupDetail.getRawValue().isHotel" trim="blur">
+                  <ngx-material-timepicker-toggle [for]="toggleTimepicker1"
+                                                  class="time-picker-clock"></ngx-material-timepicker-toggle>
+                  <ngx-material-timepicker #toggleTimepicker1 [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                           [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                  ></ngx-material-timepicker>
+                </div>
+                @if (!!formGroupDetail.controls['standardCheckIn'].hasError('required')) {
+                  <mat-error><span i18n>Standard Checkin</span><span i18n> is required</span></mat-error>
+                }
+                <mat-error *ngxControlError="formGroupDetail.controls['standardCheckIn']; track: 'pattern'">
+                  <span i18n>Standard Check-in Time</span><span i18n> must be from 00:00 to 23:59</span>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-3" sizeInput='sm'>
+              <mat-form-field>
+                <mat-label i18n>Standard Check-out Time</mat-label>
+                <div class="time-picker">
+                  <input [disableClick]="true" [format]="24" [ngxTimepicker]="toggleTimepicker2"
+                         formControlName="standardCheckOut"
+                         matInput
+                         [required]="formGroupDetail.getRawValue().isHotel" trim="blur">
+                  <ngx-material-timepicker-toggle [for]="toggleTimepicker2"
+                                                  class="time-picker-clock"></ngx-material-timepicker-toggle>
+                  <ngx-material-timepicker #toggleTimepicker2
+                                           [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                           [confirmBtnTmpl]="confirmBtn"
+                                           [enableKeyboardInput]="true"
+                  ></ngx-material-timepicker>
+                </div>
+                @if (!!formGroupDetail.controls['standardCheckOut'].hasError('required')) {
+                  <mat-error><span i18n>Standard Checkout</span><span i18n> is required</span></mat-error>
+                }
+              </mat-form-field>
+            </div>
           </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Standard Check-out Time</mat-label>
-              <div class="time-picker">
-                <input [disableClick]="true" [format]="24" [ngxTimepicker]="toggleTimepicker2"
-                       formControlName="standardCheckOut"
-                       matInput
-                       [required] = "formGroupDetail.getRawValue().isHotel" trim="blur">
-                <ngx-material-timepicker-toggle [for]="toggleTimepicker2"
-                                                class="time-picker-clock"></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #toggleTimepicker2
-                                         [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                         [confirmBtnTmpl]="confirmBtn"
-                                         [enableKeyboardInput]="true"
-                ></ngx-material-timepicker>
-              </div>
-              @if (!!formGroupDetail.controls['standardCheckOut'].hasError('required')) {
-                <mat-error><span i18n>Standard Checkout</span><span i18n> is required</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-        </div>
         }
         <!--        dong5-->
         <div class="row mt-20">
@@ -964,12 +963,20 @@
     <mat-panel-description class="d-block">
       <div class="w-100 text-end">
         @if (formGroupDetail.getRawValue().doiTuongDichVu === '3') {
-          <mat-checkbox [disabled]="readMode || isPL()" [checked] = "formGroupDetail.getRawValue().isTaxHotelRevert" class="mr-20" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
-          <mat-checkbox [disabled]="readMode || isPL()" [checked] = "formGroupDetail.getRawValue().isTaxCarRevert" class="mr-20" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
+          <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxHotelRevert" class="mr-20"
+                        (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn
+          </mat-checkbox>
+          <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxCarRevert" class="mr-20"
+                        (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe
+          </mat-checkbox>
         } @else if (formGroupDetail.getRawValue().doiTuongDichVu === '1') {
-          <mat-checkbox [disabled]="readMode || isPL()" [checked] = "formGroupDetail.getRawValue().isTaxHotelRevert" class="mr-20" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
+          <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxHotelRevert" class="mr-20"
+                        (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn
+          </mat-checkbox>
         } @else {
-          <mat-checkbox [disabled]="readMode || isPL()" [checked] = "formGroupDetail.getRawValue().isTaxCarRevert" class="mr-20" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
+          <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxCarRevert" class="mr-20"
+                        (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe
+          </mat-checkbox>
         }
 
         <button (click)="addRow(tblPriceUnit,'tblPriceUnit')" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n mat-button type="button">
@@ -1026,11 +1033,11 @@
               <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Code</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
-                  <app-selection-suggest [options]="listFeeService"
-                                         (ngModelChange)="onChangeHHDV(row)"
+                  <app-selection-suggest (ngModelChange)="onChangeHHDV(row)"
+                                         [editInlineTable]="true"
+                                         [options]="listFeeService"
                                          attrDisplay="code"
                                          attrDisplay2="name"
-                                         [editInlineTable]="true"
                                          attrValue="code" formControlName="serviceCode" i18n-label
                                          required size="sm"/>
                   <!--<mat-form-field class="edit-inline-table">

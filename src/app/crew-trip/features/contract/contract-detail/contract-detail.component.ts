@@ -115,7 +115,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         await this.baseService
           .getMarket({marketCode: value.toUpperCase()})
           .then((res) => {
-            const fieldContract = ['marketName', 'nation', 'marketType', 'flightGroup'];
+            const fieldContract = ['marketName', 'nationId', 'marketType', 'flightGroup'];
             if (res.status == HttpStatusCode.Ok) {
               //Kiểm tra thị trường nếu là quốc tế mà mã tiền tệ là VND thì báo lỗi
               if (res.data.marketType == 'International' && this.formGroupDetail.getRawValue()['currency'] === 'VND') {
@@ -592,9 +592,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async nationSelected(event: any) {
-    const nation = this.listQuocGia.find((s: any) => s.code === (event?.value || event),);
+    const nation = this.listQuocGia.find((s: any) => s.id === (event?.value || event),);
     this.formGroupDetail.patchValue({
-      nationId: nation?.id,
+      // nationId: nation?.id,
+      nation: nation?.code,
       marketType: nation?.code === 'VN' ? 'Domestic' : 'International' || ''
     });
   }
