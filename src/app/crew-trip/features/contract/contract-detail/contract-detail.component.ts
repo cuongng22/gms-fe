@@ -1,31 +1,17 @@
 import {DecimalPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {HttpStatusCode} from '@angular/common/http';
-import {
-  Component, ElementRef, EventEmitter, OnInit, Output, ViewChild, inject, model,
-} from '@angular/core';
-import {
-  FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,
-} from '@angular/forms';
+import {AfterContentInit, Component, ElementRef, EventEmitter, inject, model, OnInit, Output, ViewChild,} from '@angular/core';
+import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,} from '@angular/forms';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
-import {
-  MatAutocomplete, MatAutocompleteTrigger,
-} from '@angular/material/autocomplete';
+import {MatAutocomplete, MatAutocompleteTrigger,} from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
-import {
-  MatCheckboxChange, MatCheckboxModule,
-} from '@angular/material/checkbox';
+import {MatCheckboxChange, MatCheckboxModule,} from '@angular/material/checkbox';
 import {MatNativeDateModule} from '@angular/material/core';
-import {
-  MatDatepicker, MatDatepickerModule, MatDatepickerToggle,
-} from '@angular/material/datepicker';
+import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle,} from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
-import {
-  MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader,
-} from '@angular/material/expansion';
-import {
-  MatError, MatFormFieldModule, MatHint, MatLabel, MatSuffix,
-} from '@angular/material/form-field';
+import {MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader,} from '@angular/material/expansion';
+import {MatError, MatFormFieldModule, MatHint, MatLabel, MatSuffix,} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatPaginatorModule} from '@angular/material/paginator';
@@ -34,7 +20,7 @@ import {MatOption, MatSelect} from '@angular/material/select';
 import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
-import {cloneDeep, debounce, isEqual, remove} from 'lodash';
+import {cloneDeep, debounce} from 'lodash';
 import {NgxEditorModule} from 'ngx-editor';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
@@ -47,12 +33,9 @@ import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {PdfViewerComponent} from 'src/app/crew-trip/shared/pdf-viewer/pdf-viewer.component';
-import {
-  DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE, PARTERN,
-} from 'src/app/crew-trip/shared/utils/constant';
+import {DATE_FORMAT_DD_MM_YYYY, MESSAGE, PARTERN,} from 'src/app/crew-trip/shared/utils/constant';
 import {NgxControlError} from "ngxtension/control-error";
 import {SelectionSuggestComponent} from "src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component";
-import {BankCharge} from "src/app/crew-trip/features/contract/contract-lookup";
 import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog";
 import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
 import {beforeValidator, lessThanValidator, timeBeforeValidator} from "src/app/crew-trip/shared/utils/common";
@@ -65,16 +48,12 @@ import {beforeValidator, lessThanValidator, timeBeforeValidator} from "src/app/c
   styleUrl: './contract-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY), DecimalPipe],
 })
-export class ContractDetailComponent extends CommonComponent implements OnInit {
+export class ContractDetailComponent extends CommonComponent implements OnInit, AfterContentInit {
   override baseService = inject(ContractService);
   nationService = inject(NationService);
   serviceFeeService = inject(ServiceFeeService);
   fb = inject(FormBuilder);
-  //control
-  @ViewChild('nationName') nationName: ElementRef<HTMLInputElement>;
-  filteredNation = model<any[]>([]);
   isHiddenPdf: boolean;
-  //variable
   documentId: number;
   id: any;
   viewType: any;
@@ -108,9 +87,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     this.formGroupDetail.controls['marketCode'].setValidators([Validators.maxLength(3), Validators.minLength(3),]);
     if (value && !this.marketCodeChangeBrake) {
       try {
-        await this.spinner.show();
+        // await this.spinner.show();
         this.formGroupDetail.patchValue({
-          marketName: '', nation: '', marketType: '', flightGroup: '', statusUsage: '', supplierName: '', supplierPhone: '', supplierEmail: '', carType: '',
+          marketName: '', nation: '', marketType: '', flightGroup: '', statusUsage: '', carType: '',
         });
         await this.baseService
           .getMarket({marketCode: value.toUpperCase()})
@@ -151,7 +130,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   partnerChangeDebounce = debounce(async (value: any) => {
     if (value && !this.partnerChangeBrake) {
       try {
-        await this.spinner.show();
+        // await this.spinner.show();
         await this.baseService
           .getPartnerInfo({
             partnerCode: value.toUpperCase(), isHotel: this.formGroupDetail.getRawValue().isHotel, isVehicle: this.formGroupDetail.getRawValue().isVehicle,
@@ -200,7 +179,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     this.formGroupDetail = this.fb.group({
       doiTuongDichVu: ['', Validators.required],
       contractSpec: [], //tab4
-      marketCode: [, [Validators.minLength(3), Validators.maxLength(3), Validators.pattern(PARTERN.STRING)]],
+      marketCode: [, [Validators.minLength(3), Validators.maxLength(3), Validators.pattern(PARTERN.STRING_NUMBER)]],
       marketName: [, [Validators.maxLength(250)]],
       marketType: [],
       nation: [],
@@ -216,7 +195,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       standardCheckIn: [, [Validators.pattern(PARTERN.HOUR24)]],
       standardCheckOut: [],
       standardCheckout: [],
-      notes: [, [Validators.maxLength(500)]],
+      notes: [, [Validators.maxLength(250)]],
       isTaxHotelRevert: [true],
       isTaxCarRevert: [],
       tempp: [],
@@ -253,7 +232,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       dueDateNumber: [],
       handoverDate: [],
       documentsList: [],
-      bankAccountNoB: [, [Validators.maxLength(40), Validators.pattern(PARTERN.STRING)]],
+      bankAccountNoB: [, [Validators.maxLength(40), Validators.pattern(PARTERN.STRING_NUMBER)]],
       peopleName: [, [Validators.maxLength(250)]],
       bankNameB: [, [Validators.maxLength(190)]],
       bankAddressB: [, [Validators.maxLength(512)]],
@@ -263,7 +242,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       swiftCodeB: [, [Validators.maxLength(190)]],
       bankCharge: [],
       bankCharge1: [],
-      bankAccountNoB1: [[Validators.maxLength(40), Validators.pattern(PARTERN.STRING)]],
+      bankAccountNoB1: [[Validators.maxLength(40), Validators.pattern(PARTERN.STRING_NUMBER)]],
       bankNameB1: [, [Validators.maxLength(190)]],
       swiftCodeB1: [, [Validators.maxLength(190)]],
       iban: [, [Validators.maxLength(120)]],
@@ -338,11 +317,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     if (addType === 'tblPriceUnit') {
       row = this.fb.group({
         id: [],
-        serviceCode: [this.listFeeService[0]?.code],
+        serviceCode: [this.listFeeService[0]?.code, [Validators.required]],
         vnaTransId: [, [Validators.maxLength(50)]],
         expenseCatgId: [, [Validators.maxLength(50)]],
         priceNoTax: [],
-        taxCode: [],
+        taxCode: [, [Validators.maxLength(40)]],
         taxRate: [],
         originalAmount3: [],
         priceWithTax: [],
@@ -354,13 +333,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         serviceName: [this.listFeeService[0]?.name],
         serviceUnit: [this.listFeeService[0]?.unit],
       });
-      row.controls['toDate'].setValidators(beforeValidator(row.controls['fromDate']));
+      row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
+      // row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
       init && row.patchValue(init);
       table.push(row);
       this.dsPriceUnit.data = table.controls;
     } else if (addType === 'tblEciLco' || addType === 'tblOvernightStay') {
       row = this.fb.group({
-        id: [,], type: [,], fromHour: [,], rate: [,], toHour: [,], active: [,], typeCheck: [,], bizdocId: [,],
+        id: [,], type: [,], fromHour: ['00:00',], rate: [,], toHour: ['23:59',], active: [,], typeCheck: [,], bizdocId: [,],
       });
       row.controls['rate'].setValidators(lessThanValidator(2));
       row.controls['toHour'].setValidators(timeBeforeValidator(row.controls['fromHour']));
@@ -374,26 +354,15 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       }
     } else if (addType === 'tblDayUse') {
       row = this.fb.group({
-        id: [,], bizdocId: [,], checkinFrom: [,], checkoutTo: [,], maxHour: [,], rate: [,], rate1: [,], active: [,],
+        id: [,], bizdocId: [,], checkinFrom: ['00:00',], checkoutTo: ['23:59',], maxHour: [,], rate: [,], rate1: [,], active: [,],
       });
       row.controls['checkoutTo'].setValidators(timeBeforeValidator(row.controls['checkinFrom']));
+      row.controls['maxHour'].setValidators([Validators.min(0), Validators.max(24), Validators.pattern(PARTERN.NUMBER)]);
       init && row.patchValue(init);
       table.push(row);
       this.dsDayUse.data = table.controls;
     }
     return row;
-  }
-
-  getContractForm(key: string) {
-    return this.listContractForm.find((s) => s.key == key)?.value;
-  }
-
-  async closeConfirmDeleteFile() {
-    this.showDialogDeleteFile = false;
-  }
-
-  async _closeConfirmDelete() {
-    this._showDialogDelete = false;
   }
 
   override async ngOnInit() {
@@ -403,7 +372,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.detail(this.id),
         this.loadListQuocGia(), this.loadListFeeService(),
         this.loadListFlightMarket(),
-        this.setReadMode(this.formGroupDetail),
       ]).then((res) => {
         if (this.formGroupDetail.getRawValue().isHotel && this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({
@@ -428,7 +396,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
           flightGroup: this.listFlightGroup.find((s) => s.value == this.formGroupDetail.getRawValue().flightGroup,)?.key,
           statusUsage: this.listStatusUsage.find((s) => s.value == this.formGroupDetail.getRawValue().statusUsage,)?.key,
           standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout,
-          exchangeRate: this.numberPipe.transform(this.formGroupDetail.getRawValue().exchangeRate,),
+          //exchangeRate: this.numberPipe.transform(this.formGroupDetail.getRawValue().exchangeRate,),
         });
 
         this.getPartnerInfo();
@@ -444,6 +412,22 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     } finally {
       await this.spinner.hide();
     }
+  }
+
+  async ngAfterContentInit() {
+    await this.setReadMode(this.formGroupDetail)
+  }
+
+  getContractForm(key: string) {
+    return this.listContractForm.find((s) => s.key == key)?.value;
+  }
+
+  async closeConfirmDeleteFile() {
+    this.showDialogDeleteFile = false;
+  }
+
+  async _closeConfirmDelete() {
+    this._showDialogDelete = false;
   }
 
   goBack() {
@@ -539,7 +523,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     this.showDialogDeleteFile = false;
   }
 
-
   async loadListMaNghiepVu() {
     await this.baseService.listMaNghiepVu().then((res) => {
       if (res.data) {
@@ -549,7 +532,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
   }
 
   async loadListQuocGia() {
-    await this.nationService.search({page: 0, limit: 99999}).then((res) => {
+    await this.nationService.search({page: 0, limit: 999}).then((res) => {
       if (res.data) {
         this.listQuocGia = res.data.content;
       }
@@ -641,40 +624,24 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     });
   }
 
-  async setReadModeDtl() {
-    let groupPriceUnit = this.tblPriceUnit.controls as FormGroup[];
-    let groupEciLco = this.tblEciLco.controls as FormGroup[];
-    let groupOvernightStay = this.tblOvernightStay.controls as FormGroup[];
-    let groupDayUse = this.tblDayUse.controls as FormGroup[];
-    groupPriceUnit.forEach(fGroup => {
-      Object.entries(fGroup.controls).forEach(([k, v]) => {
-        if (this.readMode) {
-          v.disable();
-        }
+  async setReadModeDtl(formArrays?: any) {
+    if (!formArrays) {
+      formArrays = [
+        this.tblPriceUnit,
+        this.tblEciLco,
+        this.tblOvernightStay,
+        this.tblDayUse,
+      ];
+    }
+    formArrays.forEach((formArray: any) => {
+      if (!this.readMode) return;
+      const groups = formArray.controls as FormGroup[];
+      groups.forEach((fGroup) => {
+        Object.values(fGroup.controls).forEach((control) => {
+          control.disable();
+        });
       });
     });
-    groupEciLco.forEach(fGroup => {
-      Object.entries(fGroup.controls).forEach(([k, v]) => {
-        if (this.readMode) {
-          v.disable();
-        }
-      });
-    });
-    groupOvernightStay.forEach(fGroup => {
-      Object.entries(fGroup.controls).forEach(([k, v]) => {
-        if (this.readMode) {
-          v.disable();
-        }
-      });
-    });
-    groupDayUse.forEach(fGroup => {
-      Object.entries(fGroup.controls).forEach(([k, v]) => {
-        if (this.readMode) {
-          v.disable();
-        }
-      });
-    });
-
   }
 
   override async detail(id: any): Promise<void> {
@@ -690,6 +657,13 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     } else {
       this.formGroupDetail.patchValue({});
     }
+    let hotel = this.formGroupDetail.getRawValue().hotel;
+    let vehicle = this.formGroupDetail.getRawValue().vehicle;
+    this.formGroupDetail.patchValue({
+      supplierName: hotel ? hotel.hotelName : vehicle?.name || '',
+      supplierPhone: hotel ? hotel.phone : vehicle?.phone || '',
+      supplierEmail: hotel ? hotel.email : vehicle?.email || '',
+    });
 
     this.formGroupDetail.getRawValue().priceUnitInfo?.forEach((s: any) => {
       s = {
@@ -718,7 +692,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     try {
       //xoa bản ghi trang
       let group = this.tblPriceUnit.controls as FormGroup[];
-      let filter = group.filter(fGroup => fGroup.getRawValue().fromDate);
+      let filter = group.filter(fGroup => fGroup.getRawValue().serviceCode);
       this.tblPriceUnit = new FormArray<any>(filter);
       group = this.tblEciLco.controls as FormGroup[];
       filter = group.filter(fGroup => fGroup.getRawValue().fromHour);
@@ -726,9 +700,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
       group = this.tblOvernightStay.controls as FormGroup[];
       filter = group.filter(fGroup => fGroup.getRawValue().fromHour);
       this.tblOvernightStay = new FormArray<any>(filter);
-      group = this.tblDayUse.controls as FormGroup[];
-      filter = group.filter(fGroup => fGroup.getRawValue().checkinFrom);
-      this.tblDayUse = new FormArray<any>(filter);
+      // group = this.tblDayUse.controls as FormGroup[];
+      // filter = group.filter(fGroup => fGroup.getRawValue().checkinFrom);
+      // this.tblDayUse = new FormArray<any>(filter);
 
       this.formGroupDetail.patchValue({
         appendixCode: this.formGroupDetail.getRawValue().contractCode,
@@ -833,6 +807,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
         this.formGroupDetail.patchValue({
           isHotel: false, isVehicle: true, isTaxCarRevert: true, isTaxHotelRevert: false,
         });
+        this.setReadModeDtl([this.tblEciLco, this.tblOvernightStay, this.tblDayUse]);
       } else if ($event.value == 3) {
         this.formGroupDetail.patchValue({
           isHotel: true, isVehicle: true, isTaxCarRevert: true, isTaxHotelRevert: true,
@@ -874,13 +849,20 @@ export class ContractDetailComponent extends CommonComponent implements OnInit {
     });
   }
 
-
   isHD() {
     return this.viewType === 'HD';
   }
 
   isPL() {
     return this.viewType === 'PL';
+  }
+
+  isHotel() {
+    return this.formGroupDetail.getRawValue().isHotel;
+  }
+
+  isVehicle() {
+    return this.formGroupDetail.getRawValue().isVehicle;
   }
 
   bodyBuilder() {

@@ -395,7 +395,7 @@ export class CommonComponent
 
 	async loadListFeeService() {
 		await this._serviceFeeService
-			.search({ page: 0, limit: 99999 })
+			.search({ page: 0, limit: 9999 })
 			.then((res) => {
 				if (res.data) {
           this.listFeeService = res.data.content.filter((s: any) => s.active == true);

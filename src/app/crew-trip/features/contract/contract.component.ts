@@ -154,9 +154,9 @@ export class ContractComponent extends CommonComponent implements OnInit {
       this.listPartner = listCombine.map((s: any) => ({
         code: s.code ?? s.hotelCode,
         name: s.name
-          ? `[${s.code} - ${s.name}]`
+          ? `[${s.code}] - ${s.name}`
           : s.hotelName
-            ? `[${s.hotelCode} - ${s.hotelName}]`
+            ? `[${s.hotelCode}] - ${s.hotelName}`
             : '',
       }));
     });

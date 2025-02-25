@@ -69,6 +69,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 
 	@Input() size = 'sm';
 	@Input() label = '';
+	@Input() label2 = '';
 	@Input() attrValue = '';
 	@Input() attrDisplay = '';
 	@Input() attrDisplay2 = '';
@@ -110,8 +111,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 			startWith('')
 		).subscribe(value => {
 			const optionFilter = [...(this.options ?? [])];
-			this.formControl.setValue(null);
-			this.formControl.updateValueAndValidity();
+			// this.formControl.setValue(null);
+			// this.formControl.updateValueAndValidity();
 			if (!value) {
 				this.filtered.set(optionFilter);
 				return;

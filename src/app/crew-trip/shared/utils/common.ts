@@ -1,6 +1,5 @@
 import {AbstractControl, FormControl, ValidationErrors, ValidatorFn} from "@angular/forms";
 import moment from "moment";
-import {Constant} from "src/app/crew-trip/shared/utils/constant";
 
 export const truncateDate = (date: Date): Date => {
   return new Date(date.getFullYear(), date.getMonth(), date.getDate());
