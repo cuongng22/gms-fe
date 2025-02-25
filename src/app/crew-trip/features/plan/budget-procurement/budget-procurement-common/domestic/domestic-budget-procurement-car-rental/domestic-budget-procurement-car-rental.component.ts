@@ -13,6 +13,7 @@ import { getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-budget
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { PlanCategoryEnum } from '../../../budget-procurement.model';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import moment from 'moment';
 
 @Component({
   selector: 'app-domestic-budget-procurement-car-rental',
@@ -64,7 +65,8 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
       if (this.type() === PlanCategoryEnum.PROCUREMENT) {
         period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
       } else {
-        period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+        // period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+         period = moment(item.periodStart).locale('en').format('MMMM')
       }
       item.periodLabel = period;
     });

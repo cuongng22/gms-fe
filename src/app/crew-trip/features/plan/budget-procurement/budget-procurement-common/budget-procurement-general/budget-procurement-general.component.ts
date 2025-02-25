@@ -79,7 +79,10 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     }, { allowSignalWrites: true });
   }
   ngAfterViewChecked(): void {
-    this.cdRef.detectChanges()
+    this.cdRef.detectChanges();
+    // this.formGroupDetail.controls.currencyCode.setValidators(ifValidator(() => this.checkRequiredCurrency(), Validators.required))
+    // this.formGroupDetail.controls.currencyCode.updateValueAndValidity()
+
   }
 
   override formGroupDetail = this.formBuilder.group({
@@ -108,7 +111,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     lateCheckoutContractFlag: new FormControl(false),
     haveContract: new FormControl(false),
     wetLeaseFlag: new FormControl(false),
-    currencyCode: new FormControl('', [ifValidator(() => this.haveContract, Validators.required)])
+    currencyCode: new FormControl('',[Validators.required])
 
   });
   _procurementPlanFlag: boolean = false;
@@ -161,7 +164,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   }
 
   async currencyCodeChange(event: any, eventEmitter?: boolean) {
-    if (event) {
+    if (event?.value) {
       const res = await this.currencyService.getExchangeRateByCurrencyCode(event.value, this.version, 'P');
       if (res.data) {
         if (eventEmitter) {
@@ -289,5 +292,9 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
 
   set exchangeRate(value: any) {
     this._exchangeRate = value;
+  }
+
+  checkRequiredCurrency(): boolean {
+    return !this.haveContract && this.category() === CategoryEnum.INTERNATIONAL
   }
 }

@@ -12,12 +12,14 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-budget-procurement-wet-lease.model';
 import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { PADDING_0, PlanCategoryEnum } from '../../../budget-procurement.model';
+import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
 
 @Component({
   selector: 'app-domestic-budget-procurement-wet-lease',
   standalone: true,
   imports: [MatTableModule, CommonModule, MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent,
-    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule, ClickOutside],
+    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule, ClickOutside,
+  ThousandsSeparatorDirective],
   templateUrl: './domestic-budget-procurement-wet-lease.component.html',
   styleUrl: './domestic-budget-procurement-wet-lease.component.scss',
   providers: [DatePipe, DataTransformPipe],

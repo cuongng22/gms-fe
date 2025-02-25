@@ -10,16 +10,17 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, planFlightByOvernight, planFlightPeriodList } from './international-budget-procurement-car-rental.model';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
-import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
+import { truncateDate, truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { PlanCategoryEnum } from '../../../budget-procurement.model';
 import moment from 'moment';
+import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
 
 @Component({
   selector: 'app-international-budget-procurement-car-rental',
   standalone: true,
   imports: [MatTableModule, CommonModule, MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent,
-    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule, ClickOutside],
+    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule, ClickOutside, ThousandsSeparatorDirective],
   templateUrl: './international-budget-procurement-car-rental.component.html',
   styleUrl: './international-budget-procurement-car-rental.component.scss',
   providers: [DatePipe, DataTransformPipe],
@@ -101,7 +102,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
 
   private calculateData(item: any, index: number) {
 
-    if (this.type() === 'PROCUREMENT') {
+    if (this.type() === PlanCategoryEnum.PROCUREMENT) {
       //Số lượng chuyến bay theo giai đoạn
       item.numberFlight = this.planFlightPeriods.filter((t: any) =>
         t.periodStart === item.periodStart && t.periodEnd === item.periodEnd
@@ -126,18 +127,18 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   // TÍnh dòng tổng 
   getTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
-    const startDatePlanGroup = new Date(this.yearPlan() + 1, 0, 1);
+    const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     if (control === 'totalAmountVat') {
-      const endDatePlanGroup = new Date(this.yearPlan() + 1, 10, 1);
+      const endDatePlanGroup = new Date(this.yearPlan() , 10, 1);
       return Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
+        if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
           return Number(t[control]);
         }
         return 0;
       }).reduce((acc, value) => acc + value, 0));
     }
     return Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup)) {
+      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
         return Number(t[control]);
       }
       return 0;

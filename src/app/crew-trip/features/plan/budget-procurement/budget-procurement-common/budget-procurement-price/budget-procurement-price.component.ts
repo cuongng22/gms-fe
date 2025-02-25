@@ -40,20 +40,21 @@ export class BudgetProcurementPriceComponent implements OnInit {
 
   constructor() {
     effect(() => {
+      console.log('budget-procurement-price data: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
       } else {
         if (CategoryEnum.INTERNATIONAL === this.category()) {
-          this.dataSource.data = InternationalPrice;
+          this.dataSource.data = JSON.parse(JSON.stringify(InternationalPrice));
         } else {
-          this.dataSource.data = DomesticPrice;
+          this.dataSource.data = JSON.parse(JSON.stringify(DomesticPrice));
         }
       }
     })
   }
 
   setDataSource(value: any) {
-    this.dataSource.data = JSON.parse(this.data());
+    this.dataSource.data = JSON.parse(value);
   }
 
 

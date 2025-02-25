@@ -16,12 +16,13 @@ import { CategoryEnum, PlanCategoryEnum } from '../../../budget-procurement.mode
 import { el } from 'node_modules/@fullcalendar/core/internal-common';
 import { debounceTime, map, startWith, Subject } from 'rxjs';
 import moment from 'moment';
+import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
 
 @Component({
   selector: 'app-international-budget-procurement-hotel',
   standalone: true,
   imports: [MatTableModule, CommonModule, MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent,
-    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule],
+    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DataTransformPipe, DigitOnlyModule, ThousandsSeparatorDirective],
   templateUrl: './international-budget-procurement-hotel.component.html',
   styleUrl: './international-budget-procurement-hotel.component.scss',
   providers: [DatePipe, DataTransformPipe],
@@ -100,7 +101,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     this.periods = []
     this.dataSource.data = [...data];
     this.generalData = { ...generalData };
-    console.log('dataSource.data in hotel: ', this.dataSource.data)
+    console.log('generalData in hotel: ', this.generalData)
 
     this.getRow();
 
@@ -211,7 +212,6 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   }
 
   setOvernightRates(data: any, actionType: string, length?: number, planFlightByOvernight?: any[]) {
-    debugger
     let checkExists: boolean;
     switch (actionType) {
       case 'edit':
@@ -366,6 +366,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
+    this.updateValueForControl(data, control);
   }
 
 
@@ -505,6 +506,35 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     if (value) {
       element.index = index
       this.doubleRoomOtherChange.next(element);
+    }
+  }
+
+  /**
+   * Cập nhật giá trị cho các ô nhập trên table
+   * @param data 
+   * @param control 
+   */
+  updateValueForControl(data: any, control: string) {
+    if (control === 'priceSingleRoomEditing'
+      || control === 'priceDoubleRoomEditing'
+      || control === 'priceSingleRoomEarlyEditing'
+      || control === 'priceDoubleRoomEarlyEditing'
+      || control === 'priceSingleRoomLateEditing'
+      || control === 'priceDoubleRoomLateEditing'
+      || control === 'priceCrewTransportEditing'
+    ) {
+      this.dataSource.data.forEach((item: any) => {
+        if (item.period === data.periodLabel) {
+          item.priceSingleRoom = data.priceSingleRoom
+          item.priceDoubleRoom = data.priceDoubleRoom
+          item.priceSingleRoomEarly = data.priceSingleRoomEarly
+          item.priceDoubleRoomEarly = data.priceDoubleRoomEarly
+          item.priceSingleRoomLate = data.priceSingleRoomLate
+          item.priceDoubleRoomLate = data.priceDoubleRoomLate
+          item.priceCrewTransport = data.priceCrewTransport
+
+        }
+      });
     }
   }
 }

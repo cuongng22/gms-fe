@@ -1,6 +1,6 @@
 @if (this.dataSource.data && this.dataSource.data.length > 0) {
     <div class="row">
-        <div class="col-lg-6">
+        <div class="flightOvernight">
             <div class="table-responsive">
                 <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
                     <ng-container matColumnDef="addBtn">
@@ -27,14 +27,14 @@
                         </th>
                         <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" [id]="element.id"
                             [style.padding]="element.numberOfOverNightEditing?'0px !important':''"
-                            (click)="clickEdit(element,'numberOfOverNightEditing')">
+                            (click)="clickEdit(element,'numberOfOverNightEditing')" class="text-right">
                             @if(!element.numberOfOverNightEditing){
-                            {{element.numberOfOverNight}}
+                            {{element.numberOfOverNight | number}}
                             }@else {
                             <div sizeInput="xs">
                                 <mat-form-field (clickOutside)="clickOutside(element,'numberOfOverNightEditing')"
                                     class="edit-inline-table">
-                                    <input matInput [(ngModel)]="element.numberOfOverNight" [disabled]="disabled()"
+                                    <input matInput appThousandsSeparator [(ngModel)]="element.numberOfOverNight" [disabled]="disabled()"
                                         (ngModelChange)="edit($event,element.id,'numberOfOverNight')" maxlength="100"
                                         digitOnly>
                                 </mat-form-field>
@@ -49,10 +49,10 @@
                         </th>
                         <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex"
                             [style.padding]="element.flightRateEditing?'0px !important':''"
-                            (click)="clickEdit(element,'flightRateEditing')">
+                            (click)="clickEdit(element,'flightRateEditing')" class="text-right">
                             @if(!element.flightRateEditing){
-                            <div class="d-flex justify-content-between">
-                                {{element.flightRate}}
+                            <div class="d-flex justify-content-end">
+                                {{element.flightRate | number}}
                                 <i class="material-symbols-outlined fs-18" matSuffix>
                                     percent
                                 </i>
@@ -62,7 +62,7 @@
                             <div sizeInput="xs">
                                 <mat-form-field (clickOutside)="clickOutside(element,'flightRateEditing')"
                                     class="edit-inline-table">
-                                    <input matInput [(ngModel)]="element.flightRate" [disabled]="disabled()"
+                                    <input matInput  appThousandsSeparator [(ngModel)]="element.flightRate" [disabled]="disabled()"
                                         (ngModelChange)="edit($event,element.id)" maxlength="100" decimalSeparator="."
                                         digitOnly [decimal]="true">
                                     <i class="material-symbols-outlined fs-18" matSuffix>

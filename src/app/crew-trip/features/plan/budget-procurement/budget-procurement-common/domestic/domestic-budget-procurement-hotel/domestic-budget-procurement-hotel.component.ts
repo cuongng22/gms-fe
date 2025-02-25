@@ -18,7 +18,7 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
+import { truncateDate, truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { PADDING_0, PlanCategoryEnum } from '../../../budget-procurement.model';
 import {
@@ -27,6 +27,8 @@ import {
   getHeaderRowDef2,
   getRowDef,
 } from './domestic-budget-procurement-hotel.model';
+import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
+import moment from 'moment';
 
 @Component({
   selector: 'app-domestic-budget-procurement-hotel',
@@ -43,7 +45,7 @@ import {
     ClickOutside,
     MatButtonModule,
     DataTransformPipe,
-    DigitOnlyModule,
+    DigitOnlyModule, ThousandsSeparatorDirective
   ],
   templateUrl: './domestic-budget-procurement-hotel.component.html',
   styleUrl: './domestic-budget-procurement-hotel.component.scss',
@@ -51,8 +53,7 @@ import {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DomesticBudgetProcurementHotelComponent
-implements OnInit, AfterViewChecked
-{
+  implements OnInit, AfterViewChecked {
   yearPlan = input<number>(2024); // năm kế hoạch
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
   type = input<PlanCategoryEnum>(PlanCategoryEnum.BUDGET); // Loại Ngân sách hoặc mua sắm (budget/procurement)
@@ -99,7 +100,8 @@ implements OnInit, AfterViewChecked
       if (this.type() === PlanCategoryEnum.PROCUREMENT) {
         period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
       } else {
-        period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+        // period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+        period = moment(item.periodStart).locale('en').format('MMMM')
       }
       item.periodLabel = period;
       this.calculateData(item, index);
@@ -113,9 +115,9 @@ implements OnInit, AfterViewChecked
   }
 
   /**
-	 *
-	 * @param item Giá trị từng dòng của dataSource theo công thức
-	 */
+   *
+   * @param item Giá trị từng dòng của dataSource theo công thức
+   */
   private calculateData(item: any, index: number) {
     // Tổng Số phòng đơn
     this.calculate(item, 'totalSingleRoom');
@@ -125,7 +127,7 @@ implements OnInit, AfterViewChecked
     this.calculate(item, 'totalAmount');
     // Thành tiền  có vat
     this.calculate(item, 'totalAmountVat');
-    
+
     if (new Date(item.periodStart) < this.startDatePlanGroup) {
       // thành tiền có vat của tháng 12 năm ngoái (12/2024 cho kế hoạch 2025)
       this.calculate(item, 'totalAmountVatLastYear');
@@ -178,8 +180,9 @@ implements OnInit, AfterViewChecked
     // const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     if (control === 'totalAmountVat') {
       // const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
+      debugger
       return Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(this.endDatePlanGroup)) {
+        if (truncateDate(new Date(t['periodStart'])) <= truncateDate(this.endDatePlanGroup)) {
           return Number(t[control]);
         } else {
           return Number(t['totalAmountYearPerformVat'])
@@ -187,7 +190,7 @@ implements OnInit, AfterViewChecked
       }).reduce((acc, value) => acc + value, 0));
     }
     return Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(this.startDatePlanGroup)) {
+      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(this.startDatePlanGroup)) {
         return Number(t[control]);
       }
       return 0;
@@ -200,5 +203,8 @@ implements OnInit, AfterViewChecked
 
   clickOutside(data: any, control: string) {
     data[control] = false;
+    if (control === 'singleRoomExtraEditing' || control === 'doubleRoomExtraEditing') {
+      this.calculateData(data, 0)
+    }
   }
 }

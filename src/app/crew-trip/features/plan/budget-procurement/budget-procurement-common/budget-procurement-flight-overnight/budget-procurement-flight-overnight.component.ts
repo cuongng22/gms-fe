@@ -13,13 +13,15 @@ import { NgxSpinnerService } from 'ngx-spinner';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { debounceTime, Subject } from 'rxjs';
 import { ShowMessageComponent } from 'src/app/crew-trip/shared/component/show-message/show-message.component';
+import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 
 @Component({
   selector: 'app-budget-procurement-flight-overnight',
   standalone: true,
   imports: [MatTableModule, CommonModule, MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent,
-    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DigitOnlyModule, MatCardModule, MatTooltipModule],
+    FormsModule, ReactiveFormsModule, ClickOutside, MatButtonModule, DigitOnlyModule, MatCardModule, MatTooltipModule,
+    ThousandsSeparatorDirective],
   templateUrl: './budget-procurement-flight-overnight.component.html',
   styleUrl: './budget-procurement-flight-overnight.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
