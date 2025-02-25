@@ -151,6 +151,8 @@
                   </mat-select>
                   @if (!!formGroupDetail.controls['type'].hasError('required')) {
                     <mat-error><span i18n>Type</span><span i18n> is required</span></mat-error>
+                  } @else if (formGroupDetail.controls['type'].hasError('conflict')) {
+                    <mat-error><span i18n>Configuration already exists</span></mat-error>
                   }
                 </mat-form-field>
               </div>
