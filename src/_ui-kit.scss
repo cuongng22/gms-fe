@@ -5051,3 +5051,12 @@ blockquote {
 
 /* Min width 1600px */
 @media only screen and (min-width: 1600px) {}
+
+.required-label::after {
+  content: "*";
+  color: red;
+  font-weight: bold;
+  font-size: 14px;
+  vertical-align: top;
+  margin-left: 4px;
+}

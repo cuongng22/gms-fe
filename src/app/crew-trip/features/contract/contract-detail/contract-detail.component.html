@@ -47,8 +47,8 @@
       <div class="row">
         <div class="col-9 row" sizeInput="sm">
           <div class="col-2 d-flex align-items-center justify-content-center pr-0">
-            <label class="main-label fw-medium text-black pr-15 text-end w-100 pr-0" i18n>
-              Service type <span style="color:red">*</span>
+            <label class="main-label fw-medium text-black pr-15 text-end w-100 pr-0 required-label" i18n>
+              Service type
             </label>
           </div>
           <div class="col-10" sizeInput="sm">
@@ -100,10 +100,9 @@
         <div class="row">
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
-              @if(isHD()){
+              @if (isHD()) {
               <mat-label i18n>Contract number</mat-label>
-              }
-              @else{
+              } @else {
               <mat-label i18n>Appendix number</mat-label>
               }
               <input formControlName="contractCode" matInput required trim="blur">
@@ -117,10 +116,9 @@
           </div>
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
-              @if(isHD()){
+              @if (isHD()) {
               <mat-label i18n>Contract no</mat-label>
-              }
-              @else{
+              } @else {
               <mat-label i18n>Appendix no</mat-label>
               }
               <input formControlName="contractNo" matInput required trim="blur">
@@ -146,10 +144,16 @@
               <div class="col-6" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Exchange rate</mat-label>
-                  <input formControlName="exchangeRate" matInput min="0" trim="blur" type="text">
+                  <input [maxDecimal]="2" appThousandsSeparator formControlName="exchangeRate" matInput trim="blur">
                   @if (!!formGroupDetail.controls['exchangeRate'].hasError('required')) {
                   <mat-error><span i18n>Exchange rate</span><span i18n> is required</span></mat-error>
                   }
+                  <mat-error *ngxControlError="formGroupDetail.controls['exchangeRate']; track: 'invalidNumber'">
+                    <span i18n>Exchange rate</span><span i18n> must be number</span>
+                  </mat-error>
+                  <mat-error *ngxControlError="formGroupDetail.controls['exchangeRate']; track: 'invalidNumberDecimal'">
+                    <span i18n>Exchange rate</span><span i18n> invalid</span>
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -237,10 +241,9 @@
           </div>
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
-              @if(isHD()){
+              @if (isHD()) {
               <mat-label i18n>Contract name</mat-label>
-              }
-              @else{
+              } @else {
               <mat-label i18n>Appendix name</mat-label>
               }
               <input formControlName="contractName" matInput
@@ -774,9 +777,10 @@
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
-            <app-selection-suggest (selectionChange)="nationSelected($event)" [options]="listQuocGia"
+            <app-selection-suggest (selectionchange)="nationSelected(formGroupDetail.getRawValue().nationId)"
+                                   [options]="listQuocGia"
                                    attrDisplay="vniName"
-                                   attrValue="id" formControlName="nation" i18n-label label="Nation"
+                                   attrValue="id" formControlName="nationId" i18n-label label="Nation"
                                    required size="sm"/>
             <!--<mat-form-field>
               <mat-label i18n>Country</mat-label>
@@ -854,6 +858,9 @@
               <mat-error *ngxControlError="formGroupDetail.controls['supplierPhone']; track: 'maxlength'">
                 <span i18n>Supplier Phone</span><span i18n> must be less than 20 characters</span>
               </mat-error>
+              <mat-error *ngxControlError="formGroupDetail.controls['supplierPhone']; track: 'pattern'">
+                <span i18n>Supplier Phone</span><span i18n> invalid</span>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -865,31 +872,33 @@
               <input formControlName="supplierEmail" matInput required trim="blur">
               @if (!!formGroupDetail.controls['supplierEmail'].hasError('required')) {
               <mat-error><span i18n>Supplier Booking Email</span><span i18n> is required</span></mat-error>
-              } @else if (!!formGroupDetail.controls['supplierEmail'].hasError('email') &&
-              formGroupDetail.get('supplierEmail')!.touched) {
-              <mat-error><span i18n>Email</span><span i18n> invalid</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['supplierEmail']; track: 'maxlength'">
                 <span i18n>Supplier Booking Email</span><span i18n> must be less than 250 characters</span>
               </mat-error>
+              <mat-error *ngxControlError="formGroupDetail.controls['supplierEmail']; track: 'pattern'">
+                <span i18n>Supplier Booking Email</span><span i18n> invalid</span>
+              </mat-error>
             </mat-form-field>
           </div>
+          @if (isVehicle()) {
           <div class="col-6" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Vehicle Type</mat-label>
               <input formControlName="carType" matInput trim="blur">
               <mat-hint align="start"><i i18n="">Only applicable for car rentals</i></mat-hint>
               @if (!!formGroupDetail.controls['carType'].hasError('required')) {
-              <mat-error><span i18n>Vehicle Type</span><span i18n> is required</span></mat-error>
-              }
-              <mat-error *ngxControlError="formGroupDetail.controls['carType']; track: 'maxlength'">
-                <span i18n>Vehicle Type</span><span i18n> must be less than 150 characters</span>
-              </mat-error>
-
-            </mat-form-field>
-          </div>
+          <mat-error><span i18n>Vehicle Type</span><span i18n> is required</span></mat-error>
+          }
+          <mat-error *ngxControlError="formGroupDetail.controls['carType']; track: 'maxlength'">
+            <span i18n>Vehicle Type</span><span i18n> must be less than 150 characters</span>
+          </mat-error>
+        </mat-form-field>
+      </div>
+          }
         </div>
         <!--        dong4-->
+        @if (isHotel()) {
         <div class="row mt-20">
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
@@ -897,7 +906,7 @@
               <div class="time-picker">
                 <input [disableClick]="true" [format]="24" [ngxTimepicker]="toggleTimepicker1"
                        formControlName="standardCheckIn"
-                       matInput required trim="blur">
+                       matInput [required]="isHotel()" trim="blur">
                 <ngx-material-timepicker-toggle [for]="toggleTimepicker1"
                                                 class="time-picker-clock"></ngx-material-timepicker-toggle>
                 <ngx-material-timepicker #toggleTimepicker1 [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
@@ -905,32 +914,36 @@
                 ></ngx-material-timepicker>
               </div>
               @if (!!formGroupDetail.controls['standardCheckIn'].hasError('required')) {
-              <mat-error><span i18n>Standard Checkin</span><span i18n> is required</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Standard Check-out Time</mat-label>
-              <div class="time-picker">
-                <input [disableClick]="true" [format]="24" [ngxTimepicker]="toggleTimepicker2"
-                       formControlName="standardCheckOut"
-                       matInput
-                       required trim="blur">
-                <ngx-material-timepicker-toggle [for]="toggleTimepicker2"
-                                                class="time-picker-clock"></ngx-material-timepicker-toggle>
-                <ngx-material-timepicker #toggleTimepicker2
-                                         [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                         [confirmBtnTmpl]="confirmBtn"
-                                         [enableKeyboardInput]="true"
-                ></ngx-material-timepicker>
-              </div>
-              @if (!!formGroupDetail.controls['standardCheckOut'].hasError('required')) {
-              <mat-error><span i18n>Standard Checkout</span><span i18n> is required</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
+        <mat-error><span i18n>Standard Checkin</span><span i18n> is required</span></mat-error>
+        }
+        <mat-error *ngxControlError="formGroupDetail.controls['standardCheckIn']; track: 'pattern'">
+          <span i18n>Standard Check-in Time</span><span i18n> must be from 00:00 to 23:59</span>
+        </mat-error>
+      </mat-form-field>
+    </div>
+    <div class="col-3" sizeInput='sm'>
+      <mat-form-field>
+        <mat-label i18n>Standard Check-out Time</mat-label>
+        <div class="time-picker">
+          <input [disableClick]="true" [format]="24" [ngxTimepicker]="toggleTimepicker2"
+                 formControlName="standardCheckOut"
+                 matInput
+                 [required]="isHotel()" trim="blur">
+          <ngx-material-timepicker-toggle [for]="toggleTimepicker2"
+                                          class="time-picker-clock"></ngx-material-timepicker-toggle>
+          <ngx-material-timepicker #toggleTimepicker2
+                                   [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                   [confirmBtnTmpl]="confirmBtn"
+                                   [enableKeyboardInput]="true"
+          ></ngx-material-timepicker>
         </div>
+        @if (!!formGroupDetail.controls['standardCheckOut'].hasError('required')) {
+        <mat-error><span i18n>Standard Checkout</span><span i18n> is required</span></mat-error>
+        }
+        </mat-form-field>
+      </div>
+    </div>
+        }
         <!--        dong5-->
         <div class="row mt-20">
           <div class="col-12">
@@ -942,7 +955,7 @@
               <mat-error><span i18n>Notes</span><span i18n> too long</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['notes']; track: 'maxlength'">
-                <span i18n>Remark</span><span i18n> must be less than 500 characters</span>
+                <span i18n>Remark</span><span i18n> must be less than 250 characters</span>
               </mat-error>
             </mat-form-field>
           </div>
@@ -957,15 +970,24 @@
     <mat-panel-description class="d-block">
       <div class="w-100 text-end">
         @if (formGroupDetail.getRawValue().doiTuongDichVu === '3') {
-        <mat-checkbox [disabled]="readMode || isPL()" checked class="mr-20" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
-        <mat-checkbox [disabled]="readMode || isPL()" checked class="mr-20" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
+        <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxHotelRevert" class="mr-20"
+                      (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn
+        </mat-checkbox>
+        <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxCarRevert" class="mr-20"
+                      (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe
+        </mat-checkbox>
         } @else if (formGroupDetail.getRawValue().doiTuongDichVu === '1') {
-        <mat-checkbox [disabled]="readMode || isPL()" checked class="mr-20" (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn</mat-checkbox>
+        <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxHotelRevert" class="mr-20"
+                      (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn
+        </mat-checkbox>
         } @else {
-        <mat-checkbox [disabled]="readMode || isPL()" checked class="mr-20" (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe</mat-checkbox>
+        <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxCarRevert" class="mr-20"
+                      (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe
+        </mat-checkbox>
         }
 
-        <button (click)="addUnitPrice()" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n mat-button type="button">
+        <button (click)="addRow(tblPriceUnit,'tblPriceUnit')" *ngIf="!readMode" class="add-btn right-0 mb-10" i18n
+                mat-button type="button">
           <i class="material-symbols-outlined">
             add
           </i>
@@ -973,305 +995,278 @@
         </button>
       </div>
       <div class="table-responsive">
-        <table [dataSource]="tblUnitPrice" class="table-light table-responsive" mat-table>
-          <ng-container matColumnDef="stt">
-            <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
-            <td *matCellDef="let element; let i = index" class="text-center"
-                mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="fromDate">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>From Date</th>
-            <td (click)="editCellUP(element,'fromDate')" *matCellDef="let element"
-                [style.padding]="checkCellUP(element, 'fromDate')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'fromDate')) {
-              <div class="input-cell">
-                <mat-form-field
-                  class="edit-inline-table">
-                  <input #inputRef="ngModel" trim="blur" [matDatepicker]="fromDateUP" [(ngModel)]="element.fromDate"
-                         (clickOutside)="readCellUP(element,'fromDate')"
-                         matInput required>
-                  <mat-datepicker-toggle [for]="fromDateUP" matIconSuffix></mat-datepicker-toggle>
-                  <mat-datepicker #fromDateUP></mat-datepicker>
-                  <mat-error>{{ validField(element, 'fromDate', inputRef) }}</mat-error>
+        <form [formGroup]="formGroupDetail">
+          <table [dataSource]="dsPriceUnit" class="table-light table-responsive" mat-table mat-table>
+            <!-- Cột Tên -->
+            <ng-container matColumnDef="stt">
+              <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
+              <td *matCellDef="let element; let i = index" class="text-center"
+                  mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="fromDate">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>From Date</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input [matDatepicker]="fromDate" formControlName="fromDate" matInput trim="blur">
+                    <mat-datepicker-toggle [for]="fromDate" matIconSuffix></mat-datepicker-toggle>
+                    <mat-datepicker #fromDate></mat-datepicker>
+                    <mat-error *ngxControlError="row.controls['fromDate']; track: 'required'">
+                      <span i18n>From Date</span><span i18n> is required</span>
+                    </mat-error>
+                    <!--                    <mat-error *ngxControlError="row.controls['fromDate']; track: 'pattern'">-->
+                    <!--                      <span i18n>From Date</span><span i18n> format is invalid</span>-->
+                    <!--                    </mat-error>-->
                   </mat-form-field>
                 </div>
-              } @else {
-              <span class="label-text">
-              {{ element.fromDate ? (element.fromDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]) : '' }}
-              </span>
-              }
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="toDate">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>To Date</th>
-            <td (click)="editCellUP(element,'toDate')" *matCellDef="let element"
-                [style.padding]="checkCellUP(element, 'toDate')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'toDate')) {
-              <div class="input-cell">
-                <mat-form-field
-                  class="edit-inline-table">
-                  <input #inputRef="ngModel" trim="blur" [matDatepicker]="toDateUP" [(ngModel)]="element.toDate"
-                         (clickOutside)="readCellUP(element,'toDate')"
-                         matInput required>
-                  <mat-datepicker-toggle [for]="toDateUP" matIconSuffix></mat-datepicker-toggle>
-                  <mat-datepicker #toDateUP></mat-datepicker>
-                  <mat-error>{{ validField(element, 'toDate', inputRef) }}</mat-error>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="toDate">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>To Date</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input [matDatepicker]="toDate" formControlName="toDate" matInput trim="blur">
+                    <mat-datepicker-toggle [for]="toDate" matIconSuffix></mat-datepicker-toggle>
+                    <mat-datepicker #toDate></mat-datepicker>
+                    <mat-error *ngxControlError="row.controls['toDate']; track: 'required'">
+                      <span i18n>To Date</span><span i18n> is required</span>
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['toDate']; track: 'beforeValidator'">
+                      <span i18n>To Date</span><span i18n> must after from date</span>
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['toDate']; track: 'dateValidator'">
+                      <span i18n>From Date</span><span i18n> format is invalid</span>
+                    </mat-error>
                   </mat-form-field>
                 </div>
-              } @else {
-              <span class="label-text">
-              {{ element.toDate ? (element.toDate| dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]) : '' }}
-              </span>
-              }
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="serviceFeeCode">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Code</th>
-            <td (click)="editCellUP(element,'serviceFeeCode')" *matCellDef="let element"
-                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell>
-              <div class="input-cell">
-                <mat-form-field class="edit-inline-table">
-                  <mat-select #inputRef="ngModel" (ngModelChange)="onChangeHHDV(element)"
-                              [(ngModel)]="element.serviceFeeCode" [disabled]="readMode"
-                              required>
-                    <mat-option *ngFor="let option of listHHDV" [value]="option.code">
-                      {{ option.code }} - {{ option.name }}
-                    </mat-option>
-                  </mat-select>
-                  <mat-error>{{ validField(element, 'serviceFeeCode', inputRef) }}</mat-error>
-                </mat-form-field>
-              </div>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="serviceFeeName">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Cost Category Name</th>
-            <td *matCellDef="let element" mat-cell>
-                <span class="label-text">
-            {{ element.serviceFeeName }}
-            </span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="serviceFeeUnit">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Unit</th>
-            <td *matCellDef="let element" mat-cell>
-                <span class="label-text">
-            {{ element.serviceFeeUnit }}
-            </span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="codeNghiepVu">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Business code</th>
-            <td (click)="editCellUP(element,'codeNghiepVu')" *matCellDef="let element"
-                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'codeNghiepVu')) {
-              <div class="input-cell">
-                <mat-form-field
-                  class="edit-inline-table">
-                  <input trim="blur" [(ngModel)]="element.codeNghiepVu" matInput required
-                         (clickOutside)="readCellUP(element,'codeNghiepVu')">
-                </mat-form-field>
-              </div>
-              } @else {
-              <span class="label-text">
-              {{ element.codeNghiepVu }}
-              </span>
-              }
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="codeKHNS">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Budget item</th>
-            <td (click)="editCellUP(element,'codeKHNS')" *matCellDef="let element"
-                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'codeKHNS')) {
-              <div class="input-cell">
-                <mat-form-field
-                  class="edit-inline-table">
-                  <input trim="blur" [(ngModel)]="element.codeKHNS" matInput required
-                         (clickOutside)="readCellUP(element,'codeKHNS')">
-                </mat-form-field>
-              </div>
-              } @else {
-              <span class="label-text">
-              {{ element.codeKHNS }}
-              </span>
-              }
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="priceBeforeTax">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Unit price before tax</th>
-            <td (click)="editCellUP(element,'priceBeforeTax')" *matCellDef="let element"
-                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'priceBeforeTax')) {
-              <div class="input-cell">
-                <mat-form-field
-                  class="edit-inline-table">
-                  <input trim="blur" [(ngModel)]="element.priceBeforeTax" matInput required
-                         (clickOutside)="readCellUP(element,'priceBeforeTax')">
-                </mat-form-field>
-              </div>
-              } @else {
-              <span class="label-text">
-              {{ element.priceBeforeTax | number }}
-              </span>
-              }
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="taxCode">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tax Code</th>
-            <td (click)="editCellUP(element,'taxCode')" *matCellDef="let element"
-                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'taxCode')) {
-              <div class="input-cell">
-                <mat-form-field class="edit-inline-table">
-                  <input trim="blur" [(ngModel)]="element.taxCode" matInput required
-                         (clickOutside)="readCellUP(element,'taxCode')">
-                </mat-form-field>
-              </div>
-              } @else {
-              <span class="label-text">
-              {{ element.taxCode }}
-              </span>
-              }
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="taxRate">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>% VAT</th>
-            <td (click)="editCellUP(element,'taxRate')" *matCellDef="let element"
-                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'taxRate')) {
-              <div class="input-cell">
-                <mat-form-field
-                  class="edit-inline-table">
-                  <input trim="blur" [(ngModel)]="element.taxRate" matInput required
-                         (clickOutside)="readCellUP(element,'taxRate')">
-                </mat-form-field>
-              </div>
-              } @else {
-              <span class="label-text">
-              {{ element.taxRate }}
-              </span>
-              }
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="totalVatTax">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>VAT amount</th>
-            <td (click)="editCellUP(element,'totalVatTax')" *matCellDef="let element"
-                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'totalVatTax')) {
-              <div class="input-cell">
-                <mat-form-field
-                  class="edit-inline-table">
-                  <input trim="blur" [(ngModel)]="element.totalVatTax" matInput required
-                         (clickOutside)="readCellUP(element,'totalVatTax')">
-                </mat-form-field>
-              </div>
-              } @else {
-              <span class="label-text">
-              {{ element.totalVatTax | number }}
-              </span>
-              }
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="priceAfterTax">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Unit Price After Tax</th>
-            <td (click)="editCellUP(element,'priceAfterTax')" *matCellDef="let element"
-                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'priceAfterTax')) {
-              <div class="input-cell">
-                <mat-form-field
-                  class="edit-inline-table">
-                  <input trim="blur" [(ngModel)]="element.priceAfterTax" matInput required
-                         (clickOutside)="readCellUP(element,'priceAfterTax')">
-                </mat-form-field>
-              </div>
-              } @else {
-              <span class="label-text">
-              {{ element.priceAfterTax | number }}
-              </span>
-              }
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="notes">
-            <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Remark</th>
-            <td (click)="editCellUP(element,'notes')" *matCellDef="let element"
-                [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                mat-cell
-            >
-              @if (checkCellUP(element, 'notes')) {
-              <div class="input-cell">
-                <mat-form-field
-                  class="edit-inline-table">
-                  <input trim="blur" [(ngModel)]="element.notes" matInput required
-                         (clickOutside)="readCellUP(element,'notes')">
-                </mat-form-field>
-              </div>
-              } @else {
-              <span class="label-text">
-              {{ element.notes }}
-              </span>
-              }
-            </td>
-          </ng-container>
-          <ng-container *ngIf="!readMode" matColumnDef="action" stickyEnd>
-            <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
-              Action
-            </th>
-            <td *matCellDef="let element;let i = dataIndex" mat-cell>
-              <div class="action-buttons align-items-center text-center">
-                <a (click)="_confirmDelete(element,'tbl5','Are you sure you want to delete?')" *ngIf="!readMode"
-                   class="text-danger"
-                   mat-button type="button">
-                  <i class="material-symbols-outlined" i18n-title title="Delete">
-                    delete
-                  </i>
-                </a>
-              </div>
-            </td>
-          </ng-container>
-          @if (!readMode) {
-          <tr
-            *matHeaderRowDef="['stt','fromDate','toDate','serviceFeeCode','serviceFeeName','serviceFeeUnit','codeNghiepVu','codeKHNS','priceBeforeTax','taxCode','taxRate','totalVatTax','priceAfterTax','notes','action']"
-            mat-header-row></tr>
-          <tr
-            *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceFeeCode','serviceFeeName','serviceFeeUnit','codeNghiepVu','codeKHNS','priceBeforeTax','taxCode','taxRate','totalVatTax','priceAfterTax','notes','action'];"
-            class="input-row" mat-row></tr>
-          } @else {
-          <tr
-            *matHeaderRowDef="['stt','fromDate','toDate','serviceFeeCode','serviceFeeName','serviceFeeUnit','codeNghiepVu','codeKHNS','priceBeforeTax','taxCode','taxRate','totalVatTax','priceAfterTax','notes']"
-            mat-header-row></tr>
-          <tr
-            *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceFeeCode','serviceFeeName','serviceFeeUnit','codeNghiepVu','codeKHNS','priceBeforeTax','taxCode','taxRate','totalVatTax','priceAfterTax','notes']"
-            class="input-row" mat-row></tr>
-          }
-          <tr *matNoDataRow class="mat-row">
-            <td [attr.colspan]="13" class="mat-cell border-none text-center"><span
-              i18n>No data!</span></td>
-          </tr>
-        </table>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="serviceCode">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Code</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <app-selection-suggest (selectionchange)="onChangeHHDV(row)"
+                                         [editInlineTable]="true"
+                                         [options]="listFeeService"
+                                         attrDisplay="code"
+                                         attrDisplay2="name"
+                                         attrValue="code"
+                                         formControlName="serviceCode" i18n-label2 label2="Code"
+                                         required size="sm"/>
+                  <!--<mat-form-field class="edit-inline-table">
+                    <mat-select (selectionChange)="onChangeHHDV(row)"
+                                formControlName="serviceCode" required>
+                      <mat-option *ngFor="let option of listFeeService" [value]="option.code">
+                        {{ option.code }} - {{ option.name }}
+                      </mat-option>
+                    </mat-select>
+                    <mat-error *ngxControlError="row.controls['serviceCode']; track: 'required'">
+                      <span i18n>Code</span><span i18n> is required</span>
+                    </mat-error>
+                  </mat-form-field>-->
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="serviceName">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Category name</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input formControlName="serviceName" matInput readonly required trim="blur">
+                    <mat-error *ngxControlError="row.controls['serviceName']; track: 'required'">
+                      <span i18n>Category name</span><span i18n> is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="serviceUnit">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Unit</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input formControlName="serviceUnit" matInput readonly required trim="blur">
+                    <mat-error *ngxControlError="row.controls['serviceUnit']; track: 'required'">
+                      <span i18n>Unit</span><span i18n> is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="vnaTransId">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Business code</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input formControlName="vnaTransId" matInput trim="blur">
+                    <!--                    <mat-error *ngxControlError="row.controls['vnaTransId']; track: 'required'">-->
+                    <!--                      <span i18n>Business code</span><span i18n> is required</span>-->
+                    <!--                    </mat-error>-->
+                    <mat-error *ngxControlError="row.controls['vnaTransId']; track: 'maxlength'">
+                      <span i18n>Business code</span><span i18n> must be less than 50 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="expenseCatgId">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Budget item</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input formControlName="expenseCatgId" matInput trim="blur">
+                    <mat-error *ngxControlError="row.controls['expenseCatgId']; track: 'maxlength'">
+                      <span i18n>Budget item</span><span i18n> must be less than 50 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="priceNoTax">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Unit price before tax</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input [maxDecimal]="4" appThousandsSeparator formControlName="priceNoTax" matInput required
+                           trim="blur">
+                    <mat-error *ngxControlError="row.controls['priceNoTax']; track: 'required'">
+                      <span i18n>Unit price before tax</span><span i18n> is required</span>
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['priceNoTax']; track: 'invalidNumber'">
+                      <span i18n>Unit price before tax</span><span i18n> must be number</span>
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['priceNoTax']; track: 'invalidNumberDecimal'">
+                      <span i18n>Unit price before tax</span><span i18n> invalid</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="taxCode">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Tax Code</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input formControlName="taxCode" matInput trim="blur">
+                    <mat-error *ngxControlError="row.controls['taxCode']; track: 'maxlength'">
+                      <span i18n>Tax Code</span><span i18n> must be less than 24 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="taxRate">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>% VAT</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input formControlName="taxRate" matInput required trim="blur">
+                    <mat-error *ngxControlError="row.controls['taxRate']; track: 'required'">
+                      <span i18n>% VAT</span><span i18n> is required</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="originalAmount3">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>VAT amount</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input [maxDecimal]="4" appThousandsSeparator formControlName="originalAmount3" matInput required
+                           trim="blur">
+                    <mat-error *ngxControlError="row.controls['originalAmount3']; track: 'required'">
+                      <span i18n>VAT amount</span><span i18n> is required</span>
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['originalAmount3']; track: 'invalidNumber'">
+                      <span i18n>VAT amount</span><span i18n> must be number</span>
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['originalAmount3']; track: 'invalidNumberDecimal'">
+                      <span i18n>VAT amount</span><span i18n> invalid</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="priceWithTax">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Unit Price After Tax</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input [maxDecimal]="4" appThousandsSeparator formControlName="priceWithTax" matInput required
+                           trim="blur">
+                    <mat-error *ngxControlError="row.controls['priceWithTax']; track: 'required'">
+                      <span i18n>Unit Price After Tax</span><span i18n> is required</span>
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['priceWithTax']; track: 'invalidNumber'">
+                      <span i18n>Unit Price After Tax</span><span i18n> must be number</span>
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['priceWithTax']; track: 'invalidNumberDecimal'">
+                      <span i18n>Unit Price After Tax</span><span i18n> invalid</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="notes">
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Remark</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="input-cell">
+                  <mat-form-field class="edit-inline-table">
+                    <input formControlName="notes" matInput trim="blur">
+                    <mat-error *ngxControlError="row.controls['notes']; track: 'maxlength'">
+                      <span i18n>Remark</span><span i18n> must be less than 50 characters</span>
+                    </mat-error>
+                  </mat-form-field>
+                </div>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="action" stickyEnd>
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="action-buttons align-items-center text-center">
+                  <a (click)="_confirmDelete(row,i,'tblPriceUnit')" *ngIf="!readMode"
+                     class="text-danger"
+                     mat-button type="button">
+                    <i class="material-symbols-outlined" i18n-title title="Delete">
+                      delete
+                    </i>
+                  </a>
+                </div>
+              </td>
+            </ng-container>
+            @if (!readMode) {
+            <tr
+                *matHeaderRowDef="['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes','action']"
+                mat-header-row></tr>
+            <tr
+                *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes','action',];"
+                class="input-row" mat-row></tr>
+            <tr *matNoDataRow class="mat-row">
+              <td [attr.colspan]="15" class="mat-cell border-none text-center"><span
+                  i18n>No data!</span></td>
+            </tr>
+            } @else {
+            <tr
+                *matHeaderRowDef="['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes']"
+                mat-header-row></tr>
+            <tr
+                *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes']"
+                class="input-row" mat-row></tr>
+            <tr *matNoDataRow class="mat-row">
+              <td [attr.colspan]="14" class="mat-cell border-none text-center"><span
+                  i18n>No data!</span></td>
+            </tr>
+            }
+
+          </table>
+        </form>
       </div>
     </mat-panel-description>
   </mat-expansion-panel>
-  <mat-expansion-panel [expanded]="expandList.has('tab6')">
+  <mat-expansion-panel *ngIf="isHotel()" [expanded]="expandList.has('tab6')">
     <mat-expansion-panel-header i18n>
       <div (click)="$event.stopPropagation();" class="title-no-event">6. Non-24-hour room rate</div>
     </mat-expansion-panel-header>
@@ -1279,7 +1274,8 @@
       <div>
         <div class="w-100 mb-10 d-flex justify-content-between">
           <span class="d-flex align-items-end fw-bold">6.1 Early checkin, Late checkout</span>
-          <button (click)="addTbl61()" *ngIf="!readMode" class="add-btn right-0" i18n mat-button type="button">
+          <button (click)="addRow(tblEciLco,'tblEciLco')" *ngIf="!readMode" class="add-btn right-0" i18n mat-button
+                  type="button">
             <i class="material-symbols-outlined">
               add
             </i>
@@ -1287,127 +1283,135 @@
           </button>
         </div>
         <div class="table-responsive">
-          <table [dataSource]="tbl61" class="table-light" mat-table>
-            <ng-container matColumnDef="stt">
-              <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
-              <td *matCellDef="let element; let i = index" class="text-center"
-                  mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col611">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Type</th>
-              <td (click)="editCellUP(element,'col611')" *matCellDef="let element"
-                  [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                  mat-cell>
-                <div class="input-cell">
-                  <mat-form-field class="edit-inline-table">
-                    <mat-select [(ngModel)]="element.col611" required>
-                      <mat-option *ngFor="let option of listCheckType" [value]="option.key">
-                        {{ option.value }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col612">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Hours from</th>
-              <td *matCellDef="let element; let i = index"
-                  mat-cell>
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table time-picker">
-                    <input #inputRef="ngModel" [(ngModel)]="element.col612"
-                           [disableClick]="true" [format]="24"
-                           [ngxTimepicker]="timpicker612_Tbl" matInput
-                           required trim="blur">
-                    <ngx-material-timepicker-toggle [for]="timpicker612_Tbl"
-                                                    class="time-picker-clock"></ngx-material-timepicker-toggle>
-                    <ngx-material-timepicker #timpicker612_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                             [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                    ></ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col612', inputRef) }}</mat-error>
-                  </mat-form-field>
-                </div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col613">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Hours to</th>
-              <td (click)="editCellUP(element,'col613')" *matCellDef="let element"
-                  [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                  mat-cell>
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table time-picker">
-                    <input #inputRef="ngModel" (clickOutside)="readCellUP(element,'col613')"
-                           [(ngModel)]="element.col613" [disableClick]="true"
-                           [format]="24" [ngxTimepicker]="timpicker613_Tbl"
-                           matInput required
-                           trim="blur">
-                    <ngx-material-timepicker-toggle [for]="timpicker613_Tbl"
-                                                    class="time-picker-clock"></ngx-material-timepicker-toggle>
-                    <ngx-material-timepicker #timpicker613_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                             [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                    ></ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col613', inputRef) }}</mat-error>
-                  </mat-form-field>
-                </div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col614">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Ratio (to standard room rate)</th>
-              <td (click)="editCellUP(element,'col614')" *matCellDef="let element"
-                  [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                  mat-cell>
-                @if (checkCellUP(element, 'col614')) {
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table" [class.mdc-text-field--invalid]="true">
-                    <input trim="blur" [(ngModel)]="element.col614" matInput required #inputRef="ngModel"
-                           min="0" type="number" step="0.01"
-                           (blur)="true"
-                           (clickOutside)="readCellUP(element,'col614')">
-                    <mat-error>{{ validField(element, 'col614', inputRef) }}</mat-error>
+          <form [formGroup]="formGroupDetail">
+            <table [dataSource]="dsEciLco" class="table-light table-responsive" mat-table mat-table>
+              <!-- Cột Tên -->
+              <ng-container matColumnDef="stt">
+                <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
+                <td *matCellDef="let element; let i = index" class="text-center"
+                    mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="typeCheck">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Type</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell">
+                    <mat-form-field class="edit-inline-table">
+                      <mat-select formControlName="typeCheck" required>
+                        <mat-option *ngFor="let option of listCheckType" [value]="option.key">
+                          {{ option.value }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngxControlError="row.controls['typeCheck']; track: 'required'">
+                        <span i18n>Type</span><span i18n> is required</span>
+                      </mat-error>
                     </mat-form-field>
                   </div>
-                } @else {
-                <span class="label-text">
-                {{ element.col614 }}
-                </span>
-                }
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="action" stickyEnd>
-              <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
-                Action
-              </th>
-              <td *matCellDef="let element;let i = dataIndex" mat-cell>
-                <div class="action-buttons align-items-center text-center">
-                  <a (click)="_confirmDelete(element,'tbl61','Are you sure you want to delete?')" *ngIf="!readMode"
-                     class="text-danger"
-                     mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Delete">
-                      delete
-                    </i>
-                  </a>
-                </div>
-
-              </td>
-            </ng-container>
-            <tr *matHeaderRowDef="['stt','col611','col612','col613','col614','action']" mat-header-row></tr>
-            <tr *matRowDef="let row; columns: ['stt','col611','col612','col613','col614','action'];" class="input-row"
-                mat-row></tr>
-            <tr *matNoDataRow class="mat-row">
-              <td [attr.colspan]="6" class="mat-cell border-none text-center"><span
-                i18n>No data!</span></td>
-            </tr>
-          </table>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fromHour">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Hours from</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell time-picker">
+                    <mat-form-field class="edit-inline-table">
+                      <input [disableClick]="true" [format]="24" [ngxTimepicker]="fromHour"
+                             [required]="false" formControlName="fromHour"
+                             matInput trim="blur">
+                      <ngx-material-timepicker-toggle [for]="fromHour"
+                                                      class="time-picker-clock"></ngx-material-timepicker-toggle>
+                      <ngx-material-timepicker #fromHour [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                      ></ngx-material-timepicker>
+                      <mat-error *ngxControlError="row.controls['fromHour']; track: 'required'">
+                        <span i18n>Hours from</span><span i18n> is required</span>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="toHour">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Hours to</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell time-picker">
+                    <mat-form-field class="edit-inline-table">
+                      <input [disableClick]="true" [format]="24" [ngxTimepicker]="toHour"
+                             formControlName="toHour" matInput
+                             required trim="blur">
+                      <ngx-material-timepicker-toggle [for]="toHour"
+                                                      class="time-picker-clock"></ngx-material-timepicker-toggle>
+                      <ngx-material-timepicker #toHour [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                      ></ngx-material-timepicker>
+                      <mat-error *ngxControlError="row.controls['toHour']; track: 'required'">
+                        <span i18n>Hours to</span><span i18n> is required</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['toHour']; track: 'timeBeforeValidator'">
+                        <span i18n>Hours to</span><span i18n> must after hours from</span>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="rate">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Ratio (to standard
+                  room rate)
+                </th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell">
+                    <mat-form-field class="edit-inline-table">
+                      <input [maxDecimal]="2" appThousandsSeparator formControlName="rate" matInput required
+                             trim="blur">
+                      <mat-error *ngxControlError="row.controls['rate']; track: 'required'">
+                        <span i18n>Ratio</span><span i18n> is required</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['rate']; track: 'lessThanValidator'">
+                        <span i18n>Ratio</span><span i18n> must less than 2</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['rate']; track: 'invalidNumberDecimal'">
+                        <span i18n>Ratio</span><span i18n> invalid</span>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="action" stickyEnd>
+                <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="action-buttons align-items-center text-center">
+                    <a (click)="_confirmDelete(row,i,'tblEciLco')" *ngIf="!readMode"
+                       class="text-danger"
+                       mat-button type="button">
+                      <i class="material-symbols-outlined" i18n-title title="Delete">
+                        delete
+                      </i>
+                    </a>
+                  </div>
+                </td>
+              </ng-container>
+              @if (!readMode) {
+              <tr *matHeaderRowDef="['stt','typeCheck','fromHour','toHour','rate','action']" mat-header-row></tr>
+              <tr *matRowDef="let row; columns: ['stt','typeCheck','fromHour','toHour','rate','action'];" class="input-row" mat-row></tr>
+              <tr *matNoDataRow class="mat-row">
+                <td [attr.colspan]="6" class="mat-cell border-none text-center"><span
+                    i18n>No data!</span></td>
+              </tr>
+              } @else {
+              <tr *matHeaderRowDef="['stt','typeCheck','fromHour','toHour','rate']" mat-header-row></tr>
+              <tr *matRowDef="let row; columns: ['stt','typeCheck','fromHour','toHour','rate']" class="input-row" mat-row></tr>
+              <tr *matNoDataRow class="mat-row">
+                <td [attr.colspan]="5" class="mat-cell border-none text-center"><span
+                    i18n>No data!</span></td>
+              </tr>
+              }
+            </table>
+          </form>
         </div>
       </div>
       <div class="mt-25">
         <div class="w-100 mb-10 d-flex justify-content-between">
           <span class="d-flex align-items-end fw-bold">6.2 Overnight stay</span>
-          <button (click)="addTbl62()" *ngIf="!readMode" class="add-btn right-0" i18n mat-button type="button">
+          <button (click)="addRow(tblOvernightStay,'tblOvernightStay')" *ngIf="!readMode" class="add-btn right-0" i18n
+                  mat-button type="button">
             <i class="material-symbols-outlined">
               add
             </i>
@@ -1415,281 +1419,309 @@
           </button>
         </div>
         <div class="table-responsive">
-          <table [dataSource]="tbl62" class="table-light" mat-table>
-            <ng-container matColumnDef="stt">
-              <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
-              <td *matCellDef="let element; let i = index" class="text-center"
-                  mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col621">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Type</th>
-              <td (click)="editCellUP(element,'col621')" *matCellDef="let element"
-                  [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                  mat-cell>
-                <div class="input-cell">
-                  <mat-form-field class="edit-inline-table">
-                    <mat-select [(ngModel)]="element.col621" required>
-                      <mat-option *ngFor="let option of listCheckType" [value]="option.key">
-                        {{ option.value }}
-                      </mat-option>
-                    </mat-select>
-                  </mat-form-field>
-                </div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col622">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Hours from</th>
-              <td *matCellDef="let element; let i = index"
-                  mat-cell>
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table time-picker">
-                    <input #inputRef="ngModel" [(ngModel)]="element.col622"
-                           [disableClick]="true" [format]="24"
-                           [ngxTimepicker]="timpicker622_Tbl" matInput
-                           required trim="blur">
-                    <ngx-material-timepicker-toggle [for]="timpicker622_Tbl"
-                                                    class="time-picker-clock"></ngx-material-timepicker-toggle>
-                    <ngx-material-timepicker #timpicker622_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                             [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true">
-
-                    </ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col623', inputRef) }}</mat-error>
-                  </mat-form-field>
-                </div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col623">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Hours to</th>
-              <td (click)="editCellUP(element,'col623')" *matCellDef="let element"
-                  [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                  mat-cell>
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table time-picker">
-                    <input #inputRef="ngModel" (clickOutside)="readCellUP(element,'col623')"
-                           [(ngModel)]="element.col623"
-                           [disableClick]="true" [format]="24"
-                           [ngxTimepicker]="timpicker623_Tbl" matInput
-                           required
-                           trim="blur">
-                    <ngx-material-timepicker-toggle [for]="timpicker623_Tbl"
-                                                    class="time-picker-clock"></ngx-material-timepicker-toggle>
-                    <ngx-material-timepicker #timpicker623_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                             [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                    ></ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col623', inputRef) }}</mat-error>
-                  </mat-form-field>
-                </div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col624">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Ratio (to standard room rate)</th>
-              <td (click)="editCellUP(element,'col624')" *matCellDef="let element"
-                  [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                  mat-cell>
-                @if (checkCellUP(element, 'col624')) {
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table" [class.mdc-text-field--invalid]="true">
-                    <input trim="blur" [(ngModel)]="element.col624" matInput required #inputRef="ngModel"
-                           min="0" type="number" step="0.01"
-                           (blur)="true"
-                           (clickOutside)="readCellUP(element,'col624')">
-                    <mat-error>{{ validField(element, 'col624', inputRef) }}</mat-error>
+          <form [formGroup]="formGroupDetail">
+            <table [dataSource]="dsOvernightStay" class="table-light table-responsive" mat-table mat-table>
+              <!-- Cột Tên -->
+              <ng-container matColumnDef="stt">
+                <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
+                <td *matCellDef="let element; let i = index" class="text-center"
+                    mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="typeCheck">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Type</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell">
+                    <mat-form-field class="edit-inline-table">
+                      <mat-select formControlName="typeCheck" required>
+                        <mat-option *ngFor="let option of listCheckType" [value]="option.key">
+                          {{ option.value }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngxControlError="row.controls['typeCheck']; track: 'required'">
+                        <span i18n>Type</span><span i18n> is required</span>
+                      </mat-error>
                     </mat-form-field>
                   </div>
-                } @else {
-                <span class="label-text">
-                {{ element.col624 }}
-                </span>
-                }
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="action" stickyEnd>
-              <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
-                Action
-              </th>
-              <td *matCellDef="let element;let i = dataIndex" mat-cell>
-                <div class="action-buttons align-items-center text-center">
-                  <a (click)="_confirmDelete(element,'tbl62','Are you sure you want to delete?')" *ngIf="!readMode"
-                     class="text-danger"
-                     mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Delete">
-                      delete
-                    </i>
-                  </a>
-                </div>
-              </td>
-            </ng-container>
-            <tr *matHeaderRowDef="['stt','col621','col622','col623','col624','action']" mat-header-row></tr>
-            <tr *matRowDef="let row; columns: ['stt','col621','col622','col623','col624','action'];" class="input-row"
-                mat-row></tr>
-            <tr *matNoDataRow class="mat-row">
-              <td [attr.colspan]="6" class="mat-cell border-none text-center"><span
-                i18n>No data!</span></td>
-            </tr>
-          </table>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="fromHour">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Hours from</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell time-picker">
+                    <mat-form-field class="edit-inline-table">
+                      <input [disableClick]="true" [format]="24" [ngxTimepicker]="fromHour"
+                             formControlName="fromHour" matInput
+                             required trim="blur">
+                      <ngx-material-timepicker-toggle [for]="fromHour"
+                                                      class="time-picker-clock"></ngx-material-timepicker-toggle>
+                      <ngx-material-timepicker #fromHour [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                      ></ngx-material-timepicker>
+                      <mat-error *ngxControlError="row.controls['fromHour']; track: 'required'">
+                        <span i18n>Hours from</span><span i18n> is required</span>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="toHour">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Hours to</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell time-picker">
+                    <mat-form-field class="edit-inline-table">
+                      <input [disableClick]="true" [format]="24" [ngxTimepicker]="toHour"
+                             formControlName="toHour" matInput
+                             required trim="blur">
+                      <ngx-material-timepicker-toggle [for]="toHour"
+                                                      class="time-picker-clock"></ngx-material-timepicker-toggle>
+                      <ngx-material-timepicker #toHour [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                      ></ngx-material-timepicker>
+                      <mat-error *ngxControlError="row.controls['toHour']; track: 'required'">
+                        <span i18n>Hours to</span><span i18n> is required</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['toHour']; track: 'timeBeforeValidator'">
+                        <span i18n>Hours to</span><span i18n> must after hours from</span>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="rate">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Ratio (to standard
+                  room rate)
+                </th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell">
+                    <mat-form-field class="edit-inline-table">
+                      <input [maxDecimal]="2" appThousandsSeparator formControlName="rate" matInput required
+                             trim="blur">
+                      <mat-error *ngxControlError="row.controls['rate']; track: 'required'">
+                        <span i18n>Ratio</span><span i18n> is required</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['rate']; track: 'lessThanValidator'">
+                        <span i18n>Ratio</span><span i18n> must less than 2</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['rate']; track: 'invalidNumberDecimal'">
+                        <span i18n>Ratio</span><span i18n> invalid</span>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="action" stickyEnd>
+                <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="action-buttons align-items-center text-center">
+                    <a (click)="_confirmDelete(row,i,'tblOvernightStay')" *ngIf="!readMode"
+                       class="text-danger"
+                       mat-button type="button">
+                      <i class="material-symbols-outlined" i18n-title title="Delete">
+                        delete
+                      </i>
+                    </a>
+                  </div>
+                </td>
+              </ng-container>
+              @if (!readMode) {
+              <tr *matHeaderRowDef="['stt','typeCheck','fromHour','toHour','rate','action']" mat-header-row></tr>
+              <tr *matRowDef="let row; columns: ['stt','typeCheck','fromHour','toHour','rate','action'];" class="input-row" mat-row></tr>
+              <tr *matNoDataRow class="mat-row">
+                <td [attr.colspan]="6" class="mat-cell border-none text-center"><span
+                    i18n>No data!</span></td>
+              </tr>
+              } @else {
+              <tr *matHeaderRowDef="['stt','typeCheck','fromHour','toHour','rate']" mat-header-row></tr>
+              <tr *matRowDef="let row; columns: ['stt','typeCheck','fromHour','toHour','rate']" class="input-row" mat-row></tr>
+              <tr *matNoDataRow class="mat-row">
+                <td [attr.colspan]="5" class="mat-cell border-none text-center"><span
+                    i18n>No data!</span></td>
+              </tr>
+              }
+            </table>
+          </form>
         </div>
       </div>
       <div class="mt-25">
         <div class="w-100 mb-10 d-flex justify-content-between">
           <span class="d-flex align-items-end fw-bold">6.3 DAY USE</span>
-          <button (click)="addTbl63()" *ngIf="!readMode" class="add-btn right-0" i18n mat-button type="button">
+          @if(dsDayUse.data?.length===0){
+          <button (click)="addRow(tblDayUse,'tblDayUse')" *ngIf="!readMode" class="add-btn right-0" i18n mat-button
+                  type="button">
             <i class="material-symbols-outlined">
               add
             </i>
             Add
           </button>
+          }
         </div>
         <div class="table-responsive">
-          <table [dataSource]="tbl63" class="table-light" mat-table>
-            <ng-container matColumnDef="stt">
-              <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
-              <td *matCellDef="let element; let i = index" class="text-center"
-                  mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col631">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Checkin From</th>
-              <td *matCellDef="let element; let i = index"
-                  mat-cell>
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table time-picker">
-                    <input #inputRef="ngModel" [(ngModel)]="element.col631"
-                           [disableClick]="true" [format]="24"
-                           [ngxTimepicker]="timpicker631_Tbl" matInput
-                           required trim="blur">
-                    <ngx-material-timepicker-toggle [for]="timpicker631_Tbl"
-                                                    class="time-picker-clock"></ngx-material-timepicker-toggle>
-                    <ngx-material-timepicker #timpicker631_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                             [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                    ></ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col631', inputRef) }}</mat-error>
-                  </mat-form-field>
-                </div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col632">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Checkout To</th>
-              <td (click)="editCellUP(element,'col632')" *matCellDef="let element"
-                  [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                  mat-cell>
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table time-picker">
-                    <input #inputRef="ngModel" (clickOutside)="readCellUP(element,'col632')"
-                           [(ngModel)]="element.col632"
-                           [disableClick]="true" [format]="24"
-                           [ngxTimepicker]="timpicker632_Tbl" matInput
-                           required
-                           trim="blur">
-                    <ngx-material-timepicker-toggle [for]="timpicker632_Tbl"
-                                                    class="time-picker-clock"></ngx-material-timepicker-toggle>
-                    <ngx-material-timepicker #timpicker632_Tbl [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                             [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
-                    ></ngx-material-timepicker>
-                    <mat-error>{{ validField(element, 'col632', inputRef) }}</mat-error>
-                  </mat-form-field>
-                </div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col633">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Maximum stay duration (hours)</th>
-              <td (click)="editCellUP(element,'col633')" *matCellDef="let element"
-                  [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                  mat-cell>
-                <div class="input-cell">
-                  <mat-form-field class="edit-inline-table">
-                    <input #inputRef="ngModel" (blur)="true" (clickOutside)="readCellUP(element,'col633')"
-                           [(ngModel)]="element.col633" matInput
-                           required
-                           trim="blur">
-                    <mat-error>{{ validField(element, 'col633', inputRef) }}</mat-error>
-                  </mat-form-field>
-
-                </div>
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col634">
-              <th *matHeaderCellDef i18n id="gt_max" mat-header-cell mat-sort-header>Ratio (stay duration <= maximum
-                stay
-                duration)
-              </th>
-              <td (click)="editCellUP(element,'col634')" *matCellDef="let element"
-                  [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                  mat-cell>
-                @if (checkCellUP(element, 'col634')) {
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table" [class.mdc-text-field--invalid]="true">
-                    <input trim="blur" [(ngModel)]="element.col634" matInput required #inputRef="ngModel"
-                           min="0" type="number" step="0.01"
-                           (blur)="true"
-                           (clickOutside)="readCellUP(element,'col634')">
-                    <mat-error>{{ validField(element, 'col634', inputRef) }}</mat-error>
+          <form [formGroup]="formGroupDetail">
+            <table [dataSource]="dsDayUse" class="table-light table-responsive" mat-table mat-table>
+              <!-- Cột Tên -->
+              <ng-container matColumnDef="stt">
+                <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
+                <td *matCellDef="let element; let i = index" class="text-center"
+                    mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="checkinFrom">
+                <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Checkin From</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell time-picker">
+                    <mat-form-field class="edit-inline-table">
+                      <input [disableClick]="true" [format]="24" [ngxTimepicker]="checkinFrom"
+                             formControlName="checkinFrom" matInput
+                             trim="blur">
+                      <ngx-material-timepicker-toggle [for]="checkinFrom"
+                                                      class="time-picker-clock"></ngx-material-timepicker-toggle>
+                      <ngx-material-timepicker #checkinFrom [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                      ></ngx-material-timepicker>
+                      <mat-error *ngxControlError="row.controls['checkinFrom']; track: 'required'">
+                        <span i18n>Checkin From</span><span i18n> is required</span>
+                      </mat-error>
                     </mat-form-field>
                   </div>
-                } @else {
-                <span class="label-text">
-                {{ element.col634 }}
-                </span>
-                }
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="col635">
-              <th *matHeaderCellDef i18n id="lt_max" mat-header-cell mat-sort-header>Ratio (stay duration > maximum stay
-                duration)
-              </th>
-              <td (click)="editCellUP(element,'col635')" *matCellDef="let element"
-                  [style.padding]="checkCellUP(element, 'type')?'0px !important':''"
-                  mat-cell>
-                @if (checkCellUP(element, 'col635')) {
-                <div class="input-cell">
-                  <mat-form-field
-                    class="edit-inline-table" [class.mdc-text-field--invalid]="true">
-                    <input trim="blur" [(ngModel)]="element.col635" matInput required #inputRef="ngModel"
-                           min="0" type="number" step="0.01"
-                           (blur)="true"
-                           (clickOutside)="readCellUP(element,'col635')">
-                    <mat-error>{{ validField(element, 'col635', inputRef) }}</mat-error>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="checkoutTo">
+                <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Checkout To</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell time-picker">
+                    <mat-form-field class="edit-inline-table">
+                      <input [disableClick]="true" [format]="24" [ngxTimepicker]="checkoutTo"
+                             formControlName="checkoutTo" matInput
+                             trim="blur">
+                      <ngx-material-timepicker-toggle [for]="checkoutTo"
+                                                      class="time-picker-clock"></ngx-material-timepicker-toggle>
+                      <ngx-material-timepicker #checkoutTo [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
+                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                      ></ngx-material-timepicker>
+                      <mat-error *ngxControlError="row.controls['checkoutTo']; track: 'required'">
+                        <span i18n>Checkout To</span><span i18n> is required</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['checkoutTo']; track: 'timeBeforeValidator'">
+                        <span i18n>Checkout To</span><span i18n> must after checkin from</span>
+                      </mat-error>
                     </mat-form-field>
                   </div>
-                } @else {
-                <span class="label-text">
-                {{ element.col635 }}
-                </span>
-                }
-              </td>
-            </ng-container>
-            <ng-container matColumnDef="action" stickyEnd>
-              <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
-                Action
-              </th>
-              <td *matCellDef="let element;let i = dataIndex" mat-cell>
-                <div class="action-buttons align-items-center text-center">
-                  <a (click)="_confirmDelete(element,'tbl63','Are you sure you want to delete?')" *ngIf="!readMode"
-                     class="text-danger"
-                     mat-button type="button">
-                    <i class="material-symbols-outlined" i18n-title title="Delete">
-                      delete
-                    </i>
-                  </a>
-                </div>
-
-              </td>
-            </ng-container>
-            <tr *matHeaderRowDef="['stt','col631','col632','col633','col634','col635','action']" mat-header-row></tr>
-            <tr *matRowDef="let row; columns: ['stt','col631','col632','col633','col634','col635','action'];"
-                class="input-row"
-                mat-row></tr>
-            <tr *matNoDataRow class="mat-row">
-              <td [attr.colspan]="6" class="mat-cell border-none text-center"><span
-                i18n>No data!</span></td>
-            </tr>
-          </table>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="typeCheck">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Type</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell">
+                    <mat-form-field class="edit-inline-table">
+                      <mat-select formControlName="typeCheck" required>
+                        <mat-option *ngFor="let option of listCheckType" [value]="option.key">
+                          {{ option.value }}
+                        </mat-option>
+                      </mat-select>
+                      <mat-error *ngxControlError="row.controls['typeCheck']; track: 'required'">
+                        <span i18n>Type</span><span i18n> is required</span>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="maxHour">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Maximum stay duration
+                  (hours)
+                </th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell">
+                    <mat-form-field class="edit-inline-table">
+                      <input formControlName="maxHour" matInput required trim="blur">
+                      <mat-error *ngxControlError="row.controls['maxHour']; track: 'required'">
+                        <span i18n>Stay duration</span><span i18n> is required</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['maxHour']; track: 'min'">
+                        <span i18n>Stay duration</span><span i18n> must greater than 0 and less than 24</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['maxHour']; track: 'max'">
+                        <span i18n>Stay duration</span><span i18n> must greater than 0 and less than 24</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['maxHour']; track: 'pattern'">
+                        <span i18n>Stay duration</span><span i18n> must be an integer</span>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="rate">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Ratio (stay duration
+                  <= maximum stay
+                  duration)
+                </th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell">
+                    <mat-form-field class="edit-inline-table">
+                      <input [maxDecimal]="2" [maxDecimal]="2" appThousandsSeparator formControlName="rate" matInput required
+                             trim="blur">
+                      <mat-error *ngxControlError="row.controls['rate']; track: 'required'">
+                        <span i18n>Ratio</span><span i18n> is required</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['rate']; track: 'invalidNumberDecimal'">
+                        <span i18n>Ratio</span><span i18n> invalid</span>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="rate1">
+                <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Ratio (stay duration >
+                  maximum stay
+                  duration)
+                </th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="input-cell">
+                    <mat-form-field class="edit-inline-table">
+                      <input [maxDecimal]="2" appThousandsSeparator formControlName="rate1" matInput required
+                             trim="blur">
+                      <mat-error *ngxControlError="row.controls['rate1']; track: 'required'">
+                        <span i18n>Ratio</span><span i18n> is required</span>
+                      </mat-error>
+                      <mat-error *ngxControlError="row.controls['rate1']; track: 'invalidNumberDecimal'">
+                        <span i18n>Ratio</span><span i18n> invalid</span>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                </td>
+              </ng-container>
+              <ng-container matColumnDef="action" stickyEnd>
+                <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
+                <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                  <div class="action-buttons align-items-center text-center">
+                    <a (click)="_confirmDelete(row,i,'tblDayUse')" *ngIf="!readMode"
+                       class="text-danger"
+                       mat-button type="button">
+                      <i class="material-symbols-outlined" i18n-title title="Delete">
+                        delete
+                      </i>
+                    </a>
+                  </div>
+                </td>
+              </ng-container>
+              @if (!readMode) {
+              <tr *matHeaderRowDef="['stt','checkinFrom','checkoutTo','maxHour','rate','rate1','action']" mat-header-row></tr>
+              <tr *matRowDef="let row; columns: ['stt','checkinFrom','checkoutTo','maxHour','rate','rate1','action'];" class="input-row"
+                  mat-row></tr>
+              <tr *matNoDataRow class="mat-row">
+                <td [attr.colspan]="7" class="mat-cell border-none text-center"><span
+                    i18n>No data!</span></td>
+              </tr>
+              } @else {
+              <tr *matHeaderRowDef="['stt','checkinFrom','checkoutTo','maxHour','rate','rate1']" mat-header-row></tr>
+              <tr *matRowDef="let row; columns: ['stt','checkinFrom','checkoutTo','maxHour','rate','rate1']" class="input-row" mat-row></tr>
+              <tr *matNoDataRow class="mat-row">
+                <td [attr.colspan]="6" class="mat-cell border-none text-center"><span
+                    i18n>No data!</span></td>
+              </tr>
+              }
+            </table>
+          </form>
         </div>
       </div>
     </mat-panel-description>
@@ -1699,7 +1731,7 @@
 <!-- Delete file confirm Popup -->
 <app-confirm-dialog
   (closeDialog)="closeConfirmDeleteFile()"
-  (confirm)="deleteFile()"
+  (confirm)="_doDelete()"
   [icon]="'check_circle'"
   [mainText]="'Are you sure you want to delete?'"
   [showDialog]="showDialogDeleteFile"

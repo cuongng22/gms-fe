@@ -208,7 +208,15 @@
         <mat-card-content>
           <mat-tab-group mat-align-tabs="start" mat-stretch-tabs="false">
             <mat-tab i18n-label label="Đối soát chung">
-              <div>export</div>
+              <div class="w-100 text-end">
+                <button (click)="download()" class="add-btn right-0 mb-10" i18n mat-button
+                        type="button">
+                  <i class="material-symbols-outlined">
+                    download
+                  </i>
+                  Export
+                </button>
+              </div>
               <div class="table-responsive">
                 <table [dataSource]="formGroupDetail.getRawValue().invoiceDocumentReviewProjection"
                        class="table-light table-responsive"

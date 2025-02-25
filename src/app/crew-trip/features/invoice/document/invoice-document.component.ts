@@ -41,6 +41,7 @@ import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/th
 import {cloneDeep} from "lodash";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
+import {InvoiceDocumentExportType} from "src/app/crew-trip/features/invoice/invoice-lookup";
 
 @Component({
   selector: 'app-invoice-document',
@@ -247,7 +248,9 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       await this.spinner.show();
       let filename = '';
       if (type === 'EXPORT') {
-        const res = await this.baseService.exportListData({});
+        const res = await this.baseService.exportListData({
+          exportType: InvoiceDocumentExportType.DOCUMENT_LIST
+        });
         this.downloadFile(res, 'export.xlsx');
       } else if (type === 'DOWNLOAD') {
         const res = await this.baseService.exportFileData({

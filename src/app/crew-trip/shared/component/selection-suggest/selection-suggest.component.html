@@ -13,11 +13,12 @@
     <mat-autocomplete requireSelection #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
       @for (option of filtered(); track option) {
       <mat-option [value]="attrValue?option[attrValue]:option">{{ attrDisplay ? option[attrDisplay] : option }}
+      @if(attrDisplay2){  -  {{option[attrDisplay2]}}}
       </mat-option>
       }
     </mat-autocomplete>
     <mat-error *ngxControlError="viewControl; track: 'required'">
-      {{ label }} {{MESSAGE.REQUIRED}}
+      {{ label?label:label2 }} {{MESSAGE.REQUIRED}}
     </mat-error>
   </mat-form-field>
 </div>

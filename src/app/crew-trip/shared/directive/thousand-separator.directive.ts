@@ -1,4 +1,4 @@
-import {AfterContentInit, Directive, ElementRef, HostListener} from '@angular/core';
+import {AfterContentInit, Directive, ElementRef, HostListener, Input} from '@angular/core';
 import {NgControl} from '@angular/forms';
 import {isNaN, parseInt} from "lodash";
 import {take} from "rxjs";
@@ -10,6 +10,8 @@ import {take} from "rxjs";
 })
 export class ThousandsSeparatorDirective implements AfterContentInit {
 
+  @Input() maxDecimal: number = 0;
+
   constructor(private el: ElementRef, private control: NgControl) {
   }
 
@@ -19,7 +21,8 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
       if (value && !isNaN(Number(value))) {
         inputElement.value = this.formatNumber(value);
       } else {
-        inputElement.value = '0';
+        // inputElement.value = '0';
+        this.control.control?.setErrors({invalidNumber: true});
       }
     });
   }
@@ -30,10 +33,16 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
     const inputElement = this.el.nativeElement;
     const value = inputElement.value.replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
     if (value && !isNaN(Number(value))) {
-      this.control.control?.setValue(Number(value), {emitEvent: false});
-      inputElement.value = this.formatNumber(value);
+      if (!this.isValidNumberDecimal(value)) {
+        this.control.control?.setErrors({invalidNumberDecimal: true});
+      } else {
+        this.control.control?.setErrors(null);
+        this.control.control?.setValue(Number(value), {emitEvent: false});
+        inputElement.value = this.formatNumber(value);
+      }
     } else {
-      inputElement.value = '';
+      // inputElement.value = '';
+      this.control.control?.setErrors({invalidNumber: true});
     }
   }
 
@@ -52,5 +61,9 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
     return parts.join('.'); // Ghép lại phần nguyên và thập phân
   }
 
-
+  private isValidNumberDecimal(value: string): boolean {
+    const regex = new RegExp(`^-?\\d*(\\.\\d{0,${this.maxDecimal}})?$`);
+    console.log(regex)
+    return regex.test(value);
+  }
 }

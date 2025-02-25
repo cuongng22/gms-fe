@@ -46,3 +46,9 @@ export const InvoiceDocumentStatusPayment = [
   {key: 'VOIDED', value: $localize`VOIDED`},
 
 ];
+
+export enum InvoiceDocumentExportType {
+  DOCUMENT_LIST = 'DOCUMENT_LIST',
+  DOCUMENT_REVIEW = 'DOCUMENT_REVIEW',
+  DOCUMENT_REVIEW_DETAIL = 'DOCUMENT_REVIEW_DETAIL',
+};

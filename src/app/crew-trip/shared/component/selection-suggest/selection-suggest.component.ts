@@ -62,15 +62,17 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 		}
 		this.setViewValueInit(this.formControl.value);
 
-		if (this.formControl.disabled) {
+		/*if (this.formControl.disabled) {
 			this.viewControl.disable();
-		}
+		}*/
 	}
 
 	@Input() size = 'sm';
 	@Input() label = '';
+	@Input() label2 = '';
 	@Input() attrValue = '';
 	@Input() attrDisplay = '';
+	@Input() attrDisplay2 = '';
 	@Input() editInlineTable = false
 	@Output() clearInputEvent = new EventEmitter<void>();
 	selectionChange = output<any>();
@@ -109,8 +111,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 			startWith('')
 		).subscribe(value => {
 			const optionFilter = [...(this.options ?? [])];
-			this.formControl.setValue(null);
-			this.formControl.updateValueAndValidity();
+			// this.formControl.setValue(null);
+			// this.formControl.updateValueAndValidity();
 			if (!value) {
 				this.filtered.set(optionFilter);
 				return;
@@ -121,6 +123,13 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 			}));
 		});
 
+		this.formControl.statusChanges.subscribe((res) => {
+			if (this.formControl.disabled) {
+				this.viewControl.disable();
+			} else {
+				this.viewControl.enable();
+			}
+		});
 	}
 
 
