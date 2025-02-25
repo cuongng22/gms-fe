@@ -37,22 +37,32 @@
                     Number of Overnight Stays
                 </th>
                 <td mat-cell *matCellDef="let element" [style.padding]="element['overnightEditing']?'0px !important':''"
-                    (click)="clickEdit(element, 'overnightEditing')">
+                    (click)="clickEdit(element, 'overnightEditing')" class="text-right">
                     @if(!element['overnightEditing']){
-                    {{element.overnight}}
+                    {{element.overnight | number}}
                     }@else {
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'overnightEditing')"
                             class="edit-inline-table">
-                            <input matInput type="number" digitOnly [(ngModel)]="element.overnight"
-                                [disabled]="disabled()">
+                            <input appThousandsSeparator matInput type="number" digitOnly
+                                [(ngModel)]="element.overnight" [disabled]="disabled()">
                         </mat-form-field>
                     </div>
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
-
+            <ng-container matColumnDef="totalFlightByAircraft" sticky>
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.rowspan]="2"
+                    i18n="@@aircraftType">
+                    Aircraft Type
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{element.totalFlightByAircraft | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="text-right">{{getTotal('totalFlightByAircraft') | number}}
+                </td>
+            </ng-container>
             <ng-container matColumnDef="numberOfRooms">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]=3
                     i18n="@@numberOfRooms">
@@ -63,33 +73,33 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
                     Single Room
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.singleRoom}}
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.singleRoom | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoom')}} }
+                <td mat-footer-cell *matFooterCellDef class="text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoom') | number}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="doubleRoom">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
                     Double Room
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.doubleRoom}}
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.doubleRoom | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoom')}} }</td>
+                <td mat-footer-cell *matFooterCellDef class="text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoom') | number}} }</td>
             </ng-container>
             <ng-container matColumnDef="singleRoomReserved">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center wrap-text"
                     i18n="@@singleRoomReserved">
                     Buffer rate <br /> (for single-gender)
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.singleRoomReserved}}
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.singleRoomReserved | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomReserved')}} }</td>
+                <td mat-footer-cell *matFooterCellDef class="text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomReserved') | number}} }</td>
             </ng-container>
 
 
@@ -105,21 +115,22 @@
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex"
                     [style.padding]="element['singleRoomOtherEditing']?'0px !important':''"
-                    (click)="clickEdit(element, 'singleRoomOtherEditing')">
+                    (click)="clickEdit(element, 'singleRoomOtherEditing')" class="text-right">
                     @if(!element['singleRoomOtherEditing']){
-                    {{element.singleRoomOther}}
+                    {{element.singleRoomOther | number}}
                     }@else {
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'singleRoomOtherEditing')"
                             class="edit-inline-table">
-                            <input matInput type="text" digitOnly [(ngModel)]="element.singleRoomOther"
+                            <input appThousandsSeparator matInput type="text" digitOnly
+                                [(ngModel)]="element.singleRoomOther"
                                 (ngModelChange)="vlcSingleRoomOther(index, element, $event)" [disabled]="disabled()">
                         </mat-form-field>
                     </div>
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomOther')}} }</td>
+                <td mat-footer-cell *matFooterCellDef class="text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomOther') | number}} }</td>
             </ng-container>
             <ng-container matColumnDef="doubleRoomOther">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
@@ -127,26 +138,27 @@
                 </th>
                 <td mat-cell *matCellDef="let element;let index = dataIndex"
                     [style.padding]="element['doubleRoomOtherEditing']?'0px !important':''"
-                    (click)="clickEdit(element, 'doubleRoomOtherEditing')">
+                    (click)="clickEdit(element, 'doubleRoomOtherEditing')" class="text-right">
                     @if(!element['doubleRoomOtherEditing']){
-                    {{element.doubleRoomOther}}
+                    {{element.doubleRoomOther | number}}
                     }@else {
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'doubleRoomOtherEditing')"
                             class="edit-inline-table">
-                            <input matInput type="text" digitOnly [(ngModel)]="element.doubleRoomOther"
+                            <input appThousandsSeparator matInput type="text" digitOnly
+                                [(ngModel)]="element.doubleRoomOther"
                                 (ngModelChange)="vlcDoubleRoomOther(index, element, $event)" [disabled]="disabled()">
                         </mat-form-field>
                     </div>
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomOther')}} }
+                <td mat-footer-cell *matFooterCellDef class="text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomOther') | number}} }
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="numberOfEstimatedEarlyCheckInRooms">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]=3
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [colSpan]="3"
                     i18n="@@numberOfEstimatedEarlyCheckInRooms">
                     Number of Estimated Early Check-in Rooms
                 </th>
@@ -156,13 +168,13 @@
                     Single Room
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
+                    [style.display]="!!element.aircraftTypeLabel?'':'none'" class="text-right">
                     @if(!!element.aircraftTypeLabel){
-                    {{element.singleRoomEarly}}
+                    {{element.singleRoomEarly | number}}
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomEarly')}} }
+                <td mat-footer-cell *matFooterCellDef class="text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomEarly') | number}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="doubleRoomEarly">
@@ -170,29 +182,29 @@
                     Double Room
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
+                    [style.display]="!!element.aircraftTypeLabel?'':'none'" class="text-right">
                     @if(!!element.aircraftTypeLabel){
-                    {{element.doubleRoomEarly}}
+                    {{element.doubleRoomEarly | number}}
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomEarly')}} }
+                <td mat-footer-cell *matFooterCellDef class="text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomEarly') | number}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="singleRoomEarlyReserved">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center wrap-text"
                     i18n="@@singleRoomReserved">
-                    Buffer rate <br /> (for single-gender)
+                    Buffer rate <br /> (for single-gender) early
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
+                    [style.display]="!!element.aircraftTypeLabel?'':'none'" class="text-right">
                     @if(!!element.aircraftTypeLabel){
-                    {{element.singleRoomEarlyReserved}}
+                    {{element.singleRoomEarlyReserved | number}}
                     }
                 </td>
 
-                <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomEarlyReserved')}} }
+                <td mat-footer-cell *matFooterCellDef class="text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomEarlyReserved') | number}} }
                 </td>
             </ng-container>
 
@@ -208,13 +220,13 @@
                     Single Room
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
+                    [style.display]="!!element.aircraftTypeLabel?'':'none'" class="text-right">
                     @if(!!element.aircraftTypeLabel){
                     {{element.singleRoomLate}}
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomLate')}} }
+                <td mat-footer-cell *matFooterCellDef class="text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomLate') | number}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="doubleRoomLate">
@@ -222,13 +234,13 @@
                     Double Room
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
+                    [style.display]="!!element.aircraftTypeLabel?'':'none'" class="text-right">
                     @if(!!element.aircraftTypeLabel){
                     {{element.doubleRoomLate}}
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomLate')}} }
+                <td mat-footer-cell *matFooterCellDef class="text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomLate') | number}} }
                 </td>
             </ng-container>
             <ng-container matColumnDef="singleRoomLateReserved">
@@ -237,21 +249,45 @@
                     Buffer rate <br /> (for single-gender)
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
+                    [style.display]="!!element.aircraftTypeLabel?'':'none'" class="text-right">
                     @if(!!element.aircraftTypeLabel){
                     {{element.singleRoomLateReserved}}
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef>
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomLateReserved')}} }
+                <td mat-footer-cell *matFooterCellDef class="text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomLateReserved') | number}} }
                 </td>
             </ng-container>
 
+            <ng-container matColumnDef="totalRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [colSpan]="2"
+                    i18n="@@totalRoom">
+                    Total room
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="totalSingleRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
+                    Single Room
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{element.totalSingleRoom | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="text-right">{{getTotal('totalSingleRoom') | number}}</td>
+            </ng-container>
+            <ng-container matColumnDef="totalDoubleRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
+                    Double Room
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{element.totalDoubleRoom | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="text-right">{{getTotal('totalDoubleRoom') | number}}</td>
+            </ng-container>
 
             <!-- start phần kế hoạch mua sắm -->
             <ng-container matColumnDef="unitPriceIncludingVat">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="!!generalData?.earlyCheckinFeeFlag && !!generalData?.lateCheckoutFeeFlag ? 6 :
-                            (!!generalData?.earlyCheckinFeeFlag || !!generalData?.lateCheckoutFeeFlag ? 4 : 2)"
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="!!generalData?.earlyCheckinFlag && !!generalData?.lateCheckoutFlag ? 6 :
+                            (!!generalData?.earlyCheckinFlag || !!generalData?.lateCheckoutFlag ? 4 : 2)"
                     i18n="@@unitPriceIncludingVat">
                     Unit Price (Including VAT)
                 </th>
@@ -260,10 +296,22 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
                     Single Room
                 </th>
-                <td mat-cell *matCellDef="let element" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                <td mat-cell *matCellDef="let element; let index = dataIndex" [attr.rowspan]="periodRowspan"
+                    [style.display]="!!element.periodLabel?'':'none'" class="text-right"
+                    [style.padding]="element['priceSingleRoomEditing']?'0px !important':''"
+                    (click)="clickEdit(element, 'priceSingleRoomEditing')">
+                    @if(!!element.periodLabel){
+                    @if (!element['priceSingleRoomEditing']) {
                     {{element.priceSingleRoom | number}}
+                    }@else {
+                    <div sizeInput="lg">
+                        <mat-form-field (clickOutside)="clickOutside(element,'priceSingleRoomEditing')"
+                            class="edit-inline-table">
+                            <input appThousandsSeparator matInput type="text" digitOnly
+                                [(ngModel)]="element.priceSingleRoom" [disabled]="disabled()">
+                        </mat-form-field>
+                    </div>
+                    }
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>
@@ -274,9 +322,21 @@
                     Double Room
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                    [style.display]="!!element.periodLabel?'':'none'" class="text-right"
+                    [style.padding]="element['priceDoubleRoomEditing']?'0px !important':''"
+                    (click)="clickEdit(element, 'priceDoubleRoomEditing')">
+                    @if(!!element.periodLabel){
+                    @if (!element['priceDoubleRoomEditing']) {
                     {{element.priceDoubleRoom | number}}
+                    }@else {
+                    <div sizeInput="lg">
+                        <mat-form-field (clickOutside)="clickOutside(element,'priceDoubleRoomEditing')"
+                            class="edit-inline-table">
+                            <input appThousandsSeparator matInput type="text" digitOnly
+                                [(ngModel)]="element.priceDoubleRoom" [disabled]="disabled()">
+                        </mat-form-field>
+                    </div>
+                    }
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>
@@ -287,11 +347,22 @@
                     i18n="@@earlyCheckInSingleRoom">
                     Early Check-in <br /> Single Room
                 </th>
-
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                    [style.display]="!!element.periodLabel?'':'none'" class="text-right"
+                    [style.padding]="element['priceSingleRoomEarlyEditing']?'0px !important':''"
+                    (click)="clickEdit(element, 'priceSingleRoomEarlyEditing')">
+                    @if(!!element.periodLabel){
+                    @if (!element['priceSingleRoomEarlyEditing']) {
                     {{element.priceSingleRoomEarly | number}}
+                    }@else {
+                    <div sizeInput="lg">
+                        <mat-form-field (clickOutside)="clickOutside(element,'priceSingleRoomEarlyEditing')"
+                            class="edit-inline-table">
+                            <input appThousandsSeparator matInput type="text" digitOnly
+                                [(ngModel)]="element.priceSingleRoomEarly" [disabled]="disabled()">
+                        </mat-form-field>
+                    </div>
+                    }
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>
@@ -303,9 +374,21 @@
                     Early Check-in <br /> Double Room
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                    [style.display]="!!element.periodLabel?'':'none'" class="text-right"
+                    [style.padding]="element['priceDoubleRoomEarlyEditing']?'0px !important':''"
+                    (click)="clickEdit(element, 'priceDoubleRoomEarlyEditing')">
+                    @if(!!element.periodLabel){
+                    @if (!element['priceDoubleRoomEarlyEditing']) {
                     {{element.priceDoubleRoomEarly | number}}
+                    }@else {
+                    <div sizeInput="lg">
+                        <mat-form-field (clickOutside)="clickOutside(element,'priceDoubleRoomEarlyEditing')"
+                            class="edit-inline-table">
+                            <input appThousandsSeparator matInput type="text" digitOnly
+                                [(ngModel)]="element.priceDoubleRoomEarly" [disabled]="disabled()">
+                        </mat-form-field>
+                    </div>
+                    }
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>
@@ -316,11 +399,22 @@
                     i18n="@@lateCheckoutSingleRoom">
                     Late Checkout <br /> Single Room
                 </th>
-
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                    [style.display]="!!element.periodLabel?'':'none'" class="text-right"
+                    [style.padding]="element['priceSingleRoomLateEditing']?'0px !important':''"
+                    (click)="clickEdit(element, 'priceSingleRoomLateEditing')">
+                    @if(!!element.periodLabel){
+                    @if (!element['priceSingleRoomLateEditing']) {
                     {{element.priceSingleRoomLate | number}}
+                    }@else {
+                    <div sizeInput="lg">
+                        <mat-form-field (clickOutside)="clickOutside(element,'priceSingleRoomLateEditing')"
+                            class="edit-inline-table">
+                            <input appThousandsSeparator matInput type="text" digitOnly
+                                [(ngModel)]="element.priceSingleRoomLate" [disabled]="disabled()">
+                        </mat-form-field>
+                    </div>
+                    }
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>
@@ -332,9 +426,21 @@
                     Late Checkout <br /> Double Room
                 </th>
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                    [style.display]="!!element.periodLabel?'':'none'" class="text-right"
+                    [style.padding]="element['priceDoubleRoomLateEditing']?'0px !important':''"
+                    (click)="clickEdit(element, 'priceDoubleRoomLateEditing')">
+                    @if(!!element.periodLabel){
+                    @if (!element['priceDoubleRoomLateEditing']) {
                     {{element.priceDoubleRoomLate | number}}
+                    }@else {
+                    <div sizeInput="lg">
+                        <mat-form-field (clickOutside)="clickOutside(element,'priceDoubleRoomLateEditing')"
+                            class="edit-inline-table">
+                            <input appThousandsSeparator matInput type="text" digitOnly
+                                [(ngModel)]="element.priceDoubleRoomLate" [disabled]="disabled()">
+                        </mat-form-field>
+                    </div>
+                    }
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>
@@ -345,11 +451,22 @@
                     i18n="@@unitPricePerTrip">
                     Unit Price per Trip
                 </th>
-
                 <td mat-cell *matCellDef="let element" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                    [style.display]="!!element.periodLabel?'':'none'" class="text-right"
+                    [style.padding]="element['priceCrewTransportEditing']?'0px !important':''"
+                    (click)="clickEdit(element, 'priceCrewTransportEditing')">
+                    @if(!!element.periodLabel){
+                    @if (!element['priceCrewTransportEditing']) {
                     {{element.priceCrewTransport | number}}
+                    }@else {
+                    <div sizeInput="lg">
+                        <mat-form-field (clickOutside)="clickOutside(element,'priceCrewTransportEditing')"
+                            class="edit-inline-table">
+                            <input appThousandsSeparator matInput type="text" digitOnly
+                                [(ngModel)]="element.priceCrewTransport" [disabled]="disabled()">
+                        </mat-form-field>
+                    </div>
+                    }
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
@@ -359,18 +476,18 @@
 
             <ng-container matColumnDef="totalAmountForeignTransport">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center wrap-text"
-                    [attr.rowspan]=2 i18n="@@totalCostOfCrewTransport">
+                    [rowSpan]="2" i18n="@@totalCostOfCrewTransport">
                     Total Cost of Crew Transport <br /> (Foreign Currency)
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
+                    [style.display]="!!element.aircraftTypeLabel?'':'none'" class="text-right">
                     <!-- {{element.totalAmountForeignTransportGroup|number}} -->
                     @if(!!element.aircraftTypeLabel){
                     {{getTotalByGroup(element,'totalAmountForeignTransport','totalAmountForeignTransportGroup') |
                     number}}
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef>
+                <td mat-footer-cell *matFooterCellDef class="text-right">
                     {{getTotal('totalAmountForeignTransport') | number}}
                 </td>
             </ng-container>
@@ -387,13 +504,14 @@
                     Excluding VAT
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.periodLabel?'':'none'">
+                    [style.display]="!!element.periodLabel?'':'none'" class="text-right">
                     <!-- {{element.totalAmountForeignGroup | number}} -->
                     @if(!!element.periodLabel){
                     {{getTotalByGroup(element,'totalAmountForeign','totalAmountForeignGroup') | number}}
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef>{{getTotal('totalAmountForeign') | number}}</td>
+                <td mat-footer-cell *matFooterCellDef class="text-right">{{getTotal('totalAmountForeign') | number}}
+                </td>
             </ng-container>
             <ng-container matColumnDef="totalAmountForeignVat">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center wrap-text"
@@ -401,13 +519,14 @@
                     Including VAT
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.periodLabel?'':'none'">
+                    [style.display]="!!element.periodLabel?'':'none'" class="text-right">
                     <!-- {{element.totalAmountForeignVatGroup | number}} -->
                     @if(!!element.periodLabel){
                     {{getTotalByGroup(element,'totalAmountForeignVat','totalAmountForeignVatGroup') | number}}
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef>{{getTotal('totalAmountForeignVat') | number}}</td>
+                <td mat-footer-cell *matFooterCellDef class="text-right">{{getTotal('totalAmountForeignVat') | number}}
+                </td>
             </ng-container>
 
 
@@ -422,20 +541,20 @@
                     Excluding VAT
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.periodLabel?'':'none'">
+                    [style.display]="!!element.periodLabel?'':'none'" class="text-right">
                     <!-- {{element.totalAmountGroup | number}} -->
                     @if(!!element.periodLabel){
                     {{getTotalByGroup(element,'totalAmount','totalAmountGroup') | number}}
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef>{{getTotal('totalAmount') | number}}</td>
+                <td mat-footer-cell *matFooterCellDef class="text-right">{{getTotal('totalAmount') | number}}</td>
             </ng-container>
             <ng-container matColumnDef="totalAmountVat">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVat">
                     Including VAT
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.periodLabel?'':'none'">
+                    [style.display]="!!element.periodLabel?'':'none'" class="text-right">
 
                     <!-- {{element.totalAmountVatGroup | number}} -->
                     @if(!!element.periodLabel){
@@ -443,7 +562,7 @@
                     }
                 </td>
 
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
                     {{getTotal('totalAmountVat') | number}}
                 </td>
             </ng-container>

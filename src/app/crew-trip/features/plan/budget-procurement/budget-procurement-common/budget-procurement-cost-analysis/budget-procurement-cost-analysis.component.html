@@ -5,7 +5,7 @@
                 <mat-label i18n="@@plannedProductionVsEstimatedProduction">
                     Planned Production vs Estimated Production
                 </mat-label>
-                <input type="text" inputmode="numeric" decimalSeparator="," digitOnly [decimal]="true"
+                <input appThousandsSeparator type="text" inputmode="numeric" decimalSeparator="," digitOnly [decimal]="true"
                     formControlName="planVsEstimate" matInput>
                 <i class="material-symbols-outlined fs-18" matSuffix>
                     percent
@@ -17,7 +17,7 @@
                 <mat-label i18n="@@planExcRateVsEstExcRate">
                     Plan. Exc. Rate vs Est. Exc. Rate
                 </mat-label>
-                <input type="text" inputmode="numeric" decimalSeparator="," digitOnly [decimal]="true" matInput
+                <input appThousandsSeparator type="text" inputmode="numeric" decimalSeparator="," digitOnly [decimal]="true" matInput
                     formControlName="planVsEstimateRate">
                 <i class="material-symbols-outlined fs-18" matSuffix>
                     percent
@@ -29,7 +29,7 @@
                 <mat-label i18n="@@roomRateThisYearVsLastYear">
                     Room Rate This Year vs Last Year
                 </mat-label>
-                <input type="text" inputmode="numeric" decimalSeparator="," digitOnly [decimal]="true" matInput
+                <input appThousandsSeparator type="text" inputmode="numeric" decimalSeparator="," digitOnly [decimal]="true" matInput
                     formControlName="ratePriceRoomBefore">
                 <i class="material-symbols-outlined fs-18" matSuffix>
                     percent
@@ -41,7 +41,7 @@
                 <mat-label i18n="@@unitPriceTransportThisYearVsLastYear">
                     Unit Price Transport This Year vs Last Year
                 </mat-label>
-                <input type="text" inputmode="numeric" [pattern]="'^\\d+(\,\\d{1,2})?$'" decimalSeparator="," digitOnly
+                <input appThousandsSeparator type="text" inputmode="numeric" [pattern]="'^\\d+(\,\\d{1,2})?$'" decimalSeparator="," digitOnly
                     [decimal]="true" matInput formControlName="ratePriceCarBefore">
                 <i class="material-symbols-outlined fs-18" matSuffix>
                     percent
@@ -55,7 +55,7 @@
             <mat-label i18n="@@carRatePlannedYearVsCurrentYear">
                 Note
             </mat-label>
-            <textarea matInput formControlName="notes" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5" matTextareaAutosize
+            <textarea matInput formControlName="notes" cdkAutosizeMaxRows="5" matTextareaAutosize
                 cdkTextareaAutosize #autosize="cdkTextareaAutosize">
             </textarea>
             <mat-error *ngxControlError="formGroupDetail.controls.notes; track: 'maxlength'" i18n="@@noteMaxlength">

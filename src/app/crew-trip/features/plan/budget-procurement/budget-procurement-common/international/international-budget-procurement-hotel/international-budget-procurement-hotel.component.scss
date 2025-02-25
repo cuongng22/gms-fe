@@ -14,7 +14,14 @@
         max-width: 140px !important;
     }
 
-    .mat-column-doubleRoomOther {
+    .mat-column-doubleRoomOther ,
+    .mat-column-priceSingleRoom,
+    .mat-column-priceDoubleRoom,
+    .mat-column-priceSingleRoomEarly,
+    .mat-column-priceDoubleRoomEarly,
+    .mat-column-priceDoubleRoomLate,
+    .mat-column-priceCrewTransport
+    {
         min-width: 140px !important;
         max-width: 140px !important;
     }

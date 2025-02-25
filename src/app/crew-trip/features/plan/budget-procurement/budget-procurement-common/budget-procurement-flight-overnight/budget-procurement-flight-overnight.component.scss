@@ -1,3 +1,7 @@
+@import './node_modules/bootstrap/scss/_functions.scss';
+@import './node_modules/bootstrap/scss/_variables.scss';
+@import './node_modules/bootstrap/scss/_mixins.scss';
+
 ::ng-deep {
 
     .mat-column-addBtn {
@@ -25,5 +29,18 @@
 
     .table-light.mdc-data-table__table .mdc-data-table__content .mat-mdc-row .field-required {
         border-bottom: 2px solid red !important;
+    }
+
+
+    .flightOvernight {
+        @include make-col-ready();
+
+        @include media-breakpoint-up(sm) {
+            @include make-col(15, 15);
+        }
+
+        @include media-breakpoint-up(lg) {
+            @include make-col(9, 15);
+        }
     }
 }

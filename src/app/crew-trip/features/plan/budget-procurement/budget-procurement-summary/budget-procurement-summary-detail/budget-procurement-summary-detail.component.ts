@@ -1,6 +1,6 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject, input, OnInit, signal, viewChild, ViewChild, HostListener, AfterViewChecked, ChangeDetectorRef, AfterViewInit, AfterContentInit, ChangeDetectionStrategy } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -10,7 +10,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
-import { RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { BudgetProcurementGeneralComponent } from '../../budget-procurement-common/budget-procurement-general/budget-procurement-general.component';
@@ -30,9 +30,10 @@ import { DomesticBudgetProcurementFlightRateComponent } from '../../budget-procu
 import { DomesticBudgetProcurementHotelComponent } from '../../budget-procurement-common/domestic/domestic-budget-procurement-hotel/domestic-budget-procurement-hotel.component';
 import { DomesticBudgetProcurementCarRentalComponent } from '../../budget-procurement-common/domestic/domestic-budget-procurement-car-rental/domestic-budget-procurement-car-rental.component';
 import { DomesticBudgetProcurementWetLeaseComponent } from '../../budget-procurement-common/domestic/domestic-budget-procurement-wet-lease/domestic-budget-procurement-wet-lease.component';
-import { V } from '@angular/cdk/keycodes';
-import { dA } from 'node_modules/@fullcalendar/core/internal-common';
 import { checkChange } from '../../budget-procurement-common/international/international-budget-procurement-hotel/international-budget-procurement-hotel.model';
+import moment from 'moment';
+import { CurrencyService } from 'src/app/crew-trip/core/services/currency.service';
+import { ifValidator } from 'ngxtension/if-validator';
 
 @Component({
   selector: 'app-budget-procurement-summary-detail',
@@ -52,6 +53,8 @@ import { checkChange } from '../../budget-procurement-common/international/inter
 export class BudgetProcurementSummaryDetailComponent extends CommonComponent implements OnInit, AfterViewChecked, AfterViewInit {
   override baseService = inject(PlanBudgetProcurementService);
   dataTransformPipe = inject(DataTransformPipe);
+  private readonly currencyService = inject(CurrencyService);
+  private readonly router = inject(Router)
 
   @ViewChild('panelCalculationBasisState', { static: false }) panelCalculationBasisState: MatExpansionPanel; // II
   @ViewChild('panelFlightRateYearState', { static: false }) panelFlightRateYearState: MatExpansionPanel; // 2.1
@@ -103,6 +106,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
   dataDetail: any;
   showDialogSummary = false;
+  showDialogClose = false;
 
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
@@ -137,7 +141,10 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       this.budgetProcurementGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
       this.budgetProcurementGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
       this.budgetProcurementGeneral.inputPrice = this.dataDetail?.inputPrice;
+      this.budgetProcurementGeneral.setVerionRate(this.dataDetail?.planBudgetProcurement.versionRate);
+      this.budgetProcurementGeneral.currencyCodeChange({ value: this.dataDetail?.currencyCode });
       this.budgetProcurementGeneral.setDefaultValueGeneral();
+
       this.setDataDetail();
       this.setPanelState();
     } catch (error) {
@@ -169,7 +176,22 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
   async confirmSummaryData() {
     try {
+      this.showDialogSummary = false;
       this.spinner.show();
+
+      this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.updateValueAndValidity();
+      this.budgetProcurementGeneral.formGroupDetail.controls.procEndDate.updateValueAndValidity();
+      if (!this.budgetProcurementGeneral.checkRequiredCurrency()) {
+        this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.clearValidators();
+        this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.updateValueAndValidity();
+      }
+      this.budgetProcurementGeneral.formGroupDetail.markAllAsTouched();
+      this.budgetProcurementGeneral.formGroupDetail.updateValueAndValidity();
+      if (this.budgetProcurementGeneral.formGroupDetail.invalid) {
+        console.log('this.budgetProcurementGeneral.formGroupDetail.invalid: ', this.budgetProcurementGeneral.formGroupDetail)
+        return;
+      }
+
       const procStartDate = this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.value;
       const procEndDate = this.budgetProcurementGeneral.formGroupDetail.controls.procEndDate.value;
       const requestBody = new DataSummayRequest(this.id() ?? 0,
@@ -184,6 +206,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       const response = await this.baseService.dataSummary(requestBody);//summaryDataExample;//summaryDataExample1;//
       this.dataDetail = {
         ...response.data,
+        ...this.budgetProcurementGeneral.formGroupDetail.getRawValue(),
         planFlightRates: response.data.planFlightRates ?? [],
         planFlightPeriods: response.data.planFlightPeriods ?? [],
         planOverightRates: response.data.planOverightRates ?? [],
@@ -195,28 +218,147 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
         planProcumentWetLease: response.data.planProcumentWetLease ?? [],
         listActype: response.data.listActype ?? [],
       };
+
+      this.setPriceAndExchangeRate();
+
       this.setDataDetail();
       this.isSetPanelState = false;
       this.setPanelState();
     } catch (error) {
+      console.error(error)
     } finally {
       this.showDialogSummary = false;
       this.spinner.hide();
     }
   }
 
+  setPriceAndExchangeRate() {
+    // set đơn giá cho trường hợp chưa có hợp đồng
+    const _priceData = this.budgetProcurementGeneral.budgetProcurementPrice?.dataSource?.data;
+
+    if (_priceData && _priceData.length > 0 && !this.dataDetail?.haveContract) {
+      const _priceSingleRoom = _priceData.find((item: any) => item.code === 'singleRoom') as any;
+      const _priceDoubleRoom = _priceData.find((item: any) => item.code === 'doubleRoom') as any;
+      const _priceEarlyCheckinSingleRoom = _priceData.find((item: any) => item.code === 'earlyCheckinSingleRoom') as any;
+      const _priceEarlyCheckinDoubleRoom = _priceData.find((item: any) => item.code === 'earlyCheckinDoubleRoom') as any;
+      const _priceLateCheckoutSingleRoom = _priceData.find((item: any) => item.code === 'lateCheckoutSingleRoom') as any;
+      const _priceLateCheckoutDoubleRoom = _priceData.find((item: any) => item.code === 'lateCheckoutDoubleRoom') as any;
+      const _priceTransportation = _priceData.find((item: any) => item.code === 'transportation') as any;
+      const price = {
+        priceData: _priceData,
+        priceSingleRoom: _priceSingleRoom,
+        priceDoubleRoom: _priceDoubleRoom,
+        priceEarlyCheckinSingleRoom: _priceEarlyCheckinSingleRoom,
+        priceEarlyCheckinDoubleRoom: _priceEarlyCheckinDoubleRoom,
+        priceLateCheckoutSingleRoom: _priceLateCheckoutSingleRoom,
+        priceLateCheckoutDoubleRoom: _priceLateCheckoutDoubleRoom,
+        priceTransportation: _priceTransportation
+      }
+
+      this.dataDetail?.planBudgetHotels.forEach((item: any) => {
+        this.setPrice(item, price);
+        this.setExchangeRateBudget(item, this.budgetProcurementGeneral.exchangeRate)
+      });
+      this.dataDetail?.planProcurementHotels.forEach((item: any) => {
+        this.setPrice(item, price);
+        this.setExchangeRateProcurement(item, this.budgetProcurementGeneral.exchangeRate)
+      });
+
+      this.dataDetail?.planBudgetCarentals.forEach((item: any) => {
+        this.setPrice(item, price);
+        this.setExchangeRateBudget(item, this.budgetProcurementGeneral.exchangeRate)
+      })
+
+      this.dataDetail?.planProcurementCarentals.forEach((item: any) => {
+        this.setPrice(item, price);
+        this.setExchangeRateProcurement(item, this.budgetProcurementGeneral.exchangeRate)
+      })
+    }
+  }
+  setPrice(item: any, price: any) {
+    item.priceSingleRoom = price.priceSingleRoom.priceBeforeTax;
+    item.priceSingleRoomVat = price.priceSingleRoom.priceAfterTax
+
+    item.priceDoubleRoom = price.priceDoubleRoom.priceBeforeTax;
+    item.priceDoubleRoomVat = price.priceDoubleRoom.priceAfterTax
+
+    item.priceSingleRoomEarly = price.priceEarlyCheckinSingleRoom.priceBeforeTax;
+    item.priceSingleRoomEarlyVat = price.priceEarlyCheckinSingleRoom.priceAfterTax;
+
+    item.priceDoubleRoomEarly = price.priceEarlyCheckinDoubleRoom.priceBeforeTax;
+    item.priceDoubleRoomEarlyVat = price.priceEarlyCheckinDoubleRoom.priceAfterTax;
+
+    item.priceSingleRoomLate = price.priceLateCheckoutSingleRoom.priceBeforeTax;
+    item.priceSingleRoomLateVat = price.priceLateCheckoutSingleRoom.priceAfterTax;
+
+    item.priceDoubleRoomLate = price.priceLateCheckoutDoubleRoom.priceBeforeTax;
+    item.priceDoubleRoomLateVat = price.priceLateCheckoutDoubleRoom.priceAfterTax;
+
+    item.priceCrewTransport = price.priceTransportation.priceBeforeTax;
+    item.priceCrewTransportVat = price.priceTransportation.priceAfterTax;
+
+    item.unitPrice = price.priceTransportation.priceBeforeTax;
+    item.unitPriceVat = price.priceTransportation.priceAfterTax;
+  }
+
+  setExchangeRateBudget(item: any, exchangeRate: any) {
+    const _periodStart = moment(item.periodStart).locale('en');
+    const _exchangeRate = exchangeRate[_periodStart.format('MMMM').toLowerCase()]
+    console.log(_periodStart, _exchangeRate);
+    if (_exchangeRate) {
+      item.rateInPeriod = _exchangeRate;
+    }
+  }
+  setExchangeRateProcurement(item: any, exchangeRate: any) {
+    item.rateInPeriod = exchangeRate.average;
+  }
+
 
   override async save(): Promise<any> {
     try {
+      await this.spinner.show();
+      const resSave = await this.processSave();
+      if (resSave.result) {
+        this.baseService.showSuccess(resSave.isUpdate ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
+        this.getDetailSummary()
+      }
+    } catch (error) {
+      console.error('save error: ', error);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  async confirmClose() {
+    try {
+      await this.spinner.show()
+      const resSave = await this.processSave();
+      if (resSave.result) {
+        this.router.navigate(['/plan/est-plan/budget-procurement', this.planBudgetProcurementId(), 'summary']);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.spinner.hide()
+    }
+
+  }
+
+  async processSave(): Promise<{ result: boolean, isUpdate?: boolean }> {
+    try {
+      if (!this.budgetProcurementGeneral.checkRequiredCurrency()) {
+        this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.clearValidators();
+        this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.updateValueAndValidity();
+      }
+      this.budgetProcurementGeneral.formGroupDetail.updateValueAndValidity()
       this.budgetProcurementGeneral.formGroupDetail.markAllAsTouched();
       this.budgetProcurementCostAnalysis.formGroupDetail.markAllAsTouched();
       console.log(this.budgetProcurementGeneral.formGroupDetail)
       if (this.budgetProcurementGeneral.formGroupDetail.invalid ||
         (this.category() === CategoryEnum.INTERNATIONAL && this.internationalFlightOvernight.invalid()) ||
         this.budgetProcurementCostAnalysis.formGroupDetail.invalid) {
-        return;
+        return Promise.resolve({ result: false });
       }
-      await this.spinner.show();
       const update = !!this.dataDetail.id;
 
       let planFlightRates: any[] = [];
@@ -270,13 +412,11 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       };
       console.log('data: ', data);
       const response = await this.baseService.save(data);
-      this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
-      this.getDetailSummary()
       console.log('response: ', response);
+      return Promise.resolve({ result: true, isUpdate: update })
     } catch (error) {
       console.error('save error: ', error);
-    } finally {
-      this.spinner.hide();
+      return Promise.resolve({ result: false })
     }
   }
 
@@ -327,15 +467,6 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       default:
         break;
     }
-
-    // if (this.budgetProcurementCostAnalysis && (this.budgetProcurementCostAnalysis.formGroupDetail.dirty
-    //   || this.budgetProcurementCostAnalysis.formGroupDetail.controls.notes.value
-    //   || this.budgetProcurementCostAnalysis.formGroupDetail.controls.planVsEstimate.value
-    //   || this.budgetProcurementCostAnalysis.formGroupDetail.controls.planVsEstimateRate.value
-    //   || this.budgetProcurementCostAnalysis.formGroupDetail.controls.ratePriceCarBefore.value
-    //   || this.budgetProcurementCostAnalysis.formGroupDetail.controls.ratePriceRoomBefore.value)) {
-    //   openPanel(this.panelBudgetProcurementCostAnalysisState);
-    // }
   }
 
   formGeneralValueChanges(event: any): void {
@@ -349,20 +480,37 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     }
   }
 
+  exchangeRateChange(event: any) {
+    console.log('exchangeRateChange: ', event)
+    this.internationalBudgetHotel?.setExchangeRate(event);
+    this.internationalProcurementHotel?.setExchangeRate(event);
+    this.internationalBudgetCarRental?.setExchangeRate(event)
+    this.internationalProcurementCarRental?.setExchangeRate(event)
+  }
+
   overnightValueChange(event: any): void {
     console.log('overnightValueChange: ', event);
     this.internationalBudgetHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.internationalFlightOvernight.dataSource.data);
   }
 
+  priceChange(event: any[]) {
+    this.internationalBudgetHotel?.setPrice(event);
+    this.internationalProcurementHotel?.setPrice(event);
+    this.internationalBudgetCarRental?.setPrice(event);
+    this.internationalProcurementCarRental?.setPrice(event);
+  }
   cleanData(data: any[]): any[] {
     return data.map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }));
   }
 
-  completed() {
-    this.baseService.summaryUpdateStatus({ id: this.id(), status: StatusSummaryEnum.COMPLETED }).then(() => {
-      this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
-      this.getDetailSummary();
-    });
+  async completed() {
+    const resSave = await this.processSave();
+    if (resSave.result) {
+      this.baseService.summaryUpdateStatus({ id: this.id(), status: StatusSummaryEnum.COMPLETED }).then(() => {
+        this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
+        this.getDetailSummary();
+      });
+    }
   }
 
 
@@ -382,6 +530,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     }
     this.internationalFlightOvernightData = [...this.dataDetail?.planOverightRates ?? []];
     this.domesticBudgetHotelData = [...this.dataDetail?.planBudgetHotels ?? []]
+
     this.internationalBudgetHotelData = {
       aircraftTypeRowspan: (this.dataDetail?.listActype ?? []).length,
       overnightRowspan: (this.dataDetail?.planOverightRates ?? []).length,
@@ -390,6 +539,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       planHotels: [...this.dataDetail?.planBudgetHotels ?? []],
       general: this.budgetProcurementGeneral.formGroupDetail.getRawValue()
     };
+
     this.domesticBudgetCarRentalData = [...this.dataDetail?.planBudgetCarentals ?? []];
     this.internationalBudgetCarRentalData = {
       planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
@@ -522,6 +672,10 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
   toggleDialogSummary() {
     this.showDialogSummary = !this.showDialogSummary;
+  }
+
+  toggleDialogClose() {
+    this.showDialogClose = !this.showDialogClose;
   }
 
   checkStatusCompelted(): boolean {

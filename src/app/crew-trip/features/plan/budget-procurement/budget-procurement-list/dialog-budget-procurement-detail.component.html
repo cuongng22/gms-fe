@@ -79,9 +79,8 @@
                                 Version {{ MESSAGE.MAX_LENGTH_INVALID |
                                 dataTransformPipe:[Constant.STRING_FORMAT,20]}}
                             </mat-error>
-                            <mat-error *ngxControlError="formGroupDetail.controls.version; track: 'existsVersion'"
-                                i18n="@@noteMaxlength">
-                                Exists
+                            <mat-error *ngxControlError="formGroupDetail.controls.version; track: 'existsVersion'">
+                                {{existsVersionMessage}}
                             </mat-error>
                         </mat-form-field>
                     </div>

@@ -5,12 +5,13 @@ export const formula: any = {
 
   //Số chuyến bay theo tàu (công thức của kế hoạch mua sắm)
   totalFlightByAircraft: {
-    formula: 'ctz(data.planFlightPeriod) * ctz(data.flightOvernightRate)'
+    formula: 'ctz(data.totalFlightMonth) * ctz(data.flightOvernightRate)',
+    formulaProcurement: 'ctz(data.planFlightPeriod) * ctz(data.flightOvernightRate)'
   },
 
   //Tổng tiền xe chở tổ bay (ngoại tệ)
   totalAmountForeignTransport: {
-    formula: 'ctz(data.totalFlightMonth) * 2 * ctz(data.priceCrewTransport)',
+    formula: 'ctz(data.totalFlightMonth) * 2 * ctz(data.priceCrewTransportVat)',
     groupFormula: 'aircraftType && period',
   },
   //Số phòng đơn
@@ -51,19 +52,19 @@ export const formula: any = {
   },
   //Thành tiền ngoại tệ, - phòng đơn 
   totalAmountForeignSingleRoom: {
-    formula: 'ctz(data.singleRoom) * ctz(data.priceSingleRoom)'
+    formula: 'ctz(data.singleRoom) * ctz(data.priceSingleRoomVat)'
   },
   //Thành tiền ngoại tệ,  - phòng đôi
   totalAmountForeignDoubleRoom: {
-    formula: 'ctz(data.doubleRoom) * ctz(data.priceDoubleRoom)'
+    formula: 'ctz(data.doubleRoom) * ctz(data.priceDoubleRoomVat)'
   },
   //Thành tiền ngoại tệ,  - phòng early-checkin 
   totalAmountForeignEarly: {
-    formula: '(ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarly) + ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly)'
+    formula: '(ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarlyVat) + ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarlyVat)'
   },
   //Thành tiền ngoại tệ, - phòng late checkout
   totalAmountForeignLate: {
-    formula: '(ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLate) + ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate)'
+    formula: '(ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLateVat) + ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLateVat)'
   },
   //Tổng tiền theo loại máy bay
   totalAmountAircraft: {
@@ -122,10 +123,12 @@ export function getHeaderRowDef1(contractData: any, type: string): string[] {
     { column: "month", visible: true },
     { column: "aircraftType", visible: true },
     { column: "overnight", visible: true },
+    { column: "totalFlightByAircraft", visible: true },
     { column: "numberOfRooms", visible: true },
     { column: "numberOfRoomsForOthers", visible: true },
-    { column: "numberOfEstimatedEarlyCheckInRooms", visible: !!contractData.earlyCheckinFlag },
-    { column: "numberOfEstimatedLateCheckoutRooms", visible: !!contractData.lateCheckoutFlag },
+    { column: "numberOfEstimatedEarlyCheckInRooms", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, type) },
+    { column: "numberOfEstimatedLateCheckoutRooms", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, type) },
+    // { column: 'totalRoom', visible: true },
     //start phần kế hoạch mua sắm
     { column: "unitPriceIncludingVat", visible: type === PlanCategoryEnum.PROCUREMENT }, // (Đơn giá bao gồm vat) 
     { column: "priceCrewTransport", visible: type === PlanCategoryEnum.PROCUREMENT && !!contractData.crewTransportFeeFlag }, // (Đơn giá xe chở tổ bay/lượt) 
@@ -144,12 +147,14 @@ export function getHeaderRowDef2(contractData: any, type: string): string[] {
     { column: "singleRoomReserved", visible: true },
     { column: "singleRoomOther", visible: true },
     { column: "doubleRoomOther", visible: true },
-    { column: "singleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
-    { column: "doubleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
-    { column: "singleRoomEarlyReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
-    { column: "singleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
-    { column: "doubleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
-    { column: "singleRoomLateReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
+    { column: "singleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, type) },
+    { column: "doubleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, type) },
+    { column: "singleRoomEarlyReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, type) },
+    { column: "singleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, type) },
+    { column: "doubleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, type) },
+    { column: "singleRoomLateReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, type) },
+    // { column: "totalSingleRoom", visible: true },
+    // { column: "totalDoubleRoom", visible: true },
     //start phần kế hoạch mua sắm
     { column: "priceSingleRoom", visible: type === PlanCategoryEnum.PROCUREMENT }, // (Đơn giá phòng đơn) 
     { column: "priceDoubleRoom", visible: type === PlanCategoryEnum.PROCUREMENT }, // (Đơn giá phòng đôi) 
@@ -171,17 +176,20 @@ export function getRowDef(contractData: any, type: string): string[] {
     { column: "month", visible: true },
     { column: "aircraftType", visible: true },
     { column: "overnight", visible: true },
+    { column: "totalFlightByAircraft", visible: true },
     { column: "singleRoom", visible: true },
     { column: "doubleRoom", visible: true },
     { column: "singleRoomReserved", visible: true },
     { column: "singleRoomOther", visible: true },
     { column: "doubleRoomOther", visible: true },
-    { column: "singleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
-    { column: "doubleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
-    { column: "singleRoomEarlyReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.BUDGET) },
-    { column: "singleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
-    { column: "doubleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
-    { column: "singleRoomLateReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.BUDGET) },
+    { column: "singleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, type) },
+    { column: "doubleRoomEarly", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, type) },
+    { column: "singleRoomEarlyReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, type) },
+    { column: "singleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, type) },
+    { column: "doubleRoomLate", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, type) },
+    { column: "singleRoomLateReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, type) },
+    // { column: "totalSingleRoom", visible: true },
+    // { column: "totalDoubleRoom", visible: true },
     //start phần kế hoạch mua sắm
     { column: "priceSingleRoom", visible: type === PlanCategoryEnum.PROCUREMENT },
     { column: "priceDoubleRoom", visible: type === PlanCategoryEnum.PROCUREMENT },

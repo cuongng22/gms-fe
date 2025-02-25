@@ -1,5 +1,21 @@
+@import './node_modules/bootstrap/scss/_functions.scss';
+@import './node_modules/bootstrap/scss/_variables.scss';
+@import './node_modules/bootstrap/scss/_mixins.scss';
+
 :host::ng-deep{
     .mat-column-numberOfFlight{
         width: 250px;
+    }
+
+    .flightPeriod {
+        @include make-col-ready();
+
+        @include media-breakpoint-up(sm) {
+            @include make-col(15, 15);
+        }
+
+        @include media-breakpoint-up(lg) {
+            @include make-col(9, 15);
+        }
     }
 }

@@ -39,8 +39,7 @@
         </mat-card-title>
         <mat-card-subtitle>
             <div (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'">
-                <button type="button" mat-button class="close-btn  min-with-100 mlr-5"
-                    [routerLink]="['/plan/est-plan/budget-procurement',planBudgetProcurementId(),'summary']">
+                <button type="button" mat-button class="close-btn  min-with-100 mlr-5" (click)="toggleDialogClose()">
                     <i class="material-symbols-outlined">
                         close
                     </i>
@@ -66,8 +65,8 @@
     </mat-card-header>
     <mat-card-content>
         <app-budget-procurement-general #budgetProcurementGeneral [category]="category()"
-            [disabled]="checkStatusCompelted()"
-            (formValueChanges)="formGeneralValueChanges($event)"></app-budget-procurement-general>
+            [disabled]="checkStatusCompelted()" (formValueChanges)="formGeneralValueChanges($event)"
+            (exchangeRateChange)="exchangeRateChange($event)" (priceChange)="priceChange($event)" />
         <div class="d-flex justify-content-end">
             <button [disabled]="checkStatusCompelted()" mat-button color="primary" type="button" class="add-btn"
                 (click)="summaryData()">
@@ -401,6 +400,41 @@
                             save
                         </i>
                         <span i18n="@@confirm">Confirm</span>
+                    </button>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+
+<div class="add-new-popup" [class.active]="showDialogClose">
+    <div class="popup-dialog dialog-delete-with" style="width: 600px !important; max-width: 600px !important;">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+            <mat-card-content>
+                <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+                </div>
+                <div class="text-center mb-20">
+                    <h3 class="mb-0" i18n="@@summaryMessage">Do you want to save the edited data?</h3>
+                </div>
+                <div class="btn-box text-center">
+                    <button type="button" mat-button
+                        [routerLink]="['/plan/est-plan/budget-procurement',planBudgetProcurementId(),'summary']"
+                        class="close-btn  min-with-100 mlr-5">
+                        <i class="material-symbols-outlined">
+                            close
+                        </i>
+                        <span i18n="@@no">No</span>
+                    </button>
+                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="confirmClose()">
+                        <i class="material-symbols-outlined">
+                            save
+                        </i>
+                        <span i18n="@@yes">Yes</span>
                     </button>
 
                 </div>

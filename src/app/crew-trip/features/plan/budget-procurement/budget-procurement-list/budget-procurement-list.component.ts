@@ -1,6 +1,6 @@
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { Component, DestroyRef, ElementRef, Inject, inject, model, OnInit, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -30,6 +30,7 @@ import { NgxControlError } from 'ngxtension/control-error';
 import { PlanTypeEnum, Statuses, years } from '../budget-procurement.model';
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
+import { EstimatedAnnualProductionService } from 'src/app/crew-trip/core/services/estimated-annual-production';
 
 @Component({
   selector: 'app-budget-procurement-list',
@@ -200,12 +201,13 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
 })
 export class DialogBudgetProcurementDetail extends CommonComponent {
   override baseService = inject(PlanBudgetProcurementService);
+  estimatedAnnualProductionService = inject(EstimatedAnnualProductionService);
 
   override formGroupDetail = this.formBuilder.group({
     id: new FormControl(''),
     name: new FormControl('', [Validators.required, Validators.maxLength(500)]),
     year: new FormControl('', [Validators.required, Validators.maxLength(4), Validators.minLength(4)]),
-    version: new FormControl('', [Validators.required, Validators.maxLength(20)]),
+    version: new FormControl('', [Validators.required, Validators.maxLength(20), this.existsVersionValidator.bind(this)]),
     versionProd: new FormControl(''),
     versionRate: new FormControl(''),
     updateBudgetPlan: new FormControl(false)
@@ -213,6 +215,8 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
 
   isCreate = model<boolean>(false);
 
+  existsVersion = false;
+  existsVersionMessage = ''
 
   constructor(
     public dialogRef: MatDialogRef<DialogBudgetProcurementDetail>,
@@ -225,13 +229,20 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
     if (this.data) {
       console.log(this.data);
       this.isCreate.set(this.data.isCreate);
-      
+
       if (this.data.budgetProcurementDetail) {
         console.log(this.data.budgetProcurementDetail);
         this.formGroupDetail.patchValue(this.data.budgetProcurementDetail);
-        if(this.formGroupDetail.controls.id.value){
+        if (this.formGroupDetail.controls.id.value) {
           this.formGroupDetail.controls.updateBudgetPlan.disable();
         }
+      } else {
+        this.estimatedAnnualProductionService.getNewsVersion().then(res => {
+          this.formGroupDetail.patchValue({
+            year: res.data.year,
+            version: res.data.versionId
+          })
+        })
       }
 
       this.baseService.isUpdate = !this.data.isCreate || !!this.formGroupDetail.controls.id.value;
@@ -240,7 +251,11 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
         this.formGroupDetail.controls.versionRate.disable();
       }
 
-      
+      this.formGroupDetail.controls.version.valueChanges.pipe(debounceTime(500)).subscribe(value => {
+        this.existsVersion = false;
+        this.formGroupDetail.controls.version.updateValueAndValidity()
+      })
+
     }
   }
 
@@ -265,13 +280,18 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
       if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
         this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
       } else if (e.status === HttpStatusCode.Conflict) {
-        this.formGroupDetail.controls.version.setErrors({ existsVersion: e }, { emitEvent: true });
-        console.log(this.formGroupDetail.controls.version.errors)
+        this.existsVersion = true;
+        this.formGroupDetail.controls.version.updateValueAndValidity();
+        this.existsVersionMessage = e.error.error
       }
       return e;
     } finally {
       this.spinner.hide();
     }
+  }
+
+  existsVersionValidator(control: AbstractControl): ValidationErrors | null {
+    return this.existsVersion ? { existsVersion: true } : null;
   }
 
   close() {

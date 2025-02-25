@@ -52,7 +52,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 		if (this.requiredControl) {
 			this.viewControl.addValidators(Validators.required);
 		}
-		
+
 
 	}
 	ngAfterViewChecked(): void {
@@ -181,9 +181,9 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 		this.viewControl.updateValueAndValidity();
 		this.formControl.updateValueAndValidity();
 		this.keySearch.next('');
-		// const findResult = this.auto?.options.find((o) => o.selected);
-		// findResult?.focus(null, { preventScroll: false });
-		// findResult?.deselect(false);
+		const findResult = this.auto?.options.find((o) => o.selected);
+		findResult?.focus(null, { preventScroll: false });
+		findResult?.deselect(false);
 		this.clearInputEvent.emit();
 	}
 }

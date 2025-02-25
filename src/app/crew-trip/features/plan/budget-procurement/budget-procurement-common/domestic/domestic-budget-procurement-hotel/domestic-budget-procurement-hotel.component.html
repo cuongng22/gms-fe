@@ -1,244 +1,249 @@
 @if (this.dataSource.data && this.dataSource.data.length > 0) {
-    <div class="row">
-        <div class="table-responsive max-height-600">
-            <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
-                <ng-container matColumnDef="month" sticky>
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.rowspan]="2"
-                        i18n="@@month">
-                        {{type() === PlanCategoryEnum.BUDGET? 'Month':'Period'}}
-                    </th>
-                    <td mat-cell *matCellDef="let element" class="fw-bold">
-                        {{element.periodLabel}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef i18n="@@total" class="fw-bold text-center"> Total </td>
-                </ng-container>
-    
-                <ng-container matColumnDef="totalRoomsInCurrentYear">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
-                        i18n="@@totalRoomsInCurrentYear">
-                        Total rooms in current year
-                    </th>
-                </ng-container>
-                <ng-container matColumnDef="numberOfRoom">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
-                        i18n="@@numberOfRoom">
-                        Number of Room
-                    </th>
-                </ng-container>
-    
-                <ng-container matColumnDef="singleRoomYearPerform">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
-                        Single Room
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.singleRoomYearPerform | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                        @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomYearPerform') | number}} }
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="doubleRoomYearPerform">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
-                        Double Room
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.doubleRoomYearPerform | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                        @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomYearPerform') | number}} }
-                    </td>
-                </ng-container>
-    
-                <ng-container matColumnDef="estimatedRoomsInPlannedYear">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
-                        i18n="@@estimatedRoomsInPlannedYear">
-                        Estimated rooms in planned year
-                    </th>
-                </ng-container>
-                <ng-container matColumnDef="singleRoom">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
-                        Single Room
-                    </th>
-                    <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                        {{element.singleRoom | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                        @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoom') | number}} }
-                    <td>
-                </ng-container>
-                <ng-container matColumnDef="doubleRoom">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
-                        Double Room
-                    </th>
-                    <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                        {{element.doubleRoom | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                        @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoom') | number}} }
-                    </td>
-                </ng-container>
-    
-                <ng-container matColumnDef="extraRoom">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
-                        i18n="@@extraRoom">
-                        Extra Room
-                    </th>
-                </ng-container>
-                <ng-container matColumnDef="singleRoomExtra">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
-                        Single Room
-                    </th>
-                    <td mat-cell *matCellDef="let element" [style.padding]="element['singleRoomExtraEditing']?PADDING_0:''"
-                        (click)="clickEdit(element, 'singleRoomExtraEditing')">
-                        @if(!element['singleRoomExtraEditing']){
-                        {{element.singleRoomExtra | number}}
-                        }@else {
-                        <div sizeInput="xs">
-                            <mat-form-field (clickOutside)="clickOutside(element,'singleRoomExtraEditing')"
-                                class="edit-inline-table">
-                                <input type="text" digitOnly matInput [(ngModel)]="element.singleRoomExtra" [disabled]="disabled()">
-                            </mat-form-field>
-                        </div>
-                        }
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                        @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomExtra') | number}} }
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="doubleRoomExtra">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
-                        Double Room
-                    </th>
-                    <td mat-cell *matCellDef="let element" [style.padding]="element['doubleRoomExtraEditing']?PADDING_0:''"
-                        (click)="clickEdit(element, 'doubleRoomExtraEditing')">
-                        @if(!element['doubleRoomExtraEditing']){
-                        {{element.doubleRoomExtra | number}}
-                        }@else {
-                        <div sizeInput="xs">
-                            <mat-form-field (clickOutside)="clickOutside(element,'doubleRoomExtraEditing')"
-                                class="edit-inline-table">
-                                <input type="text" digitOnly matInput [(ngModel)]="element.doubleRoomExtra" [disabled]="disabled()">
-                            </mat-form-field>
-                        </div>
-                        }
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                        @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomExtra') | number}} }
-                    </td>
-                </ng-container>
-    
-                <!-- Đơn giá phòng đơn -->
-                <ng-container matColumnDef="singleRoomRate">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
-                        i18n="@@singleRoomRate">
-                        Single Room Rate
-                    </th>
-                </ng-container>
-                <ng-container matColumnDef="priceSingleRoom">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVAT">
-                        Excluding VAT
-                    </th>
-                    <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                        {{element.priceSingleRoom | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef></td>
-                </ng-container>
-                <ng-container matColumnDef="priceSingleRoomVat">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVAT">
-                        Including VAT
-                    </th>
-                    <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                        {{element.priceSingleRoomVat | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef></td>
-                </ng-container>
-    
-                <!-- Đơn giá phòng đôi -->
-                <ng-container matColumnDef="twinRoomRate">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
-                        i18n="@@twinRoomRate">
-                        Twin Room Rate
-                    </th>
-                </ng-container>
-                <ng-container matColumnDef="priceDoubleRoom">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVAT">
-                        Excluding VAT
-                    </th>
-                    <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                        {{element.priceDoubleRoom | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef></td>
-                </ng-container>
-                <ng-container matColumnDef="priceDoubleRoomVat">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVAT">
-                        Including VAT
-                    </th>
-                    <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                        {{element.priceDoubleRoomVat | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef></td>
-                </ng-container>
-    
-    
-                <ng-container matColumnDef="totalNumberOfRooms">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center wrap-text"
-                        [attr.colspan]="2" i18n="@@totalNumberOfRooms">
-                        Total Number of Rooms
-                    </th>
-                </ng-container>
-                <ng-container matColumnDef="totalSingleRoom">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
-                        Single Room
-                    </th>
-                    <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                        {{element.totalSingleRoom | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('totalSingleRoom') | number}}</td>
-                </ng-container>
-                <ng-container matColumnDef="totalDoubleRoom">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
-                        Double Room
-                    </th>
-                    <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                        {{element.totalDoubleRoom | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('totalDoubleRoom') | number}}</td>
-                </ng-container>
-    
-                <ng-container matColumnDef="totalAmount">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]=3
-                        i18n="@@totalAmount">
-                        Total Amount
-                    </th>
-                </ng-container>
-                <ng-container matColumnDef="totalAmountExcludingVat">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVAT">
-                        Excluding VAT
-                    </th>
-                    <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                        {{element.totalAmount | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('totalAmount') | number}}
-                    <td>
-                </ng-container>
-                <ng-container matColumnDef="totalAmountIncludingVAT">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVAT">
-                        Including VAT
-                    </th>
-                    <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                        {{element.totalAmountVat | number}}
-                    </td>
-                    <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('totalAmountVat') | number}}</td>
-                </ng-container>
-    
-                <tr mat-header-row *matHeaderRowDef="headerRowDef1; sticky:true"></tr>
-                <tr mat-header-row *matHeaderRowDef="headerRowDef2; sticky:true"></tr>
-                <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
-                <tr mat-footer-row *matFooterRowDef="rowDef; sticky: true"></tr>
-                <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell text-center" colspan="12">No data!</td>
-                </tr>
-            </table>
-        </div>
+<div class="row">
+    <div class="table-responsive max-height-600">
+        <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+            <ng-container matColumnDef="month" sticky>
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.rowspan]="2"
+                    i18n="@@month">
+                    {{type() === PlanCategoryEnum.BUDGET? 'Month':'Period'}}
+                </th>
+                <td mat-cell *matCellDef="let element" class="fw-bold">
+                    {{element.periodLabel}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef i18n="@@total" class="fw-bold text-center"> Total </td>
+            </ng-container>
+
+            <ng-container matColumnDef="totalRoomsInCurrentYear">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
+                    i18n="@@totalRoomsInCurrentYear">
+                    Total rooms in current year
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="numberOfRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
+                    i18n="@@numberOfRoom">
+                    Number of Room
+                </th>
+            </ng-container>
+
+            <ng-container matColumnDef="singleRoomYearPerform">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
+                    Single Room
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{element.singleRoomYearPerform | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomYearPerform') | number}} }
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="doubleRoomYearPerform">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
+                    Double Room
+                </th>
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{element.doubleRoomYearPerform | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomYearPerform') | number}} }
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="estimatedRoomsInPlannedYear">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
+                    i18n="@@estimatedRoomsInPlannedYear">
+                    Estimated rooms in planned year
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="singleRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
+                    Single Room
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.singleRoom | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoom') | number}} }
+                <td>
+            </ng-container>
+            <ng-container matColumnDef="doubleRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
+                    Double Room
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.doubleRoom | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoom') | number}} }
+                </td>
+            </ng-container>
+
+            <ng-container matColumnDef="extraRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
+                    i18n="@@extraRoom">
+                    Extra Room
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="singleRoomExtra">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
+                    Single Room
+                </th>
+                <td mat-cell *matCellDef="let element" [style.padding]="element['singleRoomExtraEditing']?PADDING_0:''"
+                    (click)="clickEdit(element, 'singleRoomExtraEditing')" class="text-right">
+                    @if(!element['singleRoomExtraEditing']){
+                    {{element.singleRoomExtra | number}}
+                    }@else {
+                    <div sizeInput="xs">
+                        <mat-form-field (clickOutside)="clickOutside(element,'singleRoomExtraEditing')"
+                            class="edit-inline-table">
+                            <input appThousandsSeparator type="text" digitOnly matInput
+                                [(ngModel)]="element.singleRoomExtra" [disabled]="disabled()">
+                        </mat-form-field>
+                    </div>
+                    }
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomExtra') | number}} }
+                </td>
+            </ng-container>
+            <ng-container matColumnDef="doubleRoomExtra">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
+                    Double Room
+                </th>
+                <td mat-cell *matCellDef="let element" [style.padding]="element['doubleRoomExtraEditing']?PADDING_0:''"
+                    (click)="clickEdit(element, 'doubleRoomExtraEditing')" class="text-right">
+                    @if(!element['doubleRoomExtraEditing']){
+                    {{element.doubleRoomExtra | number}}
+                    }@else {
+                    <div sizeInput="xs">
+                        <mat-form-field (clickOutside)="clickOutside(element,'doubleRoomExtraEditing')"
+                            class="edit-inline-table">
+                            <input appThousandsSeparator type="text" digitOnly matInput
+                                [(ngModel)]="element.doubleRoomExtra" [disabled]="disabled()">
+                        </mat-form-field>
+                    </div>
+                    }
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomExtra') | number}} }
+                </td>
+            </ng-container>
+
+            <!-- Đơn giá phòng đơn -->
+            <ng-container matColumnDef="singleRoomRate">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
+                    i18n="@@singleRoomRate">
+                    Single Room Rate
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="priceSingleRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVAT">
+                    Excluding VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.priceSingleRoom | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            <ng-container matColumnDef="priceSingleRoomVat">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVAT">
+                    Including VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.priceSingleRoomVat | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+            <!-- Đơn giá phòng đôi -->
+            <ng-container matColumnDef="twinRoomRate">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
+                    i18n="@@twinRoomRate">
+                    Twin Room Rate
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="priceDoubleRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVAT">
+                    Excluding VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.priceDoubleRoom | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+            <ng-container matColumnDef="priceDoubleRoomVat">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVAT">
+                    Including VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.priceDoubleRoomVat | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef></td>
+            </ng-container>
+
+
+            <ng-container matColumnDef="totalNumberOfRooms">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center wrap-text"
+                    [attr.colspan]="2" i18n="@@totalNumberOfRooms">
+                    Total Number of Rooms
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="totalSingleRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
+                    Single Room
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.totalSingleRoom | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotal('totalSingleRoom') |
+                    number}}</td>
+            </ng-container>
+            <ng-container matColumnDef="totalDoubleRoom">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
+                    Double Room
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.totalDoubleRoom | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotal('totalDoubleRoom') |
+                    number}}</td>
+            </ng-container>
+
+            <ng-container matColumnDef="totalAmount">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]=3
+                    i18n="@@totalAmount">
+                    Total Amount
+                </th>
+            </ng-container>
+            <ng-container matColumnDef="totalAmountExcludingVat">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVAT">
+                    Excluding VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.totalAmount | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotal('totalAmount') | number}}
+                <td>
+            </ng-container>
+            <ng-container matColumnDef="totalAmountIncludingVAT">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVAT">
+                    Including VAT
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.totalAmountVat | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotal('totalAmountVat') | number}}
+                </td>
+            </ng-container>
+
+            <tr mat-header-row *matHeaderRowDef="headerRowDef1; sticky:true"></tr>
+            <tr mat-header-row *matHeaderRowDef="headerRowDef2; sticky:true"></tr>
+            <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
+            <tr mat-footer-row *matFooterRowDef="rowDef; sticky: true"></tr>
+            <tr class="mat-row" *matNoDataRow>
+                <td class="mat-cell text-center" colspan="12">No data!</td>
+            </tr>
+        </table>
     </div>
+</div>
 }

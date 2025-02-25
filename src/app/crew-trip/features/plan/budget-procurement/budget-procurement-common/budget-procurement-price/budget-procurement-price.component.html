@@ -23,7 +23,7 @@
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'priceBeforeTaxEditing')"
                             class="edit-inline-table">
-                            <input type="text" digitOnly matInput [(ngModel)]="element.priceBeforeTax">
+                            <input appThousandsSeparator type="text" digitOnly [decimal]="true" decimalSeparator="." matInput [(ngModel)]="element.priceBeforeTax">
                         </mat-form-field>
                     </div>
                     }
@@ -46,7 +46,7 @@
                     }@else {
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'vatEditing')" class="edit-inline-table">
-                            <input type="text" digitOnly matInput [(ngModel)]="element.vat">
+                            <input appThousandsSeparator type="text" digitOnly matInput [(ngModel)]="element.vat">
                             <i class="material-symbols-outlined fs-18" matSuffix>
                                 percent
                             </i>
@@ -68,7 +68,7 @@
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'priceAfterTaxEditing')"
                             class="edit-inline-table">
-                            <input type="text" digitOnly matInput [(ngModel)]="element.priceAfterTax">
+                            <input appThousandsSeparator type="text" digitOnly [decimal]="true" decimalSeparator="." matInput [(ngModel)]="element.priceAfterTax">
                         </mat-form-field>
                     </div>
                     }

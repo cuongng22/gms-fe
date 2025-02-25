@@ -16,6 +16,7 @@ import { Validators } from 'ngx-editor';
 import { NgxControlError } from 'ngxtension/control-error';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.component';
 
@@ -25,7 +26,7 @@ import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.c
   imports: [MatCardModule, FormsModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
-    NgxControlError, DatepickerComponent, DigitOnlyModule],
+    NgxControlError, DatepickerComponent, DigitOnlyModule, ThousandsSeparatorDirective],
   templateUrl: './budget-procurement-cost-analysis.component.html',
   styleUrl: './budget-procurement-cost-analysis.component.scss'
 })

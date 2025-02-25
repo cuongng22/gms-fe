@@ -1,6 +1,6 @@
 @if (this.dataSource.data && this.dataSource.data.length > 0) {
     <div class="row">
-        <div class="col-lg-6">
+        <div class="flightPeriod">
             <div class="table-responsive">
                 <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
                     <ng-container matColumnDef="period">
@@ -27,7 +27,7 @@
                             i18n="@@numberOfFlights">
                             Number of Flights
                         </th>
-                        <td mat-cell *matCellDef="let element; let i = dataIndex">
+                        <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
                             {{element.numberOfFlight | number}}
                         </td>
                     </ng-container>

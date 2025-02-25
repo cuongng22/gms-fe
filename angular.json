@@ -56,7 +56,6 @@
               "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.carousel.min.css",
               "node_modules/ngx-owl-carousel-o/lib/styles/prebuilt-themes/owl.theme.default.min.css",
               "node_modules/remixicon/fonts/remixicon.css",
-              "node_modules/bootstrap/scss/bootstrap.scss",
               "src/styles.scss",
               "node_modules/ngx-spinner/animations/ball-climbing-dot.css",
               "node_modules/ngx-spinner/animations/square-jelly-box.css"

@@ -34,6 +34,7 @@ export class DomesticBudgetProcurementFlightRateComponent implements OnInit, Aft
   constructor() {
     effect(() => {
       if (this.data()) {
+        console.log('domestic-budget-procurement-flight-rate effect data: ', this.data())
         this.setDataSource(this.data());
       }
     })

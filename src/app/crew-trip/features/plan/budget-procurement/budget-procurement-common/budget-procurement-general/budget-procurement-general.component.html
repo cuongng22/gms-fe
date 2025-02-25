@@ -2,7 +2,7 @@
     <div class="row">
         <mat-checkbox class="mb-2" i18n="@@budgetPlan" formControlName="budgetPlanFlag">Budget Plan</mat-checkbox>
     </div>
-    <div class="row">
+    <div class="row row-cols-5">
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@category">Category</mat-label>
@@ -18,7 +18,7 @@
         </div>
         <div class="col mb-2">
             <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="airports()"
-                formControlName="airportCode" size="md" [required]="true" />
+                formControlName="airportCode" size="sm" [required]="true" />
         </div>
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
@@ -36,7 +36,7 @@
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@rateForSingle">Buffer rate (for single-gender)</mat-label>
-                <input type="text" decimalSeparator="," digitOnly [decimal]="true" matInput
+                <input type="text" decimalSeparator="," digitOnly [decimal]="false" matInput
                     formControlName="rateForSingle">
                 <i class="material-symbols-outlined fs-18" matSuffix>
                     percent
@@ -44,16 +44,24 @@
             </mat-form-field>
         </div>
         }
+        @if (checkRequiredCurrency()) {
+        <div class="col mb-2">
+            <app-selection-suggest i18n-label="@@currencyCode" label="Currency code" [options]="currencyCodes"
+                (selectionChange)="currencyCodeChange($event, true)" formControlName="currencyCode" size="sm"
+                [required]="true" />
+        </div>
+        }
     </div>
-    @if (!formGroupDetail.controls.haveContract.value) {
+    @if (!haveContract) {
     <div class="row">
-        <div class="col-xl-8">
-            <app-budget-procurement-price #budgetProcurementPrice [category]="category()" [data]="inputPrice"></app-budget-procurement-price>
+        <div class="budgetProcurementPrice">
+            <app-budget-procurement-price #budgetProcurementPrice [category]="category()"
+                (priceChange)="priceChangeEvent($event)" [data]="inputPrice"></app-budget-procurement-price>
         </div>
     </div>
     } @else {
     <div class="row">
-        <div class="col " [ngClass]="category() === CategoryEnum.INTERNATIONAL?'col-lg-3':'col-lg-4'">
+        <div class="roomRate">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@singleRoomRate">Single Room Rate</mat-label>
                 <textarea matInput [disabled]="true" [ngModel]="unitPriceSingleHotel"
@@ -70,7 +78,7 @@
                     </mat-error> -->
             </mat-form-field>
         </div>
-        <div class="col " [ngClass]="category() === CategoryEnum.INTERNATIONAL?'col-lg-3':'col-lg-4'">
+        <div class="roomRate">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@doubleRoomRate">Double Room Rate</mat-label>
                 <textarea matInput [disabled]="true" [ngModel]="unitPriceDoubleHotel"

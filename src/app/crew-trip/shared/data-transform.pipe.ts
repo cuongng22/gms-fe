@@ -12,11 +12,16 @@ export class DataTransformPipe implements PipeTransform {
     try {
       const type = args[0];
       const format = args[1];
+      const utcOffset = args[2];
       if (type === 'number') {
         // return value.toLocaleString('vi-VN');
         return value.toLocaleString('en-US');
       } else if (type === Constant.DATE) {
-        return moment(value).isValid() ? moment(value).format(format) : '';
+        if (utcOffset) {
+          return moment.utc(value).isValid() ? moment.utc(value).utcOffset(utcOffset).format(format) : '';
+        } else {
+          return moment(value).isValid() ? moment(value).format(format) : '';
+        }
       } else if (type === Constant.STRING_FORMAT) {
         const params = args.slice(1);
         return sprintf(value, params);
