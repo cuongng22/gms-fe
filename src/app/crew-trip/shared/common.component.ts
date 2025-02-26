@@ -32,6 +32,7 @@ import { CustomizerSettingsService } from 'src/app/customizer-settings/customize
 import { environment } from 'src/environments/environment';
 import { ShowMessageComponent } from './component/show-message/show-message.component';
 import { ListResponse } from './models/common.model';
+import * as ERROR_MESSAGE from 'src/app/crew-trip/shared/utils/error-message';
 
 @Component({
 	selector: 'app-common',
@@ -82,6 +83,8 @@ export class CommonComponent
 	configScrollY = 60;
 	listFlightMarket: any[] = [];
 	listFeeService: any[] = [];
+  allErrorTrack = ['invalidNumberDecimal','required','pattern','max','min','timeBeforeValidator',
+    'lessThanValidator','maxlength','invalidNumber','dateValidator','beforeValidator','partern','minlength'];
 
 	@HostListener('window:keyup', ['$event'])
 	keyEvent(event: KeyboardEvent) {
@@ -402,4 +405,9 @@ export class CommonComponent
 				}
 			});
 	}
+
+  errorMessages:any = ERROR_MESSAGE;
+  getErrorMessage(errorKey: string) {
+    return this.errorMessages[errorKey];
+  }
 }
