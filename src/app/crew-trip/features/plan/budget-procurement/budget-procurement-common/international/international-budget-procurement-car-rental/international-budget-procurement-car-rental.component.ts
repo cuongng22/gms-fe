@@ -43,6 +43,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   PlanCategoryEnum = PlanCategoryEnum;
 
   planFlightPeriods: any[] = []; // danh sách chuyến bay theo giai đoạn
+  resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
@@ -72,6 +73,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
       item.period = period;
       this.calculateData(item, index);
     });
+    this.calculateTotal()
   }
 
   setExchangeRate(exchangeRateData: any) {
@@ -89,6 +91,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
       }
       this.calculateData(item, index);
     });
+    this.calculateTotal()
   }
 
   setPrice(priceData: any[]) {
@@ -98,9 +101,10 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
       item.unitPriceVat = _priceTransportation.priceAfterTax;
       this.calculateData(item, index);
     })
+    this.calculateTotal()
   }
 
-  private calculateData(item: any, index: number) {
+  private calculateData(item: any, index?: number) {
 
     if (this.type() === PlanCategoryEnum.PROCUREMENT) {
       //Số lượng chuyến bay theo giai đoạn
@@ -124,25 +128,46 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   setPlanFlightPeriods(data: any[]) {
     this.planFlightPeriods = data;
   }
+
   // TÍnh dòng tổng 
-  getTotal(control: string) {
+  setTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
+
     const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     if (control === 'totalAmountVat') {
-      const endDatePlanGroup = new Date(this.yearPlan() , 10, 1);
-      return Math.round(this.dataSource.data.map((t: any) => {
+      const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
+      const totalValue = Math.round(this.dataSource.data.map((t: any) => {
         if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
           return Number(t[control]);
         }
         return 0;
       }).reduce((acc, value) => acc + value, 0));
+      console.log(control, totalValue)
+      this.resultTotal[control] = totalValue;
     }
-    return Math.round(this.dataSource.data.map((t: any) => {
+    const totalValue = Math.round(this.dataSource.data.map((t: any) => {
       if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
         return Number(t[control]);
       }
       return 0;
-    }).reduce((acc, value) => acc + value, 0));;
+    }).reduce((acc, value) => acc + value, 0));
+    console.log(control, totalValue)
+    this.resultTotal[control] = totalValue;
+  }
+
+  getTotal(control: string) {
+    return this.resultTotal[control] ?? 0
+  }
+
+  calculateTotal() {
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('numberFlight') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('numberVehicles') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('extraTransfer') }
+    this.setTotal('totalAmountForeign')
+    this.setTotal('totalAmountForeignVat')
+    this.setTotal('totalAmount')
+    this.setTotal('totalAmountVat')
+
   }
 
   // hàm công thức tính chung
@@ -218,5 +243,10 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
+    if (control === 'unitPriceVatEditing') {
+      data.unitPrice = Number(data.unitPriceVat) / (1 + (Number(data.taxRate) / 100))
+    }
+    this.calculateData(data);
+    this.calculateTotal()
   }
 }

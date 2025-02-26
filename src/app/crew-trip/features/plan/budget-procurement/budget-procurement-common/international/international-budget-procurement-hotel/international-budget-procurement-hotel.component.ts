@@ -10,7 +10,7 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { checkChange, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './international-budget-procurement-hotel.model';
-import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
+import { truncateDate, truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { CategoryEnum, PlanCategoryEnum } from '../../../budget-procurement.model';
 import { el } from 'node_modules/@fullcalendar/core/internal-common';
@@ -41,6 +41,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
   generalData: any = {};
   totalByGroup: any = {};
+  resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
 
   headerRowDef1: string[] = [];
   headerRowDef2: string[] = [];
@@ -111,6 +112,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       this.calculateAirCraftLabel(item, index);
       this.calculateData(item, index);
     });
+    this.calculateTotal()
   };
 
   calculatePeriodLabel(item: any, index: number) {
@@ -151,6 +153,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       this.dataSource.data.forEach((item: any, index) => {
         this.calculateData(item, index);
       });
+      this.calculateTotal()
     }
     const earlyCheckinFlag = checkChange(this.generalData.earlyCheckinFlag, data.earlyCheckinFlag);
     const lateCheckoutFlag = checkChange(this.generalData.lateCheckoutFlag, data.lateCheckoutFlag);
@@ -176,6 +179,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       }
       this.calculateData(item, index);
     });
+    this.calculateTotal()
   }
 
   setPrice(priceData: any[]) {
@@ -208,7 +212,8 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       item.priceCrewTransport = _priceTransportation.priceBeforeTax;
       item.priceCrewTransportVat = _priceTransportation.priceAfterTax;
       this.calculateData(item, index);
-    })
+    });
+    this.calculateTotal()
   }
 
   setOvernightRates(data: any, actionType: string, length?: number, planFlightByOvernight?: any[]) {
@@ -225,6 +230,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
             }
             this.calculateData(item, index);
           });
+          this.calculateTotal()
         } else {
           // lấy id bản ghi cuối cùng để làm cơ sở ví trí thêm data
           if (planFlightByOvernight && planFlightByOvernight.length) {
@@ -248,6 +254,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
             }
             this.calculateData(dataProcessHotel[i], i);
           }
+          this.calculateTotal()
           if (length) {
             this.calculateSpan(this.aircraftTypeRowspan, length);
           }
@@ -271,6 +278,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         this.dataSource.data.forEach((item: any, index) => {
           this.calculateData(item, index);
         });
+        this.calculateTotal()
         break;
     }
   }
@@ -371,24 +379,56 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
 
   // TÍnh dòng tổng 
-  getTotal(control: string) {
+  setTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
+
     const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     if (control === 'totalAmountVat') {
       const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-      return Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
+      const totalValue = Math.round(this.dataSource.data.map((t: any) => {
+        if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
           return Number(t[control]);
         }
         return 0;
       }).reduce((acc, value) => acc + value, 0));
+      console.log(control, totalValue)
+      this.resultTotal[control] = totalValue;
     }
-    return Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup)) {
+    const totalValue = Math.round(this.dataSource.data.map((t: any) => {
+      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
         return Number(t[control]);
       }
       return 0;
-    }).reduce((acc, value) => acc + value, 0));;
+    }).reduce((acc, value) => acc + value, 0));
+    console.log(control, totalValue)
+    this.resultTotal[control] = totalValue;
+  }
+
+  getTotal(control: string) {
+    return this.resultTotal[control] ?? 0
+  }
+
+  calculateTotal() {
+    this.setTotal('totalFlightByAircraft');
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('singleRoom') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('doubleRoom') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('singleRoomReserved') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('singleRoomOther') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('doubleRoomOther') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('singleRoomEarly') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('doubleRoomEarly') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('singleRoomEarlyReserved') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('singleRoomLate') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('doubleRoomLate') }
+    if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('singleRoomLateReserved') }
+    this.setTotal('totalSingleRoom')
+    this.setTotal('totalDoubleRoom')
+    this.setTotal('totalAmountForeignTransport')
+    this.setTotal('totalAmountForeign')
+    this.setTotal('totalAmountForeignVat')
+    this.setTotal('totalAmount')
+    this.setTotal('totalAmountVat')
+
   }
 
   // hàm công thức tính chung
@@ -515,26 +555,37 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
    * @param control 
    */
   updateValueForControl(data: any, control: string) {
-    if (control === 'priceSingleRoomEditing'
-      || control === 'priceDoubleRoomEditing'
-      || control === 'priceSingleRoomEarlyEditing'
-      || control === 'priceDoubleRoomEarlyEditing'
-      || control === 'priceSingleRoomLateEditing'
-      || control === 'priceDoubleRoomLateEditing'
-      || control === 'priceCrewTransportEditing'
+    if (control === 'priceSingleRoomVatEditing'
+      || control === 'priceDoubleRoomVatEditing'
+      || control === 'priceSingleRoomEarlyVatEditing'
+      || control === 'priceDoubleRoomEarlyVatEditing'
+      || control === 'priceSingleRoomLateVatEditing'
+      || control === 'priceDoubleRoomLateVatEditing'
+      || control === 'priceCrewTransportVatEditing'
     ) {
-      this.dataSource.data.forEach((item: any) => {
+      this.dataSource.data.forEach((item: any, index: number) => {
         if (item.period === data.periodLabel) {
-          item.priceSingleRoom = data.priceSingleRoom
-          item.priceDoubleRoom = data.priceDoubleRoom
-          item.priceSingleRoomEarly = data.priceSingleRoomEarly
-          item.priceDoubleRoomEarly = data.priceDoubleRoomEarly
-          item.priceSingleRoomLate = data.priceSingleRoomLate
-          item.priceDoubleRoomLate = data.priceDoubleRoomLate
-          item.priceCrewTransport = data.priceCrewTransport
+          item.priceSingleRoomVat = data.priceSingleRoomVat
+          item.priceDoubleRoomVat = data.priceDoubleRoomVat
+          item.priceSingleRoomEarlyVat = data.priceSingleRoomEarlyVat
+          item.priceDoubleRoomEarlyVat = data.priceDoubleRoomEarlyVat
+          item.priceSingleRoomLateVat = data.priceSingleRoomLateVat
+          item.priceDoubleRoomLateVat = data.priceDoubleRoomLateVat
+          item.priceCrewTransportVat = data.priceCrewTransportVat
 
+          item.priceSingleRoom = Number(item.priceSingleRoomVat) / (1 + (Number(item.taxRate) / 100))
+          item.priceDoubleRoom = Number(item.priceDoubleRoomVat) / (1 + (Number(item.taxRate) / 100))
+          item.priceSingleRoomEarly = Number(item.priceSingleRoomEarlyVat) / (1 + (Number(item.taxRate) / 100))
+          item.priceDoubleRoomEarly = Number(item.priceDoubleRoomEarlyVat) / (1 + (Number(item.taxRate) / 100))
+          item.priceSingleRoomLate = Number(item.priceSingleRoomLateVat) / (1 + (Number(item.taxRate) / 100))
+          item.priceDoubleRoomLate = Number(item.priceDoubleRoomLateVat) / (1 + (Number(item.taxRate) / 100))
+          item.priceCrewTransport = Number(item.priceCrewTransportVat) / (1 + (Number(item.taxRate) / 100))
+
+          this.calculateData(item, index);
         }
+
       });
     }
+    this.calculateTotal()
   }
 }
