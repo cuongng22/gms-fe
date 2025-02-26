@@ -79,23 +79,17 @@ Chốt hóa đơn
                 <mat-option [value]="item">{{ item }}</mat-option>
                 }
               </mat-select>
-              @if (!!formGroupDetail.controls['airportCode'].hasError('required')) {
-              <mat-error><span i18n>Airport Code</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="airportCode"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Invoice number</mat-label>
               <input formControlName="invoiceNumber" matInput required trim="blur" upperCase="blur">
-              @if (!!formGroupDetail.controls['invoiceNumber'].hasError('required')) {
-              <mat-error><span i18n>Invoice Number</span><span i18n> not empty</span></mat-error>
-              }
-              <mat-error *ngxControlError="formGroupDetail.controls['invoiceNumber']; track: 'maxlength'">
-                <span i18n>Invoice Number</span><span i18n> must be less than 50 characters</span>
-              </mat-error>
-              <mat-error *ngxControlError="formGroupDetail.controls['invoiceNumber']; track: 'pattern'">
-                <span i18n>Invoice Number</span><span i18n> format is invalid</span>
+              <mat-error>
+                <app-control-error controlName="invoiceNumber"></app-control-error>
               </mat-error>
             </mat-form-field>
           </div>
@@ -107,9 +101,9 @@ Chốt hóa đơn
                 <mat-option [value]="item.key">{{ item.value }}</mat-option>
                 }
               </mat-select>
-              @if (!!formGroupDetail.controls['ctype'].hasError('required')) {
-              <mat-error><span i18n>Invoice Type</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="ctype"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
@@ -119,9 +113,9 @@ Chốt hóa đơn
                      required trim="blur">
               <mat-datepicker-toggle [for]="invoiceDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #invoiceDate></mat-datepicker>
-              @if (!!formGroupDetail.controls['invoiceDate'].hasError('required')) {
-              <mat-error><span i18n>Invoice Date</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="invoiceDate"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -134,9 +128,9 @@ Chốt hóa đơn
                      required trim="blur">
               <mat-datepicker-toggle [for]="invoiceReceiveDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #invoiceReceiveDate></mat-datepicker>
-              @if (!!formGroupDetail.controls['invoiceReceiveDate'].hasError('required')) {
-              <mat-error><span i18n>ReceiveDate Date</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="invoiceReceiveDate"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
@@ -146,9 +140,9 @@ Chốt hóa đơn
                      required trim="blur">
               <mat-datepicker-toggle [for]="periodFrom" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #periodFrom></mat-datepicker>
-              @if (!!formGroupDetail.controls['periodFrom'].hasError('required')) {
-              <mat-error><span i18n>Period From</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="periodFrom"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
@@ -158,9 +152,9 @@ Chốt hóa đơn
                      required trim="blur">
               <mat-datepicker-toggle [for]="periodTo" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #periodTo></mat-datepicker>
-              @if (!!formGroupDetail.controls['periodTo'].hasError('required')) {
-              <mat-error><span i18n>Period To</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="periodTo"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
@@ -175,9 +169,9 @@ Chốt hóa đơn
             <mat-form-field>
               <mat-label i18n>Payment Due Day</mat-label>
               <input formControlName="paymentDueDay" matInput trim="blur">
-              @if (!!formGroupDetail.controls['paymentDueDay'].hasError('required')) {
-              <mat-error><span i18n>Payment Due Day</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="paymentDueDay"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
@@ -187,27 +181,27 @@ Chốt hóa đơn
                      required trim="blur">
               <mat-datepicker-toggle [for]="paymentDueDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #paymentDueDate></mat-datepicker>
-              @if (!!formGroupDetail.controls['paymentDueDate'].hasError('required')) {
-              <mat-error><span i18n>Payment Due Date</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="paymentDueDate"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>BizDocId</mat-label>
               <input formControlName="bizDocId" matInput trim="blur">
-              @if (!!formGroupDetail.controls['bizDocId'].hasError('required')) {
-              <mat-error><span i18n>BizDocId</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="bizDocId"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Partner Code</mat-label>
               <input formControlName="partnerCode" matInput trim="blur">
-              @if (!!formGroupDetail.controls['partnerCode'].hasError('required')) {
-              <mat-error><span i18n>Partner Code</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="partnerCode"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -217,27 +211,27 @@ Chốt hóa đơn
             <mat-form-field>
               <mat-label i18n>Partner Name</mat-label>
               <input formControlName="partnerName" matInput trim="blur">
-              @if (!!formGroupDetail.controls['partnerName'].hasError('required')) {
-              <mat-error><span i18n>Partner Name</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="partnerName"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract Service Type</mat-label>
               <input formControlName="contractServiceType" matInput required trim="blur">
-              @if (!!formGroupDetail.controls['contractServiceType'].hasError('required')) {
-              <mat-error><span i18n>Contract Service Type</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="contractServiceType"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Currency</mat-label>
               <input formControlName="currency" matInput trim="blur">
-              @if (!!formGroupDetail.controls['currency'].hasError('required')) {
-              <mat-error><span i18n>Currency</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="currency"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
@@ -247,9 +241,9 @@ Chốt hóa đơn
                      required trim="blur">
               <mat-datepicker-toggle [for]="exchangeRateDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #exchangeRateDate></mat-datepicker>
-              @if (!!formGroupDetail.controls['exchangeRateDate'].hasError('required')) {
-              <mat-error><span i18n>Exchange Rate Date</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="exchangeRateDate"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -259,18 +253,18 @@ Chốt hóa đơn
             <mat-form-field>
               <mat-label i18n>Exchange Rate</mat-label>
               <input formControlName="exchangeRate" matInput trim="blur">
-              @if (!!formGroupDetail.controls['exchangeRate'].hasError('required')) {
-              <mat-error><span i18n>Exchange Rate</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="exchangeRate"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Exchange Type</mat-label>
               <input formControlName="exchangeRateType" matInput trim="blur">
-              @if (!!formGroupDetail.controls['exchangeRateType'].hasError('required')) {
-              <mat-error><span i18n>Exchange Type</span><span i18n> not empty</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="exchangeRateType"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'></div>
@@ -284,9 +278,9 @@ Chốt hóa đơn
                       cdkTextareaAutosize
                       formControlName="description" i18n-placeholder matInput
                       required trim="blur"></textarea>
-            @if (!!formGroupDetail.controls['description'].hasError('required')) {
-            <mat-error><span i18n>Description</span><span i18n> not empty</span></mat-error>
-            }
+            <mat-error>
+              <app-control-error controlName="description"></app-control-error>
+            </mat-error>
           </mat-form-field>
         </div>
         <!--        dong7-->
@@ -296,6 +290,9 @@ Chốt hóa đơn
             <textarea cdkAutosizeMaxRows="5" cdkAutosizeMinRows="2" cdkTextareaAutosize formControlName="note"
                       i18n-placeholder
                       matInput trim="blur"></textarea>
+            <mat-error>
+              <app-control-error controlName="note"></app-control-error>
+            </mat-error>
           </mat-form-field>
         </div>
         <!--        dong8-->
@@ -313,12 +310,18 @@ Chốt hóa đơn
                 </mat-option>
                 }
               </mat-select>
+              <mat-error>
+                <app-control-error controlName="idParent"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Version</mat-label>
               <input formControlName="version" matInput trim="blur">
+              <mat-error>
+                <app-control-error controlName="version"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
@@ -330,6 +333,9 @@ Chốt hóa đơn
                 <mat-option [value]="item.key">{{ item.value }}</mat-option>
                 }
               </mat-select>
+              <mat-error>
+                <app-control-error controlName="status"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -554,9 +560,9 @@ Chốt hóa đơn
                 <mat-label i18n>Amount Fc Before Vat</mat-label>
                 <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput required
                        trim="blur" type="text">
-                @if (!!formGroupDetail.controls['amountFcBeforeVat'].hasError('required')) {
-          <mat-error><span i18n>Amount Fc Before Vat</span><span i18n> not empty</span></mat-error>
-          }
+           <mat-error>
+                <app-control-error controlName="airportCode"></app-control-error>
+              </mat-error>
           </mat-form-field>
         </div>
       </mat-grid-tile>
@@ -566,9 +572,9 @@ Chốt hóa đơn
             <mat-label i18n>Vat Fc</mat-label>
             <input appThousandsSeparator formControlName="vatFc" matInput required
                    trim="blur" type="text">
-            @if (!!formGroupDetail.controls['vatFc'].hasError('required')) {
-          <mat-error><span i18n>Vat Fc</span><span i18n> not empty</span></mat-error>
-          }
+            <mat-error>
+                <app-control-error controlName="airportCode"></app-control-error>
+              </mat-error>
           </mat-form-field>
         </div>
       </mat-grid-tile>
@@ -578,9 +584,9 @@ Chốt hóa đơn
             <mat-label i18n>Total Amount Fc</mat-label>
             <input #inputElementRef3 appThousandsSeparator formControlName="totalAmountFc" matInput required
                    trim="blur" type="text">
-            @if (!!formGroupDetail.controls['totalAmountFc'].hasError('required')) {
-          <mat-error><span i18n>Total Amount Fc</span><span i18n> not empty</span></mat-error>
-          }
+            <mat-error>
+                <app-control-error controlName="airportCode"></app-control-error>
+              </mat-error>
           </mat-form-field>
         </div>
       </mat-grid-tile>
@@ -590,9 +596,9 @@ Chốt hóa đơn
             <mat-label i18n>Reimbursement Total Fc</mat-label>
             <input appThousandsSeparator formControlName="reimbursementTotalFc" matInput required
                    trim="blur" type="text">
-            @if (!!formGroupDetail.controls['reimbursementTotalFc'].hasError('required')) {
-          <mat-error><span i18n>Reimbursement Total Fc</span><span i18n> not empty</span></mat-error>
-          }
+            <mat-error>
+                <app-control-error controlName="airportCode"></app-control-error>
+              </mat-error>
           </mat-form-field>
         </div>
       </mat-grid-tile>
@@ -603,9 +609,9 @@ Chốt hóa đơn
                 <mat-label i18n>Amount Vnd Before Vat</mat-label>
                 <input #inputElementRef2 appThousandsSeparator formControlName="amountVndBeforeVat" matInput required
                        trim="blur" type="text">
-                @if (!!formGroupDetail.controls['amountVndBeforeVat'].hasError('required')) {
-                <mat-error><span i18n>Amount Vnd Before Vat</span><span i18n> not empty</span></mat-error>
-                }
+                <mat-error>
+                  <app-control-error controlName="airportCode"></app-control-error>
+                </mat-error>
               </mat-form-field>
             </div>
           </mat-grid-tile>
@@ -615,9 +621,9 @@ Chốt hóa đơn
                 <mat-label i18n>Vat Vnd</mat-label>
                 <input appThousandsSeparator formControlName="vatVnd" matInput required
                        trim="blur" type="text">
-                @if (!!formGroupDetail.controls['vatVnd'].hasError('required')) {
-                <mat-error><span i18n>Vat Vnd</span><span i18n> not empty</span></mat-error>
-                }
+                <mat-error>
+                  <app-control-error controlName="airportCode"></app-control-error>
+                </mat-error>
               </mat-form-field>
             </div>
           </mat-grid-tile>
@@ -627,9 +633,9 @@ Chốt hóa đơn
                 <mat-label i18n>Total Amount Vnd</mat-label>
                 <input #inputElementRef4 appThousandsSeparator formControlName="totalAmountVnd" matInput required
                        trim="blur" type="text">
-                @if (!!formGroupDetail.controls['totalAmountVnd'].hasError('required')) {
-                <mat-error><span i18n>Total Amount Vnd</span><span i18n> not empty</span></mat-error>
-                }
+                <mat-error>
+                  <app-control-error controlName="airportCode"></app-control-error>
+                </mat-error>
               </mat-form-field>
             </div>
           </mat-grid-tile>
@@ -639,9 +645,9 @@ Chốt hóa đơn
                 <mat-label i18n>Reimbursement Total Vnd</mat-label>
                 <input appThousandsSeparator formControlName="reimbursementTotalVnd" matInput required
                        trim="blur" type="text">
-                @if (!!formGroupDetail.controls['reimbursementTotalVnd'].hasError('required')) {
-                <mat-error><span i18n>Reimbursement Total Vnd</span><span i18n> not empty</span></mat-error>
-                }
+                <mat-error>
+                  <app-control-error controlName="airportCode"></app-control-error>
+                </mat-error>
               </mat-form-field>
             </div>
           </mat-grid-tile>
