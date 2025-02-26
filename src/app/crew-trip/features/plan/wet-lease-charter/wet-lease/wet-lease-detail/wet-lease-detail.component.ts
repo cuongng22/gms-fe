@@ -60,6 +60,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
     isCompleted: [false]
   });
   showDialogCreateData: boolean = false;
+  isCreateData = false;
 
   constructor() {
     super();
@@ -194,6 +195,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.wetLeaseHotel.totalPlannedBudget = {}
 
     this.dataGeneral = { ...this.wetLeaseGeneral.formGroupDetail.getRawValue() };
+    this.isCreateData = true;
 
     this.spinner.hide()
   }
