@@ -216,7 +216,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }
 
   async loadListHotel() {
-    await this.hotelService.search({}).then((res) => {
+    await this.hotelService.search({limit:9999}).then((res) => {
       if (res.data) {
         this.listHotel = res.data.content;
       }
@@ -224,7 +224,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }
 
   async loadListVehiclesPartner() {
-    await this.vehicleService.search({}).then((res) => {
+    await this.vehicleService.search({limit:9999}).then((res) => {
       if (res.data) {
         this.listVehicle = res.data.content;
       }

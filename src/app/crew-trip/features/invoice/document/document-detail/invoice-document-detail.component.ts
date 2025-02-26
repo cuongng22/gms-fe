@@ -4,14 +4,14 @@ import {AsyncPipe, CommonModule, DecimalPipe, NgClass, NgForOf, NgIf, NgTemplate
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
+import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validator, Validators} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
@@ -21,7 +21,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
-import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE, PARTERN} from 'src/app/crew-trip/shared/utils/constant';
 import {ClickOutside} from 'ngxtension/click-outside';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
 import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
@@ -34,6 +34,7 @@ import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 import {DigitOnlyModule} from "@uiowa/digit-only";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentStatusEnum, InvoiceDocumentTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import {CdkTextareaAutosize} from "@angular/cdk/text-field";
 import {ContractService} from "src/app/crew-trip/core/services/contract-service";
@@ -47,15 +48,15 @@ import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {CdkVirtualScrollViewport} from "@angular/cdk/scrolling";
 import {ConfirmDeleteDialog} from "src/app/crew-trip/shared/dialog/confirm-delete-dialog";
 import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog";
-import {InvoiceDocumentStatus, InvoiceDocumentStatusEnum, InvoiceDocumentTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 import {NgxControlError} from "ngxtension/control-error";
+import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
 
 
 @Component({
   selector: 'app-invoice-document-detail',
   standalone: true,
-  imports: [CommonModule, DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, SelectionSuggestComponent, AsyncPipe, DatepickerYearMonthComponent, SeparatorDirective, ThousandsSeparatorDirective, MatGridTile, MatGridList, NgTemplateOutlet, CdkVirtualScrollViewport, ConfirmDeleteDialog, ConfirmDialog, NgxControlError, NgxUpperCaseDirectiveModule],
+  imports: [CommonModule, DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, SelectionSuggestComponent, AsyncPipe, DatepickerYearMonthComponent, SeparatorDirective, ThousandsSeparatorDirective, MatGridTile, MatGridList, NgTemplateOutlet, CdkVirtualScrollViewport, ConfirmDeleteDialog, ConfirmDialog, NgxControlError, NgxUpperCaseDirectiveModule, ControlErrorComponent],
   templateUrl: './invoice-document-detail.component.html',
   styleUrl: './invoice-document-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -181,7 +182,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       idInvoiceForm: [],
       version: [],
       ctype: [InvoiceDocumentTypeEnum.STANDARD],
-      invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(/^[a-zA-Z0-9]*$/)]],
+      invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(PARTERN.STRING_NUMBER)]],
       invoiceDate: [],
       invoiceReceiveDate: [],
       periodFrom: [],
@@ -289,6 +290,60 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       });
     }
   }
+
+  // addRow(table: any, addType: any, init?: any) {
+  //   let row: FormGroup = this.fb.group({})
+  //   if (addType === 'tblPriceUnit') {
+  //     row = this.fb.group({
+  //       id: [],
+  //       serviceCode: [this.listFeeService[0]?.code, [Validators.required]],
+  //       vnaTransId: [, [Validators.maxLength(50)]],
+  //       expenseCatgId: [, [Validators.maxLength(50)]],
+  //       priceNoTax: [],
+  //       taxCode: [,],
+  //       taxRate: [],
+  //       originalAmount3: [],
+  //       priceWithTax: [],
+  //       notes: [, [Validators.maxLength(50)]],
+  //       bizDocId: [],
+  //       fromDate: [this.formGroupDetail.getRawValue().effectiveDate || ''],
+  //       toDate: [this.formGroupDetail.getRawValue().expiryDate || ''],
+  //       active: [],
+  //       serviceName: [this.listFeeService[0]?.name],
+  //       serviceUnit: [this.listFeeService[0]?.unit],
+  //     });
+  //     row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
+  //     // row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
+  //     row.controls['taxCode'].setValidators([Validators.maxLength(24), Validators.pattern(PARTERN.STRING)]);
+  //     init && row.patchValue(init);
+  //     table.push(row);
+  //     this.dsPriceUnit.data = table.controls;
+  //   } else if (addType === 'tblEciLco' || addType === 'tblOvernightStay') {
+  //     row = this.fb.group({
+  //       id: [,], type: [,], fromHour: ['00:00',], rate: [,], toHour: ['23:59',], active: [,], typeCheck: [,], bizdocId: [,],
+  //     });
+  //     row.controls['rate'].setValidators(lessThanValidator(2));
+  //     row.controls['toHour'].setValidators(timeBeforeValidator(row.controls['fromHour']));
+  //     table.push(row);
+  //     if (addType === 'tblEciLco') {
+  //       init && row.patchValue(init);
+  //       this.dsEciLco.data = table.controls;
+  //     } else if (addType === 'tblOvernightStay') {
+  //       init && row.patchValue(init);
+  //       this.dsOvernightStay.data = table.controls;
+  //     }
+  //   } else if (addType === 'tblDayUse') {
+  //     row = this.fb.group({
+  //       id: [,], bizdocId: [,], checkinFrom: ['00:00',], checkoutTo: ['23:59',], maxHour: [,], rate: [,], rate1: [,], active: [,],
+  //     });
+  //     row.controls['checkoutTo'].setValidators(timeBeforeValidator(row.controls['checkinFrom']));
+  //     row.controls['maxHour'].setValidators([Validators.min(0), Validators.max(24), Validators.pattern(PARTERN.NUMBER)]);
+  //     init && row.patchValue(init);
+  //     table.push(row);
+  //     this.dsDayUse.data = table.controls;
+  //   }
+  //   return row;
+  // }
 
   override async ngOnInit() {
     try {
