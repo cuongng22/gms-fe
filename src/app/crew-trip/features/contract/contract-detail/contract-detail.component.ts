@@ -869,7 +869,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   bodyBuilder() {
     let body = this.formGroupDetail.getRawValue();
     body.priceUnitNotAllDay = {type1: this.tblEciLco.value, type2: this.tblOvernightStay.value}
-    body.dayUses = this.tblDayUse.value[0];
+    body.dayUses = this.tblDayUse.value[0] || {};
     body.dayUses.lengthTime = body.dayUses?.maxHour || 0;
     body.priceUnitInfo = this.tblPriceUnit.value;
     body.priceUnitInfo.forEach((s: any) => {
