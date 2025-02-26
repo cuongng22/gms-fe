@@ -112,3 +112,12 @@ export const BankCharge = [
   {key: 'OUR', value: $localize`OUR`},
   {key: 'SHA', value: $localize`SHA`},
 ];
+
+
+export const ContractCode={
+      "ERRORS": {
+        "required": "Email is required",
+          "maxlength": "Please enter a valid email address",
+          "myCustomError": "Email cannot contain 'test'"
+      }
+}

@@ -321,7 +321,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         vnaTransId: [, [Validators.maxLength(50)]],
         expenseCatgId: [, [Validators.maxLength(50)]],
         priceNoTax: [],
-        taxCode: [, [Validators.maxLength(40)]],
+        taxCode: [,],
         taxRate: [],
         originalAmount3: [],
         priceWithTax: [],
@@ -335,6 +335,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       });
       row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
       // row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
+      row.controls['taxCode'].setValidators([Validators.maxLength(24), Validators.pattern(PARTERN.STRING)]);
       init && row.patchValue(init);
       table.push(row);
       this.dsPriceUnit.data = table.controls;

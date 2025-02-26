@@ -106,12 +106,11 @@
               <mat-label i18n>Appendix number</mat-label>
               }
               <input formControlName="contractCode" matInput required trim="blur">
-              @if (!!formGroupDetail.controls['contractCode'].hasError('required')) {
-              <mat-error><span i18n>Contract number</span><span i18n> is required</span></mat-error>
-              }
-              <mat-error *ngxControlError="formGroupDetail.controls['contractCode']; track: 'maxlength'">
-                <span i18n>Contract number</span><span i18n> must be less than 50 characters</span>
+              @for (error of allErrorTrack; track error) {
+              <mat-error *ngxControlError="formGroupDetail.controls['contractCode']; track: error">
+              {{getErrorMessage('contractCode')[error]}}
               </mat-error>
+              }
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -1150,9 +1149,11 @@
                 <div class="input-cell">
                   <mat-form-field class="edit-inline-table">
                     <input formControlName="taxCode" matInput trim="blur">
-                    <mat-error *ngxControlError="row.controls['taxCode']; track: 'maxlength'">
-                      <span i18n>Tax Code</span><span i18n> must be less than 24 characters</span>
+                    @for (error of allErrorTrack; track error) {
+                    <mat-error *ngxControlError="row.controls['taxCode']; track: error">
+                    {{getErrorMessage('taxCode')[error]}}
                     </mat-error>
+                    }
                   </mat-form-field>
                 </div>
               </td>
@@ -1546,7 +1547,7 @@
       <div class="mt-25">
         <div class="w-100 mb-10 d-flex justify-content-between">
           <span class="d-flex align-items-end fw-bold">6.3 DAY USE</span>
-          @if(dsDayUse.data?.length===0){
+          @if(dsDayUse.data.length===0){
           <button (click)="addRow(tblDayUse,'tblDayUse')" *ngIf="!readMode" class="add-btn right-0" i18n mat-button
                   type="button">
             <i class="material-symbols-outlined">
@@ -1658,7 +1659,8 @@
                 <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                   <div class="input-cell">
                     <mat-form-field class="edit-inline-table">
-                      <input [maxDecimal]="2" [maxDecimal]="2" appThousandsSeparator formControlName="rate" matInput required
+                      <input [maxDecimal]="2" [maxDecimal]="2" appThousandsSeparator formControlName="rate" matInput
+                             required
                              trim="blur">
                       <mat-error *ngxControlError="row.controls['rate']; track: 'required'">
                         <span i18n>Ratio</span><span i18n> is required</span>
