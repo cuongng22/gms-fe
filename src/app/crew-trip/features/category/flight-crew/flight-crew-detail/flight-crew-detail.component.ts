@@ -115,12 +115,12 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
   override async save() {
     this.messageErrorActype = '';
     super.save().then(value => {
-      if (value.status == HttpStatusCode.Conflict) {
+      if (value.status === HttpStatusCode.Conflict) {
         this.existActype = true;
         this.messageErrorActype = value.error?.error;
         this.formGroupDetail.controls['acType'].updateValueAndValidity();
         this.existActype = false;
-      }else{
+      } else {
         this.dialogRef.close('Update Success');
       }
     });
