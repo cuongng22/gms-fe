@@ -1,10 +1,10 @@
-import { inject, Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
-import { firstValueFrom, Observable } from 'rxjs';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { ActionAlertComponent } from 'src/app/crew-trip/shared/action-alert/action-alert.component';
-import { environment } from 'src/environments/environment';
-import { DetailResponse, ListResponse } from '../../shared/models/common.model';
+import {inject, Injectable} from '@angular/core';
+import {HttpClient, HttpHeaders, HttpParams, HttpResponse} from '@angular/common/http';
+import {firstValueFrom, Observable} from 'rxjs';
+import {MatSnackBar} from '@angular/material/snack-bar';
+import {ActionAlertComponent} from 'src/app/crew-trip/shared/action-alert/action-alert.component';
+import {environment} from 'src/environments/environment';
+import {DetailResponse, ListResponse} from '../../shared/models/common.model';
 
 @Injectable({
   providedIn: 'root'
@@ -26,8 +26,8 @@ export class BaseService {
 
   search<T = any>(body: any): Promise<ListResponse<T> | any> {
     const url = `${this.api}/${this.path}`;
-    const params = new HttpParams({ fromObject: body });
-    return firstValueFrom(this.http.get<ListResponse<T>>(url, { params }));
+    const params = new HttpParams({fromObject: body});
+    return firstValueFrom(this.http.get<ListResponse<T>>(url, {params}));
   }
 
   detail<T = any>(id: any): Promise<DetailResponse<T> | any> {
@@ -53,9 +53,9 @@ export class BaseService {
         'Accept': 'application/octet-stream'
       }),
       responseType: 'blob' as 'json',
-      params: new HttpParams({ fromObject: body })
+      params: new HttpParams({fromObject: body})
     };
-    const response = await firstValueFrom(this.http.get(url, { ...httpOptionsExport, observe: 'response' }));
+    const response = await firstValueFrom(this.http.get(url, {...httpOptionsExport, observe: 'response'}));
     const contentDisposition = response.headers.get('Content-Disposition');
     let fileName = 'downloaded-file.xlsx';
     if (contentDisposition) {
@@ -64,7 +64,7 @@ export class BaseService {
         fileName = matches[1];
       }
     }
-    return { blob: response.body as Blob, fileName };
+    return {blob: response.body as Blob, fileName};
   }
 
   async exportDataOptions(body?: any, sourcePath?: string): Promise<{ blob: Blob, fileName: string }> {
@@ -76,9 +76,9 @@ export class BaseService {
         'Accept': 'application/octet-stream'
       }),
       responseType: 'blob' as 'json',
-      params: new HttpParams({ fromObject: body })
+      params: new HttpParams({fromObject: body})
     };
-    const response = await firstValueFrom(this.http.get(url, { ...httpOptionsExport, observe: 'response' }));
+    const response = await firstValueFrom(this.http.get(url, {...httpOptionsExport, observe: 'response'}));
     const contentDisposition = response.headers.get('Content-Disposition');
     let fileName = 'downloaded-file.xlsx';
     if (contentDisposition) {
@@ -87,7 +87,7 @@ export class BaseService {
         fileName = matches[1];
       }
     }
-    return { blob: response.body as Blob, fileName };
+    return {blob: response.body as Blob, fileName};
   }
 
 
@@ -112,7 +112,7 @@ export class BaseService {
       responseType: 'blob' as 'json'
     };
 
-    const response = await firstValueFrom(this.http.post(url, form, { ...httpOptionsExport, observe: 'response' }));
+    const response = await firstValueFrom(this.http.post(url, form, {...httpOptionsExport, observe: 'response'}));
     const contentDisposition = response.headers.get('Content-Disposition');
     const totalErrors = response.headers.get('totalErrors');
     let fileName = 'error-file.xlsx';
@@ -122,7 +122,7 @@ export class BaseService {
         fileName = matches[1];
       }
     }
-    return { blob: response.body as Blob, fileName, totalErrors: totalErrors ?? '' };
+    return {blob: response.body as Blob, fileName, totalErrors: totalErrors ?? ''};
   }
 
   showNotification(message: string, options: any) {
@@ -135,7 +135,7 @@ export class BaseService {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
-        data: { type: 'success', message: message }
+        data: {type: 'success', message: message}
       });
     }
   }
@@ -146,7 +146,7 @@ export class BaseService {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
-        data: { type: 'error', message: message }
+        data: {type: 'error', message: message}
       });
     }
   }
@@ -157,7 +157,7 @@ export class BaseService {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
-        data: { type: 'warning', message: message }
+        data: {type: 'warning', message: message}
       });
     }
   }
@@ -168,7 +168,7 @@ export class BaseService {
         duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
-        data: { type: 'info', message: message }
+        data: {type: 'info', message: message}
       });
     }
   }

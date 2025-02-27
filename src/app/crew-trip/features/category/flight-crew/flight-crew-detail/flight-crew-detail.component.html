@@ -38,7 +38,7 @@
                 </mat-option>
               </mat-select>
               @if (!!formGroupDetail.controls['acType'].hasError('existActype')) {
-                <mat-error>{{messageErrorActype}}</mat-error>
+                <mat-error>{{ messageErrorActype }}</mat-error>
               }
             </mat-form-field>
           </div>
@@ -53,6 +53,8 @@
                 <mat-error><span i18n>Pilot number</span><span i18n> is required</span></mat-error>
               } @else if (!!formGroupDetail.controls['pilotNumber'].hasError('min')) {
                 <mat-error><span i18n>Pilot number</span><span i18n> must be greater than 1</span></mat-error>
+              } @else if (!!formGroupDetail.controls['pilotNumber'].hasError('max')) {
+                <mat-error><span i18n>Pilot number</span><span i18n> must be less than 99</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -64,9 +66,11 @@
               <input formControlName="numberAttendant" matInput
                      min="1" max="99" required type="number">
               @if (!!formGroupDetail.controls['numberAttendant'].hasError('required')) {
-                <mat-error><span i18n>Pilot number</span><span i18n> is required</span></mat-error>
+                <mat-error><span i18n>Attendant number</span><span i18n> is required</span></mat-error>
               } @else if (!!formGroupDetail.controls['numberAttendant'].hasError('min')) {
-                <mat-error><span i18n>Pilot number</span><span i18n> must be greater than 1</span></mat-error>
+                <mat-error><span i18n>Attendant number</span><span i18n> must be greater than 1</span></mat-error>
+              } @else if (!!formGroupDetail.controls['numberAttendant'].hasError('max')) {
+                <mat-error><span i18n>Attendant number</span><span i18n> must be less than 99</span></mat-error>
               }
             </mat-form-field>
           </div>
