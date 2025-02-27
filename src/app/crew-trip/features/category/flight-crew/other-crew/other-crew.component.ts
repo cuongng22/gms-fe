@@ -102,7 +102,7 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
-      s: ['',], type: ['',],
+      s: ['',], type: ['',], export: [false],
     });
     this.formGroupDetail = this.fb.group({
       id: ['',],
