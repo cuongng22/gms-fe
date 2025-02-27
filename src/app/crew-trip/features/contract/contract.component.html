@@ -55,7 +55,7 @@
                                  label="Airport code" size="md">
             </app-select-multiple>
           </div>
-          <div *ngIf="isHD()" class="col-3" sizeInput='md'>
+          <div *ngIf="isHD()" class="col-2" sizeInput='md'>
             <app-select-multiple [options]="listPartner"
                                  [required]="false"
                                  attrDisplay="name"
@@ -67,7 +67,7 @@
 
             </app-select-multiple>
           </div>
-          <div class="col-3" sizeInput='md'>
+          <div class="col-2" sizeInput='md'>
             <mat-form-field>
               <mat-date-range-input [rangePicker]="picker">
                 <input formControlName="startDate" i18n-placeholder="@@startDate" matStartDate placeholder="dd/mm/yyyy"
@@ -99,7 +99,7 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="col-1" sizeInput='md'>
+          <div class="col" sizeInput='md'>
             <mat-card-header class="mb-0">
               <mat-card-title>
                 <button (click)="search()" class="search-btn" i18n mat-button>
