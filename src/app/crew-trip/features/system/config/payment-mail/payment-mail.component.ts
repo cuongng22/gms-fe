@@ -109,22 +109,21 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
           emails: emailList
         });
       }
-      const res = await super.save();
-      if (res instanceof HttpErrorResponse) {
-        if (res.error.status === HttpStatusCode.BadRequest) {
+      await super.save();
+    } catch (error) {
+      if (error instanceof HttpErrorResponse) {
+        if (error.error.status === HttpStatusCode.BadRequest) {
           this.formGroupDetail.get('emailsInput')?.setErrors({
             invalid: true,
-            message: res.error.error['emails[]']
+            message: error.error.error['emails[]']
           });
-        } else if (res.error.status === HttpStatusCode.Conflict) {
+        } else if (error.error.status === HttpStatusCode.Conflict) {
           this.formGroupDetail.get('marketCode')?.setErrors({
             conflict: true,
-            message: res.error.error
+            message: error.error.error
           });
         }
       }
-    } catch (error) {
-      console.log(error);
     }
   }
 
@@ -147,7 +146,6 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
   }
 
   override async showDialogDetail(id?: any, type?: string) {
-
     // const email = this.dataSource.data[id] ? this.dataSource.data[id] : '';
     if (id != null && type === 'index') {
       const data = this.dataSource.data[id] as Data;

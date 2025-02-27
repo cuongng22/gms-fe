@@ -208,19 +208,17 @@ export class GroupMailDetailComponent extends CommonComponent implements OnInit 
       return;
     }
     try {
-      await super.save().then((value) => {
-        if (value?.status == HttpStatusCode.Conflict) {
-          this.showError(value.error?.error)
-          // this.existCode = true;
-          // this.existMessage = value.error?.error;
-          // this.formGroupDetail.controls['marketCode'].updateValueAndValidity();
-          // this.existCode = false;
-          return;
-        }
+        await super.save().then((value) => {
         this.dialogRef.close('Update Success');
       });
     } catch (e: any) {
-      console.log("aaaa:", e)
+      if (e?.status == HttpStatusCode.Conflict) {
+        this.existCode = true;
+        this.existMessage = e.error?.error;
+        this.formGroupDetail.controls['marketCode'].updateValueAndValidity();
+        this.existCode = false;
+        return;
+      }
     } finally {
       await this.spinner.hide();
     }
