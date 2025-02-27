@@ -32,7 +32,6 @@ import {HttpStatusCode} from '@angular/common/http';
   standalone: true,
   imports: [
     CommonModule,
-    DataTransformPipe,
     FormsModule,
     InputSizeComponent,
     MatAutocomplete,
@@ -48,7 +47,6 @@ import {HttpStatusCode} from '@angular/common/http';
     MatLabel,
     MatOption,
     MatSelect,
-    NgxControlError,
     NgxTrimDirectiveModule,
     ReactiveFormsModule,
     NgForOf,
@@ -113,17 +111,20 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
   }
 
   override async save() {
-    this.messageErrorActype = '';
-    super.save().then(value => {
-      if (value.status === HttpStatusCode.Conflict) {
+    try {
+      this.messageErrorActype = '';
+      const value = await super.save();
+      this.dialogRef.close('Update Success');
+    } catch (error: any) {
+      if (error.status === HttpStatusCode.Conflict) {
         this.existActype = true;
-        this.messageErrorActype = value.error?.error;
+        this.messageErrorActype = error.error?.error || 'Conflict error';
         this.formGroupDetail.controls['acType'].updateValueAndValidity();
         this.existActype = false;
       } else {
-        this.dialogRef.close('Update Success');
+        console.error('Unexpected error:', error);
       }
-    });
+    }
   }
 
   close(): void {
