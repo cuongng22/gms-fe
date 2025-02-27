@@ -143,7 +143,10 @@
                 @if (formGroupDetail.controls['marketCode'].hasError('required')) {
                   <mat-error><span i18n>Airport code</span><span i18n> is required</span></mat-error>
                 } @else if (formGroupDetail.controls['marketCode'].hasError('conflict')) {
-                  <mat-error>{{ formGroupDetail.controls['marketCode'].getError('message') }}</mat-error>
+                  <mat-error>
+                    <!--                    {{ formGroupDetail.controls['marketCode'].getError('message') }}-->
+                    Airport code has already existed in payment email config.
+                  </mat-error>
                 }
               </mat-form-field>
               <div class="mb-2"></div>
