@@ -108,7 +108,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Airport code`, value: 'marketCode'},
     {label: $localize`bizDocId`, value: 'bizDocId',},
-    {label: $localize`Contract Code`,label1 : $localize`Appendix Code`, value: 'contractCode'},
+    {label: $localize`Contract Code`, label1: $localize`Appendix Code`, value: 'contractCode'},
     {label: $localize`Contract No`, value: 'contractNo',},
     {label: $localize`Contract Name`, label1: $localize`Appendix Name`, value: 'contractName'},
     {label: $localize`Supplier`, value: 'partnerName',},
@@ -150,6 +150,11 @@ export class ContractComponent extends CommonComponent implements OnInit {
       this.loadListVehiclesPartner(),
       this.search(),
     ]).then(() => {
+      let cache = JSON.parse(localStorage.getItem('viewType')!);
+      if(cache){
+        this.viewType = cache.viewType;
+        this.showListAnnex(cache.bizDocId)
+      }
       const listCombine = [...this.listVehicle, ...this.listHotel];
       this.listPartner = listCombine.map((s: any) => ({
         code: s.code ?? s.hotelCode,
@@ -216,7 +221,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }
 
   async loadListHotel() {
-    await this.hotelService.search({limit:9999}).then((res) => {
+    await this.hotelService.search({limit: 9999}).then((res) => {
       if (res.data) {
         this.listHotel = res.data.content;
       }
@@ -224,7 +229,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }
 
   async loadListVehiclesPartner() {
-    await this.vehicleService.search({limit:9999}).then((res) => {
+    await this.vehicleService.search({limit: 9999}).then((res) => {
       if (res.data) {
         this.listVehicle = res.data.content;
       }
@@ -232,7 +237,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }
 
   async syncDWH() {
-    await this.baseService.syncContract({}).then(res=>{
+    await this.baseService.syncContract({}).then(res => {
       console.log(res);
       this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
     });
@@ -240,6 +245,12 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   async showListAnnex(id: any) {
     await this._router.navigate([], {fragment: 'annex',});
+    localStorage.setItem('viewType', JSON.stringify({
+      bizDocId: id,
+      step: 2,
+      viewType: this.viewType,
+    }));
+
     this.viewType = 'PL';
     this.formGroupSearch.patchValue({contractId: id});
     this.contractObj = this.dataSource.data.find(
@@ -254,6 +265,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }
 
   async showListContract() {
+    localStorage.removeItem('viewType');
     this.viewType = 'HD';
     await this.search();
   }
