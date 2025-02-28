@@ -770,9 +770,7 @@
             <mat-form-field>
               <mat-label i18n>Airport Name</mat-label>
               <input formControlName="marketName" matInput trim="blur">
-              @if (!!formGroupDetail.controls['marketName'].hasError('required')) {
-              <mat-error><span i18n>Airport Name</span><span i18n> is required</span></mat-error>
-              }
+              <mat-error><app-control-error controlName="marketName"/></mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
@@ -842,24 +840,14 @@
             <mat-form-field>
               <mat-label i18n>Supplier Name</mat-label>
               <input formControlName="supplierName" matInput trim="blur">
-              @if (!!formGroupDetail.controls['supplierName'].hasError('required')) {
-              <mat-error><span i18n>Supplier Name</span><span i18n> is required</span></mat-error>
-              }
+              <mat-error><app-control-error controlName="supplierName"/></mat-error>
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Supplier Phone</mat-label>
               <input formControlName="supplierPhone" matInput trim="blur">
-              @if (!!formGroupDetail.controls['supplierPhone'].hasError('required')) {
-              <mat-error><span i18n>Supplier Phone</span><span i18n> is required</span></mat-error>
-              }
-              <mat-error *ngxControlError="formGroupDetail.controls['supplierPhone']; track: 'maxlength'">
-                <span i18n>Supplier Phone</span><span i18n> must be less than 20 characters</span>
-              </mat-error>
-              <mat-error *ngxControlError="formGroupDetail.controls['supplierPhone']; track: 'pattern'">
-                <span i18n>Supplier Phone</span><span i18n> invalid</span>
-              </mat-error>
+              <mat-error><app-control-error controlName="supplierPhone"/></mat-error>
             </mat-form-field>
           </div>
         </div>
@@ -910,7 +898,7 @@
                 <ngx-material-timepicker-toggle [for]="toggleTimepicker1"
                                                 class="time-picker-clock"></ngx-material-timepicker-toggle>
                 <ngx-material-timepicker #toggleTimepicker1 [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                         [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                         [confirmBtnTmpl]="confirmBtn"
                 ></ngx-material-timepicker>
               </div>
               @if (!!formGroupDetail.controls['standardCheckIn'].hasError('required')) {
@@ -934,7 +922,7 @@
           <ngx-material-timepicker #toggleTimepicker2
                                    [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
                                    [confirmBtnTmpl]="confirmBtn"
-                                   [enableKeyboardInput]="true"
+
           ></ngx-material-timepicker>
         </div>
         @if (!!formGroupDetail.controls['standardCheckOut'].hasError('required')) {
@@ -1044,7 +1032,7 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="serviceCode">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Code</th>
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header class="required-label">Code</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
                   <app-selection-suggest (selectionchange)="onChangeHHDV(row)"
@@ -1125,20 +1113,17 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="priceNoTax">
-              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Unit price before tax</th>
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header class="required-label">Unit price before tax</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
                   <mat-form-field class="edit-inline-table">
-                    <input [maxDecimal]="4" appThousandsSeparator formControlName="priceNoTax" matInput required
+                    <input appThousandsSeparator formControlName="priceNoTax" matInput required
                            trim="blur">
                     <mat-error *ngxControlError="row.controls['priceNoTax']; track: 'required'">
                       <span i18n>Unit price before tax</span><span i18n> is required</span>
                     </mat-error>
                     <mat-error *ngxControlError="row.controls['priceNoTax']; track: 'invalidNumber'">
                       <span i18n>Unit price before tax</span><span i18n> must be number</span>
-                    </mat-error>
-                    <mat-error *ngxControlError="row.controls['priceNoTax']; track: 'invalidNumberDecimal'">
-                      <span i18n>Unit price before tax</span><span i18n> invalid</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -1164,9 +1149,9 @@
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
                   <mat-form-field class="edit-inline-table">
-                    <input formControlName="taxRate" matInput required trim="blur">
-                    <mat-error *ngxControlError="row.controls['taxRate']; track: 'required'">
-                      <span i18n>% VAT</span><span i18n> is required</span>
+                    <input formControlName="taxRate" matInput trim="blur">
+                    <mat-error>
+                      <app-control-error controlName="taxRate"/>
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -1177,16 +1162,13 @@
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
                   <mat-form-field class="edit-inline-table">
-                    <input [maxDecimal]="4" appThousandsSeparator formControlName="originalAmount3" matInput required
+                    <input appThousandsSeparator formControlName="originalAmount3" matInput
                            trim="blur">
                     <mat-error *ngxControlError="row.controls['originalAmount3']; track: 'required'">
                       <span i18n>VAT amount</span><span i18n> is required</span>
                     </mat-error>
                     <mat-error *ngxControlError="row.controls['originalAmount3']; track: 'invalidNumber'">
                       <span i18n>VAT amount</span><span i18n> must be number</span>
-                    </mat-error>
-                    <mat-error *ngxControlError="row.controls['originalAmount3']; track: 'invalidNumberDecimal'">
-                      <span i18n>VAT amount</span><span i18n> invalid</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -1197,16 +1179,13 @@
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
                   <mat-form-field class="edit-inline-table">
-                    <input [maxDecimal]="4" appThousandsSeparator formControlName="priceWithTax" matInput required
+                    <input appThousandsSeparator formControlName="priceWithTax" matInput
                            trim="blur">
                     <mat-error *ngxControlError="row.controls['priceWithTax']; track: 'required'">
                       <span i18n>Unit Price After Tax</span><span i18n> is required</span>
                     </mat-error>
                     <mat-error *ngxControlError="row.controls['priceWithTax']; track: 'invalidNumber'">
                       <span i18n>Unit Price After Tax</span><span i18n> must be number</span>
-                    </mat-error>
-                    <mat-error *ngxControlError="row.controls['priceWithTax']; track: 'invalidNumberDecimal'">
-                      <span i18n>Unit Price After Tax</span><span i18n> invalid</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -1219,7 +1198,7 @@
                   <mat-form-field class="edit-inline-table">
                     <input formControlName="notes" matInput trim="blur">
                     <mat-error *ngxControlError="row.controls['notes']; track: 'maxlength'">
-                      <span i18n>Remark</span><span i18n> must be less than 50 characters</span>
+                      <span i18n>Remark</span><span i18n> must be less than 250 characters</span>
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -1322,7 +1301,7 @@
                       <ngx-material-timepicker-toggle [for]="fromHour"
                                                       class="time-picker-clock"></ngx-material-timepicker-toggle>
                       <ngx-material-timepicker #fromHour [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                               [confirmBtnTmpl]="confirmBtn"
                       ></ngx-material-timepicker>
                       <mat-error *ngxControlError="row.controls['fromHour']; track: 'required'">
                         <span i18n>Hours from</span><span i18n> is required</span>
@@ -1342,7 +1321,7 @@
                       <ngx-material-timepicker-toggle [for]="toHour"
                                                       class="time-picker-clock"></ngx-material-timepicker-toggle>
                       <ngx-material-timepicker #toHour [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                               [confirmBtnTmpl]="confirmBtn"
                       ></ngx-material-timepicker>
                       <mat-error *ngxControlError="row.controls['toHour']; track: 'required'">
                         <span i18n>Hours to</span><span i18n> is required</span>
@@ -1458,7 +1437,7 @@
                       <ngx-material-timepicker-toggle [for]="fromHour"
                                                       class="time-picker-clock"></ngx-material-timepicker-toggle>
                       <ngx-material-timepicker #fromHour [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                               [confirmBtnTmpl]="confirmBtn"
                       ></ngx-material-timepicker>
                       <mat-error *ngxControlError="row.controls['fromHour']; track: 'required'">
                         <span i18n>Hours from</span><span i18n> is required</span>
@@ -1478,7 +1457,7 @@
                       <ngx-material-timepicker-toggle [for]="toHour"
                                                       class="time-picker-clock"></ngx-material-timepicker-toggle>
                       <ngx-material-timepicker #toHour [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                               [confirmBtnTmpl]="confirmBtn"
                       ></ngx-material-timepicker>
                       <mat-error *ngxControlError="row.controls['toHour']; track: 'required'">
                         <span i18n>Hours to</span><span i18n> is required</span>
@@ -1579,7 +1558,7 @@
                       <ngx-material-timepicker-toggle [for]="checkinFrom"
                                                       class="time-picker-clock"></ngx-material-timepicker-toggle>
                       <ngx-material-timepicker #checkinFrom [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                               [confirmBtnTmpl]="confirmBtn"
                       ></ngx-material-timepicker>
                       <mat-error *ngxControlError="row.controls['checkinFrom']; track: 'required'">
                         <span i18n>Checkin From</span><span i18n> is required</span>
@@ -1599,7 +1578,7 @@
                       <ngx-material-timepicker-toggle [for]="checkoutTo"
                                                       class="time-picker-clock"></ngx-material-timepicker-toggle>
                       <ngx-material-timepicker #checkoutTo [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
-                                               [confirmBtnTmpl]="confirmBtn" [enableKeyboardInput]="true"
+                                               [confirmBtnTmpl]="confirmBtn"
                       ></ngx-material-timepicker>
                       <mat-error *ngxControlError="row.controls['checkoutTo']; track: 'required'">
                         <span i18n>Checkout To</span><span i18n> is required</span>
@@ -1660,7 +1639,7 @@
                 <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                   <div class="input-cell">
                     <mat-form-field class="edit-inline-table">
-                      <input [maxDecimal]="2" [maxDecimal]="2" appThousandsSeparator formControlName="rate" matInput
+                      <input [maxDecimal]="2" appThousandsSeparator formControlName="rate" matInput
                              required
                              trim="blur">
                       <mat-error *ngxControlError="row.controls['rate']; track: 'required'">

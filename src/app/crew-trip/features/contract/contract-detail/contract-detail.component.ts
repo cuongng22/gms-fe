@@ -80,6 +80,8 @@ import {
   MESSAGE,
   PARTERN,
 } from 'src/app/crew-trip/shared/utils/constant';
+import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
+import {NgxMatTimepickerComponent, NgxMatTimepickerToggleComponent} from "ngx-mat-timepicker";
 
 @Component({
   selector: 'app-contract-detail',
@@ -127,6 +129,7 @@ import {
     SelectionSuggestComponent,
     ConfirmDialog,
     ThousandsSeparatorDirective,
+    ControlErrorComponent,
   ],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
@@ -238,7 +241,7 @@ export class ContractDetailComponent
         await this.spinner.hide();
       }
     }
-  }, 1000);
+  }, 500);
   partnerChangeBrake: any;
   partnerChangeDebounce = debounce(async (value: any) => {
     if (value && !this.partnerChangeBrake) {
@@ -261,14 +264,14 @@ export class ContractDetailComponent
         await this.spinner.hide();
       }
     }
-  }, 1000);
+  }, 500);
   _showDialogDelete = false;
   deleteObj: any;
   dsPriceUnit = new MatTableDataSource<any>([]);
   dsEciLco = new MatTableDataSource<any>([]);
   dsOvernightStay = new MatTableDataSource<any>([]);
   dsDayUse = new MatTableDataSource<any>([]);
-  tableFilter: any;
+
 
   constructor(private readonly numberPipe: DecimalPipe) {
     super();
@@ -324,7 +327,7 @@ export class ContractDetailComponent
       standardCheckIn: ['', [Validators.pattern(PARTERN.HOUR24)]],
       standardCheckOut: [],
       standardCheckout: [],
-      notes: ['', [Validators.maxLength(250)]],
+      notes: ['', [Validators.maxLength(500)]],
       isTaxHotelRevert: [true],
       isTaxCarRevert: [],
       tempp: [],
@@ -456,10 +459,10 @@ export class ContractDetailComponent
         expenseCatgId: ['', [Validators.maxLength(50)]],
         priceNoTax: [],
         taxCode: [],
-        taxRate: [],
+        taxRate: [, [Validators.pattern(PARTERN.NUMBER)]],
         originalAmount3: [],
         priceWithTax: [],
-        notes: ['', [Validators.maxLength(50)]],
+        notes: ['', [Validators.maxLength(250)]],
         bizDocId: [],
         fromDate: [this.formGroupDetail.getRawValue().effectiveDate || ''],
         toDate: [this.formGroupDetail.getRawValue().expiryDate || ''],
@@ -477,10 +480,9 @@ export class ContractDetailComponent
       ]);
       init && row.patchValue(init);
       if (row.getRawValue().active) {
-        this.tableFilter.push(row);
+        table.push(row);
       }
-      table.push(row);
-      this.dsPriceUnit.data = this.tableFilter.controls;
+      this.dsPriceUnit.data = table.controls;
     } else if (addType === 'tblEciLco' || addType === 'tblOvernightStay') {
       row = this.fb.group({
         id: [],
@@ -692,6 +694,13 @@ export class ContractDetailComponent
       } else if (this.deleteObj?.deleteType == 'tblPriceUnit') {
         this.tblPriceUnit.removeAt(this.deleteObj.index);
         this.dsPriceUnit.data = this.tblPriceUnit.controls;
+        this.formGroupDetail.getRawValue().priceUnitInfo.forEach((s:any)=>{
+          console.log(s.id,this.deleteObj.id)
+          if(s.id==this.deleteObj.id){
+            s.active=false;
+          }
+        });
+        console.log(this.formGroupDetail.getRawValue())
       } else if (this.deleteObj.deleteType == 'tblEciLco') {
         this.tblEciLco.removeAt(this.deleteObj.index);
         this.dsEciLco.data = this.tblEciLco.controls;
@@ -710,8 +719,7 @@ export class ContractDetailComponent
   }
 
   async _confirmDelete(element?: any, index?: any, type?: any) {
-    this.deleteObj = {...element, deleteType: type, index: index};
-    //this.curFile = element;
+    this.deleteObj = {...element.value, deleteType: type, index: index};
     this._showDialogDelete = true;
   }
 
@@ -951,7 +959,7 @@ export class ContractDetailComponent
   override async save() {
     try {
       //xoa bản ghi trang
-      let group = this.tblPriceUnit.controls as FormGroup[];
+      /*let group = this.tblPriceUnit.controls as FormGroup[];
       let filter = group.filter((fGroup) => fGroup.getRawValue().serviceCode);
       this.tblPriceUnit = new FormArray<any>(filter);
       group = this.tblEciLco.controls as FormGroup[];
@@ -960,9 +968,9 @@ export class ContractDetailComponent
       group = this.tblOvernightStay.controls as FormGroup[];
       filter = group.filter((fGroup) => fGroup.getRawValue().fromHour);
       this.tblOvernightStay = new FormArray<any>(filter);
-      // group = this.tblDayUse.controls as FormGroup[];
-      // filter = group.filter(fGroup => fGroup.getRawValue().checkinFrom);
-      // this.tblDayUse = new FormArray<any>(filter);
+      group = this.tblDayUse.controls as FormGroup[];
+      filter = group.filter(fGroup => fGroup.getRawValue().checkinFrom);
+      this.tblDayUse = new FormArray<any>(filter);*/
 
       this.formGroupDetail.patchValue({
         appendixCode: this.formGroupDetail.getRawValue().contractCode,
@@ -1167,7 +1175,8 @@ export class ContractDetailComponent
     };
     body.dayUses = this.tblDayUse.value[0] || null;
     body.dayUses && (body.dayUses.lengthTime = body.dayUses?.maxHour || 0);
-    body.priceUnitInfo = this.tblPriceUnit.value;
+    let priceUnitInfoInactive = this.formGroupDetail.getRawValue().priceUnitInfo.filter((s: any) => s.active == false);
+    body.priceUnitInfo = [...this.tblPriceUnit.value, ...priceUnitInfoInactive];
     body.priceUnitInfo.forEach((s: any) => {
       s.priceBeforeTax = s.priceNoTax;
       s.priceAfterTax = s.priceWithTax;
