@@ -768,10 +768,10 @@
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
-              <mat-label i18n>Market Name</mat-label>
+              <mat-label i18n>Airport Name</mat-label>
               <input formControlName="marketName" matInput trim="blur">
               @if (!!formGroupDetail.controls['marketName'].hasError('required')) {
-              <mat-error><span i18n>Market Name</span><span i18n> is required</span></mat-error>
+              <mat-error><span i18n>Airport Name</span><span i18n> is required</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -779,7 +779,7 @@
             <app-selection-suggest (selectionchange)="nationSelected(formGroupDetail.getRawValue().nationId)"
                                    [options]="listQuocGia"
                                    attrDisplay="vniName"
-                                   attrValue="id" formControlName="nationId" i18n-label label="Nation"
+                                   attrValue="id" formControlName="nationId" i18n-label label="Country"
                                    required size="sm"/>
             <!--<mat-form-field>
               <mat-label i18n>Country</mat-label>
