@@ -16,9 +16,19 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
   }
 
   ngAfterContentInit() {
+    const inputElement = this.el.nativeElement;
+    //init
+    let initValue = this.control.value;
+    if (initValue && !isNaN(Number(initValue))) {
+      inputElement.value = this.formatNumber(initValue);
+    } else {
+      this.control.control?.setErrors({invalidNumber: true});
+    }
+
+    //la field tinh toan
     this.control.control?.valueChanges.pipe(take(1)).subscribe((value) => {
-      const inputElement = this.el.nativeElement;
       if (value && !isNaN(Number(value))) {
+        console.log(value)
         inputElement.value = this.formatNumber(value);
       } else {
         // inputElement.value = '0';
@@ -58,12 +68,12 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
   private formatNumber(value: string | number): string {
     const parts = value.toString().split('.'); // Tách phần nguyên và thập phân
     parts[0] = parseInt(parts[0], 10).toLocaleString('en-US'); // Thêm dấu phân cách hàng nghìn cho phần nguyên
+    console.log(parts[0])
     return parts.join('.'); // Ghép lại phần nguyên và thập phân
   }
 
   private isValidNumberDecimal(value: string): boolean {
-    const regex = new RegExp(`^-?\\d*(\\.\\d{0,${this.maxDecimal}})?$`);
-    console.log(regex)
+    const regex = new RegExp(`^-?\\d*(\\.\\d{0,${this.maxDecimal}})?$`);// so thap phan
     return regex.test(value);
   }
 }
