@@ -120,7 +120,8 @@ export class COMMON_CONFIG {
 }
 
 export class PARTERN {
-  static PHONE = '^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$' //so () -
+  // static PHONE = '^[\\+]?[(]?[0-9]{3}[)]?[-\\s\\.]?[0-9]{3}[-\\s\\.]?[0-9]{4,6}$' //so () -
+  static PHONE = '^[0-9()+]+$'
   static STRING_NUMBER = '^[a-zA-Z0-9]+$' //chu va so
   static EMAIL = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
   static HOUR24 = '^([01]\\d|2[0-3]):([0-5]\\d)$'

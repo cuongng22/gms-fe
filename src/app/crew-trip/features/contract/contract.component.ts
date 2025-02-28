@@ -363,13 +363,10 @@ export class ContractComponent extends CommonComponent implements OnInit {
     }
   }
 
-  async exportAppendix(body?: any, filename?: string) {
+  async exportAppendix(filename?: string) {
     try {
       await this.spinner.show();
-      let body = this.formGroupSearch.getRawValue();
-      body.export= true;
-      // body.contractId =
-      this.baseService.exportAppendix(removeNullValues(body)).then((res) => {
+      this.baseService.exportAppendix(removeNullValues({contractId: this.contractObj.bizDocId, export: true})).then((res) => {
         this.downloadFile(res, filename ?? res.fileName);
       });
     } catch (e: any) {
