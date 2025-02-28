@@ -869,6 +869,7 @@
             <mat-form-field>
               <mat-label i18n>Supplier Booking Email</mat-label>
               <input formControlName="supplierEmail" matInput required trim="blur">
+              <mat-hint align="start"><i i18n="">Please separate multiple emails with ;</i></mat-hint>
               @if (!!formGroupDetail.controls['supplierEmail'].hasError('required')) {
               <mat-error><span i18n>Supplier Booking Email</span><span i18n> is required</span></mat-error>
               }
