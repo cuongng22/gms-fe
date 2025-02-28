@@ -25,7 +25,7 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
       this.control.control?.setErrors({invalidNumber: true});
     }
 
-    //update
+    //la field tinh toan
     this.control.control?.valueChanges.pipe(take(1)).subscribe((value) => {
       if (value && !isNaN(Number(value))) {
         console.log(value)
@@ -73,7 +73,7 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
   }
 
   private isValidNumberDecimal(value: string): boolean {
-    const regex = new RegExp(`^-?\\d*(\\.\\d{0,${this.maxDecimal}})?$`);
+    const regex = new RegExp(`^-?\\d*(\\.\\d{0,${this.maxDecimal}})?$`);// so thap phan
     return regex.test(value);
   }
 }
