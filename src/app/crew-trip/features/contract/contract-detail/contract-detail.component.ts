@@ -581,6 +581,12 @@ export class ContractDetailComponent
           statusUsage: this.listStatusUsage.find(
             (s) => s.value == this.formGroupDetail.getRawValue().statusUsage,
           )?.key,
+          bankCharge: this.listBankCharge.find(
+            (s) => s.value == this.formGroupDetail.getRawValue().bankCharge,
+          )?.key,
+          bankCharge1: this.listBankCharge.find(
+            (s) => s.value == this.formGroupDetail.getRawValue().bankCharge1,
+          )?.key,
           standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout,
           //exchangeRate: this.numberPipe.transform(this.formGroupDetail.getRawValue().exchangeRate,),
         });
@@ -1159,8 +1165,8 @@ export class ContractDetailComponent
       type1: this.tblEciLco.value,
       type2: this.tblOvernightStay.value,
     };
-    body.dayUses = this.tblDayUse.value[0] || {};
-    body.dayUses.lengthTime = body.dayUses?.maxHour || 0;
+    body.dayUses = this.tblDayUse.value[0] || null;
+    body.dayUses && (body.dayUses.lengthTime = body.dayUses?.maxHour || 0);
     body.priceUnitInfo = this.tblPriceUnit.value;
     body.priceUnitInfo.forEach((s: any) => {
       s.priceBeforeTax = s.priceNoTax;

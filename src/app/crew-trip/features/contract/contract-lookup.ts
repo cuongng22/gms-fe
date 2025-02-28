@@ -108,16 +108,7 @@ export const StatusUsage = [
 ];
 
 export const BankCharge = [
-  {key: 'BEN', value: $localize`BEN`},
-  {key: 'OUR', value: $localize`OUR`},
-  {key: 'SHA', value: $localize`SHA`},
+  {key: 'BEN', value: $localize`Receiver will pay the fee`},
+  {key: 'OUR', value: $localize`Payee will pay the fee`},
+  {key: 'SHA', value: $localize`Mỗi bên chịu một phần`},
 ];
-
-
-export const ContractCode={
-      "ERRORS": {
-        "required": "Email is required",
-          "maxlength": "Please enter a valid email address",
-          "myCustomError": "Email cannot contain 'test'"
-      }
-}

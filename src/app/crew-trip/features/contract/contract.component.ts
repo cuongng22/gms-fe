@@ -34,6 +34,7 @@ import {
   removeNullValues,
 } from 'src/app/crew-trip/shared/utils/constant';
 import {RouterLink, RouterLinkActive} from "@angular/router";
+import {cloneDeep} from "lodash";
 
 @Component({
   selector: 'app-contract',
@@ -151,7 +152,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
       this.search(),
     ]).then(() => {
       let cache = JSON.parse(localStorage.getItem('viewType')!);
-      if(cache){
+      if (cache) {
         this.viewType = cache.viewType;
         this.showListAnnex(cache.bizDocId)
       }
@@ -252,7 +253,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
     }));
 
     this.viewType = 'PL';
-    this.formGroupSearch.patchValue({contractId: id});
+    let initData = cloneDeep(this.formGroupSearchInit);
+    this.formGroupSearch.patchValue({...initData, contractId: id});
     this.contractObj = this.dataSource.data.find(
       (value: any) => value.bizDocId == id,
     );
@@ -267,6 +269,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   async showListContract() {
     localStorage.removeItem('viewType');
     this.viewType = 'HD';
+    this.formGroupSearch.patchValue(this.formGroupSearchInit);
     await this.search();
   }
 
@@ -354,6 +357,23 @@ export class ContractComponent extends CommonComponent implements OnInit {
         });
       this.formGroupSearch.patchValue({export: false, exportType: 'ALL'});
     } catch (e: any) {
+      this.baseService.showError(e.error?.error?.code ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
+  }
+
+  async exportAppendix(body?: any, filename?: string) {
+    try {
+      await this.spinner.show();
+      let body = this.formGroupSearch.getRawValue();
+      body.export= true;
+      // body.contractId =
+      this.baseService.exportAppendix(removeNullValues(body)).then((res) => {
+        this.downloadFile(res, filename ?? res.fileName);
+      });
+    } catch (e: any) {
+      console.log(e);
       this.baseService.showError(e.error?.error?.code ?? MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
