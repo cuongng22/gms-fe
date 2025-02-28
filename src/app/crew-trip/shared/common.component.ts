@@ -85,7 +85,6 @@ export class CommonComponent
   listFeeService: any[] = [];
   allErrorTrack = ['invalidNumberDecimal', 'required', 'pattern', 'max', 'min', 'timeBeforeValidator',
     'lessThanValidator', 'maxlength', 'invalidNumber', 'dateValidator', 'beforeValidator', 'partern', 'minlength'];
-
   @HostListener('window:keyup', ['$event'])
   keyEvent(event: KeyboardEvent) {
     if (event.keyCode === 27) {
@@ -99,6 +98,9 @@ export class CommonComponent
 
   constructor() {
     super();
+    this.formGroupSearch = this.formBuilder.group({
+      export: [],
+    });
     this.toggleService.isSidebarToggled$.subscribe((isSidebarToggled) => {
       this.isSidebarToggled = isSidebarToggled;
     });

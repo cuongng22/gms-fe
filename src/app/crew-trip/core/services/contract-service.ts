@@ -93,4 +93,17 @@ export class ContractService extends BaseService {
     const params = new HttpParams({fromObject: removeNullValues(body)});
     return firstValueFrom(this.http.get<any>(url, {params}));
   }
+
+  exportAppendix(body: any) {
+    const url = `${this.api}/${this.path}/appendix`;
+    const httpOptionsExport = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        Accept: 'application/octet-stream',
+      }),
+      responseType: 'blob' as 'json',
+      params: new HttpParams({fromObject: body}),
+    };
+    return firstValueFrom(this.http.get<any>(url, httpOptionsExport));
+  }
 }
