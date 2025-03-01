@@ -11,7 +11,7 @@ export const truncateDateUTC = (date: Date): Date => {
 export function lessThanValidator(number: number): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     const value = control.value;
-    if (value !== null && value >= number) {
+    if (value !== null && (value >= number || value < 0)) {
       return {lessThanValidator: true};
     }
     return null;
@@ -24,6 +24,28 @@ export function beforeValidator(from: any): ValidatorFn {
     let toMoment = moment(control.value) || null;
     if (fromMoment && toMoment && toMoment.isBefore(fromMoment)) {
       return {beforeValidator: true};
+    }
+    return null;
+  };
+}
+
+export function afterValidator(to: any): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    let fromMoment = moment(control.value) || null;
+    let toMoment = moment(to.value) || null;
+    if (fromMoment && toMoment && fromMoment.isAfter(toMoment)) {
+      return {afterValidator: true};
+    }
+    return null;
+  };
+}
+
+export function timeAfterValidator(to: any): ValidatorFn {
+  return (control: AbstractControl): ValidationErrors | null => {
+    let fromNumber = +to.value?.replace(':', '') || null
+    let toNumber = +control.value?.replace(':', '') || null
+    if (fromNumber && toNumber && toNumber > fromNumber) {
+      return {timeAfterValidator: true};
     }
     return null;
   };

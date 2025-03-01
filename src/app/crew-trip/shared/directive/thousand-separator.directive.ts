@@ -44,7 +44,7 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
     if (value && !isNaN(Number(value))) {
       if (!this.isValidNumberDecimal(value)) {
         this.control.control?.setErrors({invalidNumberDecimal: true});
-      } else {
+      } else if (!this.control.errors) {
         this.control.control?.setErrors(null);
         this.control.control?.setValue(Number(value), {emitEvent: false});
         inputElement.value = this.formatNumber(value);
@@ -71,7 +71,9 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
   }
 
   private isValidNumberDecimal(value: string): boolean {
-    const regex = new RegExp(`^-?\\d*(\\.\\d{0,${this.maxDecimal}})?$`);// so thap phan
-    return regex.test(value);
+    if (this.maxDecimal) {
+      const regex = new RegExp(`^-?\\d*(\\.\\d{0,${this.maxDecimal}})?$`);// so thap phan
+      return regex.test(value);
+    } else return true;
   }
 }

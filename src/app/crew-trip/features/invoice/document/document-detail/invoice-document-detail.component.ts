@@ -21,7 +21,7 @@ import {MatRadioModule} from '@angular/material/radio';
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from '@angular/material/datepicker';
 import {MatNativeDateModule} from '@angular/material/core';
 import {FileUploadModule} from '@iplab/ngx-file-upload';
-import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE, PARTERN} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE, PATTERN} from 'src/app/crew-trip/shared/utils/constant';
 import {ClickOutside} from 'ngxtension/click-outside';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
 import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocomplete';
@@ -182,7 +182,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       idInvoiceForm: [],
       version: [],
       ctype: [InvoiceDocumentTypeEnum.STANDARD],
-      invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(PARTERN.STRING_NUMBER)]],
+      invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(PATTERN.STRING_NUMBER)]],
       invoiceDate: [],
       invoiceReceiveDate: [],
       periodFrom: [],
@@ -314,7 +314,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   //     });
   //     row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
   //     // row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
-  //     row.controls['taxCode'].setValidators([Validators.maxLength(24), Validators.pattern(PARTERN.STRING)]);
+  //     row.controls['taxCode'].setValidators([Validators.maxLength(24), Validators.pattern(PATTERN.STRING)]);
   //     init && row.patchValue(init);
   //     table.push(row);
   //     this.dsPriceUnit.data = table.controls;
@@ -337,7 +337,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   //       id: [,], bizdocId: [,], checkinFrom: ['00:00',], checkoutTo: ['23:59',], maxHour: [,], rate: [,], rate1: [,], active: [,],
   //     });
   //     row.controls['checkoutTo'].setValidators(timeBeforeValidator(row.controls['checkinFrom']));
-  //     row.controls['maxHour'].setValidators([Validators.min(0), Validators.max(24), Validators.pattern(PARTERN.NUMBER)]);
+  //     row.controls['maxHour'].setValidators([Validators.min(0), Validators.max(24), Validators.pattern(PATTERN.NUMBER)]);
   //     init && row.patchValue(init);
   //     table.push(row);
   //     this.dsDayUse.data = table.controls;

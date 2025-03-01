@@ -1,51 +1,30 @@
 import {DecimalPipe, NgClass, NgForOf, NgIf} from '@angular/common';
 import {HttpStatusCode} from '@angular/common/http';
 import {
-  AfterContentInit,
-  Component,
-  EventEmitter,
-  OnInit,
-  Output,
-  inject,
+  AfterContentInit, Component, EventEmitter, OnInit, Output, inject,
 } from '@angular/core';
 import {
-  FormArray,
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  Validators,
+  FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,
 } from '@angular/forms';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {
-  MatAutocomplete,
-  MatAutocompleteTrigger,
+  MatAutocomplete, MatAutocompleteTrigger,
 } from '@angular/material/autocomplete';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {
-  MatCheckboxChange,
-  MatCheckboxModule,
+  MatCheckboxChange, MatCheckboxModule,
 } from '@angular/material/checkbox';
 import {MatNativeDateModule} from '@angular/material/core';
 import {
-  MatDatepicker,
-  MatDatepickerModule,
-  MatDatepickerToggle,
+  MatDatepicker, MatDatepickerModule, MatDatepickerToggle,
 } from '@angular/material/datepicker';
 import {MatDialogModule} from '@angular/material/dialog';
 import {
-  MatAccordion,
-  MatExpansionPanel,
-  MatExpansionPanelDescription,
-  MatExpansionPanelHeader,
+  MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader,
 } from '@angular/material/expansion';
 import {
-  MatError,
-  MatFormFieldModule,
-  MatHint,
-  MatLabel,
-  MatSuffix,
+  MatError, MatFormFieldModule, MatHint, MatLabel, MatSuffix,
 } from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
@@ -71,73 +50,25 @@ import {ThousandsSeparatorDirective} from 'src/app/crew-trip/shared/directive/th
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {PdfViewerComponent} from 'src/app/crew-trip/shared/pdf-viewer/pdf-viewer.component';
 import {
-  beforeValidator,
-  lessThanValidator,
-  timeBeforeValidator,
+  afterValidator,
+  beforeValidator, lessThanValidator, timeAfterValidator, timeBeforeValidator,
 } from 'src/app/crew-trip/shared/utils/common';
 import {
-  DATE_FORMAT_DD_MM_YYYY,
-  MESSAGE,
-  PARTERN,
+  DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN,
 } from 'src/app/crew-trip/shared/utils/constant';
 import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
 import {NgxMatTimepickerComponent, NgxMatTimepickerToggleComponent} from "ngx-mat-timepicker";
+import {airportCode} from "src/app/crew-trip/shared/utils/error-message";
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [
-    FormsModule,
-    InputSizeComponent,
-    MatFormFieldModule,
-    MatAccordion,
-    MatButtonModule,
-    MatCardModule,
-    MatCheckboxModule,
-    MatError,
-    MatExpansionPanel,
-    MatExpansionPanelDescription,
-    MatExpansionPanelHeader,
-    MatInput,
-    MatLabel,
-    MatMenuModule,
-    MatOption,
-    MatPaginatorModule,
-    MatRadioModule,
-    MatSelect,
-    MatSuffix,
-    MatTableModule,
-    NgClass,
-    NgIf,
-    NgxEditorModule,
-    ReactiveFormsModule,
-    MatHint,
-    MatDatepickerModule,
-    MatDatepicker,
-    MatDatepickerToggle,
-    MatNativeDateModule,
-    FileUploadModule,
-    MatAutocomplete,
-    MatAutocompleteTrigger,
-    NgxTrimDirectiveModule,
-    NgxMaterialTimepickerModule,
-    NgForOf,
-    NgxMaterialTimepickerModule,
-    MatTooltipModule,
-    MatDialogModule,
-    NgxControlError,
-    SelectionSuggestComponent,
-    ConfirmDialog,
-    ThousandsSeparatorDirective,
-    ControlErrorComponent,
-  ],
+  imports: [FormsModule, InputSizeComponent, MatFormFieldModule, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatRadioModule, MatSelect, MatSuffix, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgForOf, NgxMaterialTimepickerModule, MatTooltipModule, MatDialogModule, NgxControlError, SelectionSuggestComponent, ConfirmDialog, ThousandsSeparatorDirective, ControlErrorComponent,],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY), DecimalPipe],
 })
-export class ContractDetailComponent
-  extends CommonComponent
-  implements OnInit, AfterContentInit {
+export class ContractDetailComponent extends CommonComponent implements OnInit, AfterContentInit {
   override baseService = inject(ContractService);
   nationService = inject(NationService);
   serviceFeeService = inject(ServiceFeeService);
@@ -152,14 +83,7 @@ export class ContractDetailComponent
   contractObj: any;
   @Output() backStep = new EventEmitter<any>();
   tblAttachedDocument = new MatTableDataSource();
-  expandList = new Set<string>([
-    'tab1',
-    'tab2',
-    'tab3',
-    'tab4',
-    'tab5',
-    'tab6',
-  ]);
+  expandList = new Set<string>(['tab1', 'tab2', 'tab3', 'tab4', 'tab5', 'tab6',]);
   formGroupFileUpload!: FormGroup;
   curFile: any;
   showDialogDeleteFile = false;
@@ -180,36 +104,20 @@ export class ContractDetailComponent
   marketCodeChangeBrake: any;
   //debounce
   marketCodeChangeDebounce = debounce(async (value: any) => {
-    this.formGroupDetail.controls['marketCode'].setValidators([
-      Validators.maxLength(3),
-      Validators.minLength(3),
-    ]);
+    this.formGroupDetail.controls['marketCode'].setValidators([Validators.maxLength(3), Validators.minLength(3),]);
     if (value && !this.marketCodeChangeBrake) {
       try {
         // await this.spinner.show();
         this.formGroupDetail.patchValue({
-          marketName: '',
-          nation: '',
-          marketType: '',
-          flightGroup: '',
-          statusUsage: '',
-          carType: '',
+          marketName: '', nation: '', marketType: '', flightGroup: '', statusUsage: '', carType: '',
         });
         await this.baseService
           .getMarket({marketCode: value.toUpperCase()})
           .then((res) => {
-            const fieldContract = [
-              'marketName',
-              'nationId',
-              'marketType',
-              'flightGroup',
-            ];
+            const fieldContract = ['marketName', 'nationId', 'marketType', 'flightGroup',];
             if (res.status == HttpStatusCode.Ok) {
               //Kiểm tra thị trường nếu là quốc tế mà mã tiền tệ là VND thì báo lỗi
-              if (
-                res.data.marketType == 'International' &&
-                this.formGroupDetail.getRawValue()['currency'] === 'VND'
-              ) {
+              if (res.data.marketType == 'International' && this.formGroupDetail.getRawValue()['currency'] === 'VND') {
                 this.formGroupDetail.controls['marketCode'].setErrors({
                   invalid: true,
                 });
@@ -219,21 +127,17 @@ export class ContractDetailComponent
               this.nationSelected(res.data.nationId);
               this.marketCodeChangeBrake = true;
 
-              Object.entries(this.formGroupDetail.controls).forEach(
-                ([k, v]) => {
-                  if (fieldContract.includes(k)) {
-                    v.disable();
-                  }
-                },
-              );
+              Object.entries(this.formGroupDetail.controls).forEach(([k, v]) => {
+                if (fieldContract.includes(k)) {
+                  v.disable();
+                }
+              },);
             } else if (res.status == HttpStatusCode.NotFound) {
-              Object.entries(this.formGroupDetail.controls).forEach(
-                ([k, v]) => {
-                  if (fieldContract.includes(k)) {
-                    v.enable();
-                  }
-                },
-              );
+              Object.entries(this.formGroupDetail.controls).forEach(([k, v]) => {
+                if (fieldContract.includes(k)) {
+                  v.enable();
+                }
+              },);
             }
           });
       } catch (e) {
@@ -249,9 +153,7 @@ export class ContractDetailComponent
         // await this.spinner.show();
         await this.baseService
           .getPartnerInfo({
-            partnerCode: value.toUpperCase(),
-            isHotel: this.formGroupDetail.getRawValue().isHotel,
-            isVehicle: this.formGroupDetail.getRawValue().isVehicle,
+            partnerCode: value.toUpperCase(), isHotel: this.formGroupDetail.getRawValue().isHotel, isVehicle: this.formGroupDetail.getRawValue().isVehicle,
           })
           .then((res) => {
             if (res.status == HttpStatusCode.Ok) {
@@ -298,14 +200,7 @@ export class ContractDetailComponent
     this.formGroupDetail = this.fb.group({
       doiTuongDichVu: ['', Validators.required],
       contractSpec: [], //tab4
-      marketCode: [
-        '',
-        [
-          Validators.minLength(3),
-          Validators.maxLength(3),
-          Validators.pattern(PARTERN.STRING_NUMBER),
-        ],
-      ],
+      marketCode: ['', [Validators.minLength(3), Validators.maxLength(3), Validators.pattern(PATTERN.STRING_NUMBER),],],
       marketName: ['', [Validators.maxLength(250)]],
       marketType: [],
       nation: [],
@@ -314,17 +209,11 @@ export class ContractDetailComponent
       flightGroup: [],
       statusUsage: [],
       supplierName: ['', [Validators.maxLength(250)]],
-      supplierPhone: [
-        '',
-        [Validators.maxLength(20), Validators.pattern(PARTERN.PHONE)],
-      ],
-      supplierEmail: [
-        '',
-        [Validators.maxLength(250), Validators.pattern(PARTERN.EMAIL)],
-      ],
+      supplierPhone: ['', [Validators.maxLength(20), Validators.pattern(PATTERN.PHONE)],],
+      supplierEmail: ['', [Validators.maxLength(250), Validators.pattern(PATTERN.EMAIL)],],
       email: [],
       carType: ['', [Validators.maxLength(150)]],
-      standardCheckIn: ['', [Validators.pattern(PARTERN.HOUR24)]],
+      standardCheckIn: ['', [Validators.pattern(PATTERN.HOUR24)]],
       standardCheckOut: [],
       standardCheckout: [],
       notes: ['', [Validators.maxLength(500)]],
@@ -364,10 +253,7 @@ export class ContractDetailComponent
       dueDateNumber: [],
       handoverDate: [],
       documentsList: [],
-      bankAccountNoB: [
-        '',
-        [Validators.maxLength(40), Validators.pattern(PARTERN.STRING_NUMBER)],
-      ],
+      bankAccountNoB: ['', [Validators.maxLength(40), Validators.pattern(PATTERN.STRING_NUMBER)],],
       peopleName: ['', [Validators.maxLength(250)]],
       bankNameB: ['', [Validators.maxLength(190)]],
       bankAddressB: ['', [Validators.maxLength(512)]],
@@ -377,9 +263,7 @@ export class ContractDetailComponent
       swiftCodeB: ['', [Validators.maxLength(190)]],
       bankCharge: [],
       bankCharge1: [],
-      bankAccountNoB1: [
-        [Validators.maxLength(40), Validators.pattern(PARTERN.STRING_NUMBER)],
-      ],
+      bankAccountNoB1: [[Validators.maxLength(40), Validators.pattern(PATTERN.STRING_NUMBER)],],
       bankNameB1: ['', [Validators.maxLength(190)]],
       swiftCodeB1: ['', [Validators.maxLength(190)]],
       iban: ['', [Validators.maxLength(120)]],
@@ -411,6 +295,7 @@ export class ContractDetailComponent
     this.formGroupFileUpload = this.fb.group({
       fileUpload: [],
     });
+
   }
 
   get tblPriceUnit(): FormArray {
@@ -459,7 +344,7 @@ export class ContractDetailComponent
         expenseCatgId: ['', [Validators.maxLength(50)]],
         priceNoTax: [],
         taxCode: [],
-        taxRate: [, [Validators.pattern(PARTERN.NUMBER)]],
+        taxRate: [, [Validators.pattern(PATTERN.NUMBER)]],
         originalAmount3: [],
         priceWithTax: [],
         notes: ['', [Validators.maxLength(250)]],
@@ -470,14 +355,9 @@ export class ContractDetailComponent
         serviceName: [this.listFeeService[0]?.name],
         serviceUnit: [this.listFeeService[0]?.unit],
       });
-      row.controls['toDate'].setValidators([
-        beforeValidator(row.controls['fromDate']),
-      ]);
-      // row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
-      row.controls['taxCode'].setValidators([
-        Validators.maxLength(24),
-        Validators.pattern(PARTERN.STRING),
-      ]);
+      row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']),]);
+      row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']),]);
+      row.controls['taxCode'].setValidators([Validators.maxLength(24), Validators.pattern(PATTERN.STRING),]);
       init && row.patchValue(init);
       if (row.getRawValue().active) {
         table.push(row);
@@ -485,48 +365,32 @@ export class ContractDetailComponent
       this.dsPriceUnit.data = table.controls;
     } else if (addType === 'tblEciLco' || addType === 'tblOvernightStay') {
       row = this.fb.group({
-        id: [],
-        type: [],
-        fromHour: ['00:00'],
-        rate: [],
-        toHour: ['23:59'],
-        active: [],
-        typeCheck: [],
-        bizdocId: [],
+        id: [], type: [], fromHour: ['00:00'], rate: [], toHour: ['23:59'], active: [true], typeCheck: [], bizdocId: [],
       });
       row.controls['rate'].setValidators(lessThanValidator(2));
-      row.controls['toHour'].setValidators(
-        timeBeforeValidator(row.controls['fromHour']),
-      );
-      table.push(row);
+      row.controls['fromHour'].setValidators(timeAfterValidator(row.controls['toHour']),);
+      row.controls['toHour'].setValidators(timeBeforeValidator(row.controls['fromHour']),);
+      init && row.patchValue(init);
+      if (row.getRawValue().active) {
+        table.push(row);
+      }
       if (addType === 'tblEciLco') {
-        init && row.patchValue(init);
         this.dsEciLco.data = table.controls;
       } else if (addType === 'tblOvernightStay') {
-        init && row.patchValue(init);
         this.dsOvernightStay.data = table.controls;
       }
     } else if (addType === 'tblDayUse') {
       row = this.fb.group({
-        id: [],
-        bizdocId: [],
-        checkinFrom: ['00:00'],
-        checkoutTo: ['23:59'],
-        maxHour: [],
-        rate: [],
-        rate1: [],
-        active: [],
+        id: [], bizdocId: [], checkinFrom: ['00:00'], checkoutTo: ['23:59'], maxHour: [], rate: [], rate1: [], active: [true],
       });
-      row.controls['checkoutTo'].setValidators(
-        timeBeforeValidator(row.controls['checkinFrom']),
-      );
-      row.controls['maxHour'].setValidators([
-        Validators.min(0),
-        Validators.max(24),
-        Validators.pattern(PARTERN.NUMBER),
-      ]);
+      row.controls['checkinFrom'].setValidators(timeAfterValidator(row.controls['checkoutTo']),);
+      row.controls['checkoutTo'].setValidators(timeBeforeValidator(row.controls['checkinFrom']),);
+      row.controls['maxHour'].setValidators([Validators.min(0), Validators.max(24), Validators.pattern(PATTERN.NUMBER),]);
+
       init && row.patchValue(init);
-      table.push(row);
+      if (row.getRawValue().active) {
+        table.push(row);
+      }
       this.dsDayUse.data = table.controls;
     }
     return row;
@@ -535,16 +399,14 @@ export class ContractDetailComponent
   override async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([
-        this.detail(this.id),
+      await Promise.all([this.detail(this.id),
         this.loadListQuocGia(),
         this.loadListFeeService(),
         this.loadListFlightMarket(),
+        this.loadListMaNghiepVu(),
+        this.loadListKhoanMucKhns()
       ]).then((res) => {
-        if (
-          this.formGroupDetail.getRawValue().isHotel &&
-          this.formGroupDetail.getRawValue().isVehicle
-        ) {
+        if (this.formGroupDetail.getRawValue().isHotel && this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({
             doiTuongDichVu: '3',
           });
@@ -558,45 +420,21 @@ export class ContractDetailComponent
           });
         }
         this.formGroupDetail.patchValue({
-          contractType: this.listContractType.find(
-            (s) => s.value == this.formGroupDetail.getRawValue().contractType,
-          )?.key,
-          contractForm: this.listContractForm.find(
-            (s) => s.value == this.formGroupDetail.getRawValue().contractForm,
-          )?.key,
-          negotiateCompetence: this.listNegotiateCompetence.find(
-            (s) =>
-              s.value == this.formGroupDetail.getRawValue().negotiateCompetence,
-          )?.key,
-          competence: this.listCompetence.find(
-            (s) => s.value == this.formGroupDetail.getRawValue().competence,
-          )?.key,
-          fieldCode2: this.listFieldCode2.find(
-            (s) => s.value == this.formGroupDetail.getRawValue().fieldCode2,
-          )?.key,
-          budgetCode: this.listBudgetCode.find(
-            (s) => s.value == this.formGroupDetail.getRawValue().budgetCode,
-          )?.key,
-          flightGroup: this.listFlightGroup.find(
-            (s) => s.value == this.formGroupDetail.getRawValue().flightGroup,
-          )?.key,
-          statusUsage: this.listStatusUsage.find(
-            (s) => s.value == this.formGroupDetail.getRawValue().statusUsage,
-          )?.key,
-          bankCharge: this.listBankCharge.find(
-            (s) => s.value == this.formGroupDetail.getRawValue().bankCharge,
-          )?.key,
-          bankCharge1: this.listBankCharge.find(
-            (s) => s.value == this.formGroupDetail.getRawValue().bankCharge1,
-          )?.key,
-          standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout,
-          //exchangeRate: this.numberPipe.transform(this.formGroupDetail.getRawValue().exchangeRate,),
+          contractType: this.listContractType.find((s) => s.value == this.formGroupDetail.getRawValue().contractType,)?.key,
+          contractForm: this.listContractForm.find((s) => s.value == this.formGroupDetail.getRawValue().contractForm,)?.key,
+          negotiateCompetence: this.listNegotiateCompetence.find((s) => s.value == this.formGroupDetail.getRawValue().negotiateCompetence,)?.key,
+          competence: this.listCompetence.find((s) => s.value == this.formGroupDetail.getRawValue().competence,)?.key,
+          fieldCode2: this.listFieldCode2.find((s) => s.value == this.formGroupDetail.getRawValue().fieldCode2,)?.key,
+          budgetCode: this.listBudgetCode.find((s) => s.value == this.formGroupDetail.getRawValue().budgetCode,)?.key,
+          flightGroup: this.listFlightGroup.find((s) => s.value == this.formGroupDetail.getRawValue().flightGroup,)?.key,
+          statusUsage: this.listStatusUsage.find((s) => s.value == this.formGroupDetail.getRawValue().statusUsage,)?.key,
+          bankCharge: this.listBankCharge.find((s) => s.value == this.formGroupDetail.getRawValue().bankCharge,)?.key,
+          bankCharge1: this.listBankCharge.find((s) => s.value == this.formGroupDetail.getRawValue().bankCharge1,)?.key,
+          standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout, //exchangeRate: this.numberPipe.transform(this.formGroupDetail.getRawValue().exchangeRate,),
         });
 
         this.getPartnerInfo();
-        this.tblAttachedDocument = new MatTableDataSource(
-          this.formGroupDetail.getRawValue().documentsList ?? [],
-        );
+        this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.getRawValue().documentsList ?? [],);
         this.setReadModeDtl();
 
         //debounce
@@ -639,10 +477,7 @@ export class ContractDetailComponent
         await this.spinner.show();
         const formUpload = new FormData();
         const fileUpload = this.formGroupFileUpload.value.fileUpload[0];
-        const bizDocIdBlob = new Blob(
-          [this.formGroupDetail.getRawValue().bizDocId],
-          {type: 'application/json'},
-        );
+        const bizDocIdBlob = new Blob([this.formGroupDetail.getRawValue().bizDocId], {type: 'application/json'},);
         //validate
         // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
         if (fileUpload.size > 10 * 1048576) {
@@ -653,25 +488,14 @@ export class ContractDetailComponent
         formUpload.append('bizDocId', bizDocIdBlob);
         await this.baseService.uploadFile(formUpload).then((res) => {
           if (res.status == HttpStatusCode.Ok) {
-            this.tblAttachedDocument.data = [
-              ...this.tblAttachedDocument.data,
-              {
-                id: res.data.id,
-                fileName: res.data.filename,
-                fileUrl: `source/${res.data.url}`,
-                isManual: true,
-              },
-            ];
+            this.tblAttachedDocument.data = [...this.tblAttachedDocument.data, {
+              id: res.data.id, fileName: res.data.filename, fileUrl: `source/${res.data.url}`, isManual: true,
+            },];
           }
         });
         this.formGroupFileUpload.patchValue({fileUpload: []});
       } catch (e: any) {
-        this.baseService.showError(
-          e.error?.error?.file ??
-          e.error?.error ??
-          e.error?.error?.code ??
-          MESSAGE.ERROR,
-        );
+        this.baseService.showError(e.error?.error?.file ?? e.error?.error ?? e.error?.error?.code ?? MESSAGE.ERROR,);
       } finally {
         await this.spinner.hide();
       }
@@ -688,16 +512,14 @@ export class ContractDetailComponent
         // 			this.baseService.showSuccess('Delete file successfully.');
         // 		}
         // 	});
-        this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter(
-          (item: any) => item.fileName !== this.curFile.fileName,
-        );
+        this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter((item: any) => item.fileName !== this.curFile.fileName,);
       } else if (this.deleteObj?.deleteType == 'tblPriceUnit') {
         this.tblPriceUnit.removeAt(this.deleteObj.index);
         this.dsPriceUnit.data = this.tblPriceUnit.controls;
-        this.formGroupDetail.getRawValue().priceUnitInfo.forEach((s:any)=>{
-          console.log(s.id,this.deleteObj.id)
-          if(s.id==this.deleteObj.id){
-            s.active=false;
+        this.formGroupDetail.getRawValue().priceUnitInfo.forEach((s: any) => {
+          console.log(s.id, this.deleteObj.id)
+          if (s.id == this.deleteObj.id) {
+            s.active = false;
           }
         });
         console.log(this.formGroupDetail.getRawValue())
@@ -737,9 +559,7 @@ export class ContractDetailComponent
           this.baseService.showSuccess('Delete file successfully.');
         }
       });
-    this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter(
-      (item: any) => item.fileName !== this.curFile.fileName,
-    );
+    this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter((item: any) => item.fileName !== this.curFile.fileName,);
     this.showDialogDeleteFile = false;
   }
 
@@ -795,13 +615,10 @@ export class ContractDetailComponent
   }
 
   async nationSelected(event: any) {
-    const nation = this.listQuocGia.find(
-      (s: any) => s.id === (event?.value || event),
-    );
+    const nation = this.listQuocGia.find((s: any) => s.id === (event?.value || event),);
     this.formGroupDetail.patchValue({
       // nationId: nation?.id,
-      nation: nation?.code,
-      marketType: (nation?.code === 'VN' ? 'Domestic' : 'International') || '',
+      nation: nation?.code, marketType: (nation?.code === 'VN' ? 'Domestic' : 'International') || '',
     });
   }
 
@@ -835,37 +652,8 @@ export class ContractDetailComponent
   }
 
   async setReadMode(form: FormGroup) {
-    const fieldContract = [
-      'marketCode',
-      'marketName',
-      'nation',
-      'classification',
-      'flightGroup',
-      'statusUsage',
-      'supplierName',
-      'supplierPhone',
-      'supplierEmail',
-      'carType',
-      'standardCheckIn',
-      'standardCheckOut',
-      'notes',
-      'doiTuongDichVu',
-      'contractSpec',
-      'marketType',
-    ];
-    const fieldAnnex = [
-      'partnerName',
-      'partnerAddress',
-      'currency',
-      'hdPlRoot',
-      'signedDepartmentName',
-      'budgetDepartmentName',
-      'proceedDepartmentName',
-      'paidDepartmentName',
-      'paymentType',
-      'budgetCode',
-      'fieldCode2',
-    ];
+    const fieldContract = ['marketCode', 'marketName', 'nation', 'classification', 'flightGroup', 'statusUsage', 'supplierName', 'supplierPhone', 'supplierEmail', 'carType', 'standardCheckIn', 'standardCheckOut', 'notes', 'doiTuongDichVu', 'contractSpec', 'marketType',];
+    const fieldAnnex = ['partnerName', 'partnerAddress', 'currency', 'hdPlRoot', 'signedDepartmentName', 'budgetDepartmentName', 'proceedDepartmentName', 'paidDepartmentName', 'paymentType', 'budgetCode', 'fieldCode2',];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -879,12 +667,7 @@ export class ContractDetailComponent
 
   async setReadModeDtl(formArrays?: any) {
     if (!formArrays) {
-      formArrays = [
-        this.tblPriceUnit,
-        this.tblEciLco,
-        this.tblOvernightStay,
-        this.tblDayUse,
-      ];
+      formArrays = [this.tblPriceUnit, this.tblEciLco, this.tblOvernightStay, this.tblDayUse,];
     }
     formArrays.forEach((formArray: any) => {
       if (!this.readMode) return;
@@ -901,22 +684,11 @@ export class ContractDetailComponent
     if (id) {
       await super.detail(id);
     } else if (this.isPL()) {
-      const resContract = await this.baseService.detail(
-        this.contractObj.bizDocId,
-      );
+      const resContract = await this.baseService.detail(this.contractObj.bizDocId,);
       const bizDocIdContract = cloneDeep(resContract.data.bizDocId);
-      [
-        'contractCode',
-        'contractName',
-        'contractNo',
-        'signedDate',
-        'dueDateNumber',
-        'handoverDate',
-        'priceUnitInfo',
-      ].forEach((key) => delete resContract.data[key]);
+      ['contractCode', 'contractName', 'contractNo', 'signedDate', 'dueDateNumber', 'handoverDate', 'priceUnitInfo',].forEach((key) => delete resContract.data[key]);
       this.formGroupDetail.patchValue({
-        ...(resContract?.data || resContract),
-        hdPlRoot: bizDocIdContract,
+        ...(resContract?.data || resContract), hdPlRoot: bizDocIdContract,
       });
     } else {
       this.formGroupDetail.patchValue({});
@@ -932,12 +704,8 @@ export class ContractDetailComponent
     this.formGroupDetail.getRawValue().priceUnitInfo?.forEach((s: any) => {
       s = {
         ...s, //serviceFeeCode: s.serviceCode,
-        serviceName: this.listFeeService.find(
-          (s1: any) => s1.code === s.serviceCode,
-        )?.name,
-        serviceUnit: this.listFeeService.find(
-          (s1: any) => s1.code === s.serviceCode,
-        )?.unit,
+        serviceName: this.listFeeService.find((s1: any) => s1.code === s.serviceCode,)?.name,
+        serviceUnit: this.listFeeService.find((s1: any) => s1.code === s.serviceCode,)?.unit,
       };
       this.addRow(this.tblPriceUnit, 'tblPriceUnit', s);
     });
@@ -981,12 +749,8 @@ export class ContractDetailComponent
         expiryAppendix: this.formGroupDetail.getRawValue().expiryDate,
         notesAppendix: this.formGroupDetail.getRawValue().notes,
         currencyCode: this.formGroupDetail.getRawValue().currency,
-        isHotel:
-          this.formGroupDetail.getRawValue().doiTuongDichVu == 1 ||
-          this.formGroupDetail.getRawValue().doiTuongDichVu == 3,
-        isVehicle:
-          this.formGroupDetail.getRawValue().doiTuongDichVu == 2 ||
-          this.formGroupDetail.getRawValue().doiTuongDichVu == 3,
+        isHotel: this.formGroupDetail.getRawValue().doiTuongDichVu == 1 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3,
+        isVehicle: this.formGroupDetail.getRawValue().doiTuongDichVu == 2 || this.formGroupDetail.getRawValue().doiTuongDichVu == 3,
         email: this.formGroupDetail.getRawValue().supplierEmail,
       });
       this.formGroupDetailInit = {...this.formGroupDetail.getRawValue()};
@@ -1009,18 +773,14 @@ export class ContractDetailComponent
         res = await this.baseService.create(body);
       }
       await this.search();
-      this.baseService.showSuccess(
-        this.action == 'edit' ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,
-      );
+      this.baseService.showSuccess(this.action == 'edit' ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,);
       await this.closeDetail();
       if (res === null) {
         this.goBack();
       }
     } catch (e: any) {
       // console.log(e);
-      this.baseService.showError(
-        e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
-      );
+      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,);
       return e;
     } finally {
       await this.spinner.hide();
@@ -1031,13 +791,7 @@ export class ContractDetailComponent
     if (!inputRef) return 'none';
     if (!row[cell]) {
       return 'Not empty';
-    } else if (
-      (cell == 'col614' ||
-        cell == 'col624' ||
-        cell == 'col634' ||
-        cell == 'col635') &&
-      row[cell] > 2
-    ) {
+    } else if ((cell == 'col614' || cell == 'col624' || cell == 'col634' || cell == 'col635') && row[cell] > 2) {
       inputRef.control.setErrors({invalid: true});
       return 'Must less than 2';
     } else if (cell == 'col633') {
@@ -1074,12 +828,8 @@ export class ContractDetailComponent
   async onChangeHHDV(row: any) {
     const data = row.getRawValue();
     row.patchValue({
-      serviceName:
-        this.listFeeService.find((s: any) => s.code == data.serviceCode)
-          ?.name || null,
-      serviceUnit:
-        this.listFeeService.find((s: any) => s.code == data.serviceCode)
-          ?.unit || null,
+      serviceName: this.listFeeService.find((s: any) => s.code == data.serviceCode)?.name || null,
+      serviceUnit: this.listFeeService.find((s: any) => s.code == data.serviceCode)?.unit || null,
     });
   }
 
@@ -1087,29 +837,16 @@ export class ContractDetailComponent
     if ($event) {
       if ($event.value == 1) {
         this.formGroupDetail.patchValue({
-          isHotel: true,
-          isVehicle: false,
-          isTaxHotelRevert: true,
-          isTaxCarRevert: false,
+          isHotel: true, isVehicle: false, isTaxHotelRevert: true, isTaxCarRevert: false,
         });
       } else if ($event.value == 2) {
         this.formGroupDetail.patchValue({
-          isHotel: false,
-          isVehicle: true,
-          isTaxCarRevert: true,
-          isTaxHotelRevert: false,
+          isHotel: false, isVehicle: true, isTaxCarRevert: true, isTaxHotelRevert: false,
         });
-        this.setReadModeDtl([
-          this.tblEciLco,
-          this.tblOvernightStay,
-          this.tblDayUse,
-        ]);
+        this.setReadModeDtl([this.tblEciLco, this.tblOvernightStay, this.tblDayUse,]);
       } else if ($event.value == 3) {
         this.formGroupDetail.patchValue({
-          isHotel: true,
-          isVehicle: true,
-          isTaxCarRevert: true,
-          isTaxHotelRevert: true,
+          isHotel: true, isVehicle: true, isTaxCarRevert: true, isTaxHotelRevert: true,
         });
       }
       this.getPartnerInfo();
@@ -1142,10 +879,7 @@ export class ContractDetailComponent
 
   pdfViewer(url: string) {
     const dialogRef = this.dialog.open(PdfViewerComponent, {
-      height: '90vh',
-      minHeight: '90vh',
-      minWidth: '80vw',
-      data: {pdfSrc: url},
+      height: '90vh', minHeight: '90vh', minWidth: '80vw', data: {pdfSrc: url},
     });
     dialogRef.afterClosed().subscribe(() => {
     });
@@ -1170,8 +904,7 @@ export class ContractDetailComponent
   bodyBuilder() {
     let body = this.formGroupDetail.getRawValue();
     body.priceUnitNotAllDay = {
-      type1: this.tblEciLco.value,
-      type2: this.tblOvernightStay.value,
+      type1: this.tblEciLco.value, type2: this.tblOvernightStay.value,
     };
     body.dayUses = this.tblDayUse.value[0] || null;
     body.dayUses && (body.dayUses.lengthTime = body.dayUses?.maxHour || 0);
@@ -1189,5 +922,19 @@ export class ContractDetailComponent
     body.isTaxVehicle = body.isTaxCarRevert;
     // console.log(body, 'body');
     return body;
+  }
+
+  fieldUpdateValueAndValidity(row: FormGroup) {
+    Object.values(row.controls).forEach((control) => {
+      control.updateValueAndValidity()
+    });
+  }
+
+  airportCodeChange(value: any) {
+    this.listFlightMarket = this.listFlightMarket.filter((s: any) => s.includes(value.toUpperCase()));
+  }
+
+  airportCodeForcus() {
+    this.listFlightMarket = cloneDeep(this.listFlightMarketAll)
   }
 }
