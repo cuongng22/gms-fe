@@ -1629,11 +1629,8 @@
                     <mat-form-field class="edit-inline-table">
                       <input appThousandsSeparator formControlName="rate1" matInput required
                              trim="blur">
-                      <mat-error *ngxControlError="row.controls['rate1']; track: 'required'">
-                        <span i18n>Ratio</span><span i18n> is required</span>
-                      </mat-error>
-                      <mat-error *ngxControlError="row.controls['rate1']; track: 'invalidNumberDecimal'">
-                        <span i18n>Ratio</span><span i18n> invalid</span>
+                      <mat-error>
+                        <app-control-error controlName="rate1"></app-control-error>
                       </mat-error>
                     </mat-form-field>
                   </div>

@@ -343,7 +343,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         vnaTransId: ['', [Validators.maxLength(50)]],
         expenseCatgId: ['', [Validators.maxLength(50)]],
         priceNoTax: [],
-        taxCode: [],
+        taxCode: [,[Validators.maxLength(24), Validators.pattern(PATTERN.STRING),]],
         taxRate: [, [Validators.pattern(PATTERN.NUMBER)]],
         originalAmount3: [],
         priceWithTax: [],
@@ -357,7 +357,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       });
       row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']),]);
       row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']),]);
-      row.controls['taxCode'].setValidators([Validators.maxLength(24), Validators.pattern(PATTERN.STRING),]);
       init && row.patchValue(init);
       if (row.getRawValue().active) {
         table.push(row);
@@ -365,9 +364,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       this.dsPriceUnit.data = table.controls;
     } else if (addType === 'tblEciLco' || addType === 'tblOvernightStay') {
       row = this.fb.group({
-        id: [], type: [], fromHour: ['00:00'], rate: [], toHour: ['23:59'], active: [true], typeCheck: [], bizdocId: [],
+        id: [], type: [], fromHour: ['00:00'], rate: [, [lessThanValidator(2)]], toHour: ['23:59'], active: [true], typeCheck: [], bizdocId: [],
       });
-      row.controls['rate'].setValidators(lessThanValidator(2));
       row.controls['fromHour'].setValidators(timeAfterValidator(row.controls['toHour']),);
       row.controls['toHour'].setValidators(timeBeforeValidator(row.controls['fromHour']),);
       init && row.patchValue(init);
@@ -381,7 +379,14 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       }
     } else if (addType === 'tblDayUse') {
       row = this.fb.group({
-        id: [], bizdocId: [], checkinFrom: ['00:00'], checkoutTo: ['23:59'], maxHour: [], rate: [], rate1: [], active: [true],
+        id: [],
+        bizdocId: [],
+        checkinFrom: ['00:00'],
+        checkoutTo: ['23:59'],
+        maxHour: [],
+        rate: [, [lessThanValidator(2)]],
+        rate1: [, [lessThanValidator(2)]],
+        active: [true],
       });
       row.controls['checkinFrom'].setValidators(timeAfterValidator(row.controls['checkoutTo']),);
       row.controls['checkoutTo'].setValidators(timeBeforeValidator(row.controls['checkinFrom']),);
