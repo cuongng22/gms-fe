@@ -108,7 +108,7 @@ export const StatusUsage = [
 ];
 
 export const BankCharge = [
-  {key: 'BEN', value: $localize`Receiver will pay the fee`},
-  {key: 'OUR', value: $localize`Payee will pay the fee`},
-  {key: 'SHA', value: $localize`Mỗi bên chịu một phần`},
+  { key: 'BEN', value: $localize`Bên nhận trả phí` },
+  { key: 'OUR', value: $localize`Bên chuyển trả phí` },
+  { key: 'SHA', value: $localize`Mỗi bên chịu một phần` },
 ];
