@@ -80,6 +80,8 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
           }
         } else if (errorResponse.status === HttpStatusCode.Conflict ||
           errorResponse.status === HttpStatusCode.NotFound) {
+        }  else if (errorResponse.status === HttpStatusCode.TooManyRequests) {
+          baseService.showError('Bạn đã gửi quá nhiều yêu cầu. Vui lòng thử lại sau.');
         } else {
           baseService.showError(errorResponse?.error?.error ?? MESSAGE.ERROR);
         }
