@@ -1,14 +1,15 @@
-import { CommonModule } from '@angular/common';
-import { HttpStatusCode } from '@angular/common/http';
-import { Component, inject, OnDestroy, OnInit } from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {HttpStatusCode} from '@angular/common/http';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {
+  AbstractControl,
   FormBuilder,
   FormsModule,
-  ReactiveFormsModule,
+  ReactiveFormsModule, ValidationErrors, ValidatorFn,
   Validators,
 } from '@angular/forms';
-import { MatOption } from '@angular/material/autocomplete';
-import { MatAnchor, MatButton } from '@angular/material/button';
+import {MatOption} from '@angular/material/autocomplete';
+import {MatAnchor, MatButton} from '@angular/material/button';
 import {
   MatCard,
   MatCardContent,
@@ -16,26 +17,27 @@ import {
   MatCardModule,
   MatCardTitle,
 } from '@angular/material/card';
-import { MatCheckbox } from '@angular/material/checkbox';
+import {MatCheckbox} from '@angular/material/checkbox';
 import {
   MatError,
   MatFormField,
   MatFormFieldModule,
   MatLabel,
 } from '@angular/material/form-field';
-import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatListOption, MatSelectionList } from '@angular/material/list';
-import { MatPaginator } from '@angular/material/paginator';
-import { MatSelect } from '@angular/material/select';
-import { MatTableModule } from '@angular/material/table';
-import { Editor, NgxEditorModule, Toolbar } from 'ngx-editor';
-import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
-import { EmailSupplierService } from 'src/app/crew-trip/core/services/email-supplier-service';
-import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
-import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
-import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
+import {MatInput, MatInputModule} from '@angular/material/input';
+import {MatListOption, MatSelectionList} from '@angular/material/list';
+import {MatPaginator} from '@angular/material/paginator';
+import {MatSelect} from '@angular/material/select';
+import {MatTableModule} from '@angular/material/table';
+import {Editor, NgxEditorModule, Toolbar} from 'ngx-editor';
+import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import {EmailSupplierService} from 'src/app/crew-trip/core/services/email-supplier-service';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
+import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {SelectMultipleComponent} from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
+import {SanitizeService} from "src/app/crew-trip/core/services/sanitize.service";
 
 @Component({
   selector: 'app-email-supplier',
@@ -74,20 +76,20 @@ import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
 })
 export class EmailSupplierComponent
   extends CommonComponent
-  implements OnInit, OnDestroy
-{
+  implements OnInit, OnDestroy {
   override baseService = inject(EmailSupplierService);
   flightMarketService = inject(FlightMarketService);
   fb = inject(FormBuilder);
   editor: Editor;
   targetPersonals: any[] = [];
   isUpdatingValue = false;
+  sanitizedContent: string = '';
   toolbar: Toolbar = [
     ['bold', 'italic'],
     ['underline', 'strike'],
     ['code', 'blockquote'],
     ['ordered_list', 'bullet_list'],
-    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    [{heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']}],
     ['link', 'image'],
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
@@ -106,15 +108,15 @@ export class EmailSupplierComponent
     content: ['', [Validators.required]],
     emailClass: ['', [Validators.required]],
     marketClass: ['', [Validators.required]],
-    targetObject: [{ value: '', disabled: true }],
+    targetObject: [{value: '', disabled: true}],
     title: ['', [Validators.maxLength(250)]],
     note: ['', [Validators.maxLength(500)]],
     active: [true],
   });
 
-  constructor() {
+  constructor(private sanitizeService: SanitizeService) {
     super();
-    this.formGroupDetailInit = { ...this.formGroupDetail.value };
+    this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
 
   override async ngOnInit() {
@@ -131,8 +133,8 @@ export class EmailSupplierComponent
     ];
     this.search();
     this.targetPersonals = [
-      { label: 'Flight crew', code: 'PILOT' },
-      { label: 'Cabin crew', code: 'ATTENDANT' },
+      {label: 'Flight crew', code: 'PILOT'},
+      {label: 'Cabin crew', code: 'ATTENDANT'},
     ];
 
     this.formGroupDetail.get('emailClass')?.valueChanges.subscribe((value) => {
@@ -170,7 +172,7 @@ export class EmailSupplierComponent
     }
     if (!this.formGroupDetail.disabled) {
       try {
-        this.formGroupDetail.disable({ emitEvent: false });
+        this.formGroupDetail.disable({emitEvent: false});
         // this.formGroupDetail.patchValue();
       } catch (error) {
         console.error('Error disabling form:', error);
@@ -179,19 +181,19 @@ export class EmailSupplierComponent
     this.toggleDialogCreate();
   }
 
-  onEditorChange(value: string) {
-    if (this.isUpdatingValue) {
-      return; // Ngừng xử lý sự kiện nếu đang trong quá trình cập nhật giá trị
-    }
-    const cleanedValue = this.cleanHtml(value);
-    this.isUpdatingValue = true;
-    this.formGroupDetail
-      .get('content')
-      ?.setValue(cleanedValue, { emitEvent: false });
-    this.formGroupDetail.get('content')?.markAsTouched();
-    this.formGroupDetail.get('content')?.updateValueAndValidity();
-    this.isUpdatingValue = false;
-  }
+  // onEditorChange(value: string) {
+  //   if (this.isUpdatingValue) {
+  //     return;
+  //   }
+  //   const cleanedValue = this.cleanHtml(value);
+  //   this.isUpdatingValue = true;
+  //   this.formGroupDetail
+  //     .get('content')
+  //     ?.setValue(cleanedValue, {emitEvent: false});
+  //   this.formGroupDetail.get('content')?.markAsTouched();
+  //   this.formGroupDetail.get('content')?.updateValueAndValidity();
+  //   this.isUpdatingValue = false;
+  // }
 
   override async save() {
     try {
@@ -222,10 +224,10 @@ export class EmailSupplierComponent
     } catch (e: any) {
       if (
         (e.status = HttpStatusCode.Conflict) &&
-				!(
-				  e.status == HttpStatusCode.InternalServerError &&
-					e.error?.error.includes('UNIQUE')
-				)
+        !(
+          e.status == HttpStatusCode.InternalServerError &&
+          e.error?.error.includes('UNIQUE')
+        )
       ) {
         this.baseService.showError(
           e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
@@ -237,14 +239,23 @@ export class EmailSupplierComponent
     }
   }
 
-  cleanHtml(value: string): string {
+  onEditorChange(value: string) {
     if (!value || value === '<p></p>') {
-      return '';
+      this.sanitizedContent = '';
+    } else {
+      const sanitizedValue = this.sanitizeService.sanitizeInput(value);
+      console.log("sanitizedValuesanitizedValue:",sanitizedValue)
+      if (sanitizedValue !== this.formGroupDetail.get('content')?.value) {
+        this.sanitizedContent = sanitizedValue;
+        this.formGroupDetail.get('content')?.setValue(this.sanitizedContent, { emitEvent: false });
+        this.formGroupDetail.get('content')?.updateValueAndValidity({ onlySelf: true });
+      }
     }
-    return value;
   }
 
   ngOnDestroy(): void {
     this.editor.destroy();
   }
+
+
 }

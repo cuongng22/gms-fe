@@ -292,7 +292,8 @@
                   } @else {
                     <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
                   }
-                  <ngx-editor [required]="true" [editor]="editor" formControlName="content" placeholder="Email body *">
+                  <ngx-editor [required]="true" [editor]="editor" formControlName="content"
+                              (ngModelChange)="onEditorChange($event)" placeholder="Email body *">
                   </ngx-editor>
                   @if (formGroupDetail.controls.content.hasError('required') &&
                   formGroupDetail.controls.content.touched) {
