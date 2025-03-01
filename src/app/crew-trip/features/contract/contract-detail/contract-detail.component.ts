@@ -908,7 +908,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     };
     body.dayUses = this.tblDayUse.value[0] || null;
     body.dayUses && (body.dayUses.lengthTime = body.dayUses?.maxHour || 0);
-    let priceUnitInfoInactive = this.formGroupDetail.getRawValue().priceUnitInfo.filter((s: any) => s.active == false);
+    let priceUnitInfoInactive = this.formGroupDetail.getRawValue().priceUnitInfo?.filter((s: any) => s.active == false) || [];
     body.priceUnitInfo = [...this.tblPriceUnit.value, ...priceUnitInfoInactive];
     body.priceUnitInfo.forEach((s: any) => {
       s.priceBeforeTax = s.priceNoTax;
