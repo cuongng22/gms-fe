@@ -82,19 +82,12 @@ export class CommonComponent
   isSticky = false;
   configScrollY = 60;
   listFlightMarket: any[] = [];
+  listFlightMarketAll: any[] = [];
   listFeeService: any[] = [];
-  allErrorTrack = ['invalidNumberDecimal', 'required', 'pattern', 'max', 'min', 'timeBeforeValidator',
-    'lessThanValidator', 'maxlength', 'invalidNumber', 'dateValidator', 'beforeValidator', 'partern', 'minlength'];
-  @HostListener('window:keyup', ['$event'])
-  keyEvent(event: KeyboardEvent) {
-    if (event.keyCode === 27) {
-      this.showDialogCreate = false;
-      this.showDialogDelete = false;
-    }
-  }
 
   readonly dialog = inject(MatDialog);
   formBuilder = inject(FormBuilder);
+  errorMessages: any = ERROR_MESSAGE;
 
   constructor() {
     super();
@@ -107,6 +100,14 @@ export class CommonComponent
     this.themeService.isToggled$.subscribe((isToggled) => {
       this.isToggled = isToggled;
     });
+  }
+
+  @HostListener('window:keyup', ['$event'])
+  keyEvent(event: KeyboardEvent) {
+    if (event.keyCode === 27) {
+      this.showDialogCreate = false;
+      this.showDialogDelete = false;
+    }
   }
 
   ngOnInit(): void {
@@ -396,6 +397,7 @@ export class CommonComponent
   async loadListFlightMarket(param?: any) {
     await this._flightMarketService.search({option: 1, ...param}).then((res) => {
       if (res.data) {
+        this.listFlightMarketAll = res.data;
         this.listFlightMarket = res.data;
       }
     });
@@ -410,8 +412,6 @@ export class CommonComponent
         }
       });
   }
-
-  errorMessages: any = ERROR_MESSAGE;
 
   getErrorMessage(errorKey: string) {
     return this.errorMessages[errorKey];

@@ -1,3 +1,5 @@
+import {timeAfterValidator} from "src/app/crew-trip/shared/utils/common";
+
 export const contractCode: { [key: string]: string } = {
   required: 'Contract code' + $localize` is required`,
   maxlength: 'Contract code' + $localize` must be less than 50 characters`,
@@ -44,4 +46,41 @@ export const remark: { [key: string]: string } = {
 export const notes: { [key: string]: string } = {
   required: 'Remark' + $localize` is required`,
   maxlength: 'Remark' + $localize` must be less than 500 characters`,
+};
+
+export const fromDate: { [key: string]: string } = {
+  required: 'From date' + $localize` is required`,
+  afterValidator: 'From date' + $localize` must before to date`,
+  dateValidator: 'From date' + $localize` format is invalid`,
+};
+export const toDate: { [key: string]: string } = {
+  required: 'To date' + $localize` is required`,
+  beforeValidator: 'To date' + $localize` must after from date`,
+  dateValidator: 'To date' + $localize` format is invalid`,
+};
+
+export const checkinFrom: { [key: string]: string } = {
+  required: 'Checkin from' + $localize` is required`,
+  afterValidator: 'Checkin from' + $localize` must before checkout to`,
+};
+export const checkoutTo: { [key: string]: string } = {
+  required: 'Checkout to' + $localize` is required`,
+  beforeValidator: 'Checkout to' + $localize` must after checkin from`,
+};
+
+export const fromHour: { [key: string]: string } = {
+  required: 'Hour from' + $localize` is required`,
+  timeAfterValidator: 'Hour from' + $localize` must before hour to`,
+};
+
+export const toHour: { [key: string]: string } = {
+  required: 'Hour to' + $localize` is required`,
+  timeBeforeValidator: 'Hour to' + $localize` must after hour from`,
+};
+
+export const rate: { [key: string]: string } = {
+  required: 'Ratio' + $localize` is required`,
+  invalidNumber: 'Ratio' + $localize` must be number`,
+  lessThanValidator: 'Ratio' + $localize` must less than 2`,
+  invalidNumberDecimal: 'Ratio' + $localize` invalid`,
 };

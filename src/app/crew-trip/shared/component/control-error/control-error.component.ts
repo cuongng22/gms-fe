@@ -14,8 +14,8 @@ import {NgxControlError} from "ngxtension/control-error";
 export class ControlErrorComponent {
   @Input() controlName!: string;
   errorMessages: any = ERROR_MESSAGE;
-  allErrorTrack = ['invalidNumberDecimal', 'required', 'pattern', 'max', 'min', 'timeBeforeValidator',
-    'lessThanValidator', 'maxlength', 'invalidNumber', 'dateValidator', 'beforeValidator', 'partern', 'minlength'];
+  allErrorTrack = ['invalidNumberDecimal', 'required', 'pattern', 'max', 'min', 'timeBeforeValidator','timeAfterValidator',
+    'lessThanValidator', 'maxlength', 'invalidNumber', 'dateValidator', 'beforeValidator', 'afterValidator', 'minlength'];
 
   constructor(@Optional() @SkipSelf() private controlContainer?: ControlContainer) {
   }
