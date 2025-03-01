@@ -298,14 +298,14 @@
           </p>
         </div>
       </mat-card-content>
-      <mat-card-actions class="p-15" style="display: flex; justify-content: center;">
+      <mat-card-actions class="p-15 d-flex justify-content-end">
         <button type="button" mat-button
                 (click)="resetFileUpload() ;toggleDialogUpload()"
-                class="danger-btn  min-with-100 mlr-5">
+                class="close-btn  min-with-100 mlr-5">
           <i class="material-symbols-outlined">
             close
           </i>
-          <span i18n="@@cancel">Cancel</span>
+          <span i18n="@@cancel">Close</span>
         </button>
         <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
           <i class="material-symbols-outlined">
