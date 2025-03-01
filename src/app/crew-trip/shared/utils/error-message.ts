@@ -81,6 +81,14 @@ export const toHour: { [key: string]: string } = {
 export const rate: { [key: string]: string } = {
   required: 'Ratio' + $localize` is required`,
   invalidNumber: 'Ratio' + $localize` must be number`,
-  lessThanValidator: 'Ratio' + $localize` must less than 2`,
+  lessThanValidator: 'Ratio' + $localize` must be greater than or equal to 0 and less than 2`,
   invalidNumberDecimal: 'Ratio' + $localize` invalid`,
 };
+
+export const rate1: { [key: string]: string } = {
+  required: 'Ratio' + $localize` is required`,
+  invalidNumber: 'Ratio' + $localize` must be number`,
+  lessThanValidator: 'Ratio' + $localize` must be greater than or equal to 0 and less than 2`,
+  invalidNumberDecimal: 'Ratio' + $localize` invalid`,
+};
+
