@@ -1,9 +1,10 @@
 <form [formGroup]="formGroupDetail" autocomplete="off">
     <div class="row">
         <div class="d-flex justify-content-start">
-            <mat-checkbox formControlName="isHotel" class="mb-2" i18n="@@hotel">Hotel</mat-checkbox>
-            <mat-checkbox formControlName="isTransport" class="mb-2" i18n="@@carRental">Car rental</mat-checkbox>
-            <mat-checkbox formControlName="isECI" class="mb-2" i18n="@@carRental">Early checkin</mat-checkbox>
+            <mat-checkbox formControlName="isHotel" class="mb-2 mr-20" i18n="@@hotel">Hotel</mat-checkbox>
+            <mat-checkbox formControlName="isTransport" class="mb-2 mr-20"
+                i18n="@@transportation">Transportation</mat-checkbox>
+            <mat-checkbox formControlName="isECI" class="mb-2 mr-20" i18n="@@carRental">Early checkin</mat-checkbox>
             <mat-checkbox formControlName="isLCO" class="mb-2" i18n="@@carRental">Late checkout</mat-checkbox>
         </div>
     </div>
@@ -31,6 +32,14 @@
                         </button>
                     </mat-date-range-picker-actions>
                 </mat-date-range-picker>
+                <mat-error *ngxControlError="formGroupDetail.controls.startDate; track: 'required'"
+                    i18n="@@startDateIsRequired">
+                    Start date {{MESSAGE.REQUIRED}}
+                </mat-error>
+                <mat-error *ngxControlError="formGroupDetail.controls.endDate; track: 'required'"
+                    i18n="@@endDateIsRequired">
+                    End date {{MESSAGE.REQUIRED}}
+                </mat-error>
                 <mat-error *ngxControlError="formGroupDetail.controls.startDate; track: 'matDatepickerParse'"
                     i18n="@@startDateInvalidFormat">
                     Start date invalid format
@@ -39,9 +48,12 @@
                     i18n="@@endDateInvalidFormat">
                     End date invalid format
                 </mat-error>
-                <mat-error *ngxControlError="formGroupDetail.controls.startDate; track: 'matStartDateInvalid'">
+                @if (formGroupDetail.controls.startDate.hasError('matStartDateInvalid') ||
+                formGroupDetail.controls.endDate.hasError('matEndDateInvalid')) {
+                <mat-error>
                     {{MESSAGE.END_DATE_LESS_THAN_START_DATE}}
                 </mat-error>
+                }
                 <mat-error *ngxControlError="formGroupDetail.controls.endDate; track: 'errorDiffMonth'"
                     i18n="@@endDateMustBeInTheSameMonthAsTheStartDate">
                     End date must be in the same month as the Start date
@@ -63,7 +75,7 @@
         <div class="col" sizeInput="sm">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@vat">%VAT</mat-label>
-                <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput formControlName="rateVat">
+                <input type="text" digitOnly [decimal]="false" matInput formControlName="rateVat">
             </mat-form-field>
         </div>
         <!-- <div class="col"></div> -->
@@ -178,7 +190,7 @@
                     <th mat-sort-header mat-header-cell *matHeaderCellDef colspan="3"
                         style="background-color: transparent;border: none !important;" class="pt-0 pl-0">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h6 class="mb-0 text-black" i18n="@@carRental">Car rental</h6>
+                            <h6 class="mb-0 text-black" i18n="@@transportation">Transportation</h6>
                             @if(!!!disabled()){
                             @if(invalidCarRental()){
                             <span class="text-danger">Duplicate Number of Supplier name</span>
@@ -222,7 +234,8 @@
                         class="font-weight-bold text-center mat-column-200" i18n="@@unitPriceIncludingVAT">
                         Unit price (Including VAT)
                     </th>
-                    <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="mat-column-200 text-right"
+                    <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex"
+                        class="mat-column-200 text-right"
                         [style.padding]="element.priceIncVatEditing  && !!!disabled()?'0px !important':''"
                         (click)="clickEdit(element,'priceIncVatEditing')">
                         @if(!element.priceIncVatEditing || !!disabled()){

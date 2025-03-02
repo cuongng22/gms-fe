@@ -1,14 +1,14 @@
 <form [formGroup]="formGroupDetail" (submit)="submit()" autocomplete="off">
   <div class="row">
     <div class="d-flex justify-content-start">
-      <mat-checkbox formControlName="isHotel" class="mb-2" i18n="@@hotel">Hotel</mat-checkbox>
-      <mat-checkbox formControlName="isTransport" class="mb-2" i18n="@@carRental">Car rental</mat-checkbox>
+      <mat-checkbox formControlName="isHotel" class="mb-2 mr-20" i18n="@@hotel">Hotel</mat-checkbox>
+      <mat-checkbox formControlName="isTransport" class="mb-2" i18n="@@transportation">Transportation</mat-checkbox>
     </div>
   </div>
   <div class="row">
     <div class="col mb-2">
-      <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="airports" formControlName="airportCode"
-        (selectionChange)="airportChange($event)" [required]="true" />
+      <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="listFlightMarket"
+        formControlName="airportCode" (selectionChange)="airportChange($event)" [required]="true" />
     </div>
     <div class="col mb-2" sizeInput="sm">
       <mat-form-field class="mb-1">
@@ -27,6 +27,13 @@
             </button>
           </mat-date-range-picker-actions>
         </mat-date-range-picker>
+        <mat-error *ngxControlError="formGroupDetail.controls.startDate; track: 'required'"
+          i18n="@@startDateIsRequired">
+          Start date {{MESSAGE.REQUIRED}}
+        </mat-error>
+        <mat-error *ngxControlError="formGroupDetail.controls.endDate; track: 'required'" i18n="@@endDateIsRequired">
+          End date {{MESSAGE.REQUIRED}}
+        </mat-error>
         <mat-error *ngxControlError="formGroupDetail.controls.startDate; track: 'matDatepickerParse'"
           i18n="@@startDateInvalidFormat">
           Start date invalid format
@@ -35,9 +42,12 @@
           i18n="@@endDateInvalidFormat">
           End date invalid format
         </mat-error>
-        <mat-error *ngxControlError="formGroupDetail.controls.startDate; track: 'matStartDateInvalid'">
+        @if (formGroupDetail.controls.startDate.hasError('matStartDateInvalid') ||
+        formGroupDetail.controls.endDate.hasError('matEndDateInvalid')) {
+        <mat-error>
           {{MESSAGE.END_DATE_LESS_THAN_START_DATE}}
         </mat-error>
+        }
         <mat-error *ngxControlError="formGroupDetail.controls.endDate; track: 'errorDiffMonth'"
           i18n="@@endDateMustBeInTheSameMonthAsTheStartDate">
           End date must be in the same month as the Start date
@@ -48,7 +58,8 @@
     <div class="col" sizeInput="sm">
       <mat-form-field class="mb-2">
         <mat-label i18n="@@rateForSingle">Exchange rate</mat-label>
-        <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput formControlName="exchangeRate">
+        <input type="text" appThousandsSeparator decimalSeparator="." digitOnly [decimal]="true" matInput
+          formControlName="exchangeRate">
         <mat-error i18n="@@exchangeRateRequired"
           *ngxControlError="formGroupDetail.controls.exchangeRate; track: 'required'">
           Exchange rate {{ MESSAGE.REQUIRED }}
@@ -58,7 +69,7 @@
     <div class="col" sizeInput="sm">
       <mat-form-field class="mb-2">
         <mat-label i18n="@@vat">%VAT</mat-label>
-        <input type="text" decimalSeparator="." digitOnly [decimal]="true" matInput formControlName="rateVat">
+        <input type="text" digitOnly [decimal]="false" matInput formControlName="rateVat">
       </mat-form-field>
     </div>
   </div>
@@ -76,9 +87,6 @@
             <div class="d-flex justify-content-between align-items-center">
               <h6 class="mb-0 fw-medium-extra">Hotel</h6>
               @if(!!!disabled()){
-              @if(invalidHotel()){
-              <span class="text-danger">Duplicate Number of Supplier name</span>
-              }
               <button type="button" [disabled]="!!disabled()" mat-button class="mini-vna-btn" (click)="addHotel()">
                 <i class="material-symbols-outlined">
                   add
@@ -106,7 +114,7 @@
               <div (clickOutside)="clickOutside(element,'hotelEditing')" class="edit-inline-table">
                 <app-selection-suggest [editInlineTable]="true" [options]="hotels" attrValue="hotelCode"
                   attrDisplay="hotelName" [(ngModel)]="element.hotelCode" [ngModelOptions]="{standalone: true}"
-                  (selectionChange)="hotelChange($event, element)" />
+                  appThousandsSeparator (selectionChange)="hotelChange($event, element)" />
               </div>
             </div>
             }
@@ -119,20 +127,20 @@
         </ng-container>
         <ng-container matColumnDef="unitPriceForSingleRoom">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-            i18n="@@unitPriceForSingleRoom">
-            Unit price for single room
+            i18n="@@unitPriceForSingleRoomIncludingVAT">
+            Unit price for single room <br /> (Including VAT)
           </th>
           <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="text-right"
             [style.padding]="element.singleRoomPriceEditing  && !!!disabled()?'0px !important':''"
             (click)="clickEdit(element,'singleRoomPriceEditing')">
             @if(!element.singleRoomPriceEditing || !!disabled()){
-              {{element.singleRoomPrice | number}}
+            {{element.singleRoomPrice | number}}
             }@else {
             <div sizeInput="xs">
               <mat-form-field (clickOutside)="clickOutside(element,'singleRoomPriceEditing')" class="edit-inline-table">
-                <input type="number" matInput [(ngModel)]="element.singleRoomPrice"
-                  [ngModelOptions]="{standalone: true}" [min]="0" [max]="999999999999" digitOnly
-                  [disabled]="!!disabled()" decimalSeparator="." [decimal]="true">
+                <input type="text" matInput [(ngModel)]="element.singleRoomPrice" [ngModelOptions]="{standalone: true}"
+                  [min]="0" [max]="999999999999" digitOnly [disabled]="!!disabled()" decimalSeparator="."
+                  appThousandsSeparator [decimal]="true">
               </mat-form-field>
             </div>
             }
@@ -140,19 +148,19 @@
         </ng-container>
         <ng-container matColumnDef="unitPriceForTwinRoom">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-            i18n="@@unitPriceForTwinRoom">
-            Unit price for twin room
+            i18n="@@unitPriceForTwinRoomIncludingVAT">
+            Unit price for twin room <br /> (Including VAT)
           </th>
           <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="text-right"
             [style.padding]="element.twinRoomPriceEditing  && !!!disabled()?'0px !important':''"
             (click)="clickEdit(element,'twinRoomPriceEditing')">
             @if(!element.twinRoomPriceEditing || !!disabled()){
-              {{element.twinRoomPrice | number}}
+            {{element.twinRoomPrice | number}}
             }@else {
             <div sizeInput="xs">
               <mat-form-field (clickOutside)="clickOutside(element,'twinRoomPriceEditing')" class="edit-inline-table">
                 <input matInput type="text" [(ngModel)]="element.twinRoomPrice" [ngModelOptions]="{standalone: true}"
-                  [min]="0" [max]="999999999999" digitOnly [decimal]="true" decimalSeparator="."
+                  [min]="0" [max]="999999999999" digitOnly [decimal]="true" decimalSeparator="." appThousandsSeparator
                   [disabled]="!!disabled()">
               </mat-form-field>
             </div>
@@ -178,9 +186,42 @@
 
           </td>
         </ng-container>
+        <ng-container matColumnDef="invalidSupplier">
+          <td mat-footer-cell *matFooterCellDef class="text-left  pl-0">
+            @if (duplicateSupplierHotel()) {
+            <p class="mb-0 text-danger" i18n="@@duplicateSuppliersInList">Duplicate suppliers in list</p>
+            }
+            @if(isRequiredSupplierHotel) {
+            <p class="mb-0 text-danger" i18n="@@supplierIsRequired">Supplier is required</p>
+            }
+
+          </td>
+          <ng-container matColumnDef="requiredUnitPriceForSingleRoom">
+            <td mat-footer-cell *matFooterCellDef class="text-left  pl-0">
+              @if (isRequiredUnitPriceForSingleRoomHotel) {
+              <p class="mb-0 text-danger" i18n="@@unitPriceForSingleRoomIncludingVATRequired">
+                Unit price for single room (Including VAT) {{MESSAGE.REQUIRED}}
+              </p>
+              }
+            </td>
+          </ng-container>
+          <ng-container matColumnDef="requiredUnitPriceForTwinRoom">
+            <td mat-footer-cell *matFooterCellDef class="text-left  pl-0">
+              @if (isRequiredUnitPriceForTwinRoomHotel) {
+              <p class="mb-0 text-danger" i18n="@@unitPriceForTwinRoomIncludingVATRequired">
+                Unit price for twin room (Including VAT) {{MESSAGE.REQUIRED}}
+              </p>
+              }
+            </td>
+          </ng-container>
+        </ng-container>
         <tr mat-header-row *matHeaderRowDef="['addBtn']"></tr>
         <tr mat-header-row *matHeaderRowDef="displayedColumnsHotel"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsHotel;"></tr>
+        <tr mat-row
+          *matFooterRowDef="['invalidSupplier','requiredUnitPriceForSingleRoom', 'requiredUnitPriceForTwinRoom']"
+          [hidden]="!duplicateSupplierHotel() && !isRequiredSupplierHotel && !isRequiredUnitPriceForSingleRoomHotel && !isRequiredUnitPriceForTwinRoomHotel">
+        </tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center" colspan="4">No data!</td>
         </tr>
@@ -201,11 +242,8 @@
           background-color: transparent;
           border: none !important;" class="pt-0 pl-0">
             <div class="d-flex justify-content-between align-items-center">
-              <h6 class="mb-0 fw-medium-extra">Car rental</h6>
+              <h6 class="mb-0 fw-medium-extra" i18n="@@transportation">Transportation</h6>
               @if(!!!disabled()){
-              @if(invalidCarRental()){
-              <span class="text-danger">Duplicate Number of Supplier name</span>
-              }
               <button type="button" [disabled]="!!disabled()" mat-button class="mini-vna-btn" (click)="addCarRental()">
                 <i class="material-symbols-outlined">
                   add
@@ -245,20 +283,20 @@
         </ng-container>
         <ng-container matColumnDef="unitPrice">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center mat-column-200"
-            i18n="@@unitPrice">
-            Unit price
+            i18n="@@unitPriceIncludingVAT">
+            Unit price <br /> (Including VAT)
           </th>
           <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="mat-column-200 text-right"
             [style.padding]="element.unitPriceEditing  && !!!disabled()?'0px !important':''"
             (click)="clickEdit(element,'unitPriceEditing')">
             @if(!element.unitPriceEditing || !!disabled()){
-              {{element.unitPrice | number}}
+            {{element.unitPrice | number}}
             }@else {
             <div sizeInput="xs">
               <mat-form-field (clickOutside)="clickOutside(element,'unitPriceEditing')" class="edit-inline-table">
                 <input matInput type="text" [(ngModel)]="element.unitPrice" [ngModelOptions]="{standalone: true}"
                   [min]="0" [max]="999999999999" digitOnly [disabled]="!!disabled()" decimalSeparator="."
-                  [decimal]="true">
+                  appThousandsSeparator [decimal]="true">
               </mat-form-field>
             </div>
             }
@@ -284,9 +322,31 @@
 
           </td>
         </ng-container>
+        <ng-container matColumnDef="invalidSupplier">
+          <td mat-footer-cell *matFooterCellDef [colSpan]="999" class="text-left text-danger pl-0">
+            @if (duplicateCarRental()) {
+            <p class="mb-0 text-danger" i18n="@@duplicateSuppliersInList">Duplicate suppliers in list</p>
+            }
+            @if(isRequiredSupplierTransportation) {
+            <p class="mb-0 text-danger" i18n="@@supplierIsRequired">Supplier is required</p>
+            }
+          </td>
+        </ng-container>
+        <ng-container matColumnDef="requiredUnitPriceIncludingVatTransport">
+          <td mat-footer-cell *matFooterCellDef class="text-left  pl-0">
+            @if (isRequiredUnitPriceIncludingVatTransport) {
+            <p class="mb-0 text-danger" i18n="@@unitPriceIncludingVAT">
+              Unit price (Including VAT) {{MESSAGE.REQUIRED}}
+            </p>
+            }
+          </td>
+        </ng-container>
         <tr mat-header-row *matHeaderRowDef="['addBtn']"></tr>
         <tr mat-header-row *matHeaderRowDef="displayedColumnsCarRental"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsCarRental;"></tr>
+        <tr mat-row *matFooterRowDef="['invalidSupplier','requiredUnitPriceIncludingVatTransport']"
+          [hidden]="!duplicateCarRental() && !isRequiredSupplierTransportation && !isRequiredUnitPriceIncludingVatTransport">
+        </tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center" colspan="4">No data!</td>
         </tr>

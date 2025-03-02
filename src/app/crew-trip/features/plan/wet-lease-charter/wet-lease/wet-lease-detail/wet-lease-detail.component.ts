@@ -60,6 +60,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
     isCompleted: [false]
   });
   showDialogCreateData: boolean = false;
+  isCreateData = false;
 
   constructor() {
     super();
@@ -76,6 +77,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
       if (id) {
         let resDetail = await this.baseService.detail(this.id());
         this.formGroupDetail.patchValue({ ...resDetail.data })
+        this.airportCodeChange(resDetail.data.airportCode)
         this.dataGeneral = { ...resDetail.data };
         this.wetLeaseGeneral.setData(this.dataGeneral)
         this.planHotel = [...resDetail.data.planHotel];
@@ -121,12 +123,14 @@ export class WetLeaseDetailComponent extends CommonComponent {
   }
 
   createData() {
-    this.wetLeaseGeneral.formGroupDetail.markAllAsTouched()
+    this.wetLeaseGeneral.formGroupDetail.markAllAsTouched();
+    const isRequiredHotelAndTrans = this.wetLeaseGeneral.checkRequiredHotelAndTransportation();
     if (this.wetLeaseGeneral.formGroupDetail.valid &&
-      !this.wetLeaseGeneral.invalidCarRental() &&
-      !this.wetLeaseGeneral.invalidHotel() &&
+      !this.wetLeaseGeneral.duplicateCarRental() &&
+      !this.wetLeaseGeneral.duplicateSupplierHotel() &&
       this.wetLeaseGeneral.dataSourceCarRental.data.length > 0 &&
-      this.wetLeaseGeneral.dataSourceHotel.data.length > 0
+      this.wetLeaseGeneral.dataSourceHotel.data.length > 0 &&
+      !isRequiredHotelAndTrans
     ) {
       if (this.wetLeaseHotel.dataSource.data && this.wetLeaseHotel.dataSource.data.length > 0 &&
         this.wetLeaseCarRental.dataSource.data && this.wetLeaseCarRental.dataSource.data.length > 0
@@ -194,21 +198,24 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.wetLeaseHotel.totalPlannedBudget = {}
 
     this.dataGeneral = { ...this.wetLeaseGeneral.formGroupDetail.getRawValue() };
+    this.isCreateData = true;
 
     this.spinner.hide()
   }
 
 
   override async save(): Promise<any> {
-    await this.spinner.show()
-    this.wetLeaseGeneral.formGroupDetail.markAllAsTouched()
+    this.wetLeaseGeneral.formGroupDetail.markAllAsTouched();
+    const isRequiredHotelAndTrans = this.wetLeaseGeneral.checkRequiredHotelAndTransportation();
     if (this.wetLeaseGeneral.formGroupDetail.valid &&
-      !this.wetLeaseGeneral.invalidCarRental() &&
-      !this.wetLeaseGeneral.invalidHotel() &&
+      !this.wetLeaseGeneral.duplicateCarRental() &&
+      !this.wetLeaseGeneral.duplicateSupplierHotel() &&
       this.wetLeaseGeneral.dataSourceCarRental.data.length > 0 &&
-      this.wetLeaseGeneral.dataSourceHotel.data.length > 0
+      this.wetLeaseGeneral.dataSourceHotel.data.length > 0 &&
+      !isRequiredHotelAndTrans
     ) {
 
+      await this.spinner.show()
       const _dataGeneral = this.wetLeaseGeneral.formGroupDetail.getRawValue();
       const _priceHotelsList = this.wetLeaseGeneral.dataSourceHotel.data;
       const _priceTransports = this.wetLeaseGeneral.dataSourceCarRental.data;
@@ -245,23 +252,20 @@ export class WetLeaseDetailComponent extends CommonComponent {
           update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS,
         );
         if (res.data && !this.id()) {
-          this.router.navigate(['/plan/est-plan/wet-lease/detail', res.data])
+          this.router.navigate(['/plan/est-plan/wet-lease-charter/wet-lease-detail', res.data])
         }
       } finally {
         this.spinner.hide()
       }
-
+      this.spinner.hide()
     }
 
-    this.spinner.hide()
 
   }
 
   async airportCodeChange(event: string) {
     const res = await this._flightMarketService.search({ code: event, option: 0 });
-    if (res.data.content[0].marketType === CategoryEnum.INTERNATIONAL) {
-      this.category.set(CategoryEnum.INTERNATIONAL)
-    }
+    this.category.set(res.data.content[0].marketType)
   }
 
   get planHotel() {

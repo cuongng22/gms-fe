@@ -1,4 +1,3 @@
-import { values } from "lodash"
 
 // - Cấp phê duyệt: cho chọn 1 giá trị, danh sách gồm: HĐQT, TGĐ, PTGĐ- GĐ KTB, GĐ TTĐHKT
 export const Authoritys = [

@@ -37,21 +37,15 @@
                         <mat-form-field
                             (clickOutside)="clickOutside(element.hotelItem[item.hotelCode],'totalSingleRoomEditing',element)"
                             class="edit-inline-table">
-                            <input matInput type="number" digitOnly
+                            <input matInput type="text" digitOnly [decimal]="true" decimalSeparator="."  appThousandsSeparator
                                 [(ngModel)]="element.hotelItem[item.hotelCode].totalSingleRoom">
                         </mat-form-field>
                     </div>
                     }
                 </td>
-                <!-- <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
-                    {{ element.hotelItem[item.hotelCode].totalSingleRoom | number }}
-                </td> -->
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
                     {{getTotal('item.hotelItem[\''+item.hotelCode+'\'].totalSingleRoom') | number}}
                 </td>
-                <!-- <td mat-footer-cell *matFooterCellDef class="fw-bold text-center" colspan="2">
-                    534534
-                </td> -->
             </ng-container>
             <ng-container [matColumnDef]="'totalTwinRoom_'+item.hotelCode">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center mat-column-60"
@@ -67,16 +61,15 @@
                         <mat-form-field
                             (clickOutside)="clickOutside(element.hotelItem[item.hotelCode],'totalTwinRoomEditing',element)"
                             class="edit-inline-table">
-                            <input matInput type="number" digitOnly
+                            <input matInput type="text" digitOnly [decimal]="true" decimalSeparator="."
                                 [(ngModel)]="element.hotelItem[item.hotelCode].totalTwinRoom">
                         </mat-form-field>
                     </div>
                     }
                 </td>
-                <!-- <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
-                    {{ element.hotelItem[item.hotelCode].totalTwinRoom | number }}
-                </td> -->
-                <td mat-footer-cell *matFooterCellDef class="fw-bold text-center"></td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    {{getTotal('item.hotelItem[\''+item.hotelCode+'\'].totalTwinRoom') | number}}
+                </td>
             </ng-container>
             }
             <ng-container matColumnDef="totalRoom">
@@ -92,9 +85,6 @@
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
                     {{getTotal('item.totalQtySingleRoom') | number}}
                 </td>
-                <!-- <td mat-footer-cell *matFooterCellDef class="fw-bold text-center" >
-                   1231
-                </td> -->
             </ng-container>
             <ng-container matColumnDef="totalQtyTwinRoom">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
@@ -114,12 +104,10 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
                     i18n="@@totalAmountForeignExchange" rowspan="2">Total amount <br />(Foreign exchange)</th>
                 <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
-                    @if (category() === CategoryEnum.INTERNATIONAL) {
-                    {{ element.totalCountForeign | number }}
-                    }
+                    {{(category() === CategoryEnum.INTERNATIONAL ? element.totalCountForeign:0) | number }}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right"></td>
-                <!-- <td mat-footer-cell *matFooterCellDef class="fw-bold text-center" >23</td> -->
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                </td>
             </ng-container>
 
             <ng-container matColumnDef="totalAmount">
@@ -157,9 +145,13 @@
                 @if (item.includes('_')) {
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right" colspan="2">
                     {{getTotalPlannedBudget(item) | number}}</td>
-                }@else {
-                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotalPlannedBudget(item) |
-                    number}}</td>
+                }@else if(item.includes('ft2TotalCountForeign')) {
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    {{(category() === CategoryEnum.INTERNATIONAL ? getTotalPlannedBudget(item) : 0) | number}}
+                </td>
+                } @else {
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    {{getTotalPlannedBudget(item) | number}}</td>
                 }
             </ng-container>
             }

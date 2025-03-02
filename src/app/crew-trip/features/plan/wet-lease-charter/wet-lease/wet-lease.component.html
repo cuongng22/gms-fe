@@ -14,7 +14,7 @@
               <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
                 formControlName="endDate">
             </mat-date-range-input>
-            <mat-label i18n="@@contractEndDate">Contract end date</mat-label>
+            <mat-label i18n="@@time">Time</mat-label>
             <mat-datepicker-toggle matIconSuffix [for]="contractRangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #contractRangePicker>
               <mat-date-range-picker-actions>
@@ -25,12 +25,12 @@
               </mat-date-range-picker-actions>
             </mat-date-range-picker>
             <mat-error *ngxControlError="formGroupSearch.controls['startDate']; track: 'matDatepickerParse'"
-              i18n="@@contractPeriodInvalidFormat">
-              Contract period invalid format
+              i18n="@@timeInvalidFormat">
+              Time invalid format
             </mat-error>
             <mat-error *ngxControlError="formGroupSearch.controls['endDate']; track: 'matDatepickerParse'"
-              i18n="@@contractPeriodInvalidFormat">
-              Contract period invalid format
+              i18n="@@timeInvalidFormat">
+              Time invalid format
             </mat-error>
           </mat-form-field>
         </div>

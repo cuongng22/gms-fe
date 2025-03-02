@@ -5,7 +5,7 @@
     }
     <input type="text" matInput #inputSearch [matAutocomplete]="auto" (input)="filter()" requireSelection
       [required]="requiredControl" [formControl]="viewControl">
-    @if (viewControl.value) {
+    @if (viewControl.value && !viewControl.disabled) {
     <i class="material-symbols-outlined mr-15 pe-clear-input" matSuffix (click)="clearInput()">
       close
     </i>

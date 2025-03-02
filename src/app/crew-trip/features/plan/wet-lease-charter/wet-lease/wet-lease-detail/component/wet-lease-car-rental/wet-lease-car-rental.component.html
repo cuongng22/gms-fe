@@ -23,7 +23,8 @@
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'totalSingleRoomEditing')"
                             class="edit-inline-table">
-                            <input matInput type="number" digitOnly [(ngModel)]="element.numberOfTrip">
+                            <input matInput type="text" appThousandsSeparator digitOnly
+                                [(ngModel)]="element.numberOfTrip">
                         </mat-form-field>
                     </div>
                     }
@@ -70,8 +71,8 @@
                 </td>
             </ng-container>
             <ng-container matColumnDef="totalAmountForexPlan">
-                <td mat-footer-cell *matFooterCellDef class="fw-bold text-center">
-
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    {{(category() === CategoryEnum.INTERNATIONAL?getTotal('totalAmountForex'):0) | number}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="totalAmountExcVATPlan">
@@ -88,8 +89,10 @@
             <tr mat-header-row *matHeaderRowDef="headerRowDef1"></tr>
             <tr mat-header-row *matHeaderRowDef="headerRowDef2"></tr>
             <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
-            <tr mat-footer-row *matFooterRowDef="totalRowDef; sticky: true" [hidden]="dataSource.data.length === 0"></tr>
-            <tr mat-footer-row *matFooterRowDef="totalPlanRowDef; sticky: true" [hidden]="dataSource.data.length === 0"></tr>
+            <tr mat-footer-row *matFooterRowDef="totalRowDef; sticky: true" [hidden]="dataSource.data.length === 0">
+            </tr>
+            <tr mat-footer-row *matFooterRowDef="totalPlanRowDef; sticky: true" [hidden]="dataSource.data.length === 0">
+            </tr>
             <tr class="mat-row" *matNoDataRow>
                 <td class="mat-cell text-center" colspan="999999">No data!</td>
             </tr>
