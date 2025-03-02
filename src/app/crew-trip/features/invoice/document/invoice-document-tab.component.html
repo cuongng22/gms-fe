@@ -15,23 +15,22 @@
     </ol>
   </div>
   <!--    List data-->
-  <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
-    <mat-card-content>
-      <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="tabType==='INVOICE'?0:1"
-                     mat-align-tabs="start" mat-stretch-tabs="false">
-        <mat-tab label="Invoice">
-          @if (tabType === 'INVOICE') {
+
+  <div>
+    <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="tabType==='INVOICE'?0:1"
+                   mat-align-tabs="start" mat-stretch-tabs="false">
+      <mat-tab label="Invoice">
+        @if (tabType === 'INVOICE') {
           <app-invoice-document [tabType]="tabType" (nextStepEmit)="nextStepEmit($event)"/>
-          }
-        </mat-tab>
-        <mat-tab label="Reminder">
-          @if (tabType === 'REMINDER') {
+        }
+      </mat-tab>
+      <mat-tab label="Reminder">
+        @if (tabType === 'REMINDER') {
           <app-invoice-document-remind/>
-          }
-        </mat-tab>
-      </mat-tab-group>
-    </mat-card-content>
-  </mat-card>
+        }
+      </mat-tab>
+    </mat-tab-group>
+  </div>
 </ng-container>
 <!-- Detail -->
 <ng-container *ngIf="step==2">

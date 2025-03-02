@@ -43,6 +43,8 @@ export class MESSAGE {
   static PRIVIOUS_PAGE = $localize`:@@priviousPage:Privious page`;
   static MAX_FILE_SIZE = $localize`Invalid file`;
   static SEND_EMAIL = $localize`Send email successfully`;
+  static FILE_UPLOAD_EMPTY = $localize`The file must not be empty`;
+  static FILE_UPLOAD_INVALID = $localize`The file import is not valid`;
 
   static LABEL_START_DATE = $localize`:@@startDate:Start Date`;
   static MESSAGE_START_DATE_REQUIRED = $localize`:@@startDateRequired:Start Date is required`;

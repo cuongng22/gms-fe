@@ -34,6 +34,7 @@ import {InvoiceActualCostService} from "src/app/crew-trip/core/services/invoice-
 import moment from "moment";
 import {InvoiceDocumentDetailComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-detail.component";
 import {InvoiceDocumentService} from "src/app/crew-trip/core/services/invoice-document-service";
+import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 
 
 @Component({
@@ -130,7 +131,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   override async ngOnInit() {
     this.formGroupFile.patchValue({partnerType: this.partnerType});
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.loadListFlightMarket(), this.search(),]).then(() => {
+    await Promise.all([this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}), this.search(),]).then(() => {
       if (this.partnerType == 'HOTEL') {
         this.displayedColumns = ['stt', ...this._displayedColumns.filter(s => !['numberTrip'].includes(s.value)).map(s => s.value), 'action'];
       } else if (this.partnerType == 'TRANSPORTATION') {
