@@ -26,9 +26,12 @@ COPY --from=build /app/dist/crew-trip /usr/share/nginx/html/crew-trip/fe
 # Thêm cấu hình nginx cho phép port 80 trỏ đến file index trong thư mục của dự án
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
+# Copy certificate
+COPY /opt/certificate/crewtrip_certificate.pem /etc/nginx/ssl/cert.pem
+COPY /opt/certificate/private.key /etc/nginx/ssl/key.pem
 
 # Expose port 80 để Nginx phục vụ ứng dụng
-EXPOSE 80
+EXPOSE 80 443
 
 # Khởi động Nginx
 CMD ["nginx", "-g", "daemon off;"]
