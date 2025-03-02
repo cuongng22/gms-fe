@@ -34,6 +34,7 @@ import {
   MESSAGE,
   removeNullValues,
 } from 'src/app/crew-trip/shared/utils/constant';
+import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 
 @Component({
   selector: 'app-contract',
@@ -156,7 +157,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   override async ngOnInit() {
     await Promise.all([
-      this.loadListFlightMarket(),
+      this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}),
       this.loadListHotel(),
       this.loadListVehiclesPartner(),
       this.search(),

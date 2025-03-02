@@ -59,6 +59,7 @@ import {
 import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
 import {NgxMatTimepickerComponent, NgxMatTimepickerToggleComponent} from "ngx-mat-timepicker";
 import {airportCode} from "src/app/crew-trip/shared/utils/error-message";
+import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 
 @Component({
   selector: 'app-contract-detail',
@@ -407,7 +408,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       await Promise.all([this.detail(this.id),
         this.loadListQuocGia(),
         this.loadListFeeService(),
-        this.loadListFlightMarket(),
+        this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}),
         this.loadListMaNghiepVu(),
         this.loadListKhoanMucKhns()
       ]).then((res) => {

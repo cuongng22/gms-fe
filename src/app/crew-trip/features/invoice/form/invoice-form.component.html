@@ -16,7 +16,7 @@
           <div class="col-2" sizeInput='md'>
             <mat-form-field>
               <mat-label i18n>Type</mat-label>
-              <mat-select formControlName="ctype">
+              <mat-select (selectionChange)="ctypeChange()" formControlName="ctype">
                 <mat-option [value]="null" i18n>-- All Type --</mat-option>
                 <mat-option i18n value="INTERNATIONAL">International</mat-option>
                 <mat-option i18n value="DOMESTIC">Domestic</mat-option>
@@ -24,29 +24,33 @@
             </mat-form-field>
           </div>
           <div class="col-2" sizeInput='md'>
-            <mat-form-field>
-              <mat-label i18n>Airport Code</mat-label>
-              <mat-select formControlName="airportCode" multiple>
-                @for (item of listFlightMarket; track item) {
-                  <mat-option [value]="item">{{ item }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+            <!--            <mat-form-field>-->
+            <!--              <mat-label i18n>Airport Code</mat-label>-->
+            <!--              <mat-select formControlName="airportCode" multiple>-->
+            <!--                @for (item of listFlightMarket; track item) {-->
+            <!--                  <mat-option [value]="item">{{ item }}</mat-option>-->
+            <!--                }-->
+            <!--              </mat-select>-->
+            <!--            </mat-form-field>-->
+            <app-select-multiple [options]="listFlightMarket" [required]="false"
+                                 attrValue="" formControlName="airportCode"
+                                 label="Airport code" size="md">
+            </app-select-multiple>
           </div>
           <div class="col-3" sizeInput='md'>
             <mat-form-field>
               <mat-label i18n>Period Date</mat-label>
               <mat-date-range-input [rangePicker]="picker">
-                <input formControlName="periodFrom" matStartDate placeholder="Start date">
-                <input formControlName="periodTo" matEndDate placeholder="End date">
+                <input formControlName="periodFrom" matStartDate placeholder="dd/mm/yyyy">
+                <input formControlName="periodTo" matEndDate placeholder="dd/mm/yyyy">
               </mat-date-range-input>
               <!--              <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>-->
               <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
-              @if (!!formGroupSearch.controls['periodFrom'].hasError('matStartDateInvalid')) {
+              @if (!!formGroupSearch.controls['periodFrom'].hasError('matDatepickerParse')) {
                 <mat-error>Invalid start date</mat-error>
               }
-              @if (!!formGroupSearch.controls['periodTo'].hasError('matEndDateInvalid')) {
+              @if (!!formGroupSearch.controls['periodTo'].hasError('matDatepickerParse')) {
                 <mat-error>Invalid end date</mat-error>
               }
             </mat-form-field>
@@ -74,18 +78,18 @@
       <mat-card-title>
       </mat-card-title>
       <mat-card-subtitle>
-        <button class="add-btn mr-10" i18n mat-button
-                type="button">
-          <i class="material-symbols-outlined">
-            download
-          </i>
-          Export
-        </button>
+        <!--        <button class="add-btn mr-10" i18n mat-button-->
+        <!--                type="button">-->
+        <!--          <i class="material-symbols-outlined">-->
+        <!--            download-->
+        <!--          </i>-->
+        <!--          Export-->
+        <!--        </button>-->
         <button (click)="openDialogFile()" class="add-btn" i18n mat-button type="button">
           <i class="material-symbols-outlined">
             upload
           </i>
-          Upload data
+          Import
         </button>
       </mat-card-subtitle>
     </mat-card-header>
@@ -166,7 +170,11 @@
       <mat-card-header>
         <mat-card-title>
           <h5 class="mb-0">
-            <span i18n>Upload Detailed Statement </span>
+            @if (isHotel()) {
+              <span i18n>Import Detailed Statement of Hotel</span>
+            } @else {
+              <span i18n>Import Detailed Statement of Transportation</span>
+            }
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
@@ -192,15 +200,17 @@
               </mat-radio-group>
             </div>
             <div class="col-md-12 mt-20">
-              <span i18n>File Template</span>
-              <button (click)="download('DOWNLOAD')" class="close-btn" i18n mat-button type="button">
+              <span i18n>Download template </span>
+              <button (click)="download('DOWNLOAD')" class="search-btn" i18n mat-button type="button">
                 <i class="material-symbols-outlined">
                   download
                 </i>
-                {{ formGroupFile.getRawValue().templateName }}
+                {{ formGroupFile.getRawValue().templateNameLabel }}
               </button>
             </div>
             <div class="col-md-12 mt-20" sizeInput='sm'>
+              <span i18n>Select file </span>
+
               <file-upload [accept]="COMMON_CONFIG.FILE_ACCEPT_EXCEL" [multiple]="false"
                            class="file-uploader"
                            formControlName="fileUpload"></file-upload>
@@ -214,11 +224,7 @@
             </i>
             Close
           </button>
-          <button
-              (click)="upload()" [disabled]="(formGroupFile.value.fileUpload?.length??0) == 0"
-              class="add-btn"
-              i18n mat-button
-          >
+          <button (click)="upload()" class="add-btn" i18n mat-button>
             <i class="material-symbols-outlined">
               upload
             </i>

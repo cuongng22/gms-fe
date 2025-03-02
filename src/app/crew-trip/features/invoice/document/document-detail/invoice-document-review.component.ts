@@ -43,6 +43,7 @@ import {HttpStatusCode} from "@angular/common/http";
 import {InvoiceDocumentComponent} from "src/app/crew-trip/features/invoice/document/invoice-document.component";
 import {InvoiceDocumentRemindComponent} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
 import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog";
+import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 
 
 @Component({
@@ -222,7 +223,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   override async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([this.detail(this.id), this.loadListFlightMarket(), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
+      await Promise.all([this.detail(this.id), this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
         if (this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
           this.formType = 1;
           this._displayedColumnsHeader1 = ['stt', 'checkin2col', 'checkout2col', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights', 'earlyCheckin',
