@@ -127,15 +127,16 @@ export class WetLeaseHotelComponent extends CommonComponent {
 
 
   getTotal(formula: string) {
-    return Math.round(this.dataSource.data.map((item: any) => {
+    return (this.dataSource.data.map((item: any) => {
       return Number(this.calWithFormula(formula, item));
-    }).reduce((acc, value) => acc + value, 0));
+    }).reduce((acc, value) => acc + value, 0)).toFixed(3);
   }
 
   calculation() {
     this.totalPlannedBudgetRowDef.forEach(rowDef => {
       this.totalPlannedBudget[rowDef] = 0;
     });
+    this.totalPlannedBudget = {}
     this.dataSource.data.forEach(element => {
       this.getTotalRoom(element);
       this.calTotalCountForeign(element);
@@ -164,16 +165,14 @@ export class WetLeaseHotelComponent extends CommonComponent {
       if (_formula) {
         const _hotelItem = element.hotelItem[hotelCode];
         const result = this.calWithFormula(_formula, _hotelItem, this.dataGeneral());
-        this.totalPlannedBudget[control] += Number(result);
+        this.totalPlannedBudget[control] = (this.totalPlannedBudget[control] ?? 0) + Number(result);
+      }
+    } else if (['ft2TotalExcVAT', 'ft2TotalIncVAT', 'ft2TotalCountForeign'].includes(control)) {
+      if (_formula) {
+        this.totalPlannedBudget[control] = (this.totalPlannedBudget[control] ?? 0) + Number(this.calWithFormula(_formula, element, this.dataGeneral()));
       }
     } else {
-      if (['ft2TotalExcVAT', 'ft2TotalIncVAT'].includes(control)) {
-        if (_formula) {
-          this.totalPlannedBudget[control] += Number(this.calWithFormula(_formula, element, this.dataGeneral()));
-        }
-      } else {
-        this.totalPlannedBudget[control] = null
-      }
+      this.totalPlannedBudget[control] = null
     }
     // });
   }
@@ -208,8 +207,10 @@ export class WetLeaseHotelComponent extends CommonComponent {
     const _totalCountForeign = Object.entries(element.hotelItem).map((item: any[]) => {
       return Number(item[1].singleRoomPrice ?? 0) * Number(item[1].totalSingleRoom ?? 0) + Number(item[1].twinRoomPrice ?? 0) * Number(item[1].totalTwinRoom ?? 0)
     }).reduce((acc, value) => acc + value, 0);
-    element.totalExcVAT = _totalCountForeign * (this.dataGeneral().exchangeRate ?? 1);
-    element.totalIncVAT = (element.totalExcVAT) + (element.totalExcVAT * (this.dataGeneral().rateVat ?? 0) / 100)
+    // element.totalExcVAT = _totalCountForeign * (this.dataGeneral().exchangeRate ?? 1);
+    // element.totalIncVAT = (element.totalExcVAT) + (element.totalExcVAT * (this.dataGeneral().rateVat ?? 0) / 100)
+    element.totalIncVAT = _totalCountForeign * (this.dataGeneral().exchangeRate ?? 1);
+    element.totalExcVAT = element.totalIncVAT / (1 + (this.dataGeneral().rateVat ?? 0) / 100)
   }
 
 
@@ -221,6 +222,7 @@ export class WetLeaseHotelComponent extends CommonComponent {
     this.getTotalRoom(parrentData);
     this.calTotalCountForeign(parrentData);
     this.calTotalAmount(parrentData);
+    this.totalPlannedBudget = {}
     this.dataSource.data.forEach(element => {
       this.calTotalPlanBudget(element);
     });

@@ -10,7 +10,9 @@ export const formula: any = {
     ft2TotalIncVAT: {
         formula: 'item.totalIncVAT'
     },
-
+    ft2TotalCountForeign:{
+        formula:'item.totalCountForeign'
+    }
 
 
 

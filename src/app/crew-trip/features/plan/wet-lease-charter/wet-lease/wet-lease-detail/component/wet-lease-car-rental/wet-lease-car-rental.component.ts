@@ -24,6 +24,7 @@ import { SeparatorDirective } from 'src/app/crew-trip/shared/directive/separator
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.component';
 import { formula } from './wet-lease-car-rental.model';
+import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
 
 @Component({
   selector: 'app-wet-lease-car-rental',
@@ -33,7 +34,7 @@ import { formula } from './wet-lease-car-rental.model';
     MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
     NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent,
-    DatepickerComponent, MatDatepickerModule, NgxControlError, ClickOutside
+    DatepickerComponent, MatDatepickerModule, NgxControlError, ClickOutside, ThousandsSeparatorDirective
   ],
   templateUrl: './wet-lease-car-rental.component.html',
   styleUrl: './wet-lease-car-rental.component.scss',
@@ -50,6 +51,7 @@ export class WetLeaseCarRentalComponent extends CommonComponent {
   category = input.required<CategoryEnum>(); // quốc tế hoặc quốc nội
   dataGeneral = input<any>();
   disabled = input<boolean>(false);
+  totalPlan: any = {}
 
   constructor() {
     super();
@@ -67,13 +69,29 @@ export class WetLeaseCarRentalComponent extends CommonComponent {
       this.calculation('totalAmountForex', element)
       this.calculation('totalAmountIncVAT', element)
       this.calculation('totalAmountExcVAT', element)
-    })
+    });
+
+    this.setTotal('numberOfTrip')
+    this.setTotal('totalAmountForex')
+    this.setTotal('totalAmountExcVAT')
+    this.setTotal('totalAmountIncVAT')
   }
 
   getTotal(control: string) {
-    return Math.round(this.dataSource.data.map((item: any) => {
-      return Number(this.calWithFormula(`item.${control}`, item));
+    return this.totalPlan[control]
+    // Math.round(this.dataSource.data.map((item: any) => {
+    //   const total = Number(this.calWithFormula(`item.${control}`, item));
+    //   return total;
+    // }).reduce((acc, value) => acc + value, 0));
+  }
+
+  setTotal(control: string) {
+    const result = Math.round(this.dataSource.data.map((item: any) => {
+      const total = Number(this.calWithFormula(`item.${control}`, item));
+      console.log(control, total)
+      return total;
     }).reduce((acc, value) => acc + value, 0));
+    this.totalPlan[control] = result;
   }
 
   calWithFormula(formula: string, item: any) {
@@ -97,5 +115,9 @@ export class WetLeaseCarRentalComponent extends CommonComponent {
     this.calculation('totalAmountForex', data)
     this.calculation('totalAmountIncVAT', data)
     this.calculation('totalAmountExcVAT', data)
+    this.setTotal('numberOfTrip')
+    this.setTotal('totalAmountForex')
+    this.setTotal('totalAmountExcVAT')
+    this.setTotal('totalAmountIncVAT')
   }
 }

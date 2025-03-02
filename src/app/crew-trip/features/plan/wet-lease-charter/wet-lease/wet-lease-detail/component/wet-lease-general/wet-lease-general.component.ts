@@ -23,12 +23,14 @@ import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-mark
 import { HotelService } from 'src/app/crew-trip/core/services/hotel-service';
 import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
 import { WetLeaseService } from 'src/app/crew-trip/core/services/wet-lease.service';
+import { FlightMarketStatusEnum } from 'src/app/crew-trip/features/category/flight-market/flight-market.model';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DatepickerYearMonthComponent } from 'src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component';
 import { DatepickerComponent } from 'src/app/crew-trip/shared/component/datepicker/datepicker.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { SeparatorDirective } from 'src/app/crew-trip/shared/directive/separator.directive';
+import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
 import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant';
@@ -41,7 +43,7 @@ import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant'
     MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
     NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent,
-    DatepickerComponent, MatDatepickerModule, NgxControlError, ClickOutside
+    DatepickerComponent, MatDatepickerModule, NgxControlError, ClickOutside, ThousandsSeparatorDirective
   ],
   templateUrl: './wet-lease-general.component.html',
   styleUrl: './wet-lease-general.component.scss',
@@ -68,13 +70,19 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
 
   disabled = input<boolean>(false);
 
-  airports: any[] = [];
   hotels: any[] = [];
   carRentals: any[] = [];
   maxDate: any;
   errorDiffMonth = false;
 
   airportCodeChange = output<string>();
+
+  isRequiredSupplierHotel: boolean = false;
+  isRequiredUnitPriceForSingleRoomHotel: boolean = false;
+  isRequiredUnitPriceForTwinRoomHotel: boolean = false;
+
+  isRequiredSupplierTransportation: boolean = false;
+  isRequiredUnitPriceIncludingVatTransport: boolean = false;
 
   override formGroupDetail = this.formBuilder.group({
     airportCode: ['', [Validators.required]],
@@ -90,7 +98,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     super();
   }
 
-  setData(data:any){
+  setData(data: any) {
     if (data) {
       const _data = { ...data }
       this.formGroupDetail.patchValue(_data);
@@ -113,8 +121,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   override async ngOnInit() {
     await this.spinner.show();
     console.log(this.dataSourceHotel.data)
-    let airportRes = await this.flightMarketService.search({ option: 1, page: 0, size: 999999999, limit: 999999999 });;
-    this.airports = airportRes.data
+    this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL })
 
     if (this.formGroupDetail.controls.airportCode.value) {
       this.getHotelByAirport(this.formGroupDetail.controls.airportCode.value);
@@ -131,7 +138,9 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
       this.getExchangeRate()
     });
-
+    this.formGroupDetail.controls.startDate.valueChanges.subscribe(value => {
+      this.getExchangeRate()
+    });
     this.formGroupDetail.controls.isHotel.valueChanges.subscribe(value => {
       this.dataSourceHotel.data = [];
     });
@@ -165,6 +174,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
 
   airportChange(data: any) {
     this.dataSourceHotel.data = []
+    this.dataSourceCarRental.data = [];
     this.getHotelByAirport(data.value);
     this.getCaRentalByAirport(data.value);
     this.getExchangeRate();
@@ -229,12 +239,29 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     this.showDialogDeleteCarRental = !this.showDialogDeleteCarRental;
   }
 
-  invalidHotel() {
+  duplicateSupplierHotel() {
     if (this.dataSourceHotel.data) {
       return this.dataSourceHotel.data.some((item, index) => this.dataSourceHotel.data.map(mapItem => mapItem.hotelCode).indexOf(item.hotelCode) !== index);
     }
     return false;
   }
+
+  checkRequiredHotelAndTransportation() {
+    this.isRequiredSupplierHotel = this.dataSourceHotel.data.some((item: any) => !item.hotelCode);
+    this.isRequiredUnitPriceForSingleRoomHotel = this.dataSourceHotel.data.some((item: any) => !item.singleRoomPrice)
+    this.isRequiredUnitPriceForTwinRoomHotel = this.dataSourceHotel.data.some((item: any) => !item.twinRoomPrice)
+
+    this.isRequiredSupplierTransportation = this.dataSourceCarRental.data.some((item: any) => !item.carRentalCode);
+    this.isRequiredUnitPriceIncludingVatTransport = this.dataSourceCarRental.data.some((item: any) => !item.unitPrice);
+
+
+    return this.isRequiredSupplierHotel ||
+      this.isRequiredUnitPriceForSingleRoomHotel ||
+      this.isRequiredUnitPriceForTwinRoomHotel ||
+      this.isRequiredSupplierTransportation ||
+      this.isRequiredUnitPriceIncludingVatTransport
+  }
+
 
   addHotel() {
     const addItem = {
@@ -255,7 +282,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     this.toggleDialogDeleteHotel()
   }
 
-  invalidCarRental() {
+  duplicateCarRental() {
     if (this.dataSourceCarRental.data) {
       return this.dataSourceCarRental.data.map(item => item.carRentalCode).some((item, index, array) => array.indexOf(item) !== index);
     }

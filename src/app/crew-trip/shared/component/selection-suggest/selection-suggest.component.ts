@@ -62,9 +62,6 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 		}
 		this.setViewValueInit(this.formControl.value);
 
-		/*if (this.formControl.disabled) {
-			this.viewControl.disable();
-		}*/
 	}
 
 	@Input() size = 'sm';
@@ -124,7 +121,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 		});
 
 		this.formControl.statusChanges.subscribe((res) => {
-			if (this.formControl.disabled) {
+			if ('DISABLED' === res) {
 				this.viewControl.disable();
 			} else {
 				this.viewControl.enable();

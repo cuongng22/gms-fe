@@ -20,6 +20,7 @@ import { NgxControlError } from 'ngxtension/control-error';
 import { ifValidator } from 'ngxtension/if-validator';
 import { BaseService } from 'src/app/crew-trip/core/services/base-service';
 import { CharterService } from 'src/app/crew-trip/core/services/charter.service';
+import { FlightMarketStatusEnum } from 'src/app/crew-trip/features/category/flight-market/flight-market.model';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DatepickerYearMonthComponent } from 'src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
@@ -95,8 +96,12 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
 
 
   override ngOnInit(): void {
-    this.loadListFlightMarket({ status: 'Operational' });
+    this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL})
     this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
+      this.getExchangeRate()
+    });
+
+    this.formGroupDetail.controls.airportCode.valueChanges.subscribe(value => {
       this.getExchangeRate()
     });
 
