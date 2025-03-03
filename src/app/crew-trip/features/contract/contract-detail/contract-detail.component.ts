@@ -344,7 +344,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         vnaTransId: ['', [Validators.maxLength(50)]],
         expenseCatgId: ['', [Validators.maxLength(50)]],
         priceNoTax: [],
-        taxCode: [,[Validators.maxLength(24), Validators.pattern(PATTERN.STRING),]],
+        taxCode: [,[Validators.maxLength(24), Validators.pattern(PATTERN.STRING_NUMBER1),]],
         taxRate: [, [Validators.pattern(PATTERN.NUMBER)]],
         originalAmount3: [],
         priceWithTax: [],
@@ -623,7 +623,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   async nationSelected(event: any) {
     const nation = this.listQuocGia.find((s: any) => s.id === (event?.value || event),);
     this.formGroupDetail.patchValue({
-      // nationId: nation?.id,
+      nationId: nation?.id,
       nation: nation?.code, marketType: (nation?.code === 'VN' ? 'Domestic' : 'International') || '',
     });
   }
