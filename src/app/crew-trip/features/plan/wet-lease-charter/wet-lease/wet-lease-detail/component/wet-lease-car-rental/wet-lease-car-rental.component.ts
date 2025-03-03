@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +25,9 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.component';
 import { formula } from './wet-lease-car-rental.model';
 import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
+import { Subscription } from 'rxjs';
+import { BaseService } from 'src/app/crew-trip/core/services/base-service';
+import { WetLeaseService } from 'src/app/crew-trip/core/services/wet-lease.service';
 
 @Component({
   selector: 'app-wet-lease-car-rental',
@@ -40,7 +43,8 @@ import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/
   styleUrl: './wet-lease-car-rental.component.scss',
   providers: [DataTransformPipe]
 })
-export class WetLeaseCarRentalComponent extends CommonComponent {
+export class WetLeaseCarRentalComponent extends CommonComponent implements OnDestroy {
+  override baseService: WetLeaseService = inject(WetLeaseService);
   CategoryEnum = CategoryEnum;
   headerRowDef1 = ['transportName', 'numberOfTrip', 'totalAmountForex', 'totalAmount'];
   headerRowDef2 = ['totalAmountExcVAT', 'totalAmountIncVAT'];
@@ -51,7 +55,11 @@ export class WetLeaseCarRentalComponent extends CommonComponent {
   category = input.required<CategoryEnum>(); // quốc tế hoặc quốc nội
   dataGeneral = input<any>();
   disabled = input<boolean>(false);
-  totalPlan: any = {}
+  totalPlan: any = {};
+
+  exchangeRateSubscription: Subscription;
+  rateVatSubscription: Subscription;
+  unitPriceTransportationSubscription: Subscription;
 
   constructor() {
     super();
@@ -61,14 +69,49 @@ export class WetLeaseCarRentalComponent extends CommonComponent {
       }
     });
   }
+  override ngOnInit(): void {
+    this.exchangeRateSubscription = this.baseService.exchangeRate$.subscribe(data => {
+      if (data) {
+        const _exchangeRate = Number(data);
+        if (this.dataGeneral()) {
+          this.dataGeneral().exchangeRate = _exchangeRate;
+          this.calculationAll()
+        }
+      }
+    });
+
+    this.rateVatSubscription = this.baseService.rateVat$.subscribe(data => {
+      if (data) {
+        const _rateVat = Number(data);
+        if (this.dataGeneral()) {
+          this.dataGeneral().rateVat = _rateVat;
+          this.calculationAll()
+        }
+      }
+    });
+
+    this.unitPriceTransportationSubscription = this.baseService.unitPriceTransportation$.subscribe(data => {
+      if (data) {
+        this.dataSource.data.forEach(element => {
+          if (element.transportCode === data.carRentalCode) {
+            element.unitPrice = Number(data.unitPrice);
+            this.calculationAll()
+          }
+        });
+      }
+    });
+  }
 
 
   setDataSource(value: any[]) {
     this.dataSource.data = [...value];
+    this.calculationAll()
+  }
+  calculationAll() {
     this.dataSource.data.forEach(element => {
-      this.calculation('totalAmountForex', element)
-      this.calculation('totalAmountIncVAT', element)
-      this.calculation('totalAmountExcVAT', element)
+      this.calculationItem('totalAmountForex', element)
+      this.calculationItem('totalAmountIncVAT', element)
+      this.calculationItem('totalAmountExcVAT', element)
     });
 
     this.setTotal('numberOfTrip')
@@ -79,18 +122,13 @@ export class WetLeaseCarRentalComponent extends CommonComponent {
 
   getTotal(control: string) {
     return this.totalPlan[control]
-    // Math.round(this.dataSource.data.map((item: any) => {
-    //   const total = Number(this.calWithFormula(`item.${control}`, item));
-    //   return total;
-    // }).reduce((acc, value) => acc + value, 0));
   }
 
   setTotal(control: string) {
-    const result = Math.round(this.dataSource.data.map((item: any) => {
+    const result = (this.dataSource.data.map((item: any) => {
       const total = Number(this.calWithFormula(`item.${control}`, item));
-      console.log(control, total)
       return total;
-    }).reduce((acc, value) => acc + value, 0));
+    }).reduce((acc, value) => acc + value, 0)).toFixed(3);
     this.totalPlan[control] = result;
   }
 
@@ -102,7 +140,7 @@ export class WetLeaseCarRentalComponent extends CommonComponent {
     return formulaFunction(item, this.dataGeneral());
   }
 
-  calculation(control: string, item: any) {
+  calculationItem(control: string, item: any) {
     const _formula = formula[control].formula;
     item[control] = this.calWithFormula(_formula, item)
   }
@@ -112,12 +150,18 @@ export class WetLeaseCarRentalComponent extends CommonComponent {
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
-    this.calculation('totalAmountForex', data)
-    this.calculation('totalAmountIncVAT', data)
-    this.calculation('totalAmountExcVAT', data)
+    this.calculationItem('totalAmountForex', data)
+    this.calculationItem('totalAmountIncVAT', data)
+    this.calculationItem('totalAmountExcVAT', data)
     this.setTotal('numberOfTrip')
     this.setTotal('totalAmountForex')
     this.setTotal('totalAmountExcVAT')
     this.setTotal('totalAmountIncVAT')
+  }
+
+  ngOnDestroy() {
+    this.exchangeRateSubscription.unsubscribe();
+    this.rateVatSubscription.unsubscribe();
+    this.unitPriceTransportationSubscription.unsubscribe();
   }
 }

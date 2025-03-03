@@ -55,6 +55,7 @@ export class CharterDetailComponent extends CommonComponent {
   private _planTransports: any[] = [];
 
   showDialogClose = false;
+  isCreateData = false;
 
   override formGroupDetail = this.formBuilder.group({
     id: [],
@@ -70,6 +71,7 @@ export class CharterDetailComponent extends CommonComponent {
 
 
   }
+
 
   async getDetailById(id: number | undefined) {
     try {
@@ -118,19 +120,26 @@ export class CharterDetailComponent extends CommonComponent {
   }
 
   createData() {
-    const _isTransport = this.charterGeneral.formGroupDetail.controls.isTransport.value;
-    this.charterGeneral.formGroupDetail.markAllAsTouched()
-    if (this.charterGeneral.formGroupDetail.valid &&
-      !this.charterGeneral.invalidCarRental() &&
-      (!_isTransport || (_isTransport && this.charterGeneral.dataSource.data.length > 0))
+    this.charterGeneral.formGroupDetail.markAllAsTouched();
+    const isRequiredTransportation = this.charterGeneral.checkRequiredTransportation();
+    const _dataGeneral = this.charterGeneral.formGroupDetail.getRawValue();
+    if (this.charterGeneral.formGroupDetail.invalid ||
+      this.charterGeneral.duplicateCarRental()
     ) {
-      if (this.charterHotel?.dataSource.data && this.charterHotel?.dataSource.data.length > 0 &&
-        this.charterCarRental?.dataSource.data && this.charterCarRental?.dataSource.data.length > 0
-      ) {
-        this.toggleDialogCreateData();
-      } else {
-        this.confirmCreateData()
-      }
+      return
+    } else if (
+      (_dataGeneral.isTransport && this.charterGeneral.dataSource.data.length <= 0) ||
+      isRequiredTransportation
+    ) {
+      this.showError($localize`:@@cannotSaveDataWithoutTransportationData:Cannot create data without transportation data`)
+      return;
+    } else if (
+      ((_dataGeneral.isHotel && this.charterHotel?.dataSource.data && this.charterHotel?.dataSource.data.length > 0)) ||
+      ((_dataGeneral.isTransport && this.charterCarRental?.dataSource.data && this.charterCarRental?.dataSource.data.length > 0))
+    ) {
+      this.toggleDialogCreateData();
+    } else {
+      this.confirmCreateData()
     }
   }
 
@@ -190,62 +199,67 @@ export class CharterDetailComponent extends CommonComponent {
     });
     this.planTransports = _planTransports;
     this.dataGeneral = { ...this.charterGeneral.formGroupDetail.getRawValue() };
-
+    this.isCreateData = true;
     this.spinner.hide()
   }
 
   override async save(): Promise<any> {
-    await this.spinner.show()
-    const _isTransport = this.charterGeneral.formGroupDetail.controls.isTransport.value;
+
+    const isRequiredTransportation = this.charterGeneral.checkRequiredTransportation();
+    const _dataGeneral = this.charterGeneral.formGroupDetail.getRawValue();
     this.charterGeneral.formGroupDetail.markAllAsTouched()
-    if (this.charterGeneral.formGroupDetail.valid &&
-      !this.charterGeneral.invalidCarRental() &&
-      (!_isTransport || (_isTransport && this.charterGeneral.dataSource.data.length > 0))
+    if (this.charterGeneral.formGroupDetail.invalid ||
+      this.charterGeneral.duplicateCarRental()
     ) {
+      return
+    } else if (
+      (_dataGeneral.isTransport && this.charterGeneral.dataSource.data.length <= 0) ||
+      isRequiredTransportation
+    ) {
+      this.showError($localize`:@@cannotSaveDataWithoutTransportationData:Cannot save data without transportation data`)
+      return;
+    }
+
+    await this.spinner.show()
+    const _priceTransports = this.charterGeneral.dataSource.data;
+    const _planHotel = this.charterHotel.dataSource.data;
+    const _planTransports = this.charterCarRental.dataSource.data;
+
+    let _body: any = { ..._dataGeneral }
+    _body.id = this.formGroupDetail.controls.id.value;
+    _body.completed = this.formGroupDetail.controls.completed.value;
+    _body.startDate = moment(_dataGeneral.startDate).format(this.Constant.LOCAL_DATE_FORMAT);
+    _body.endDate = moment(_dataGeneral.endDate).format(this.Constant.LOCAL_DATE_FORMAT);
+    _body.priceTransports = [..._priceTransports];
+    _body.planHotels = {
+      ...Object.fromEntries(_planHotel.map(([key, value]) => [key, Object.fromEntries(Object.entries(value).map(([key, value]) => [key, Number(value)]))])
+      )
+    };
+    _body.planTransports = [..._planTransports];
+    _body.totalNumberOfTrip = _planTransports.map(item => item.numberOfTrip).reduce((acc, value) => acc + value, 0);
+    _body.totalForex = [..._planHotel.map(item => item[1].totalForex).flat(), ..._planTransports.map(item => item.totalAmountForex).flat()].reduce((acc, value) => acc + value, 0)
+    _body.totalIncVAT = [..._planHotel.map(item => item[1].totalIncVAT).flat(), ..._planTransports.map(item => item.totalAmountIncVat).flat()].reduce((acc, value) => acc + value, 0);
+    _body.totalExcVAT = [..._planHotel.map(item => item[1].totalExcVAT).flat(), ..._planTransports.map(item => item.totalAmountExcVat).flat()].reduce((acc, value) => acc + value, 0)
 
 
-      const _dataGeneral = this.charterGeneral.formGroupDetail.getRawValue();
-      const _priceTransports = this.charterGeneral.dataSource.data;
-      const _planHotel = this.charterHotel.dataSource.data;
-      const _planTransports = this.charterCarRental.dataSource.data;
+    console.log(_body);
 
-      let _body: any = { ..._dataGeneral }
-      _body.id = this.formGroupDetail.controls.id.value;
-      _body.completed = this.formGroupDetail.controls.completed.value;
-      _body.startDate = moment(_dataGeneral.startDate).format(this.Constant.LOCAL_DATE_FORMAT);
-      _body.endDate = moment(_dataGeneral.endDate).format(this.Constant.LOCAL_DATE_FORMAT);
-      _body.priceTransports = [..._priceTransports];
-      _body.planHotels = {
-        ...Object.fromEntries(_planHotel.map(([key, value]) => [key, Object.fromEntries(Object.entries(value).map(([key, value]) => [key, Number(value)]))])
-        )
-      };
-      _body.planTransports = [..._planTransports];
-      _body.totalNumberOfTrip = _planTransports.map(item => item.numberOfTrip).reduce((acc, value) => acc + value, 0);
-      _body.totalForex = [..._planHotel.map(item => item[1].totalForex).flat(), ..._planTransports.map(item => item.totalAmountForex).flat()].reduce((acc, value) => acc + value, 0)
-      _body.totalIncVAT = [..._planHotel.map(item => item[1].totalIncVAT).flat(), ..._planTransports.map(item => item.totalAmountIncVat).flat()].reduce((acc, value) => acc + value, 0);
-      _body.totalExcVAT = [..._planHotel.map(item => item[1].totalExcVAT).flat(), ..._planTransports.map(item => item.totalAmountExcVat).flat()].reduce((acc, value) => acc + value, 0)
-
-
-      console.log(_body);
-
-      try {
-        const update = !!this.formGroupDetail.getRawValue().id;
-        let res;
-        if (update) {
-          res = await this.baseService.update(_body);
-        } else {
-          res = await this.baseService.create(_body);
-        }
-        this.baseService.showSuccess(
-          update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS,
-        );
-        if (res.data && !this.id()) {
-          this.router.navigate(['/plan/est-plan/wet-lease-charter/charter-detail', res.data])
-        }
-      } finally {
-        this.spinner.hide()
+    try {
+      const update = !!this.formGroupDetail.getRawValue().id;
+      let res;
+      if (update) {
+        res = await this.baseService.update(_body);
+      } else {
+        res = await this.baseService.create(_body);
       }
-
+      this.baseService.showSuccess(
+        update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS,
+      );
+      if (res.data && !this.id()) {
+        this.router.navigate(['/plan/est-plan/wet-lease-charter/charter-detail', res.data])
+      }
+    } finally {
+      this.spinner.hide()
     }
 
     this.spinner.hide()

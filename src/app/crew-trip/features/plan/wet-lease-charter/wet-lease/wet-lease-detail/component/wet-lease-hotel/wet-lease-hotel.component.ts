@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -25,6 +25,9 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.component';
 import { formula } from './wet-lease-hotel.model';
 import { forEach } from 'lodash';
+import { BaseService } from 'src/app/crew-trip/core/services/base-service';
+import { WetLeaseService } from 'src/app/crew-trip/core/services/wet-lease.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-wet-lease-hotel',
@@ -40,7 +43,8 @@ import { forEach } from 'lodash';
   styleUrl: './wet-lease-hotel.component.scss',
   providers: [DataTransformPipe]
 })
-export class WetLeaseHotelComponent extends CommonComponent {
+export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy {
+  override baseService: WetLeaseService = inject(WetLeaseService);
   CategoryEnum = CategoryEnum;
   headerRowDef1Common = ['stt', 'leaseDate', 'totalRoom', 'totalCountForeign', 'totalAmount'];
   headerRowDef2Common = ['totalQtySingleRoom', 'totalQtyTwinRoom', 'totalExcVAT', 'totalIncVAT'];
@@ -65,6 +69,10 @@ export class WetLeaseHotelComponent extends CommonComponent {
   priceHotel = input<any[]>();
   dataGeneral = input<any>()
   disabled = input<boolean>(false);
+
+  exchangeRateSubscription: Subscription;
+  rateVatSubscription: Subscription;
+  roomPriceSubscription: Subscription;
 
   constructor() {
     super();
@@ -95,6 +103,44 @@ export class WetLeaseHotelComponent extends CommonComponent {
   }
   override ngOnInit(): void {
     this.processColumnTable()
+
+    this.exchangeRateSubscription = this.baseService.exchangeRate$.subscribe(data => {
+      if (data) {
+        const _exchangeRate = Number(data);
+        if (this.dataGeneral()) {
+          this.dataGeneral().exchangeRate = _exchangeRate;
+          this.calculation()
+        }
+      }
+    });
+
+    this.rateVatSubscription = this.baseService.rateVat$.subscribe(data => {
+      if (data) {
+        const _rateVat = Number(data);
+        if (this.dataGeneral()) {
+          this.dataGeneral().rateVat = _rateVat;
+          this.calculation()
+        }
+      }
+    });
+
+    this.roomPriceSubscription = this.baseService.roomPrice$.subscribe(data => {
+      if (data) {
+        this.dataSource.data.forEach(element => {
+          Object.entries<any>(element.hotelItem).forEach(([_hotelCode, _hotelValue]) => {
+            if (data.hotelCode === _hotelCode) {
+              _hotelValue.singleRoomPrice = Number(data.singleRoomPrice);
+              _hotelValue.twinRoomPrice = Number(data.twinRoomPrice);
+            }
+          })
+
+          this.getTotalRoom(element);
+          this.calTotalCountForeign(element);
+          this.calTotalAmount(element);
+          this.calTotalPlanBudget(element);
+        });
+      }
+    });
   }
 
   setDataSource(value: any[]) {
@@ -196,16 +242,17 @@ export class WetLeaseHotelComponent extends CommonComponent {
   // tính tiền ngoại tệ
   calTotalCountForeign(element: any) {
     // if (this.category() === CategoryEnum.INTERNATIONAL) {
-    element.totalCountForeign = Object.entries(element.hotelItem).map((item: any[]) => {
-      return Number(item[1].singleRoomPrice ?? 0) * Number(item[1].totalSingleRoom ?? 0) + Number(item[1].twinRoomPrice ?? 0) * Number(item[1].totalTwinRoom ?? 0)
+    element.totalCountForeign = Object.entries<any>(element.hotelItem).map(([_hotelCode, _hotelValue]) => {
+      return Number(_hotelValue.singleRoomPrice ?? 0) * Number(_hotelValue.totalSingleRoom ?? 0) + Number(_hotelValue.twinRoomPrice ?? 0) * Number(_hotelValue.totalTwinRoom ?? 0)
     }).reduce((acc, value) => acc + value, 0)
     // }
   }
 
   // tính thành tiền chưa vat và có vat
   calTotalAmount(element: any) {
-    const _totalCountForeign = Object.entries(element.hotelItem).map((item: any[]) => {
-      return Number(item[1].singleRoomPrice ?? 0) * Number(item[1].totalSingleRoom ?? 0) + Number(item[1].twinRoomPrice ?? 0) * Number(item[1].totalTwinRoom ?? 0)
+    debugger
+    const _totalCountForeign = Object.entries<any>(element.hotelItem).map(([_hotelCode, _hotelValue]) => {
+      return Number(_hotelValue.singleRoomPrice ?? 0) * Number(_hotelValue.totalSingleRoom ?? 0) + Number(_hotelValue.twinRoomPrice ?? 0) * Number(_hotelValue.totalTwinRoom ?? 0)
     }).reduce((acc, value) => acc + value, 0);
     // element.totalExcVAT = _totalCountForeign * (this.dataGeneral().exchangeRate ?? 1);
     // element.totalIncVAT = (element.totalExcVAT) + (element.totalExcVAT * (this.dataGeneral().rateVat ?? 0) / 100)
@@ -226,5 +273,11 @@ export class WetLeaseHotelComponent extends CommonComponent {
     this.dataSource.data.forEach(element => {
       this.calTotalPlanBudget(element);
     });
+  }
+
+  ngOnDestroy() {
+    this.exchangeRateSubscription.unsubscribe();
+    this.rateVatSubscription.unsubscribe();
+    this.roomPriceSubscription.unsubscribe();
   }
 }

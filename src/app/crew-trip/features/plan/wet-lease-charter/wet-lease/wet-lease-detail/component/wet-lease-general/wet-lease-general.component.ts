@@ -149,6 +149,13 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
       this.dataSourceCarRental.data = [];
     });
 
+    this.formGroupDetail.controls.exchangeRate.valueChanges.subscribe(_value => {
+      this.wetLeaseService.exchangeRateChange(_value)
+    })
+    this.formGroupDetail.controls.rateVat.valueChanges.subscribe(_value => {
+      this.wetLeaseService.rateVatChange(_value)
+    })
+
   }
 
   submit(): void {
@@ -229,6 +236,12 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
+    debugger
+    if (['singleRoomPriceEditing', 'twinRoomPriceEditing'].includes(control)) {
+      this.wetLeaseService.roomPriceChange(data)
+    } else if ('unitPriceEditing' === control) {
+      this.wetLeaseService.unitPriceTransportationChange(data)
+    }
   }
 
   toggleDialogDeleteHotel() {

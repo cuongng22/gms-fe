@@ -79,6 +79,8 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
       priceTwinRoomLCO: [null, ifValidator(() => this.isHotel, [Validators.required])],
     })
   });
+  isRequiredCarTypeTransportation: boolean = false;
+  isRequiredPriceIncVatTransportation: boolean = false;
 
   constructor() {
     super();
@@ -96,7 +98,7 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
 
 
   override ngOnInit(): void {
-    this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL})
+    this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL })
     this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
       this.getExchangeRate()
     });
@@ -165,7 +167,7 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
     return this.errorDiffMonth ? { errorDiffMonth: true } : null;
   }
 
-  invalidCarRental() {
+  duplicateCarRental() {
     if (this.dataSource.data) {
       return this.dataSource.data.map(item => item.carType.toLowerCase()).some((item, index, array) => array.indexOf(item) !== index);
     }
@@ -181,16 +183,25 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
     this.dataSource.data = [...this.dataSource.data];
   }
 
-  async showConfirmDeleteCarRental(id: any) {
+  async showConfirmDeleteTransportation(id: any) {
     this.indexDeleteCarRental = id
     this.toggleDialogDelete();
   }
 
-  deleteCarRental() {
+  deleteTransportation() {
     this.dataSource.data.splice(this.indexDeleteCarRental, 1);
     this.dataSource.data = [...this.dataSource.data]
     this.toggleDialogDelete()
   }
+
+  checkRequiredTransportation() {
+    this.isRequiredCarTypeTransportation = this.dataSource.data.some((item: any) => !item.carType);
+    this.isRequiredPriceIncVatTransportation = this.dataSource.data.some((item: any) => !item.priceIncVat);
+
+    return this.isRequiredCarTypeTransportation ||
+      this.isRequiredPriceIncVatTransportation
+  }
+
 
 
   clickEdit(data: any, control: string) {
