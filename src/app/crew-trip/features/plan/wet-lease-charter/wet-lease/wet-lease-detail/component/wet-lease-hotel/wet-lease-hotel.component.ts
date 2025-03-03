@@ -74,8 +74,6 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
   rateVatSubscription: Subscription;
   roomPriceSubscription: Subscription;
 
-  Math = Math;
-
   constructor() {
     super();
     effect(() => {
@@ -128,7 +126,6 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
 
     this.roomPriceSubscription = this.baseService.roomPrice$.subscribe(data => {
       if (data) {
-        this.totalPlannedBudget = {};
         this.dataSource.data.forEach(element => {
           Object.entries<any>(element.hotelItem).forEach(([_hotelCode, _hotelValue]) => {
             if (data.hotelCode === _hotelCode) {
@@ -182,7 +179,6 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
   }
 
   calculation() {
-    console.log(this.dataSource.data)
     this.totalPlannedBudgetRowDef.forEach(rowDef => {
       this.totalPlannedBudget[rowDef] = 0;
     });
@@ -204,7 +200,7 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
   }
 
   getTotalPlannedBudget(control: any) {
-    return Math.round(this.totalPlannedBudget[control]);
+    return this.totalPlannedBudget[control];
   }
 
   setTotalPlannedBudget(control: string, element: any) {
@@ -215,11 +211,11 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
       if (_formula) {
         const _hotelItem = element.hotelItem[hotelCode];
         const result = this.calWithFormula(_formula, _hotelItem, this.dataGeneral());
-        this.totalPlannedBudget[control] = Math.round((this.totalPlannedBudget[control] ?? 0) + Number(result));
+        this.totalPlannedBudget[control] = (this.totalPlannedBudget[control] ?? 0) + Number(result);
       }
     } else if (['ft2TotalExcVAT', 'ft2TotalIncVAT', 'ft2TotalCountForeign'].includes(control)) {
       if (_formula) {
-        this.totalPlannedBudget[control] = Math.round((this.totalPlannedBudget[control] ?? 0) + Number(this.calWithFormula(_formula, element, this.dataGeneral())));
+        this.totalPlannedBudget[control] = (this.totalPlannedBudget[control] ?? 0) + Number(this.calWithFormula(_formula, element, this.dataGeneral()));
       }
     } else {
       this.totalPlannedBudget[control] = null
@@ -232,7 +228,7 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
       'item', 'dataGeneral',
       `return ${formula};`
     );
-    return Math.round(formulaFunction(item, dataGeneral));
+    return formulaFunction(item, dataGeneral);
   }
 
   // tính toán tổng số phòng
@@ -245,23 +241,23 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
 
   // tính tiền ngoại tệ
   calTotalCountForeign(element: any) {
-    const _totalForex = Object.entries<any>(element.hotelItem).map(([_hotelCode, _hotelValue]) => {
+    // if (this.category() === CategoryEnum.INTERNATIONAL) {
+    element.totalCountForeign = Object.entries<any>(element.hotelItem).map(([_hotelCode, _hotelValue]) => {
       return Number(_hotelValue.singleRoomPrice ?? 0) * Number(_hotelValue.totalSingleRoom ?? 0) + Number(_hotelValue.twinRoomPrice ?? 0) * Number(_hotelValue.totalTwinRoom ?? 0)
     }).reduce((acc, value) => acc + value, 0)
-    if (this.category() === CategoryEnum.INTERNATIONAL) {
-      element.totalCountForeign = this.Math.round(_totalForex)
-    } else {
-      element.totalCountForeign = 0;
-    }
-    return _totalForex;
+    // }
   }
 
   // tính thành tiền chưa vat và có vat
   calTotalAmount(element: any) {
+    debugger
+    const _totalCountForeign = Object.entries<any>(element.hotelItem).map(([_hotelCode, _hotelValue]) => {
+      return Number(_hotelValue.singleRoomPrice ?? 0) * Number(_hotelValue.totalSingleRoom ?? 0) + Number(_hotelValue.twinRoomPrice ?? 0) * Number(_hotelValue.totalTwinRoom ?? 0)
+    }).reduce((acc, value) => acc + value, 0);
     // element.totalExcVAT = _totalCountForeign * (this.dataGeneral().exchangeRate ?? 1);
     // element.totalIncVAT = (element.totalExcVAT) + (element.totalExcVAT * (this.dataGeneral().rateVat ?? 0) / 100)
-    element.totalIncVAT = Math.round(this.calTotalCountForeign(element) * (this.dataGeneral().exchangeRate ?? 1));
-    element.totalExcVAT = Math.round(element.totalIncVAT / (1 + (this.dataGeneral().rateVat ?? 0) / 100))
+    element.totalIncVAT = _totalCountForeign * (this.dataGeneral().exchangeRate ?? 1);
+    element.totalExcVAT = element.totalIncVAT / (1 + (this.dataGeneral().rateVat ?? 0) / 100)
   }
 
 

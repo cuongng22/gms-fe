@@ -18,6 +18,7 @@ import { WetLeaseGeneralComponent } from './component/wet-lease-general/wet-leas
 import { WetLeaseHotelComponent } from './component/wet-lease-hotel/wet-lease-hotel.component';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { CategoryEnum } from '../../../budget-procurement/budget-procurement.model';
+import { dataExample } from './wet-lease-detail.model';
 import { WetLeaseCarRentalComponent } from './component/wet-lease-car-rental/wet-lease-car-rental.component';
 import moment from 'moment';
 import { WetLeaseService } from 'src/app/crew-trip/core/services/wet-lease.service';
@@ -61,8 +62,6 @@ export class WetLeaseDetailComponent extends CommonComponent {
   showDialogCreateData: boolean = false;
   isCreateData = false;
 
-  showDialogClose = false;
-
   constructor() {
     super();
   }
@@ -77,10 +76,9 @@ export class WetLeaseDetailComponent extends CommonComponent {
       await this.spinner.show();
       if (id) {
         let resDetail = await this.baseService.detail(this.id());
-        this.formGroupDetail.patchValue({ ...resDetail.data });
-
+        this.formGroupDetail.patchValue({ ...resDetail.data })
         this.airportCodeChange(resDetail.data.airportCode)
-        this.dataGeneral = { ...resDetail.data, id: this.id() };
+        this.dataGeneral = { ...resDetail.data };
         this.wetLeaseGeneral.setData(this.dataGeneral)
         this.planHotel = [...resDetail.data.planHotel];
         this.planTransports = [...resDetail.data.planTransports];
@@ -107,10 +105,10 @@ export class WetLeaseDetailComponent extends CommonComponent {
   setPriceHotel() {
     const _priceHotelsList: any[] = this.dataGeneral.priceHotelsList;
     this.planHotel.forEach((element: any) => {
-      Object.entries<any>(element.hotelItem).forEach(([hotelCode, hotelValue]) => {
-        const _itemPrice = _priceHotelsList.find(item => item.hotelCode === hotelCode);
-        hotelValue.singleRoomPrice = Number(_itemPrice.singleRoomPrice);
-        hotelValue.twinRoomPrice = Number(_itemPrice.twinRoomPrice);
+      Object.entries(element.hotelItem).forEach((elementHotel: any[]) => {
+        const _itemPrice = _priceHotelsList.find(item => item.hotelCode === elementHotel[0]);
+        elementHotel[1].singleRoomPrice = Number(_itemPrice.singleRoomPrice);
+        elementHotel[1].twinRoomPrice = Number(_itemPrice.twinRoomPrice);
       })
     });
   }
@@ -221,25 +219,6 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.spinner.hide()
   }
 
-  async saveAndProccess() {
-    const res = await this.save();
-    if (res?.data && !this.id()) {
-      this.router.navigate(['/plan/est-plan/wet-lease-charter/wet-lease-detail', res.data])
-    } else if (this.id()) {
-      this.getDetailById(this.id())
-    }
-  }
-
-  async saveAndClose() {
-    try {
-      await this.save();
-      debugger
-      this.router.navigate(['/plan/est-plan/wet-lease-charter'], { fragment: 'wet-lease' })
-    } catch (error) {
-      console.error(error)
-    }
-
-  }
 
   override async save(): Promise<any> {
     this.wetLeaseGeneral.formGroupDetail.markAllAsTouched();
@@ -294,10 +273,9 @@ export class WetLeaseDetailComponent extends CommonComponent {
       this.baseService.showSuccess(
         update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS,
       );
-      return res;
-    } catch (error: any) {
-      console.error(error)
-      throw error;
+      if (res.data && !this.id()) {
+        this.router.navigate(['/plan/est-plan/wet-lease-charter/wet-lease-detail', res.data])
+      }
     } finally {
       this.spinner.hide()
     }
@@ -308,13 +286,6 @@ export class WetLeaseDetailComponent extends CommonComponent {
   async airportCodeChange(event: string) {
     const res = await this._flightMarketService.search({ code: event, option: 0 });
     this.category.set(res.data.content[0].marketType)
-  }
-
-  wetLeaseGeneralClearData() {
-    this.wetLeaseHotel.dataSource.data = [];
-    this.planHotel = []
-    this.wetLeaseCarRental.dataSource.data = [];
-    this.planTransports = []
   }
 
   get planHotel() {
@@ -353,8 +324,5 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.showDialogCreateData = !this.showDialogCreateData;
   }
 
-  toggleDialogClose() {
-    this.showDialogClose = !this.showDialogClose;
-  }
 
 }
