@@ -30,3 +30,11 @@ Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To u
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+
+## Building Production
+1. copy file certificate to prj first.
+2. Sửa lại url host trong file `environment.ts`
+3. Sử dụng docker compose để build up: 
+```
+docker-compose up --build -d
+```

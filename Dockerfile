@@ -27,8 +27,8 @@ COPY --from=build /app/dist/crew-trip /usr/share/nginx/html/crew-trip/fe
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Copy certificate
-COPY /opt/certificate/crewtrip_certificate.pem /etc/nginx/ssl/cert.pem
-COPY /opt/certificate/private.key /etc/nginx/ssl/key.pem
+COPY ./crewtrip_certificate.pem /etc/nginx/ssl/crewtrip_certificate.pem
+COPY ./private.key /etc/nginx/ssl/private.key
 
 # Expose port 80 để Nginx phục vụ ứng dụng
 EXPOSE 80 443
