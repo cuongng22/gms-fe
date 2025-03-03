@@ -943,4 +943,5 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   airportCodeForcus() {
     this.listFlightMarket = cloneDeep(this.listFlightMarketAll)
   }
+
 }
