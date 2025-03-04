@@ -20,5 +20,6 @@
     <mat-error *ngxControlError="viewControl; track: 'required'">
       {{ label?label:label2 }} {{MESSAGE.REQUIRED}}
     </mat-error>
+    <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
   </mat-form-field>
 </div>

@@ -392,6 +392,7 @@ export class CommonComponent
         invalid.push(name);
       }
     }
+    console.log(invalid)
   }
 
   async loadListFlightMarket(param?: any) {

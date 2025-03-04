@@ -4,7 +4,8 @@ import {
   AfterContentInit, Component, EventEmitter, OnInit, Output, inject,
 } from '@angular/core';
 import {
-  FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,
+  AbstractControl,
+  FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators,
 } from '@angular/forms';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {
@@ -60,6 +61,7 @@ import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-
 import {NgxMatTimepickerComponent, NgxMatTimepickerToggleComponent} from "ngx-mat-timepicker";
 import {airportCode} from "src/app/crew-trip/shared/utils/error-message";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
+import moment from "moment";
 
 @Component({
   selector: 'app-contract-detail',
@@ -340,11 +342,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     if (addType === 'tblPriceUnit') {
       row = this.fb.group({
         id: [],
-        serviceCode: [this.listFeeService[0]?.code, [Validators.required]],
+        serviceCode: ['',],
         vnaTransId: ['', [Validators.maxLength(50)]],
         expenseCatgId: ['', [Validators.maxLength(50)]],
         priceNoTax: [],
-        taxCode: [,[Validators.maxLength(24), Validators.pattern(PATTERN.STRING_NUMBER1),]],
+        taxCode: [, [Validators.maxLength(24), Validators.pattern(PATTERN.STRING_NUMBER1),]],
         taxRate: [, [Validators.pattern(PATTERN.NUMBER)]],
         originalAmount3: [],
         priceWithTax: [],
@@ -353,11 +355,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         fromDate: [this.formGroupDetail.getRawValue().effectiveDate || ''],
         toDate: [this.formGroupDetail.getRawValue().expiryDate || ''],
         active: [true],
-        serviceName: [this.listFeeService[0]?.name],
-        serviceUnit: [this.listFeeService[0]?.unit],
+        serviceName: [],
+        serviceUnit: [],
       });
-      row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']),]);
-      row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']),]);
+      row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']), this.dateOverlapValidator(row)]);
+      row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']), this.dateOverlapValidator(row)]);
+      row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row)]);
       init && row.patchValue(init);
       if (row.getRawValue().active) {
         table.push(row);
@@ -944,4 +947,21 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     this.listFlightMarket = cloneDeep(this.listFlightMarketAll)
   }
 
+  dateOverlapValidator(row: any): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      let fromDate = moment(row.getRawValue().fromDate);
+      let toDate = moment(row.getRawValue().toDate);
+      let serviceCode = row.getRawValue().serviceCode;
+      if (fromDate && toDate && serviceCode) {
+        let isOveralap = this.dsPriceUnit.data.filter((s: any) => {
+          return (s.getRawValue().active == true && s.getRawValue().serviceCode === serviceCode &&
+            moment(s.getRawValue().fromDate).isBefore(toDate) && moment(s.getRawValue().toDate).isAfter(fromDate))
+        });
+        if (isOveralap.length > 1) {
+          return {overlapValidator: true, message: `${serviceCode} already exists in this period`};
+        }
+      }
+      return null;
+    };
+  }
 }
