@@ -25,14 +25,13 @@ import { MESSAGE } from '../../utils/constant';
 import { NgxControlError } from 'ngxtension/control-error';
 import { Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import { MatTooltipModule } from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-selection-suggest',
   standalone: true,
   imports: [FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatAutocompleteModule, CommonModule, NgxControlError,
-    MatIconModule, MatTooltipModule
+    MatIconModule
   ],
   templateUrl: './selection-suggest.component.html',
   styleUrl: './selection-suggest.component.scss',
@@ -72,7 +71,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
   @Input() attrDisplay = '';
   @Input() attrDisplay2 = '';
   @Input() editInlineTable = false
-  @Input() errors: any;
+  @Input() errors : any;
   @Output() clearInputEvent = new EventEmitter<void>();
   selectionChange = output<any>();
 
@@ -122,19 +121,6 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
       }));
     });
 
-    this.selectionControl.writeValue = (value: any) => {
-      const selected = this.options.find((option: any) => {
-        return value === (this.attrValue ? option[this.attrValue] : option);
-      });
-      if (selected) {
-        this.viewControl.setValue(
-          this.attrDisplay ? selected[this.attrDisplay] : selected
-        );
-      } else {
-        this.viewControl.setValue('');
-      }
-    };
-
     this.formControl.statusChanges.subscribe((res) => {
       if ('DISABLED' === res) {
         this.viewControl.disable();
@@ -145,8 +131,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
   }
 
 
-  setViewValueInit(value: any, force?: boolean) {
-    if (!this.setInitValue || force) {
+  setViewValueInit(value: any) {
+    if (!this.setInitValue) {
       if (value) {
         const selected = this.options.filter((option: any) => {
           return value === (this.attrValue ? option[this.attrValue] : option);
@@ -169,8 +155,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 
   filter(): void {
     const filterValue = this.inputSearch.nativeElement.value;
-    /*this.formControl.setValue(null);
-    this.formControl.updateValueAndValidity();*/
+    this.formControl.setValue(null);
+    this.formControl.updateValueAndValidity();
     this.keySearch.next(filterValue);
   }
 
@@ -178,7 +164,6 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
     this.viewControl.setValue(event.option.viewValue ?? null);
     this.viewControl.updateValueAndValidity();
     this.selectionControl.writeValue(event.option.value ?? null);
-    this.formControl.setValue(event.option.value ?? null);
     this.formControl.updateValueAndValidity();
     this.selectionChange.emit({
       value: event.option.value ?? null,
@@ -207,5 +192,13 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
     findResult?.focus(null, { preventScroll: false });
     findResult?.deselect(false);
     this.clearInputEvent.emit();
+  }
+
+  get errorMessage(){
+    if(this.errors?.overlapValidator){
+      this.viewControl.setErrors(this.errors.overlapValidator);
+      return this.errors.message
+    }
+    return null;
   }
 }
