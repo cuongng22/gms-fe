@@ -53,12 +53,15 @@ export const fromDate: { [key: string]: string } = {
   afterValidator: 'From date' + $localize` must before to date`,
   dateValidator: 'From date' + $localize` format is invalid`,
   matDatepickerParse: 'invalid format',
+  overlapValidator: 'already exists in this period',
 };
 export const toDate: { [key: string]: string } = {
   required: 'To date' + $localize` is required`,
   beforeValidator: 'To date' + $localize` must after from date`,
   dateValidator: 'To date' + $localize` format is invalid`,
   matDatepickerParse: 'invalid format',
+  overlapValidator: 'already exists in this period',
+
 };
 
 export const checkinFrom: { [key: string]: string } = {
