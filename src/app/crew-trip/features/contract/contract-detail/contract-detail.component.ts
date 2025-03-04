@@ -62,12 +62,11 @@ import {NgxMatTimepickerComponent, NgxMatTimepickerToggleComponent} from "ngx-ma
 import {airportCode} from "src/app/crew-trip/shared/utils/error-message";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 import moment from "moment";
-import {DropdownSuggestComponent} from "src/app/crew-trip/shared/component/dropdown-suggest/dropdown-suggest.component";
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [FormsModule, InputSizeComponent, MatFormFieldModule, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatRadioModule, MatSelect, MatSuffix, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgForOf, NgxMaterialTimepickerModule, MatTooltipModule, MatDialogModule, NgxControlError, SelectionSuggestComponent, ConfirmDialog, ThousandsSeparatorDirective, ControlErrorComponent, DropdownSuggestComponent,],
+  imports: [FormsModule, InputSizeComponent, MatFormFieldModule, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatRadioModule, MatSelect, MatSuffix, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgForOf, NgxMaterialTimepickerModule, MatTooltipModule, MatDialogModule, NgxControlError, SelectionSuggestComponent, ConfirmDialog, ThousandsSeparatorDirective, ControlErrorComponent,],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY), DecimalPipe],
