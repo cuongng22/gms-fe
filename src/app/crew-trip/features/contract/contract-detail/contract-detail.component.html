@@ -1031,7 +1031,7 @@
               <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Code</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
-                  <app-selection-suggest (selectionchange)="onChangeHHDV(row); fieldUpdateValueAndValidity(row)"
+                  <app-selection-suggest-2 (selectionchange)="onChangeHHDV(row); fieldUpdateValueAndValidity(row)"
                                          [editInlineTable]="true"
                                          [errors]="row.get('serviceCode').errors"
                                          [options]="listFeeService"

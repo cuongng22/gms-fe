@@ -62,11 +62,12 @@ import {NgxMatTimepickerComponent, NgxMatTimepickerToggleComponent} from "ngx-ma
 import {airportCode} from "src/app/crew-trip/shared/utils/error-message";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 import moment from "moment";
+import {SelectionSuggest2Component} from "src/app/crew-trip/shared/component/selection-suggest-2/selection-suggest-2.component";
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [FormsModule, InputSizeComponent, MatFormFieldModule, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatRadioModule, MatSelect, MatSuffix, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgForOf, NgxMaterialTimepickerModule, MatTooltipModule, MatDialogModule, NgxControlError, SelectionSuggestComponent, ConfirmDialog, ThousandsSeparatorDirective, ControlErrorComponent,],
+  imports: [FormsModule, InputSizeComponent, MatFormFieldModule, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatRadioModule, MatSelect, MatSuffix, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgForOf, NgxMaterialTimepickerModule, MatTooltipModule, MatDialogModule, NgxControlError, SelectionSuggestComponent, ConfirmDialog, ThousandsSeparatorDirective, ControlErrorComponent, SelectionSuggestComponent, SelectionSuggest2Component,],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY), DecimalPipe],
@@ -343,8 +344,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       row = this.fb.group({
         id: [],
         serviceCode: ['',],
-        vnaTransId: ['', [Validators.maxLength(50)]],
-        expenseCatgId: ['', [Validators.maxLength(50)]],
+        vnaTransId: ['',],
+        expenseCatgId: ['',],
         priceNoTax: [],
         taxCode: [, [Validators.maxLength(24), Validators.pattern(PATTERN.STRING_NUMBER1),]],
         taxRate: [, [Validators.pattern(PATTERN.NUMBER)]],
@@ -360,7 +361,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       });
       row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']), this.dateOverlapValidator(row)]);
       row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']), this.dateOverlapValidator(row)]);
-      row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row)]);
+      row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row),Validators.required]);
+
       init && row.patchValue(init);
       if (row.getRawValue().active) {
         table.push(row);
@@ -709,7 +711,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       supplierPhone: hotel ? hotel.phone : vehicle?.phone || '',
       supplierEmail: hotel ? hotel.email : vehicle?.email || '',
     });
-
+    console.log(this.formGroupDetail.getRawValue().priceUnitInfo,'this.formGroupDetail.getRawValue().priceUnitInfo')
     this.formGroupDetail.getRawValue().priceUnitInfo?.forEach((s: any) => {
       s = {
         ...s, //serviceFeeCode: s.serviceCode,
@@ -958,10 +960,30 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
             moment(s.getRawValue().fromDate).isBefore(toDate) && moment(s.getRawValue().toDate).isAfter(fromDate))
         });
         if (isOveralap.length > 1) {
+          let err={overlapValidator: true, message: `${serviceCode} already exists in this period`};
+          row.get('fromDate').setErrors(err);
+          row.get('toDate').setErrors(err);
+          row.get('serviceCode').setErrors(err);
           return {overlapValidator: true, message: `${serviceCode} already exists in this period`};
         }
+        else{
+          row.get('fromDate').setErrors(null);
+          row.get('toDate').setErrors(null);
+          row.get('serviceCode').setErrors(null);
+        }
+        row.get('fromDate').markAsTouched();
+        row.get('toDate').markAsTouched();
+        row.get('serviceCode').markAsTouched();
+
+        row.get('fromDate').markAsDirty();
+        row.get('toDate').markAsDirty();
+        row.get('serviceCode').markAsDirty();
+        row.updateValueAndValidity();
       }
       return null;
     };
+  }
+  test(row:any){
+    console.log(row)
   }
 }

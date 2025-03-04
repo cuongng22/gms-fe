@@ -27,19 +27,19 @@ import { Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 
 @Component({
-  selector: 'app-selection-suggest',
+  selector: 'app-selection-suggest-2',
   standalone: true,
   imports: [FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatAutocompleteModule, CommonModule, NgxControlError,
     MatIconModule
   ],
-  templateUrl: './selection-suggest.component.html',
-  styleUrl: './selection-suggest.component.scss',
+  templateUrl: './selection-suggest-2.component.html',
+  styleUrl: './selection-suggest-2.component.scss',
   hostDirectives: [NgxControlValueAccessor],
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class SelectionSuggest2Component implements OnInit, AfterViewInit, AfterViewChecked {
 
   ngAfterViewInit(): void {
     this.auto?.options.changes.subscribe((list: any[]) => {
@@ -73,6 +73,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
   @Input() editInlineTable = false
   @Input() errors : any;
   @Output() clearInputEvent = new EventEmitter<void>();
+  @Input() formControlName: string
   selectionChange = output<any>();
 
   private _options: any[] = [];
@@ -103,6 +104,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
   }
 
   ngOnInit(): void {
+    console.log(this.formControl.value)
     this.keySearch.pipe(
       debounceTime(500),
       distinctUntilChanged(),
@@ -132,7 +134,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 
 
   setViewValueInit(value: any) {
-    if (!this.setInitValue) {
+   /* if (!this.setInitValue) {
       if (value) {
         const selected = this.options.filter((option: any) => {
           return value === (this.attrValue ? option[this.attrValue] : option);
@@ -148,7 +150,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
       } else {
         this.setInitValue = false
       }
-    }
+    }*/
 
 
   }
@@ -192,5 +194,13 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
     findResult?.focus(null, { preventScroll: false });
     findResult?.deselect(false);
     this.clearInputEvent.emit();
+  }
+
+  get errorMessage(){
+    if(this.errors?.overlapValidator){
+      //this.viewControl.setErrors(this.errors.overlapValidator);
+      return this.errors.message
+    }
+    return null;
   }
 }
