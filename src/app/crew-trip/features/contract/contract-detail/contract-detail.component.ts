@@ -343,8 +343,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       row = this.fb.group({
         id: [],
         serviceCode: ['',],
-        vnaTransId: ['', [Validators.maxLength(50)]],
-        expenseCatgId: ['', [Validators.maxLength(50)]],
+        vnaTransId: ['',],
+        expenseCatgId: ['',],
         priceNoTax: [],
         taxCode: [, [Validators.maxLength(24), Validators.pattern(PATTERN.STRING_NUMBER1),]],
         taxRate: [, [Validators.pattern(PATTERN.NUMBER)]],
@@ -360,7 +360,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       });
       row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']), this.dateOverlapValidator(row)]);
       row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']), this.dateOverlapValidator(row)]);
-      row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row)]);
+      row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row),Validators.required]);
       init && row.patchValue(init);
       if (row.getRawValue().active) {
         table.push(row);
