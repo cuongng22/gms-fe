@@ -193,12 +193,4 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
     findResult?.deselect(false);
     this.clearInputEvent.emit();
   }
-
-  get errorMessage(){
-    if(this.errors?.overlapValidator){
-      this.viewControl.setErrors(this.errors.overlapValidator);
-      return this.errors.message
-    }
-    return null;
-  }
 }

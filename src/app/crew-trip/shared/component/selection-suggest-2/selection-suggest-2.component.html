@@ -3,14 +3,14 @@
     @if (label) {
     <mat-label i18n>{{ label }}</mat-label>
     }
-    <input type="text" matInput #inputSearch [matAutocomplete]="auto" (input)="filter()"
-      [required]="requiredControl" [formControl]="formControl" [matTooltip]="viewControl.value">
+    <input type="text" matInput #inputSearch [matAutocomplete]="auto" (input)="filter()" requireSelection
+      [required]="requiredControl" [formControl]="formControl">
     @if (formControl.value && !formControl.disabled) {
     <i class="material-symbols-outlined mr-15 pe-clear-input" matSuffix (click)="clearInput()">
       close
     </i>
     }
-    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
+    <mat-autocomplete requireSelection #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
       @for (option of filtered(); track option) {
       <mat-option [value]="attrValue?option[attrValue]:option">{{ attrDisplay ? option[attrDisplay] : option }}
       @if(attrDisplay2){  -  {{option[attrDisplay2]}}}
