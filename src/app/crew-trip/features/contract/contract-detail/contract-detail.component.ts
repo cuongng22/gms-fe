@@ -62,11 +62,12 @@ import {NgxMatTimepickerComponent, NgxMatTimepickerToggleComponent} from "ngx-ma
 import {airportCode} from "src/app/crew-trip/shared/utils/error-message";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 import moment from "moment";
+import {DropdownSuggestComponent} from "src/app/crew-trip/shared/component/dropdown-suggest/dropdown-suggest.component";
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [FormsModule, InputSizeComponent, MatFormFieldModule, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatRadioModule, MatSelect, MatSuffix, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgForOf, NgxMaterialTimepickerModule, MatTooltipModule, MatDialogModule, NgxControlError, SelectionSuggestComponent, ConfirmDialog, ThousandsSeparatorDirective, ControlErrorComponent,],
+  imports: [FormsModule, InputSizeComponent, MatFormFieldModule, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatRadioModule, MatSelect, MatSuffix, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgForOf, NgxMaterialTimepickerModule, MatTooltipModule, MatDialogModule, NgxControlError, SelectionSuggestComponent, ConfirmDialog, ThousandsSeparatorDirective, ControlErrorComponent, DropdownSuggestComponent,],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY), DecimalPipe],
@@ -343,8 +344,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       row = this.fb.group({
         id: [],
         serviceCode: ['',],
-        vnaTransId: ['', [Validators.maxLength(50)]],
-        expenseCatgId: ['', [Validators.maxLength(50)]],
+        vnaTransId: ['',],
+        expenseCatgId: ['',],
         priceNoTax: [],
         taxCode: [, [Validators.maxLength(24), Validators.pattern(PATTERN.STRING_NUMBER1),]],
         taxRate: [, [Validators.pattern(PATTERN.NUMBER)]],
@@ -360,7 +361,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       });
       row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']), this.dateOverlapValidator(row)]);
       row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']), this.dateOverlapValidator(row)]);
-      row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row)]);
+      row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row),Validators.required]);
       init && row.patchValue(init);
       if (row.getRawValue().active) {
         table.push(row);
