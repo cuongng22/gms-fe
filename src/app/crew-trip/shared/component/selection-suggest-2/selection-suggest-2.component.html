@@ -4,8 +4,8 @@
     <mat-label i18n>{{ label }}</mat-label>
     }
     <input type="text" matInput #inputSearch [matAutocomplete]="auto" (input)="filter()" requireSelection
-      [required]="requiredControl" [formControl]="viewControl">
-    @if (viewControl.value && !viewControl.disabled) {
+      [required]="requiredControl" [formControl]="formControl">
+    @if (formControl.value && !formControl.disabled) {
     <i class="material-symbols-outlined mr-15 pe-clear-input" matSuffix (click)="clearInput()">
       close
     </i>
@@ -17,8 +17,9 @@
       </mat-option>
       }
     </mat-autocomplete>
-    <mat-error *ngxControlError="viewControl; track: 'required'">
+    <mat-error *ngxControlError="formControl; track: 'required'">
       {{ label?label:label2 }} {{MESSAGE.REQUIRED}}
     </mat-error>
+    <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
   </mat-form-field>
 </div>
