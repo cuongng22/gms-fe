@@ -25,13 +25,14 @@ import { MESSAGE } from '../../utils/constant';
 import { NgxControlError } from 'ngxtension/control-error';
 import { Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-selection-suggest',
   standalone: true,
   imports: [FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatAutocompleteModule, CommonModule, NgxControlError,
-    MatIconModule
+    MatIconModule, MatTooltipModule
   ],
   templateUrl: './selection-suggest.component.html',
   styleUrl: './selection-suggest.component.scss',

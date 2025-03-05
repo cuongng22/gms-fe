@@ -63,6 +63,7 @@ import {airportCode} from "src/app/crew-trip/shared/utils/error-message";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 import moment from "moment";
 import {SelectionSuggest2Component} from "src/app/crew-trip/shared/component/selection-suggest-2/selection-suggest-2.component";
+import {UsersService} from "src/app/crew-trip/core/services/users-service";
 
 @Component({
   selector: 'app-contract-detail',
@@ -76,6 +77,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   override baseService = inject(ContractService);
   nationService = inject(NationService);
   serviceFeeService = inject(ServiceFeeService);
+  usersService = inject(UsersService);
   fb = inject(FormBuilder);
   isHiddenPdf: boolean;
   documentId: number;
@@ -105,6 +107,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   listFlightGroup = ContractLookup.FlightGroup;
   listStatusUsage = ContractLookup.StatusUsage;
   listBankCharge = ContractLookup.BankCharge;
+  listPaymentType = ContractLookup.PaymentType;
   marketCodeChangeBrake: any;
   //debounce
   marketCodeChangeDebounce = debounce(async (value: any) => {
@@ -177,7 +180,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   dsEciLco = new MatTableDataSource<any>([]);
   dsOvernightStay = new MatTableDataSource<any>([]);
   dsDayUse = new MatTableDataSource<any>([]);
-
+  actionDeleteFile: any[] = []
 
   constructor(private readonly numberPipe: DecimalPipe) {
     super();
@@ -254,10 +257,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       paymentType: [],
       budgetCode: [],
       fieldCode2: [],
-      dueDateNumber: [],
+      dueDateNumber: [, [Validators.min(0), Validators.max(99)]],
       handoverDate: [],
       documentsList: [],
-      bankAccountNoB: ['', [Validators.maxLength(40), Validators.pattern(PATTERN.STRING_NUMBER)],],
+      bankAccountNoB: ['', [Validators.maxLength(40), Validators.pattern(PATTERN.STRING_NUMBER1)],],
       peopleName: ['', [Validators.maxLength(250)]],
       bankNameB: ['', [Validators.maxLength(190)]],
       bankAddressB: ['', [Validators.maxLength(512)]],
@@ -267,7 +270,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       swiftCodeB: ['', [Validators.maxLength(190)]],
       bankCharge: [],
       bankCharge1: [],
-      bankAccountNoB1: [[Validators.maxLength(40), Validators.pattern(PATTERN.STRING_NUMBER)],],
+      bankAccountNoB1: [[Validators.maxLength(40), Validators.pattern(PATTERN.STRING_NUMBER1)],],
       bankNameB1: ['', [Validators.maxLength(190)]],
       swiftCodeB1: ['', [Validators.maxLength(190)]],
       iban: ['', [Validators.maxLength(120)]],
@@ -361,7 +364,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       });
       row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']), this.dateOverlapValidator(row)]);
       row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']), this.dateOverlapValidator(row)]);
-      row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row),Validators.required]);
+      row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row), Validators.required]);
 
       init && row.patchValue(init);
       if (row.getRawValue().active) {
@@ -524,6 +527,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         // 		}
         // 	});
         this.tblAttachedDocument.data = this.tblAttachedDocument.data.filter((item: any) => item.fileName !== this.curFile.fileName,);
+        if (this.curFile.id) {
+          this.actionDeleteFile.push({fileName: this.curFile.fileName, id: this.id, documentId: this.curFile.id})
+        }
       } else if (this.deleteObj?.deleteType == 'tblPriceUnit') {
         this.tblPriceUnit.removeAt(this.deleteObj.index);
         this.dsPriceUnit.data = this.tblPriceUnit.controls;
@@ -557,6 +563,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   }
 
   async confirmDeleteFile(element: any, id: number) {
+    this.deleteObj = {deleteType: 'file'};
     this.curFile = element;
     this.documentId = id;
     this.showDialogDeleteFile = true;
@@ -664,7 +671,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
 
   async setReadMode(form: FormGroup) {
     const fieldContract = ['marketCode', 'marketName', 'nation', 'classification', 'flightGroup', 'statusUsage', 'supplierName', 'supplierPhone', 'supplierEmail', 'carType', 'standardCheckIn', 'standardCheckOut', 'notes', 'doiTuongDichVu', 'contractSpec', 'marketType',];
-    const fieldAnnex = ['partnerName', 'partnerAddress', 'currency', 'hdPlRoot', 'signedDepartmentName', 'budgetDepartmentName', 'proceedDepartmentName', 'paidDepartmentName', 'paymentType', 'budgetCode', 'fieldCode2',];
+    const fieldAnnex = ['partnerName', 'partnerAddress', 'currency', 'hdPlRoot', 'signedDepartmentName', 'budgetDepartmentName', 'proceedDepartmentName', 'paidDepartmentName', 'contractSpec', 'doiTuongDichVu', 'employeeName','marketCode'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -697,9 +704,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     } else if (this.isPL()) {
       const resContract = await this.baseService.detail(this.contractObj.bizDocId,);
       const bizDocIdContract = cloneDeep(resContract.data.bizDocId);
-      ['contractCode', 'contractName', 'contractNo', 'signedDate', 'dueDateNumber', 'handoverDate', 'priceUnitInfo',].forEach((key) => delete resContract.data[key]);
+      ['contractCode', 'contractName', 'contractNo', 'signedDate', 'employeeName'].forEach((key) => delete resContract.data[key]);
       this.formGroupDetail.patchValue({
         ...(resContract?.data || resContract), hdPlRoot: bizDocIdContract,
+        employeeName: this.usersService.getUserLogin()?.fullName
       });
     } else {
       this.formGroupDetail.patchValue({});
@@ -711,7 +719,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       supplierPhone: hotel ? hotel.phone : vehicle?.phone || '',
       supplierEmail: hotel ? hotel.email : vehicle?.email || '',
     });
-    console.log(this.formGroupDetail.getRawValue().priceUnitInfo,'this.formGroupDetail.getRawValue().priceUnitInfo')
     this.formGroupDetail.getRawValue().priceUnitInfo?.forEach((s: any) => {
       s = {
         ...s, //serviceFeeCode: s.serviceCode,
@@ -779,6 +786,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         });
         const body = this.bodyBuilder();
         res = await this.baseService.update(body);
+
+        //action delete file attach
+        this.actionDeleteFile.forEach(s => {
+          this.baseService.deleteFile(s.fileName, s.id, s.documentId)
+        });
       } else {
         const body = this.bodyBuilder();
         res = await this.baseService.create(body);
@@ -931,6 +943,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     });
     body.isTaxHotel = body.isTaxHotelRevert;
     body.isTaxVehicle = body.isTaxCarRevert;
+    body.documentsList = this.tblAttachedDocument.data
     // console.log(body, 'body');
     return body;
   }
@@ -960,13 +973,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
             moment(s.getRawValue().fromDate).isBefore(toDate) && moment(s.getRawValue().toDate).isAfter(fromDate))
         });
         if (isOveralap.length > 1) {
-          let err={overlapValidator: true, message: `${serviceCode} already exists in this period`};
+          let err = {overlapValidator: true, message: `${serviceCode} already exists in this period`};
           row.get('fromDate').setErrors(err);
           row.get('toDate').setErrors(err);
           row.get('serviceCode').setErrors(err);
           return {overlapValidator: true, message: `${serviceCode} already exists in this period`};
-        }
-        else{
+        } else {
           row.get('fromDate').setErrors(null);
           row.get('toDate').setErrors(null);
           row.get('serviceCode').setErrors(null);
@@ -983,7 +995,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       return null;
     };
   }
-  test(row:any){
+
+  test(row: any) {
     console.log(row)
   }
 }
