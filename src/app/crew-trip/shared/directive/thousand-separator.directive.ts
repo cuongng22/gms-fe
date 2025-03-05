@@ -1,8 +1,7 @@
-import {AfterContentInit, Directive, ElementRef, HostListener, Input} from '@angular/core';
-import {NgControl} from '@angular/forms';
-import {isNaN, parseInt} from "lodash";
-import {take} from "rxjs";
-
+import { AfterContentInit, Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { NgControl } from '@angular/forms';
+import { isNaN, parseInt } from "lodash";
+import { take } from "rxjs";
 
 @Directive({
   standalone: true,
@@ -12,26 +11,24 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
 
   @Input() maxDecimal: number = 0;
 
-  constructor(private el: ElementRef, private control: NgControl) {
-  }
+  constructor(private el: ElementRef, private control: NgControl) {}
 
   ngAfterContentInit() {
     const inputElement = this.el.nativeElement;
-    //init
+    // Khoi tao gia tri
     let initValue = this.control.value;
     if (initValue && !isNaN(Number(initValue))) {
       inputElement.value = this.formatNumber(initValue);
-    } else {
-      this.control.control?.setErrors({invalidNumber: true});
+    } else if (initValue) {
+      this.control.control?.setErrors({ invalidNumber: true });
     }
 
-    //la field tinh toan
+    // Xu ly thay doi gia tri
     this.control.control?.valueChanges.pipe(take(1)).subscribe((value) => {
       if (value && !isNaN(Number(value))) {
         inputElement.value = this.formatNumber(value);
       } else {
-        // inputElement.value = '0';
-        this.control.control?.setErrors({invalidNumber: true});
+        this.control.control?.setErrors({ invalidNumber: true });
       }
     });
   }
@@ -40,18 +37,17 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
   @HostListener('focus', ['$event'])
   onInput(event: any) {
     const inputElement = this.el.nativeElement;
-    const value = inputElement.value.replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
+    const value = inputElement.value.replace(/,/g, ''); // Loai bo dau phay cu
     if (value && !isNaN(Number(value))) {
       if (!this.isValidNumberDecimal(value)) {
-        this.control.control?.setErrors({invalidNumberDecimal: true});
+        this.control.control?.setErrors({ invalidNumberDecimal: true });
       } else if (!this.control.errors) {
         this.control.control?.setErrors(null);
-        this.control.control?.setValue(Number(value), {emitEvent: false});
+        this.control.control?.setValue(Number(value), { emitEvent: false });
         inputElement.value = this.formatNumber(value);
       }
-    } else {
-      // inputElement.value = '';
-      this.control.control?.setErrors({invalidNumber: true});
+    } else if (value) {
+      this.control.control?.setErrors({ invalidNumber: true });
     }
   }
 
@@ -59,20 +55,20 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
   onBlur(event: any) {
     const inputElement = this.el.nativeElement;
     if (inputElement.value.endsWith('.')) {
-      inputElement.value = inputElement.value.slice(0, -1); // Loại bỏ dấu chấm thừa cuối
+      inputElement.value = inputElement.value.slice(0, -1); // Loai bo dau cham thua cuoi
     }
   }
 
-  // Hàm định dạng số với dấu phân cách hàng nghìn
+  // Dinh dang so voi dau phan cach hang nghin
   private formatNumber(value: string | number): string {
-    const parts = value.toString().split('.'); // Tách phần nguyên và thập phân
-    parts[0] = parseInt(parts[0], 10).toLocaleString('en-US'); // Thêm dấu phân cách hàng nghìn cho phần nguyên
-    return parts.join('.'); // Ghép lại phần nguyên và thập phân
+    const parts = value.toString().split('.');
+    parts[0] = parseInt(parts[0], 10).toLocaleString('en-US'); // Them dau phan cach hang nghin
+    return parts.join('.');
   }
 
   private isValidNumberDecimal(value: string): boolean {
     if (this.maxDecimal) {
-      const regex = new RegExp(`^-?\\d*(\\.\\d{0,${this.maxDecimal}})?$`);// so thap phan
+      const regex = new RegExp(`^-?\\d*(\\.\\d{0,${this.maxDecimal}})?$`); // Kiem tra so thap phan
       return regex.test(value);
     } else return true;
   }

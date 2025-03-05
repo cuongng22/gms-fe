@@ -25,13 +25,14 @@ import { MESSAGE } from '../../utils/constant';
 import { NgxControlError } from 'ngxtension/control-error';
 import { Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-selection-suggest-2',
   standalone: true,
   imports: [FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatAutocompleteModule, CommonModule, NgxControlError,
-    MatIconModule
+    MatIconModule, MatTooltipModule
   ],
   templateUrl: './selection-suggest-2.component.html',
   styleUrl: './selection-suggest-2.component.scss',
@@ -104,7 +105,6 @@ export class SelectionSuggest2Component implements OnInit, AfterViewInit, AfterV
   }
 
   ngOnInit(): void {
-    console.log(this.formControl.value)
     this.keySearch.pipe(
       debounceTime(500),
       distinctUntilChanged(),
@@ -117,10 +117,21 @@ export class SelectionSuggest2Component implements OnInit, AfterViewInit, AfterV
         this.filtered.set(optionFilter);
         return;
       }
-      this.filtered.set(optionFilter.filter(option => {
-        const valueAttrDisplay = (this.attrDisplay ? option[this.attrDisplay] : option)?.toString().toLowerCase();
-        return valueAttrDisplay.includes(value.toLowerCase());
-      }));
+      this.filtered.set(
+        optionFilter.filter(option => {
+          let valueAttrDisplay = '';
+          if (this.attrDisplay) {
+            valueAttrDisplay = option[this.attrDisplay] || '';
+            if (this.attrDisplay2) {
+              valueAttrDisplay += ' ' + (option[this.attrDisplay2] || '');
+            }
+          } else {
+            valueAttrDisplay = option.toString();
+          }
+          return valueAttrDisplay.toLowerCase().includes(value.toLowerCase());
+        })
+      );
+
     });
 
     this.formControl.statusChanges.subscribe((res) => {
@@ -157,8 +168,8 @@ export class SelectionSuggest2Component implements OnInit, AfterViewInit, AfterV
 
   filter(): void {
     const filterValue = this.inputSearch.nativeElement.value;
-    this.formControl.setValue(null);
-    this.formControl.updateValueAndValidity();
+    // this.formControl.setValue(null);
+    // this.formControl.updateValueAndValidity();
     this.keySearch.next(filterValue);
   }
 

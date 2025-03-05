@@ -4,7 +4,7 @@
     <mat-label i18n>{{ label }}</mat-label>
     }
     <input type="text" matInput #inputSearch [matAutocomplete]="auto" (input)="filter()" requireSelection
-      [required]="requiredControl" [formControl]="formControl">
+      [required]="requiredControl" [formControl]="formControl" [matTooltip]="viewControl.value">
     @if (formControl.value && !formControl.disabled) {
     <i class="material-symbols-outlined mr-15 pe-clear-input" matSuffix (click)="clearInput()">
       close
