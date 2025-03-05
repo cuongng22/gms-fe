@@ -69,7 +69,6 @@
   <mat-card-content>
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
-        
         @for (col of displayedFirst; track col.name) {
         <ng-container matColumnDef="{{ col.name }}">
           <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="col.colSpan" [rowSpan]="col.rowSan" [innerHtml]="col.field">
@@ -119,13 +118,13 @@
           </td>
           }
           @if (col.name === 'airportCode') {
-          <td mat-footer-cell *matFooterCellDef class="text-left fw-bold" [colSpan]="3">Total</td>
+          <td mat-footer-cell *matFooterCellDef class="text-center fw-bold" [colSpan]="3">Total</td>
           } @else if (['totalNumberOfTrip', 'totalForex'].includes(col.name)) {
-          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+          <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
             {{ (dataSource.data | dataCalculateTotal: col.name) | number }}
           </td>
           } @else {
-          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+          <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
           </td>
           }
         </ng-container>
@@ -143,7 +142,7 @@
           </td>
           }
           @if (['totalSingleRoom', 'totalTwinRoom', 'totalIncVAT', 'totalExcVAT'].includes(col.name)) {
-          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+          <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
             {{ (dataSource.data | dataCalculateTotal: col.name) | number }}
           </td>
           }
