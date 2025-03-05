@@ -88,7 +88,7 @@
                     i18n="@@totalAmountForeignExchange">Total amount <br />(Foreign exchange)</th>
                 <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
                     @if (category() === CategoryEnum.INTERNATIONAL) {
-                    {{ element[1].totalForex | number}}
+                    {{ Math.round(element[1].totalForex) | number}}
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
@@ -101,7 +101,7 @@
             <!-- Thành tiền -->
             <ng-container matColumnDef="totalAmount">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " colspan="2"
-                    i18n="@@totalAmountVND">Total amount (VND)</th>
+                    i18n="@@totalAmountVND">Total amount <br/> (VND)</th>
             </ng-container>
 
             <!-- thành tiền VND chưa vat -->
@@ -109,7 +109,7 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
                     i18n="@@excludingVAT">Excluding VAT</th>
                 <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
-                    {{ element[1].totalExcVAT | number}}
+                    {{ Math.round(element[1].totalExcVAT) | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
                     {{getTotal('item[1].totalExcVAT') | number}}
@@ -120,7 +120,7 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
                     i18n="@@includingVAT">Including VAT</th>
                 <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
-                    {{ element[1].totalIncVAT | number}}
+                    {{ Math.round(element[1].totalIncVAT) | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
                     {{getTotal('item[1].totalIncVAT') | number}}

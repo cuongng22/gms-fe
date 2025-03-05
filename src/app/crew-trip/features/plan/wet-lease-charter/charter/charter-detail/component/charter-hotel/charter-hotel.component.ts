@@ -44,11 +44,12 @@ export class CharterHotelComponent extends CommonComponent {
   dataGeneral = input<any>()
   CategoryEnum = CategoryEnum;
   headerRowDef1: string[] = [];
-  headerRowDef2 = ['totalIncVAT', 'totalExcVAT'];
+  headerRowDef2 = [ 'totalExcVAT','totalIncVAT'];
   rowDef: string[] = [];
   totalRowDef = ['total', 'totalForex', 'totalExcVAT', 'totalIncVAT',];
   data = input<any[]>();
 
+  Math = Math;
   constructor() {
     super();
     effect(() => {
@@ -93,15 +94,22 @@ export class CharterHotelComponent extends CommonComponent {
 
   // tính tiền ngoại tệ
   calTotalCountForeign(element: any) {
-    element.totalForex = Number(element.priceRoom ?? 0) * Number(element.totalNormalRoom ?? 0) * Number(element.numberOfNight ?? 0)
+    const _totalForex = Number(element.priceRoom ?? 0) * Number(element.totalNormalRoom ?? 0) * Number(element.numberOfNight ?? 0)
       + Number(element.priceRoomECI ?? 0) * Number(element.totalECIRoom ?? 0)
       + Number(element.priceRoomLCO ?? 0) * Number(element.totalLCORoom ?? 0);
+    if (this.category() === CategoryEnum.INTERNATIONAL) {
+      element.totalForex = _totalForex;
+    } else {
+      element.totalForex = 0;
+    }
+    return _totalForex
   }
 
   // tính thành tiền chưa vat và có vat					
   calTotalAmount(element: any) {
-    element.totalExcVAT = element.totalForex * (element.exchangeRate ?? 1);
-    element.totalIncVAT = (element.totalExcVAT) + (element.totalExcVAT * (element.rateVat ?? 0) / 100)
+    element.totalIncVAT = this.calTotalCountForeign(element) * (element.exchangeRate ?? 1);
+    element.totalExcVAT = element.totalIncVAT / (1 + (this.dataGeneral().rateVat ?? 0) / 100)
+    
   }
 
   clickEdit(data: any, control: string) {

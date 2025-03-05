@@ -26,6 +26,7 @@ import { DatepickerYearMonthComponent } from 'src/app/crew-trip/shared/component
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { SeparatorDirective } from 'src/app/crew-trip/shared/directive/separator.directive';
+import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant';
 import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.component';
@@ -38,7 +39,7 @@ import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.c
     MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
     NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent,
-    DatepickerComponent, MatDatepickerModule, NgxControlError, ClickOutside
+    DatepickerComponent, MatDatepickerModule, NgxControlError, ClickOutside, ThousandsSeparatorDirective
   ],
   templateUrl: './charter-general.component.html',
   styleUrl: './charter-general.component.scss',
@@ -58,6 +59,8 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
   errorDiffMonth = false;
   indexDeleteCarRental: any;
   isHotel = false;
+  isECI = false;
+  isLCO = false;
 
   override formGroupDetail = this.formBuilder.group({
     airportCode: ['', [Validators.required]],
@@ -73,12 +76,14 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
       numberOfNight: [null, ifValidator(() => this.isHotel, [Validators.required])],
       priceSingleRoom: [null, ifValidator(() => this.isHotel, [Validators.required])],
       priceTwinRoom: [null, ifValidator(() => this.isHotel, [Validators.required])],
-      priceSingleRoomECI: [null, ifValidator(() => this.isHotel, [Validators.required])],
-      priceTwinRoomECI: [null, ifValidator(() => this.isHotel, [Validators.required])],
-      priceSingleRoomLCO: [null, ifValidator(() => this.isHotel, [Validators.required])],
-      priceTwinRoomLCO: [null, ifValidator(() => this.isHotel, [Validators.required])],
+      priceSingleRoomECI: [null, ifValidator(() => this.isHotel && this.isECI, [Validators.required])],
+      priceTwinRoomECI: [null, ifValidator(() => this.isHotel && this.isECI, [Validators.required])],
+      priceSingleRoomLCO: [null, ifValidator(() => this.isHotel && this.isLCO, [Validators.required])],
+      priceTwinRoomLCO: [null, ifValidator(() => this.isHotel && this.isLCO, [Validators.required])],
     })
   });
+  isRequiredCarTypeTransportation: boolean = false;
+  isRequiredPriceIncVatTransportation: boolean = false;
 
   constructor() {
     super();
@@ -87,6 +92,10 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
   setData(data: any) {
     if (data) {
       const _data = { ...data }
+      console.log(_data)
+      if (_data.id) {
+        this.formGroupDetail.controls.airportCode.disable();
+      }
       this.formGroupDetail.patchValue(_data, { emitEvent: false });
       if (_data.priceTransports) {
         this.dataSource.data = [..._data.priceTransports];
@@ -96,12 +105,12 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
 
 
   override ngOnInit(): void {
-    this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL})
+    this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL })
     this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
       this.getExchangeRate()
     });
 
-    this.formGroupDetail.controls.airportCode.valueChanges.subscribe(value => {
+    this.formGroupDetail.controls.startDate.valueChanges.subscribe(value => {
       this.getExchangeRate()
     });
 
@@ -119,11 +128,24 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
       this.formValueChange.emit(this.formGroupDetail.getRawValue())
     });
 
+    this.formGroupDetail.controls.isECI.valueChanges.subscribe(value => {
+      this.isECI = !!value;
+      this.formGroupDetail.controls.priceHotel.updateValueAndValidity();
+      this.formGroupDetail.controls.priceHotel.controls.priceSingleRoomECI.updateValueAndValidity()
+      this.formGroupDetail.controls.priceHotel.controls.priceTwinRoomECI.updateValueAndValidity()
+    });
+
+    this.formGroupDetail.controls.isLCO.valueChanges.subscribe(value => {
+      this.isLCO = !!value;
+      this.formGroupDetail.controls.priceHotel.updateValueAndValidity();
+      this.formGroupDetail.controls.priceHotel.controls.priceSingleRoomLCO.updateValueAndValidity()
+      this.formGroupDetail.controls.priceHotel.controls.priceTwinRoomLCO.updateValueAndValidity()
+    });
   }
 
   ngAfterViewChecked(): void {
     if (this.disabled() && !this.formGroupDetail.disabled) {
-      this.formGroupDetail.disable()
+      this.formGroupDetail.disable({ emitEvent: false })
     }
   }
 
@@ -165,7 +187,7 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
     return this.errorDiffMonth ? { errorDiffMonth: true } : null;
   }
 
-  invalidCarRental() {
+  duplicateCarRental() {
     if (this.dataSource.data) {
       return this.dataSource.data.map(item => item.carType.toLowerCase()).some((item, index, array) => array.indexOf(item) !== index);
     }
@@ -181,16 +203,25 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
     this.dataSource.data = [...this.dataSource.data];
   }
 
-  async showConfirmDeleteCarRental(id: any) {
+  async showConfirmDeleteTransportation(id: any) {
     this.indexDeleteCarRental = id
     this.toggleDialogDelete();
   }
 
-  deleteCarRental() {
+  deleteTransportation() {
     this.dataSource.data.splice(this.indexDeleteCarRental, 1);
     this.dataSource.data = [...this.dataSource.data]
     this.toggleDialogDelete()
   }
+
+  checkRequiredTransportation() {
+    this.isRequiredCarTypeTransportation = this.dataSource.data.some((item: any) => !item.carType);
+    this.isRequiredPriceIncVatTransportation = this.dataSource.data.some((item: any) => !item.priceIncVat);
+
+    return this.isRequiredCarTypeTransportation ||
+      this.isRequiredPriceIncVatTransportation
+  }
+
 
 
   clickEdit(data: any, control: string) {

@@ -104,7 +104,7 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
                     i18n="@@totalAmountForeignExchange" rowspan="2">Total amount <br />(Foreign exchange)</th>
                 <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
-                    {{(category() === CategoryEnum.INTERNATIONAL ? element.totalCountForeign:0) | number }}
+                    {{(category() === CategoryEnum.INTERNATIONAL ? Math.round(element.totalCountForeign) :0) | number }}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
                 </td>
@@ -112,13 +112,13 @@
 
             <ng-container matColumnDef="totalAmount">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " colspan="2"
-                    i18n="@@totalAmountVND">Total amount (VND)</th>
+                    i18n="@@totalAmountVND">Total amount <br/> (VND)</th>
             </ng-container>
             <ng-container matColumnDef="totalExcVAT">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
                     i18n="@@excludingVAT">Excluding VAT</th>
                 <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
-                    {{ element.totalExcVAT | number }}
+                    {{ Math.round(element.totalExcVAT) | number }}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-center"></td>
                 <!-- <td mat-footer-cell *matFooterCellDef class="fw-bold text-center" >123</td> -->
@@ -127,7 +127,7 @@
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
                     i18n="@@includingVAT">Including VAT</th>
                 <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
-                    {{ element.totalIncVAT | number }}
+                    {{ Math.round(element.totalIncVAT) | number }}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-center"></td>
                 <!-- <td mat-footer-cell *matFooterCellDef class="fw-bold text-center" >23</td> -->

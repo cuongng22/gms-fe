@@ -14,7 +14,7 @@
               <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
                 formControlName="endDate">
             </mat-date-range-input>
-            <mat-label i18n="@@contractEndDate">Contract end date</mat-label>
+            <mat-label i18n="@@time">Time</mat-label>
             <mat-datepicker-toggle matIconSuffix [for]="contractRangePicker"></mat-datepicker-toggle>
             <mat-date-range-picker #contractRangePicker>
               <mat-date-range-picker-actions>
@@ -25,12 +25,12 @@
               </mat-date-range-picker-actions>
             </mat-date-range-picker>
             <mat-error *ngxControlError="formGroupSearch.controls['startDate']; track: 'matDatepickerParse'"
-              i18n="@@contractPeriodInvalidFormat">
-              Contract period invalid format
+              i18n="@@timeInvalidFormat">
+              Time invalid format
             </mat-error>
             <mat-error *ngxControlError="formGroupSearch.controls['endDate']; track: 'matDatepickerParse'"
-              i18n="@@contractPeriodInvalidFormat">
-              Contract period invalid format
+              i18n="@@timeInvalidFormat">
+              Time invalid format
             </mat-error>
           </mat-form-field>
         </div>
@@ -103,7 +103,7 @@
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@singleRoom">
             Single room
           </th>
-          <td mat-cell *matCellDef="let element;" class="text-center">
+          <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalSingleRoom | number}}
           </td>
         </ng-container>
@@ -111,7 +111,7 @@
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@twinRoom">
             Twin room
           </th>
-          <td mat-cell *matCellDef="let element;" class="text-center">
+          <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalTwinRoom | number}}
           </td>
         </ng-container>
@@ -125,7 +125,7 @@
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@singleRoom">
             Single room
           </th>
-          <td mat-cell *matCellDef="let element;" class="text-center">
+          <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalSingleEICRoom | number}}
           </td>
         </ng-container>
@@ -133,7 +133,7 @@
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@twinRoom">
             Twin room
           </th>
-          <td mat-cell *matCellDef="let element;" class="text-center">
+          <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalTwinEICRoom | number}}
           </td>
         </ng-container>
@@ -144,10 +144,10 @@
           </th>
         </ng-container>
         <ng-container matColumnDef="totalSingleLCORoom">
-          <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@singleRoom">
+          <th mat-header-cell *matHeaderCellDef class="text-right" i18n="@@singleRoom">
             Single room
           </th>
-          <td mat-cell *matCellDef="let element;" class="text-center">
+          <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalSingleLCORoom | number}}
           </td>
         </ng-container>
@@ -155,7 +155,7 @@
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@twinRoom">
             Twin room
           </th>
-          <td mat-cell *matCellDef="let element;" class="text-center">
+          <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalTwinLCORoom | number}}
           </td>
         </ng-container>
@@ -165,7 +165,7 @@
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@noOfTrip" [rowSpan]="2">
             No. of trip
           </th>
-          <td mat-cell *matCellDef="let element;" class="text-center">
+          <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalNumberOfTrip | number}}
           </td>
         </ng-container>
@@ -175,7 +175,7 @@
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@totalAmountForeignExchange" [rowSpan]="2">
             Total amount <br /> (Foreign exchange)
           </th>
-          <td mat-cell *matCellDef="let element;" class="text-center">
+          <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalForex | number}}
           </td>
         </ng-container>
@@ -183,14 +183,14 @@
         <!-- Tổng tiền VND -->
         <ng-container matColumnDef="totalAmount">
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@totalAmountVND" [colSpan]="2">
-            Total amount (VND)
+            Total amount <br/> (VND)
           </th>
         </ng-container>
         <ng-container matColumnDef="totalExcVAT">
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@excludingVAT">
             Excluding VAT
           </th>
-          <td mat-cell *matCellDef="let element;" class="text-center">
+          <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalExcVAT | number}}
           </td>
         </ng-container>
@@ -198,7 +198,7 @@
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@includingVAT">
             Including VAT
           </th>
-          <td mat-cell *matCellDef="let element;" class="text-center">
+          <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalIncVAT | number}}
           </td>
         </ng-container>
@@ -207,7 +207,7 @@
             Action
           </th>
           <td mat-cell *matCellDef="let element;" class="text-center">
-            <div class="action-buttons d-flex justify-content-end">
+            <div class="action-buttons d-flex justify-content-start">
               <a mat-button title="View" i18n-title="@@view" class="text-vna"
                 [routerLink]="['/plan/est-plan/wet-lease-charter/charter-detail', element.id]"
                 [queryParams]="{'view-detail':true}">
@@ -215,6 +215,7 @@
                   visibility
                 </i>
               </a>
+              @if (!element.completed) {
               <a type="button" class="text-warning" mat-button
                 [routerLink]="['/plan/est-plan/wet-lease-charter/charter-detail', element.id]"
                 [queryParams]="{'view-detail':false}">
@@ -229,7 +230,7 @@
                   delete
                 </i>
               </button>
-
+              }
             </div>
           </td>
         </ng-container>

@@ -101,26 +101,34 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   setData(data: any) {
     if (data) {
       const _data = { ...data }
-      this.formGroupDetail.patchValue(_data);
+      console.log('_data: ', _data)
+      if (_data.id) {
+        this.formGroupDetail.controls.airportCode.disable();
+      }
+      if (_data.airportCode) {
+        this.getHotelByAirport(_data.airportCode);
+        this.getCaRentalByAirport(_data.airportCode);
+      }
+      this.formGroupDetail.patchValue(_data, { emitEvent: false });
       if (_data.priceHotelsList) {
         this.dataSourceHotel.data = [..._data.priceHotelsList];
       }
       if (_data.priceTransports) {
         this.dataSourceCarRental.data = [..._data.priceTransports];
       }
+      console.log('this.dataSourceHotel.data: ', this.dataSourceHotel.data)
     }
   }
 
   ngAfterViewChecked(): void {
     this.cdRef.detectChanges(); // Phát hiện và cập nhật các thay đổi
     if (this.disabled() && !this.formGroupDetail.disabled) {
-      this.formGroupDetail.disable()
+      this.formGroupDetail.disable({ emitEvent: false })
     }
   }
 
   override async ngOnInit() {
     await this.spinner.show();
-    console.log(this.dataSourceHotel.data)
     this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL })
 
     if (this.formGroupDetail.controls.airportCode.value) {
@@ -142,12 +150,20 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
       this.getExchangeRate()
     });
     this.formGroupDetail.controls.isHotel.valueChanges.subscribe(value => {
+      console.log('isHotel.valueChanges: ', value)
       this.dataSourceHotel.data = [];
     });
 
     this.formGroupDetail.controls.isTransport.valueChanges.subscribe(value => {
       this.dataSourceCarRental.data = [];
     });
+
+    this.formGroupDetail.controls.exchangeRate.valueChanges.subscribe(_value => {
+      this.wetLeaseService.exchangeRateChange(_value)
+    })
+    this.formGroupDetail.controls.rateVat.valueChanges.subscribe(_value => {
+      this.wetLeaseService.rateVatChange(_value)
+    })
 
   }
 
@@ -229,6 +245,12 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
+    debugger
+    if (['singleRoomPriceEditing', 'twinRoomPriceEditing'].includes(control)) {
+      this.wetLeaseService.roomPriceChange(data)
+    } else if ('unitPriceEditing' === control) {
+      this.wetLeaseService.unitPriceTransportationChange(data)
+    }
   }
 
   toggleDialogDeleteHotel() {
