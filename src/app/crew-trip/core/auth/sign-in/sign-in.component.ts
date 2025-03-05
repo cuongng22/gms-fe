@@ -95,8 +95,8 @@ export class SignInComponent implements OnInit {
       }
     } catch (error: any) {
       if (error.status === 401 && error.error?.error) {
-        // this.formGroup.get('password')?.setErrors({incorrect: true});
-        // this.errorMessage = error.error.error;
+        this.formGroup.get('password')?.setErrors({incorrect: true});
+        this.errorMessage = error.error.error;
       } else if (error.status === 404 && error.error?.error) {
         if (error.error.error.includes('email')) {
           this.formGroup.get('email')?.setErrors({incorrect: true});

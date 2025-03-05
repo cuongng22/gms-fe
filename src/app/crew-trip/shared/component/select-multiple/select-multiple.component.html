@@ -22,7 +22,11 @@
           </mat-form-field>
         </form>
       }
+
       @if (selectOptionsRaw && selectOptionsRaw.length > 0) {
+        <mat-option (click)="toggleSelectAll()" [value]="allSelected ? null : 'all'">
+          {{ allSelected ? 'Clear all' : 'Select all' }}
+        </mat-option>
         @for (option of selectOptionsRaw; track $index) {
           <mat-option [value]="attrValue?option[attrValue]:option">{{ attrDisplay ? option[attrDisplay] : option }}
           </mat-option>

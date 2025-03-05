@@ -4,7 +4,8 @@ import {
   AfterContentInit, Component, EventEmitter, OnInit, Output, inject,
 } from '@angular/core';
 import {
-  FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators,
+  AbstractControl,
+  FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators,
 } from '@angular/forms';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {
@@ -60,11 +61,13 @@ import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-
 import {NgxMatTimepickerComponent, NgxMatTimepickerToggleComponent} from "ngx-mat-timepicker";
 import {airportCode} from "src/app/crew-trip/shared/utils/error-message";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
+import moment from "moment";
+import {SelectionSuggest2Component} from "src/app/crew-trip/shared/component/selection-suggest-2/selection-suggest-2.component";
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [FormsModule, InputSizeComponent, MatFormFieldModule, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatRadioModule, MatSelect, MatSuffix, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgForOf, NgxMaterialTimepickerModule, MatTooltipModule, MatDialogModule, NgxControlError, SelectionSuggestComponent, ConfirmDialog, ThousandsSeparatorDirective, ControlErrorComponent,],
+  imports: [FormsModule, InputSizeComponent, MatFormFieldModule, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatRadioModule, MatSelect, MatSuffix, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgForOf, NgxMaterialTimepickerModule, MatTooltipModule, MatDialogModule, NgxControlError, SelectionSuggestComponent, ConfirmDialog, ThousandsSeparatorDirective, ControlErrorComponent, SelectionSuggestComponent, SelectionSuggest2Component,],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY), DecimalPipe],
@@ -340,11 +343,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     if (addType === 'tblPriceUnit') {
       row = this.fb.group({
         id: [],
-        serviceCode: [this.listFeeService[0]?.code, [Validators.required]],
-        vnaTransId: ['', [Validators.maxLength(50)]],
-        expenseCatgId: ['', [Validators.maxLength(50)]],
+        serviceCode: ['',],
+        vnaTransId: ['',],
+        expenseCatgId: ['',],
         priceNoTax: [],
-        taxCode: [,[Validators.maxLength(24), Validators.pattern(PATTERN.STRING),]],
+        taxCode: [, [Validators.maxLength(24), Validators.pattern(PATTERN.STRING_NUMBER1),]],
         taxRate: [, [Validators.pattern(PATTERN.NUMBER)]],
         originalAmount3: [],
         priceWithTax: [],
@@ -353,11 +356,13 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         fromDate: [this.formGroupDetail.getRawValue().effectiveDate || ''],
         toDate: [this.formGroupDetail.getRawValue().expiryDate || ''],
         active: [true],
-        serviceName: [this.listFeeService[0]?.name],
-        serviceUnit: [this.listFeeService[0]?.unit],
+        serviceName: [],
+        serviceUnit: [],
       });
-      row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']),]);
-      row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']),]);
+      row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']), this.dateOverlapValidator(row)]);
+      row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']), this.dateOverlapValidator(row)]);
+      row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row),Validators.required]);
+
       init && row.patchValue(init);
       if (row.getRawValue().active) {
         table.push(row);
@@ -623,7 +628,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   async nationSelected(event: any) {
     const nation = this.listQuocGia.find((s: any) => s.id === (event?.value || event),);
     this.formGroupDetail.patchValue({
-      // nationId: nation?.id,
+      nationId: nation?.id,
       nation: nation?.code, marketType: (nation?.code === 'VN' ? 'Domestic' : 'International') || '',
     });
   }
@@ -706,7 +711,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       supplierPhone: hotel ? hotel.phone : vehicle?.phone || '',
       supplierEmail: hotel ? hotel.email : vehicle?.email || '',
     });
-
+    console.log(this.formGroupDetail.getRawValue().priceUnitInfo,'this.formGroupDetail.getRawValue().priceUnitInfo')
     this.formGroupDetail.getRawValue().priceUnitInfo?.forEach((s: any) => {
       s = {
         ...s, //serviceFeeCode: s.serviceCode,
@@ -942,5 +947,43 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
 
   airportCodeForcus() {
     this.listFlightMarket = cloneDeep(this.listFlightMarketAll)
+  }
+
+  dateOverlapValidator(row: any): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      let fromDate = moment(row.getRawValue().fromDate);
+      let toDate = moment(row.getRawValue().toDate);
+      let serviceCode = row.getRawValue().serviceCode;
+      if (fromDate && toDate && serviceCode) {
+        let isOveralap = this.dsPriceUnit.data.filter((s: any) => {
+          return (s.getRawValue().active == true && s.getRawValue().serviceCode === serviceCode &&
+            moment(s.getRawValue().fromDate).isBefore(toDate) && moment(s.getRawValue().toDate).isAfter(fromDate))
+        });
+        if (isOveralap.length > 1) {
+          let err={overlapValidator: true, message: `${serviceCode} already exists in this period`};
+          row.get('fromDate').setErrors(err);
+          row.get('toDate').setErrors(err);
+          row.get('serviceCode').setErrors(err);
+          return {overlapValidator: true, message: `${serviceCode} already exists in this period`};
+        }
+        else{
+          row.get('fromDate').setErrors(null);
+          row.get('toDate').setErrors(null);
+          row.get('serviceCode').setErrors(null);
+        }
+        row.get('fromDate').markAsTouched();
+        row.get('toDate').markAsTouched();
+        row.get('serviceCode').markAsTouched();
+
+        row.get('fromDate').markAsDirty();
+        row.get('toDate').markAsDirty();
+        row.get('serviceCode').markAsDirty();
+        row.updateValueAndValidity();
+      }
+      return null;
+    };
+  }
+  test(row:any){
+    console.log(row)
   }
 }

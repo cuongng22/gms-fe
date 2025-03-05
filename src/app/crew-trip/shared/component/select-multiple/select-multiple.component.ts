@@ -106,12 +106,14 @@ implements ControlValueAccessor, OnInit, OnChanges
 	    if (!keySearch) {
 	      this.selectOptionsRaw = [...this.options];
 	    } else {
-	      this.selectOptionsRaw = this.options.filter((option: any) => {
-	        const attr = this.attrDisplay ? option[this.attrDisplay] : option;
-	        const check = attr.toLowerCase().includes(keySearch.toLowerCase());
-	        return check;
-	      });
-	    }
+				const filteredOptions = this.options.filter((option: any) => {
+					const attr = this.attrDisplay ? option[this.attrDisplay] : option;
+					return attr.toLowerCase().includes(keySearch.toLowerCase());
+				});
+
+				this.selectOptionsRaw = filteredOptions.length > 0 ? filteredOptions : [...this.options];
+
+			}
 	  });
 	}
 
@@ -193,5 +195,14 @@ implements ControlValueAccessor, OnInit, OnChanges
 	  } else {
 	    this.formControl.disable({ emitEvent: false });
 	  }
+	}
+	allSelected = false;
+	toggleSelectAll() {
+		this.allSelected = !this.allSelected;
+		const selectedValues = this.allSelected
+			? this.selectOptionsRaw.map(option => this.attrValue ? option[this.attrValue] : option)
+			: [];
+		this.formControl.setValue(selectedValues);
+
 	}
 }
