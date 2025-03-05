@@ -130,4 +130,5 @@ export class PATTERN {
   static STRING = '^[a-zA-Z]+$' //chu
   static NUMBER = '^[0-9]+$' //so
   static NUMBER1 = '^[0-9/.]+$' //so '/'
+  static STRING_NUMBER1 = '^[a-zA-Z0-9-.]+$' //chu va so . -
 }
