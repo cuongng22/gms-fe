@@ -1,8 +1,28 @@
 import {timeAfterValidator} from "src/app/crew-trip/shared/utils/common";
 
 export const contractCode: { [key: string]: string } = {
-  required: 'Contract code' + $localize` is required`,
-  maxlength: 'Contract code' + $localize` must be less than 50 characters`,
+  required: 'Contract number' + $localize` is required`,
+  maxlength: 'Contract number' + $localize` must be less than 50 characters`,
+};
+export const appendixCode: { [key: string]: string } = {
+  required: 'Appendix number' + $localize` is required`,
+  maxlength: 'Appendix number' + $localize` must be less than 50 characters`,
+};
+export const contractNo: { [key: string]: string } = {
+  required: 'Contract no' + $localize` is required`,
+  maxlength: 'Contract no' + $localize` must be less than 50 characters`,
+};
+export const appendixNo: { [key: string]: string } = {
+  required: 'Appendix no' + $localize` is required`,
+  maxlength: 'Appendix no' + $localize` must be less than 50 characters`,
+};
+export const contractName: { [key: string]: string } = {
+  required: 'Contract name' + $localize` is required`,
+  maxlength: 'Contract name' + $localize` must be less than 250 characters`,
+};
+export const appendixName: { [key: string]: string } = {
+  required: 'Appendix name' + $localize` is required`,
+  maxlength: 'Appendix name' + $localize` must be less than 250 characters`,
 };
 export const taxCode: { [key: string]: string } = {
   required: 'Tax code' + $localize` is required`,
@@ -51,15 +71,13 @@ export const notes: { [key: string]: string } = {
 export const fromDate: { [key: string]: string } = {
   required: 'From date' + $localize` is required`,
   afterValidator: 'From date' + $localize` must before to date`,
-  dateValidator: 'From date' + $localize` format is invalid`,
-  matDatepickerParse: 'invalid format',
+  matDatepickerParse: 'From date' + $localize`invalid format`,
   overlapValidator: 'Already exists in this period',
 };
 export const toDate: { [key: string]: string } = {
   required: 'To date' + $localize` is required`,
   beforeValidator: 'To date' + $localize` must after from date`,
-  dateValidator: 'To date' + $localize` format is invalid`,
-  matDatepickerParse: 'invalid format',
+  matDatepickerParse: 'To date' + $localize`invalid format`,
   overlapValidator: 'Already exists in this period',
 
 };
@@ -97,3 +115,26 @@ export const rate1: { [key: string]: string } = {
   invalidNumberDecimal: 'Ratio' + $localize` invalid`,
 };
 
+export const dueDateNumber: { [key: string]: string } = {
+  required: 'Due date' + $localize` is required`,
+  min: 'Due date' + $localize` must be greater than 0 and less than 100`,
+  max: 'Due date' + $localize` must be greater than 0 and less than 100`,
+};
+
+export const signedDate: { [key: string]: string } = {
+  required: 'Sign date' + $localize` is required`,
+  matDatepickerParse: 'Sign date' + $localize`invalid format`,
+};
+
+export const effectiveDate: { [key: string]: string } = {
+  required: 'Effective date' + $localize` is required`,
+  matDatepickerParse: 'Effective date' + $localize`invalid format`,
+};
+export const expiryDate: { [key: string]: string } = {
+  required: 'Expiry date' + $localize` is required`,
+  matDatepickerParse: 'Expiry date' + $localize`invalid format`,
+};
+export const handoverDate: { [key: string]: string } = {
+  required: 'Handover date' + $localize` is required`,
+  matDatepickerParse: 'Handover date' + $localize`invalid format`,
+};
