@@ -57,6 +57,7 @@ export class CharterDetailComponent extends CommonComponent {
   showDialogClose = false;
   isCreateData = false;
 
+
   override formGroupDetail = this.formBuilder.group({
     id: [],
     completed: [false]
@@ -80,7 +81,7 @@ export class CharterDetailComponent extends CommonComponent {
         let resDetail = await this.baseService.detail(this.id());
         this.formGroupDetail.patchValue({ ...resDetail.data })
         this.formGroupDetail.controls.id.setValue(id as any)
-        this.dataGeneral = { ...resDetail.data };
+        this.dataGeneral = { ...resDetail.data, id: this.id() };
         this.charterGeneral.setData(this.dataGeneral);
         this.airportCodeChange(this.dataGeneral.airportCode);
 
@@ -121,6 +122,7 @@ export class CharterDetailComponent extends CommonComponent {
 
   createData() {
     this.charterGeneral.formGroupDetail.markAllAsTouched();
+    console.log(this.charterGeneral.formGroupDetail)
     const isRequiredTransportation = this.charterGeneral.checkRequiredTransportation();
     const _dataGeneral = this.charterGeneral.formGroupDetail.getRawValue();
     if (this.charterGeneral.formGroupDetail.invalid ||
@@ -203,6 +205,22 @@ export class CharterDetailComponent extends CommonComponent {
     this.spinner.hide()
   }
 
+  async saveAndProccess() {
+    const res = await this.save();
+    if (res.data && !this.id()) {
+      this.router.navigate(['/plan/est-plan/wet-lease-charter/charter-detail', res.data])
+    } else if (this.id()) {
+      this.getDetailById(this.id())
+    }
+  }
+
+  async saveAndClose() {
+    const res = await this.save();
+    if (res.data) {
+      this.router.createUrlTree(['/plan/est-plan/wet-lease-charter'], { fragment: 'charter' });
+    }
+  }
+
   override async save(): Promise<any> {
 
     const isRequiredTransportation = this.charterGeneral.checkRequiredTransportation();
@@ -255,9 +273,7 @@ export class CharterDetailComponent extends CommonComponent {
       this.baseService.showSuccess(
         update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS,
       );
-      if (res.data && !this.id()) {
-        this.router.navigate(['/plan/est-plan/wet-lease-charter/charter-detail', res.data])
-      }
+      return res;
     } finally {
       this.spinner.hide()
     }

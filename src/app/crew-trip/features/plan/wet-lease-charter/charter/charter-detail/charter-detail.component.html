@@ -2,16 +2,22 @@
 <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center justify-content-between mt-2">
         <button type="button" class="btn btn-outline-secondary mr-20" i18n="@@back"
-            [routerLink]="['/plan/est-plan/wet-lease-charter']">
+            [routerLink]="['/plan/est-plan/wet-lease-charter']" fragment="charter">
             <i class="material-symbols-outlined">
                 undo
             </i>
             Back
         </button>
         @if (this.formGroupDetail.controls.id.value) {
+        @if (this.viewDetail() === 'true') {
         <h5 class="mb-0" i18n="@@addNew">
             View details
         </h5>
+        }@else {
+        <h5 class="mb-0" i18n="@@edit">
+            Edit
+        </h5>
+        }
         }@else {
         <h5 class="mb-0" i18n="@@addNew">
             Add new
@@ -32,10 +38,17 @@
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@charter">
             Charter
         </li>
-        @if (this.formGroupDetail.controls.id.value) {
+        @if (this.formGroupDetail.controls.id.value) {\
+        @if (this.viewDetail() === 'true') {
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@viewDetails">
             View details
         </li>
+        }@else {
+        <li class="breadcrumb-item d-inline-block position-relative" i18n="@@edit">
+            Edit
+        </li>
+        }
+
         }@else {
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@addNew">
             Add new
@@ -53,7 +66,7 @@
             </h5>
             @if (!disable) {
             <div (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'">
-                <button mat-button color="primary" type="button" class="add-btn" (click)="save()">
+                <button mat-button color="primary" type="button" class="add-btn" (click)="saveAndProccess()">
                     <i class="material-symbols-outlined">
                         save
                     </i>
@@ -108,9 +121,10 @@
                     </div>
                 </div>
             </form>
-            @if (!disable) {
+
             <div class="row">
                 <div class="btn-box text-right">
+                    @if (!disable) {
                     <button type="button" mat-button (click)="toggleDialogClose()"
                         class="close-btn  min-with-100 mlr-5">
                         <i class="material-symbols-outlined">
@@ -118,15 +132,23 @@
                         </i>
                         <span i18n="@@close">Close</span>
                     </button>
-                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="save()">
+                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="saveAndProccess()">
                         <i class="material-symbols-outlined">
                             save
                         </i>
                         <span i18n="@@save">Save</span>
                     </button>
+                    }@else {
+                    <button type="button" mat-button [routerLink]="['/plan/est-plan/wet-lease-charter']"
+                        fragment="charter" class="close-btn  min-with-100 mlr-5">
+                        <i class="material-symbols-outlined">
+                            close
+                        </i>
+                        <span i18n="@@close">Close</span>
+                    </button>
+                    }
                 </div>
             </div>
-            }
         </div>
     </mat-card-content>
 </mat-card>
@@ -179,19 +201,19 @@
                     </span>
                 </div>
                 <div class="text-center mb-20">
-                    <h5 class="mb-0" i18n="@@deleteMessage">Are you sure you want to recreate the data?</h5>
+                    <h5 class="mb-0" i18n="@@deleteMessage">Do you want to save the edited data?</h5>
                 </div>
 
                 <div class="btn-box text-center">
                     <button type="button" mat-button [routerLink]="['/plan/est-plan/wet-lease-charter']"
-                        class="close-btn  min-with-100 mlr-5">
+                        fragment="charter" class="close-btn  min-with-100 mlr-5">
                         <i class="material-symbols-outlined">
                             close
                         </i>
                         <span i18n="@@cancel">Cancel</span>
                     </button>
                     <button mat-button type="button" class="add-btn min-with-100 mlr-5"
-                        (click)="toggleDialogClose(); save()">
+                        (click)="toggleDialogClose(); saveAndClose()">
                         <i class="material-symbols-outlined">
                             save
                         </i>

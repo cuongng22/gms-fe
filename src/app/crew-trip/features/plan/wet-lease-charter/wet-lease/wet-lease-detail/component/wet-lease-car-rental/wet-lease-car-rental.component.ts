@@ -121,7 +121,7 @@ export class WetLeaseCarRentalComponent extends CommonComponent implements OnDes
   }
 
   getTotal(control: string) {
-    return this.totalPlan[control]
+    return Math.round(this.totalPlan[control])
   }
 
   setTotal(control: string) {

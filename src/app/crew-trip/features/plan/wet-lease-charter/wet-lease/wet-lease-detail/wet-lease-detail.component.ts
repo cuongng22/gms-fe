@@ -62,6 +62,8 @@ export class WetLeaseDetailComponent extends CommonComponent {
   showDialogCreateData: boolean = false;
   isCreateData = false;
 
+  showDialogClose = false;
+
   constructor() {
     super();
   }
@@ -78,7 +80,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
         let resDetail = await this.baseService.detail(this.id());
         this.formGroupDetail.patchValue({ ...resDetail.data })
         this.airportCodeChange(resDetail.data.airportCode)
-        this.dataGeneral = { ...resDetail.data };
+        this.dataGeneral = { ...resDetail.data, id: this.id() };
         this.wetLeaseGeneral.setData(this.dataGeneral)
         this.planHotel = [...resDetail.data.planHotel];
         this.planTransports = [...resDetail.data.planTransports];
@@ -219,6 +221,21 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.spinner.hide()
   }
 
+  async saveAndProccess() {
+    const res = await this.save();
+    if (res?.data && !this.id()) {
+      this.router.navigate(['/plan/est-plan/wet-lease-charter/wet-lease-detail', res.data])
+    } else if (this.id()) {
+      this.getDetailById(this.id())
+    }
+  }
+
+  async saveAndClose() {
+    const res = await this.save();
+    if (res.data) {
+      this.router.createUrlTree(['/plan/est-plan/wet-lease-charter#wet-lease'], { fragment: 'wet-lease' })
+    }
+  }
 
   override async save(): Promise<any> {
     this.wetLeaseGeneral.formGroupDetail.markAllAsTouched();
@@ -273,9 +290,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
       this.baseService.showSuccess(
         update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS,
       );
-      if (res.data && !this.id()) {
-        this.router.navigate(['/plan/est-plan/wet-lease-charter/wet-lease-detail', res.data])
-      }
+      return res;
     } finally {
       this.spinner.hide()
     }
@@ -324,5 +339,8 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.showDialogCreateData = !this.showDialogCreateData;
   }
 
+  toggleDialogClose() {
+    this.showDialogClose = !this.showDialogClose;
+  }
 
 }
