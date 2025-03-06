@@ -725,7 +725,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       group = this.tblDayUse.controls as FormGroup[];
       filter = group.filter(fGroup => fGroup.getRawValue().checkinFrom);
       this.tblDayUse = new FormArray<any>(filter);*/
-
+      if(this.isPL() && !this.formGroupDetail.getRawValue().marketCode){
+        this.showError($localize`Please update the airport code in the contract!`)
+      }
       this.formGroupDetail.patchValue({
         appendixCode: this.formGroupDetail.getRawValue().contractCode,
         appendixName: this.formGroupDetail.getRawValue().contractName,
@@ -873,7 +875,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     });
     body.isTaxHotel = body.isTaxHotelRevert;
     body.isTaxVehicle = body.isTaxCarRevert;
-    body.documentsList = this.tblAttachedDocument.data
+    body.documentsList = this.tblAttachedDocument.data;
+    body.phoneNumber = body.supplierPhone;
     // console.log(body, 'body');
     return body;
   }
