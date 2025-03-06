@@ -304,14 +304,12 @@
         <!--        dong4-->
         <div class="row mt-20">
           <div class="col-4" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Supplier ID</mat-label>
-              <input (ngModelChange)="partnerChangeDebounce($event);this.partnerChangeBrake=false;"
-                     formControlName="partnerCode" matInput required trim="blur">
-              @if (!!formGroupDetail.controls['partnerCode'].hasError('required')) {
-              <mat-error><span i18n>Supplier ID</span><span i18n> is required</span></mat-error>
-              }
-            </mat-form-field>
+            <app-selection-suggest-2 (selectionChange)="changePartnerCode($event)"
+                                     (inputChange)="changePartnerCode($event)"
+                                     [options]="listPartner"
+                                     attrDisplay="label"
+                                     attrValue="code" formControlName="partnerCode"
+                                     size="sm"/>
           </div>
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
@@ -531,9 +529,6 @@
             <mat-form-field>
               <mat-label i18n>Transfer to</mat-label>
               <input formControlName="peopleName" matInput trim="blur">
-              @if (!!formGroupDetail.controls['bankAccountNoB'].hasError('required')) {
-              <mat-error><span i18n>Transfer to</span><span i18n> is required</span></mat-error>
-              }
               <mat-error *ngxControlError="formGroupDetail.controls['peopleName']; track: 'maxlength'">
                 <span i18n>Transfer to</span><span i18n> must be less than 250 characters</span>
               </mat-error>
@@ -829,7 +824,7 @@
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
-            <app-selection-suggest (selectionchange)="nationSelected(formGroupDetail.getRawValue().nationId)"
+            <app-selection-suggest (selectionChange)="nationSelected(formGroupDetail.getRawValue().nationId)"
                                    [options]="listQuocGia"
                                    attrDisplay="vniName"
                                    attrValue="id" formControlName="nationId" i18n-label label="Country"
@@ -1087,7 +1082,7 @@
               <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Code</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
-                  <app-selection-suggest-2 (selectionchange)="onChangeHHDV(row); fieldUpdateValueAndValidity(row)"
+                  <app-selection-suggest-2 (selectionChange)="onChangeHHDV(row); fieldUpdateValueAndValidity(row)"
                                            [editInlineTable]="true"
                                            [errors]="row.get('serviceCode').errors"
                                            [options]="listFeeService"

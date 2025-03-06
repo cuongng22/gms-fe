@@ -64,6 +64,7 @@ import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight
 import moment from "moment";
 import {SelectionSuggest2Component} from "src/app/crew-trip/shared/component/selection-suggest-2/selection-suggest-2.component";
 import {UsersService} from "src/app/crew-trip/core/services/users-service";
+import {HOTEL} from "src/app/crew-trip/features/plan/budget-procurement/budget-procurement.model";
 
 @Component({
   selector: 'app-contract-detail',
@@ -96,6 +97,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   listMaNghiepVu: any = [];
   listKhoanMucKhns: any = [];
   listQuocGia: any = [];
+  listPartner: any = [];
   listContractSpec = ContractLookup.ContractSpec;
   listContractType = ContractLookup.ContractType;
   listContractForm = ContractLookup.ContractForm;
@@ -155,24 +157,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   }, 500);
   partnerChangeBrake: any;
   partnerChangeDebounce = debounce(async (value: any) => {
-    if (value && !this.partnerChangeBrake) {
-      try {
-        // await this.spinner.show();
-        await this.baseService
-          .getPartnerInfo({
-            partnerCode: value.toUpperCase(), isHotel: this.formGroupDetail.getRawValue().isHotel, isVehicle: this.formGroupDetail.getRawValue().isVehicle,
-          })
-          .then((res) => {
-            if (res.status == HttpStatusCode.Ok) {
-              this.formGroupDetail.patchValue(res.data);
-              this.partnerChangeBrake = true;
-            }
-          });
-      } catch (e) {
-      } finally {
-        await this.spinner.hide();
-      }
-    }
+    await this.getPartnerInfo(value);
   }, 500);
   _showDialogDelete = false;
   deleteObj: any;
@@ -418,7 +403,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         this.loadListFeeService(),
         this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}),
         this.loadListMaNghiepVu(),
-        this.loadListKhoanMucKhns()
+        this.loadListKhoanMucKhns(),
+        this.loadListHotel(),
+        this.loadListVehicle(),
       ]).then((res) => {
         if (this.formGroupDetail.getRawValue().isHotel && this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({
@@ -447,8 +434,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
           standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout, //exchangeRate: this.numberPipe.transform(this.formGroupDetail.getRawValue().exchangeRate,),
         });
 
-        this.getPartnerInfo();
+        this.getPartnerInfo(this.formGroupDetail.getRawValue().partnerCode);
         this.tblAttachedDocument = new MatTableDataSource(this.formGroupDetail.getRawValue().documentsList ?? [],);
+
+        //tao list ncc
+        this.buildListPartner(this.contractObj.marketCode);
+
         this.setReadModeDtl();
 
         //debounce
@@ -605,32 +596,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     });
   }
 
-  editCellUP(row: any, cell: any) {
-    if (!this.readMode) {
-      const cur = new Set(row.cellEdit);
-      cur.add(cell);
-      row.cellEdit = Array.from(cur);
-    }
-  }
-
-  readCellUP(row: any, cell: any) {
-    const cur = new Set(row.cellEdit);
-    if (!this.validField(row, cell)) {
-      cur.delete(cell);
-      row.cellEdit = Array.from(cur);
-    } else {
-      if (['priceBeforeTax', 'totalVatTax', 'priceAfterTax'].includes(cell)) {
-        row[cell] = this.numberPipe.transform(row[cell]);
-      }
-    }
-  }
-
-  checkCellUP(row: any, cell: any) {
-    return row.cellEdit?.some((s: any) => s == cell) ?? false;
-  }
-
-  filterNation(nationId: number) {
-  }
 
   async nationSelected(event: any) {
     const nation = this.listQuocGia.find((s: any) => s.id === (event?.value || event),);
@@ -640,10 +605,13 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     });
   }
 
-  async getPartnerInfo() {
+  async getPartnerInfo(partnerCode?: any) {
+    if (!partnerCode) {
+      return;
+    }
     await this.baseService
       .getPartnerInfo({
-        partnerCode: this.formGroupDetail.getRawValue().partnerCode,
+        partnerCode: partnerCode,
         isHotel: this.formGroupDetail.getRawValue().isHotel,
         isVehicle: this.formGroupDetail.getRawValue().isVehicle,
       })
@@ -671,7 +639,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
 
   async setReadMode(form: FormGroup) {
     const fieldContract = ['marketCode', 'marketName', 'nation', 'classification', 'flightGroup', 'statusUsage', 'supplierName', 'supplierPhone', 'supplierEmail', 'carType', 'standardCheckIn', 'standardCheckOut', 'notes', 'doiTuongDichVu', 'contractSpec', 'marketType',];
-    const fieldAnnex = ['partnerName', 'partnerAddress', 'currency', 'hdPlRoot', 'signedDepartmentName', 'budgetDepartmentName', 'proceedDepartmentName', 'paidDepartmentName', 'contractSpec', 'doiTuongDichVu', 'employeeName','marketCode'];
+    const fieldAnnex = ['partnerName', 'partnerAddress', 'currency', 'hdPlRoot', 'signedDepartmentName', 'budgetDepartmentName', 'proceedDepartmentName', 'paidDepartmentName', 'contractSpec', 'doiTuongDichVu', 'employeeName', 'marketCode'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -810,44 +778,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     }
   }
 
-  validField(row: any, cell: any, inputRef?: any) {
-    if (!inputRef) return 'none';
-    if (!row[cell]) {
-      return 'Not empty';
-    } else if ((cell == 'col614' || cell == 'col624' || cell == 'col634' || cell == 'col635') && row[cell] > 2) {
-      inputRef.control.setErrors({invalid: true});
-      return 'Must less than 2';
-    } else if (cell == 'col633') {
-      const regex = /^(>?)([1-9]|1[0-9]|2[0-4])$/;
-      if (!regex.test(row[cell])) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Not valid';
-      }
-    } else if (cell == 'col613') {
-      const from = +row['col612'].replace(':', '');
-      const to = +row['col613'].replace(':', '');
-      if (to < from) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Must after from';
-      }
-    } else if (cell == 'col623') {
-      const from = +row['col622'].replace(':', '');
-      const to = +row['col623'].replace(':', '');
-      if (to < from) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Must after from';
-      }
-    } else if (cell == 'col632') {
-      const from = +row['col631'].replace(':', '');
-      const to = +row['col632'].replace(':', '');
-      if (to < from) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Must after from';
-      }
-    }
-    return '';
-  }
-
   async onChangeHHDV(row: any) {
     const data = row.getRawValue();
     row.patchValue({
@@ -872,7 +802,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
           isHotel: true, isVehicle: true, isTaxCarRevert: true, isTaxHotelRevert: true,
         });
       }
-      this.getPartnerInfo();
+      // this.getPartnerInfo();
     }
   }
 
@@ -998,5 +928,46 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
 
   test(row: any) {
     console.log(row)
+  }
+
+  changePartnerCode(dataInput: any) {
+    let current = this.listPartner.find((s: any) => s.code === dataInput);
+    this.formGroupDetail.patchValue({
+      partnerName: current?.name ?? '',
+      partnerAddress: current?.address ?? ''
+    });
+    if (current) {
+      this.formGroupDetail.get('partnerName')?.disable();
+      this.formGroupDetail.get('partnerAddress')?.disable();
+    } else {
+      this.formGroupDetail.get('partnerName')?.enable();
+      this.formGroupDetail.get('partnerAddress')?.enable();
+    }
+  }
+
+  private async buildListPartner(partnerCode?: any) {
+    console.log(partnerCode)
+    this.listVehicles = this.listVehicles.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({...s, label: `[${s.code}] - ${s.name}`, type: 'VEHICLE'}));
+    this.listHotels = this.listHotels.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({...s, label: `[${s.hotelCode}] - ${s.hotelName}`, type: 'HOTEL'}));
+    let listCombine = [];
+    if (this.formGroupDetail.getRawValue().isHotel) {
+      listCombine = this.listHotels;
+    } else {
+      listCombine = this.listVehicles;
+    }
+    this.listPartner = listCombine.map((s: any) => ({
+      marketCode: s.marketCode,
+      code: s.code ?? s.hotelCode,
+      name: s.name ?? s.hotelName,
+      address: s.address,
+      fullName: s.fullName,
+      email: s.email,
+      phone: s.phone,
+      active: s.active,
+      notes: s.notes,
+      label: s.label,
+      type: s.type
+    }));
+    console.log(this.listPartner)
   }
 }
