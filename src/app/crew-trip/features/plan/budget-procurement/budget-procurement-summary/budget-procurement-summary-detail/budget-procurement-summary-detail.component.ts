@@ -136,6 +136,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       const response = await this.baseService.getDetailSummary(this.id() ?? 0); //dataDetailExample;//
       this.dataDetail = { ...response.data };
       this.budgetProcurementGeneral.formGroupDetail.patchValue(this.dataDetail, { emitEvent: false });
+      this.budgetProcurementGeneral.formGroupDetail.controls.procurementPlanFlag.setValue(this.dataDetail.procurementPlanFlag)
       this.budgetProcurementGeneral.formGroupDetail.controls.category.disable();
       this.budgetProcurementGeneral.formGroupDetail.controls.airportCode.disable();
       this.budgetProcurementGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
@@ -143,7 +144,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       this.budgetProcurementGeneral.inputPrice = this.dataDetail?.inputPrice;
       this.budgetProcurementGeneral.setVerionRate(this.dataDetail?.planBudgetProcurement.versionRate);
       this.budgetProcurementGeneral.currencyCodeChange({ value: this.dataDetail?.currencyCode });
-      this.budgetProcurementGeneral.setDefaultValueGeneral();
+      this.budgetProcurementGeneral.setDefaultValueGeneral(this.dataDetail.procurementPlanFlag);
 
       this.setDataDetail();
       this.setPanelState();

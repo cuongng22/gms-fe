@@ -111,7 +111,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     lateCheckoutContractFlag: new FormControl(false),
     haveContract: new FormControl(false),
     wetLeaseFlag: new FormControl(false),
-    currencyCode: new FormControl('',[Validators.required])
+    currencyCode: new FormControl('', [Validators.required])
 
   });
   _procurementPlanFlag: boolean = false;
@@ -231,8 +231,10 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
       this.formGroupDetail.controls.totalTime.setValue(null);
       this.formGroupDetail.controls.estimateTime.setValue(null);
       this.formGroupDetail.controls.time.setValue(null);
-      this.formGroupDetail.controls.earlyCheckinFlag.setValue(!!this.formGroupDetail.controls.earlyCheckinContractFlag.value);
-      this.formGroupDetail.controls.lateCheckoutFlag.setValue(!!this.formGroupDetail.controls.lateCheckoutContractFlag.value);
+      this.formGroupDetail.controls.earlyCheckinFlag.setValue(
+        this.formGroupDetail.controls.earlyCheckinFlag.value ?? !!this.formGroupDetail.controls.earlyCheckinContractFlag.value);
+      this.formGroupDetail.controls.lateCheckoutFlag.setValue(
+        this.formGroupDetail.controls.lateCheckoutFlag.value ?? !!this.formGroupDetail.controls.lateCheckoutContractFlag.value);
       this.formGroupDetail.controls.num.setValue(this.procurementPlanFlag ? '1' : null);
       this.formGroupDetail.controls.unit.setValue(this.procurementPlanFlag ? 'Gói HĐ/DV' : null);
       this.formGroupDetail.controls.supplierMethod.setValue(this.procurementPlanFlag ? 'Chào giá/ Đàm phán' : null);
