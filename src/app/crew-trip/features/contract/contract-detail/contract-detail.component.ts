@@ -1,75 +1,29 @@
-import {DecimalPipe, NgClass, NgForOf, NgIf} from '@angular/common';
+import {DecimalPipe} from '@angular/common';
 import {HttpStatusCode} from '@angular/common/http';
-import {
-  AfterContentInit, Component, EventEmitter, OnInit, Output, inject,
-} from '@angular/core';
-import {
-  AbstractControl,
-  FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators,
-} from '@angular/forms';
+import {AfterContentInit, Component, EventEmitter, inject, OnInit, Output,} from '@angular/core';
+import {AbstractControl, FormArray, FormBuilder, FormGroup, ValidationErrors, ValidatorFn, Validators,} from '@angular/forms';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
-import {
-  MatAutocomplete, MatAutocompleteTrigger,
-} from '@angular/material/autocomplete';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {
-  MatCheckboxChange, MatCheckboxModule,
-} from '@angular/material/checkbox';
-import {MatNativeDateModule} from '@angular/material/core';
-import {
-  MatDatepicker, MatDatepickerModule, MatDatepickerToggle,
-} from '@angular/material/datepicker';
-import {MatDialogModule} from '@angular/material/dialog';
-import {
-  MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader,
-} from '@angular/material/expansion';
-import {
-  MatError, MatFormFieldModule, MatHint, MatLabel, MatSuffix,
-} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatRadioModule} from '@angular/material/radio';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-import {MatTooltipModule} from '@angular/material/tooltip';
-import {FileUploadModule} from '@iplab/ngx-file-upload';
+import {MatCheckboxChange,} from '@angular/material/checkbox';
+import {MatTableDataSource} from '@angular/material/table';
 import {cloneDeep, debounce} from 'lodash';
-import {NgxEditorModule} from 'ngx-editor';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
-import {NgxControlError} from 'ngxtension/control-error';
 import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lookup';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {SelectionSuggestComponent} from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
-import {ConfirmDialog} from 'src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog';
-import {ThousandsSeparatorDirective} from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {PdfViewerComponent} from 'src/app/crew-trip/shared/pdf-viewer/pdf-viewer.component';
-import {
-  afterValidator,
-  beforeValidator, lessThanValidator, timeAfterValidator, timeBeforeValidator,
-} from 'src/app/crew-trip/shared/utils/common';
-import {
-  DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN,
-} from 'src/app/crew-trip/shared/utils/constant';
-import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
-import {NgxMatTimepickerComponent, NgxMatTimepickerToggleComponent} from "ngx-mat-timepicker";
-import {airportCode} from "src/app/crew-trip/shared/utils/error-message";
+import {afterValidator, beforeValidator, lessThanValidator, timeAfterValidator, timeBeforeValidator,} from 'src/app/crew-trip/shared/utils/common';
+import {DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN,} from 'src/app/crew-trip/shared/utils/constant';
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 import moment from "moment";
-import {SelectionSuggest2Component} from "src/app/crew-trip/shared/component/selection-suggest-2/selection-suggest-2.component";
 import {UsersService} from "src/app/crew-trip/core/services/users-service";
 import {HOTEL} from "src/app/crew-trip/features/plan/budget-procurement/budget-procurement.model";
+import {BaseImport} from "src/app/crew-trip/shared/base-import";
 
 @Component({
   selector: 'app-contract-detail',
   standalone: true,
-  imports: [FormsModule, InputSizeComponent, MatFormFieldModule, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatRadioModule, MatSelect, MatSuffix, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgForOf, NgxMaterialTimepickerModule, MatTooltipModule, MatDialogModule, NgxControlError, SelectionSuggestComponent, ConfirmDialog, ThousandsSeparatorDirective, ControlErrorComponent, SelectionSuggestComponent, SelectionSuggest2Component,],
+  imports: [BaseImport],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY), DecimalPipe],
@@ -398,15 +352,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   override async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([this.detail(this.id),
-        this.loadListQuocGia(),
-        this.loadListFeeService(),
-        this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}),
-        this.loadListMaNghiepVu(),
-        this.loadListKhoanMucKhns(),
-        this.loadListHotel(),
-        this.loadListVehicle(),
-      ]).then((res) => {
+      await Promise.all([this.detail(this.id), this.loadListQuocGia(), this.loadListFeeService(), this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}), this.loadListMaNghiepVu(), this.loadListKhoanMucKhns(), this.loadListHotel(), this.loadListVehicle(),]).then((res) => {
         if (this.formGroupDetail.getRawValue().isHotel && this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({
             doiTuongDichVu: '3',
@@ -525,12 +471,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         this.tblPriceUnit.removeAt(this.deleteObj.index);
         this.dsPriceUnit.data = this.tblPriceUnit.controls;
         this.formGroupDetail.getRawValue().priceUnitInfo.forEach((s: any) => {
-          console.log(s.id, this.deleteObj.id)
           if (s.id == this.deleteObj.id) {
             s.active = false;
           }
         });
-        console.log(this.formGroupDetail.getRawValue())
       } else if (this.deleteObj.deleteType == 'tblEciLco') {
         this.tblEciLco.removeAt(this.deleteObj.index);
         this.dsEciLco.data = this.tblEciLco.controls;
@@ -600,8 +544,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   async nationSelected(event: any) {
     const nation = this.listQuocGia.find((s: any) => s.id === (event?.value || event),);
     this.formGroupDetail.patchValue({
-      nationId: nation?.id,
-      nation: nation?.code, marketType: (nation?.code === 'VN' ? 'Domestic' : 'International') || '',
+      nationId: nation?.id, nation: nation?.code, marketType: (nation?.code === 'VN' ? 'Domestic' : 'International') || '',
     });
   }
 
@@ -611,9 +554,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     }
     await this.baseService
       .getPartnerInfo({
-        partnerCode: partnerCode,
-        isHotel: this.formGroupDetail.getRawValue().isHotel,
-        isVehicle: this.formGroupDetail.getRawValue().isVehicle,
+        partnerCode: partnerCode, isHotel: this.formGroupDetail.getRawValue().isHotel, isVehicle: this.formGroupDetail.getRawValue().isVehicle,
       })
       .then((res) => {
         if (res.status == HttpStatusCode.Ok && res.data) {
@@ -669,13 +610,25 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   override async detail(id: any): Promise<void> {
     if (id) {
       await super.detail(id);
+      if (this.isPL()) {
+        const resContract = await this.baseService.detail(this.contractObj.bizDocId);
+        let fileAttachContract = cloneDeep(resContract.data.documentsList);
+        fileAttachContract = fileAttachContract.map((s: any) => ({...s, isFromContract: true}));
+        this.formGroupDetail.patchValue({
+          documentsList: [...fileAttachContract, ...this.formGroupDetail.getRawValue().documentsList]
+        });
+      }
     } else if (this.isPL()) {
-      const resContract = await this.baseService.detail(this.contractObj.bizDocId,);
+      const resContract = await this.baseService.detail(this.contractObj.bizDocId);
+      let fileAttachContract = cloneDeep(resContract.data.documentsList);
+      fileAttachContract = fileAttachContract.map((s: any) => ({...s, isFromContract: true}));
       const bizDocIdContract = cloneDeep(resContract.data.bizDocId);
-      ['contractCode', 'contractName', 'contractNo', 'signedDate', 'employeeName'].forEach((key) => delete resContract.data[key]);
+      ['contractCode', 'contractName', 'contractNo', 'signedDate', 'employeeName', 'documentsList'].forEach((key) => delete resContract.data[key]);
       this.formGroupDetail.patchValue({
-        ...(resContract?.data || resContract), hdPlRoot: bizDocIdContract,
-        employeeName: this.usersService.getUserLogin()?.fullName
+        ...(resContract?.data || resContract),
+        hdPlRoot: bizDocIdContract,
+        employeeName: this.usersService.getUserLogin()?.fullName,
+        documentsList: fileAttachContract
       });
     } else {
       this.formGroupDetail.patchValue({});
@@ -725,7 +678,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       group = this.tblDayUse.controls as FormGroup[];
       filter = group.filter(fGroup => fGroup.getRawValue().checkinFrom);
       this.tblDayUse = new FormArray<any>(filter);*/
-      if(this.isPL() && !this.formGroupDetail.getRawValue().marketCode){
+      if (this.isPL() && !this.formGroupDetail.getRawValue().marketCode) {
         this.showError($localize`Please update the airport code in the contract!`)
       }
       this.formGroupDetail.patchValue({
@@ -876,6 +829,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     body.isTaxHotel = body.isTaxHotelRevert;
     body.isTaxVehicle = body.isTaxCarRevert;
     body.documentsList = this.tblAttachedDocument.data;
+    body.documentsList = body.documentsList.filter((s: any) => !s.isFromContract);
     body.phoneNumber = body.supplierPhone;
     // console.log(body, 'body');
     return body;
@@ -902,8 +856,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       let serviceCode = row.getRawValue().serviceCode;
       if (fromDate && toDate && serviceCode) {
         let isOveralap = this.dsPriceUnit.data.filter((s: any) => {
-          return (s.getRawValue().active == true && s.getRawValue().serviceCode === serviceCode &&
-            moment(s.getRawValue().fromDate).isBefore(toDate) && moment(s.getRawValue().toDate).isAfter(fromDate))
+          return (s.getRawValue().active == true && s.getRawValue().serviceCode === serviceCode && moment(s.getRawValue().fromDate).isBefore(toDate) && moment(s.getRawValue().toDate).isAfter(fromDate))
         });
         if (isOveralap.length > 1) {
           let err = {overlapValidator: true, message: `${serviceCode} already exists in this period`};
@@ -936,8 +889,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   changePartnerCode(dataInput: any) {
     let current = this.listPartner.find((s: any) => s.code === dataInput);
     this.formGroupDetail.patchValue({
-      partnerName: current?.name ?? '',
-      partnerAddress: current?.address ?? ''
+      partnerName: current?.name ?? '', partnerAddress: current?.address ?? ''
     });
     if (current) {
       this.formGroupDetail.get('partnerName')?.disable();
@@ -949,9 +901,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   }
 
   private async buildListPartner(partnerCode?: any) {
-    console.log(partnerCode)
-    this.listVehicles = this.listVehicles.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({...s, label: `[${s.code}] - ${s.name}`, type: 'VEHICLE'}));
-    this.listHotels = this.listHotels.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({...s, label: `[${s.hotelCode}] - ${s.hotelName}`, type: 'HOTEL'}));
+    this.listVehicles = this.listVehicles.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({
+      ...s, label: `[${s.code}] - ${s.name}`, type: 'VEHICLE'
+    }));
+    this.listHotels = this.listHotels.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({
+      ...s, label: `[${s.hotelCode}] - ${s.hotelName}`, type: 'HOTEL'
+    }));
     let listCombine = [];
     if (this.formGroupDetail.getRawValue().isHotel) {
       listCombine = this.listHotels;
@@ -971,6 +926,5 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       label: s.label,
       type: s.type
     }));
-    console.log(this.listPartner)
   }
 }
