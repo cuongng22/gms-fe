@@ -86,7 +86,7 @@ export const formula: any = {
         formula: '(ctz(data.singleRoom) * ctz(data.priceSingleRoomVat)) + (ctz(data.doubleRoom) * ctz(data.priceDoubleRoomVat))'
     },
     totalAmountYearPerformVat: {
-        formula: '(ctz(data.singleRoomYearPerform) * ctz(data.priceSingleRoomVat)) + (ctz(data.doubleRoomYearPerform) * ctz(data.priceDoubleRoomVat))'
+        formula: '(ctz(data.singleRoomYearPerform) * ctz(data.priceSingleRoomPerformVat)) + (ctz(data.doubleRoomYearPerform) * ctz(data.priceDoubleRoomPerformVat))'
     }
 }
 
