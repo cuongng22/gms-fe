@@ -34,7 +34,7 @@
                                 formControlName="year" attrValue="code" attrDisplay="value" size="md" />
                         </div>
                         <div class="col mb-2">
-                            <app-selection-suggest #selectionVersion i18n-label="@@version" label="Version" [options]="versions()"
+                            <app-selection-suggest i18n-label="@@version" label="Version" [options]="versions()"
                                 formControlName="version" size="md" />
                         </div>
 
@@ -269,7 +269,7 @@
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell text-center" colspan="99">No data!</td>
+                    <td class="mat-cell" colspan="99">No data!"</td>
                 </tr>
             </table>
         </div>
