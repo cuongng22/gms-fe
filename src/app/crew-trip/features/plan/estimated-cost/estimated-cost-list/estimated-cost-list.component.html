@@ -34,8 +34,8 @@
                                 formControlName="year" attrValue="code" attrDisplay="value" size="md" />
                         </div>
                         <div class="col mb-2">
-                            <app-selection-suggest #selectionVersion i18n-label="@@version" label="Version"
-                                [options]="versions()" formControlName="version" size="md" />
+                            <app-selection-suggest i18n-label="@@version" label="Version" [options]="versions()"
+                                formControlName="version" size="md" />
                         </div>
 
                         <div class="col mb-2">
@@ -116,8 +116,7 @@
                         i18n="@@year">
                         Year
                     </th>
-                    <td mat-cell *matCellDef="let element" class="text-center"
-                        [ngClass]="{'text-disable':element.disable}">
+                    <td mat-cell *matCellDef="let element" class="text-center" [ngClass]="{'text-disable':element.disable}">
                         {{element.year}}
                     </td>
                 </ng-container>
@@ -126,8 +125,7 @@
                         i18n="@@version">
                         Version
                     </th>
-                    <td mat-cell *matCellDef="let element" class="text-center"
-                        [ngClass]="{'text-disable':element.disable}">
+                    <td mat-cell *matCellDef="let element" class="text-center" [ngClass]="{'text-disable':element.disable}">
                         {{element.version }}
                     </td>
                 </ng-container>
@@ -136,8 +134,7 @@
                         i18n="@@versionOfProduction">
                         Version of Production
                     </th>
-                    <td mat-cell *matCellDef="let element" class="text-center"
-                        [ngClass]="{'text-disable':element.disable}">
+                    <td mat-cell *matCellDef="let element" class="text-center" [ngClass]="{'text-disable':element.disable}">
                         {{element.versionProd }}
                     </td>
                 </ng-container>
@@ -146,8 +143,7 @@
                         i18n="@@versionOfExchangeRate">
                         Version of Exchange Rate
                     </th>
-                    <td mat-cell *matCellDef="let element" class="text-center"
-                        [ngClass]="{'text-disable':element.disable}">
+                    <td mat-cell *matCellDef="let element" class="text-center" [ngClass]="{'text-disable':element.disable}">
                         {{element.versionRate }}
                     </td>
                 </ng-container>
@@ -156,15 +152,11 @@
                         i18n="@@time">Time
                     </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">
-                        <!-- @if(
-                        element.status === 'international_completed' ||
+                        @if(element.status === 'international_completed' ||
                         element.status === 'domestic_completed' ||
                         element.status === 'dom_int_completed' ||
                         element.status === 'confirmed' ||
                         element.status === 'approved'
-                        ){ -->
-                        @if(
-                        element.status === 'dom_int_completed'
                         ){
                         <span>
                             <span class="text-secondary-bootstrap" i18n="@@completionDate">Completion Date</span>:
@@ -219,8 +211,7 @@
                             element.status === 'dom_int_completed' ||
                             element.status === 'confirmed' ||
                             element.status === 'rejected' ||
-                            element.status === 'approved' ||
-                            element.status === 'domestic_completed'){
+                            element.status === 'approved'){
                             <button type="button" mat-button class="text-vna" [routerLink]="[element.id,'summary']"
                                 routerLinkActive="router-link-active">
                                 <i class="material-symbols-outlined " title="Detail" i18n-title="@@detail">

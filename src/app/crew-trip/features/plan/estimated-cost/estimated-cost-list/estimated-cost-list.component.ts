@@ -1,6 +1,6 @@
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { HttpStatusCode } from '@angular/common/http';
-import { Component, DestroyRef, inject, Inject, model, OnInit, viewChild } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, model, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -30,7 +30,6 @@ import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/se
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 import { EstimatedAnnualProductionService } from 'src/app/crew-trip/core/services/estimated-annual-production';
 import moment from 'moment';
-import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-estimated-cost-list',
@@ -49,8 +48,6 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
 
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(PlanBudgetProcurementService);
-
-  selectionVersion = viewChild<SelectionSuggestComponent>('selectionVersion')
 
   versions = model<any[]>([]);
   statuses = Statuses;
@@ -153,10 +150,7 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
     dialogDetailRef.afterClosed().subscribe(async (res) => {
       if (res) {
         this.getVersion();
-        if (this.formGroupSearch.controls.version.value) {
-          this.formGroupSearch.controls.version.setValue(res.version)
-          this.selectionVersion()?.setViewValueInit(res.version, true)
-        }
+        this.formGroupSearch.controls.version.setValue(res.version)
         await this.search();
       }
     });
@@ -254,12 +248,6 @@ export class DialogEstimatedCostDetail extends CommonComponent {
           })
         })
       }
-
-      this.formGroupDetail.controls.version.valueChanges.pipe(debounceTime(1000)).subscribe((value: any) => {
-        console.log('vaoooo version.valueChanges: ', value)
-        this.existsVersion = false;
-        this.formGroupDetail.controls.version.updateValueAndValidity()
-      })
     }
   }
 
@@ -279,7 +267,7 @@ export class DialogEstimatedCostDetail extends CommonComponent {
       }
       console.log(res)
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
-      this.dialogRef.close({ version: res.data.version });
+      this.dialogRef.close({ version: this.formGroupDetail.getRawValue().version });
     } catch (e: any) {
       if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
         this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
