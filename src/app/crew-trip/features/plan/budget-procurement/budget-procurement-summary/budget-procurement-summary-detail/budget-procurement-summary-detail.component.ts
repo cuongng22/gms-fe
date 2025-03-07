@@ -259,6 +259,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       this.dataDetail?.planBudgetHotels.forEach((item: any) => {
         this.setPrice(item, price);
         this.setExchangeRateBudget(item, this.budgetProcurementGeneral.exchangeRate)
+
       });
       this.dataDetail?.planProcurementHotels.forEach((item: any) => {
         this.setPrice(item, price);
@@ -277,41 +278,56 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     }
   }
   setPrice(item: any, price: any) {
-    item.priceSingleRoom = price.priceSingleRoom.priceBeforeTax;
-    item.priceSingleRoomVat = price.priceSingleRoom.priceAfterTax
+    item.priceSingleRoom = price.priceSingleRoom?.priceBeforeTax ?? 0;
+    item.priceSingleRoomVat = price.priceSingleRoom?.priceAfterTax ?? 0;
 
-    item.priceDoubleRoom = price.priceDoubleRoom.priceBeforeTax;
-    item.priceDoubleRoomVat = price.priceDoubleRoom.priceAfterTax
+    item.priceDoubleRoom = price.priceDoubleRoom?.priceBeforeTax ?? 0;;
+    item.priceDoubleRoomVat = price.priceDoubleRoom?.priceAfterTax ?? 0;
 
-    item.priceSingleRoomEarly = price.priceEarlyCheckinSingleRoom.priceBeforeTax;
-    item.priceSingleRoomEarlyVat = price.priceEarlyCheckinSingleRoom.priceAfterTax;
+    item.priceSingleRoomEarly = price.priceEarlyCheckinSingleRoom?.priceBeforeTax ?? 0;;
+    item.priceSingleRoomEarlyVat = price.priceEarlyCheckinSingleRoom?.priceAfterTax ?? 0;;
 
-    item.priceDoubleRoomEarly = price.priceEarlyCheckinDoubleRoom.priceBeforeTax;
-    item.priceDoubleRoomEarlyVat = price.priceEarlyCheckinDoubleRoom.priceAfterTax;
+    item.priceDoubleRoomEarly = price.priceEarlyCheckinDoubleRoom?.priceBeforeTax ?? 0;;
+    item.priceDoubleRoomEarlyVat = price.priceEarlyCheckinDoubleRoom?.priceAfterTax ?? 0;;
 
-    item.priceSingleRoomLate = price.priceLateCheckoutSingleRoom.priceBeforeTax;
-    item.priceSingleRoomLateVat = price.priceLateCheckoutSingleRoom.priceAfterTax;
+    item.priceSingleRoomLate = price.priceLateCheckoutSingleRoom?.priceBeforeTax ?? 0;;
+    item.priceSingleRoomLateVat = price.priceLateCheckoutSingleRoom?.priceAfterTax ?? 0;;
 
-    item.priceDoubleRoomLate = price.priceLateCheckoutDoubleRoom.priceBeforeTax;
-    item.priceDoubleRoomLateVat = price.priceLateCheckoutDoubleRoom.priceAfterTax;
+    item.priceDoubleRoomLate = price.priceLateCheckoutDoubleRoom?.priceBeforeTax ?? 0;;
+    item.priceDoubleRoomLateVat = price.priceLateCheckoutDoubleRoom?.priceAfterTax ?? 0;;
 
-    item.priceCrewTransport = price.priceTransportation.priceBeforeTax;
-    item.priceCrewTransportVat = price.priceTransportation.priceAfterTax;
+    item.priceCrewTransport = price.priceTransportation?.priceBeforeTax ?? 0;;
+    item.priceCrewTransportVat = price.priceTransportation?.priceAfterTax ?? 0;;
 
-    item.unitPrice = price.priceTransportation.priceBeforeTax;
-    item.unitPriceVat = price.priceTransportation.priceAfterTax;
+    item.unitPrice = price.priceTransportation?.priceBeforeTax ?? 0;;
+    item.unitPriceVat = price.priceTransportation?.priceAfterTax ?? 0;;
   }
 
+  /**
+   * Set tỉ giá cho phần kế hoạch ngân sách theo hàng tháng
+   * @param item 
+   * @param exchangeRate 
+   */
   setExchangeRateBudget(item: any, exchangeRate: any) {
-    const _periodStart = moment(item.periodStart).locale('en');
-    const _exchangeRate = exchangeRate[_periodStart.format('MMMM').toLowerCase()]
-    console.log(_periodStart, _exchangeRate);
-    if (_exchangeRate) {
-      item.rateInPeriod = _exchangeRate;
+    if (exchangeRate) {
+      const _periodStart = moment(item.periodStart).locale('en');
+      const _exchangeRate = exchangeRate[_periodStart.format('MMMM').toLowerCase()]
+      console.log(_periodStart, _exchangeRate);
+      if (_exchangeRate) {
+        item.rateInPeriod = _exchangeRate;
+      }
     }
   }
+
+  /**
+   * Set tỉ giá cho phần kế hoạch mua sắm
+   * @param item 
+   * @param exchangeRate 
+   */
   setExchangeRateProcurement(item: any, exchangeRate: any) {
-    item.rateInPeriod = exchangeRate.average;
+    if (exchangeRate) {
+      item.rateInPeriod = exchangeRate.average;
+    }
   }
 
 
