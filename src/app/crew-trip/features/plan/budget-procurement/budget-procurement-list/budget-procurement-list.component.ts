@@ -86,7 +86,7 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
   }
 
   getVersion() {
-    this.baseService.versions().then(res => {
+    this.baseService.versions(PlanTypeEnum.KHNS).then(res => {
       this.versions.set(res.data);
     });
   }
@@ -237,7 +237,7 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
           this.formGroupDetail.controls.updateBudgetPlan.disable();
         }
       } else {
-        this.estimatedAnnualProductionService.getNewsVersion().then(res => {
+        this.estimatedAnnualProductionService.getNewsVersion('P').then(res => {
           this.formGroupDetail.patchValue({
             year: res.data.year,
             version: res.data.versionId
