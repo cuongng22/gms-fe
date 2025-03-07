@@ -197,7 +197,7 @@
                         Status
                     </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">
-                        {{element.status }}</td>
+                        {{element.statusName }}</td>
                 </ng-container>
                 <ng-container matColumnDef="action" stickyEnd>
                     <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef
@@ -267,7 +267,9 @@
 
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="99">No data!</td>
+                </tr>
             </table>
         </div>
         <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
