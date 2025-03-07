@@ -23,8 +23,8 @@ export class PlanBudgetProcurementService extends BaseService {
         return this._isUpdate;
     }
 
-    versions(): Promise<any> {
-        const url = `${this.api}/${this.path}/versions`;
+    versions(type:string): Promise<any> {
+        const url = `${this.api}/${this.path}/versions?type=${type}`;
         return firstValueFrom(this.http.get<any>(url, this.httpOptions));
     }
 

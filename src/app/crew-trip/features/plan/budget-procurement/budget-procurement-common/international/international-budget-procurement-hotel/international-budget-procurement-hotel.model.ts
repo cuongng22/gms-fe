@@ -5,8 +5,8 @@ export const formula: any = {
 
   //Số chuyến bay theo tàu (công thức của kế hoạch mua sắm)
   totalFlightByAircraft: {
-    formula: 'ctz(data.totalFlightMonth) * ctz(data.flightOvernightRate)',
-    formulaProcurement: 'ctz(data.planFlightPeriod) * ctz(data.flightOvernightRate)'
+    formula: 'ctz(data.totalFlightMonth) * (ctz(data.flightOvernightRate)/100)',
+    formulaProcurement: 'ctz(data.planFlightPeriod) * (ctz(data.flightOvernightRate)/100)'
   },
 
   //Tổng tiền xe chở tổ bay (ngoại tệ)
