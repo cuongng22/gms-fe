@@ -39,7 +39,7 @@ import { DatepickerComponent } from 'src/app/crew-trip/shared/component/datepick
     MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
     NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent,
-    BudgetProcurementPriceComponent,DatepickerComponent
+    BudgetProcurementPriceComponent, DatepickerComponent
   ],
   templateUrl: './budget-procurement-general.component.html',
   styleUrl: './budget-procurement-general.component.scss',
@@ -223,7 +223,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
       this.formGroupDetail.controls.budgetPlanFlag.value === undefined) {
       this.formGroupDetail.controls.budgetPlanFlag.setValue(true);
     }
-    if (isCheckProcurementPlan) {
+    if (!isCheckProcurementPlan) {
       this.formGroupDetail.controls.procStartDate.setValue(null);
       this.formGroupDetail.controls.procStartDate.markAsUntouched();
       this.formGroupDetail.controls.procEndDate.setValue(null);
@@ -231,13 +231,24 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
       this.formGroupDetail.controls.totalTime.setValue(null);
       this.formGroupDetail.controls.estimateTime.setValue(null);
       this.formGroupDetail.controls.time.setValue(null);
+
+      this.formGroupDetail.controls.num.setValue(null);
+      this.formGroupDetail.controls.unit.setValue(null);
+    } else {
       this.formGroupDetail.controls.earlyCheckinFlag.setValue(
         this.formGroupDetail.controls.earlyCheckinFlag.value ?? !!this.formGroupDetail.controls.earlyCheckinContractFlag.value);
       this.formGroupDetail.controls.lateCheckoutFlag.setValue(
         this.formGroupDetail.controls.lateCheckoutFlag.value ?? !!this.formGroupDetail.controls.lateCheckoutContractFlag.value);
-      this.formGroupDetail.controls.num.setValue(this.procurementPlanFlag ? '1' : null);
-      this.formGroupDetail.controls.unit.setValue(this.procurementPlanFlag ? 'Gói HĐ/DV' : null);
-      this.formGroupDetail.controls.supplierMethod.setValue(this.procurementPlanFlag ? 'Chào giá/ Đàm phán' : null);
+
+      if (!this.formGroupDetail.controls.num.value) {
+        this.formGroupDetail.controls.num.setValue('1');
+      }
+      if (!this.formGroupDetail.controls.unit.value) {
+        this.formGroupDetail.controls.unit.setValue('Gói HĐ/DV');
+      }
+      if (!this.formGroupDetail.controls.supplierMethod.value) {
+        this.formGroupDetail.controls.supplierMethod.setValue('Chào giá/ Đàm phán');
+      }
     }
   }
 
