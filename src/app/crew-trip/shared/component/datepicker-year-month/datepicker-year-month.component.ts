@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import {AfterContentChecked, Component, inject, Input, input, OnInit} from '@angular/core';
+import { Component, inject, input, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
@@ -49,7 +49,7 @@ export class DatepickerYearMonthComponent implements OnInit {
   label = input<string>();
   readonly = input<boolean>(false);
   requiredLabel = input<boolean>(false);
-  @Input() editInlineTable = false;
+
 
   protected datepickerYearMonth = inject<NgxControlValueAccessor<any>>(
     NgxControlValueAccessor,
@@ -62,7 +62,6 @@ export class DatepickerYearMonthComponent implements OnInit {
   ngOnInit(): void {
   }
   get requiredControl(): boolean {
-    console.log('requiredControl: ', this.datepickerYearMonth.ngControl?.control?.hasValidator(Validators.required));
     return this.formControl.hasValidator(Validators.required);
   }
 

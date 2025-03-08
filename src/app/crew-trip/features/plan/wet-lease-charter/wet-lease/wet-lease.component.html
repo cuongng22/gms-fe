@@ -69,6 +69,7 @@
   <mat-card-content>
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+        
         @for (col of displayedFirst; track col.name) {
         <ng-container matColumnDef="{{ col.name }}">
           <th mat-header-cell *matHeaderCellDef class="text-center" [colSpan]="col.colSpan" [rowSpan]="col.rowSan" [innerHtml]="col.field">

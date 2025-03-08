@@ -17,7 +17,7 @@
             </mat-form-field>
         </div>
         <div class="col mb-2">
-            <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="listFlightMarket"
+            <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="airports()"
                 formControlName="airportCode" size="sm" [required]="true" />
         </div>
         <div class="col" sizeInput="sm">
@@ -109,101 +109,104 @@
             Procurement Plan
         </mat-checkbox>
     </div>
-    <div [hidden]="!formGroupDetail.controls.procurementPlanFlag.value">
-        <div class="row">
-            <div class="col">
-                <app-datepicker-year-month class="mb-2" [requiredLabel]="true" i18n-label="@@startDate" label="Start Date"
-                    size="sm" formControlName="procStartDate">
-                </app-datepicker-year-month>
-            </div>
-            <div class="col" sizeInput="sm">
-                <app-datepicker-year-month class="mb-2" [requiredLabel]="true" i18n-label="@@endDate" label="End Date"
-                    size="sm" formControlName="procEndDate">
-                </app-datepicker-year-month>
-            </div>
-            <div class="col" sizeInput="sm">
-                <mat-form-field class="mb-2">
-                    <mat-label i18n="@@totalTime">Total Time (month)</mat-label>
-                    <input type="text" matInput formControlName="totalTime" digitOnly>
-                    <mat-error *ngxControlError="formGroupDetail.controls.totalTime; track: 'maxlength'"
-                        i18n="@@totalTimeMaxlength">
-                        Total Time {{MESSAGE.MAX_LENGTH_INVALID|
-                        dataTransformPipe:[Constant.STRING_FORMAT,3]
-                        }}
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col">
-                <app-datepicker-year-month class="mb-2" i18n-lable="@@estimatedTime" label="Estimated Time" size="sm"
-                    formControlName="estimateTime">
-                </app-datepicker-year-month>
-            </div>
-            <div class="col" sizeInput="sm">
-                <mat-form-field class="mb-2">
-                    <mat-label i18n="@@time">Time (month)</mat-label>
-                    <input type="text" matInput formControlName="time" digitOnly>
-                    <mat-error *ngxControlError="formGroupDetail.controls.time; track: 'maxlength'" i18n="@@timeMaxlength">
-                        Time {{MESSAGE.MAX_LENGTH_INVALID|
-                        dataTransformPipe:[Constant.STRING_FORMAT,3]
-                        }}
-                    </mat-error>
-                </mat-form-field>
-            </div>
+    @if(formGroupDetail.controls.procurementPlanFlag.value) {
+    <div class="row">
+        <div class="col">
+            <!-- <app-datepicker-year-month class="mb-2" [requiredLabel]="true" i18n-label="@@startDate" label="Start Date"
+                size="sm" formControlName="procStartDate">
+            </app-datepicker-year-month> -->
+            <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="airports()"
+                formControlName="procStartDate" size="sm" [required]="true" />
         </div>
-        <div class="row">
-            <div class="col" sizeInput="sm">
-                <mat-form-field class="mb-2">
-                    <mat-label i18n="@@number">Number</mat-label>
-                    <input type="text" matInput formControlName="num">
-                    <mat-error *ngxControlError="formGroupDetail.controls.num; track: 'maxlength'" i18n="@@numberMaxlength">
-                        Number {{MESSAGE.MAX_LENGTH_INVALID|
-                        dataTransformPipe:[Constant.STRING_FORMAT,20]
-                        }}
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col " sizeInput="sm">
-                <mat-form-field class="mb-2">
-                    <mat-label i18n="@@unit">Unit</mat-label>
-                    <input type="text" matInput formControlName="unit">
-                    <mat-error *ngxControlError="formGroupDetail.controls.unit; track: 'maxlength'" i18n="@@unitMaxlength">
-                        Unit {{MESSAGE.MAX_LENGTH_INVALID|
-                        dataTransformPipe:[Constant.STRING_FORMAT,100]
-                        }}
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            <div class="col " sizeInput="sm">
-                <mat-form-field class="mb-2">
-                    <mat-label i18n="@@supplierSelectionMethod">Supplier Selection Method</mat-label>
-                    <input type="text" matInput formControlName="supplierMethod">
-                    <mat-error *ngxControlError="formGroupDetail.controls.supplierMethod; track: 'maxlength'"
-                        i18n="@@supplierMethodMaxlength">
-                        Supplier Selection Method {{MESSAGE.MAX_LENGTH_INVALID|
-                        dataTransformPipe:[Constant.STRING_FORMAT,100]
-                        }}
-                    </mat-error>
-                </mat-form-field>
-            </div>
-            @if (category() === CategoryEnum.INTERNATIONAL) {
-            <div class="col" sizeInput="sm">
-                <mat-checkbox class="mb-2" i18n="@@earlyCheckInFee" formControlName="earlyCheckinFlag">
-                    Early check-in fee
-                </mat-checkbox>
-            </div>
-            <div class="col" sizeInput="sm">
-                <mat-checkbox class="mb-2" i18n="@@lateCheckOutFee" formControlName="lateCheckoutFlag">
-                    Late check-out fee
-                </mat-checkbox>
-            </div>
-            }@else {
-            <div class="col " sizeInput="sm">
-                <mat-checkbox class="mb-2" i18n="@@wetLease" formControlName="wetLeaseFlag">
-                    Wet Lease
-                </mat-checkbox>
-            </div>
-            <div class="col "></div>
-            }
+        <div class="col" sizeInput="sm">
+            <app-datepicker-year-month class="mb-2" [requiredLabel]="true" i18n-label="@@endDate" label="End Date"
+                size="sm" formControlName="procEndDate">
+            </app-datepicker-year-month>
+        </div>
+        <div class="col" sizeInput="sm">
+            <mat-form-field class="mb-2">
+                <mat-label i18n="@@totalTime">Total Time (month)</mat-label>
+                <input type="text" matInput formControlName="totalTime" digitOnly>
+                <mat-error *ngxControlError="formGroupDetail.controls.totalTime; track: 'maxlength'"
+                    i18n="@@totalTimeMaxlength">
+                    Total Time {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,3]
+                    }}
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col">
+            <app-datepicker-year-month class="mb-2" i18n-lable="@@estimatedTime" label="Estimated Time" size="sm"
+                formControlName="estimateTime">
+            </app-datepicker-year-month>
+        </div>
+        <div class="col" sizeInput="sm">
+            <mat-form-field class="mb-2">
+                <mat-label i18n="@@time">Time (month)</mat-label>
+                <input type="text" matInput formControlName="time" digitOnly>
+                <mat-error *ngxControlError="formGroupDetail.controls.time; track: 'maxlength'" i18n="@@timeMaxlength">
+                    Time {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,3]
+                    }}
+                </mat-error>
+            </mat-form-field>
         </div>
     </div>
+    <div class="row">
+        <div class="col" sizeInput="sm">
+            <mat-form-field class="mb-2">
+                <mat-label i18n="@@number">Number</mat-label>
+                <input type="text" matInput formControlName="num">
+                <mat-error *ngxControlError="formGroupDetail.controls.num; track: 'maxlength'" i18n="@@numberMaxlength">
+                    Number {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,20]
+                    }}
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col " sizeInput="sm">
+            <mat-form-field class="mb-2">
+                <mat-label i18n="@@unit">Unit</mat-label>
+                <input type="text" matInput formControlName="unit">
+                <mat-error *ngxControlError="formGroupDetail.controls.unit; track: 'maxlength'" i18n="@@unitMaxlength">
+                    Unit {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,100]
+                    }}
+                </mat-error>
+            </mat-form-field>
+        </div>
+        <div class="col " sizeInput="sm">
+            <mat-form-field class="mb-2">
+                <mat-label i18n="@@supplierSelectionMethod">Supplier Selection Method</mat-label>
+                <input type="text" matInput formControlName="supplierMethod">
+                <mat-error *ngxControlError="formGroupDetail.controls.supplierMethod; track: 'maxlength'"
+                    i18n="@@supplierMethodMaxlength">
+                    Supplier Selection Method {{MESSAGE.MAX_LENGTH_INVALID|
+                    dataTransformPipe:[Constant.STRING_FORMAT,100]
+                    }}
+                </mat-error>
+            </mat-form-field>
+        </div>
+        @if (category() === CategoryEnum.INTERNATIONAL) {
+        <div class="col" sizeInput="sm">
+            <mat-checkbox class="mb-2" i18n="@@earlyCheckInFee" formControlName="earlyCheckinFlag">
+                Early check-in fee
+            </mat-checkbox>
+        </div>
+        <div class="col" sizeInput="sm">
+            <mat-checkbox class="mb-2" i18n="@@lateCheckOutFee" formControlName="lateCheckoutFlag">
+                Late check-out fee
+            </mat-checkbox>
+        </div>
+        }@else {
+        <div class="col " sizeInput="sm">
+            <mat-checkbox class="mb-2" i18n="@@wetLease" formControlName="wetLeaseFlag">
+                Wet Lease
+            </mat-checkbox>
+        </div>
+        <div class="col "></div>
+        }
+
+    </div>
+    }
 </form>

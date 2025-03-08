@@ -1,9 +1,10 @@
-<div [sizeInput]="size()">
-    <mat-form-field [ngClass]="{'edit-inline-table':editInlineTable}">
+<!-- <div [sizeInput]="size()">
+    <mat-form-field>
         @if(!!label()){
-        <mat-label>{{label()}} @if(requiredLabel()){<span class="required">*</span>}</mat-label>
+        <mat-label>{{label()}}</mat-label>
         }
-        <input matInput [matDatepicker]="datePicker" [formControl]="formControl" placeholder="mm/yyyy">
+        <input [required]="requiredControl || requiredLabel()" matInput [matDatepicker]="datePicker"
+            [formControl]="formControl" placeholder="mm/yyyy">
         <mat-datepicker-toggle matIconSuffix [for]="datePicker"></mat-datepicker-toggle>
         <mat-datepicker #datePicker startView="year" (monthSelected)="setMonthAndYear($event, datePicker)"
             panelClass="example-month-picker">
@@ -23,4 +24,5 @@
             Purchase End Date must be later than Purchase Start Date
         </mat-error>
     </mat-form-field>
-</div>
+</div> -->
+app-datepicker-year-month

@@ -11,28 +11,22 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
   imports: [
     InputComponent,
     SelectionComponent,
-    DatepickerYearMonthComponent,
-    SelectionSuggestComponent
+    DatepickerYearMonthComponent
   ],
   exports: [
     InputComponent,
     SelectionComponent,
-    DatepickerYearMonthComponent,
-    SelectionSuggestComponent
+    DatepickerYearMonthComponent
   ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
-      useExisting: [InputComponent, SelectionComponent, SelectionSuggestComponent, DatepickerYearMonthComponent, DatepickerComponent,
-
-      ],
+      useExisting: [InputComponent, SelectionComponent, SelectionSuggestComponent, DatepickerYearMonthComponent, DatepickerComponent],
       multi: true,
     },
     {
       provide: NG_VALIDATORS,
-      useExisting: [InputComponent, SelectionComponent, SelectionSuggestComponent, DatepickerYearMonthComponent, DatepickerComponent,
-
-      ],
+      useExisting: [InputComponent, SelectionComponent, SelectionSuggestComponent, DatepickerYearMonthComponent, DatepickerComponent],
       multi: true,
     },
   ]
