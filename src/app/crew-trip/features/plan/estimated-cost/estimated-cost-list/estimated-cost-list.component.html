@@ -34,7 +34,7 @@
                                 formControlName="year" attrValue="code" attrDisplay="value" size="md" />
                         </div>
                         <div class="col mb-2">
-                            <app-selection-suggest i18n-label="@@version" label="Version" [options]="versions()"
+                            <app-selection-suggest #selectionVersion i18n-label="@@version" label="Version" [options]="versions()"
                                 formControlName="version" size="md" />
                         </div>
 
@@ -152,11 +152,15 @@
                         i18n="@@time">Time
                     </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">
-                        @if(element.status === 'international_completed' ||
+                        <!-- @if(
+                        element.status === 'international_completed' ||
                         element.status === 'domestic_completed' ||
                         element.status === 'dom_int_completed' ||
                         element.status === 'confirmed' ||
                         element.status === 'approved'
+                        ){ -->
+                        @if(
+                        element.status === 'dom_int_completed'
                         ){
                         <span>
                             <span class="text-secondary-bootstrap" i18n="@@completionDate">Completion Date</span>:

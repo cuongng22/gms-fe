@@ -135,8 +135,8 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
   displayedSecond: any[] = [
     { name: 'totalSingleRoom', field: 'Single Room' }, //tổng số phòng đơn
     { name: 'totalTwinRoom', field: 'Twin room' }, //tổng số phòng đôi
-    { name: 'totalIncVAT', field: 'Including VAT' },
     { name: 'totalExcVAT', field: 'Excluding VAT' },
+    { name: 'totalIncVAT', field: 'Including VAT' },
   ];
   displayedFirstArr: string[];
   displayedSecondArr: string[];

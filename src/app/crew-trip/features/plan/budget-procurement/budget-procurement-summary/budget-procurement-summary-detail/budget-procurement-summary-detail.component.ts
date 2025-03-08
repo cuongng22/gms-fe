@@ -136,6 +136,12 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       const response = await this.baseService.getDetailSummary(this.id() ?? 0); //dataDetailExample;//
       this.dataDetail = { ...response.data };
       this.budgetProcurementGeneral.formGroupDetail.patchValue(this.dataDetail, { emitEvent: false });
+      console.log(this.dataDetail.procStartDate)
+      this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.setValue(this.dataDetail.procStartDate, {
+        emitEvent: true,
+        emitModelToViewChange: true,
+        emitViewToModelChange: true
+      });
       this.budgetProcurementGeneral.formGroupDetail.controls.procurementPlanFlag.setValue(this.dataDetail.procurementPlanFlag)
       this.budgetProcurementGeneral.formGroupDetail.controls.category.disable();
       this.budgetProcurementGeneral.formGroupDetail.controls.airportCode.disable();

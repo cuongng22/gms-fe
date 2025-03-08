@@ -29,6 +29,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { el } from 'node_modules/@fullcalendar/core/internal-common';
 import { BudgetProcurementPriceComponent } from '../budget-procurement-price/budget-procurement-price.component';
 import { CurrencyService } from 'src/app/crew-trip/core/services/currency.service';
+import { DatepickerComponent } from 'src/app/crew-trip/shared/component/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-budget-procurement-general',
@@ -38,7 +39,7 @@ import { CurrencyService } from 'src/app/crew-trip/core/services/currency.servic
     MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
     NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent,
-    BudgetProcurementPriceComponent
+    BudgetProcurementPriceComponent,DatepickerComponent
   ],
   templateUrl: './budget-procurement-general.component.html',
   styleUrl: './budget-procurement-general.component.scss',
@@ -139,7 +140,6 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     this.formGroupDetail.valueChanges.pipe(debounceTime(1000)).subscribe((value: any) => {
       this.formValueChanges.emit(value);
     });
-
   }
 
 

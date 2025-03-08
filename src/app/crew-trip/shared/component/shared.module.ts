@@ -10,11 +10,13 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
   declarations: [],
   imports: [
     InputComponent,
-    SelectionComponent
+    SelectionComponent,
+    DatepickerYearMonthComponent
   ],
   exports: [
     InputComponent,
-    SelectionComponent
+    SelectionComponent,
+    DatepickerYearMonthComponent
   ],
   providers: [
     {

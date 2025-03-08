@@ -112,9 +112,11 @@
     @if(formGroupDetail.controls.procurementPlanFlag.value) {
     <div class="row">
         <div class="col">
-            <app-datepicker-year-month class="mb-2" [requiredLabel]="true" i18n-label="@@startDate" label="Start Date"
+            <!-- <app-datepicker-year-month class="mb-2" [requiredLabel]="true" i18n-label="@@startDate" label="Start Date"
                 size="sm" formControlName="procStartDate">
-            </app-datepicker-year-month>
+            </app-datepicker-year-month> -->
+            <app-selection-suggest i18n-label="@@airport" label="Airport" [options]="airports()"
+                formControlName="procStartDate" size="sm" [required]="true" />
         </div>
         <div class="col" sizeInput="sm">
             <app-datepicker-year-month class="mb-2" [requiredLabel]="true" i18n-label="@@endDate" label="End Date"
