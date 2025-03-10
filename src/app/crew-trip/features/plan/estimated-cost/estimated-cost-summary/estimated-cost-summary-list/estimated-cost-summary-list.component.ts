@@ -50,13 +50,13 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
   }
 
   setDisplayedColumns(type: string) {
-    this.displayedColumns = getDisplayedColumns(type);
+    this.displayedColumns = getDisplayedColumns(type, this.categoryType());
     this.displayedColumnTotals = getDisplayedColumnTotals(type);
   }
 
   override async search(bodySearch?: any) {
     try {
-      this.spinner.show();
+     await this.spinner.show();
       this.setDisplayedColumns(bodySearch?.categoryOfPlan);
       const body = {
         planBudgetProcurementId: this.planBudgetProcurementId(),

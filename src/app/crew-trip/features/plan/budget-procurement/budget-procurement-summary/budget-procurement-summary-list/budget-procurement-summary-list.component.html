@@ -1,4 +1,4 @@
-<mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
+<mat-card class=" pl-0 pr-0 mb-10 ml-0 mr-0 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-header class="mb-10">
         <mat-card-title>
             <!-- <h5 i18n="@@planSummaryList">Plan Summary List</h5> -->
@@ -512,7 +512,9 @@
                 <tr mat-row *matRowDef="let row; columns: ['serviceType'];"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumnTotals;"></tr>
-
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="99">No data!</td>
+                </tr>
             </table>
         </div>
     </mat-card-content>

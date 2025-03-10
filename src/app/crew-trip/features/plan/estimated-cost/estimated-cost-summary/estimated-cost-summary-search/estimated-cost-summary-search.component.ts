@@ -21,6 +21,8 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { categories, categoryOfPlans, StatusesSummary } from '../../../budget-procurement/budget-procurement.model';
 import { CategoriesEnum } from '../../estimated-cost.model';
+import { FlightMarketStatusEnum } from 'src/app/crew-trip/features/category/flight-market/flight-market.model';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 
 @Component({
   selector: 'app-estimated-cost-summary-search',
@@ -35,43 +37,39 @@ import { CategoriesEnum } from '../../estimated-cost.model';
   templateUrl: './estimated-cost-summary-search.component.html',
   styleUrl: './estimated-cost-summary-search.component.scss'
 })
-export class EstimatedCostSummarySearchComponent implements OnInit {
+export class EstimatedCostSummarySearchComponent extends CommonComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
-  private readonly formBuilder = inject(FormBuilder);
   flightMarketService = inject(FlightMarketService);
 
   CategoriesEnum = CategoriesEnum;
 
   _categoryType: CategoriesEnum = CategoriesEnum.ALL;
-  search = output<any>();
+  searchEvent = output<any>();
 
   @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
   filteredOptionsAirport = model<any[]>([]);
   keySearchAirport = new Subject<string>();
-  airports = model<any[]>([]);
   categories = categories;
-  categoryOfPlans = categoryOfPlans;
+  // categoryOfPlans = categoryOfPlans;
   statuses = StatusesSummary;
 
-  formGroupSearch = this.formBuilder.group({
+  override  formGroupSearch = this.formBuilder.group({
     airportCodes: [''],
-    categoryOfPlan: [''], // loại kế hoạch ngân sách hay mua sắm
+    // categoryOfPlan: [''], // loại kế hoạch ngân sách hay mua sắm
     category: [''], // loại quốc tế hay quốc nội
     status: ['']
   });
 
 
-  ngOnInit(): void {
-    // Lấy danh sách thị trường cho ô search
-    this.flightMarketService.search({ option: 1 }).then(res => {
-      this.airports.set(res.data);
-    });
+  override ngOnInit(): void {
+    const typeAirport = this.categoryType === CategoriesEnum.ALL ? '' : this.categoryType;
+    this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL, type: typeAirport })
   }
 
 
   onSearch(): void {
-    this.search.emit(this.formGroupSearch.value);
+    this.searchEvent.emit(this.formGroupSearch.value);
   }
 
   @Input()
