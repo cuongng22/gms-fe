@@ -76,6 +76,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   errorDiffMonth = false;
 
   airportCodeChange = output<string>();
+  cleanData = output<void>()
 
   isRequiredSupplierHotel: boolean = false;
   isRequiredUnitPriceForSingleRoomHotel: boolean = false;
@@ -145,9 +146,11 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     this.spinner.hide();
     this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
       this.getExchangeRate()
+      this.cleanData.emit()
     });
     this.formGroupDetail.controls.startDate.valueChanges.subscribe(value => {
       this.getExchangeRate()
+      this.cleanData.emit()
     });
     this.formGroupDetail.controls.isHotel.valueChanges.subscribe(value => {
       console.log('isHotel.valueChanges: ', value)
@@ -233,9 +236,12 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
 
   hotelChange(event: any, element: any) {
     element.hotelName = event.viewValue;
+    this.cleanData.emit()
+
   }
   carRentalChange(event: any, element: any) {
     element.carRentalName = event.viewValue;
+    this.cleanData.emit()
   }
 
 
@@ -245,7 +251,6 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
-    debugger
     if (['singleRoomPriceEditing', 'twinRoomPriceEditing'].includes(control)) {
       this.wetLeaseService.roomPriceChange(data)
     } else if ('unitPriceEditing' === control) {
@@ -293,6 +298,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     }
     this.dataSourceHotel.data.push(addItem);
     this.dataSourceHotel.data = [...this.dataSourceHotel.data];
+    this.cleanData.emit()
   }
   showConfirmDeleteHotel(index: any) {
     this.indexDeleteHotel = index;
@@ -301,7 +307,8 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   deleteHotel() {
     this.dataSourceHotel.data.splice(this.indexDeleteHotel, 1);
     this.dataSourceHotel.data = [...this.dataSourceHotel.data]
-    this.toggleDialogDeleteHotel()
+    this.toggleDialogDeleteHotel();
+    this.cleanData.emit()
   }
 
   duplicateCarRental() {
@@ -318,6 +325,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     }
     this.dataSourceCarRental.data.push(addItem);
     this.dataSourceCarRental.data = [...this.dataSourceCarRental.data];
+    this.cleanData.emit()
   }
   showConfirmDeleteCarRental(index: any) {
     this.indexDeleteCarRental = index;
@@ -327,6 +335,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     this.dataSourceCarRental.data.splice(this.indexDeleteCarRental, 1);
     this.dataSourceCarRental.data = [...this.dataSourceCarRental.data]
     this.toggleDialogDeleteCarRental()
+    this.cleanData.emit()
   }
 
   sameMonthValidator(control: AbstractControl): ValidationErrors | null {
