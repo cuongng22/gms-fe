@@ -36,8 +36,6 @@
     "@grapecity/wijmo.xlsx": "^5.20242.30",
     "@iplab/ngx-file-upload": "^18.0.0",
     "@mescius/wijmo.xlsx": "^5.20242.30",
-    "@ngx-translate/core": "^15.0.0",
-    "@ngx-translate/http-loader": "^8.0.0",
     "@types/lodash": "^4.17.9",
     "@types/luxon": "^1.11.1",
     "@types/sprintf-js": "^1.1.4",
