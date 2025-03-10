@@ -140,7 +140,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   override async ngOnInit() {
     await Promise.all([
-      this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}),
+      this.loadListFlightMarket(),
       this.loadListHotel(),
       this.loadListVehicle(),
       this.search(),
