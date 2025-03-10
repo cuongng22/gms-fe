@@ -440,12 +440,13 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         await this.baseService.uploadFile(formUpload).then((res) => {
           if (res.status == HttpStatusCode.Ok) {
             this.tblAttachedDocument.data = [...this.tblAttachedDocument.data, {
-              id: res.data.id, fileName: res.data.filename, fileUrl: `source/${res.data.url}`, isManual: true,
+              id: res.data.id, fileName: res.data.filename, fileUrl: `/source/${res.data.url}`, isManual: true,
             },];
           }
         });
         this.formGroupFileUpload.patchValue({fileUpload: []});
       } catch (e: any) {
+        console.log(e)
         this.baseService.showError(e.error?.error?.file ?? e.error?.error ?? e.error?.error?.code ?? MESSAGE.ERROR,);
       } finally {
         await this.spinner.hide();
