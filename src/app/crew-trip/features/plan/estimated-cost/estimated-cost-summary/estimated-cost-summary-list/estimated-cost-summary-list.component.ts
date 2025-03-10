@@ -41,12 +41,8 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
   planBudgetProcurementId = input<number>(); // id của kế hoạch
 
   displayedColumnTotals: string[] = [];
-  bodySearch: any;
 
   override baseService = inject(PlanBudgetProcurementService);
-  override formGroupDetail = this.formBuilder.group({
-    id: ''
-  })
 
   override ngOnInit(): void {
     this.setDisplayedColumns('');
@@ -60,14 +56,13 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
 
   override async search(bodySearch?: any) {
     try {
-      await this.spinner.show();
+     await this.spinner.show();
       this.setDisplayedColumns(bodySearch?.categoryOfPlan);
       const body = {
         planBudgetProcurementId: this.planBudgetProcurementId(),
         category: this.categoryType(),
         ...bodySearch
       }
-      this.bodySearch = body
       this.baseService.summarySearch(body).then((data: any) => {
         let firstHotelIndex = -1;
         let firstCarRentalIndex = -1;
@@ -150,24 +145,15 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
     return this.selection.hasValue() && !this.isAllSelected();
   }
 
-  async completed() {
+  completed() {
     this.spinner.show();
     const selected = this.selection.selected;
-    if (selected.length > 0) {
-      try {
-        await this.spinner.show();
-        const response = await this.baseService.summaryUpdateStatusMulti({ idsSummary: selected.map((item: any) => item.id) });
-        this.showSuccess(this.MESSAGE.UPDATE_SUCCESS)
-        this.search(this.bodySearch);
-      } catch (error) {
-        console.error(error)
-      } finally {
-        this.spinner.hide();
-      }
-    } else {
-      this.spinner.hide();
-      this.showError($localize`:@@cannotUpdateCompletionStatusIfNoPlanIsSelected:Cannot update completion status if no plan is selected`)
-    }
+    this.spinner.show();
+    // this.baseService.completed(selected.map((item: any) => item.id)).then(() => {
+    //   this.loadData();
+    // }).finally(() => {
+    //   this.spinner.hide();
+    // })
   }
 
   async changeStatus(id: number, status: StatusSummaryEnum) {
