@@ -721,30 +721,25 @@
               <ng-container matColumnDef="fileName">
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
                 <td *matCellDef="let element" mat-cell>
-                  <a mat-button  [href]="environment.baseUrl+element.fileUrl" target="_blank"
-                     class="d-flex align-items-center justify-content-between position-relative"
-                     style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
-                    {{ element.fileName }}
-                  </a>
-                 <!-- @if (element.fileUrl?.substr(element.fileUrl.length - 4) == '.pdf') {
-                  <a mat-button (click)="pdfViewer(environment.baseUrl+element.fileUrl)" target="_blank"
-                     class="d-flex align-items-center justify-content-between position-relative"
-                     style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
+                  @if (element.fileUrl?.substr(element.fileUrl.length - 4) == '.pdf') {
+                  <a mat-button [href]="environment.baseUrl+element.fileUrl" target="_blank"
+                      class="d-flex align-items-center justify-content-between position-relative"
+                      style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                   {{ element.fileName }}
                   </a>
                   } @else {
-                  <a mat-button (click)="true" [href]="environment.baseUrl+element.fileUrl" target="_blank"
+                  <a mat-button [href]="environment.baseUrl+element.fileUrl"
                      class="d-flex align-items-center justify-content-between position-relative"
                      style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                   {{ element.fileName }}
                   </a>
-                  }-->
+                  }
                 </td>
               </ng-container>
               <ng-container matColumnDef="action">
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
                 <td *matCellDef="let element" mat-cell>
-                  @if (element.isManual && !element.isFromContract) {
+                  @if (element.isManual && !element.isFromContract && !readMode) {
                   <div class="action-buttons d-flex justify-content-center">
                     <a type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
                        (click)="confirmDeleteFile(element, element.id)">
