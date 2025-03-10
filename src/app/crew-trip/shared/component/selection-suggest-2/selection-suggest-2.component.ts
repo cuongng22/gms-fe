@@ -208,7 +208,7 @@ export class SelectionSuggest2Component implements OnInit, AfterViewInit, AfterV
   }
 
   get errorMessage(){
-    if(this.errors?.overlapValidator){
+    if(this.errors?.message){
       //this.viewControl.setErrors(this.errors.overlapValidator);
       return this.errors.message
     }

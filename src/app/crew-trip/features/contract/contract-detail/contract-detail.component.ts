@@ -352,7 +352,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   override async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([this.detail(this.id), this.loadListQuocGia(), this.loadListFeeService(), this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}), this.loadListMaNghiepVu(), this.loadListKhoanMucKhns(), this.loadListHotel(), this.loadListVehicle(),]).then((res) => {
+      await Promise.all([this.detail(this.id), this.loadListQuocGia(), this.loadListFeeService(), this.loadListFlightMarket(), this.loadListMaNghiepVu(), this.loadListKhoanMucKhns(), this.loadListHotel(), this.loadListVehicle(),]).then((res) => {
         if (this.formGroupDetail.getRawValue().isHotel && this.formGroupDetail.getRawValue().isVehicle) {
           this.formGroupDetail.patchValue({
             doiTuongDichVu: '3',
@@ -887,6 +887,23 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   }
 
   changePartnerCode(dataInput: any) {
+    //check ton tai
+    if (this.formGroupDetail.getRawValue().isHotel) {
+      let currentHotel = this.listHotels.find((s: any) => s.hotelCode.toUpperCase() === dataInput.toUpperCase() && s.marketCode !== this.contractObj.marketCode);
+      if (currentHotel) {
+        this.formGroupDetail.get('partnerCode')?.setErrors({exists: true, message: `Suppliers already exist in other airport code`});
+        this.formGroupDetail.get('partnerCode')?.markAsTouched();
+        return;
+      }
+    } else {
+      let currentVehicle = this.listVehicles.find((s: any) => s.code.toUpperCase() === dataInput.toUpperCase() && s.marketCode !== this.contractObj.marketCode);
+      if (currentVehicle) {
+        this.formGroupDetail.get('partnerCode')?.setErrors({exists: true, message: `Suppliers already exist in other airport code`});
+        this.formGroupDetail.get('partnerCode')?.markAsTouched();
+        return;
+      }
+    }
+
     let current = this.listPartner.find((s: any) => s.code === dataInput);
     this.formGroupDetail.patchValue({
       partnerName: current?.name ?? '', partnerAddress: current?.address ?? ''
@@ -901,18 +918,20 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   }
 
   private async buildListPartner(partnerCode?: any) {
-    this.listVehicles = this.listVehicles.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({
-      ...s, label: `[${s.code}] - ${s.name}`, type: 'VEHICLE'
-    }));
-    this.listHotels = this.listHotels.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({
+    let filterHotels = this.listHotels.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({
       ...s, label: `[${s.hotelCode}] - ${s.hotelName}`, type: 'HOTEL'
     }));
+    let filterVehicles = this.listVehicles.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({
+      ...s, label: `[${s.code}] - ${s.name}`, type: 'VEHICLE'
+    }));
+
     let listCombine = [];
     if (this.formGroupDetail.getRawValue().isHotel) {
-      listCombine = this.listHotels;
+      listCombine = filterHotels;
     } else {
-      listCombine = this.listVehicles;
+      listCombine = filterVehicles;
     }
+
     this.listPartner = listCombine.map((s: any) => ({
       marketCode: s.marketCode,
       code: s.code ?? s.hotelCode,
@@ -926,5 +945,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       label: s.label,
       type: s.type
     }));
+    console.log(this.listPartner, 'this.listPartner')
   }
 }
