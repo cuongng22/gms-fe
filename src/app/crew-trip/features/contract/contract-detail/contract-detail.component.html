@@ -687,7 +687,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Swift code intermediary bank</mat-label>
-              <input formControlName="swiftCodeB1" matInput`
+              <input formControlName="swiftCodeB1" matInput
                      trim="blur">
               @if (!!formGroupDetail.controls['swiftCodeB1'].hasError('required')) {
               <mat-error><span i18n>Swift code intermediary bank</span><span i18n> is required</span></mat-error>
@@ -721,7 +721,7 @@
               <ng-container matColumnDef="fileName">
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
                 <td *matCellDef="let element" mat-cell>
-                  <a mat-button (click)="true" [href]="environment.baseUrl+element.fileUrl" target="_blank"
+                  <a mat-button  [href]="environment.baseUrl+element.fileUrl" target="_blank"
                      class="d-flex align-items-center justify-content-between position-relative"
                      style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                     {{ element.fileName }}
@@ -739,7 +739,6 @@
                   {{ element.fileName }}
                   </a>
                   }-->
-
                 </td>
               </ng-container>
               <ng-container matColumnDef="action">

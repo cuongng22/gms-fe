@@ -945,6 +945,5 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       label: s.label,
       type: s.type
     }));
-    console.log(this.listPartner, 'this.listPartner')
   }
 }
