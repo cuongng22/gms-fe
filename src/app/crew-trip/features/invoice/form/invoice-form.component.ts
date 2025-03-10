@@ -97,7 +97,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   override async ngOnInit() {
     this.formGroupFile.patchValue({partnerType: this.partnerType});
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}), this.search(),]).then(() => {
+    await Promise.all([this.loadListFlightMarket(), this.search(),]).then(() => {
 
     });
     this.displayedColumns = ['stt', 'airportCode', 'partnerName', 'invoiceNumber', 'invoiceDate', 'invoiceReceiveDate', 'periodDate', 'totalAmount', 'action'];
@@ -255,11 +255,11 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
 
   ctypeChange() {
     if (this.formGroupSearch.getRawValue().ctype == 'INTERNATIONAL') {
-      this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL, type: 'International'})
+      this.loadListFlightMarket({ type: 'International'})
     } else if (this.formGroupSearch.getRawValue().ctype == 'DOMESTIC') {
-      this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL, type: 'Domestic'})
+      this.loadListFlightMarket({ type: 'Domestic'})
     } else {
-      this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL})
+      this.loadListFlightMarket()
     }
   }
   isHotel(){

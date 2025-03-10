@@ -131,7 +131,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   override async ngOnInit() {
     this.formGroupFile.patchValue({partnerType: this.partnerType});
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}), this.search(),]).then(() => {
+    await Promise.all([this.loadListFlightMarket(), this.search(),]).then(() => {
       if (this.partnerType == 'HOTEL') {
         this.displayedColumns = ['stt', ...this._displayedColumns.filter(s => !['numberTrip'].includes(s.value)).map(s => s.value), 'action'];
       } else if (this.partnerType == 'TRANSPORTATION') {

@@ -159,7 +159,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   override async ngOnInit() {
 
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.search(), this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL})]).then(() => {
+    await Promise.all([this.search(), this.loadListFlightMarket()]).then(() => {
       this.showDocumentDtl(this.dataSource.data[0]);
     });
     this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVat',
