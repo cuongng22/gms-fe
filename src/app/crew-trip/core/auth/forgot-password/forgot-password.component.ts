@@ -7,7 +7,6 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {MatInputModule} from '@angular/material/input';
 import {MatCard, MatCardActions, MatCardContent, MatCardHeader} from '@angular/material/card';
 import {MatCheckbox} from '@angular/material/checkbox';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
 import {HelperService} from 'src/app/crew-trip/core/services/helper.service';
@@ -21,7 +20,7 @@ import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
   selector: 'app-forgot-password',
   standalone: true,
   imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCard, MatCardHeader, MatCardContent, MatCheckbox, MatCardActions,
-    TranslateModule, MatIconModule, NgxSpinnerModule, NgxTrimDirectiveModule
+    MatIconModule, NgxSpinnerModule, NgxTrimDirectiveModule
   ],
   templateUrl: './forgot-password.component.html',
   styleUrl: './forgot-password.component.scss'

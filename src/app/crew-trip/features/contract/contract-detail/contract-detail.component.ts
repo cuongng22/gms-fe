@@ -14,7 +14,6 @@ import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {PdfViewerComponent} from 'src/app/crew-trip/shared/pdf-viewer/pdf-viewer.component';
 import {afterValidator, beforeValidator, lessThanValidator, timeAfterValidator, timeBeforeValidator,} from 'src/app/crew-trip/shared/utils/common';
 import {DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN,} from 'src/app/crew-trip/shared/utils/constant';
-import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 import moment from "moment";
 import {UsersService} from "src/app/crew-trip/core/services/users-service";
 import {HOTEL} from "src/app/crew-trip/features/plan/budget-procurement/budget-procurement.model";
@@ -242,6 +241,11 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       fileUpload: [],
     });
 
+    //listen change
+    this.formGroupFileUpload.controls['fileUpload'].valueChanges.subscribe((value) => {
+      if (!value || value.length === 0) return;
+      this.actionUpload(value);
+    });
   }
 
   get tblPriceUnit(): FormArray {
@@ -422,12 +426,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     localStorage.removeItem('detail');
   }
 
-  async actionUpload() {
-    if (this.formGroupFileUpload.value.fileUpload.length > 0) {
+  async actionUpload(fileUploadData: any) {
+    if (fileUploadData?.length > 0) {
       try {
         await this.spinner.show();
         const formUpload = new FormData();
-        const fileUpload = this.formGroupFileUpload.value.fileUpload[0];
+        const fileUpload = fileUploadData[0];
         const bizDocIdBlob = new Blob([this.formGroupDetail.getRawValue().bizDocId], {type: 'application/json'},);
         //validate
         // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
