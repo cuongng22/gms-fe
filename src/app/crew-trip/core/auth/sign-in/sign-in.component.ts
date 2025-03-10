@@ -8,7 +8,6 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {HelperService} from 'src/app/crew-trip/core/services/helper.service';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
 import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
 import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
 import {CommonModule, Location} from '@angular/common';
@@ -19,7 +18,7 @@ import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 @Component({
   selector: 'app-sign-in',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCheckbox, TranslateModule, NgxSpinnerComponent, NgxTrimDirectiveModule
+  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatCheckbox, NgxSpinnerComponent, NgxTrimDirectiveModule
   ],
   templateUrl: './sign-in.component.html',
   styleUrl: './sign-in.component.scss'
@@ -41,12 +40,11 @@ export class SignInComponent implements OnInit {
   constructor(
     public themeService: CustomizerSettingsService,
     public helperService: HelperService,
-    private translate: TranslateService,
     private storageService: StorageService,
     private route: ActivatedRoute
   ) {
     // this.usersService.showError('Token hết hạn hoặc không hợp lệ');
-    this.translate.setDefaultLang('en');
+    // this.translate.setDefaultLang('en');
     this.themeService.isToggled$.subscribe(isToggled => {
       this.isToggled = isToggled;
     });
