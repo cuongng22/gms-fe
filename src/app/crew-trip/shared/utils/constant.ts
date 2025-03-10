@@ -1,8 +1,7 @@
 import { effect, Signal, signal } from '@angular/core';
-import { jwtDecode } from 'jwt-decode';
+import {jwtDecode} from 'jwt-decode';
 
 export class Constant {
-
   static DATE_FORMAT = 'DD/MM/YYYY';
   static DATE_TIME_FORMAT = 'DD/MM/YYYY HH:mm';
   static MONTH_FORMAT = 'MM/YYYY';
@@ -46,7 +45,6 @@ export class MESSAGE {
   static SEND_EMAIL = $localize`Send email successfully`;
   static FILE_UPLOAD_EMPTY = $localize`The file must not be empty`;
   static FILE_UPLOAD_INVALID = $localize`The file import is not valid`;
-  static FILE_UPLOAD_INVALID_XLSX = $localize`File type must be .xlsx`;
 
   static LABEL_START_DATE = $localize`:@@startDate:Start Date`;
   static MESSAGE_START_DATE_REQUIRED = $localize`:@@startDateRequired:Start Date is required`;
@@ -117,10 +115,10 @@ export const DATE_FORMAT_DD_MM_YYYY = {
 };
 
 export class COMMON_CONFIG {
-  static TIMEOUT = 20000;
-  static MAX_FILE_SIZE = '5MB';
-  static FILE_ACCEPT = '.doc,.docx,.pdf,.xls,.xlsx';
-  static FILE_ACCEPT_EXCEL = '.xls,.xlsx';
+  static TIMEOUT=20000;
+  static MAX_FILE_SIZE='5MB';
+  static FILE_ACCEPT='.doc,.docx,.pdf,.xls,.xlsx';
+  static FILE_ACCEPT_EXCEL='.xls,.xlsx';
 }
 
 export class PATTERN {
@@ -128,58 +126,10 @@ export class PATTERN {
   static PHONE = '^[0-9()+]+$'
   static STRING_NUMBER = '^[a-zA-Z0-9]+$' //chu va so
   static EMAIL = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
-  static EMAIL_MULTI = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(;\\s*[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})*$';
+  static EMAIL_MULTI = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})*$'
   static HOUR24 = '^([01]\\d|2[0-3]):([0-5]\\d)$'
   static STRING = '^[a-zA-Z]+$' //chu
   static NUMBER = '^[0-9]+$' //so
   static NUMBER1 = '^[0-9/.]+$' //so '/'
   static STRING_NUMBER1 = '^[a-zA-Z0-9-.]+$' //chu va so . -
 }
-
-export function round(data: any | any[], fractionDigits?: number) {
-  if (Array.isArray(data) && data.length > 0) {
-    data.forEach(item => {
-      if (typeof (item) === 'number' || typeof (item) === 'string') {
-        if (!isNaN(Number(item))) {
-          const _value = Number(item.toString().replace(/,/g, ''))
-          item = Math.round(fractionDigits ? Number(_value.toFixed(fractionDigits)) : _value);
-        }
-      } else if (typeof (item) === 'object') {
-        Object.keys(item).forEach(key => {
-          if (typeof (item[key]) === 'number' || typeof (item[key]) === 'string') {
-            if (!isNaN(Number(item[key]))) {
-              const _value = Number(item[key].toString().replace(/,/g, ''));
-              item[key] = Math.round(fractionDigits ? Number(_value.toFixed(fractionDigits)) : _value);
-            }
-          }
-        });
-      }
-    });
-    return data;
-  } else if (typeof data === 'object' && data && Object.keys(data).length > 0) {
-    Object.keys(data).forEach(key => {
-      if (typeof (data[key]) === 'number' || typeof (data[key]) === 'string') {
-        if (!isNaN(Number(data[key]))) {
-          const _value = Number(data[key].toString().replace(/,/g, ''));
-          data[key] = Math.round(fractionDigits ? Number(_value.toFixed(fractionDigits)) : _value);
-        }
-      }
-    })
-    return data;
-  } else if ((typeof data === 'number' || typeof data === 'string') && data) {
-    if (!isNaN(Number(data))) {
-      const _value = Number(data.toString().replace(/,/g, ''));
-      return Math.round(fractionDigits ? Number(_value.toFixed(fractionDigits)) : _value);
-    }
-  }
-  return 0
-}
-
-
-  // convertToZero
-  export function ctz(value: any) {
-    if (value) {
-      return new Number(value.toString().replace(',', '.'));
-    }
-    return 0;
-  }
