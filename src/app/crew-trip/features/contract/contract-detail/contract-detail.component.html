@@ -739,7 +739,7 @@
               <ng-container matColumnDef="action">
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
                 <td *matCellDef="let element" mat-cell>
-                  @if (element.isManual && !element.isFromContract) {
+                  @if (element.isManual && !element.isFromContract && !readMode) {
                   <div class="action-buttons d-flex justify-content-center">
                     <a type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
                        (click)="confirmDeleteFile(element, element.id)">
