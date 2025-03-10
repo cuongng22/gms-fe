@@ -303,6 +303,11 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.category.set(res.data.content[0].marketType)
   }
 
+  wetLeaseGeneralClearData() {
+    this.wetLeaseHotel.dataSource.data = [];
+    this.wetLeaseCarRental.dataSource.data = [];
+  }
+
   get planHotel() {
     return this._planHotel;
   }

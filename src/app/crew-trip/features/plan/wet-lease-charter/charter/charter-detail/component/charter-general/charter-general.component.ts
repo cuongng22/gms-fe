@@ -52,6 +52,7 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
   airportCodeChange = output<string>();
   formValueChange = output<any>();
   dataTransformPipe = inject(DataTransformPipe);
+  cleanData = output<void>()
 
 
   disabled = input<boolean>(false);
@@ -107,11 +108,13 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
   override ngOnInit(): void {
     this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL })
     this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
-      this.getExchangeRate()
+      this.getExchangeRate();
+      this.cleanData.emit()
     });
 
     this.formGroupDetail.controls.startDate.valueChanges.subscribe(value => {
       this.getExchangeRate()
+      this.cleanData.emit()
     });
 
     this.formGroupDetail.controls.isHotel.valueChanges.subscribe(value => {

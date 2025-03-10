@@ -78,7 +78,7 @@
 
 
         </div>
-        <app-wet-lease-general #wetLeaseGeneral [disabled]="disable"
+        <app-wet-lease-general #wetLeaseGeneral [disabled]="disable" (cleanData)="wetLeaseGeneralClearData()"
             (airportCodeChange)="airportCodeChange($event)"></app-wet-lease-general>
 
         <div class="d-flex justify-content-between align-items-center mt-3 mb-1">
