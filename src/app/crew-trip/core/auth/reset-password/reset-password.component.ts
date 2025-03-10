@@ -5,7 +5,6 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {MatButtonModule} from '@angular/material/button';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatInputModule} from '@angular/material/input';
-import {TranslateModule} from '@ngx-translate/core';
 import {MatIconModule} from '@angular/material/icon';
 import {NgxSpinnerModule, NgxSpinnerService} from 'ngx-spinner';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
@@ -17,7 +16,7 @@ import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 @Component({
   selector: 'app-reset-password',
   standalone: true,
-  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, TranslateModule, MatIconModule, NgxSpinnerModule, NgxTrimDirectiveModule
+  imports: [CommonModule, RouterLink, MatButtonModule, MatFormFieldModule, ReactiveFormsModule, MatInputModule, MatIconModule, NgxSpinnerModule, NgxTrimDirectiveModule
   ],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.scss'

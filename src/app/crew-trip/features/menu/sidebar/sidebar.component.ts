@@ -2,7 +2,6 @@ import {CommonModule, NgClass} from '@angular/common';
 import {Component, inject, OnInit, signal} from '@angular/core';
 import {MatExpansionModule} from '@angular/material/expansion';
 import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {TranslateModule} from '@ngx-translate/core';
 import {NgScrollbarModule} from 'ngx-scrollbar';
 import {ToggleService} from 'src/app/common/header/toggle.service';
 import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
@@ -19,7 +18,6 @@ import {take} from 'rxjs';
     RouterLinkActive,
     RouterLink,
     NgClass,
-    TranslateModule,
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
