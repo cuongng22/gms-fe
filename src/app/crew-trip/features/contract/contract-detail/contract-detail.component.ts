@@ -156,7 +156,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       statusUsage: [],
       supplierName: ['', [Validators.maxLength(250)]],
       supplierPhone: ['', [Validators.maxLength(20), Validators.pattern(PATTERN.PHONE)],],
-      supplierEmail: ['', [Validators.maxLength(250), Validators.pattern(PATTERN.EMAIL)],],
+      supplierEmail: ['', [Validators.maxLength(500), Validators.pattern(PATTERN.EMAIL_MULTI)],],
       email: [],
       carType: ['', [Validators.maxLength(150)]],
       standardCheckIn: ['', [Validators.pattern(PATTERN.HOUR24)]],
@@ -431,7 +431,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         const bizDocIdBlob = new Blob([this.formGroupDetail.getRawValue().bizDocId], {type: 'application/json'},);
         //validate
         // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
-        if (fileUpload.size > 10 * 1048576) {
+        if (fileUpload?.size > 10 * 1048576) {
           this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
           return;
         }

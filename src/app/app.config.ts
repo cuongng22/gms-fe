@@ -25,6 +25,6 @@ export const appConfig: ApplicationConfig = {
     ),
     importProvidersFrom(NgxSpinnerModule.forRoot()),
     [{provide: LOCALE_ID, useValue: LOCALE.EN}],
-    [{provide: LOCALE_ID, useValue: LOCALE.VN}],
+    // [{provide: LOCALE_ID, useValue: LOCALE.VN}],
   ]
 };
