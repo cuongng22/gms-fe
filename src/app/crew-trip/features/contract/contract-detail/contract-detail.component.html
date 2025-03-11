@@ -986,6 +986,9 @@
                 @if (!!formGroupDetail.controls['standardCheckOut'].hasError('required')) {
                   <mat-error><span i18n>Standard Checkout</span><span i18n> is required</span></mat-error>
                 }
+                <mat-error *ngxControlError="formGroupDetail.controls['standardCheckOut']; track: 'pattern'">
+                  <span i18n>Standard Check-out Time</span><span i18n> must be from 00:00 to 23:59</span>
+                </mat-error>
               </mat-form-field>
             </div>
           </div>

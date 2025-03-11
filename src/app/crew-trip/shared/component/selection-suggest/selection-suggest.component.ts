@@ -122,6 +122,19 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
       }));
     });
 
+    this.selectionControl.writeValue = (value: any) => {
+      const selected = this.options.find((option: any) => {
+        return value === (this.attrValue ? option[this.attrValue] : option);
+      });
+      if (selected) {
+        this.viewControl.setValue(
+          this.attrDisplay ? selected[this.attrDisplay] : selected
+        );
+      } else {
+        this.viewControl.setValue('');
+      }
+    };
+
     this.formControl.statusChanges.subscribe((res) => {
       if ('DISABLED' === res) {
         this.viewControl.disable();
