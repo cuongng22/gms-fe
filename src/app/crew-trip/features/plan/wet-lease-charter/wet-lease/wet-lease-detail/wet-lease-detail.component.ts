@@ -305,7 +305,9 @@ export class WetLeaseDetailComponent extends CommonComponent {
 
   wetLeaseGeneralClearData() {
     this.wetLeaseHotel.dataSource.data = [];
+    this.planHotel = []
     this.wetLeaseCarRental.dataSource.data = [];
+    this.planTransports = []
   }
 
   get planHotel() {

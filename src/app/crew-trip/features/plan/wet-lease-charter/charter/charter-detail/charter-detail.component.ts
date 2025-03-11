@@ -282,6 +282,14 @@ export class CharterDetailComponent extends CommonComponent {
 
   }
 
+  charterGeneralClearData() {
+    this.charterHotel.dataSource.data = [];
+    this.planHotel = [];
+
+    this.charterCarRental.dataSource.data = [];
+    this.planTransports = []
+  }
+
   async airportCodeChange(event: string) {
     const res = await this._flightMarketService.search({ code: event, option: 0 });
     if (res.data.content[0].marketType === CategoryEnum.INTERNATIONAL) {
@@ -299,6 +307,15 @@ export class CharterDetailComponent extends CommonComponent {
 
   set formCharterGeneral(value: any) {
     this._formCharterGeneral = value;
+    if (!value.isHotel) {
+      this.planHotel = [];
+      this.charterHotel.dataSource.data = [];
+    }
+
+    if (!value.isTransport) {
+      this.planTransports = [];
+      this.charterCarRental.dataSource.data = []
+    }
   }
 
 

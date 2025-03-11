@@ -78,7 +78,7 @@
 
 
         </div>
-        <app-charter-general #charterGeneral (airportCodeChange)="airportCodeChange($event)"
+        <app-charter-general #charterGeneral (airportCodeChange)="airportCodeChange($event)" (cleanData)="charterGeneralClearData()"
             (formValueChange)="formCharterGeneralChange($event)" [disabled]="disable"></app-charter-general>
         <div class="d-flex justify-content-between align-items-center mt-3 mb-1">
             <h5>
