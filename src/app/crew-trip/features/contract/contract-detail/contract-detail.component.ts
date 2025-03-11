@@ -697,8 +697,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   }
 
   override async save() {
-    console.log(this.formGroupDetail.getRawValue())
-    return;
     try {
       //xoa bản ghi trang
       /*let group = this.tblPriceUnit.controls as FormGroup[];
