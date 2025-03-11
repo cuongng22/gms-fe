@@ -85,10 +85,13 @@ export const toDate: { [key: string]: string } = {
 export const checkinFrom: { [key: string]: string } = {
   required: 'Checkin from' + $localize` is required`,
   afterValidator: 'Checkin from' + $localize` must before checkout to`,
+  timeAfterValidator: 'Checkin from' + $localize` must before checkout to`,
+
 };
 export const checkoutTo: { [key: string]: string } = {
   required: 'Checkout to' + $localize` is required`,
   beforeValidator: 'Checkout to' + $localize` must after checkin from`,
+  timeBeforeValidator: 'Checkout to' + $localize` must after checkin from`,
 };
 
 export const fromHour: { [key: string]: string } = {
