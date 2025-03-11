@@ -1,7 +1,7 @@
-import {AfterContentInit, Directive, ElementRef, HostListener, Input} from '@angular/core';
-import {NgControl} from '@angular/forms';
-import {isNaN, parseInt} from "lodash";
-import {take} from "rxjs";
+import { AfterContentInit, Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { NgControl } from '@angular/forms';
+import { isNaN, parseInt } from "lodash";
+import { take } from "rxjs";
 
 
 @Directive({
@@ -21,17 +21,18 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
     let initValue = this.control.value;
     if (initValue && !isNaN(Number(initValue))) {
       inputElement.value = this.formatNumber(initValue);
-    } else {
-      this.control.control?.setErrors({invalidNumber: true});
+    } else if (isNaN(Number(initValue))) {
+      this.control.control?.setErrors({ invalidNumber: true });
     }
 
     //la field tinh toan
     this.control.control?.valueChanges.pipe(take(1)).subscribe((value) => {
-      if (value && !isNaN(Number(value))) {
-        inputElement.value = this.formatNumber(value);
-      } else {
+      const _value = value.replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
+      if (value && !isNaN(Number(_value))) {
+        inputElement.value = this.formatNumber(_value);
+      } else if (isNaN(Number(_value))) {
         // inputElement.value = '0';
-        this.control.control?.setErrors({invalidNumber: true});
+        this.control.control?.setErrors({ invalidNumber: true });
       }
     });
   }
@@ -43,15 +44,15 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
     const value = inputElement.value.replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
     if (value && !isNaN(Number(value))) {
       if (!this.isValidNumberDecimal(value)) {
-        this.control.control?.setErrors({invalidNumberDecimal: true});
+        this.control.control?.setErrors({ invalidNumberDecimal: true });
       } else if (!this.control.errors) {
         this.control.control?.setErrors(null);
-        this.control.control?.setValue(Number(value), {emitEvent: false});
+        this.control.control?.setValue(Number(value), { emitEvent: false });
         inputElement.value = this.formatNumber(value);
       }
-    } else {
+    } else if (isNaN(Number(value))) {
       // inputElement.value = '';
-      this.control.control?.setErrors({invalidNumber: true});
+      this.control.control?.setErrors({ invalidNumber: true });
     }
   }
 

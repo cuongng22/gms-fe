@@ -83,8 +83,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
   viewType = 'HD'; //HD-PL
   override baseService = inject(ContractService);
   flightMarketService = inject(FlightMarketService);
-  hotelService = inject(HotelService);
-  vehicleService = inject(VehicleService);
   fb = inject(FormBuilder);
 
   //variable
@@ -94,8 +92,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
   bizDocId: any;
   contractObj: any;
   listPartner: any[] = [];
-  listHotel = [];
-  listVehicle = [];
   tblAnnexData = new MatTableDataSource();
   _displayedColumns: {
     label: string;
@@ -106,26 +102,13 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }[] = [
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Airport code`, value: 'marketCode'},
-    {label: $localize`bizDocId`, value: 'bizDocId'},
-    {
-      label: $localize`Contract Code`,
-      label1: $localize`Appendix Code`,
-      value: 'contractCode',
-    },
+    {label: this.isHD() ? $localize`BizDocId` : $localize`Appendix No`, value: 'bizDocId'},
+    {label: $localize`Contract Code`, label1: $localize`Appendix Code`, value: 'contractCode',},
     {label: $localize`Contract No`, value: 'contractNo'},
-    {
-      label: $localize`Contract Name`,
-      label1: $localize`Appendix Name`,
-      value: 'contractName',
-    },
+    {label: $localize`Contract Name`, label1: $localize`Appendix Name`, value: 'contractName',},
     {label: $localize`Supplier`, value: 'partnerName'},
     {label: $localize`Service Type`, value: 'serviceObject'},
-    {
-      label: $localize`Signed Date`,
-      value: 'signedDate',
-      type: Constant.DATE,
-      format: Constant.DATE_FORMAT,
-    },
+    {label: $localize`Signed Date`, value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT,},
   ];
   @Input() contractId: any;
 
@@ -157,9 +140,9 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   override async ngOnInit() {
     await Promise.all([
-      this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}),
+      this.loadListFlightMarket(),
       this.loadListHotel(),
-      this.loadListVehiclesPartner(),
+      this.loadListVehicle(),
       this.search(),
     ]).then(() => {
       const cache = JSON.parse(localStorage.getItem('viewType')!);
@@ -167,7 +150,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
         this.viewType = cache.viewType;
         this.showListAnnex(cache.bizDocId);
       }
-      const listCombine = [...this.listVehicle, ...this.listHotel];
+      const listCombine = [...this.listVehicles, ...this.listHotels];
       this.listPartner = listCombine.map((s: any) => ({
         code: s.code ?? s.hotelCode,
         name: s.name
@@ -230,22 +213,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
     //   this.tblAnnexData.data = res.data.content;
     this.tblAnnexData.data = (this.dataSource.data[index] as any).appendixList;
     this.showPopupAnnex = true;
-  }
-
-  async loadListHotel() {
-    await this.hotelService.search({limit: 9999}).then((res) => {
-      if (res.data) {
-        this.listHotel = res.data.content;
-      }
-    });
-  }
-
-  async loadListVehiclesPartner() {
-    await this.vehicleService.search({limit: 9999}).then((res) => {
-      if (res.data) {
-        this.listVehicle = res.data.content;
-      }
-    });
   }
 
   async syncDWH() {

@@ -17,9 +17,12 @@ import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-mark
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { categories, categoryOfPlans, StatusesSummary } from '../../budget-procurement.model';
+import { categories, CategoryEnum, categoryOfPlans, StatusesSummary } from '../../budget-procurement.model';
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { FlightMarketStatusEnum } from 'src/app/crew-trip/features/category/flight-market/flight-market.model';
+import { CategoriesEnum } from '../../../estimated-cost/estimated-cost.model';
 
 @Component({
   selector: 'app-budget-procurement-summary-search',
@@ -32,24 +35,22 @@ import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/sele
   templateUrl: './budget-procurement-summary-search.component.html',
   styleUrl: './budget-procurement-summary-search.component.scss'
 })
-export class BudgetProcurementSummarySearchComponent implements OnInit {
+export class BudgetProcurementSummarySearchComponent extends CommonComponent implements OnInit {
 
   private readonly destroyRef = inject(DestroyRef);
-  private readonly formBuilder = inject(FormBuilder);
   flightMarketService = inject(FlightMarketService);
 
   _categoryType: string = '';
-  search = output<any>();
+  searchEvent = output<any>();
 
   @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
   filteredOptionsAirport = model<any[]>([]);
   keySearchAirport = new Subject<string>();
-  airports = model<any[]>([]);
   categories = categories;
   categoryOfPlans = categoryOfPlans;
   statuses = StatusesSummary;
 
-  formGroupSearch = this.formBuilder.group({
+  override formGroupSearch = this.formBuilder.group({
     airportCodes: [''],
     categoryOfPlan: [''], // loại kế hoạch ngân sách hay mua sắm
     category: [''], // loại quốc tế hay quốc nội
@@ -57,16 +58,14 @@ export class BudgetProcurementSummarySearchComponent implements OnInit {
   });
 
 
-  ngOnInit(): void {
-    // Lấy danh sách thị trường cho ô search
-    this.flightMarketService.search({ option: 1 }).then(res => {
-      this.airports.set(res.data);
-    });
+  override ngOnInit(): void {
+    const typeAirport = this.categoryType === CategoriesEnum.ALL || this.categoryType === 'All' ? '' : this.categoryType;
+    this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL, type: typeAirport })
   }
 
 
   onSearch(): void {
-    this.search.emit(this.formGroupSearch.value);
+    this.searchEvent.emit(this.formGroupSearch.value);
   }
 
   @Input()

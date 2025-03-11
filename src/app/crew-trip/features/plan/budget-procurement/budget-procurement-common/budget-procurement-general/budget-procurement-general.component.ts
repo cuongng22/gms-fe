@@ -29,6 +29,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { el } from 'node_modules/@fullcalendar/core/internal-common';
 import { BudgetProcurementPriceComponent } from '../budget-procurement-price/budget-procurement-price.component';
 import { CurrencyService } from 'src/app/crew-trip/core/services/currency.service';
+import { DatepickerComponent } from 'src/app/crew-trip/shared/component/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-budget-procurement-general',
@@ -38,7 +39,7 @@ import { CurrencyService } from 'src/app/crew-trip/core/services/currency.servic
     MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
     NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent,
-    BudgetProcurementPriceComponent
+    BudgetProcurementPriceComponent, DatepickerComponent
   ],
   templateUrl: './budget-procurement-general.component.html',
   styleUrl: './budget-procurement-general.component.scss',
@@ -111,7 +112,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     lateCheckoutContractFlag: new FormControl(false),
     haveContract: new FormControl(false),
     wetLeaseFlag: new FormControl(false),
-    currencyCode: new FormControl('',[Validators.required])
+    currencyCode: new FormControl('', [Validators.required])
 
   });
   _procurementPlanFlag: boolean = false;
@@ -139,7 +140,6 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     this.formGroupDetail.valueChanges.pipe(debounceTime(1000)).subscribe((value: any) => {
       this.formValueChanges.emit(value);
     });
-
   }
 
 
@@ -223,7 +223,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
       this.formGroupDetail.controls.budgetPlanFlag.value === undefined) {
       this.formGroupDetail.controls.budgetPlanFlag.setValue(true);
     }
-    if (isCheckProcurementPlan) {
+    if (!isCheckProcurementPlan) {
       this.formGroupDetail.controls.procStartDate.setValue(null);
       this.formGroupDetail.controls.procStartDate.markAsUntouched();
       this.formGroupDetail.controls.procEndDate.setValue(null);
@@ -231,11 +231,24 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
       this.formGroupDetail.controls.totalTime.setValue(null);
       this.formGroupDetail.controls.estimateTime.setValue(null);
       this.formGroupDetail.controls.time.setValue(null);
-      this.formGroupDetail.controls.earlyCheckinFlag.setValue(!!this.formGroupDetail.controls.earlyCheckinContractFlag.value);
-      this.formGroupDetail.controls.lateCheckoutFlag.setValue(!!this.formGroupDetail.controls.lateCheckoutContractFlag.value);
-      this.formGroupDetail.controls.num.setValue(this.procurementPlanFlag ? '1' : null);
-      this.formGroupDetail.controls.unit.setValue(this.procurementPlanFlag ? 'Gói HĐ/DV' : null);
-      this.formGroupDetail.controls.supplierMethod.setValue(this.procurementPlanFlag ? 'Chào giá/ Đàm phán' : null);
+
+      this.formGroupDetail.controls.num.setValue(null);
+      this.formGroupDetail.controls.unit.setValue(null);
+    } else {
+      this.formGroupDetail.controls.earlyCheckinFlag.setValue(
+        this.formGroupDetail.controls.earlyCheckinFlag.value ?? !!this.formGroupDetail.controls.earlyCheckinContractFlag.value);
+      this.formGroupDetail.controls.lateCheckoutFlag.setValue(
+        this.formGroupDetail.controls.lateCheckoutFlag.value ?? !!this.formGroupDetail.controls.lateCheckoutContractFlag.value);
+
+      if (!this.formGroupDetail.controls.num.value) {
+        this.formGroupDetail.controls.num.setValue('1');
+      }
+      if (!this.formGroupDetail.controls.unit.value) {
+        this.formGroupDetail.controls.unit.setValue('Gói HĐ/DV');
+      }
+      if (!this.formGroupDetail.controls.supplierMethod.value) {
+        this.formGroupDetail.controls.supplierMethod.setValue('Chào giá/ Đàm phán');
+      }
     }
   }
 

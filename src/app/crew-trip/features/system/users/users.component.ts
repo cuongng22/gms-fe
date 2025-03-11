@@ -29,7 +29,6 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { InputSizeComponent } from '../../../shared/input/input-size.component';
 import { ResetPasswordRequest, Role } from './users.model';
 import { CustomMatPaginatorIntl } from 'src/app/customizer-settings/paginator-intl.service';
-import { TranslateModule } from '@ngx-translate/core';
 import { CommonComponent } from '../../../shared/common.component';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { NgxControlError } from 'ngxtension/control-error';
@@ -51,7 +50,7 @@ export interface PeriodicElement {
     MatCheckboxModule, DataTransformPipe, NgClass, MatSelect, MatOption,
     MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatInputModule, MatSelectModule, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, FormsModule, MatFormFieldModule, CommonModule, MatTooltipModule,
-    TranslateModule, NgxTrimDirectiveModule, NgxControlError, SelectMultipleComponent],
+    NgxTrimDirectiveModule, NgxControlError, SelectMultipleComponent],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
   providers: [

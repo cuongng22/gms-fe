@@ -136,6 +136,8 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       const response = await this.baseService.getDetailSummary(this.id() ?? 0); //dataDetailExample;//
       this.dataDetail = { ...response.data };
       this.budgetProcurementGeneral.formGroupDetail.patchValue(this.dataDetail, { emitEvent: false });
+      this.budgetProcurementGeneral.formGroupDetail.controls.procurementPlanFlag.setValue(this.dataDetail.procurementPlanFlag)
+      this.budgetProcurementGeneral.setDefaultValueGeneral(this.dataDetail.procurementPlanFlag);
       this.budgetProcurementGeneral.formGroupDetail.controls.category.disable();
       this.budgetProcurementGeneral.formGroupDetail.controls.airportCode.disable();
       this.budgetProcurementGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
@@ -143,7 +145,6 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       this.budgetProcurementGeneral.inputPrice = this.dataDetail?.inputPrice;
       this.budgetProcurementGeneral.setVerionRate(this.dataDetail?.planBudgetProcurement.versionRate);
       this.budgetProcurementGeneral.currencyCodeChange({ value: this.dataDetail?.currencyCode });
-      this.budgetProcurementGeneral.setDefaultValueGeneral();
 
       this.setDataDetail();
       this.setPanelState();
@@ -258,6 +259,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       this.dataDetail?.planBudgetHotels.forEach((item: any) => {
         this.setPrice(item, price);
         this.setExchangeRateBudget(item, this.budgetProcurementGeneral.exchangeRate)
+
       });
       this.dataDetail?.planProcurementHotels.forEach((item: any) => {
         this.setPrice(item, price);
@@ -276,57 +278,73 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     }
   }
   setPrice(item: any, price: any) {
-    item.priceSingleRoom = price.priceSingleRoom.priceBeforeTax;
-    item.priceSingleRoomVat = price.priceSingleRoom.priceAfterTax
+    item.priceSingleRoom = price.priceSingleRoom?.priceBeforeTax ?? 0;
+    item.priceSingleRoomVat = price.priceSingleRoom?.priceAfterTax ?? 0;
 
-    item.priceDoubleRoom = price.priceDoubleRoom.priceBeforeTax;
-    item.priceDoubleRoomVat = price.priceDoubleRoom.priceAfterTax
+    item.priceDoubleRoom = price.priceDoubleRoom?.priceBeforeTax ?? 0;;
+    item.priceDoubleRoomVat = price.priceDoubleRoom?.priceAfterTax ?? 0;
 
-    item.priceSingleRoomEarly = price.priceEarlyCheckinSingleRoom.priceBeforeTax;
-    item.priceSingleRoomEarlyVat = price.priceEarlyCheckinSingleRoom.priceAfterTax;
+    item.priceSingleRoomEarly = price.priceEarlyCheckinSingleRoom?.priceBeforeTax ?? 0;;
+    item.priceSingleRoomEarlyVat = price.priceEarlyCheckinSingleRoom?.priceAfterTax ?? 0;;
 
-    item.priceDoubleRoomEarly = price.priceEarlyCheckinDoubleRoom.priceBeforeTax;
-    item.priceDoubleRoomEarlyVat = price.priceEarlyCheckinDoubleRoom.priceAfterTax;
+    item.priceDoubleRoomEarly = price.priceEarlyCheckinDoubleRoom?.priceBeforeTax ?? 0;;
+    item.priceDoubleRoomEarlyVat = price.priceEarlyCheckinDoubleRoom?.priceAfterTax ?? 0;;
 
-    item.priceSingleRoomLate = price.priceLateCheckoutSingleRoom.priceBeforeTax;
-    item.priceSingleRoomLateVat = price.priceLateCheckoutSingleRoom.priceAfterTax;
+    item.priceSingleRoomLate = price.priceLateCheckoutSingleRoom?.priceBeforeTax ?? 0;;
+    item.priceSingleRoomLateVat = price.priceLateCheckoutSingleRoom?.priceAfterTax ?? 0;;
 
-    item.priceDoubleRoomLate = price.priceLateCheckoutDoubleRoom.priceBeforeTax;
-    item.priceDoubleRoomLateVat = price.priceLateCheckoutDoubleRoom.priceAfterTax;
+    item.priceDoubleRoomLate = price.priceLateCheckoutDoubleRoom?.priceBeforeTax ?? 0;;
+    item.priceDoubleRoomLateVat = price.priceLateCheckoutDoubleRoom?.priceAfterTax ?? 0;;
 
-    item.priceCrewTransport = price.priceTransportation.priceBeforeTax;
-    item.priceCrewTransportVat = price.priceTransportation.priceAfterTax;
+    item.priceCrewTransport = price.priceTransportation?.priceBeforeTax ?? 0;;
+    item.priceCrewTransportVat = price.priceTransportation?.priceAfterTax ?? 0;;
 
-    item.unitPrice = price.priceTransportation.priceBeforeTax;
-    item.unitPriceVat = price.priceTransportation.priceAfterTax;
+    item.unitPrice = price.priceTransportation?.priceBeforeTax ?? 0;;
+    item.unitPriceVat = price.priceTransportation?.priceAfterTax ?? 0;;
   }
 
+  /**
+   * Set tỉ giá cho phần kế hoạch ngân sách theo hàng tháng
+   * @param item 
+   * @param exchangeRate 
+   */
   setExchangeRateBudget(item: any, exchangeRate: any) {
-    const _periodStart = moment(item.periodStart).locale('en');
-    const _exchangeRate = exchangeRate[_periodStart.format('MMMM').toLowerCase()]
-    console.log(_periodStart, _exchangeRate);
-    if (_exchangeRate) {
-      item.rateInPeriod = _exchangeRate;
+    if (exchangeRate) {
+      const _periodStart = moment(item.periodStart).locale('en');
+      const _exchangeRate = exchangeRate[_periodStart.format('MMMM').toLowerCase()]
+      console.log(_periodStart, _exchangeRate);
+      if (_exchangeRate) {
+        item.rateInPeriod = _exchangeRate;
+      }
     }
   }
+
+  /**
+   * Set tỉ giá cho phần kế hoạch mua sắm
+   * @param item 
+   * @param exchangeRate 
+   */
   setExchangeRateProcurement(item: any, exchangeRate: any) {
-    item.rateInPeriod = exchangeRate.average;
+    if (exchangeRate) {
+      item.rateInPeriod = exchangeRate.average;
+    }
   }
 
 
   override async save(): Promise<any> {
-    try {
-      await this.spinner.show();
-      const resSave = await this.processSave();
-      if (resSave.result) {
-        this.baseService.showSuccess(resSave.isUpdate ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
-        this.getDetailSummary()
-      }
-    } catch (error) {
-      console.error('save error: ', error);
-    } finally {
-      this.spinner.hide();
-    }
+    this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.setValue('2026-01-08')
+    // try {
+    //   await this.spinner.show();
+    //   const resSave = await this.processSave();
+    //   if (resSave.result) {
+    //     this.baseService.showSuccess(resSave.isUpdate ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
+    //     this.getDetailSummary()
+    //   }
+    // } catch (error) {
+    //   console.error('save error: ', error);
+    // } finally {
+    //   this.spinner.hide();
+    // }
   }
 
   async confirmClose() {

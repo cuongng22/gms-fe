@@ -34,7 +34,7 @@
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
             <mat-tab label="All" i18n="@@all">
                 <ng-template matTabContent>
-                    <app-budget-procurement-summary-search categoryType="All" (search)="searchSummary($event,'All')">
+                    <app-budget-procurement-summary-search categoryType="All" (searchEvent)="searchSummary($event,'All')">
                     </app-budget-procurement-summary-search>
                     <app-budget-procurement-summary-list [planBudgetProcurementId]="id()"
                         #budgetProcurementSummaryListAll>

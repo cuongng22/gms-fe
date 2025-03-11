@@ -349,7 +349,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     try {
       await this.spinner.show();
       await this.loadListDocumentParent();
-      await Promise.all([this.detail(this.id), this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
+      await Promise.all([this.detail(this.id), this.loadListFlightMarket(), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
         this.formGroupDetail.patchValue({idParent: this.formGroupDetail.getRawValue().idParent})
       });
     } catch (e) {

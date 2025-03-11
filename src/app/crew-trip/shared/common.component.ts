@@ -84,7 +84,8 @@ export class CommonComponent
   listFlightMarket: any[] = [];
   listFlightMarketAll: any[] = [];
   listFeeService: any[] = [];
-
+  listHotels: any[] = [];
+  listVehicles:any[] = [];
   readonly dialog = inject(MatDialog);
   formBuilder = inject(FormBuilder);
   errorMessages: any = ERROR_MESSAGE;
@@ -392,6 +393,7 @@ export class CommonComponent
         invalid.push(name);
       }
     }
+    console.log(invalid)
   }
 
   async loadListFlightMarket(param?: any) {
@@ -411,6 +413,22 @@ export class CommonComponent
           this.listFeeService = res.data.content.filter((s: any) => s.active == true);
         }
       });
+  }
+
+  async loadListHotel() {
+    await this._hotelService.search({limit: 9999}).then((res) => {
+      if (res.data) {
+        this.listHotels = res.data.content;
+      }
+    });
+  }
+
+  async loadListVehicle() {
+    await this._vehicleService.search({limit: 9999}).then((res) => {
+      if (res.data) {
+        this.listVehicles = res.data.content;
+      }
+    });
   }
 
   getErrorMessage(errorKey: string) {

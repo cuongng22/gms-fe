@@ -28,19 +28,19 @@ import { MatIconModule } from '@angular/material/icon';
 import {MatTooltipModule} from "@angular/material/tooltip";
 
 @Component({
-  selector: 'app-selection-suggest',
+  selector: 'app-selection-suggest-2',
   standalone: true,
   imports: [FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatAutocompleteModule, CommonModule, NgxControlError,
     MatIconModule, MatTooltipModule
   ],
-  templateUrl: './selection-suggest.component.html',
-  styleUrl: './selection-suggest.component.scss',
+  templateUrl: './selection-suggest-2.component.html',
+  styleUrl: './selection-suggest-2.component.scss',
   hostDirectives: [NgxControlValueAccessor],
   changeDetection: ChangeDetectionStrategy.OnPush
 
 })
-export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterViewChecked {
+export class SelectionSuggest2Component implements OnInit, AfterViewInit, AfterViewChecked {
 
   ngAfterViewInit(): void {
     this.auto?.options.changes.subscribe((list: any[]) => {
@@ -72,9 +72,11 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
   @Input() attrDisplay = '';
   @Input() attrDisplay2 = '';
   @Input() editInlineTable = false
-  @Input() errors: any;
+  @Input() errors : any;
   @Output() clearInputEvent = new EventEmitter<void>();
-  selectionChange = output<any>();
+  @Input() formControlName: string
+  @Output() selectionChange = new EventEmitter<any>();
+  @Output() inputChange = new EventEmitter<any>();
 
   private _options: any[] = [];
   keySearch = new Subject<string>();
@@ -116,10 +118,22 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
         this.filtered.set(optionFilter);
         return;
       }
-      this.filtered.set(optionFilter.filter(option => {
-        const valueAttrDisplay = (this.attrDisplay ? option[this.attrDisplay] : option)?.toString().toLowerCase();
-        return valueAttrDisplay.includes(value.toLowerCase());
-      }));
+      this.filtered.set(
+        optionFilter.filter(option => {
+          let valueAttrDisplay = value;
+          if (this.attrDisplay) {
+            valueAttrDisplay = option[this.attrDisplay] || '';
+            if (this.attrDisplay2) {
+              valueAttrDisplay += ' ' + (option[this.attrDisplay2] || '');
+            }
+          } else {
+            valueAttrDisplay = option.toString();
+          }
+          return valueAttrDisplay.toLowerCase().includes(value.toLowerCase());
+        })
+      );
+      this.inputChange.emit(value);
+
     });
 
     this.formControl.statusChanges.subscribe((res) => {
@@ -132,8 +146,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
   }
 
 
-  setViewValueInit(value: any, force?: boolean) {
-    if (!this.setInitValue || force) {
+  setViewValueInit(value: any) {
+   /* if (!this.setInitValue) {
       if (value) {
         const selected = this.options.filter((option: any) => {
           return value === (this.attrValue ? option[this.attrValue] : option);
@@ -149,27 +163,25 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
       } else {
         this.setInitValue = false
       }
-    }
+    }*/
 
 
   }
 
   filter(): void {
     const filterValue = this.inputSearch.nativeElement.value;
-    this.formControl.setValue(null);
-    this.formControl.updateValueAndValidity();
+    // this.formControl.setValue(null);
+    // this.formControl.updateValueAndValidity();
     this.keySearch.next(filterValue);
   }
 
   onSelectionChange(event: any) {
-    this.viewControl.setValue(event.option.viewValue ?? null);
+    const filterValue = this.inputSearch.nativeElement.value ?? "";
+    /*this.viewControl.setValue(event.option.viewValue ?? null);
     this.viewControl.updateValueAndValidity();
     this.selectionControl.writeValue(event.option.value ?? null);
-    this.formControl.updateValueAndValidity();
-    this.selectionChange.emit({
-      value: event.option.value ?? null,
-      viewValue: event.option.viewValue ?? null,
-    });
+    this.formControl.updateValueAndValidity();*/
+    this.selectionChange.emit(filterValue);
   }
 
   @Input() set options(options: any[]) {
@@ -193,5 +205,13 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
     findResult?.focus(null, { preventScroll: false });
     findResult?.deselect(false);
     this.clearInputEvent.emit();
+  }
+
+  get errorMessage(){
+    if(this.errors?.message){
+      //this.viewControl.setErrors(this.errors.overlapValidator);
+      return this.errors.message
+    }
+    return null;
   }
 }

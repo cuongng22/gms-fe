@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, inject, input, OnDestroy } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -24,6 +24,9 @@ import { SeparatorDirective } from 'src/app/crew-trip/shared/directive/separator
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.component';
 import { getHeaderRowDef1, getRowDef, planHotels } from './charter-hotel.model';
+import { Subscription } from 'rxjs';
+import { BaseService } from 'src/app/crew-trip/core/services/base-service';
+import { CharterService } from 'src/app/crew-trip/core/services/charter.service';
 
 @Component({
   selector: 'app-charter-hotel',
@@ -38,16 +41,22 @@ import { getHeaderRowDef1, getRowDef, planHotels } from './charter-hotel.model';
   templateUrl: './charter-hotel.component.html',
   styleUrl: './charter-hotel.component.scss'
 })
-export class CharterHotelComponent extends CommonComponent {
+export class CharterHotelComponent extends CommonComponent implements OnDestroy {
+  override baseService: CharterService = inject(CharterService);
   disabled = input<boolean>(false);
   category = input.required<CategoryEnum>(); // quốc tế hoặc quốc nội
   dataGeneral = input<any>()
   CategoryEnum = CategoryEnum;
   headerRowDef1: string[] = [];
-  headerRowDef2 = ['totalIncVAT', 'totalExcVAT'];
+  headerRowDef2 = ['totalExcVAT', 'totalIncVAT'];
   rowDef: string[] = [];
   totalRowDef = ['total', 'totalForex', 'totalExcVAT', 'totalIncVAT',];
   data = input<any[]>();
+
+  Math = Math;
+  hotelSubscription: Subscription;
+  exchangeRateSubscription: Subscription;
+  rateVatSubscription: Subscription;
 
   constructor() {
     super();
@@ -64,8 +73,46 @@ export class CharterHotelComponent extends CommonComponent {
       }
     })
   }
+  ngOnDestroy(): void {
+    this.hotelSubscription.unsubscribe();
+    this.exchangeRateSubscription.unsubscribe();
+    this.rateVatSubscription.unsubscribe();
+  }
   override ngOnInit(): void {
     // this.dataSource.data = Object.entries(planHotels);
+
+    this.hotelSubscription = this.baseService.hotel$.subscribe(data => {
+      if (data) {
+        this.dataSource.data.forEach(element => {
+          element[1].numberOfNight = Number(data.numberOfNight);
+          element[1].priceRoom = Number(data.priceSingleRoom);
+          element[1].priceRoomECI = Number(data.priceSingleRoomECI);
+          element[1].priceRoomLCO = Number(data.priceSingleRoomLCO);
+          this.calTotalCountForeign(element[1]);
+          this.calTotalAmount(element[1]);
+        })
+      }
+    });
+
+    this.exchangeRateSubscription = this.baseService.exchangeRate$.subscribe(data => {
+      if (data) {
+        const _exchangeRate = Number(data);
+        this.dataSource.data.forEach(element => {
+          element[1].exchangeRate = _exchangeRate
+          this.calTotalAmount(element[1]);
+        });
+      }
+    });
+
+    this.rateVatSubscription = this.baseService.rateVat$.subscribe(data => {
+      if (data) {
+        const _rateVat = Number(data);
+        this.dataSource.data.forEach(element => {
+          element[1].rateVat = _rateVat
+          this.calTotalAmount(element[1]);
+        });
+      }
+    });
   }
 
   setDataSource(value: any) {
@@ -93,15 +140,22 @@ export class CharterHotelComponent extends CommonComponent {
 
   // tính tiền ngoại tệ
   calTotalCountForeign(element: any) {
-    element.totalForex = Number(element.priceRoom ?? 0) * Number(element.totalNormalRoom ?? 0) * Number(element.numberOfNight ?? 0)
+    const _totalForex = Number(element.priceRoom ?? 0) * Number(element.totalNormalRoom ?? 0) * Number(element.numberOfNight ?? 0)
       + Number(element.priceRoomECI ?? 0) * Number(element.totalECIRoom ?? 0)
       + Number(element.priceRoomLCO ?? 0) * Number(element.totalLCORoom ?? 0);
+    if (this.category() === CategoryEnum.INTERNATIONAL) {
+      element.totalForex = _totalForex;
+    } else {
+      element.totalForex = 0;
+    }
+    return _totalForex
   }
 
   // tính thành tiền chưa vat và có vat					
   calTotalAmount(element: any) {
-    element.totalExcVAT = element.totalForex * (element.exchangeRate ?? 1);
-    element.totalIncVAT = (element.totalExcVAT) + (element.totalExcVAT * (element.rateVat ?? 0) / 100)
+    element.totalIncVAT = this.calTotalCountForeign(element) * (element.exchangeRate ?? 1);
+    element.totalExcVAT = element.totalIncVAT / (1 + (this.dataGeneral().rateVat ?? 0) / 100)
+
   }
 
   clickEdit(data: any, control: string) {
