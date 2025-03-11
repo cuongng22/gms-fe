@@ -126,7 +126,7 @@ export class PATTERN {
   static PHONE = '^[0-9()+]+$'
   static STRING_NUMBER = '^[a-zA-Z0-9]+$' //chu va so
   static EMAIL = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'
-  static EMAIL_MULTI = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(;[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})*$'
+  static EMAIL_MULTI = '^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}(;\\s*[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,})*$';
   static HOUR24 = '^([01]\\d|2[0-3]):([0-5]\\d)$'
   static STRING = '^[a-zA-Z]+$' //chu
   static NUMBER = '^[0-9]+$' //so
