@@ -13,11 +13,7 @@ import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lo
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {PdfViewerComponent} from 'src/app/crew-trip/shared/pdf-viewer/pdf-viewer.component';
 import {
-  afterValidator,
-  beforeValidator,
-  lessThanValidator,
-  timeAfterValidator,
-  timeBeforeValidator,
+  afterValidator, beforeValidator, lessThanValidator, timeAfterValidator, timeBeforeValidator,
 } from 'src/app/crew-trip/shared/utils/common';
 import {DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN,} from 'src/app/crew-trip/shared/utils/constant';
 import moment from "moment";
@@ -186,7 +182,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       contractForm: [],
       hdPlRoot: [],
       contractName: ['', [Validators.maxLength(250)]],
-      partnerCode: [],
+      partnerCode: ['', [Validators.required]],
       partnerName: [],
       partnerAddress: [],
       negotiateCompetence: [],
@@ -311,19 +307,23 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         serviceName: [],
         serviceUnit: [],
       });
-      row.controls['fromDate'].setValidators(
-        [afterValidator(row.controls['toDate']),
-          this.beforeValidatorMessage(this.formGroupDetail.controls['effectiveDate'], $localize`From date not less than Effective date`),
-          this.afterValidatorMessage(this.formGroupDetail.controls['expiryDate'], $localize`From date not greater than Expiry date`),
-          this.dateOverlapValidator(row)
-        ]);
-      row.controls['toDate'].setValidators(
-        [beforeValidator(row.controls['fromDate']),
-          this.beforeValidatorMessage(this.formGroupDetail.controls['effectiveDate'], $localize`To date not less than Effective date`),
-          this.afterValidatorMessage(this.formGroupDetail.controls['expiryDate'], $localize`To date not greater than Expiry date`),
-          this.dateOverlapValidator(row)
-        ]);
+      row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']), this.beforeValidatorMessage(this.formGroupDetail.controls['effectiveDate'], $localize`From date not less than Effective date`), this.afterValidatorMessage(this.formGroupDetail.controls['expiryDate'], $localize`From date not greater than Expiry date`), this.dateOverlapValidator(row)]);
+      row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']), this.beforeValidatorMessage(this.formGroupDetail.controls['effectiveDate'], $localize`To date not less than Effective date`), this.afterValidatorMessage(this.formGroupDetail.controls['expiryDate'], $localize`To date not greater than Expiry date`), this.dateOverlapValidator(row)]);
       row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row), Validators.required]);
+      row.controls['priceNoTax'].valueChanges.subscribe((value) => {
+        if (value && row.getRawValue().taxRate) {
+          row.patchValue({
+            originalAmount3: value * row.getRawValue().taxRate / 100
+          })
+        }
+      });
+      row.controls['taxRate'].valueChanges.subscribe((value) => {
+        if (value && row.getRawValue().priceNoTax) {
+          row.patchValue({
+            originalAmount3: value * row.getRawValue().taxRate / 100
+          })
+        }
+      });
 
       init && row.patchValue(init);
       if (row.getRawValue().active) {
@@ -334,8 +334,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       row = this.fb.group({
         id: [], type: [], fromHour: ['00:00'], rate: [, [lessThanValidator(2)]], toHour: ['23:59'], active: [true], typeCheck: [], bizdocId: [],
       });
-      row.controls['fromHour'].setValidators(timeAfterValidator(row.controls['toHour']),);
-      row.controls['toHour'].setValidators(timeBeforeValidator(row.controls['fromHour']),);
+      row.controls['fromHour'].setValidators([timeAfterValidator(row.controls['toHour']), Validators.pattern(PATTERN.HOUR24)]);
+      row.controls['toHour'].setValidators([timeBeforeValidator(row.controls['fromHour']), Validators.pattern(PATTERN.HOUR24)]);
       init && row.patchValue(init);
       if (row.getRawValue().active) {
         table.push(row);
@@ -347,17 +347,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       }
     } else if (addType === 'tblDayUse') {
       row = this.fb.group({
-        id: [],
-        bizdocId: [],
-        checkinFrom: ['00:00'],
-        checkoutTo: ['23:59'],
-        maxHour: [],
-        rate: [, [lessThanValidator(2)]],
-        rate1: [, [lessThanValidator(2)]],
-        active: [true],
+        id: [], bizdocId: [], checkinFrom: ['00:00'], checkoutTo: ['23:59'], maxHour: [], rate: [, [lessThanValidator(2)]], rate1: [, [lessThanValidator(2)]], active: [true],
       });
-      row.controls['checkinFrom'].setValidators(timeAfterValidator(row.controls['checkoutTo']),);
-      row.controls['checkoutTo'].setValidators(timeBeforeValidator(row.controls['checkinFrom']),);
+      row.controls['checkinFrom'].setValidators([timeAfterValidator(row.controls['checkoutTo']), Validators.pattern(PATTERN.HOUR24)]);
+      row.controls['checkoutTo'].setValidators([timeBeforeValidator(row.controls['checkinFrom']), Validators.pattern(PATTERN.HOUR24)]);
       row.controls['maxHour'].setValidators([Validators.min(0), Validators.max(24), Validators.pattern(PATTERN.NUMBER),]);
 
       init && row.patchValue(init);
@@ -592,7 +585,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
             supplierName: data.peopleName,
             supplierPhone: data.phoneNumber,
             supplierEmail: data.email,
-            carType: data.carType,
           });
         }
       });
@@ -628,7 +620,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   }
 
   override async detail(id: any): Promise<void> {
-    console.log(id, 'id')
     if (id) {
       await super.detail(id);
       if (this.isPL()) {
@@ -645,23 +636,20 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       fileAttachContract = fileAttachContract.map((s: any) => ({...s, isFromContract: true}));
       const bizDocIdContract = cloneDeep(resContract.data.bizDocId);
       ['contractCode', 'contractName', 'contractNo', 'signedDate', 'employeeName', 'documentsList'].forEach((key) => delete resContract.data[key]);
-      resContract.data.priceUnitInfo.forEach((s:any) => {
+      resContract.data.priceUnitInfo.forEach((s: any) => {
         delete s.id;
         delete s.bizDocId;
       });
-      resContract.data.priceUnitNotAllDay.forEach((s:any) => {
+      resContract.data.priceUnitNotAllDay.forEach((s: any) => {
         delete s.id;
         delete s.bizdocId;
       });
-      resContract.data.dayUses.forEach((s:any) => {
+      resContract.data.dayUses.forEach((s: any) => {
         delete s.id;
         delete s.bizdocId;
       });
       this.formGroupDetail.patchValue({
-        ...resContract?.data,
-        hdPlRoot: bizDocIdContract,
-        employeeName: this.usersService.getUserLogin()?.fullName,
-        documentsList: fileAttachContract
+        ...resContract?.data, hdPlRoot: bizDocIdContract, employeeName: this.usersService.getUserLogin()?.fullName, documentsList: fileAttachContract
       });
     } else {
       this.formGroupDetail.patchValue({});
@@ -672,12 +660,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       supplierName: hotel ? hotel.hotelName : vehicle?.name || '',
       supplierPhone: hotel ? hotel.phone : vehicle?.phone || '',
       supplierEmail: hotel ? hotel.email : vehicle?.email || '',
+      carType: hotel ? '' : vehicle?.carType || '',
     });
     this.formGroupDetail.getRawValue().priceUnitInfo?.forEach((s: any) => {
       s = {
         ...s, //serviceFeeCode: s.serviceCode,
-        serviceName: this.listFeeService.find((s1: any) => s1.code === s.serviceCode,)?.name,
-        serviceUnit: this.listFeeService.find((s1: any) => s1.code === s.serviceCode,)?.unit,
+        serviceName: this.listFeeService.find((s1: any) => s1.code === s.serviceCode,)?.name, serviceUnit: this.listFeeService.find((s1: any) => s1.code === s.serviceCode,)?.unit,
       };
       this.addRow(this.tblPriceUnit, 'tblPriceUnit', s);
     });
@@ -697,6 +685,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   }
 
   override async save() {
+    console.log(this.formGroupDetail.controls)
+    return;
     try {
       //xoa bản ghi trang
       /*let group = this.tblPriceUnit.controls as FormGroup[];
@@ -958,6 +948,28 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     }
   }
 
+  beforeValidatorMessage(from: any, message?: any): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      let fromMoment = moment(from.value) || null;
+      let toMoment = moment(control.value) || null;
+      if (fromMoment && toMoment && toMoment.isBefore(fromMoment)) {
+        return {beforeValidatorMessage: true, message: message};
+      }
+      return null;
+    };
+  }
+
+  afterValidatorMessage(to: any, message?: any): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      let fromMoment = moment(control.value) || null;
+      let toMoment = moment(to.value) || null;
+      if (fromMoment && toMoment && fromMoment.isAfter(toMoment)) {
+        return {afterValidatorMessage: true, message: message};
+      }
+      return null;
+    };
+  }
+
   private async buildListPartner(partnerCode?: any) {
     let filterHotels = this.listHotels.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({
       ...s, label: `[${s.hotelCode}] - ${s.hotelName}`, type: 'HOTEL'
@@ -986,28 +998,5 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       label: s.label,
       type: s.type
     }));
-  }
-
-
-  beforeValidatorMessage(from: any, message?: any): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      let fromMoment = moment(from.value) || null;
-      let toMoment = moment(control.value) || null;
-      if (fromMoment && toMoment && toMoment.isBefore(fromMoment)) {
-        return {beforeValidatorMessage: true, message: message};
-      }
-      return null;
-    };
-  }
-
-  afterValidatorMessage(to: any, message?: any): ValidatorFn {
-    return (control: AbstractControl): ValidationErrors | null => {
-      let fromMoment = moment(control.value) || null;
-      let toMoment = moment(to.value) || null;
-      if (fromMoment && toMoment && fromMoment.isAfter(toMoment)) {
-        return {afterValidatorMessage: true, message: message};
-      }
-      return null;
-    };
   }
 }
