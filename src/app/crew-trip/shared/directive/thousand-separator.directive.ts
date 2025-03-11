@@ -27,7 +27,7 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
 
     //la field tinh toan
     this.control.control?.valueChanges.pipe(take(1)).subscribe((value) => {
-      const _value = value.replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
+      const _value = String(value).replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
       if (value && !isNaN(Number(_value))) {
         inputElement.value = this.formatNumber(_value);
       } else if (isNaN(Number(_value))) {
