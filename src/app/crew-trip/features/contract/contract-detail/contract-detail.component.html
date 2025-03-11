@@ -1062,6 +1062,12 @@
                     <mat-error>
                       <app-control-error controlName="fromDate"></app-control-error>
                     </mat-error>
+                    <mat-error *ngxControlError="row.controls['fromDate']; track: 'beforeValidatorMessage'">
+                      {{row.controls['fromDate'].errors?.message}}
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['fromDate']; track: 'afterValidatorMessage'">
+                      {{row.controls['fromDate'].errors?.message}}
+                    </mat-error>
                   </mat-form-field>
                 </div>
               </td>
@@ -1077,6 +1083,12 @@
                     <mat-datepicker #toDate></mat-datepicker>
                     <mat-error>
                       <app-control-error controlName="toDate"></app-control-error>
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['toDate']; track: 'beforeValidatorMessage'">
+                      {{row.controls['toDate'].errors?.message}}
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['toDate']; track: 'afterValidatorMessage'">
+                      {{row.controls['toDate'].errors?.message}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -1095,7 +1107,7 @@
                                            attrValue="code" formControlName="serviceCode" i18n-label2
                                            label2="Code"
                                            size="sm"/>
-                  <!--<mat-error *ngxControlError="row.controls['serviceCode']; track: 'overlapValidator'">
+                  <!--<mat-error *nfgxControlError="row.controls['serviceCode']; track: 'overlapValidator'">
                     {{row.controls['serviceCode'].error}}
                   </mat-error>-->
                   <!--<mat-form-field class="edit-inline-table">
@@ -1157,7 +1169,7 @@
                 <div class="input-cell">
                   <app-selection-suggest [editInlineTable]="true"
                                          [options]="listKhoanMucKhns"
-                                         attrDisplay="name"
+                                         attrDisplay="fullname"
                                          attrValue="code"
                                          formControlName="expenseCatgId"
                                          size="sm"/>
@@ -1738,7 +1750,7 @@
 <app-confirm-dialog
     (closeDialog)="closeConfirmDeleteFile()"
     (confirm)="_doDelete()"
-    [icon]="'check_circle'"
+    [icon]="'error'"
     [mainText]="'Are you sure you want to delete?'"
     [showDialog]="showDialogDeleteFile"
     [subText]="'You will not be able to recover the deleted data!'"
@@ -1748,7 +1760,7 @@
 <app-confirm-dialog
     (closeDialog)="_closeConfirmDelete()"
     (confirm)="_doDelete()"
-    [icon]="'check_circle'"
+    [icon]="'error'"
     [mainText]="'Are you sure you want to delete?'"
     [showDialog]="_showDialogDelete"
     [subText]="'You will not be able to recover the deleted data!'"
