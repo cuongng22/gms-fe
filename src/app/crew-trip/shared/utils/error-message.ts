@@ -32,7 +32,8 @@ export const taxCode: { [key: string]: string } = {
 
 export const taxRate: { [key: string]: string } = {
   required: 'Tax rate' + $localize` is required`,
-  pattern: 'Tax rate' + $localize` must be number`,
+  pattern: 'Tax rate' + $localize` must be an integer`,
+  min: 'Tax rate' + $localize` must be greater than or equal 0`,
 };
 export const airportCode: { [key: string]: string } = {
   required: 'Airport code' + $localize` is required`,
