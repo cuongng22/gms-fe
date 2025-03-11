@@ -144,6 +144,18 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
       this.formGroupDetail.controls.priceHotel.controls.priceSingleRoomLCO.updateValueAndValidity()
       this.formGroupDetail.controls.priceHotel.controls.priceTwinRoomLCO.updateValueAndValidity()
     });
+
+
+    this.formGroupDetail.controls.exchangeRate.valueChanges.subscribe(_value => {
+      this.baseService.exchangeRateChange(_value)
+    })
+    this.formGroupDetail.controls.rateVat.valueChanges.subscribe(_value => {
+      this.baseService.rateVatChange(_value)
+    })
+    this.formGroupDetail.controls.priceHotel.valueChanges.subscribe(_value => {
+      console.log('priceHotel.valueChanges: ', _value)
+      this.baseService.hotelChange(_value)
+    })
   }
 
   ngAfterViewChecked(): void {
@@ -204,6 +216,7 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
     }
     this.dataSource.data.push(addItem);
     this.dataSource.data = [...this.dataSource.data];
+    this.cleanData.emit()
   }
 
   async showConfirmDeleteTransportation(id: any) {
@@ -214,7 +227,8 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
   deleteTransportation() {
     this.dataSource.data.splice(this.indexDeleteCarRental, 1);
     this.dataSource.data = [...this.dataSource.data]
-    this.toggleDialogDelete()
+    this.toggleDialogDelete();
+    this.cleanData.emit()
   }
 
   checkRequiredTransportation() {
@@ -226,12 +240,21 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
   }
 
 
+  carTypeOldValue: string;
 
   clickEdit(data: any, control: string) {
     data[control] = true;
+    if (control === 'carTypeEditing') {
+      this.carTypeOldValue = data.carType
+    }
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
+    if (control === 'carTypeEditing') {
+      if (data.carType !== this.carTypeOldValue) {
+        this.cleanData.emit()
+      }
+    }
   }
 
 }
