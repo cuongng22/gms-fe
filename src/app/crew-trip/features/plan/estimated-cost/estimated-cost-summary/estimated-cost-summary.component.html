@@ -2,7 +2,7 @@
 <div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
     <div class="d-flex align-items-center justify-content-between mt-2">
         <button type="button" class="btn btn-outline-secondary mr-20" i18n="@@back"
-            [routerLink]="['/plan/est-plan/budget-procurement']">
+            [routerLink]="['/plan/est-plan/est-cost']">
             <i class="material-symbols-outlined">
                 undo
             </i>
@@ -21,7 +21,7 @@
             Estimated/Plan
         </li>
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@budgetProcurementPlan">
-            Budget & Procurement plan
+            Estimated cost
         </li>
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@estimatedCostSummary">
             Estimated cost summary
@@ -34,7 +34,7 @@
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
             <mat-tab label="All" i18n="@@all">
                 <ng-template matTabContent>
-                    <app-estimated-cost-summary-search [categoryType]="CategoriesEnum.ALL" (search)="searchSummary($event,'All')">
+                    <app-estimated-cost-summary-search [categoryType]="CategoriesEnum.ALL" (searchEvent)="searchSummary($event,'All')">
                     </app-estimated-cost-summary-search>
                     <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.ALL" [planBudgetProcurementId]="id()"
                         #budgetProcurementSummaryListAll>

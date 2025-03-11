@@ -72,7 +72,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
   @Input() attrDisplay = '';
   @Input() attrDisplay2 = '';
   @Input() editInlineTable = false
-  @Input() errors : any;
+  @Input() errors: any;
   @Output() clearInputEvent = new EventEmitter<void>();
   selectionChange = output<any>();
 
@@ -132,8 +132,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
   }
 
 
-  setViewValueInit(value: any) {
-    if (!this.setInitValue) {
+  setViewValueInit(value: any, force?: boolean) {
+    if (!this.setInitValue || force) {
       if (value) {
         const selected = this.options.filter((option: any) => {
           return value === (this.attrValue ? option[this.attrValue] : option);

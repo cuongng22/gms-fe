@@ -142,7 +142,6 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
         }
         return 0;
       }).reduce((acc, value) => acc + value, 0));
-      console.log(control, totalValue)
       this.resultTotal[control] = totalValue;
     }
     const totalValue = Math.round(this.dataSource.data.map((t: any) => {
@@ -151,7 +150,6 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
       }
       return 0;
     }).reduce((acc, value) => acc + value, 0));
-    console.log(control, totalValue)
     this.resultTotal[control] = totalValue;
   }
 

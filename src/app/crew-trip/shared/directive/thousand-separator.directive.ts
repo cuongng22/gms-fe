@@ -21,15 +21,16 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
     let initValue = this.control.value;
     if (initValue && !isNaN(Number(initValue))) {
       inputElement.value = this.formatNumber(initValue);
-    } else {
+    } else if (isNaN(Number(initValue))) {
       this.control.control?.setErrors({ invalidNumber: true });
     }
 
     //la field tinh toan
     this.control.control?.valueChanges.pipe(take(1)).subscribe((value) => {
-      if (value && !isNaN(Number(value))) {
-        inputElement.value = this.formatNumber(value);
-      } else if (isNaN(Number(value))) {
+      const _value = value.replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
+      if (value && !isNaN(Number(_value))) {
+        inputElement.value = this.formatNumber(_value);
+      } else if (isNaN(Number(_value))) {
         // inputElement.value = '0';
         this.control.control?.setErrors({ invalidNumber: true });
       }

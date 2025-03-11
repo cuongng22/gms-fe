@@ -137,6 +137,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       this.dataDetail = { ...response.data };
       this.budgetProcurementGeneral.formGroupDetail.patchValue(this.dataDetail, { emitEvent: false });
       this.budgetProcurementGeneral.formGroupDetail.controls.procurementPlanFlag.setValue(this.dataDetail.procurementPlanFlag)
+      this.budgetProcurementGeneral.setDefaultValueGeneral(this.dataDetail.procurementPlanFlag);
       this.budgetProcurementGeneral.formGroupDetail.controls.category.disable();
       this.budgetProcurementGeneral.formGroupDetail.controls.airportCode.disable();
       this.budgetProcurementGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
@@ -144,7 +145,6 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       this.budgetProcurementGeneral.inputPrice = this.dataDetail?.inputPrice;
       this.budgetProcurementGeneral.setVerionRate(this.dataDetail?.planBudgetProcurement.versionRate);
       this.budgetProcurementGeneral.currencyCodeChange({ value: this.dataDetail?.currencyCode });
-      this.budgetProcurementGeneral.setDefaultValueGeneral(this.dataDetail.procurementPlanFlag);
 
       this.setDataDetail();
       this.setPanelState();
@@ -332,18 +332,19 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
 
   override async save(): Promise<any> {
-    try {
-      await this.spinner.show();
-      const resSave = await this.processSave();
-      if (resSave.result) {
-        this.baseService.showSuccess(resSave.isUpdate ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
-        this.getDetailSummary()
-      }
-    } catch (error) {
-      console.error('save error: ', error);
-    } finally {
-      this.spinner.hide();
-    }
+    this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.setValue('2026-01-08')
+    // try {
+    //   await this.spinner.show();
+    //   const resSave = await this.processSave();
+    //   if (resSave.result) {
+    //     this.baseService.showSuccess(resSave.isUpdate ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
+    //     this.getDetailSummary()
+    //   }
+    // } catch (error) {
+    //   console.error('save error: ', error);
+    // } finally {
+    //   this.spinner.hide();
+    // }
   }
 
   async confirmClose() {

@@ -1,6 +1,6 @@
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { HttpStatusCode } from '@angular/common/http';
-import { Component, DestroyRef, inject, Inject, model, OnInit } from '@angular/core';
+import { Component, DestroyRef, inject, Inject, model, OnInit, viewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -48,6 +48,8 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
 
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(PlanBudgetProcurementService);
+
+  selectionVersion = viewChild<SelectionSuggestComponent>('selectionVersion')
 
   versions = model<any[]>([]);
   statuses = Statuses;
@@ -151,6 +153,7 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
       if (res) {
         this.getVersion();
         this.formGroupSearch.controls.version.setValue(res.version)
+        this.selectionVersion()?.setViewValueInit(res.version, true)
         await this.search();
       }
     });
@@ -267,7 +270,7 @@ export class DialogEstimatedCostDetail extends CommonComponent {
       }
       console.log(res)
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
-      this.dialogRef.close({ version: this.formGroupDetail.getRawValue().version });
+      this.dialogRef.close({ version: res.data.version });
     } catch (e: any) {
       if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
         this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);

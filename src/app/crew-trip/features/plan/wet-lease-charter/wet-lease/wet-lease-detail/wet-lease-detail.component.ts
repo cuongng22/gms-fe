@@ -107,10 +107,10 @@ export class WetLeaseDetailComponent extends CommonComponent {
   setPriceHotel() {
     const _priceHotelsList: any[] = this.dataGeneral.priceHotelsList;
     this.planHotel.forEach((element: any) => {
-      Object.entries(element.hotelItem).forEach((elementHotel: any[]) => {
-        const _itemPrice = _priceHotelsList.find(item => item.hotelCode === elementHotel[0]);
-        elementHotel[1].singleRoomPrice = Number(_itemPrice.singleRoomPrice);
-        elementHotel[1].twinRoomPrice = Number(_itemPrice.twinRoomPrice);
+      Object.entries<any>(element.hotelItem).forEach(([hotelCode, hotelValue]) => {
+        const _itemPrice = _priceHotelsList.find(item => item.hotelCode === hotelCode);
+        hotelValue.singleRoomPrice = Number(_itemPrice.singleRoomPrice);
+        hotelValue.twinRoomPrice = Number(_itemPrice.twinRoomPrice);
       })
     });
   }
@@ -301,6 +301,13 @@ export class WetLeaseDetailComponent extends CommonComponent {
   async airportCodeChange(event: string) {
     const res = await this._flightMarketService.search({ code: event, option: 0 });
     this.category.set(res.data.content[0].marketType)
+  }
+
+  wetLeaseGeneralClearData() {
+    this.wetLeaseHotel.dataSource.data = [];
+    this.planHotel = []
+    this.wetLeaseCarRental.dataSource.data = [];
+    this.planTransports = []
   }
 
   get planHotel() {

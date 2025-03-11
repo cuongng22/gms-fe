@@ -103,7 +103,7 @@ export class EstimatedCostGeneralComponent extends CommonComponent implements On
    * @param isCheckProcurementPlan Để handle check lập kế hoạch mua sắm hoặc init giá trị mặc định khi load detail
    */
   setDefaultValueGeneral(): void {
-    if (!!!this.formGroupDetail.controls.rateForSingle.value) {
+    if (!this.formGroupDetail.controls.rateForSingle.value) {
       this.formGroupDetail.controls.rateForSingle.setValue('20');
     }
 

@@ -181,6 +181,7 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
   }
 
   calculation() {
+    console.log(this.dataSource.data)
     this.totalPlannedBudgetRowDef.forEach(rowDef => {
       this.totalPlannedBudget[rowDef] = 0;
     });
