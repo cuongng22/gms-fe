@@ -73,7 +73,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       try {
         // await this.spinner.show();
         this.formGroupDetail.patchValue({
-          marketName: '', nation: '', marketType: '', flightGroup: '', statusUsage: '', carType: '',
+          marketName: '', nation: '', marketType: '', flightGroup: '', statusUsage: '',
         });
         await this.baseService
           .getMarket({marketCode: value.toUpperCase()})
@@ -88,7 +88,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
                 return;
               }
               this.formGroupDetail.patchValue(res.data);
-              this.nationSelected(res.data.nationId);
+              // this.nationSelected(res.data.nationId);
               this.marketCodeChangeBrake = true;
 
               Object.entries(this.formGroupDetail.controls).forEach(([k, v]) => {
@@ -161,7 +161,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       email: [],
       carType: ['', [Validators.maxLength(150)]],
       standardCheckIn: ['', [Validators.pattern(PATTERN.HOUR24)]],
-      standardCheckOut: [],
+      standardCheckOut: ['',[Validators.pattern(PATTERN.HOUR24)]],
       standardCheckout: [],
       notes: ['', [Validators.maxLength(500)]],
       isTaxHotelRevert: [true],
@@ -660,7 +660,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       supplierName: hotel ? hotel.hotelName : vehicle?.name || '',
       supplierPhone: hotel ? hotel.phone : vehicle?.phone || '',
       supplierEmail: hotel ? hotel.email : vehicle?.email || '',
-      carType: hotel ? '' : vehicle?.carType || '',
+      carType: vehicle?.carType || '',
     });
     this.formGroupDetail.getRawValue().priceUnitInfo?.forEach((s: any) => {
       s = {
