@@ -993,7 +993,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     return (control: AbstractControl): ValidationErrors | null => {
       let fromMoment = moment(from.value) || null;
       let toMoment = moment(control.value) || null;
-      if (fromMoment && toMoment && toMoment.isSameOrBefore(fromMoment)) {
+      if (fromMoment && toMoment && toMoment.isBefore(fromMoment)) {
         return {beforeValidatorMessage: true, message: message};
       }
       return null;
@@ -1004,7 +1004,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     return (control: AbstractControl): ValidationErrors | null => {
       let fromMoment = moment(control.value) || null;
       let toMoment = moment(to.value) || null;
-      if (fromMoment && toMoment && fromMoment.isSameOrAfter(toMoment)) {
+      if (fromMoment && toMoment && fromMoment.isAfter(toMoment)) {
         return {afterValidatorMessage: true, message: message};
       }
       return null;
