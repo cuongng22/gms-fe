@@ -12,7 +12,13 @@ import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-ser
 import * as ContractLookup from 'src/app/crew-trip/features/contract/contract-lookup';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {PdfViewerComponent} from 'src/app/crew-trip/shared/pdf-viewer/pdf-viewer.component';
-import {afterValidator, beforeValidator, lessThanValidator, timeAfterValidator, timeBeforeValidator,} from 'src/app/crew-trip/shared/utils/common';
+import {
+  afterValidator,
+  beforeValidator,
+  lessThanValidator,
+  timeAfterValidator,
+  timeBeforeValidator,
+} from 'src/app/crew-trip/shared/utils/common';
 import {DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN,} from 'src/app/crew-trip/shared/utils/constant';
 import moment from "moment";
 import {UsersService} from "src/app/crew-trip/core/services/users-service";
@@ -305,8 +311,18 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         serviceName: [],
         serviceUnit: [],
       });
-      row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']), this.dateOverlapValidator(row)]);
-      row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']), this.dateOverlapValidator(row)]);
+      row.controls['fromDate'].setValidators(
+        [afterValidator(row.controls['toDate']),
+          this.beforeValidatorMessage(this.formGroupDetail.controls['effectiveDate'], $localize`From date not less than Effective date`),
+          this.afterValidatorMessage(this.formGroupDetail.controls['expiryDate'], $localize`From date not greater than Expiry date`),
+          this.dateOverlapValidator(row)
+        ]);
+      row.controls['toDate'].setValidators(
+        [beforeValidator(row.controls['fromDate']),
+          this.beforeValidatorMessage(this.formGroupDetail.controls['effectiveDate'], $localize`To date not less than Effective date`),
+          this.afterValidatorMessage(this.formGroupDetail.controls['expiryDate'], $localize`To date not greater than Expiry date`),
+          this.dateOverlapValidator(row)
+        ]);
       row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row), Validators.required]);
 
       init && row.patchValue(init);
@@ -577,7 +593,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
             supplierPhone: data.phoneNumber,
             supplierEmail: data.email,
             carType: data.carType,
-            notes: data.notes,
           });
         }
       });
@@ -613,6 +628,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   }
 
   override async detail(id: any): Promise<void> {
+    console.log(id, 'id')
     if (id) {
       await super.detail(id);
       if (this.isPL()) {
@@ -629,8 +645,20 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       fileAttachContract = fileAttachContract.map((s: any) => ({...s, isFromContract: true}));
       const bizDocIdContract = cloneDeep(resContract.data.bizDocId);
       ['contractCode', 'contractName', 'contractNo', 'signedDate', 'employeeName', 'documentsList'].forEach((key) => delete resContract.data[key]);
+      resContract.data.priceUnitInfo.forEach((s:any) => {
+        delete s.id;
+        delete s.bizDocId;
+      });
+      resContract.data.priceUnitNotAllDay.forEach((s:any) => {
+        delete s.id;
+        delete s.bizdocId;
+      });
+      resContract.data.dayUses.forEach((s:any) => {
+        delete s.id;
+        delete s.bizdocId;
+      });
       this.formGroupDetail.patchValue({
-        ...(resContract?.data || resContract),
+        ...resContract?.data,
         hdPlRoot: bizDocIdContract,
         employeeName: this.usersService.getUserLogin()?.fullName,
         documentsList: fileAttachContract
@@ -669,6 +697,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   }
 
   override async save() {
+    console.log(this.formGroupDetail.getRawValue())
+    return;
     try {
       //xoa bản ghi trang
       /*let group = this.tblPriceUnit.controls as FormGroup[];
@@ -863,17 +893,24 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         let isOveralap = this.dsPriceUnit.data.filter((s: any) => {
           return (s.getRawValue().active == true && s.getRawValue().serviceCode === serviceCode && moment(s.getRawValue().fromDate).isBefore(toDate) && moment(s.getRawValue().toDate).isAfter(fromDate))
         });
+        let errorsFromDate = row.get('fromDate')?.errors || {};
+        let errorsToDate = row.get('toDate')?.errors || {};
+        let errorsServiceCode = row.get('ServiceCode')?.errors || {};
+
         if (isOveralap.length > 1) {
-          let err = {overlapValidator: true, message: `${serviceCode} already exists in this period`};
-          row.get('fromDate').setErrors(err);
-          row.get('toDate').setErrors(err);
-          row.get('serviceCode').setErrors(err);
-          return {overlapValidator: true, message: `${serviceCode} already exists in this period`};
+          row.get('fromDate').setErrors({...errorsFromDate, overlapValidator: true});
+          row.get('toDate').setErrors({...errorsToDate, overlapValidator: true});
+          row.get('serviceCode').setErrors({...errorsServiceCode, overlapValidator: true, message: `${serviceCode} already exists in this period`});
+          return {overlapValidator: true};
         } else {
-          row.get('fromDate').setErrors(null);
-          row.get('toDate').setErrors(null);
-          row.get('serviceCode').setErrors(null);
+          delete errorsFromDate.overlapValidator;
+          delete errorsToDate.overlapValidator;
+          delete errorsServiceCode.overlapValidator;
+          row.get('fromDate').setErrors(Object.keys(errorsFromDate).length === 0 ? null : errorsFromDate);
+          row.get('toDate').setErrors(Object.keys(errorsToDate).length === 0 ? null : errorsToDate);
+          row.get('serviceCode').setErrors(Object.keys(errorsServiceCode).length === 0 ? null : errorsServiceCode);
         }
+
         row.get('fromDate').markAsTouched();
         row.get('toDate').markAsTouched();
         row.get('serviceCode').markAsTouched();
@@ -881,6 +918,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         row.get('fromDate').markAsDirty();
         row.get('toDate').markAsDirty();
         row.get('serviceCode').markAsDirty();
+
         row.updateValueAndValidity();
       }
       return null;
@@ -950,5 +988,28 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       label: s.label,
       type: s.type
     }));
+  }
+
+
+  beforeValidatorMessage(from: any, message?: any): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      let fromMoment = moment(from.value) || null;
+      let toMoment = moment(control.value) || null;
+      if (fromMoment && toMoment && toMoment.isSameOrBefore(fromMoment)) {
+        return {beforeValidatorMessage: true, message: message};
+      }
+      return null;
+    };
+  }
+
+  afterValidatorMessage(to: any, message?: any): ValidatorFn {
+    return (control: AbstractControl): ValidationErrors | null => {
+      let fromMoment = moment(control.value) || null;
+      let toMoment = moment(to.value) || null;
+      if (fromMoment && toMoment && fromMoment.isSameOrAfter(toMoment)) {
+        return {afterValidatorMessage: true, message: message};
+      }
+      return null;
+    };
   }
 }
