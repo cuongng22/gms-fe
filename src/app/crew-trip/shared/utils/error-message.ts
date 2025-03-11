@@ -71,13 +71,13 @@ export const notes: { [key: string]: string } = {
 export const fromDate: { [key: string]: string } = {
   required: 'From date' + $localize` is required`,
   afterValidator: 'From date' + $localize` must before to date`,
-  matDatepickerParse: 'From date' + $localize`invalid format`,
+  matDatepickerParse: 'From date' + $localize` invalid format`,
   overlapValidator: 'Already exists in this period',
 };
 export const toDate: { [key: string]: string } = {
   required: 'To date' + $localize` is required`,
   beforeValidator: 'To date' + $localize` must after from date`,
-  matDatepickerParse: 'To date' + $localize`invalid format`,
+  matDatepickerParse: 'To date' + $localize` invalid format`,
   overlapValidator: 'Already exists in this period',
 
 };
@@ -86,22 +86,26 @@ export const checkinFrom: { [key: string]: string } = {
   required: 'Checkin from' + $localize` is required`,
   afterValidator: 'Checkin from' + $localize` must before checkout to`,
   timeAfterValidator: 'Checkin from' + $localize` must before checkout to`,
+  pattern: 'Checkin from' + $localize` must be from 00:00 to 23:59`,
 
 };
 export const checkoutTo: { [key: string]: string } = {
   required: 'Checkout to' + $localize` is required`,
   beforeValidator: 'Checkout to' + $localize` must after checkin from`,
   timeBeforeValidator: 'Checkout to' + $localize` must after checkin from`,
+  pattern: 'Checkout to' + $localize` must be from 00:00 to 23:59`,
 };
 
 export const fromHour: { [key: string]: string } = {
   required: 'Hour from' + $localize` is required`,
   timeAfterValidator: 'Hour from' + $localize` must before hour to`,
+  pattern: 'Hour from' + $localize` must be from 00:00 to 23:59`,
 };
 
 export const toHour: { [key: string]: string } = {
   required: 'Hour to' + $localize` is required`,
   timeBeforeValidator: 'Hour to' + $localize` must after hour from`,
+  pattern: 'Hour to' + $localize` must be from 00:00 to 23:59`,
 };
 
 export const rate: { [key: string]: string } = {
@@ -126,18 +130,18 @@ export const dueDateNumber: { [key: string]: string } = {
 
 export const signedDate: { [key: string]: string } = {
   required: 'Sign date' + $localize` is required`,
-  matDatepickerParse: 'Sign date' + $localize`invalid format`,
+  matDatepickerParse: 'Sign date' + $localize` invalid format`,
 };
 
 export const effectiveDate: { [key: string]: string } = {
   required: 'Effective date' + $localize` is required`,
-  matDatepickerParse: 'Effective date' + $localize`invalid format`,
+  matDatepickerParse: 'Effective date' + $localize` invalid format`,
 };
 export const expiryDate: { [key: string]: string } = {
   required: 'Expiry date' + $localize` is required`,
-  matDatepickerParse: 'Expiry date' + $localize`invalid format`,
+  matDatepickerParse: 'Expiry date' + $localize` invalid format`,
 };
 export const handoverDate: { [key: string]: string } = {
   required: 'Handover date' + $localize` is required`,
-  matDatepickerParse: 'Handover date' + $localize`invalid format`,
+  matDatepickerParse: 'Handover date' + $localize` invalid format`,
 };
