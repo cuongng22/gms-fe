@@ -1024,4 +1024,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       type: s.type
     }));
   }
+  vnaTransIdChange(data:any, row:any){
+    row.patchValue({
+      vnaTransId:data.value
+    })
+  }
 }
