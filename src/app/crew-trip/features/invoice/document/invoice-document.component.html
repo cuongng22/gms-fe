@@ -190,18 +190,17 @@
                   mat-cell *matCellDef="let element">
             <span [ngClass]="{
           'badge': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value),
-          'text-soft-dark': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && (
-          element['statusEmail'] ==='UNSEND'|| element['statusPayment'] === 'UNPAID'),
-          'text-soft-primary': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
-          element['status'] === 'VERIFIED',
-          'text-soft-info': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && element['status']
-          === 'MATCHED',
-          'text-soft-warning': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
-          element['status'] === 'UNMATCHED',
-          'text-soft-danger': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
-          element['status'] === 'UNVERIFIED',
-          'text-soft-vna': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
-          ['FINISHED','SEND','CLEARED','RECONCILED','PAID',].includes(element[innerColumn.value]),
+
+          'text-soft-info': innerColumn.value === 'status' && element['status'] === 'MATCHED',
+          'text-soft-warning': innerColumn.value === 'status' && element['status'] === 'UNMATCHED',
+          'text-soft-danger': innerColumn.value === 'status' && element['status'] === 'UNVERIFIED',
+
+          'text-soft-dark': (innerColumn.value === 'statusEmail' && element['statusEmail'] === 'UNSEND') ||
+          (innerColumn.value === 'statusPayment' && ['NEGOTIABLE','CLEARED BUT UNACCOUNTED', 'RECONCILED UNACCOUNTED', 'VOIDED'].includes(element['statusPayment'])),
+
+          'text-soft-vna': (innerColumn.value === 'statusEmail' && ['FINISHED', 'SEND', 'CLEARED', 'RECONCILED', 'PAID'].includes(element['statusEmail'])) ||
+          (innerColumn.value === 'status' && element['status'] === 'VERIFIED') ||
+          (innerColumn.value === 'statusPayment' && ['FINISHED', 'SEND', 'CLEARED', 'RECONCILED', 'PAID'].includes(element['statusPayment']))
           }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
               </td>
             </ng-container>

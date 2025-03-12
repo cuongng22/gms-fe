@@ -42,6 +42,7 @@ import {cloneDeep} from "lodash";
 import {MatGridList, MatGridTile} from "@angular/material/grid-list";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 import {InvoiceDocumentExportType} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import moment from "moment";
 
 @Component({
   selector: 'app-invoice-document',
@@ -194,7 +195,8 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
         this.pageIndex = Constant.PAGE;
       }
       let req = body || this.formGroupSearch.getRawValue();
-
+      req.periodFrom = moment(req.periodFrom).isValid() ? moment(req.periodFrom).format(Constant.LOCAL_DATE_FORMAT) : null;
+      req.periodTo = moment(req.periodTo).isValid() ? moment(req.periodTo).format(Constant.LOCAL_DATE_FORMAT) : null;
       let res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,
