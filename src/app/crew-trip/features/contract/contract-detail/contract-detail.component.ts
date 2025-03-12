@@ -296,7 +296,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
         expenseCatgId: ['',],
         priceNoTax: [],
         taxCode: [, [Validators.maxLength(24), Validators.pattern(PATTERN.STRING_NUMBER1),]],
-        taxRate: [, [Validators.min(0),Validators.pattern(PATTERN.NUMBER)]],
+        taxRate: [, [Validators.min(0), Validators.pattern(PATTERN.NUMBER)]],
         originalAmount3: [],
         priceWithTax: [],
         notes: ['', [Validators.maxLength(250)]],
@@ -853,7 +853,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     let notAllDayType1Inactive = this.formGroupDetail.getRawValue().priceUnitNotAllDay?.filter((s: any) => s.active == false && s.type == 1) || [];
     let notAllDayType2Inactive = this.formGroupDetail.getRawValue().priceUnitNotAllDay?.filter((s: any) => s.active == false && s.type == 2) || [];
     body.priceUnitNotAllDay = {
-      type1: [...this.tblEciLco.value,...notAllDayType1Inactive], type2: [...this.tblOvernightStay.value,...notAllDayType2Inactive],
+      type1: [...this.tblEciLco.value, ...notAllDayType1Inactive], type2: [...this.tblOvernightStay.value, ...notAllDayType2Inactive],
     };
 
     let dayUsesInactive = this.formGroupDetail.getRawValue().dayUses?.filter((s: any) => s.active == false) || [];
@@ -861,7 +861,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     // let dayUsesActive = this.tblDayUse.value.find((s:any)=>s.active == true);
     // body.dayUses && (body.dayUses.lengthTime = body.dayUses?.maxHour || 0);
     body.dayUses.forEach((s: any) => {
-      s.lengthTime = s.maxHour?? 0;
+      s.lengthTime = s.maxHour ?? 0;
     });
 
     let priceUnitInfoInactive = this.formGroupDetail.getRawValue().priceUnitInfo?.filter((s: any) => s.active == false) || [];
@@ -995,6 +995,18 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     };
   }
 
+  vnaTransIdChange(data: any, row: any) {
+    row.patchValue({
+      vnaTransId: data.value
+    })
+  }
+
+  expenseCatgIdChange(data: any, row: any) {
+    row.patchValue({
+      expenseCatgId: data.value
+    })
+  }
+
   private async buildListPartner(partnerCode?: any) {
     let filterHotels = this.listHotels.filter(s => !!s.active && s.marketCode == partnerCode).map(s => ({
       ...s, label: `[${s.hotelCode}] - ${s.hotelName}`, type: 'HOTEL'
@@ -1023,10 +1035,5 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       label: s.label,
       type: s.type
     }));
-  }
-  vnaTransIdChange(data:any, row:any){
-    row.patchValue({
-      vnaTransId:data.value
-    })
   }
 }
