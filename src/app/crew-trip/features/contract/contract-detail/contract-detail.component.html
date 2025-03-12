@@ -1151,7 +1151,7 @@
               <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Business code</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
-                  <app-selection-suggest [editInlineTable]="true"
+                  <app-selection-suggest (selectionChange)="vnaTransIdChange($event,row)" [editInlineTable]="true"
                                          [options]="listMaNghiepVu"
                                          attrDisplay="name"
                                          attrValue="code"
