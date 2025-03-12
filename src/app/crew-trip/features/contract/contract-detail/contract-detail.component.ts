@@ -73,7 +73,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       try {
         // await this.spinner.show();
         this.formGroupDetail.patchValue({
-          marketName: '', nation: '', marketType: '', flightGroup: '', statusUsage: '',
+          marketName: '', nation: '', marketType: '', flightGroup: '', statusUsage: '', carType: '',
         });
         await this.baseService
           .getMarket({marketCode: value.toUpperCase()})
@@ -88,7 +88,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
                 return;
               }
               this.formGroupDetail.patchValue(res.data);
-              // this.nationSelected(res.data.nationId);
+              this.nationSelected(res.data.nationId);
               this.marketCodeChangeBrake = true;
 
               Object.entries(this.formGroupDetail.controls).forEach(([k, v]) => {
@@ -161,7 +161,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       email: [],
       carType: ['', [Validators.maxLength(150)]],
       standardCheckIn: ['', [Validators.pattern(PATTERN.HOUR24)]],
-      standardCheckOut: ['',[Validators.pattern(PATTERN.HOUR24)]],
+      standardCheckOut: [],
       standardCheckout: [],
       notes: ['', [Validators.maxLength(500)]],
       isTaxHotelRevert: [true],
@@ -492,12 +492,27 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       } else if (this.deleteObj.deleteType == 'tblEciLco') {
         this.tblEciLco.removeAt(this.deleteObj.index);
         this.dsEciLco.data = this.tblEciLco.controls;
+        this.formGroupDetail.getRawValue().priceUnitNotAllDay.forEach((s: any) => {
+          if (s.id == this.deleteObj.id) {
+            s.active = false;
+          }
+        });
       } else if (this.deleteObj.deleteType == 'tblOvernightStay') {
         this.tblOvernightStay.removeAt(this.deleteObj.index);
         this.dsOvernightStay.data = this.tblOvernightStay.controls;
+        this.formGroupDetail.getRawValue().priceUnitNotAllDay.forEach((s: any) => {
+          if (s.id == this.deleteObj.id) {
+            s.active = false;
+          }
+        });
       } else if (this.deleteObj.deleteType == 'tblDayUse') {
         this.tblDayUse.removeAt(this.deleteObj.index);
         this.dsDayUse.data = this.tblDayUse.controls;
+        this.formGroupDetail.getRawValue().dayUses.forEach((s: any) => {
+          if (s.id == this.deleteObj.id) {
+            s.active = false;
+          }
+        });
       }
     } catch (e) {
     } finally {
@@ -660,7 +675,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       supplierName: hotel ? hotel.hotelName : vehicle?.name || '',
       supplierPhone: hotel ? hotel.phone : vehicle?.phone || '',
       supplierEmail: hotel ? hotel.email : vehicle?.email || '',
-      carType: vehicle?.carType || '',
+      carType: hotel ? '' : vehicle?.carType || '',
     });
     this.formGroupDetail.getRawValue().priceUnitInfo?.forEach((s: any) => {
       s = {
@@ -729,6 +744,9 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
           id: this.formGroupDetail.getRawValue().bizDocId,
         });
         const body = this.bodyBuilder();
+        // console.log(body)
+        // console.log(this.formGroupDetail.getRawValue())
+        // return;
         res = await this.baseService.update(body);
 
         //action delete file attach
@@ -832,11 +850,20 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
 
   bodyBuilder() {
     let body = this.formGroupDetail.getRawValue();
+    let notAllDayType1Inactive = this.formGroupDetail.getRawValue().priceUnitNotAllDay?.filter((s: any) => s.active == false && s.type == 1) || [];
+    let notAllDayType2Inactive = this.formGroupDetail.getRawValue().priceUnitNotAllDay?.filter((s: any) => s.active == false && s.type == 2) || [];
     body.priceUnitNotAllDay = {
-      type1: this.tblEciLco.value, type2: this.tblOvernightStay.value,
+      type1: [...this.tblEciLco.value,...notAllDayType1Inactive], type2: [...this.tblOvernightStay.value,...notAllDayType2Inactive],
     };
-    body.dayUses = this.tblDayUse.value[0] || null;
-    body.dayUses && (body.dayUses.lengthTime = body.dayUses?.maxHour || 0);
+
+    let dayUsesInactive = this.formGroupDetail.getRawValue().dayUses?.filter((s: any) => s.active == false) || [];
+    body.dayUses = [...this.tblDayUse.value, ...dayUsesInactive];
+    // let dayUsesActive = this.tblDayUse.value.find((s:any)=>s.active == true);
+    // body.dayUses && (body.dayUses.lengthTime = body.dayUses?.maxHour || 0);
+    body.dayUses.forEach((s: any) => {
+      s.lengthTime = s.maxHour?? 0;
+    });
+
     let priceUnitInfoInactive = this.formGroupDetail.getRawValue().priceUnitInfo?.filter((s: any) => s.active == false) || [];
     body.priceUnitInfo = [...this.tblPriceUnit.value, ...priceUnitInfoInactive];
     body.priceUnitInfo.forEach((s: any) => {
