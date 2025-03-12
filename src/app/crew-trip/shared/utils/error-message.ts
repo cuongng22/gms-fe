@@ -127,6 +127,7 @@ export const dueDateNumber: { [key: string]: string } = {
   required: 'Due date' + $localize` is required`,
   min: 'Due date' + $localize` must be greater than 0 and less than 100`,
   max: 'Due date' + $localize` must be greater than 0 and less than 100`,
+  pattern: 'Due date' + $localize` Due date must be an integer`,
 };
 
 export const signedDate: { [key: string]: string } = {
