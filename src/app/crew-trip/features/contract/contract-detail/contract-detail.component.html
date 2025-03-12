@@ -228,6 +228,9 @@
                   <mat-error>
                     <app-control-error controlName="effectiveDate"></app-control-error>
                   </mat-error>
+                  <mat-error *ngxControlError="formGroupDetail.controls['effectiveDate']; track: 'beforeValidatorMessage'">
+                    {{formGroupDetail.controls['effectiveDate'].errors?.['message']}}
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-6" sizeInput='sm'>
@@ -785,7 +788,6 @@
               <mat-label i18n>Airport Code</mat-label>
               <input
                 (focus)="airportCodeForcus()"
-                (ngModelChange)="marketCodeChangeDebounce($event);this.marketCodeChangeBrake=false;airportCodeChange($event)"
                 [matAutocomplete]="auto"
                 formControlName="marketCode"
                 matInput required
