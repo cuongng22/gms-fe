@@ -1,25 +1,53 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {RouterLink} from '@angular/router';
+import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {MatCardModule} from '@angular/material/card';
+import {MatButtonModule} from '@angular/material/button';
+import {MatMenuModule} from '@angular/material/menu';
+import {MatTableModule} from '@angular/material/table';
+import {MatPaginatorModule} from '@angular/material/paginator';
+import {MatCheckboxModule} from '@angular/material/checkbox';
+import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
+import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
+import {MatOption, MatSelect} from '@angular/material/select';
+import {MatInput} from '@angular/material/input';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import {MatTab, MatTabGroup} from '@angular/material/tabs';
+import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
+import {NoDataRowOutlet} from '@angular/cdk/table';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
+import {ContractDetailComponent} from 'src/app/crew-trip/features/contract/contract-detail/contract-detail.component';
 import {Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
 import {HotelService} from 'src/app/crew-trip/core/services/hotel-service';
 import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
+import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ListResponse} from 'src/app/crew-trip/shared/models/common.model';
 import {HttpStatusCode} from '@angular/common/http';
-import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
+import {InvoiceFormService} from 'src/app/crew-trip/core/services/invoice-form-service';
+import {
+  InvoiceFormDetailComponent
+} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
+import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
+import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {InvoiceDocumentExportType} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {ConfirmDeleteDialog} from "src/app/crew-trip/shared/dialog/confirm-delete-dialog";
+import {DatepickerYearMonthComponent} from "src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component";
+import {NgxTrimDirectiveModule} from "ngx-trim-directive";
+import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
 import {cloneDeep} from "lodash";
+import {MatGridList, MatGridTile} from "@angular/material/grid-list";
+import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
+import {InvoiceDocumentExportType} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import moment from "moment";
-import {BaseImport} from "src/app/crew-trip/shared/base-import";
 
 @Component({
   selector: 'app-invoice-document',
   standalone: true,
-  imports: [BaseImport, InvoiceFormDetailComponent],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, ConfirmDeleteDialog, DatepickerYearMonthComponent, NgxTrimDirectiveModule, ThousandsSeparatorDirective, FormsModule, MatGridTile, MatGridList],
   templateUrl: './invoice-document.component.html',
   styleUrl: './invoice-document.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -44,8 +72,6 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   dataObject: any;
   listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus.filter(s => s.key != 'MATCHED');
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
-  startOfMonth = moment().startOf('year').format('YYYY-MM-DD');
-  endOfMonth = moment().format('YYYY-MM-DD');
 
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
@@ -58,9 +84,27 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   }[] = [
     {label: $localize`Airport Code`, value: 'airportCode', rowspan: "2"},
     {label: $localize`Invoice Number`, value: 'invoiceNumber', rowspan: "2"},
-    {label: $localize`Invoice Date`, value: 'invoiceDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
-    {label: $localize`InvoiceReceive Date`, value: 'invoiceReceiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
-    {label: $localize`Period From`, value: 'periodFrom', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
+    {
+      label: $localize`Invoice Date`,
+      value: 'invoiceDate',
+      type: Constant.DATE,
+      format: Constant.DATE_FORMAT,
+      rowspan: "2"
+    },
+    {
+      label: $localize`InvoiceReceive Date`,
+      value: 'invoiceReceiveDate',
+      type: Constant.DATE,
+      format: Constant.DATE_FORMAT,
+      rowspan: "2"
+    },
+    {
+      label: $localize`Period From`,
+      value: 'periodFrom',
+      type: Constant.DATE,
+      format: Constant.DATE_FORMAT,
+      rowspan: "2"
+    },
     {label: $localize`Period To`, value: 'periodTo', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
     {label: $localize`bizDocId`, value: 'bizDocId', rowspan: "2"},
     {label: $localize`Partner Name`, value: 'partnerName', rowspan: "2"},
@@ -89,8 +133,6 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   tblDetail: any[]
   currentRow: any
   selectedRow: any = null;
-  showListChild = true;
-  dataListChild: any;
 
   constructor() {
     super();
@@ -100,11 +142,10 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       partnerType: [],
       airportCode: [],
       listAirportCode: [],
-      periodFrom: [this.startOfMonth],
-      periodTo: [this.endOfMonth],
+      periodFrom: [],
+      periodTo: [],
       status: [],
       statusEmail: [],
-      version: [1],
     });
     this.formGroupDetail = this.fb.group({
       id: [], emailTo: ['chien12345aabb@gmail.com'], emailCc: ['chien12345aabb@gmail.com'], emailSubject: ['test'], emailContent: ['test1']
@@ -137,34 +178,6 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     this.readMode = readMode;
     this.dataObject = dataObject;
     this.nextStepEmit.emit([this.id, this.readMode, this.step, this.dataObject])
-  }
-
-  async checkVersion(data: any) {
-    try {
-      await this.spinner.show();
-      if (moment(data.periodOccurrence).isValid()) {
-        let res = await this.baseService.search({
-          page: this.pageIndex,
-          size: this.pageSize,
-          limit: this.pageSize, ...removeNullValues({
-            listAirportCode: data.airportCode,
-            partnerCode: data.partnerCode,
-            periodOccurrence: moment(data.periodOccurrence).startOf('month').format('YYYY-MM-DD')
-          })
-        });
-        if (res.data?.totalElements > 1) {
-          this.showListChild = true;
-          this.dataListChild = res.data.content;
-        } else {
-          this.showListChild = false;
-          // this.nextStep(data.id, true, 2, data);
-        }
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      await this.spinner.hide();
-    }
   }
 
   async backStep() {

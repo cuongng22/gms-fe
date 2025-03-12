@@ -13,16 +13,16 @@
         <h5 class="mb-0 ml-10">
           @if (readMode) {
             <span i18n>View Appendix </span>
-            <span class="text-vna">[{{ contractObj.contractCode }}]</span>
-            <span class="text-warning">{{ contractObj.contractName }}</span>
+            <span class="text-vna"> [{{ contractObj?.contractNo }}]</span>
+            <span class="text-warning"> {{ contractObj?.contractName }}</span>
           } @else {
             @if (this.id) {
               <span i18n>Edit Appendix </span>
             } @else {
               <span i18n>Add new Appendix </span>
             }
-            <span class="text-vna">[{{ contractObj.contractCode }}] </span>
-            <span class="text-warning">{{ contractObj.contractName }}</span>
+            <span class="text-vna"> [{{ contractObj?.contractNo }}] </span>
+            <span class="text-warning"> {{ contractObj?.contractName }}</span>
           }
         </h5>
       }
@@ -129,12 +129,9 @@
   <mat-expansion-panel [expanded]="expandList.has('tab1')">
     <mat-expansion-panel-header i18n>
       @if (isHD()) {
-        <div (click)="$event.stopPropagation();" class="title-no-event">1. General information (Data extracted from the
-          CMS)
-        </div>
+        <div (click)="$event.stopPropagation();" class="title-no-event">1. General information        </div>
       } @else {
-        <div (click)="$event.stopPropagation();" class="title-no-event">1. General information
-        </div>
+        <div (click)="$event.stopPropagation();" class="title-no-event">1. General information        </div>
       }
 
     </mat-expansion-panel-header>
@@ -507,8 +504,7 @@
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab2')">
     <mat-expansion-panel-header i18n>
-      <div (click)="$event.stopPropagation();" class="title-no-event">2. Remittance Information (Data extracted from the
-        CMS)
+      <div (click)="$event.stopPropagation();" class="title-no-event">2. Remittance Information
       </div>
     </mat-expansion-panel-header>
     <mat-panel-description>
@@ -707,9 +703,7 @@
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab3')">
     <mat-expansion-panel-header i18n>
-      <div (click)="$event.stopPropagation();" class="title-no-event">3. Attached Document Information (Data extracted
-        from the CMS)
-      </div>
+      <div (click)="$event.stopPropagation();" class="title-no-event">3. Attached Document Information</div>
     </mat-expansion-panel-header>
     <mat-panel-description>
       <form [formGroup]="formGroupFileUpload" autocomplete="off" class="w-100">
