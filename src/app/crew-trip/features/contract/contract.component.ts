@@ -90,7 +90,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }[] = [
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Airport code`, value: 'marketCode'},
-    {label: this.isHD() ? $localize`BizDocId` : $localize`Appendix No`, value: 'bizDocId'},
+    {label: $localize`BizDocId`, label1: $localize`Appendix No`, value: 'bizDocId'},
     {label: $localize`Contract Code`, label1: $localize`Appendix Code`, value: 'contractCode',},
     {label: $localize`Contract No`, value: 'contractNo'},
     {label: $localize`Contract Name`, label1: $localize`Appendix Name`, value: 'contractName',},
@@ -150,13 +150,26 @@ export class ContractComponent extends CommonComponent implements OnInit {
             : '',
       }));
     });
-    this.displayedColumns = [
-      'stt',
-      ...this._displayedColumns.map((s) => s.value),
-      'effectiveDate',
-      'appendixCount',
-      'action',
-    ];
+    if (this.isHD()) {
+      this.displayedColumns = [
+        'stt',
+        ...this._displayedColumns.map((s) => s.value),
+        'effectiveDate',
+        'appendixCount',
+        'action',
+      ]
+    } else {
+      this.displayedColumns = [
+        'stt',
+        'contractCode',
+        'bizDocId',
+        'contractName',
+        'partnerName',
+        'marketCode',
+        'effectiveDate',
+        'action',
+      ];
+    }
   }
 
   async nextStep(id?: any, readMode?: any, action?: any) {
@@ -274,8 +287,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
       } else if (this.isPL()) {
         this.displayedColumns = [
           'stt',
-          'bizDocId',
           'contractCode',
+          'bizDocId',
           'contractName',
           'partnerName',
           'marketCode',
