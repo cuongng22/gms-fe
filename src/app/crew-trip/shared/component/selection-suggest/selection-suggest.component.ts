@@ -169,8 +169,8 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
 
   filter(): void {
     const filterValue = this.inputSearch.nativeElement.value;
-    this.formControl.setValue(null);
-    this.formControl.updateValueAndValidity();
+    /*this.formControl.setValue(null);
+    this.formControl.updateValueAndValidity();*/
     this.keySearch.next(filterValue);
   }
 
