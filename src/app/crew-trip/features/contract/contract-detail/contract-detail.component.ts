@@ -192,9 +192,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     // this.addRow(this.tblEciLco);
     // this.addRow(this.tblOvernightStay);
     // this.addRow(this.tblDayUse);
-    if (this.isPL()) {
-      this.formGroupDetail.controls['effectiveDate'].setValidators([this.beforeValidatorMessage(this.contractObj?.expiryDate, $localize`The Effective Date of the Appendix/Expiry Date of the Appendix must be greater than the Expiry Date of the Contract.`)]);
-    }
 
     this.formGroupFileUpload = this.fb.group({
       fileUpload: [],
