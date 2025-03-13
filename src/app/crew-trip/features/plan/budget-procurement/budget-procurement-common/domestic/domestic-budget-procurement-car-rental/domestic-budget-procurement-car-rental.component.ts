@@ -78,10 +78,11 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
   // TÍnh dòng tổng 
   setTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
+    let totalValue = 0;
     const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     if (control === 'totalAmountVat') {
       const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-      const totalValue = Math.round(this.dataSource.data.map((t: any) => {
+      totalValue = Math.round(this.dataSource.data.map((t: any) => {
         if (truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
           return Number(t[control]);
         } else {
@@ -89,9 +90,9 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
         }
       }).reduce((acc, value) => acc + value, 0));
       this.resultTotal[control] = totalValue;
-      return
+      return;
     }
-    const totalValue = Math.round(this.dataSource.data.map((t: any) => {
+    totalValue = Math.round(this.dataSource.data.map((t: any) => {
       if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup)) {
         return Number(t[control]);
       }

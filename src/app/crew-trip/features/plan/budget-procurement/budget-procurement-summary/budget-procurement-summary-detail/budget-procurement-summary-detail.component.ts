@@ -332,19 +332,18 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
 
   override async save(): Promise<any> {
-    this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.setValue('2026-01-08')
-    // try {
-    //   await this.spinner.show();
-    //   const resSave = await this.processSave();
-    //   if (resSave.result) {
-    //     this.baseService.showSuccess(resSave.isUpdate ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
-    //     this.getDetailSummary()
-    //   }
-    // } catch (error) {
-    //   console.error('save error: ', error);
-    // } finally {
-    //   this.spinner.hide();
-    // }
+    try {
+      await this.spinner.show();
+      const resSave = await this.processSave();
+      if (resSave.result) {
+        this.baseService.showSuccess(resSave.isUpdate ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
+        this.getDetailSummary()
+      }
+    } catch (error) {
+      console.error('save error: ', error);
+    } finally {
+      this.spinner.hide();
+    }
   }
 
   async confirmClose() {
