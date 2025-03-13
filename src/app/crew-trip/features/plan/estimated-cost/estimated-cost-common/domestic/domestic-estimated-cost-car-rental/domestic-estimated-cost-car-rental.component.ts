@@ -9,7 +9,7 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
+import { truncateDate, truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { PlanCategoryEnum } from '../../../../budget-procurement/budget-procurement.model';
 import { getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-estimated-cost-car-rental.model';

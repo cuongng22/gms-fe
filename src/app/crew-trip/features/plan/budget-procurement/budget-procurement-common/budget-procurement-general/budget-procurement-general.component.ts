@@ -74,8 +74,6 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     effect(() => {
       if (this.disabled()) {
         this.formGroupDetail.disable();
-      } else {
-        this.formGroupDetail.enable();
       }
     }, { allowSignalWrites: true });
   }

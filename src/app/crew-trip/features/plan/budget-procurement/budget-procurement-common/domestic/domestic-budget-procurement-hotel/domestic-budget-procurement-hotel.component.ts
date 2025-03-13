@@ -18,8 +18,8 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
-import { Constant, round } from 'src/app/crew-trip/shared/utils/constant';
+import { truncateDate, truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
+import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { PADDING_0, PlanCategoryEnum } from '../../../budget-procurement.model';
 import {
   formula,
@@ -74,11 +74,10 @@ export class DomesticBudgetProcurementHotelComponent
   endDatePlanGroup: any;
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
 
-  round = round;
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       if (this.data()) {
-        this.setDataSource(this.data().planHotels, this.data().isSummary);
+        this.setDataSource(this.data());
       }
     });
   }
@@ -93,7 +92,7 @@ export class DomesticBudgetProcurementHotelComponent
     this.cdRef.detectChanges(); // Phát hiện và cập nhật các thay đổi
   }
 
-  setDataSource(data: any[], isSummary?: boolean) {
+  setDataSource(data: any[]) {
     this.dataSource.data = [...data];
     this.getRow();
 
@@ -106,28 +105,9 @@ export class DomesticBudgetProcurementHotelComponent
         period = moment(item.periodStart).locale('en').format('MMMM')
       }
       item.periodLabel = period;
-      this.calculateData(item, index, isSummary);
+      this.calculateData(item, index);
     });
     this.calculateTotal()
-  }
-
-  getDataSource() {
-    const _stringData = JSON.stringify(this.dataSource.data);
-    let _jsonData = JSON.parse(_stringData);
-    _jsonData.forEach((item: any, index: number) => {
-      // Tổng Số phòng đơn
-      item.totalSingleRoom = round(item.totalSingleRoom);
-      // Tổng Số phòng đôi
-      item.totalDoubleRoom = round(item.totalDoubleRoom);
-      // Thành tiền chưa vat
-      item.totalAmount = round(item.totalAmount);
-      // Thành tiền  có vat
-      item.totalAmountVat = round(item.totalAmountVat);
-
-      // Thành tiền có vat của năm thực hiện
-      item.totalAmountYearPerformVat = round(item.totalAmountYearPerformVat);
-    });
-    return _jsonData;
   }
 
   getRow(): void {
@@ -140,30 +120,28 @@ export class DomesticBudgetProcurementHotelComponent
    *
    * @param item Giá trị từng dòng của dataSource theo công thức
    */
-  private calculateData(item: any, index: number, isCalculate?: boolean) {
-    if (isCalculate) {
-      // Tổng Số phòng đơn
-      this.calculate(item, 'totalSingleRoom');
-      // Tổng Số phòng đôi
-      this.calculate(item, 'totalDoubleRoom');
-      // Thành tiền chưa vat
-      this.calculate(item, 'totalAmount', true);
-      // Thành tiền  có vat
-      this.calculate(item, 'totalAmountVat', true);
+  private calculateData(item: any, index: number) {
+    // Tổng Số phòng đơn
+    this.calculate(item, 'totalSingleRoom');
+    // Tổng Số phòng đôi
+    this.calculate(item, 'totalDoubleRoom');
+    // Thành tiền chưa vat
+    this.calculate(item, 'totalAmount');
+    // Thành tiền  có vat
+    this.calculate(item, 'totalAmountVat');
 
-      if (new Date(item.periodStart) < this.startDatePlanGroup) {
-        // thành tiền có vat của tháng 12 năm ngoái (12/2024 cho kế hoạch 2025)
-        this.calculate(item, 'totalAmountVatLastYear', true);
-        console.log('item.totalAmountVatLastYear: ', item.totalAmountVatLastYear);
-        item.totalAmountVat = item.totalAmountVatLastYear
-      }
-      // Thành tiền có vat của năm thực hiện
-      this.calculate(item, 'totalAmountYearPerformVat', true);
+    if (new Date(item.periodStart) < this.startDatePlanGroup) {
+      // thành tiền có vat của tháng 12 năm ngoái (12/2024 cho kế hoạch 2025)
+      this.calculate(item, 'totalAmountVatLastYear');
+      console.log('item.totalAmountVatLastYear: ', item.totalAmountVatLastYear);
+      item.totalAmountVat = item.totalAmountVatLastYear
     }
+    // Thành tiền có vat của năm thực hiện
+    this.calculate(item, 'totalAmountYearPerformVat');
   }
 
   // hàm công thức tính chung
-  calculate(item: any, key: string, isRound?: boolean, fractionDigits?: number) {
+  calculate(item: any, key: string) {
     // let data: any = this.dataSource.data[index];
     // Check lập kế hoạch sản lượng thay đổi
     // Tháng nào đã thực hiện thì tính theo công thưc mới
@@ -177,9 +155,6 @@ export class DomesticBudgetProcurementHotelComponent
     if (strFomular) {
       item[key] = this.calculateFormula(item, strFomular);
     }
-    if (isRound) {
-      item[key] = round(item[key], fractionDigits);
-    }
     return item[key];
   }
 
@@ -191,7 +166,7 @@ export class DomesticBudgetProcurementHotelComponent
       `return ${formula};`    // Công thức cần tính
     );
     const result = dynamicFunction(data, null, this.ctz);
-    return result;
+    return Math.round(result);
   }
   // convertToZero
   ctz(value: any) {
@@ -206,24 +181,24 @@ export class DomesticBudgetProcurementHotelComponent
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     // const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     let totalValue = 0
-    if (this.type() === PlanCategoryEnum.BUDGET && control === 'totalAmountVat') {
+    if (control === 'totalAmountVat') {
       // const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-      totalValue = this.dataSource.data.map((t: any) => {
+      totalValue = Math.round(this.dataSource.data.map((t: any) => {
         if (truncateDate(new Date(t['periodStart'])) <= truncateDate(this.endDatePlanGroup)) {
-          return round(Number(t[control]));
+          return Number(t[control]);
         } else {
-          return round(Number(t['totalAmountYearPerformVat']))
+          return Number(t['totalAmountYearPerformVat'])
         }
-      }).reduce((acc, value) => acc + value, 0);
+      }).reduce((acc, value) => acc + value, 0));
       this.resultTotal[control] = totalValue;
       return;
     }
-    totalValue = this.dataSource.data.map((t: any) => {
+    totalValue = Math.round(this.dataSource.data.map((t: any) => {
       if (truncateDate(new Date(t['periodStart'])) >= truncateDate(this.startDatePlanGroup)) {
-        return round(Number(t[control]));
+        return Number(t[control]);
       }
       return 0;
-    }).reduce((acc, value) => acc + value, 0);
+    }).reduce((acc, value) => acc + value, 0));
     this.resultTotal[control] = totalValue;
   }
 
@@ -253,7 +228,7 @@ export class DomesticBudgetProcurementHotelComponent
   clickOutside(data: any, control: string) {
     data[control] = false;
     if (control === 'singleRoomExtraEditing' || control === 'doubleRoomExtraEditing') {
-      this.calculateData(data, 0, true)
+      this.calculateData(data, 0)
     }
     this.calculateTotal()
   }

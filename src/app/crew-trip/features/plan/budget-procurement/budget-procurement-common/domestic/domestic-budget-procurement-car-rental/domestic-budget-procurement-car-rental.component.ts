@@ -9,10 +9,10 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-budget-procurement-car-rental.model';
-import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
-import { PADDING_0, PlanCategoryEnum } from '../../../budget-procurement.model';
-import { Constant, ctz, round } from 'src/app/crew-trip/shared/utils/constant';
+import { getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-budget-procurement-car-rental.model';
+import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
+import { PlanCategoryEnum } from '../../../budget-procurement.model';
+import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import moment from 'moment';
 
 @Component({
@@ -40,16 +40,14 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
   headerRowDef2: string[] = [];
   rowDef: string[] = [];
 
-  PADDING_0 = PADDING_0;
-
   PlanCategoryEnum = PlanCategoryEnum;
 
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
-  round = round;
+
   constructor(private readonly datePipe: DatePipe, private readonly cdRef: ChangeDetectorRef) {
     effect(() => {
       if (this.data()) {
-        this.setDataSource(this.data().planCarentals, this.data().isSummary);
+        this.setDataSource(this.data());
       }
     })
   }
@@ -61,24 +59,20 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
     this.cdRef.detectChanges()
   }
 
-  setDataSource(data: any[], isSummary?: boolean) {
-    if (data && data.length > 0) {
-      this.dataSource.data = [...data]
-      this.getRow();
-      this.dataSource.data.forEach((item: any, index) => {
-        let period = '';
-        if (this.type() === PlanCategoryEnum.PROCUREMENT) {
-          period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
-        } else {
-          // period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
-          period = moment(item.periodStart).locale('en').format('MMMM')
-        }
-        item.periodLabel = period;
-        this.calculateData(item, index, isSummary);
-      });
-      this.calculateTotal()
-    }
-
+  setDataSource(data: any) {
+    this.dataSource.data = [...data]
+    this.getRow();
+    this.dataSource.data.forEach((item: any, index) => {
+      let period = '';
+      if (this.type() === PlanCategoryEnum.PROCUREMENT) {
+        period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+      } else {
+        // period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+        period = moment(item.periodStart).locale('en').format('MMMM')
+      }
+      item.periodLabel = period;
+    });
+    this.calculateTotal()
   }
 
   // TÍnh dòng tổng 
@@ -86,73 +80,25 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     let totalValue = 0;
     const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
-    if (this.type() === PlanCategoryEnum.BUDGET && control === 'totalAmountVat') {
+    if (control === 'totalAmountVat') {
       const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
       totalValue = Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup) && truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
-          return round(Number(t[control]));
+        if (truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
+          return Number(t[control]);
         } else {
-          return round(Number(t['totalAmountYearPerformVat']))
+          return Number(t['totalAmountYearPerformVat'])
         }
       }).reduce((acc, value) => acc + value, 0));
       this.resultTotal[control] = totalValue;
       return;
     }
     totalValue = Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
-        return round(Number(t[control]));
+      if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup)) {
+        return Number(t[control]);
       }
       return 0;
     }).reduce((acc, value) => acc + value, 0));
     this.resultTotal[control] = totalValue;
-  }
-
-
-  /**
-   *
-   * @param item Giá trị từng dòng của dataSource theo công thức
-   */
-  private calculateData(item: any, index: number, isCalculate?: boolean) {
-    if (isCalculate) {
-      // Tổng Số phòng đơn
-      this.calculate(item, 'totalAmount', true);
-      // Tổng Số phòng đôi
-      this.calculate(item, 'totalAmountVat', true);
-    }
-  }
-
-
-
-  // hàm công thức tính chung
-  calculate(item: any, key: string, isRound?: boolean, fractionDigits?: number) {
-    // let data: any = this.dataSource.data[index];
-    // Check lập kế hoạch sản lượng thay đổi
-    // Tháng nào đã thực hiện thì tính theo công thưc mới
-    const objFormula = formula[key];
-    let strFomular = objFormula.formula;
-    if (this.updateBudgetPlan() && item.monthIsPerform) {
-      if (objFormula.formulaUpdateBudgetPlan) {
-        strFomular = objFormula.formulaUpdateBudgetPlan;
-      }
-    }
-    if (strFomular) {
-      item[key] = this.calculateFormula(item, strFomular);
-    }
-    if (isRound) {
-      item[key] = round(item[key], fractionDigits);
-    }
-    return item[key];
-  }
-
-  // Hàm tính toán dựa trên công thức động
-  calculateFormula(data: any, formula: string): number {
-    // Sử dụng Function để tạo hàm động từ công thức
-    const dynamicFunction = new Function(
-      'data', 'generalData', 'ctz',
-      `return ${formula};`    // Công thức cần tính
-    );
-    const result = dynamicFunction(data, null, ctz);
-    return result;
   }
 
 
@@ -161,8 +107,8 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
   }
 
   calculateTotal() {
-    this.setTotal('numberVehiclesYearPerform')
-    this.setTotal('numberVehicles')
+    this.setTotal('singleRoomYearPerform')
+    this.setTotal('noOfTrip')
     this.setTotal('singleRoom')
     this.setTotal('doubleRoom')
     this.setTotal('totalAmount')
@@ -173,17 +119,6 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
     this.headerRowDef1 = getHeaderRowDef1(null, this.type());
     this.headerRowDef2 = getHeaderRowDef2(null, this.type());
     this.rowDef = getRowDef(null, this.type());
-  }
-
-
-  clickEdit(data: any, control: string) {
-    data[control] = true;
-  }
-
-  clickOutside(data: any, control: string) {
-    data[control] = false;
-    this.calculateData(data, 0, true);
-    this.calculateTotal()
   }
 
 }
