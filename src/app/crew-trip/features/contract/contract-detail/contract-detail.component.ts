@@ -379,7 +379,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
   override async ngOnInit() {
     try {
       await this.spinner.show();
-      await Promise.all([this.detail(this.id), this.loadListQuocGia(), this.loadListFeeService(), this.loadListFlightMarket(), this.loadListMaNghiepVu(), this.loadListKhoanMucKhns(), this.loadListHotel(), this.loadListVehicle(),]).then((res) => {
+      await Promise.all([this.loadListQuocGia(), this.loadListFeeService(), this.loadListFlightMarket(), this.loadListMaNghiepVu(), this.loadListKhoanMucKhns(), this.loadListHotel(), this.loadListVehicle(),]).then(async (res) => {
+        await this.detail(this.id);
         if (this.isHotel() && this.isVehicle()) {
           this.formGroupDetail.patchValue({
             doiTuongDichVu: '3',
