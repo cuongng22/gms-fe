@@ -25,7 +25,7 @@ import { MESSAGE } from '../../utils/constant';
 import { NgxControlError } from 'ngxtension/control-error';
 import { Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
-import {MatTooltipModule} from "@angular/material/tooltip";
+import { MatTooltipModule } from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-selection-suggest',
@@ -178,6 +178,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
     this.viewControl.setValue(event.option.viewValue ?? null);
     this.viewControl.updateValueAndValidity();
     this.selectionControl.writeValue(event.option.value ?? null);
+    this.formControl.setValue(event.option.value ?? null);
     this.formControl.updateValueAndValidity();
     this.selectionChange.emit({
       value: event.option.value ?? null,

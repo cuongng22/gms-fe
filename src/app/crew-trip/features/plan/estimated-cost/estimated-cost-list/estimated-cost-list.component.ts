@@ -30,6 +30,7 @@ import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/se
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 import { EstimatedAnnualProductionService } from 'src/app/crew-trip/core/services/estimated-annual-production';
 import moment from 'moment';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-estimated-cost-list',
@@ -152,8 +153,10 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
     dialogDetailRef.afterClosed().subscribe(async (res) => {
       if (res) {
         this.getVersion();
-        this.formGroupSearch.controls.version.setValue(res.version)
-        this.selectionVersion()?.setViewValueInit(res.version, true)
+        if (this.formGroupSearch.controls.version.value) {
+          this.formGroupSearch.controls.version.setValue(res.version)
+          this.selectionVersion()?.setViewValueInit(res.version, true)
+        }
         await this.search();
       }
     });
@@ -251,6 +254,12 @@ export class DialogEstimatedCostDetail extends CommonComponent {
           })
         })
       }
+
+      this.formGroupDetail.controls.version.valueChanges.pipe(debounceTime(1000)).subscribe((value: any) => {
+        console.log('vaoooo version.valueChanges: ', value)
+        this.existsVersion = false;
+        this.formGroupDetail.controls.version.updateValueAndValidity()
+      })
     }
   }
 

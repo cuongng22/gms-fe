@@ -44,7 +44,7 @@
             <mat-tab label="International" i18n="@@international">
                 <ng-template matTabContent>
                     <app-estimated-cost-summary-search [categoryType]="CategoriesEnum.INTERNATIONAL"
-                        (search)="searchSummary($event,CategoriesEnum.INTERNATIONAL)">
+                        (searchEvent)="searchSummary($event,CategoriesEnum.INTERNATIONAL)">
                     </app-estimated-cost-summary-search>
                     <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.INTERNATIONAL"
                         [planBudgetProcurementId]="id()" #budgetProcurementSummaryListInternational>
@@ -55,7 +55,7 @@
             <mat-tab label="Domestic" i18n="@@domestic">
                 <ng-template matTabContent>
                     <app-estimated-cost-summary-search [categoryType]="CategoriesEnum.DOMESTIC"
-                        (search)="searchSummary($event,CategoriesEnum.DOMESTIC)">
+                        (searchEvent)="searchSummary($event,CategoriesEnum.DOMESTIC)">
                     </app-estimated-cost-summary-search>
                     <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.DOMESTIC"
                         [planBudgetProcurementId]="id()" #budgetProcurementSummaryListDomestic>
