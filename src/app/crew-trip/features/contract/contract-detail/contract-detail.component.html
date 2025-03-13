@@ -824,7 +824,7 @@
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
-            <app-selection-suggest (selectionChange)="nationSelected(formGroupDetail.getRawValue().nationId)"
+            <app-selection-suggest (selectionChange)="nationSelected($event)"
                                    [options]="listQuocGia"
                                    attrDisplay="vniName"
                                    attrValue="id" formControlName="nationId" i18n-label label="Country"
