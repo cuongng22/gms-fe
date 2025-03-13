@@ -146,7 +146,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
       );
       const response = await this.baseService.dataSummary(requestBody);//summaryDataExample;//summaryDataExample1;//
       this.dataDetail = {
-        ...this.dataDetail,
+        ...response.data,
+        ...this.estimatedCostGeneral.formGroupDetail.getRawValue(),
         planFlightRates: response.data.planFlightRates ?? [],
         planOverightRates: response.data.planOverightRates ?? [],
         planBudgetHotels: response.data.planBudgetHotels ?? [],
@@ -163,12 +164,26 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
   override async save(): Promise<any> {
     try {
+      await this.spinner.show();
+      const resSave = await this.processSave();
+      if (resSave.result) {
+        this.baseService.showSuccess(resSave.isUpdate ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS);
+        this.getDetailSummary()
+      }
+    } catch (error) {
+      console.error('save error: ', error);
+    } finally {
+      this.spinner.hide();
+    }
+  }
+  async processSave(): Promise<{ result: boolean, isUpdate?: boolean }> {
+    try {
       this.estimatedCostGeneral.formGroupDetail.markAllAsTouched();
       console.log(this.estimatedCostGeneral.formGroupDetail)
       if (this.estimatedCostGeneral.formGroupDetail.invalid ||
         (this.category() === CategoryEnum.INTERNATIONAL && this.internationalEstimatedCostOvernight.invalid())
       ) {
-        return;
+        return Promise.resolve({ result: false });
       }
       await this.spinner.show();
       const update = !!this.dataDetail.id;
@@ -209,13 +224,11 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
       };
       console.log('data: ', data);
       const response = await this.baseService.save(data);
-      this.baseService.showSuccess(update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS);
-      this.getDetailSummary()
       console.log('response: ', response);
+      return Promise.resolve({ result: true, isUpdate: update })
     } catch (error) {
       console.error('save error: ', error);
-    } finally {
-      this.spinner.hide();
+      return Promise.resolve({ result: false })
     }
   }
 
@@ -223,11 +236,15 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     return data.map((item: any) => ({ ...item, id: !item.id || item.id < 0 ? null : item.id }));
   }
 
-  completed() {
-    this.baseService.summaryUpdateStatus({ id: this.id(), status: StatusSummaryEnum.COMPLETED }).then(() => {
-      this.baseService.showSuccess(this.MESSAGE.UPDATE_SUCCESS);
-      this.getDetailSummary();
-    });
+  async completed() {
+    const resSave = await this.processSave();
+    if (resSave.result) {
+      this.baseService.summaryUpdateStatus({ id: this.id(), status: StatusSummaryEnum.COMPLETED }).then(() => {
+        this.baseService.showSuccess(this.MESSAGE.UPDATE_SUCCESS);
+        this.getDetailSummary();
+      });
+    }
+
   }
 
   formGeneralValueChanges(event: any): void {
@@ -242,8 +259,25 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     this.internationalEstimatedCostHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.internationalEstimatedCostOvernight.dataSource.data);
   }
 
+  checkDataSummary() {
+    return this.dataDetail && (this.dataDetail.planFlightRates
+      || this.dataDetail.planFlightPeriods
+      || this.dataDetail.planOverightRates
+      || this.dataDetail.planBudgetHotels
+      || this.dataDetail.planBudgetCarentals
+      // || this.dataDetail.planProcurementHotels
+      // || this.dataDetail.planProcurementCarentals
+      // || this.dataDetail.planBudgetWetLease
+      // || this.dataDetail.planProcumentWetLease
+    )
+  }
+
   // Lấy data cho các component con
   setDataDetail() {
+    // set đơn giá phòng đơn, đơn giá phòng đôi
+    this.estimatedCostGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
+    this.estimatedCostGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
+
     this.planFlightRatesData = [...this.dataDetail?.planFlightRates ?? []];
     // this._internationalFlightPeriodData = {
     //   planFlightPeriods: [...this.dataDetail?.planFlightPeriods ?? []],

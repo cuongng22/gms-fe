@@ -33,28 +33,32 @@
         }
     </div>
     <div class="row">
-        <div  [ngClass]=" category() === CategoriesEnum.INTERNATIONAL?'col-4':'col-6'">
+        <div [ngClass]=" category() === CategoriesEnum.INTERNATIONAL?'col-4':'col-6'">
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@singleRoomRate">Single Room Rate</mat-label>
+                <mat-label i18n="@@singleRoomPrice">Single room price</mat-label>
                 <textarea matInput [disabled]="true" [ngModel]="unitPriceSingleHotel"
-                    [ngModelOptions]="{standalone: true}" matTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" cdkTextareaAutosize
-                    #autosize="cdkTextareaAutosize">
+                    [ngModelOptions]="{standalone: true}" matTextareaAutosize cdkAutosizeMinRows="1"
+                    cdkAutosizeMaxRows="3" cdkTextareaAutosize #autosize="cdkTextareaAutosize">
                 </textarea>
             </mat-form-field>
             <mat-form-field class="mb-2">
-                <mat-label i18n="@@doubleRoomRate">Double Room Rate</mat-label>
+                <mat-label i18n="@@twinRoomPrice">Twin room price</mat-label>
                 <textarea matInput [disabled]="true" [ngModel]="unitPriceDoubleHotel"
-                    [ngModelOptions]="{standalone: true}" matTextareaAutosize cdkAutosizeMinRows="1" cdkAutosizeMaxRows="3" cdkTextareaAutosize
-                    #autosize="cdkTextareaAutosize">
+                    [ngModelOptions]="{standalone: true}" matTextareaAutosize cdkAutosizeMinRows="1"
+                    cdkAutosizeMaxRows="3" cdkTextareaAutosize #autosize="cdkTextareaAutosize">
                 </textarea>
             </mat-form-field>
         </div>
-        <div  [ngClass]=" category() === CategoriesEnum.INTERNATIONAL?'col-8':'col-6'">
+        <div [ngClass]=" category() === CategoriesEnum.INTERNATIONAL?'col-8':'col-6'">
             <mat-form-field class="mb-2">
                 <mat-label i18n="@@notes">Notes</mat-label>
                 <textarea matInput [disabled]="disabled()" formControlName="notes" matTextareaAutosize
                     cdkAutosizeMinRows="4" cdkAutosizeMaxRows="6" cdkTextareaAutosize #autosize="cdkTextareaAutosize">
-                            </textarea>
+                </textarea>
+                <mat-error *ngxControlError="formGroupDetail.controls.notes; track: 'maxlength'" i18n="@@noteMaxlength">
+                    Note {{ MESSAGE.MAX_LENGTH_INVALID |
+                    dataTransformPipe:[Constant.STRING_FORMAT,500]}}
+                </mat-error>
             </mat-form-field>
         </div>
     </div>

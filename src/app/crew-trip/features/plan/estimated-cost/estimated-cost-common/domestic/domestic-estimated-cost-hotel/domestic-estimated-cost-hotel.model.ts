@@ -39,22 +39,22 @@ export const formula: any = {
 
     //Tổng số phòng đơn
     totalSingleRoom: {
-        formula: 'data.singleRoom + data.singleRoomExtra'
+        formula: 'ctz(data.singleRoom) + ctz(data.singleRoomExtra)'
     },
     //Tổng số phòng đôi
     totalDoubleRoom: {
-        formula: 'data.doubleRoom + data.doubleRoomExtra'
+        formula: 'ctz(data.doubleRoom) + ctz(data.doubleRoomExtra)'
     },
     // Thành tiền chưa vat
     totalAmount: {
-        formula: '(data.totalSingleRoom * data.priceSingleRoom) + (data.totalDoubleRoom * data.priceDoubleRoom)'
+        formula: '(ctz(data.singleRoom) * ctz(data.priceSingleRoom)) + (ctz(data.doubleRoom) * ctz(data.priceDoubleRoom))'
     },
     // Thành tiền chưa có vat
     totalAmountVat: {
-        formula: '(data.totalSingleRoom * data.priceSingleRoomVat) + (data.totalDoubleRoom * data.priceDoubleRoomVat)'
+        formula: '(ctz(data.singleRoom) * ctz(data.priceSingleRoomVat)) + (ctz(data.doubleRoom) * ctz(data.priceDoubleRoomVat))'
     },
     totalAmountYearPerformVat: {
-        formula: '(data.singleRoomYearPerform * data.priceSingleRoomVat) + (data.doubleRoomYearPerform * data.priceDoubleRoomVat)'
+        formula: '(ctz(data.singleRoomYearPerform) * ctz(data.priceSingleRoomVat)) + (ctz(data.doubleRoomYearPerform) * ctz(data.priceDoubleRoomVat))'
     }
 }
 

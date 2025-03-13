@@ -42,6 +42,8 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
   PADDING_0 = PADDING_0;
   PlanCategoryEnum = PlanCategoryEnum;
 
+  resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
+
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       console.log('effect data DomesticBudgetProcurementHotelComponent: ', this.data())
@@ -67,6 +69,7 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
       item.periodLabel = period;
       this.calculateData(item, index);
     });
+    this.calculateTotal()
   };
 
   getRow(): void {
@@ -106,37 +109,49 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
     return item[key];
   }
 
+  calculateTotal() {
+    this.setTotal('singleRoomYearPerform')
+    this.setTotal('doubleRoomYearPerform')
+    this.setTotal('singleRoom')
+    this.setTotal('doubleRoom')
+    this.setTotal('totalAmount')
+    this.setTotal('totalAmountVat')
+  }
+
   // Hàm tính toán dựa trên công thức động
   calculateFormula(data: any, formula: string): number {
     // Sử dụng Function để tạo hàm động từ công thức
     const dynamicFunction = new Function(
-      'data', 'generalData',
+      'data', 'generalData', 'ctz',
       `return ${formula};`    // Công thức cần tính
     );
-    const result = dynamicFunction(data, null);
+    const result = dynamicFunction(data, null, this.ctz);
     return Math.round(result);
   }
 
+  // convertToZero
+  ctz(value: any) {
+    if (value) {
+      return new Number(value.toString().replace(',', '.'));
+    }
+    return 0;
+  }
+
   // TÍnh dòng tổng 
-  getTotal(control: string) {
+  setTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
-    // if (control === 'totalAmountVat') {
-    //   const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-    //   return Math.round(this.dataSource.data.map((t: any) => {
-    //     if (truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
-    //       return Number(t[control]);
-    //     } else {
-    //       return Number(t['totalAmountYearPerformVat'])
-    //     }
-    //   }).reduce((acc, value) => acc + value, 0));
-    // }
-    return Math.round(this.dataSource.data.map((t: any) => {
+    const totalValue = Math.round(this.dataSource.data.map((t: any) => {
       if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup)) {
         return Number(t[control]);
       }
       return 0;
-    }).reduce((acc, value) => acc + value, 0));;
+    }).reduce((acc, value) => acc + value, 0));
+    this.resultTotal[control] = totalValue;
+  }
+
+  getTotal(control: string) {
+    return this.resultTotal[control] ?? 0
   }
 
 

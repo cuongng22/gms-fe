@@ -146,8 +146,8 @@
                     {{getTotal('totalAmountVat') | number}}
                 </td>
             </ng-container>
-            <tr mat-header-row *matHeaderRowDef="headerRowDef1" sticky:true></tr>
-            <tr mat-header-row *matHeaderRowDef="headerRowDef2" sticky:true></tr>
+            <tr mat-header-row *matHeaderRowDef="headerRowDef1; sticky:true"></tr>
+            <tr mat-header-row *matHeaderRowDef="headerRowDef2; sticky:true"></tr>
             <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
             <tr mat-footer-row *matFooterRowDef="rowDef; sticky: true"></tr>
             <tr class="mat-row" *matNoDataRow>
