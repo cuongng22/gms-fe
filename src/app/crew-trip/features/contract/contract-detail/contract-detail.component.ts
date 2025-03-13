@@ -211,7 +211,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
           return;
         }
         this.formGroupDetail.patchValue({
-          marketCode: value.toUpperCase(), marketName: '', nation: '', marketType: '', flightGroup: '', statusUsage: '', carType: '',
+          marketCode: value.toUpperCase(), marketName: '', nation: '', marketType: '', flightGroup: '', statusUsage: '',
         });
         snapMarketCode = cloneDeep(this.formGroupDetail.getRawValue().marketCode);
         if (value) {
