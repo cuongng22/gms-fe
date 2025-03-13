@@ -139,7 +139,7 @@
           "options": {
             "proxyConfig": "src/app/crew-trip/core/proxy/proxy.conf.json",
             "allowedHosts": [
-              "vna.gimasys.com"
+              "*"
             ]
           },
           "configurations": {
