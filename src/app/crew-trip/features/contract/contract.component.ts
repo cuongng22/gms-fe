@@ -90,9 +90,9 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }[] = [
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Airport code`, value: 'marketCode'},
-    {label: $localize`BizDocId`, label1: $localize`Appendix No`, value: 'bizDocId'},
+    {label: $localize`BizDocId`, value: 'bizDocId'},
     {label: $localize`Contract Code`, label1: $localize`Appendix Code`, value: 'contractCode',},
-    {label: $localize`Contract No`, value: 'contractNo'},
+    {label: $localize`Contract No`, label1: $localize`Appendix No`, value: 'contractNo'},
     {label: $localize`Contract Name`, label1: $localize`Appendix Name`, value: 'contractName',},
     {label: $localize`Supplier`, value: 'partnerName'},
     {label: $localize`Service Type`, value: 'serviceObject'},
@@ -162,7 +162,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
       this.displayedColumns = [
         'stt',
         'contractCode',
-        'bizDocId',
+        'contractNo',
         'contractName',
         'partnerName',
         'marketCode',
@@ -288,7 +288,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
         this.displayedColumns = [
           'stt',
           'contractCode',
-          'bizDocId',
+          'contractNo',
           'contractName',
           'partnerName',
           'marketCode',
