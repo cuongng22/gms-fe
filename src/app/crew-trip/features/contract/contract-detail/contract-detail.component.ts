@@ -891,6 +891,10 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     body.documentsList = body.documentsList.filter((s: any) => !s.isFromContract);
     body.phoneNumber = body.supplierPhone;
     // console.log(body, 'body');
+    if(!this.isHotel() && this.isVehicle()){
+      delete body.priceUnitNotAllDay;
+      delete body.dayUses;
+    }
     return body;
   }
 
