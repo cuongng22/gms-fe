@@ -29,7 +29,7 @@ import { SeparatorDirective } from 'src/app/crew-trip/shared/directive/separator
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { Authoritys, ContractPeriods, Fields, SelectionMethods, SelectionUnits } from '../procurement-tracking.model';
 import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
-import { debounceTime, Subscription } from 'rxjs';
+import { debounceTime } from 'rxjs';
 import moment, { Moment } from 'moment';
 
 @Component({
@@ -68,17 +68,6 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
   diffKHLCHSDXFore = viewChild<ElementRef>('diffKHLCHSDXFore');
   diffHDKHLCFore = viewChild<ElementRef>('diffHDKHLCFore');
   diffHDKHLCVnd = viewChild<ElementRef>('diffHDKHLCVnd');
-
-
-  proposalTotalValueForeValueChanges: Subscription;
-  planTotalValueForeValueChanges: Subscription;
-  proposalTotalValueVNDValueChanges: Subscription;
-  planTotalValueVNDValueChanges: Subscription;
-  resultTotalValueForeValueChanges: Subscription;
-  resultTotalValueVNDValueChanges: Subscription;
-  contractTotalValueForeValueChanges: Subscription;
-  contractTotalValueVNDValueChanges: Subscription;
-
 
   override formGroupDetail = this.formBuilder.group(
     {
@@ -143,8 +132,7 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
   async getDetailById(id: number | undefined) {
     if (id) {
       let resDetail = await this.baseService.detail(this.id());
-      this.controlUnsubscribe();
-      this.formGroupDetail.patchValue({ ...resDetail.data });
+      this.formGroupDetail.patchValue({ ...resDetail.data }, { emitEvent: false });
       this.formGroupDetail.controls.airportCode.disable()
       const _startDate = resDetail.data.startDate;
       if (typeof (_startDate) === 'string') {
@@ -174,15 +162,17 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
       throw e
     }
   }
+
+
   registerValueChange() {
     // - Chênh lệch HSĐX - KHLC (ngoại tệ): Tự động tính lần đầu theo công thức: 
     // 'Tổng kế hoạch mua sắm (ngoại tệ) của mục III - Tổng kế hoạch mua sắm (ngoại tệ) của mục II'; 
-    this.proposalTotalValueForeValueChanges = this.formGroupDetail.controls.proposalTotalValueFore.valueChanges.pipe(
+    this.formGroupDetail.controls.proposalTotalValueFore.valueChanges.pipe(
       debounceTime(1000)
     ).subscribe(value => {
       this.changeValueCalculation('proposalTotalValueFore', value);
     })
-    this.planTotalValueForeValueChanges = this.formGroupDetail.controls.planTotalValueFore.valueChanges.pipe(
+    this.formGroupDetail.controls.planTotalValueFore.valueChanges.pipe(
       debounceTime(1000)
     ).subscribe(value => {
       this.changeValueCalculation('planTotalValueFore', value);
@@ -190,12 +180,12 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
 
     // - Chênh lệch HSĐX - KHLC (VND): Tự động tính lần đầu theo công thức: 
     // 'Tổng kế hoạch mua sắm (VND) của mục III - Tổng kế hoạch mua sắm (VND) của mục II'; 
-    this.proposalTotalValueVNDValueChanges = this.formGroupDetail.controls.proposalTotalValueVND.valueChanges.pipe(
+    this.formGroupDetail.controls.proposalTotalValueVND.valueChanges.pipe(
       debounceTime(1000)
     ).subscribe(value => {
       this.changeValueCalculation('proposalTotalValueVND', value);
     })
-    this.planTotalValueVNDValueChanges = this.formGroupDetail.controls.planTotalValueVND.valueChanges.pipe(
+    this.formGroupDetail.controls.planTotalValueVND.valueChanges.pipe(
       debounceTime(1000)
     ).subscribe(value => {
       this.changeValueCalculation('planTotalValueVND', value);
@@ -203,48 +193,62 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
 
     // - Chênh lệch KQLC - HSĐX (ngoại tệ): Tự động tính lần đầu theo công thức: 
     // 'Tổng kế hoạch mua sắm (ngoại tệ) của mục IV - Tổng kế hoạch mua sắm (ngoại tệ) của mục III'; 
-    this.resultTotalValueForeValueChanges = this.formGroupDetail.controls.resultTotalValueFore.valueChanges.pipe(
+    this.formGroupDetail.controls.resultTotalValueFore.valueChanges.pipe(
       debounceTime(1000)
     ).subscribe(value => {
       this.changeValueCalculation('resultTotalValueFore', value);
     })
+    // this.formGroupDetail.controls.proposalTotalValueFore.valueChanges.pipe(
+    //   debounceTime(1000)
+    // ).subscribe(value => {
+    //   this.changeValueCalculation('proposalTotalValueFore', value);
+    // })
 
     // - Chênh lệch KQLC - HSĐX (VND): Tự động tính lần đầu theo công thức: 
     // 'Tổng kế hoạch mua sắm (VND) của mục IV - Tổng kế hoạch mua sắm (VND) của mục III'; 
-    this.resultTotalValueVNDValueChanges = this.formGroupDetail.controls.resultTotalValueVND.valueChanges.pipe(
+    this.formGroupDetail.controls.resultTotalValueVND.valueChanges.pipe(
       debounceTime(1000)
     ).subscribe(value => {
       this.changeValueCalculation('resultTotalValueVND', value);
     })
+    // this.formGroupDetail.controls.proposalTotalValueVND.valueChanges.pipe(
+    //   debounceTime(1000)
+    // ).subscribe(value => {
+    //   this.changeValueCalculation('proposalTotalValueVND', value);
+    // })
 
     // - Chênh lệch HĐ - KQLC (ngoại tệ): Tự động tính lần đầu theo công thức:
     //  'Tổng giá trị HĐ (ngoại tệ) của mục V - Tổng kế hoạch mua sắm (ngoại tệ) của mục IV';
-    this.contractTotalValueForeValueChanges = this.formGroupDetail.controls.contractTotalValueFore.valueChanges.pipe(
+    this.formGroupDetail.controls.contractTotalValueFore.valueChanges.pipe(
       debounceTime(1000)
     ).subscribe(value => {
       this.changeValueCalculation('contractTotalValueFore', value);
     })
+    // this.formGroupDetail.controls.resultTotalValueFore.valueChanges.pipe(
+    //   debounceTime(1000)
+    // ).subscribe(value => {
+    //   this.changeValueCalculation('resultTotalValueFore', value);
+    // })
+
     // - Chênh lệch HĐ - KQLC (VND): Tự động tính lần đầu theo công thức: 
     // 'Tổng giá trị hợp đồng (VND) của mục V - Tổng kế hoạch mua sắm (VND) của mục IV';
-    this.contractTotalValueVNDValueChanges = this.formGroupDetail.controls.contractTotalValueVND.valueChanges.pipe(
+    this.formGroupDetail.controls.contractTotalValueVND.valueChanges.pipe(
       debounceTime(1000)
     ).subscribe(value => {
       this.changeValueCalculation('contractTotalValueVND', value);
     })
+    // this.formGroupDetail.controls.resultTotalValueVND.valueChanges.pipe(
+    //   debounceTime(1000)
+    // ).subscribe(value => {
+    //   this.changeValueCalculation('resultTotalValueVND', value);
+    // })
   }
-
-
-  controlUnsubscribe() {
-    this.proposalTotalValueForeValueChanges.unsubscribe();
-    this.planTotalValueForeValueChanges.unsubscribe();
-    this.proposalTotalValueVNDValueChanges.unsubscribe();
-    this.planTotalValueVNDValueChanges.unsubscribe();
-    this.resultTotalValueForeValueChanges.unsubscribe();
-    this.resultTotalValueVNDValueChanges.unsubscribe();
-    this.contractTotalValueForeValueChanges.unsubscribe();
-    this.contractTotalValueVNDValueChanges.unsubscribe();
-  }
-
+  // diffHSDXKHLCFore = viewChild<ElementRef>('diffHSDXKHLCFore');
+  // diffHSDXKHLCVnd = viewChild<ElementRef>('diffHSDXKHLCVnd');
+  // diffKHLCHSDXVnd = viewChild<ElementRef>('diffKHLCHSDXVnd');
+  // diffKHLCHSDXFore = viewChild<ElementRef>('diffKHLCHSDXFore');
+  // diffHDKHLCFore = viewChild<ElementRef>('diffHDKHLCFore');
+  // diffHDKHLCVnd = viewChild<ElementRef>('diffHDKHLCVnd');
 
   changeValueCalculation(control: string, value: any) {
     if (control === 'proposalTotalValueFore' || control === 'planTotalValueFore') {
