@@ -114,7 +114,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       email: [],
       carType: ['', [Validators.maxLength(150)]],
       standardCheckIn: ['', [Validators.pattern(PATTERN.HOUR24)]],
-      standardCheckOut: ['',[Validators.pattern(PATTERN.HOUR24)]],
+      standardCheckOut: ['', [Validators.pattern(PATTERN.HOUR24)]],
       standardCheckout: [],
       notes: ['', [Validators.maxLength(500)]],
       isTaxHotelRevert: [true],
@@ -150,7 +150,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       paymentType: [],
       budgetCode: [],
       fieldCode2: [],
-      dueDateNumber: [, [Validators.min(0), Validators.max(99),Validators.pattern(PATTERN.NUMBER)]],
+      dueDateNumber: [, [Validators.min(0), Validators.max(99), Validators.pattern(PATTERN.NUMBER)]],
       handoverDate: [],
       documentsList: [],
       bankAccountNoB: ['', [Validators.maxLength(40), Validators.pattern(PATTERN.STRING_NUMBER1)],],
@@ -163,7 +163,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       swiftCodeB: ['', [Validators.maxLength(190)]],
       bankCharge: [],
       bankCharge1: [],
-      bankAccountNoB1: ['',[Validators.maxLength(40), Validators.pattern(PATTERN.STRING_NUMBER1)],],
+      bankAccountNoB1: ['', [Validators.maxLength(40), Validators.pattern(PATTERN.STRING_NUMBER1)],],
       bankNameB1: ['', [Validators.maxLength(190)]],
       swiftCodeB1: ['', [Validators.maxLength(190)]],
       iban: ['', [Validators.maxLength(120)]],
@@ -211,7 +211,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
           return;
         }
         this.formGroupDetail.patchValue({
-          marketCode: value.toUpperCase(), marketName: '', nation: '', marketType: '', flightGroup: '', statusUsage: '',
+          marketCode: value.toUpperCase(), marketName: '', nation: '', marketType: '', flightGroup: '', statusUsage: '', nationId: '',
         });
         snapMarketCode = cloneDeep(this.formGroupDetail.getRawValue().marketCode);
         if (value) {
@@ -743,7 +743,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       });
       this.formGroupDetailInit = {...this.formGroupDetail.getRawValue()};
       this.formGroupDetail.markAllAsTouched();
-      this.tblPriceUnit.controls.forEach((row:any)=>{
+      this.tblPriceUnit.controls.forEach((row: any) => {
         this.fieldUpdateValueAndValidity(row)
       });
       if (this.formGroupDetail.invalid) {
@@ -891,7 +891,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     body.documentsList = body.documentsList.filter((s: any) => !s.isFromContract);
     body.phoneNumber = body.supplierPhone;
     // console.log(body, 'body');
-    if(!this.isHotel() && this.isVehicle()){
+    if (!this.isHotel() && this.isVehicle()) {
       delete body.priceUnitNotAllDay;
       delete body.dayUses;
     }
@@ -982,7 +982,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     }
 
     let current = this.listPartner.find((s: any) => s.code === dataInput);
-    console.log(current,'currentcurrentcurrent')
+    console.log(current, 'currentcurrentcurrent')
     this.formGroupDetail.patchValue({
       partnerName: current?.name ?? '', partnerAddress: current?.address ?? '',
       supplierName: current?.fullName ?? '',
