@@ -84,9 +84,9 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
    */
   private calculateData(item: any, index: number) {
     // Tổng Số phòng đơn
-    this.calculate(item, 'totalSingleRoom');
-    // Tổng Số phòng đôi
-    this.calculate(item, 'totalDoubleRoom');
+    // this.calculate(item, 'totalSingleRoom');
+    // // Tổng Số phòng đôi
+    // this.calculate(item, 'totalDoubleRoom');
     // Thành tiền chưa vat
     this.calculate(item, 'totalAmount');
     // Thành tiền chưa có vat

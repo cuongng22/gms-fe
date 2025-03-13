@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { AfterViewChecked, Component, ElementRef, inject, input, viewChild } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AfterViewChecked, Component, ElementRef, inject, input, ViewChild, viewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCard, MatCardModule } from '@angular/material/card';
@@ -30,6 +30,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { Authoritys, ContractPeriods, Fields, SelectionMethods, SelectionUnits } from '../procurement-tracking.model';
 import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
 import { debounceTime } from 'rxjs';
+import moment, { Moment } from 'moment';
 
 @Component({
   selector: 'app-procurement-tracking-detail',
@@ -68,19 +69,18 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
   diffHDKHLCFore = viewChild<ElementRef>('diffHDKHLCFore');
   diffHDKHLCVnd = viewChild<ElementRef>('diffHDKHLCVnd');
 
-
   override formGroupDetail = this.formBuilder.group(
     {
       id: [],
       type: ['HOTEL'],
       airportCode: ['', [Validators.required]],
       servicePkgName: ['', [Validators.required, Validators.maxLength(100)]],
-      currency: ['', [Validators.maxLength(100)]],
+      currency: ['', [Validators.maxLength(10)]],
       authority: ['', [Validators.required]],
       field: ['KT'],
-      department: ['TTĐHKT'],
+      department: ['TTĐHKT', [Validators.maxLength(100)]],
       note: ['', [Validators.maxLength(500)]],
-      startDate: [],
+      startDate: new FormControl<Moment | string | null>(null),
       selectionMethod: [],
       contractPeriod: [],
       planNumber: ['', [Validators.maxLength(10)]],
@@ -100,12 +100,12 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
       contractUnitPriceIncVAT: ['', [Validators.maxLength(12)]],
       contractTotalValueFore: ['', [Validators.maxLength(12)]],
       contractTotalValueVND: ['', [Validators.maxLength(12)]],
-      diff_HSDX_KHLC_fore: ['', [Validators.maxLength(12)]],
-      diff_HSDX_KHLC_vnd: ['', [Validators.maxLength(12)]],
-      diff_KHLC_HSDX_fore: ['', [Validators.maxLength(12)]],
-      diff_KHLC_HSDX_vnd: ['', [Validators.maxLength(12)]],
-      diff_HD_KHLC_fore: ['', [Validators.maxLength(12)]],
-      diff_HD_KHLC_vnd: ['', [Validators.maxLength(12)]],
+      diff_HSDX_KHLC_fore: [{ value: '', disabled: true }, [Validators.maxLength(12)]],
+      diff_HSDX_KHLC_vnd: [{ value: '', disabled: true }, [Validators.maxLength(12)]],
+      diff_KHLC_HSDX_fore: [{ value: '', disabled: true }, [Validators.maxLength(12)]],
+      diff_KHLC_HSDX_vnd: [{ value: '', disabled: true }, [Validators.maxLength(12)]],
+      diff_HD_KHLC_fore: [{ value: '', disabled: true }, [Validators.maxLength(12)]],
+      diff_HD_KHLC_vnd: [{ value: '', disabled: true }, [Validators.maxLength(12)]],
     }
   );
 
@@ -124,7 +124,7 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
   }
 
   override ngOnInit(): void {
-    this.loadListFlightMarket({ status: 'Operational' });
+    this.loadListFlightMarket();
     this.getDetailById(this.id())
     this.registerValueChange()
   }
@@ -133,6 +133,13 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
     if (id) {
       let resDetail = await this.baseService.detail(this.id());
       this.formGroupDetail.patchValue({ ...resDetail.data }, { emitEvent: false });
+      this.formGroupDetail.controls.airportCode.disable()
+      const _startDate = resDetail.data.startDate;
+      if (typeof (_startDate) === 'string') {
+        if (moment(_startDate, 'DD/MM/YYYY').isValid()) {
+          this.formGroupDetail.controls.startDate.setValue(moment(_startDate, 'DD/MM/YYYY'));
+        }
+      }
       if (this.disable) {
         this.formGroupDetail.disable()
       }
@@ -140,6 +147,10 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
   }
 
   override async save(): Promise<any> {
+    this.formGroupDetail.markAllAsTouched()
+    if (this.formGroupDetail.invalid) {
+      return;
+    }
     let body = this.formGroupDetail.getRawValue();
     if (this.formGroupDetail.controls.startDate.value) {
       body.startDate = this.dataTransformPipe.transform(this.formGroupDetail.controls.startDate.value, [this.Constant.DATE, this.Constant.DATE_FORMAT]);
@@ -151,6 +162,7 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
       throw e
     }
   }
+
 
   registerValueChange() {
     // - Chênh lệch HSĐX - KHLC (ngoại tệ): Tự động tính lần đầu theo công thức: 

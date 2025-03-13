@@ -1,4 +1,4 @@
-import { AfterViewChecked, ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
 import { InputSizeComponent } from '../../input/input-size.component';
@@ -25,12 +25,14 @@ import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
   styleUrl: './datepicker.component.scss',
   hostDirectives: [NgxControlValueAccessor],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  // providers: [
-  //   provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY)
-  // ]
+  providers: [
+    provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY)
+  ]
 
 })
 export class DatepickerComponent implements OnInit {
+
+
   MESSAGE = MESSAGE;
   size = input<string>('sm');
   label = input<string>('');
@@ -48,5 +50,4 @@ export class DatepickerComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

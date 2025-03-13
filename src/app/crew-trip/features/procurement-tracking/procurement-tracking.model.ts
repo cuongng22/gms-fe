@@ -3,7 +3,7 @@
 export const Authoritys = [
     { code: 'HDQT', value: 'HĐQT' },
     { code: 'TGD', value: 'TGĐ' },
-    { code: 'PTGD_GD_KTB', value: 'PTGĐ- GĐ' },
+    { code: 'PTGD_GD_KTB', value: 'PTGĐ - GĐ KTB' },
     { code: 'GD_TTDHKT', value: 'GĐ TTĐHKT' },
 ]
 
@@ -23,7 +23,7 @@ export const ContractPeriods = [
     { code: 'ZERO', value: 'Dưới 1 năm' },
     { code: 'ONE', value: 'Từ 1 - dưới 2 năm' },
     { code: 'TWO', value: 'Từ 2 - dưới 3 năm' },
-    { code: 'THREE', value: 'Từ 3 - dưới 5 năm' },
+    { code: 'THREE', value: 'Từ 3 - 5 năm' },
     { code: 'FIVE', value: 'Trên 5 năm' },
 ]
 // - Đơn vị tính: cho chọn 1 giá trị. Danh sách gồm: Đêm; Phòng; Buổi; Lượt; Lần; Khác

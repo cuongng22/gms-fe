@@ -1,29 +1,29 @@
 import { CommonModule } from '@angular/common';
 import {
-  Component,
-  DestroyRef,
-  inject,
-  Input,
-  OnChanges,
-  OnInit,
-  Optional,
-  Self,
-  SimpleChanges,
+	Component,
+	DestroyRef,
+	inject,
+	Input,
+	OnChanges,
+	OnInit,
+	Optional,
+	Self,
+	SimpleChanges,
 } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
-  ControlValueAccessor,
-  FormControl,
-  FormsModule,
-  NgControl,
-  ReactiveFormsModule,
+	ControlValueAccessor,
+	FormControl,
+	FormsModule,
+	NgControl,
+	ReactiveFormsModule,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
 import {
-  MatError,
-  MatFormFieldModule,
-  MatLabel,
+	MatError,
+	MatFormFieldModule,
+	MatLabel,
 } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelect, MatSelectModule } from '@angular/material/select';
@@ -33,33 +33,34 @@ import { NgxControlError } from 'ngxtension/control-error';
 import { debounceTime, tap } from 'rxjs';
 import { InputSizeComponent } from '../../input/input-size.component';
 import { MESSAGE } from '../../utils/constant';
+import { ClickOutside } from 'ngxtension/click-outside';
 
 @Component({
-  selector: 'app-select-multiple',
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatError,
-    MatLabel,
-    MatOption,
-    MatSelect,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatTooltipModule,
-    CommonModule,
-    InputSizeComponent,
-    MatSelectModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NgxControlError,
-    NgxTrimDirectiveModule,
-  ],
-  templateUrl: './select-multiple.component.html',
-  styleUrl: './select-multiple.component.scss',
+	selector: 'app-select-multiple',
+	standalone: true,
+	imports: [
+		FormsModule,
+		MatError,
+		MatLabel,
+		MatOption,
+		MatSelect,
+		ReactiveFormsModule,
+		MatButtonModule,
+		MatTooltipModule,
+		CommonModule,
+		InputSizeComponent,
+		MatSelectModule,
+		MatFormFieldModule,
+		MatInputModule,
+		NgxControlError,
+		NgxTrimDirectiveModule,
+		ClickOutside
+	],
+	templateUrl: './select-multiple.component.html',
+	styleUrl: './select-multiple.component.scss',
 })
 export class SelectMultipleComponent
-implements ControlValueAccessor, OnInit, OnChanges
-{
+	implements ControlValueAccessor, OnInit, OnChanges {
 	@Input() placeholder = '';
 	@Input() size = 'sm';
 	@Input() label = '';
@@ -78,123 +79,123 @@ implements ControlValueAccessor, OnInit, OnChanges
 	search = new FormControl('');
 
 	constructor(@Optional() @Self() public ngControl: NgControl) {
-	  if (this.ngControl) {
-	    this.ngControl.valueAccessor = this;
-	  }
+		if (this.ngControl) {
+			this.ngControl.valueAccessor = this;
+		}
 	}
 
 	@Input() set options(options: any[]) {
-	  this._options = options;
-	  this.selectOptionsRaw = [...this._options];
+		this._options = options;
+		this.selectOptionsRaw = [...this._options];
 	}
 
 	get options(): any[] {
-	  return this._options;
+		return this._options;
 	}
 
 	ngOnInit(): void {
-	  this.selectOptionsRaw = [...this.options];
-	  this.formControl.valueChanges
-	    .pipe(
-	      debounceTime(200),
-	      tap((value) => this.onChange(value)),
-	      takeUntilDestroyed(this.destroyRef),
-	    )
-	    .subscribe();
+		this.selectOptionsRaw = [...this.options];
+		this.formControl.valueChanges
+			.pipe(
+				debounceTime(200),
+				tap((value) => this.onChange(value)),
+				takeUntilDestroyed(this.destroyRef),
+			)
+			.subscribe();
 
-	  this.search.valueChanges.pipe(debounceTime(200)).subscribe((keySearch) => {
-	    if (!keySearch) {
-	      this.selectOptionsRaw = [...this.options];
-	    } else {
+		this.search.valueChanges.pipe(debounceTime(200)).subscribe((keySearch) => {
+			if (!keySearch) {
+				this.selectOptionsRaw = [...this.options];
+			} else {
 				const filteredOptions = this.options.filter((option: any) => {
 					const attr = this.attrDisplay ? option[this.attrDisplay] : option;
 					return attr.toLowerCase().includes(keySearch.toLowerCase());
 				});
 
-				this.selectOptionsRaw = filteredOptions.length > 0 ? filteredOptions : [...this.options];
+				this.selectOptionsRaw = filteredOptions.length > 0 ? filteredOptions : [];//[...this.options];
 
 			}
-	  });
+		});
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
-	  const ocSelectOptions = changes?.['selectOptions'];
-	  if (
-	    ocSelectOptions &&
+		const ocSelectOptions = changes?.['selectOptions'];
+		if (
+			ocSelectOptions &&
 			ocSelectOptions.currentValue &&
 			ocSelectOptions.currentValue.length > 0 &&
 			!ocSelectOptions?.firstChange
-	  ) {
-	    this.selectOptionsRaw = ocSelectOptions.currentValue;
-	  }
-	  if (changes['readonly']) {
-	    this.updateEnableState();
-	  }
+		) {
+			this.selectOptionsRaw = ocSelectOptions.currentValue;
+		}
+		if (changes['readonly']) {
+			this.updateEnableState();
+		}
 	}
 
 	get formControl(): FormControl {
-	  return (this.ngControl?.control as FormControl) ?? new FormControl();
+		return (this.ngControl?.control as FormControl) ?? new FormControl();
 	}
 
 	@Input() set disabled(value: boolean) {
-	  if (this.setDisabledState) {
-	    this.setDisabledState(value);
-	  }
+		if (this.setDisabledState) {
+			this.setDisabledState(value);
+		}
 	}
 
 	writeValue(obj: any): void {
-	  if (this.formControl?.value !== obj) {
-	    this.formControl.setValue(obj, { emitEvent: false });
-	  }
+		if (this.formControl?.value !== obj) {
+			this.formControl.setValue(obj, { emitEvent: false });
+		}
 	}
 
 	registerOnChange(fn: any): void {
-	  this.onChange = fn;
+		this.onChange = fn;
 	}
 
 	registerOnTouched(fn: any): void {
-	  this.onTouched = fn;
+		this.onTouched = fn;
 	}
 
 	setDisabledState?(isDisabled: boolean): void {
-	  if (isDisabled) {
-	    this.readonly = true;
-	  } else {
-	    this.readonly = false;
-	  }
+		if (isDisabled) {
+			this.readonly = true;
+		} else {
+			this.readonly = false;
+		}
 	}
 
-	onChange = (value: any) => {};
-	onTouched = () => {};
+	onChange = (value: any) => { };
+	onTouched = () => { };
 
 	getSelectTrigger(): string {
-	  const selected = this.formControl?.value || [];
-	  if (Array.isArray(selected) && selected && selected.length > 0) {
-	    return (
-	      selected
-	        .map((select: any) =>
-	          this.options.find(
-	            (option: any) =>
-	              (this.attrValue ? option[this.attrValue] : option) === select,
-	          ),
-	        )
-	        .filter((value: any) => !!value)
-	        .map((select: any) =>
-	          this.attrDisplay ? select[this.attrDisplay] : select,
-	        )
-	        .filter((name: any) => name)
-	        .join('; ') ?? this.placeholder
-	    );
-	  }
-	  return '';
+		const selected = this.formControl?.value || [];
+		if (Array.isArray(selected) && selected && selected.length > 0) {
+			return (
+				selected
+					.map((select: any) =>
+						this.options.find(
+							(option: any) =>
+								(this.attrValue ? option[this.attrValue] : option) === select,
+						),
+					)
+					.filter((value: any) => !!value)
+					.map((select: any) =>
+						this.attrDisplay ? select[this.attrDisplay] : select,
+					)
+					.filter((name: any) => name)
+					.join('; ') ?? this.placeholder
+			);
+		}
+		return '';
 	}
 
 	private updateEnableState() {
-	  if (!this.readonly) {
-	    this.formControl.enable({ emitEvent: false });
-	  } else {
-	    this.formControl.disable({ emitEvent: false });
-	  }
+		if (!this.readonly) {
+			this.formControl.enable({ emitEvent: false });
+		} else {
+			this.formControl.disable({ emitEvent: false });
+		}
 	}
 	allSelected = false;
 	toggleSelectAll() {
@@ -204,5 +205,11 @@ implements ControlValueAccessor, OnInit, OnChanges
 			: [];
 		this.formControl.setValue(selectedValues);
 
+	}
+
+	openedChange(isOpen: boolean) {
+		if (!isOpen) {
+			this.search.setValue('')
+		}
 	}
 }
