@@ -97,7 +97,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   override async ngOnInit() {
     this.formGroupFile.patchValue({partnerType: this.partnerType});
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.loadListFlightMarket(), this.search(),]).then(() => {
+    await Promise.all([this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}), this.search(),]).then(() => {
 
     });
     this.displayedColumns = ['stt', 'airportCode', 'partnerName', 'invoiceNumber', 'invoiceDate', 'invoiceReceiveDate', 'periodDate', 'totalAmount', 'action'];
@@ -248,7 +248,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
       })
     } else if (this.formGroupFile.getRawValue().ctype === 'DOMESTIC' && this.formGroupFile.getRawValue().partnerType === 'TRANSPORTATION') {
       this.formGroupFile.patchValue({
-        templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc nội.xlsx', templateNameLabel: 'report-transport-international-template.xlsx'
+        templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc nội.xlsx', templateNameLabel: 'report-transport-domestic-template.xlsx'
       })
     }
   }
