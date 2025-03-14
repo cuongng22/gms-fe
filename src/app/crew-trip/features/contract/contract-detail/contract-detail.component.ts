@@ -686,7 +686,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       supplierName: hotel ? hotel.hotelName : vehicle?.name || '',
       supplierPhone: hotel ? hotel.phone : vehicle?.phone || '',
       supplierEmail: hotel ? hotel.email : vehicle?.email || '',
-      carType: hotel ? '' : vehicle?.carType || '',
+      carType: vehicle ? vehicle?.carType : ''
     });
     this.formGroupDetail.getRawValue().priceUnitInfo?.forEach((s: any) => {
       s = {
