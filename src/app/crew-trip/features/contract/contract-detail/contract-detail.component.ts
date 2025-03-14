@@ -891,6 +891,7 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     body.documentsList = this.tblAttachedDocument.data;
     body.documentsList = body.documentsList.filter((s: any) => !s.isFromContract);
     body.phoneNumber = body.supplierPhone;
+    body.fullName = body.supplierName;
     // console.log(body, 'body');
     if (!this.isHotel() && this.isVehicle()) {
       delete body.priceUnitNotAllDay;
@@ -983,7 +984,6 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     }
 
     let current = this.listPartner.find((s: any) => s.code === dataInput);
-    console.log(current, 'currentcurrentcurrent')
     this.formGroupDetail.patchValue({
       partnerName: current?.name ?? '', partnerAddress: current?.address ?? '',
       supplierName: current?.fullName ?? '',
