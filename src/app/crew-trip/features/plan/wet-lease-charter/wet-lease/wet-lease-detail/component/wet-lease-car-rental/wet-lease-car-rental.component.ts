@@ -128,8 +128,8 @@ export class WetLeaseCarRentalComponent extends CommonComponent implements OnDes
     const result = (this.dataSource.data.map((item: any) => {
       const total = Number(this.calWithFormula(`item.${control}`, item));
       return total;
-    }).reduce((acc, value) => acc + value, 0)).toFixed(3);
-    this.totalPlan[control] = result;
+    }).reduce((acc, value) => acc + value, 0));
+    this.totalPlan[control] = Math.round(result);
   }
 
   calWithFormula(formula: string, item: any) {
@@ -137,7 +137,7 @@ export class WetLeaseCarRentalComponent extends CommonComponent implements OnDes
       'item', 'dataGeneral',
       `return ${formula};`
     );
-    return formulaFunction(item, this.dataGeneral());
+    return Math.round(formulaFunction(item, this.dataGeneral()));
   }
 
   calculationItem(control: string, item: any) {

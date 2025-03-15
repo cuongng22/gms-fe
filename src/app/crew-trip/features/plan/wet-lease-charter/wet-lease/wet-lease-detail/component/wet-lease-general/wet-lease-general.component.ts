@@ -19,6 +19,7 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import moment from 'moment';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { NgxControlError } from 'ngxtension/control-error';
+import { Subscription } from 'rxjs';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { HotelService } from 'src/app/crew-trip/core/services/hotel-service';
 import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
@@ -85,6 +86,11 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   isRequiredSupplierTransportation: boolean = false;
   isRequiredUnitPriceIncludingVatTransport: boolean = false;
 
+  endDateValueChanges: Subscription;
+  startDateValueChanges: Subscription;
+  exchangeRateValueChanges: Subscription;
+  rateVatValueChanges: Subscription;
+
   override formGroupDetail = this.formBuilder.group({
     airportCode: ['', [Validators.required]],
     startDate: ['', [Validators.required]],
@@ -110,6 +116,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
         this.getHotelByAirport(_data.airportCode);
         this.getCaRentalByAirport(_data.airportCode);
       }
+      this.controlUnsubscribe()
       this.formGroupDetail.patchValue(_data, { emitEvent: false });
       if (_data.priceHotelsList) {
         this.dataSourceHotel.data = [..._data.priceHotelsList];
@@ -118,6 +125,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
         this.dataSourceCarRental.data = [..._data.priceTransports];
       }
       console.log('this.dataSourceHotel.data: ', this.dataSourceHotel.data)
+      this.controlSubscribe()
     }
   }
 
@@ -130,7 +138,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
 
   override async ngOnInit() {
     await this.spinner.show();
-    this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL })
+    await this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL })
 
     if (this.formGroupDetail.controls.airportCode.value) {
       this.getHotelByAirport(this.formGroupDetail.controls.airportCode.value);
@@ -143,31 +151,44 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     ) {
       this.getExchangeRate();
     }
-    this.spinner.hide();
-    this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
-      this.getExchangeRate()
-      this.cleanData.emit()
-    });
-    this.formGroupDetail.controls.startDate.valueChanges.subscribe(value => {
-      this.getExchangeRate()
-      this.cleanData.emit()
-    });
-    this.formGroupDetail.controls.isHotel.valueChanges.subscribe(value => {
-      console.log('isHotel.valueChanges: ', value)
+
+    this.controlSubscribe();
+
+    this.formGroupDetail.controls.isHotel.valueChanges.subscribe(() => {
       this.dataSourceHotel.data = [];
     });
 
-    this.formGroupDetail.controls.isTransport.valueChanges.subscribe(value => {
+    this.formGroupDetail.controls.isTransport.valueChanges.subscribe(() => {
       this.dataSourceCarRental.data = [];
     });
 
-    this.formGroupDetail.controls.exchangeRate.valueChanges.subscribe(_value => {
+    this.spinner.hide()
+
+  }
+
+  controlSubscribe() {
+    this.endDateValueChanges = this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
+      this.getExchangeRate()
+      this.cleanData.emit()
+    });
+    this.startDateValueChanges = this.formGroupDetail.controls.startDate.valueChanges.subscribe(value => {
+      this.getExchangeRate()
+      this.cleanData.emit()
+    });
+
+    this.exchangeRateValueChanges = this.formGroupDetail.controls.exchangeRate.valueChanges.subscribe(_value => {
       this.wetLeaseService.exchangeRateChange(_value)
     })
     this.formGroupDetail.controls.rateVat.valueChanges.subscribe(_value => {
       this.wetLeaseService.rateVatChange(_value)
     })
+  }
 
+  controlUnsubscribe() {
+    this.endDateValueChanges?.unsubscribe();
+    this.startDateValueChanges?.unsubscribe();
+    this.exchangeRateValueChanges?.unsubscribe();
+    this.rateVatValueChanges?.unsubscribe();
   }
 
   submit(): void {
@@ -196,6 +217,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     this.dataSourceCarRental.data = [];
     this.getHotelByAirport(data.value);
     this.getCaRentalByAirport(data.value);
+    debugger
     this.getExchangeRate();
     this.airportCodeChange.emit(data.value);
   }

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, inject, input, output, AfterViewChecked } from '@angular/core';
+import { Component, effect, inject, input, output, AfterViewChecked, OnDestroy } from '@angular/core';
 import { AbstractControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -18,6 +18,7 @@ import moment from 'moment';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { NgxControlError } from 'ngxtension/control-error';
 import { ifValidator } from 'ngxtension/if-validator';
+import { Subscription } from 'rxjs';
 import { BaseService } from 'src/app/crew-trip/core/services/base-service';
 import { CharterService } from 'src/app/crew-trip/core/services/charter.service';
 import { FlightMarketStatusEnum } from 'src/app/crew-trip/features/category/flight-market/flight-market.model';
@@ -47,7 +48,7 @@ import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.c
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
   ]
 })
-export class CharterGeneralComponent extends CommonComponent implements AfterViewChecked {
+export class CharterGeneralComponent extends CommonComponent implements AfterViewChecked, OnDestroy {
   override baseService: CharterService = inject(CharterService);
   airportCodeChange = output<string>();
   formValueChange = output<any>();
@@ -62,6 +63,11 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
   isHotel = false;
   isECI = false;
   isLCO = false;
+
+  endDateValueChanges: Subscription;
+  startDateValueChanges: Subscription;
+  exchangeRateValueChanges: Subscription;
+  rateVatValueChanges: Subscription;
 
   override formGroupDetail = this.formBuilder.group({
     airportCode: ['', [Validators.required]],
@@ -97,7 +103,9 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
       if (_data.id) {
         this.formGroupDetail.controls.airportCode.disable();
       }
+      this.controlUnsubscribe();
       this.formGroupDetail.patchValue(_data, { emitEvent: false });
+      this.controlSubscribe();
       if (_data.priceTransports) {
         this.dataSource.data = [..._data.priceTransports];
       }
@@ -105,17 +113,10 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
   }
 
 
-  override ngOnInit(): void {
-    this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL })
-    this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
-      this.getExchangeRate();
-      this.cleanData.emit()
-    });
+  override async ngOnInit() {
+    await this.spinner.show()
+    await this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL })
 
-    this.formGroupDetail.controls.startDate.valueChanges.subscribe(value => {
-      this.getExchangeRate()
-      this.cleanData.emit()
-    });
 
     this.formGroupDetail.controls.isHotel.valueChanges.subscribe(value => {
       this.isHotel = !!value;
@@ -146,16 +147,38 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
     });
 
 
-    this.formGroupDetail.controls.exchangeRate.valueChanges.subscribe(_value => {
-      this.baseService.exchangeRateChange(_value)
-    })
-    this.formGroupDetail.controls.rateVat.valueChanges.subscribe(_value => {
-      this.baseService.rateVatChange(_value)
-    })
+
     this.formGroupDetail.controls.priceHotel.valueChanges.subscribe(_value => {
-      console.log('priceHotel.valueChanges: ', _value)
       this.baseService.hotelChange(_value)
     })
+    this.spinner.hide()
+  }
+
+  controlSubscribe() {
+    this.endDateValueChanges = this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
+      this.getExchangeRate();
+      this.cleanData.emit()
+    });
+
+    this.startDateValueChanges = this.formGroupDetail.controls.startDate.valueChanges.subscribe(value => {
+      this.getExchangeRate()
+      this.cleanData.emit()
+    });
+
+    this.exchangeRateValueChanges = this.formGroupDetail.controls.exchangeRate.valueChanges.subscribe(_value => {
+      this.baseService.exchangeRateChange(_value)
+    });
+
+    this.rateVatValueChanges = this.formGroupDetail.controls.rateVat.valueChanges.subscribe(_value => {
+      this.baseService.rateVatChange(_value)
+    })
+  }
+
+  controlUnsubscribe() {
+    this.endDateValueChanges?.unsubscribe();
+    this.startDateValueChanges?.unsubscribe();
+    this.exchangeRateValueChanges?.unsubscribe();
+    this.rateVatValueChanges?.unsubscribe();
   }
 
   ngAfterViewChecked(): void {
@@ -255,6 +278,11 @@ export class CharterGeneralComponent extends CommonComponent implements AfterVie
         this.cleanData.emit()
       }
     }
+  }
+
+
+  ngOnDestroy(): void {
+    this.controlUnsubscribe();
   }
 
 }

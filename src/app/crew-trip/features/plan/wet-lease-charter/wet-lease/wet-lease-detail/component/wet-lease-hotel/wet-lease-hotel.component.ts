@@ -215,11 +215,11 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
       if (_formula) {
         const _hotelItem = element.hotelItem[hotelCode];
         const result = this.calWithFormula(_formula, _hotelItem, this.dataGeneral());
-        this.totalPlannedBudget[control] = (this.totalPlannedBudget[control] ?? 0) + Number(result);
+        this.totalPlannedBudget[control] = Math.round((this.totalPlannedBudget[control] ?? 0) + Number(result));
       }
     } else if (['ft2TotalExcVAT', 'ft2TotalIncVAT', 'ft2TotalCountForeign'].includes(control)) {
       if (_formula) {
-        this.totalPlannedBudget[control] = (this.totalPlannedBudget[control] ?? 0) + Number(this.calWithFormula(_formula, element, this.dataGeneral()));
+        this.totalPlannedBudget[control] = Math.round((this.totalPlannedBudget[control] ?? 0) + Number(this.calWithFormula(_formula, element, this.dataGeneral())));
       }
     } else {
       this.totalPlannedBudget[control] = null
@@ -232,7 +232,7 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
       'item', 'dataGeneral',
       `return ${formula};`
     );
-    return formulaFunction(item, dataGeneral);
+    return Math.round(formulaFunction(item, dataGeneral));
   }
 
   // tính toán tổng số phòng
@@ -249,7 +249,7 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
       return Number(_hotelValue.singleRoomPrice ?? 0) * Number(_hotelValue.totalSingleRoom ?? 0) + Number(_hotelValue.twinRoomPrice ?? 0) * Number(_hotelValue.totalTwinRoom ?? 0)
     }).reduce((acc, value) => acc + value, 0)
     if (this.category() === CategoryEnum.INTERNATIONAL) {
-      element.totalCountForeign = _totalForex
+      element.totalCountForeign = this.Math.round(_totalForex)
     } else {
       element.totalCountForeign = 0;
     }
@@ -260,8 +260,8 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
   calTotalAmount(element: any) {
     // element.totalExcVAT = _totalCountForeign * (this.dataGeneral().exchangeRate ?? 1);
     // element.totalIncVAT = (element.totalExcVAT) + (element.totalExcVAT * (this.dataGeneral().rateVat ?? 0) / 100)
-    element.totalIncVAT = this.calTotalCountForeign(element) * (this.dataGeneral().exchangeRate ?? 1);
-    element.totalExcVAT = element.totalIncVAT / (1 + (this.dataGeneral().rateVat ?? 0) / 100)
+    element.totalIncVAT = Math.round(this.calTotalCountForeign(element) * (this.dataGeneral().exchangeRate ?? 1));
+    element.totalExcVAT = Math.round(element.totalIncVAT / (1 + (this.dataGeneral().rateVat ?? 0) / 100))
   }
 
 
