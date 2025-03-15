@@ -42,7 +42,7 @@ export class WetLeaseService extends BaseService {
     this.roomPriceSubject.next(data);
   }
 
-  unitPriceTransportationChange(data:any){
+  unitPriceTransportationChange(data: any) {
     this.unitPriceTransportationSubject.next(data);
   }
 }

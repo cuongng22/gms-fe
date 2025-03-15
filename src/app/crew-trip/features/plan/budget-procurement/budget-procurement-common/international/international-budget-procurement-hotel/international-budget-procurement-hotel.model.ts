@@ -28,7 +28,7 @@ export const formula: any = {
   },
   //Số phòng đơn early-checkin dự kiến
   singleRoomEarly: {
-    formula: '1 * ctz(data.totalFlightEarlyCheckin) * ctz(data.pilotNumber) + (ctz(data.attendantNumber) % 2 === 0 ? 0 : ctz(data.totalFlightByAircraft))'
+    formula: '1 * ctz(data.totalFlightEarlyCheckin) * ctz(data.pilotNumber) + (ctz(data.attendantNumber) % 2 === 0 ? 0 : ctz(data.totalFlightEarlyCheckin))'
   },
   //Số phòng đôi early-checkin dự kiến
   doubleRoomEarly: {
@@ -40,7 +40,7 @@ export const formula: any = {
   },
   //Số phòng đơn late checkout dự kiến
   singleRoomLate: {
-    formula: '1 * ctz(data.totalFlightLateCheckout) * ctz(data.pilotNumber) + (ctz(data.attendantNumber) % 2 === 0 ? 0 : ctz(data.totalFlightByAircraft))'
+    formula: '1 * ctz(data.totalFlightLateCheckout) * ctz(data.pilotNumber) + (ctz(data.attendantNumber) % 2 === 0 ? 0 : ctz(data.totalFlightLateCheckout))'
   },
   //Số phòng đôi late checkout dự kiến
   doubleRoomLate: {
