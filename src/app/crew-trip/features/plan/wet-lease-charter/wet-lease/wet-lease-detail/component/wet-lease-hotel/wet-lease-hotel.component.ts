@@ -128,6 +128,7 @@ export class WetLeaseHotelComponent extends CommonComponent implements OnDestroy
 
     this.roomPriceSubscription = this.baseService.roomPrice$.subscribe(data => {
       if (data) {
+        this.totalPlannedBudget = {};
         this.dataSource.data.forEach(element => {
           Object.entries<any>(element.hotelItem).forEach(([_hotelCode, _hotelValue]) => {
             if (data.hotelCode === _hotelCode) {
