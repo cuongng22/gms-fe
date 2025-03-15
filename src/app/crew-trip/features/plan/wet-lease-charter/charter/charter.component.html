@@ -106,6 +106,9 @@
           <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalSingleRoom | number}}
           </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+            {{ (dataSource.data | dataCalculateTotal: 'totalSingleRoom') | number }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="totalTwinRoom">
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@twinRoom">
@@ -113,6 +116,9 @@
           </th>
           <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalTwinRoom | number}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+            {{ (dataSource.data | dataCalculateTotal: 'totalTwinRoom') | number }}
           </td>
         </ng-container>
         <!-- Tổng số phòng EIC -->
@@ -128,6 +134,9 @@
           <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalSingleEICRoom | number}}
           </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+            {{ (dataSource.data | dataCalculateTotal: 'totalSingleEICRoom') | number }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="totalTwinEICRoom">
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@twinRoom">
@@ -135,6 +144,9 @@
           </th>
           <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalTwinEICRoom | number}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+            {{ (dataSource.data | dataCalculateTotal: 'totalTwinEICRoom') | number }}
           </td>
         </ng-container>
         <!-- Tổng số phòng LCO -->
@@ -150,6 +162,9 @@
           <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalSingleLCORoom | number}}
           </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+            {{ (dataSource.data | dataCalculateTotal: 'totalSingleLCORoom') | number }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="totalTwinLCORoom">
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@twinRoom">
@@ -157,6 +172,9 @@
           </th>
           <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalTwinLCORoom | number}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+            {{ (dataSource.data | dataCalculateTotal: 'totalTwinLCORoom') | number }}
           </td>
         </ng-container>
 
@@ -168,6 +186,9 @@
           <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalNumberOfTrip | number}}
           </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+            {{ (dataSource.data | dataCalculateTotal: 'totalTwinLCORoom') | number }}
+          </td>
         </ng-container>
 
         <!-- Tổng tiền ngoại tệ -->
@@ -178,12 +199,15 @@
           <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalForex | number}}
           </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+            {{ (dataSource.data | dataCalculateTotal: 'totalForex') | number }}
+          </td>
         </ng-container>
 
         <!-- Tổng tiền VND -->
         <ng-container matColumnDef="totalAmount">
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@totalAmountVND" [colSpan]="2">
-            Total amount <br/> (VND)
+            Total amount <br /> (VND)
           </th>
         </ng-container>
         <ng-container matColumnDef="totalExcVAT">
@@ -193,6 +217,9 @@
           <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalExcVAT | number}}
           </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+            {{ (dataSource.data | dataCalculateTotal: 'totalExcVAT') | number }}
+          </td>
         </ng-container>
         <ng-container matColumnDef="totalIncVAT">
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@includingVAT">
@@ -200,6 +227,9 @@
           </th>
           <td mat-cell *matCellDef="let element;" class="text-right">
             {{element.totalIncVAT | number}}
+          </td>
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
+            {{ (dataSource.data | dataCalculateTotal: 'totalIncVAT') | number }}
           </td>
         </ng-container>
         <ng-container matColumnDef="action">
@@ -233,11 +263,20 @@
               }
             </div>
           </td>
+          <td mat-footer-cell *matFooterCellDef class="text-left fw-bold">
+            
+          </td>
         </ng-container>
+        <ng-container matColumnDef="total">
+          <td mat-footer-cell *matFooterCellDef class="text-left fw-bold" i18n="@@total" [colSpan]="3">
+            Total
+          </td>
+        </ng-container>
+
         <tr mat-header-row *matHeaderRowDef="headerRowDef1"></tr>
         <tr mat-header-row *matHeaderRowDef="headerRowDef2"></tr>
         <tr mat-row *matRowDef="let row; columns: rowDef;"></tr>
-        <!-- <tr mat-footer-row *matFooterRowDef="footerRowDef" [hidden]="dataSource.data.length === 0"></tr> -->
+        <tr mat-footer-row *matFooterRowDef="footerRowDef" [hidden]="dataSource.data.length === 0"></tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center" colspan="999999">No data!</td>
         </tr>
