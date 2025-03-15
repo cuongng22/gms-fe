@@ -135,7 +135,7 @@ export class CharterHotelComponent extends CommonComponent implements OnDestroy 
       'item', 'dataGeneral',
       `return ${formula};`
     );
-    return formulaFunction(item, dataGeneral);
+    return this.Math.round(formulaFunction(item, dataGeneral));
   }
 
   // tính tiền ngoại tệ
@@ -144,7 +144,7 @@ export class CharterHotelComponent extends CommonComponent implements OnDestroy 
       + Number(element.priceRoomECI ?? 0) * Number(element.totalECIRoom ?? 0)
       + Number(element.priceRoomLCO ?? 0) * Number(element.totalLCORoom ?? 0);
     if (this.category() === CategoryEnum.INTERNATIONAL) {
-      element.totalForex = _totalForex;
+      element.totalForex = Math.round(_totalForex);
     } else {
       element.totalForex = 0;
     }
@@ -153,8 +153,8 @@ export class CharterHotelComponent extends CommonComponent implements OnDestroy 
 
   // tính thành tiền chưa vat và có vat					
   calTotalAmount(element: any) {
-    element.totalIncVAT = this.calTotalCountForeign(element) * (element.exchangeRate ?? 1);
-    element.totalExcVAT = element.totalIncVAT / (1 + (this.dataGeneral().rateVat ?? 0) / 100)
+    element.totalIncVAT = this.Math.round(this.calTotalCountForeign(element) * (element.exchangeRate ?? 1));
+    element.totalExcVAT = this.Math.round(element.totalIncVAT / (1 + (this.dataGeneral().rateVat ?? 0) / 100))
 
   }
 

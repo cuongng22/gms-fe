@@ -215,10 +215,13 @@ export class CharterDetailComponent extends CommonComponent {
   }
 
   async saveAndClose() {
-    const res = await this.save();
-    if (res.data) {
-      this.router.createUrlTree(['/plan/est-plan/wet-lease-charter'], { fragment: 'charter' });
+    try {
+      await this.save();
+      this.router.navigate(['/plan/est-plan/wet-lease-charter'], { fragment: 'charter' });
+    } catch (error: any) {
+      console.error(error)
     }
+
   }
 
   override async save(): Promise<any> {
@@ -274,6 +277,9 @@ export class CharterDetailComponent extends CommonComponent {
         update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS,
       );
       return res;
+    } catch (error: any) {
+      console.error(error)
+      throw error;
     } finally {
       this.spinner.hide()
     }

@@ -78,7 +78,8 @@ export class WetLeaseDetailComponent extends CommonComponent {
       await this.spinner.show();
       if (id) {
         let resDetail = await this.baseService.detail(this.id());
-        this.formGroupDetail.patchValue({ ...resDetail.data })
+        this.formGroupDetail.patchValue({ ...resDetail.data });
+
         this.airportCodeChange(resDetail.data.airportCode)
         this.dataGeneral = { ...resDetail.data, id: this.id() };
         this.wetLeaseGeneral.setData(this.dataGeneral)
@@ -231,10 +232,14 @@ export class WetLeaseDetailComponent extends CommonComponent {
   }
 
   async saveAndClose() {
-    const res = await this.save();
-    if (res.data) {
-      this.router.createUrlTree(['/plan/est-plan/wet-lease-charter#wet-lease'], { fragment: 'wet-lease' })
+    try {
+      await this.save();
+      debugger
+      this.router.navigate(['/plan/est-plan/wet-lease-charter'], { fragment: 'wet-lease' })
+    } catch (error) {
+      console.error(error)
     }
+
   }
 
   override async save(): Promise<any> {
@@ -291,6 +296,9 @@ export class WetLeaseDetailComponent extends CommonComponent {
         update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS,
       );
       return res;
+    } catch (error: any) {
+      console.error(error)
+      throw error;
     } finally {
       this.spinner.hide()
     }
