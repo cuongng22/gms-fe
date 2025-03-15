@@ -715,7 +715,6 @@
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab3')">
     <mat-expansion-panel-header i18n>
-      <div (click)="$event.stopPropagation();" class="title-no-event">3. Attached Document Information</div>
       @if(isHD()){
       <div (click)="$event.stopPropagation();" class="title-no-event">3. Attached Document Information (Data extracted from the
         CMS)
