@@ -56,7 +56,7 @@ export class CharterComponent extends CommonComponent {
   rowDef = ['airportCode', 'startDate', 'endDate', 'totalSingleRoom', 'totalTwinRoom', 'totalSingleEICRoom',
     'totalTwinEICRoom', 'totalSingleLCORoom', 'totalTwinLCORoom', 'totalNumberOfTrip', 'totalForex', 'totalExcVAT', 'totalIncVAT', 'action']
 
-  footerRowDef = ['totalSingleRoom', 'totalTwinRoom', 'totalSingleEICRoom', 'totalTwinEICRoom', 'totalSingleLCORoom',
+  footerRowDef = ['total','totalSingleRoom', 'totalTwinRoom', 'totalSingleEICRoom', 'totalTwinEICRoom', 'totalSingleLCORoom',
     'totalTwinLCORoom', 'totalNumberOfTrip', 'totalForex', 'totalExcVAT', 'totalIncVAT', 'action']
 
 
