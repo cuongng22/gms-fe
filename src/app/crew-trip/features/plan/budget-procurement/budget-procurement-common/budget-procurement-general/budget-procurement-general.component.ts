@@ -110,7 +110,9 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     lateCheckoutContractFlag: new FormControl(false),
     haveContract: new FormControl(false),
     wetLeaseFlag: new FormControl(false),
-    currencyCode: new FormControl('', [Validators.required])
+    currencyCode: new FormControl('', [Validators.required]),
+    crewTransportFeeFlag: new FormControl<boolean>(false)
+
 
   });
   _procurementPlanFlag: boolean = false;

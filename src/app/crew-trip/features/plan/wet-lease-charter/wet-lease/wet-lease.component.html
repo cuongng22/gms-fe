@@ -119,13 +119,13 @@
           </td>
           }
           @if (col.name === 'airportCode') {
-          <td mat-footer-cell *matFooterCellDef class="text-center fw-bold" [colSpan]="3">Total</td>
+          <td mat-footer-cell *matFooterCellDef class="text-left fw-bold" [colSpan]="3">Total</td>
           } @else if (['totalNumberOfTrip', 'totalForex'].includes(col.name)) {
-          <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
             {{ (dataSource.data | dataCalculateTotal: col.name) | number }}
           </td>
           } @else {
-          <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
           </td>
           }
         </ng-container>
@@ -143,7 +143,7 @@
           </td>
           }
           @if (['totalSingleRoom', 'totalTwinRoom', 'totalIncVAT', 'totalExcVAT'].includes(col.name)) {
-          <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
+          <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
             {{ (dataSource.data | dataCalculateTotal: col.name) | number }}
           </td>
           }

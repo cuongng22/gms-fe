@@ -19,6 +19,7 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
     //init
     let initValue = this.control.value;
     if (initValue && !isNaN(Number(initValue))) {
+      debugger
       inputElement.value = this.formatNumber(initValue);
     } else if (isNaN(Number(initValue))) {
       this.control.control?.setErrors({invalidNumber: true});

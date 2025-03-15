@@ -18,7 +18,6 @@ import { WetLeaseGeneralComponent } from './component/wet-lease-general/wet-leas
 import { WetLeaseHotelComponent } from './component/wet-lease-hotel/wet-lease-hotel.component';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { CategoryEnum } from '../../../budget-procurement/budget-procurement.model';
-import { dataExample } from './wet-lease-detail.model';
 import { WetLeaseCarRentalComponent } from './component/wet-lease-car-rental/wet-lease-car-rental.component';
 import moment from 'moment';
 import { WetLeaseService } from 'src/app/crew-trip/core/services/wet-lease.service';
