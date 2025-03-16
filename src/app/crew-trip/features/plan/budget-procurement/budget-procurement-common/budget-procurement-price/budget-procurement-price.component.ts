@@ -40,7 +40,6 @@ export class BudgetProcurementPriceComponent implements OnInit {
 
   constructor() {
     effect(() => {
-      console.log('budget-procurement-price data: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
       } else {
