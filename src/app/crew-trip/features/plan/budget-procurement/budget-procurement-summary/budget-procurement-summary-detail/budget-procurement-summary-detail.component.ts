@@ -204,6 +204,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       this.dataDetail = {
         ...response.data,
         ...this.budgetProcurementGeneral.formGroupDetail.getRawValue(),
+        crewTransportFeeFlag: response.data?.crewTransportFeeFlag,
         planFlightRates: response.data.planFlightRates ?? [],
         planFlightPeriods: response.data.planFlightPeriods ?? [],
         planOverightRates: response.data.planOverightRates ?? [],
@@ -534,6 +535,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     this.budgetProcurementGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
     this.budgetProcurementGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
     this.budgetProcurementGeneral.inputPrice = this.dataDetail?.inputPrice;
+    this.budgetProcurementGeneral.formGroupDetail.controls.crewTransportFeeFlag.setValue(this.dataDetail?.crewTransportFeeFlag);
     this.budgetProcurementGeneral.cdRef.detectChanges()
 
     this.planFlightRatesData = [...this.dataDetail?.planFlightRates ?? []];

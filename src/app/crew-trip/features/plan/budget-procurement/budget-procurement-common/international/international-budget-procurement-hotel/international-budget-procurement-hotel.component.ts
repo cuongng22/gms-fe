@@ -112,6 +112,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       this.calculateAirCraftLabel(item, index);
       this.calculateData(item, index);
     });
+    console.log('after calculate data: ', this.dataSource.data)
     this.calculateTotal()
   };
 
@@ -150,6 +151,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     const isChangeRateForSingle = checkChange(this.generalData.rateForSingle, data.rateForSingle);
     if (isChangeRateForSingle) {
       this.generalData = { ...data };
+      console.log('generalData in hotel: ', this.generalData)
       this.dataSource.data.forEach((item: any, index) => {
         this.calculateData(item, index);
       });
