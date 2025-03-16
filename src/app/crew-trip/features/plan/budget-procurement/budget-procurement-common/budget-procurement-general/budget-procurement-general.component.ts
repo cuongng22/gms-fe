@@ -111,7 +111,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     haveContract: new FormControl(false),
     wetLeaseFlag: new FormControl(false),
     currencyCode: new FormControl('', [Validators.required]),
-    crewTransportFeeFlag: new FormControl<boolean>(false)
+    crewTransportFeeFlag: new FormControl(false)
 
 
   });
@@ -129,6 +129,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   }
 
   setData(dataDetail: any) {
+    debugger
     this.controlUnsubscribe()
     this.formGroupDetail.patchValue(dataDetail);
     this.procurementPlanFlag = !!dataDetail.procurementPlanFlag;
