@@ -217,8 +217,8 @@
                         }
 
                     </mat-expansion-panel>
-                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.haveContract){
-                    <mat-expansion-panel [expanded]="this.dataDetail?.haveContract" #panelBudgetPlanWetLeaseState>
+                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.wetLeaseFlag){
+                    <mat-expansion-panel [expanded]="this.dataDetail?.wetLeaseFlag" #panelBudgetPlanWetLeaseState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">3.3
