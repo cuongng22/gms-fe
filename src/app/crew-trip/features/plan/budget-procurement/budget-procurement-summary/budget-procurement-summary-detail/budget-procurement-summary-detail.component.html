@@ -39,7 +39,7 @@
         </mat-card-title>
         <mat-card-subtitle>
             <div (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'">
-                <button type="button" mat-button class="close-btn  min-with-100 mlr-5" (click)="closeEvent()">
+                <button type="button" mat-button class="close-btn  min-with-100 mlr-5" (click)="toggleDialogClose()">
                     <i class="material-symbols-outlined">
                         close
                     </i>
@@ -193,14 +193,12 @@
                                 </h6>
                             </mat-panel-title>
                         </mat-expansion-panel-header>
-                        @if((domesticBudgetCarRentalData &&
-                        (domesticBudgetCarRentalData?.planCarentals??[]).length>0) ||
+                        @if((domesticBudgetCarRentalData && domesticBudgetCarRentalData.length>0) ||
                         (internationalBudgetCarRentalData?.planCarentals &&
                         internationalBudgetCarRentalData?.planCarentals.length > 0)){
                         <div>
                             @if(category() === CategoryEnum.DOMESTIC){
-                            @if (domesticBudgetCarRentalData &&
-                            (domesticBudgetCarRentalData?.planCarentals??[]).length>0) {
+                            @if (domesticBudgetCarRentalData && domesticBudgetCarRentalData.length>0) {
                             <app-domestic-budget-procurement-car-rental #domesticBudgetCarRental [yearPlan]="yearPlan()"
                                 [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
                                 [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
@@ -208,7 +206,7 @@
                             }
                             }@else {
                             @if (internationalBudgetCarRentalData?.planCarentals &&
-                            (internationalBudgetCarRentalData?.planCarentals??[]).length > 0) {
+                            internationalBudgetCarRentalData?.planCarentals.length > 0) {
                             <app-international-budget-procurement-car-rental #internationalBudgetCarRental
                                 [disabled]="checkStatusCompelted()" [data]="internationalBudgetCarRentalData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
@@ -219,8 +217,8 @@
                         }
 
                     </mat-expansion-panel>
-                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.haveContractWetlease){
-                    <mat-expansion-panel [expanded]="this.dataDetail?.haveContractWetlease" #panelBudgetPlanWetLeaseState>
+                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.haveContract){
+                    <mat-expansion-panel [expanded]="this.dataDetail?.haveContract" #panelBudgetPlanWetLeaseState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">3.3
@@ -311,8 +309,7 @@
                         </div>
                     </mat-expansion-panel>
                     @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.wetLeaseFlag){
-                    <mat-expansion-panel [expanded]="this.dataDetail?.wetLeaseFlag"
-                        #panelProcurementPlanWetLeaseState>
+                    <mat-expansion-panel [expanded]="this.dataDetail?.wetLeaseFlag" #panelProcurementPlanWetLeaseState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">4.3
