@@ -79,8 +79,6 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   }
   ngAfterViewChecked(): void {
     this.cdRef.detectChanges();
-    // this.formGroupDetail.controls.currencyCode.setValidators(ifValidator(() => this.checkRequiredCurrency(), Validators.required))
-    // this.formGroupDetail.controls.currencyCode.updateValueAndValidity()
 
   }
 
@@ -129,7 +127,6 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   }
 
   setData(dataDetail: any) {
-    debugger
     this.controlUnsubscribe()
     this.formGroupDetail.patchValue(dataDetail);
     this.procurementPlanFlag = !!dataDetail.procurementPlanFlag;
@@ -142,7 +139,6 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     this.unitPriceSingleHotel = dataDetail?.unitPriceSingleHotel;
     this.inputPrice = dataDetail?.inputPrice;
     this.setVerionRate(dataDetail?.planBudgetProcurement.versionRate);
-    // this.currencyCodeChange({ value: dataDetail?.currencyCode });
     this.controlSubscribe();
   }
 
@@ -288,7 +284,6 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     return this._unitPriceDoubleHotel;
   }
   set unitPriceDoubleHotel(value: string) {
-    console.log('===> set unitPriceDoubleHotel: ', value)
     let result: string[] = [];
     if (value) {
       const entries = Object.entries(JSON.parse(value));
@@ -304,7 +299,6 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     return this._unitPriceSingleHotel;
   }
   set unitPriceSingleHotel(value: string) {
-    console.log('===> set unitPriceSingleHotel: ', value)
     let result: string[] = [];
     if (value) {
       const entries = Object.entries(JSON.parse(value));
