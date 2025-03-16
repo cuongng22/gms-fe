@@ -1,7 +1,7 @@
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
-import {MatError, MatFormFieldModule, MatHint, MatLabel, MatSuffix} from "@angular/material/form-field";
-import {MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader} from "@angular/material/expansion";
+import {MatError, MatFormField, MatFormFieldModule, MatHint, MatLabel, MatPrefix, MatSuffix} from "@angular/material/form-field";
+import {MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle} from "@angular/material/expansion";
 import {MatButtonModule} from "@angular/material/button";
 import {MatCardModule} from "@angular/material/card";
 import {MatCheckboxModule} from "@angular/material/checkbox";
@@ -11,7 +11,7 @@ import {MatOption, MatSelect} from "@angular/material/select";
 import {MatPaginatorModule} from "@angular/material/paginator";
 import {MatRadioModule} from "@angular/material/radio";
 import {MatTableModule} from "@angular/material/table";
-import {CommonModule, NgClass, NgForOf, NgIf} from "@angular/common";
+import {AsyncPipe, CommonModule, DecimalPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet, TitleCasePipe} from "@angular/common";
 import {NgxEditorModule} from "ngx-editor";
 import {MatDatepicker, MatDatepickerModule, MatDatepickerToggle} from "@angular/material/datepicker";
 import {MatNativeDateModule} from "@angular/material/core";
@@ -27,6 +27,19 @@ import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/conf
 import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/thousand-separator.directive";
 import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
 import {SelectionSuggest2Component} from "src/app/crew-trip/shared/component/selection-suggest-2/selection-suggest-2.component";
+import {DataTransformPipe} from "src/app/crew-trip/shared/data-transform.pipe";
+import {MatTab, MatTabGroup} from "@angular/material/tabs";
+import {ClickOutside} from "ngxtension/click-outside";
+import {DigitOnlyModule} from "@uiowa/digit-only";
+import {RouterLink} from "@angular/router";
+import {NgxMatTimepickerFieldComponent} from "ngx-mat-timepicker";
+import {CdkTextareaAutosize} from "@angular/cdk/text-field";
+import {DatepickerYearMonthComponent} from "src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component";
+import {SeparatorDirective} from "src/app/crew-trip/shared/directive/separator.directive";
+import {MatGridList, MatGridTile} from "@angular/material/grid-list";
+import {CdkVirtualScrollViewport} from "@angular/cdk/scrolling";
+import {ConfirmDeleteDialog} from "src/app/crew-trip/shared/dialog/confirm-delete-dialog";
+import {NgxUpperCaseDirectiveModule} from "ngx-upper-case-directive";
 
 export const BaseImport = [
   FormsModule,
@@ -73,4 +86,26 @@ export const BaseImport = [
   ThousandsSeparatorDirective,
   ControlErrorComponent,
   SelectionSuggest2Component,
+  DataTransformPipe,
+  MatExpansionPanelTitle,
+  MatFormField,
+  MatPrefix,
+  MatTab,
+  MatTabGroup,
+  RouterLink,
+  TitleCasePipe,
+  ClickOutside,
+  NgxMatTimepickerFieldComponent,
+  DigitOnlyModule,
+  DecimalPipe,
+  CdkTextareaAutosize,
+  AsyncPipe,
+  DatepickerYearMonthComponent,
+  SeparatorDirective,
+  MatGridTile,
+  MatGridList,
+  NgTemplateOutlet,
+  CdkVirtualScrollViewport,
+  ConfirmDeleteDialog,
+  NgxUpperCaseDirectiveModule,
 ];

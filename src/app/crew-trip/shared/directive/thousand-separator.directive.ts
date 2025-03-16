@@ -19,7 +19,6 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
     //init
     let initValue = this.control.value;
     if (initValue && !isNaN(Number(initValue))) {
-      debugger
       inputElement.value = this.formatNumber(initValue);
     } else if (isNaN(Number(initValue))) {
       this.control.control?.setErrors({invalidNumber: true});
@@ -44,6 +43,7 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
   @HostListener('focus', ['$event'])
   onInput(event: any) {
     const inputElement = this.el.nativeElement;
+    console.log(inputElement,213123)
     const value = inputElement.value.replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
     this.control.control?.setValue(value);
     if (value && !isNaN(Number(value))) {
