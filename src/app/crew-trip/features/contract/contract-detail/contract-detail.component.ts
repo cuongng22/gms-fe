@@ -317,8 +317,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
           row.patchValue({
             originalAmount3: value * row.getRawValue().taxRate / 100, priceWithTax: +value + +(value * row.getRawValue().taxRate / 100)
           });
-          row.controls['originalAmount3'].touched;
-          row.controls['priceWithTax'].touched;
+          // row.controls['originalAmount3'].touched;
+          // row.controls['priceWithTax'].touched;
         }
       });
       row.controls['taxRate'].valueChanges.subscribe((value) => {
@@ -327,8 +327,8 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
             originalAmount3: value * row.getRawValue().priceNoTax / 100,
             priceWithTax: +row.getRawValue().priceNoTax + +(value * row.getRawValue().priceNoTax / 100)
           });
-          row.controls['originalAmount3'].touched;
-          row.controls['priceWithTax'].touched;
+          // row.controls['originalAmount3'].touched;
+          // row.controls['priceWithTax'].touched;
         }
       });
 
