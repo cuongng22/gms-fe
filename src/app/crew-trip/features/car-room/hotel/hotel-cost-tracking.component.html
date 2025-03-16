@@ -4,7 +4,7 @@
       <div class="row">
         <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" sizeInput="sm">
           <app-selection-suggest i18n-label="@@airportCodes" label="Market code" [options]="markets"
-                                 formControlName="marketCode" size="sm" />
+                                 formControlName="marketCode" size="sm"/>
         </div>
         <div class="col-md-3 col-xs-3 col-sm-3 col-lg-3" sizeInput="sm">
           <mat-form-field appearance="outline" class="w-100">
@@ -284,14 +284,14 @@
         </ng-container>
         <ng-container matColumnDef="breakfastFc">
           <th mat-header-cell *matHeaderCellDef class="text-center">FC</th>
-          <td mat-cell *matCellDef="let element"> {{ element.fcOnTime }}</td>
+          <td mat-cell *matCellDef="let element"> {{ element.fcBreakfast }}</td>
           <td mat-footer-cell *matFooterCellDef>
             {{ tableData | dataCalculateTotal: 'fcOnTime' | number }}
           </td>
         </ng-container>
         <ng-container matColumnDef="breakfastCc">
           <th mat-header-cell *matHeaderCellDef class="text-center">CC</th>
-          <td mat-cell *matCellDef="let element"> {{ element.ccSingleOnTime }}</td>
+          <td mat-cell *matCellDef="let element"> {{ element.ccBreakfast }}</td>
           <td mat-footer-cell *matFooterCellDef>
             {{ tableData | dataCalculateTotal: 'ccSingleOnTime' | number }}
           </td>
