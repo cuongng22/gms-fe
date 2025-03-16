@@ -62,6 +62,7 @@ export class DatepickerYearMonthComponent implements OnInit {
   ngOnInit(): void {
   }
   get requiredControl(): boolean {
+    console.log('requiredControl: ', this.datepickerYearMonth.ngControl?.control?.hasValidator(Validators.required));
     return this.formControl.hasValidator(Validators.required);
   }
 

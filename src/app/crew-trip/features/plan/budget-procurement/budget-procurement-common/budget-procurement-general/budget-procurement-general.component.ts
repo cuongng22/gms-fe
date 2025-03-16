@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewChecked, ChangeDetectorRef, Component, DestroyRef, effect, ElementRef, inject, input, model, OnInit, output, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,7 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink, RouterModule } from '@angular/router';
-import { debounceTime, startWith, Subject } from 'rxjs';
+import { debounceTime, startWith, Subject, Subscription } from 'rxjs';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
@@ -63,7 +63,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   _exchangeRate: any
 
   @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
-  airports = model<any[]>([]);
+  // airports = model<any[]>([]);
   disabled = input<boolean>(false);
 
   CategoryEnum = CategoryEnum;
@@ -93,10 +93,10 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     // unitPriceDoubleHotel: new FormControl(''),
     rateForSingle: new FormControl(),
     procurementPlanFlag: new FormControl(false),
-    procStartDate: new FormControl('', [ifValidator(() => !!this.procurementPlanFlag, Validators.required)]),
-    procEndDate: new FormControl('', [ifValidator(() => !!this.procurementPlanFlag, Validators.required),
-    this.endDateLessThanStartDate.bind(this)
-    ]),
+    procStartDate: ['', ifValidator(() => this.procurementPlanFlag, Validators.required)],
+    procEndDate: new FormControl('', [ifValidator(() => this.procurementPlanFlag, Validators.required),
+    this.endDateLessThanStartDate.bind(this)]
+    ),
     totalTime: new FormControl('', [Validators.maxLength(3)]),
     estimateTime: new FormControl(''),
     time: new FormControl('', [Validators.maxLength(3)]),
@@ -111,38 +111,66 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     haveContract: new FormControl(false),
     wetLeaseFlag: new FormControl(false),
     currencyCode: new FormControl('', [Validators.required]),
-    crewTransportFeeFlag: new FormControl<boolean>(false)
+    crewTransportFeeFlag: new FormControl(false)
 
 
   });
   _procurementPlanFlag: boolean = false;
   _haveContract: boolean = false;
 
+  procurementPlanFlagValueChanges: Subscription;
+  procEndDateValueChanges: Subscription;
+  procStartDateValueChanges: Subscription;
+  formValueChangesSub: Subscription;
 
   override ngOnInit(): void {
-    this.flightMarketService.search({ option: 0, type: this.category(), page: 0, size: 99999 }).then((res: any) => {
-      this.airports.set(res.data.content.map((item: any) => item.marketCode));
-    });
+    this.loadListFlightMarket({ type: this.category() })
 
-    this.formGroupDetail.controls.procurementPlanFlag.valueChanges.subscribe((value: any) => {
+  }
+
+  setData(dataDetail: any) {
+    debugger
+    this.controlUnsubscribe()
+    this.formGroupDetail.patchValue(dataDetail);
+    this.procurementPlanFlag = !!dataDetail.procurementPlanFlag;
+
+    this.formGroupDetail.controls.category.disable();
+    this.formGroupDetail.controls.airportCode.disable();
+    this.setDefaultValueGeneral(dataDetail.procurementPlanFlag);
+
+    this.unitPriceDoubleHotel = dataDetail?.unitPriceDoubleHotel;
+    this.unitPriceSingleHotel = dataDetail?.unitPriceSingleHotel;
+    this.inputPrice = dataDetail?.inputPrice;
+    this.setVerionRate(dataDetail?.planBudgetProcurement.versionRate);
+    // this.currencyCodeChange({ value: dataDetail?.currencyCode });
+    this.controlSubscribe();
+  }
+
+  controlUnsubscribe() {
+    this.procurementPlanFlagValueChanges?.unsubscribe();
+    this.procEndDateValueChanges?.unsubscribe();
+    this.procStartDateValueChanges?.unsubscribe();
+    this.formValueChangesSub?.unsubscribe();
+  }
+
+  controlSubscribe() {
+    this.procurementPlanFlagValueChanges = this.formGroupDetail.controls.procurementPlanFlag.valueChanges.subscribe((value: any) => {
       this.procurementPlanFlag = !!value;
     });
 
-    this.formGroupDetail.controls.procEndDate.valueChanges.subscribe((value: any) => {
+    this.procEndDateValueChanges = this.formGroupDetail.controls.procEndDate.valueChanges.subscribe((value: any) => {
       this.formGroupDetail.controls.procEndDate.updateValueAndValidity({ emitEvent: false });
       this.calculateTotalTime();
     });
-    this.formGroupDetail.controls.procStartDate.valueChanges.subscribe((value: any) => {
+    this.procStartDateValueChanges = this.formGroupDetail.controls.procStartDate.valueChanges.subscribe((value: any) => {
       this.formGroupDetail.controls.procEndDate.updateValueAndValidity({ emitEvent: false });
       this.calculateTotalTime();
     });
 
-    this.formGroupDetail.valueChanges.pipe(debounceTime(1000)).subscribe((value: any) => {
+    this.formValueChangesSub = this.formGroupDetail.valueChanges.pipe(debounceTime(1000)).subscribe((value: any) => {
       this.formValueChanges.emit(value);
     });
   }
-
-
 
   submit(): void {
     this.formGroupDetail.updateValueAndValidity();
@@ -226,8 +254,11 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     if (!isCheckProcurementPlan) {
       this.formGroupDetail.controls.procStartDate.setValue(null);
       this.formGroupDetail.controls.procStartDate.markAsUntouched();
+      this.formGroupDetail.controls.procStartDate.updateValueAndValidity();
       this.formGroupDetail.controls.procEndDate.setValue(null);
       this.formGroupDetail.controls.procEndDate.markAsUntouched();
+      this.formGroupDetail.controls.procEndDate.updateValueAndValidity();
+
       this.formGroupDetail.controls.totalTime.setValue(null);
       this.formGroupDetail.controls.estimateTime.setValue(null);
       this.formGroupDetail.controls.time.setValue(null);
