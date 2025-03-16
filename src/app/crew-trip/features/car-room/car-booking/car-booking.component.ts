@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {InputSizeComponent} from "src/app/crew-trip/shared/input/input-size.component";
 import {MatButton} from "@angular/material/button";
 import {MatCard, MatCardContent, MatCardHeader, MatCardSubtitle, MatCardTitle} from "@angular/material/card";
-import {FormBuilder, ReactiveFormsModule} from "@angular/forms";
+import {FormBuilder, ReactiveFormsModule, Validators} from "@angular/forms";
 import {SelectionComponent} from "src/app/crew-trip/shared/component/selection/selection.component";
 import {
   SelectionSuggestComponent
@@ -23,7 +23,6 @@ import {
 import {NgForOf, NgIf} from "@angular/common";
 import {ListResponse} from "src/app/crew-trip/shared/models/common.model";
 import {MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
-import {Validators} from "ngx-editor";
 import {TransportBookingService} from "src/app/crew-trip/core/services/transport-booking.service";
 
 @Component({
@@ -83,13 +82,14 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
       this.listYear.push(year);
     }
     this.formGroupSearch = this.fb.group({
-      scheduleType: [null,[Validators.required]],
-      marketCode: [null,[Validators.required]],
-      month: [currentMonth,[Validators.required]],
-      year: [currentYear,[Validators.required]],
-      type: [null,[Validators.required]],
-      timezone:['CC',[Validators.required]],
-      transportType: [null,[Validators.required]]
+      scheduleType: [null, [Validators.required]],
+      marketCode: [null, [Validators.required]],
+      month: [currentMonth, [Validators.required]],
+      year: [currentYear, [Validators.required]],
+      type: [null, [Validators.required]],
+      timezone: ['CC', [Validators.required]],
+      transportType: [null, [Validators.required]],
+      export: [false]
     });
   }
 
@@ -124,6 +124,9 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
 
   override async search<T>(body?: any, isNextPage?: boolean, fnSearch?: (bodySearch: any) => (ListResponse<T> | any)) {
     try {
+      this.formGroupSearch.patchValue({
+        export: false,
+      });
       this.formGroupSearch.markAllAsTouched();
       if (this.formGroupSearch.invalid) {
         this.findInvalidControls(this.formGroupSearch);
@@ -152,7 +155,7 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
             rowData.isMergedRow = this.isMergedRow(rowData);
             return rowData;
           });
-          console.log("  this.dataSource.data:",  this.dataSource.data)
+          console.log("  this.dataSource.data:", this.dataSource.data)
         }
         return res
       }
@@ -164,6 +167,7 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
       await this.spinner.hide();
     }
   }
+
   isMergedRow(row: any): boolean {
     return Object.values(row).slice(1).every(value => value === "");
   }
@@ -174,5 +178,31 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
       return value.replace(/\n/g, '<br/>');
     }
     return value;
+  }
+
+  override async exportFileOptions(body?: any, filename?: string, sourcePath?: string) {
+    try {
+      await this.spinner.show();
+      this.formGroupSearch.markAllAsTouched();
+      if (this.formGroupSearch.invalid) {
+        this.findInvalidControls(this.formGroupSearch);
+        return;
+      }
+      this.formGroupSearch.patchValue({
+        export: true,
+      });
+      const res = await this.baseService.exportDataOptions(
+        {
+          ...(removeNullValues(body) ||
+            removeNullValues(this.formGroupSearch.value)),
+        },
+        sourcePath,
+      );
+      this.downloadFile(res.blob, filename ?? res.fileName);
+    } catch (e: any) {
+      this.baseService.showError(e.error?.error?.code ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 }

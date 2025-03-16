@@ -22,9 +22,9 @@
       <div class="row">
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
           <app-selection [required]="true"
-            [options]="optionsFlightScheduleType"
-            label="Flight Schedule Type"
-            formControlName="scheduleType"
+                         [options]="optionsFlightScheduleType"
+                         label="Flight Schedule Type"
+                         formControlName="scheduleType"
           >
           </app-selection>
         </div>
@@ -42,7 +42,8 @@
           </app-selection>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection [options]="transportType" [required]="true" label="Transport type" formControlName="transportType">
+          <app-selection [options]="transportType" [required]="true" label="Transport type"
+                         formControlName="transportType">
           </app-selection>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
@@ -85,7 +86,8 @@
     <mat-card-title class="sub-title">
     </mat-card-title>
     <mat-card-subtitle>
-      <button class="add-btn mr-10" type="button" mat-button>
+      <button class="add-btn mr-10" type="button" (click)="exportFileOptions(null,'transportations-booking.xlsx')"
+              mat-button>
         <i class="material-symbols-outlined">
           download
         </i>
@@ -99,25 +101,25 @@
         <!-- Cột "No." -->
         <ng-container matColumnDef="No.">
           <th mat-header-cell *matHeaderCellDef>No.</th>
-<!--          <td mat-cell *matCellDef="let row" [attr.colspan]="row.isMergedRow ? displayedColumns.length : 1" [class.merged-row]="row.isMergedRow">-->
-<!--            <ng-container *ngIf="!row.isMergedRow; else mergedRow">-->
-<!--              {{ row["No."] }}-->
-<!--            </ng-container>-->
-<!--            <ng-template #mergedRow>-->
-<!--              {{ row["No."] }}-->
-<!--            </ng-template>-->
-<!--          </td>-->
-          <td mat-cell *matCellDef="let row" [class.merged-row]="row.isMergedRow" >
+          <!--          <td mat-cell *matCellDef="let row" [attr.colspan]="row.isMergedRow ? displayedColumns.length : 1" [class.merged-row]="row.isMergedRow">-->
+          <!--            <ng-container *ngIf="!row.isMergedRow; else mergedRow">-->
+          <!--              {{ row["No."] }}-->
+          <!--            </ng-container>-->
+          <!--            <ng-template #mergedRow>-->
+          <!--              {{ row["No."] }}-->
+          <!--            </ng-template>-->
+          <!--          </td>-->
+          <td mat-cell *matCellDef="let row" [class.merged-row]="row.isMergedRow">
             {{ row["No."] }}
           </td>
         </ng-container>
         <ng-container matColumnDef="Arr. Date">
           <th mat-header-cell *matHeaderCellDef>Arr. Date</th>
-          <td mat-cell *matCellDef="let row" >{{ row["Arr. Date"] }}</td>
+          <td mat-cell *matCellDef="let row">{{ row["Arr. Date"] }}</td>
         </ng-container>
         <ng-container matColumnDef="Arr. Flt No">
           <th mat-header-cell *matHeaderCellDef>Arr. Flt No</th>
-          <td mat-cell *matCellDef="let row"  class="multiline">
+          <td mat-cell *matCellDef="let row" class="multiline">
             <div [innerHTML]="formatNewLine(row['Arr. Flt No'])"></div>
           </td>
         </ng-container>
@@ -131,7 +133,7 @@
         </ng-container>
         <ng-container matColumnDef="Dep. Flt No">
           <th mat-header-cell *matHeaderCellDef>Dep. Flt No</th>
-          <td mat-cell *matCellDef="let row"  class="multiline">
+          <td mat-cell *matCellDef="let row" class="multiline">
             <div [innerHTML]="formatNewLine(row['Dep. Flt No'])"></div>
           </td>
         </ng-container>
@@ -145,13 +147,13 @@
         </ng-container>
         <ng-container matColumnDef="Crews Info">
           <th mat-header-cell *matHeaderCellDef>Crews Info</th>
-          <td mat-cell *matCellDef="let row"  class="multiline">
+          <td mat-cell *matCellDef="let row" class="multiline">
             <div [innerHTML]="formatNewLine(row['Crews Info'])"></div>
           </td>
         </ng-container>
         <ng-container matColumnDef="Note">
           <th mat-header-cell *matHeaderCellDef>Note</th>
-          <td mat-cell *matCellDef="let row"  class="multiline">
+          <td mat-cell *matCellDef="let row" class="multiline">
             <div [innerHTML]="formatNewLine(row['Note'])"></div>
           </td>
         </ng-container>
