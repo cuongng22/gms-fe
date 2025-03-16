@@ -52,19 +52,19 @@ export const formula: any = {
   },
   //Thành tiền ngoại tệ, - phòng đơn 
   totalAmountForeignSingleRoom: {
-    formula: 'ctz(data.singleRoom) * ctz(data.priceSingleRoomVat)'
+    formula: '(ctz(data.singleRoom) + ctz(data.singleRoomReserved) + ctz(data.singleRoomOther)) * ctz(data.priceSingleRoomVat) '
   },
   //Thành tiền ngoại tệ,  - phòng đôi
   totalAmountForeignDoubleRoom: {
-    formula: 'ctz(data.doubleRoom) * ctz(data.priceDoubleRoomVat)'
+    formula: '(ctz(data.doubleRoom) + ctz(data.doubleRoomOther) ) * ctz(data.priceDoubleRoomVat)'
   },
   //Thành tiền ngoại tệ,  - phòng early-checkin 
   totalAmountForeignEarly: {
-    formula: '(ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarlyVat) + ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarlyVat)'
+    formula: '(ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarlyVat)  + (ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarlyVat))'
   },
   //Thành tiền ngoại tệ, - phòng late checkout
   totalAmountForeignLate: {
-    formula: '(ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLateVat) + ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLateVat)'
+    formula: '(ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLateVat)  + (ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLateVat))'
   },
   //Tổng tiền theo loại máy bay
   totalAmountAircraft: {
@@ -73,28 +73,29 @@ export const formula: any = {
   // Tổng tiền ngoại tệ - Chưa bao gồm VAT
   totalAmountForeign: {
     formula: '(ctz(data.singleRoom) + ctz(data.singleRoomReserved) + ctz(data.singleRoomOther)) * ctz(data.priceSingleRoom) '
-      + ' + (ctz(data.doubleRoom) + ctz(data.doubleRoomOther) ) * ctz(data.priceDoubleRoom) '
+      + ' +  (ctz(data.doubleRoom) + ctz(data.doubleRoomOther) ) * ctz(data.priceDoubleRoom) '
       + ' + (ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarly) '
       + ' + (ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly)) '
-      + ' + (ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLate) '
-      + ' + (ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate)) '
-      + ' + (ctz(data.totalFlightMonth) * 2 * ctz(data.priceCrewTransport)) ',
+      + ' + (ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLate)  + (ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate))'
+      + ' + (ctz(data.totalFlightByAircraft) * 2 * ctz(data.priceCrewTransport))'
+      ,
     formulaUpdateBudgetPlan: ' ctz(data.singleRoom) * ctz(data.priceSingleRoom) '
       + ' + ctz(ata.doubleRoom) * ctz(data.priceDoubleRoom) '
       + ' + ctz(data.singleRoomEarly) * ctz(data.priceSingleRoomEarly) '
       + ' + ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly) '
       + ' + ctz(data.singleRoomLate) * ctz(data.priceSingleRoomLate) '
       + ' + ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate) '
-      + ' + (ctz(data.totalFlightMonth) * 2 * ctz(data.priceCrewTransport)) ',
+      + ' + (ctz(data.totalFlightByAircraft) * 2 * ctz(data.priceCrewTransport)) '
+      ,
     groupFormula: 'period',
   },
   //Tổng tiền ngoại tệ - Bao gồm VAT
   totalAmountForeignVat: {
-    formula: '(ctz(data.totalAmountForeignSingleRoom) '
+    formula: 'ctz(data.totalAmountForeignSingleRoom) '
       + '+ ctz(data.totalAmountForeignDoubleRoom)'
       + '+ ctz(data.totalAmountForeignEarly)'
-      + '+ ctz(data.totalAmountForeignLate) '
-      + '+ ctz(data.totalAmountForeignTransport))',
+      + '+ ctz(data.totalAmountForeignLate)'
+      + '+ ctz(data.totalAmountForeignTransport)',
     groupFormula: 'period',
   },
   //Tổng tiền VND - bao gồm VAT
@@ -131,7 +132,7 @@ export function getHeaderRowDef1(contractData: any, type: string): string[] {
     // { column: 'totalRoom', visible: true },
     //start phần kế hoạch mua sắm
     { column: "unitPriceIncludingVat", visible: type === PlanCategoryEnum.PROCUREMENT }, // (Đơn giá bao gồm vat) 
-    { column: "priceCrewTransport", visible:  !!contractData.crewTransportFeeFlag }, // (Đơn giá xe chở tổ bay/lượt) 
+    { column: "priceCrewTransport", visible: !!contractData.crewTransportFeeFlag }, // (Đơn giá xe chở tổ bay/lượt) 
     // end phần kế hoạch mua sắm
     { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
     { column: "totalAmountForeignColspan", visible: true },
@@ -197,7 +198,7 @@ export function getRowDef(contractData: any, type: string): string[] {
     { column: "priceDoubleRoomEarly", visible: type === PlanCategoryEnum.PROCUREMENT && checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, PlanCategoryEnum.PROCUREMENT) },
     { column: "priceSingleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.PROCUREMENT) },
     { column: "priceDoubleRoomLate", visible: type === PlanCategoryEnum.PROCUREMENT && checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT, PlanCategoryEnum.PROCUREMENT) },
-    { column: "priceCrewTransport", visible:  !!contractData.crewTransportFeeFlag },
+    { column: "priceCrewTransport", visible: !!contractData.crewTransportFeeFlag },
     // end phần kế hoạch mua sắm
     { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
     { column: "totalAmountForeign", visible: true },
@@ -208,13 +209,13 @@ export function getRowDef(contractData: any, type: string): string[] {
   return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
 
-const FlagTypeEnum = {
+export const FlagTypeEnum = {
   EARLY_CHECKIN: 'earlyCheckinFlag',
   LATE_CHECKOUT: 'lateCheckoutFlag',
   CREW_TRANSPORT: 'crewTransportFeeFlag'
 }
 
-function checkVisibleColumn(contractData: any, flagType: string, type: string): boolean {
+export function checkVisibleColumn(contractData: any, flagType: string, type: string): boolean {
   // earlyCheckinContractFlag: new FormControl(false),
   // lateCheckoutContractFlag: new FormControl(false),
   //   (1) trường hợp có hợp đồng, trong hợp đồng có HHDV = phí ECI, LCO 
