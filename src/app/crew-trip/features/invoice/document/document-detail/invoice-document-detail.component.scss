@@ -16,23 +16,26 @@
 
 .mat-column-stt {
   min-width: 70px !important;
-}.mat-column-serviceName {
-  min-width: 250px !important;
 }
 
-.mat-column-serviceCode,
+.mat-column-serviceCode, .mat-column-serviceName
+.mat-column-amountFcBeforeVat, .mat-column-amountVndBeforeVat,{
+  max-width: 250px !important;
+  min-width: 250px !important;
+  width: 250px !important;
+}
+
 .mat-column-unit,
 .mat-column-periodOccurrence,
 .mat-column-nsCode,
 .mat-column-unitPrice,
-.mat-column-amountFcBeforeVat,
-.mat-column-amountVndBeforeVat,
 .mat-column-amountFcVat,
 .mat-column-amountVndVat,
 .mat-column-vatType,
 .mat-column-vat {
-  width: 200px !important;
+  width: 150px !important;
   min-width: 150px !important;
+  max-width: 180px !important;
 }
 
 
@@ -75,7 +78,7 @@
   }
 
   .input-cell {
-    margin-top: 10px;
+
     .mat-mdc-text-field-wrapper {
       height: 40px !important;
     }

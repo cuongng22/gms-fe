@@ -176,7 +176,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
         }
       }).catch(e=>{
         if(e.error?.message.includes('No valid')){
-          this.baseService.showError(this.MESSAGE.FILE_UPLOAD_INVALID);
+          this.baseService.showError(this.MESSAGE.FILE_UPLOAD_INVALID_XLSX);
         }
         else{
           this.baseService.showError(e.error?.message ?? this.MESSAGE.ERROR);

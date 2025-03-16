@@ -227,26 +227,26 @@
                     <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
                     <td *matCellDef="let element; let i = index" mat-cell>{{ i + 1 }}</td>
                   </ng-container>
-                  <ng-container matColumnDef="bizDocId">
+                  <ng-container matColumnDef="docNo">
                     <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Appendix No</th>
                     <td *matCellDef="let element" mat-cell>
                       <a (click)="nextStep(element.bizDocId,true)"
                          style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
-                        {{ element.bizDocId }}
+                        {{ element.docNo }}
                       </a>
                     </td>
                   </ng-container>
-                  <ng-container matColumnDef="description">
+                  <ng-container matColumnDef="docName">
                     <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Appendix Name</th>
                     <td *matCellDef="let element" mat-cell>
                       <a (click)="nextStep(element.bizDocId,true)"
                          style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
-                        {{ element.description }}
+                        {{ element.docName }}
                       </a>
                     </td>
                   </ng-container>
-                  <tr *matHeaderRowDef="['stt','bizDocId','description']" mat-header-row></tr>
-                  <tr *matRowDef="let row; columns: ['stt','bizDocId','description'];" mat-row></tr>
+                  <tr *matHeaderRowDef="['stt','docNo','docName']" mat-header-row></tr>
+                  <tr *matRowDef="let row; columns: ['stt','docNo','docName'];" mat-row></tr>
                 </table>
               </div>
             </mat-menu>

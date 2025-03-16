@@ -1,5 +1,5 @@
 <div [sizeInput]="size()">
-    <mat-form-field>
+    <mat-form-field [ngClass]="{'edit-inline-table':editInlineTable}">
         @if(!!label()){
         <mat-label>{{label()}} @if(requiredLabel()){<span class="required">*</span>}</mat-label>
         }

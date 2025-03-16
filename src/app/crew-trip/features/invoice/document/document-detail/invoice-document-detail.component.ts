@@ -4,14 +4,14 @@ import {AsyncPipe, CommonModule, DecimalPipe, NgClass, NgForOf, NgIf, NgTemplate
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
 import {MatMenuModule} from '@angular/material/menu';
-import {MatTableModule} from '@angular/material/table';
+import {MatTableDataSource, MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
@@ -51,12 +51,13 @@ import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/conf
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 import {NgxControlError} from "ngxtension/control-error";
 import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
+import {BaseImport} from "src/app/crew-trip/shared/base-import";
 
 
 @Component({
   selector: 'app-invoice-document-detail',
   standalone: true,
-  imports: [CommonModule, DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, SelectionSuggestComponent, AsyncPipe, DatepickerYearMonthComponent, SeparatorDirective, ThousandsSeparatorDirective, MatGridTile, MatGridList, NgTemplateOutlet, CdkVirtualScrollViewport, ConfirmDeleteDialog, ConfirmDialog, NgxControlError, NgxUpperCaseDirectiveModule, ControlErrorComponent],
+  imports: [BaseImport],
   templateUrl: './invoice-document-detail.component.html',
   styleUrl: './invoice-document-detail.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -91,7 +92,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   expandList = new Set<string>(['tab1', 'tab2', 'tab3']);
   formGroupFileUpload!: FormGroup;
   showDialogDeleteFile = false;
-
+  dsInvoiceDocumentDtl = new MatTableDataSource<any>([]);
   listDocumentType = InvoiceLookup.InvoiceDocumentType;
   listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
@@ -219,6 +220,10 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       _id: [],
       _invoiceNumber: [],
       _invoiceDate: [],
+
+      //table
+      tblInvoiceDocumentDtl: this.fb.array([]),
+
     });
 
     if (!this.readMode) {
@@ -345,6 +350,15 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   //   return row;
   // }
 
+  get tblInvoiceDocumentDtl(): FormArray {
+    return this.formGroupDetail.get('tblInvoiceDocumentDtl') as FormArray;
+  }
+
+  set tblInvoiceDocumentDtl(value: FormArray) {
+    this.formGroupDetail.setControl('tblInvoiceDocumentDtl', value);
+    this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
+  }
+
   override async ngOnInit() {
     try {
       await this.spinner.show();
@@ -383,6 +397,28 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     this.showDialogFinish = !this.showDialogFinish;
   }
 
+  /*  async airportCodeChange($event: any) {
+      if ($event?.value) {
+        try {
+          await this.spinner.show();
+          await this.baseService.getContractByAirport($event.value).then(res => {
+            if (res.data?.bizDocId) {
+              //todo set du lieu thong tin hop dong cho form detail
+              this.formGroupDetail.patchValue({
+                paymentDueDay : 15,
+                bizDocId: res.data?.bizDocId,
+              })
+            }
+          });
+        } catch (e) {
+          console.log(e);
+          this.baseService.showError(MESSAGE.ERROR);
+        } finally {
+          await this.spinner.hide();
+        }
+      }
+    }*/
+
   async setReadMode(form: FormGroup) {
     const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType'];
     const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType'];
@@ -407,8 +443,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     });
   }
 
-  calTotal(column: any) {
-    let value = this.formGroupDetail.getRawValue().invoiceDocumentDtl.reduce((prev: any, cur: any) => prev + cur[column], 0)
+  calTotal(value:any) {
+/*    let value = this.formGroupDetail.getRawValue().invoiceDocumentDtl.reduce((prev: any, cur: any) => prev + cur[column], 0)
     let key: any = {};
     if (column === 'amountFcVat') {
       key['vatFc'] = value;
@@ -425,30 +461,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     const inputs = this.totalab.nativeElement.querySelectorAll('input');
     inputs.forEach((inputRef: any) => {
       inputRef.dispatchEvent(new Event('focus'));
-    })
+    })*/
   }
-
-  /*  async airportCodeChange($event: any) {
-      if ($event?.value) {
-        try {
-          await this.spinner.show();
-          await this.baseService.getContractByAirport($event.value).then(res => {
-            if (res.data?.bizDocId) {
-              //todo set du lieu thong tin hop dong cho form detail
-              this.formGroupDetail.patchValue({
-                paymentDueDay : 15,
-                bizDocId: res.data?.bizDocId,
-              })
-            }
-          });
-        } catch (e) {
-          console.log(e);
-          this.baseService.showError(MESSAGE.ERROR);
-        } finally {
-          await this.spinner.hide();
-        }
-      }
-    }*/
 
   async download(fileRow: any) {
     try {
@@ -466,15 +480,14 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     }
   }
 
-  changeServiceFee($event: any, row: any, type: any) {
-    if (type === 'code') {
-      row.unit = this.listFeeService.find((s: any) => s.code == $event.value)?.unit;
-      row.serviceName = this.listFeeService.find((s: any) => s.code == $event.value)?.name;
-    } else if (type === 'name') {
-      row.unit = this.listFeeService.find((s: any) => s.name == $event.value)?.unit;
-      row.serviceCode = this.listFeeService.find((s: any) => s.name == $event.value)?.code;
-    }
+  changeServiceFee(row: any) {
+    const data = row.getRawValue();
+    row.patchValue({
+      serviceName: this.listFeeService.find((s: any) => s.code == data.serviceCode)?.name || null,
+      unit: this.listFeeService.find((s: any) => s.code == data.serviceCode)?.unit || null,
+    });
   }
+
 
   async actionUpload() {
     try {
@@ -584,6 +597,32 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   addDtl() {
     let listDtl = [...this.formGroupDetail.getRawValue().invoiceDocumentDtl || [], {}];
     this.formGroupDetail.patchValue({invoiceDocumentDtl: listDtl});
+  }
+
+  addRow(init?: any) {
+    let row: FormGroup = this.fb.group({
+      id: ['',],
+      serviceCode: ['',[Validators.required]],
+      serviceName: ['',],
+      unit: ['',],
+      periodOccurrence: ['',[Validators.required]],
+      nsCode: ['',],
+      quantity: ['',],
+      unitPrice: ['',],
+      amountFcBeforeVat: ['',],
+      amountVndBeforeVat: ['',],
+      amountFcVat: ['',],
+      amountVndVat: ['',],
+      vatType: ['',],
+      vat: ['',],
+    });
+    init && row.patchValue(init);
+    row.valueChanges.subscribe(value => {
+      this.calTotal(value);
+    });
+    this.tblInvoiceDocumentDtl.push(row);
+    this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
+    return row;
   }
 
   async loadListDocumentParent() {

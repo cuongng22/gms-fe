@@ -147,3 +147,80 @@ export const handoverDate: { [key: string]: string } = {
   required: 'Handover date' + $localize` is required`,
   matDatepickerParse: 'Handover date' + $localize` invalid format`,
 };
+
+export const invoiceNumber: { [key: string]: string } = {
+  required: 'Invoice number' + $localize` is required`,
+};
+export const invoiceDate: { [key: string]: string } = {
+  required: 'Invoice date' + $localize` is required`,
+};
+
+export const invoiceReceiveDate: { [key: string]: string } = {
+  required: 'Receive date' + $localize` is required`,
+};
+export const periodFrom: { [key: string]: string } = {
+  required: 'Period from' + $localize` is required`,
+};
+export const periodTo: { [key: string]: string } = {
+  required: 'Period to' + $localize` is required`,
+};
+export const exchangeRateDate: { [key: string]: string } = {
+  required: 'Exchange rate date' + $localize` is required`,
+};
+export const description: { [key: string]: string } = {
+  required: 'Description' + $localize` is required`,
+};
+
+export const serviceCode: { [key: string]: string } = {
+  required: 'Service code' + $localize` is required`,
+};
+
+export const serviceName: { [key: string]: string } = {
+  required: 'Service name' + $localize` is required`,
+};
+export const periodOccurrence: { [key: string]: string } = {
+  required: 'Period Occurrence' + $localize` is required`,
+};
+
+export const nsCode: { [key: string]: string } = {
+  required: 'nsCode' + $localize` is required`,
+};
+export const quantity: { [key: string]: string } = {
+  required: 'Quantity' + $localize` is required`,
+  min: 'Quantity' + $localize` must be greater than 0`,
+  invalidNumber: 'Quantity' + $localize` must be integer`,
+};
+
+export const unitPrice: { [key: string]: string } = {
+  required: 'Unit price' + $localize` is required`,
+  min: 'Unit price' + $localize` must be greater than 0`,
+  invalidNumber: 'Unit price' + $localize` must be integer`,
+};
+export const amountFcBeforeVat: { [key: string]: string } = {
+  min: 'AmountVndBeforeVat' + $localize` must be greater than 0`,
+  invalidNumber: 'AmountVndBeforeVat' + $localize` must be integer`,
+  required: 'AmountVndBeforeVat' + $localize` is required`,
+};
+export const amountVndBeforeVat: { [key: string]: string } = {
+  required: 'AmountVndBeforeVat' + $localize` is required`,
+  min: 'AmountVndBeforeVat' + $localize` must be greater than 0`,
+  invalidNumber: 'AmountVndBeforeVat' + $localize` must be integer`,
+};
+export const amountFcVat: { [key: string]: string } = {
+  required: 'AmountFcVat' + $localize` is required`,
+  min: 'AmountFcVat' + $localize` must be greater than 0`,
+  invalidNumber: 'AmountFcVat' + $localize` must be integer`,
+};
+export const amountVndVat: { [key: string]: string } = {
+  required: 'AmountVndVat' + $localize` is required`,
+  min: 'AmountVndVat' + $localize` must be greater than 0`,
+  invalidNumber: 'AmountVndVat' + $localize` must be integer`,
+};
+export const vatType: { [key: string]: string } = {
+  required: 'Vat type' + $localize` is required`,
+};
+export const vat: { [key: string]: string } = {
+  required: 'Vat' + $localize` is required`,
+  min: 'Vat' + $localize` must be greater than 0`,
+  invalidNumber: 'Vat' + $localize` must be integer`,
+};

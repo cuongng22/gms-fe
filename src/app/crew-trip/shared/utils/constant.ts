@@ -45,6 +45,7 @@ export class MESSAGE {
   static SEND_EMAIL = $localize`Send email successfully`;
   static FILE_UPLOAD_EMPTY = $localize`The file must not be empty`;
   static FILE_UPLOAD_INVALID = $localize`The file import is not valid`;
+  static FILE_UPLOAD_INVALID_XLSX = $localize`File type must be .xlsx`;
 
   static LABEL_START_DATE = $localize`:@@startDate:Start Date`;
   static MESSAGE_START_DATE_REQUIRED = $localize`:@@startDateRequired:Start Date is required`;
