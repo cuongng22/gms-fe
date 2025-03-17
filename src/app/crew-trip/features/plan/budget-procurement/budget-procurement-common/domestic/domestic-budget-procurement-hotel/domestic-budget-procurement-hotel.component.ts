@@ -77,7 +77,7 @@ export class DomesticBudgetProcurementHotelComponent
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       if (this.data()) {
-        this.setDataSource(this.data());
+        this.setDataSource(this.data(), this.data().isSummary);
       }
     });
   }
@@ -92,7 +92,7 @@ export class DomesticBudgetProcurementHotelComponent
     this.cdRef.detectChanges(); // Phát hiện và cập nhật các thay đổi
   }
 
-  setDataSource(data: any[]) {
+  setDataSource(data: any[], isSummary?: boolean) {
     this.dataSource.data = [...data];
     this.getRow();
 
@@ -105,7 +105,7 @@ export class DomesticBudgetProcurementHotelComponent
         period = moment(item.periodStart).locale('en').format('MMMM')
       }
       item.periodLabel = period;
-      this.calculateData(item, index);
+      this.calculateData(item, index, isSummary);
     });
     this.calculateTotal()
   }
@@ -120,7 +120,7 @@ export class DomesticBudgetProcurementHotelComponent
    *
    * @param item Giá trị từng dòng của dataSource theo công thức
    */
-  private calculateData(item: any, index: number) {
+  private calculateData(item: any, index: number, isCalculate?: boolean) {
     // Tổng Số phòng đơn
     this.calculate(item, 'totalSingleRoom');
     // Tổng Số phòng đôi
@@ -228,7 +228,7 @@ export class DomesticBudgetProcurementHotelComponent
   clickOutside(data: any, control: string) {
     data[control] = false;
     if (control === 'singleRoomExtraEditing' || control === 'doubleRoomExtraEditing') {
-      this.calculateData(data, 0)
+      this.calculateData(data, 0, true)
     }
     this.calculateTotal()
   }

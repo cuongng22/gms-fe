@@ -346,6 +346,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     try {
       await this.spinner.show()
       const resSave = await this.processSave();
+      this.showSuccess(MESSAGE.UPDATE_SUCCESS)
       if (resSave.result) {
         this.router.navigate(['/plan/est-plan/budget-procurement', this.planBudgetProcurementId(), 'summary']);
       }
@@ -386,23 +387,23 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       let inputPrice: string = '';
 
       if (this.category() === CategoryEnum.DOMESTIC) {
-        planFlightRates = [...this.cleanData(this.domesticFlightRate.dataSource.data ?? [])];
-        planBudgetHotels = [...this.cleanData(this.domesticBudgetHotel.dataSource.data ?? [])];
-        planBudgetCarentals = [...this.cleanData(this.domesticBudgetCarRental.dataSource.data ?? [])];
-        planProcurementHotels = [...this.cleanData(this.domesticProcurementHotel.dataSource.data ?? [])];
-        planProcurementCarentals = [...this.cleanData(this.domesticProcurementCarRental.dataSource.data ?? [])];
+        planFlightRates = [...this.cleanData(this.domesticFlightRate?.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.domesticBudgetHotel?.dataSource.data ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.domesticBudgetCarRental?.dataSource.data ?? [])];
+        planProcurementHotels = [...this.cleanData(this.domesticProcurementHotel?.dataSource.data ?? [])];
+        planProcurementCarentals = [...this.cleanData(this.domesticProcurementCarRental?.dataSource.data ?? [])];
         if (this.dataDetail?.wetLeaseFlag) {
-          planBudgetWetLease = [...this.cleanData(this.domesticBudgetWetLease.dataSource.data ?? [])];
-          planProcumentWetLease = [...this.cleanData(this.domesticProcurementWetLease.dataSource.data ?? [])];
+          planBudgetWetLease = [...this.cleanData(this.domesticBudgetWetLease?.dataSource.data ?? [])];
+          planProcumentWetLease = [...this.cleanData(this.domesticProcurementWetLease?.dataSource.data ?? [])];
         }
       } else {
-        planFlightRates = [...this.cleanData(this.internationalFlightRate.dataSource.data ?? [])]
-        planFlightPeriods = [...this.cleanData(this.internationalFlightPeriod.dataSource.data ?? [])];
-        planOverightRates = [...this.cleanData(this.internationalFlightOvernight.dataSource.data ?? [])];
-        planBudgetHotels = [...this.cleanData(this.internationalBudgetHotel.dataSource.data ?? [])];
-        planBudgetCarentals = [...this.cleanData(this.internationalBudgetCarRental.dataSource.data ?? [])];
-        planProcurementHotels = [...this.cleanData(this.internationalProcurementHotel.dataSource.data ?? [])];
-        planProcurementCarentals = [...this.cleanData(this.internationalProcurementCarRental.dataSource.data ?? [])];
+        planFlightRates = [...this.cleanData(this.internationalFlightRate?.dataSource.data ?? [])]
+        planFlightPeriods = [...this.cleanData(this.internationalFlightPeriod?.dataSource.data ?? [])];
+        planOverightRates = [...this.cleanData(this.internationalFlightOvernight?.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.internationalBudgetHotel?.dataSource.data ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.internationalBudgetCarRental?.dataSource.data ?? [])];
+        planProcurementHotels = [...this.cleanData(this.internationalProcurementHotel?.dataSource.data ?? [])];
+        planProcurementCarentals = [...this.cleanData(this.internationalProcurementCarRental?.dataSource.data ?? [])];
       }
       if (this.budgetProcurementGeneral.budgetProcurementPrice?.dataSource.data) {
         inputPrice = JSON.stringify(this.budgetProcurementGeneral.budgetProcurementPrice?.dataSource.data);
