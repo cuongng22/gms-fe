@@ -89,7 +89,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
       } else {
         item.rateInPeriod = exchangeRateData.average
       }
-      this.calculateData(item, index);
+      this.calculateData(item, index, true);
     });
     this.calculateTotal()
   }
@@ -99,7 +99,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     this.dataSource.data.forEach((item: any, index: number) => {
       item.unitPrice = _priceTransportation.priceBeforeTax;
       item.unitPriceVat = _priceTransportation.priceAfterTax;
-      this.calculateData(item, index);
+      this.calculateData(item, index, true);
     })
     this.calculateTotal()
   }
@@ -247,7 +247,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     if (control === 'unitPriceVatEditing') {
       data.unitPrice = Number(data.unitPriceVat) / (1 + (Number(data.taxRate) / 100))
     }
-    this.calculateData(data);
+    this.calculateData(data, undefined, true);
     this.calculateTotal()
   }
 }
