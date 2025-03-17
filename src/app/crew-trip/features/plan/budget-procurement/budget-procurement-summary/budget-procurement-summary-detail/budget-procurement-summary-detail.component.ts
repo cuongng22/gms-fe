@@ -308,7 +308,6 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     if (exchangeRate) {
       const _periodStart = moment(item.periodStart).locale('en');
       const _exchangeRate = exchangeRate[_periodStart.format('MMMM').toLowerCase()]
-      console.log(_periodStart, _exchangeRate);
       if (_exchangeRate) {
         item.rateInPeriod = _exchangeRate;
       }
