@@ -82,7 +82,6 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
 
         const _periodStart = moment(item.periodStart);
         const _exchangeRate = exchangeRateData[_periodStart.format('MMM').toLowerCase()]
-        console.log(_periodStart, _exchangeRate);
         if (_exchangeRate) {
           item.rateInPeriod = _exchangeRate;
         }
