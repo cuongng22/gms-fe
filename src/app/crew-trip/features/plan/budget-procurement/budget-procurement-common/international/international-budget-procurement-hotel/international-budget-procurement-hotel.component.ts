@@ -145,12 +145,17 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     this.overnightRowspan = overnightRowspan;
   }
 
+  //-------------
+
+  //------------
+
+
   setGeneralData(data: any) {
     const isChangeRateForSingle = checkChange(this.generalData.rateForSingle, data.rateForSingle);
     if (isChangeRateForSingle) {
       this.generalData = { ...data };
       this.dataSource.data.forEach((item: any, index) => {
-        this.calculateData(item, index);
+        this.calculateData(item, index, true);
       });
       this.calculateTotal()
     }
@@ -176,7 +181,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       } else {
         item.rateInPeriod = exchangeRateData.average
       }
-      this.calculateData(item, index);
+      this.calculateData(item, index, true);
     });
     this.calculateTotal()
   }
@@ -210,7 +215,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
       item.priceCrewTransport = _priceTransportation.priceBeforeTax;
       item.priceCrewTransportVat = _priceTransportation.priceAfterTax;
-      this.calculateData(item, index);
+      this.calculateData(item, index, true);
     });
     this.calculateTotal()
   }
@@ -227,7 +232,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
               item.overnight = Number(data.numberOfOverNight);
               item.flightOvernightRate = data.flightRate;
             }
-            this.calculateData(item, index);
+            this.calculateData(item, index, true);
           });
           this.calculateTotal()
         } else {
@@ -249,9 +254,9 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
                 overnight: Number(data.numberOfOverNight),
                 flightOvernightRate: data.flightRate,
               });
-              this.calculateData(dataProcessHotel[i + 1], i + 1);
+              this.calculateData(dataProcessHotel[i + 1], i + 1, true);
             }
-            this.calculateData(dataProcessHotel[i], i);
+            this.calculateData(dataProcessHotel[i], i, true);
           }
           this.calculateTotal()
           if (length) {
@@ -275,7 +280,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
           this.calculateSpan(this.aircraftTypeRowspan, length);
         }
         this.dataSource.data.forEach((item: any, index) => {
-          this.calculateData(item, index);
+          this.calculateData(item, index, true);
         });
         this.calculateTotal()
         break;
@@ -582,7 +587,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
           item.priceDoubleRoomLate = Number(item.priceDoubleRoomLateVat) / (1 + (Number(item.taxRate) / 100))
           item.priceCrewTransport = Number(item.priceCrewTransportVat) / (1 + (Number(item.taxRate) / 100))
 
-          this.calculateData(item, index);
+          this.calculateData(item, index, true);
         }
 
       });
