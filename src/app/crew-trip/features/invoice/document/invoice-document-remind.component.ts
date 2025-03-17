@@ -39,15 +39,12 @@ import {CdkTextareaAutosize} from "@angular/cdk/text-field";
 import {PaymentMailService} from "src/app/crew-trip/core/services/payment-mail.service";
 import {EmailSupplierService} from "src/app/crew-trip/core/services/email-supplier-service";
 import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
-import {NgxControlError} from "ngxtension/control-error";
-import {Editor, NgxEditorModule, Toolbar} from "ngx-editor";
-import {BaseImport} from "src/app/crew-trip/shared/base-import";
 
 
 @Component({
   selector: 'app-invoice-document-remind',
   standalone: true,
-  imports: [BaseImport],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, ConfirmDeleteDialog, MatGridList, MatGridTile, CdkTextareaAutosize, ControlErrorComponent],
   templateUrl: './invoice-document-remind.component.html',
   styleUrl: './invoice-document-remind.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -89,22 +86,11 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
   @Input() contractId: any;
   formGroupFile!: FormGroup;
   showDialogFile = false;
-  editor: Editor;
-  toolbar: Toolbar = [
-    ['bold', 'italic'],
-    ['underline', 'strike'],
-    ['code', 'blockquote'],
-    ['ordered_list', 'bullet_list'],
-    [{heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']}],
-    ['link', 'image'],
-    ['text_color', 'background_color'],
-    ['align_left', 'align_center', 'align_right', 'align_justify'],
-  ];
 
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
-      searchString: [],
+      searchString: [moment().format('YYYY-MM-DD')],
       ctype: [],
       partnerType: [],
       airportCode: [],
@@ -112,20 +98,17 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
       periodFrom: [],
       periodTo: [],
       statusEmail: [],
-      strPeriodTo: [moment().format('YYYY-MM-DD')]
     });
     this.formGroupDetail = this.fb.group({
       id: [],
       emailTo: [, [Validators.pattern(PATTERN.EMAIL)]],
       emailCc: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailSubject: [, [Validators.maxLength(250)]],
-      emailContent: [,[Validators.required]],
-      fileAttachs: []
+      emailContent: []
     });
 
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
-    this.editor = new Editor();
   }
 
   override async ngOnInit() {
@@ -163,28 +146,12 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
   }
 
   sendEmail() {
-    if(this.formGroupDetail.getRawValue().emailContent ==='<p></p>'){
-      this.formGroupDetail.patchValue({emailContent: ''});
-    }
     this.formGroupDetail.markAllAsTouched();
     if (this.formGroupDetail.invalid) {
       this.findInvalidControls(this.formGroupDetail);
       return;
     }
-
-    let formUpload = new FormData();
-    let reqBody = this.formGroupDetail.getRawValue();
-    delete reqBody.fileAttachs;
-    formUpload.append('request', JSON.stringify(reqBody));
-
-    let reqFile = this.formGroupDetail.getRawValue().fileAttachs;
-    if (reqFile && reqFile.length) {
-      for (let i = 0; i < reqFile.length; i++) {
-        formUpload.append('files', reqFile[i]);
-      }
-    }
-
-    this.baseService.sendEmail(formUpload).then(res => {
+    this.baseService.sendEmail(this.formGroupDetail.getRawValue()).then(res => {
       this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
       let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
       current.statusEmail = 'SEND';
@@ -194,16 +161,18 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
   }
 
   async showDialogSendEmail(data: any) {
-    this.toggleDialogCreate();
+    console.log(data)
     let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
     let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_REMINDER', marketClass: data.contractServiceType});
     let emailTitle = res1.data?.content[0]?.title;
     let emailContent = res1.data?.content[0]?.content;
+    console.log(res, res1, 'ss')
     this.formGroupDetail.patchValue({
       id: data.id,
       emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
       emailSubject: emailTitle ?? '',
       emailContent: emailContent ?? ''
     })
+    this.toggleDialogCreate();
   }
 }

@@ -224,3 +224,13 @@ export const vat: { [key: string]: string } = {
   min: 'Vat' + $localize` must be greater than 0`,
   invalidNumber: 'Vat' + $localize` must be integer`,
 };
+export const email: { [key: string]: string } = {
+  required: 'Email' + $localize` is required`,
+  pattern: 'Email' + $localize` invalid`,
+
+};
+export const emailSubject: { [key: string]: string } = {
+  required: 'Email subject' + $localize` is required`,
+  maxlength: 'Email Subject' + $localize` must be less than 250 characters`,
+
+};

@@ -217,33 +217,13 @@
                   </i>
                 </a>
                 }
-                @if(element.listChild.length>0){
                 <a class="text-secondary" mat-button
-                 type="button">
-                <i class="material-symbols-outlined" i18n-title
-                   [matMenuTriggerFor]="listChild"
-                   title="Detail">
-                  visibility
-                </i>
-              </a>
-              <mat-menu  #listChild="matMenu" xPosition="before">
-                     <mat-list role="list">
-                    <mat-list-item role="listitem" (click)="nextStep(element.id,true,2,element)" >View Current Invoice</mat-list-item>
-                    <mat-list-item role="listitem" (click)="nextStep(element.listChild[0].id,true,2,element.listChild[0])">View Previous Invoice</mat-list-item>
-                </mat-list>
-              </mat-menu>
-                }
-                @else{
-                <a class="text-secondary" mat-button
-                type="button">
-               <i (click)="nextStep(element.id,true,2,element)" class="material-symbols-outlined" i18n-title
-                  title="Detail">
-                 visibility
-               </i>
-             </a>
-                }
-
-
+                   type="button">
+                  <i (click)="nextStep(element.id,true,2,element)" class="material-symbols-outlined" i18n-title
+                     title="Detail">
+                    visibility
+                  </i>
+                </a>
                 <a class="text-secondary" mat-button
                    type="button">
                   <i class="material-symbols-outlined" i18n-title title="Copy">
