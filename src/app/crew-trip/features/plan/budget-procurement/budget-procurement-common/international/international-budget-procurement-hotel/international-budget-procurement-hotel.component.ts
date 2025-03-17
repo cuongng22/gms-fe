@@ -47,6 +47,14 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   headerRowDef2: string[] = [];
   rowDef: string[] = [];
 
+  periodsSpan: {
+    [key: string]: { count: number, firstIndex: number }
+  } = {};
+
+  aircraftTypeSpan: {
+    [key: string]: { count: number, firstIndex: number }
+  } = {}
+
   yearPlan = input<number>(2024); // năm kế hoạch
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
   type = input<PlanCategoryEnum>(PlanCategoryEnum.BUDGET); // Loại Ngân sách hoặc mua sắm (budget/procurement)
@@ -58,10 +66,10 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   singleRoomOtherChange = new Subject<any>();
   doubleRoomOtherChange = new Subject<any>();
 
+
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       if (this.data()) {
-        this.calculateSpan(this.data().aircraftTypeRowspan, this.data().overnightRowspan);
         this.setPlanFlightByOvernight(this.data().planOverightRates ?? []);
         this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
         this.setDataSource(this.data().planHotels ?? [], this.data().general, this.data().isSummary);
@@ -108,9 +116,9 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     this.aircraftTypes = [];
     this.dataSource.data.forEach((item: any, index) => {
       this.calculatePeriodLabel(item, index);
-      this.calculateAirCraftLabel(item, index);
       this.calculateData(item, index, isSummary);
     });
+    this.calculateSpan();
     this.calculateTotal()
   };
 
@@ -122,33 +130,28 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       period = `${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
     }
     item.period = period;
-    if (!this.periods.includes(period)) {
-      this.periods.push(period);
-      item.periodLabel = period;
-    } else {
-      item.periodLabel = '';
-    }
   }
 
-  calculateAirCraftLabel(item: any, index: number) {
-    if (!this.aircraftTypes.includes(`${item.period}_${item.aircraftType}`)) {
-      this.aircraftTypes.push(`${item.period}_${item.aircraftType}`)
-      item.aircraftTypeLabel = item.aircraftType;
-    } else {
-      item.aircraftTypeLabel = '';
-    }
+
+  calculateSpan() {
+    this.periodsSpan = {}
+    this.aircraftTypeSpan = {}
+    this.dataSource.data.forEach((item: any, index) => {
+      // tính toán rowspan cho cột giai đoạn
+      if (this.periodsSpan.hasOwnProperty(item.period)) {
+        this.periodsSpan[item.period].count += 1;
+      } else {
+        this.periodsSpan[item.period] = { count: 1, firstIndex: index };
+      }
+
+      // tính toán rowspan cho cột loại máy bay
+      if (this.aircraftTypeSpan.hasOwnProperty(`${item.period}_${item.aircraftType}`)) {
+        this.aircraftTypeSpan[`${item.period}_${item.aircraftType}`].count += 1;
+      } else {
+        this.aircraftTypeSpan[`${item.period}_${item.aircraftType}`] = { count: 1, firstIndex: index };
+      }
+    });
   }
-
-  calculateSpan(aircraftTypeRowspan: number, overnightRowspan: number) {
-    this.periodRowspan = aircraftTypeRowspan * overnightRowspan;
-    this.aircraftTypeRowspan = aircraftTypeRowspan;
-    this.overnightRowspan = overnightRowspan;
-  }
-
-  //-------------
-
-  //------------
-
 
   setGeneralData(data: any) {
     const isChangeRateForSingle = checkChange(this.generalData.rateForSingle, data.rateForSingle);
@@ -174,7 +177,6 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
         const _periodStart = moment(item.periodStart).locale('en');
         const _exchangeRate = exchangeRateData[_periodStart.format('MMMM').toLowerCase()]
-        console.log(_periodStart, _exchangeRate);
         if (_exchangeRate) {
           item.rateInPeriod = _exchangeRate;
         }
@@ -260,7 +262,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
           }
           this.calculateTotal()
           if (length) {
-            this.calculateSpan(this.aircraftTypeRowspan, length);
+            this.calculateSpan();
           }
           this.dataSource.data = [...dataProcessHotel];
           console.log(this.dataSource.data);
@@ -271,13 +273,11 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
         break;
       case 'delete':
-        if (planFlightByOvernight && planFlightByOvernight.length) {
-          this.setPlanFlightByOvernight(planFlightByOvernight);
-          this.calculateSpan(this.aircraftTypeRowspan, planFlightByOvernight.length);
-        }
+        this.setPlanFlightByOvernight(planFlightByOvernight ?? []);
+        this.calculateSpan();
         this.dataSource.data = [...this.dataSource.data.filter((itemFilter: any) => itemFilter.overnightId !== data.id)];
         if (length) {
-          this.calculateSpan(this.aircraftTypeRowspan, length);
+          this.calculateSpan();
         }
         this.dataSource.data.forEach((item: any, index) => {
           this.calculateData(item, index, true);

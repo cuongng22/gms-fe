@@ -12,7 +12,7 @@ export const formula: any = {
   //Tổng tiền xe chở tổ bay (ngoại tệ)
   totalAmountForeignTransport: {
     formula: 'ctz(data.totalFlightByAircraft) * 2 * ctz(data.priceCrewTransportVat)',
-    groupFormula: 'aircraftType && period',
+    groupFormula: 'period && aircraftType',
   },
   //Số phòng đơn
   singleRoom: {
