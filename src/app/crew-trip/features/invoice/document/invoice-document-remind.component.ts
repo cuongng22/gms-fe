@@ -119,7 +119,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
       emailTo: [, [Validators.pattern(PATTERN.EMAIL)]],
       emailCc: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailSubject: [, [Validators.maxLength(250)]],
-      emailContent: [],
+      emailContent: [,[Validators.required]],
       fileAttachs: []
     });
 
@@ -163,11 +163,15 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
   }
 
   sendEmail() {
+    if(this.formGroupDetail.getRawValue().emailContent ==='<p></p>'){
+      this.formGroupDetail.patchValue({emailContent: ''});
+    }
     this.formGroupDetail.markAllAsTouched();
     if (this.formGroupDetail.invalid) {
       this.findInvalidControls(this.formGroupDetail);
       return;
     }
+
     let formUpload = new FormData();
     let reqBody = this.formGroupDetail.getRawValue();
     delete reqBody.fileAttachs;
