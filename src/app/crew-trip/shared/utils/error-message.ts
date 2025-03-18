@@ -150,6 +150,8 @@ export const handoverDate: { [key: string]: string } = {
 
 export const invoiceNumber: { [key: string]: string } = {
   required: 'Invoice number' + $localize` is required`,
+  maxlength: 'Invoice number' + $localize` must be within 50 characters`,
+  pattern: 'Invoice number' + $localize` must contain only unaccented letters and numbers.`,
 };
 export const invoiceDate: { [key: string]: string } = {
   required: 'Invoice date' + $localize` is required`,
