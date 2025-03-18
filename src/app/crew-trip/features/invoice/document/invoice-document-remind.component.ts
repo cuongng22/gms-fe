@@ -95,11 +95,12 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     ['underline', 'strike'],
     ['code', 'blockquote'],
     ['ordered_list', 'bullet_list'],
-    [{ heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6'] }],
+    [{heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']}],
     ['link', 'image'],
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
+
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
@@ -111,14 +112,15 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
       periodFrom: [],
       periodTo: [],
       statusEmail: [],
-      strPeriodTo:[moment().format('YYYY-MM-DD')]
+      strPeriodTo: [moment().format('YYYY-MM-DD')]
     });
     this.formGroupDetail = this.fb.group({
       id: [],
       emailTo: [, [Validators.pattern(PATTERN.EMAIL)]],
       emailCc: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailSubject: [, [Validators.maxLength(250)]],
-      emailContent: []
+      emailContent: [,[Validators.required]],
+      fileAttachs: []
     });
 
     this.formGroupSearchInit = {...this.formGroupSearch.value};
@@ -161,12 +163,28 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
   }
 
   sendEmail() {
+    if(this.formGroupDetail.getRawValue().emailContent ==='<p></p>'){
+      this.formGroupDetail.patchValue({emailContent: ''});
+    }
     this.formGroupDetail.markAllAsTouched();
     if (this.formGroupDetail.invalid) {
       this.findInvalidControls(this.formGroupDetail);
       return;
     }
-    this.baseService.sendEmail(this.formGroupDetail.getRawValue()).then(res => {
+
+    let formUpload = new FormData();
+    let reqBody = this.formGroupDetail.getRawValue();
+    delete reqBody.fileAttachs;
+    formUpload.append('request', JSON.stringify(reqBody));
+
+    let reqFile = this.formGroupDetail.getRawValue().fileAttachs;
+    if (reqFile && reqFile.length) {
+      for (let i = 0; i < reqFile.length; i++) {
+        formUpload.append('files', reqFile[i]);
+      }
+    }
+
+    this.baseService.sendEmail(formUpload).then(res => {
       this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
       let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
       current.statusEmail = 'SEND';
