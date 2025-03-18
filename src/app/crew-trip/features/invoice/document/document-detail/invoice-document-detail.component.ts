@@ -146,7 +146,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       idInvoiceForm: [],
       version: [],
       ctype: [InvoiceDocumentTypeEnum.STANDARD],
-      invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(PATTERN.STRING_NUMBER)]],
+      invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(PATTERN.STRING_NUMBER1)]],
       invoiceDate: [],
       invoiceReceiveDate: [],
       periodFrom: [],
