@@ -154,7 +154,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   async upload() {
     try {
       await this.spinner.show();
-      if(!(this.formGroupFile.value.fileUpload?.length??0)){
+      if (!(this.formGroupFile.value.fileUpload?.length ?? 0)) {
         this.baseService.showError(MESSAGE.FILE_UPLOAD_EMPTY);
         return;
       }
@@ -174,11 +174,10 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
           this.closeDialogFile();
         }
-      }).catch(e=>{
-        if(e.error?.message.includes('No valid')){
+      }).catch(e => {
+        if (e.error?.message.includes('No valid')) {
           this.baseService.showError(this.MESSAGE.FILE_UPLOAD_INVALID_XLSX);
-        }
-        else{
+        } else {
           this.baseService.showError(e.error?.message ?? this.MESSAGE.ERROR);
         }
       });
@@ -259,18 +258,19 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
 
   ctypeChange() {
     if (this.formGroupSearch.getRawValue().ctype == 'INTERNATIONAL') {
-      this.loadListFlightMarket({ type: 'International'})
+      this.loadListFlightMarket({type: 'International', status: FlightMarketStatusEnum.OPERATIONAL})
     } else if (this.formGroupSearch.getRawValue().ctype == 'DOMESTIC') {
-      this.loadListFlightMarket({ type: 'Domestic'})
+      this.loadListFlightMarket({type: 'Domestic', status: FlightMarketStatusEnum.OPERATIONAL})
     } else {
       this.loadListFlightMarket()
     }
   }
-  isHotel(){
+
+  isHotel() {
     return this.partnerType === 'HOTEL'
   }
 
-  isTransportation(){
+  isTransportation() {
     return this.partnerType === 'TRANSPORTATION'
   }
 }
