@@ -35,3 +35,19 @@ export function getRowDef(contractData: any, type: PlanCategoryEnum): string[] {
     ];
     return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
+
+
+
+export const formula: any = {
+
+    // Thành tiền chưa vat
+    totalAmount: {
+        formula: '(ctz(data.numberVehicles) * ctz(data.unitPrice))'
+    },
+    // Thành tiền  có vat
+    totalAmountVat: {
+        formula: '(ctz(data.numberVehicles) * ctz(data.unitPriceVat))'
+    }
+}
+
+
