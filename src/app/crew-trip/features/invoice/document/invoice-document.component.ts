@@ -89,6 +89,8 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   tblDetail: any[]
   currentRow: any
   selectedRow: any = null;
+  showListChild = true;
+  dataListChild: any;
 
   constructor() {
     super();
@@ -102,6 +104,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       periodTo: [this.endOfMonth],
       status: [],
       statusEmail: [],
+      version: [1],
     });
     this.formGroupDetail = this.fb.group({
       id: [], emailTo: ['chien12345aabb@gmail.com'], emailCc: ['chien12345aabb@gmail.com'], emailSubject: ['test'], emailContent: ['test1']
@@ -134,6 +137,34 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     this.readMode = readMode;
     this.dataObject = dataObject;
     this.nextStepEmit.emit([this.id, this.readMode, this.step, this.dataObject])
+  }
+
+  async checkVersion(data: any) {
+    try {
+      await this.spinner.show();
+      if (moment(data.periodOccurrence).isValid()) {
+        let res = await this.baseService.search({
+          page: this.pageIndex,
+          size: this.pageSize,
+          limit: this.pageSize, ...removeNullValues({
+            listAirportCode: data.airportCode,
+            partnerCode: data.partnerCode,
+            periodOccurrence: moment(data.periodOccurrence).startOf('month').format('YYYY-MM-DD')
+          })
+        });
+        if (res.data?.totalElements > 1) {
+          this.showListChild = true;
+          this.dataListChild = res.data.content;
+        } else {
+          this.showListChild = false;
+          // this.nextStep(data.id, true, 2, data);
+        }
+      }
+    } catch (e) {
+      console.log(e);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
   async backStep() {
