@@ -194,13 +194,13 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         @if((domesticBudgetCarRentalData &&
-                        (domesticBudgetCarRentalData?.planBudgetCarentals??[]).length>0) ||
+                        (domesticBudgetCarRentalData?.planCarentals??[]).length>0) ||
                         (internationalBudgetCarRentalData?.planCarentals &&
                         internationalBudgetCarRentalData?.planCarentals.length > 0)){
                         <div>
                             @if(category() === CategoryEnum.DOMESTIC){
                             @if (domesticBudgetCarRentalData &&
-                            (domesticBudgetCarRentalData?.planBudgetCarentals??[]).length>0) {
+                            (domesticBudgetCarRentalData?.planCarentals??[]).length>0) {
                             <app-domestic-budget-procurement-car-rental #domesticBudgetCarRental [yearPlan]="yearPlan()"
                                 [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
                                 [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
