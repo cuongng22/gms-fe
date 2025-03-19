@@ -87,6 +87,7 @@ export const formula: any = {
       + ' + ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate) '
       + ' + (ctz(data.totalFlightByAircraft) * 2 * ctz(data.priceCrewTransport)) '
       ,
+      formulaProcurement: 'ctz(data.totalAmountForeignVat) / (1 + (ctz(data.taxRate)/100)) ',
     groupFormula: 'period',
   },
   //Tổng tiền ngoại tệ - Bao gồm VAT
@@ -106,6 +107,7 @@ export const formula: any = {
   //Tổng tiền VND - chưa bao gồm VAT
   totalAmount: {
     formula: 'ctz(data.totalAmountForeign) * ctz(data.rateInPeriod)',
+    formulaProcurement: 'ctz(data.totalAmountVat) / (1 + (ctz(data.taxRate)/100))',
     groupFormula: 'period',
   },
   //Tổng số phòng đơn

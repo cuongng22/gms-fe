@@ -18,8 +18,8 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { truncateDate, truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
-import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
+import { Constant, round } from 'src/app/crew-trip/shared/utils/constant';
 import { PADDING_0, PlanCategoryEnum } from '../../../budget-procurement.model';
 import {
   formula,
@@ -74,6 +74,7 @@ export class DomesticBudgetProcurementHotelComponent
   endDatePlanGroup: any;
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
 
+  round = round;
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       if (this.data()) {
@@ -110,6 +111,25 @@ export class DomesticBudgetProcurementHotelComponent
     this.calculateTotal()
   }
 
+  getDataSource() {
+    const _stringData = JSON.stringify(this.dataSource.data);
+    let _jsonData = JSON.parse(_stringData);
+    _jsonData.forEach((item: any, index: number) => {
+      // Tổng Số phòng đơn
+      item.totalSingleRoom = round(item.totalSingleRoom);
+      // Tổng Số phòng đôi
+      item.totalDoubleRoom = round(item.totalDoubleRoom);
+      // Thành tiền chưa vat
+      item.totalAmount = round(item.totalAmount);
+      // Thành tiền  có vat
+      item.totalAmountVat = round(item.totalAmountVat);
+
+      // Thành tiền có vat của năm thực hiện
+      item.totalAmountYearPerformVat = round(item.totalAmountYearPerformVat);
+    });
+    return _jsonData;
+  }
+
   getRow(): void {
     this.headerRowDef1 = getHeaderRowDef1(null, this.type());
     this.headerRowDef2 = getHeaderRowDef2(null, this.type());
@@ -126,22 +146,22 @@ export class DomesticBudgetProcurementHotelComponent
     // Tổng Số phòng đôi
     this.calculate(item, 'totalDoubleRoom');
     // Thành tiền chưa vat
-    this.calculate(item, 'totalAmount');
+    this.calculate(item, 'totalAmount', true);
     // Thành tiền  có vat
-    this.calculate(item, 'totalAmountVat');
+    this.calculate(item, 'totalAmountVat', true);
 
     if (new Date(item.periodStart) < this.startDatePlanGroup) {
       // thành tiền có vat của tháng 12 năm ngoái (12/2024 cho kế hoạch 2025)
-      this.calculate(item, 'totalAmountVatLastYear');
+      this.calculate(item, 'totalAmountVatLastYear', true);
       console.log('item.totalAmountVatLastYear: ', item.totalAmountVatLastYear);
       item.totalAmountVat = item.totalAmountVatLastYear
     }
     // Thành tiền có vat của năm thực hiện
-    this.calculate(item, 'totalAmountYearPerformVat');
+    this.calculate(item, 'totalAmountYearPerformVat', true);
   }
 
   // hàm công thức tính chung
-  calculate(item: any, key: string) {
+  calculate(item: any, key: string, isRound?: boolean, fractionDigits?: number) {
     // let data: any = this.dataSource.data[index];
     // Check lập kế hoạch sản lượng thay đổi
     // Tháng nào đã thực hiện thì tính theo công thưc mới
@@ -155,6 +175,9 @@ export class DomesticBudgetProcurementHotelComponent
     if (strFomular) {
       item[key] = this.calculateFormula(item, strFomular);
     }
+    if (isRound) {
+      item[key] = round(item[key], fractionDigits);
+    }
     return item[key];
   }
 
@@ -166,7 +189,7 @@ export class DomesticBudgetProcurementHotelComponent
       `return ${formula};`    // Công thức cần tính
     );
     const result = dynamicFunction(data, null, this.ctz);
-    return Math.round(result);
+    return result;
   }
   // convertToZero
   ctz(value: any) {
@@ -181,24 +204,24 @@ export class DomesticBudgetProcurementHotelComponent
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     // const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     let totalValue = 0
-    if (control === 'totalAmountVat') {
+    if (this.type() === PlanCategoryEnum.BUDGET && control === 'totalAmountVat') {
       // const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-      totalValue = Math.round(this.dataSource.data.map((t: any) => {
+      totalValue = this.dataSource.data.map((t: any) => {
         if (truncateDate(new Date(t['periodStart'])) <= truncateDate(this.endDatePlanGroup)) {
-          return Number(t[control]);
+          return round(Number(t[control]));
         } else {
-          return Number(t['totalAmountYearPerformVat'])
+          return round(Number(t['totalAmountYearPerformVat']))
         }
-      }).reduce((acc, value) => acc + value, 0));
+      }).reduce((acc, value) => acc + value, 0);
       this.resultTotal[control] = totalValue;
       return;
     }
-    totalValue = Math.round(this.dataSource.data.map((t: any) => {
+    totalValue = this.dataSource.data.map((t: any) => {
       if (truncateDate(new Date(t['periodStart'])) >= truncateDate(this.startDatePlanGroup)) {
-        return Number(t[control]);
+        return round(Number(t[control]));
       }
       return 0;
-    }).reduce((acc, value) => acc + value, 0));
+    }).reduce((acc, value) => acc + value, 0);
     this.resultTotal[control] = totalValue;
   }
 
