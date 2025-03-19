@@ -9,7 +9,7 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
+import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { PlanCategoryEnum, PADDING_0 } from '../../../../budget-procurement/budget-procurement.model';
 import { getHeaderRowDef1, getHeaderRowDef2, getRowDef, formula } from './domestic-estimated-cost-hotel.model';
@@ -142,7 +142,7 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     const totalValue = Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup)) {
+      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
         return Number(t[control]);
       }
       return 0;

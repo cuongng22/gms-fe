@@ -9,8 +9,8 @@ import { ClickOutside } from 'ngxtension/click-outside';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, planFlightByOvernight, planFlightPeriodList } from './international-budget-procurement-car-rental.model';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
-import { Constant } from 'src/app/crew-trip/shared/utils/constant';
-import { truncateDate, truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
+import { Constant, round } from 'src/app/crew-trip/shared/utils/constant';
+import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { PlanCategoryEnum } from '../../../budget-procurement.model';
 import moment from 'moment';
@@ -76,6 +76,25 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     this.calculateTotal()
   }
 
+  getDataSource() {
+    const _stringData = JSON.stringify(this.dataSource.data);
+    let _jsonData = JSON.parse(_stringData);
+    _jsonData.forEach((item: any, index: number) => {
+      //Số chuyến bay theo tàu 
+      item.totalFlightByAircraft = round(item.totalFlightByAircraft);
+
+      //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
+      item.totalAmountForeign = round(item.totalAmountForeign);
+      //Thành tiền (ngoại tệ) - Bao gồm VAT
+      item.totalAmountForeignVat = round(item.totalAmountForeignVat);
+      //Thành tiền VND (Chưa bao gồm VAT)
+      item.totalAmount = round(item.totalAmount);
+      //Thành tiền VND (Bao gồm VAT)
+      item.totalAmountVat = round(item.totalAmountVat);
+    })
+    return _jsonData;
+  }
+
   setExchangeRate(exchangeRateData: any) {
     this.dataSource.data.forEach((item: any, index) => {
       if (PlanCategoryEnum.BUDGET === this.type()) {
@@ -113,8 +132,10 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
         ).map((t: any) => t.numberOfFlight).reduce((acc, value) => acc + value, 0);
       }
 
-      //Số lượt xe
-      this.calculate(item, 'numberVehicles');
+      if (!item.monthIsPerform) {
+        //Số lượt xe
+        this.calculate(item, 'numberVehicles');
+      }
       //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
       this.calculate(item, 'totalAmountForeign');
       //Thành tiền (ngoại tệ) - Bao gồm VAT
@@ -135,11 +156,11 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     let totalValue = 0
     const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
-    if (['totalAmountVat', 'totalAmountForeignVat'].includes(control)) {
+    if (this.type() === PlanCategoryEnum.BUDGET && ['totalAmountVat', 'totalAmountForeignVat'].includes(control)) {
       const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
       totalValue = Math.round(this.dataSource.data.map((t: any) => {
         if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
-          return Number(t[control]);
+          return round(Number(t[control]));
         }
         return 0;
       }).reduce((acc, value) => acc + value, 0));
@@ -148,7 +169,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     }
     totalValue = Math.round(this.dataSource.data.map((t: any) => {
       if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
-        return Number(t[control]);
+        return round(Number(t[control]));
       }
       return 0;
     }).reduce((acc, value) => acc + value, 0));
@@ -171,7 +192,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   }
 
   // hàm công thức tính chung
-  calculate(item: any, key: string) {
+  calculate(item: any, key: string, isRound?: boolean, fractionDigits?: number) {
     // Check lập kế hoạch sản lượng thay đổi
     // Tháng nào đã thực hiện thì tính theo công thưc mới
     const objFormula = formula[key];
@@ -185,6 +206,9 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     if (!!strFomular) {
       item[key] = this.calculateFormula(item, strFomular);
     }
+    if (isRound) {
+      item[key] = round(item[key], fractionDigits);
+    }
     return item[key];
   }
 
@@ -192,7 +216,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   getTotalByGroup(index: number, key: string, control: string) {
     let data: any = this.dataSource.data[index];
     const filterData = this.dataSource.data.filter((item: any) => this.groupFormula(item, data, formula[key].groupFormula));
-    data[control] = filterData.map((t: any) => t[key]).reduce((acc, value) => acc + value, 0);
+    data[control] = filterData.map((t: any) => round(t[key])).reduce((acc, value) => acc + value, 0);
   }
 
   // Hàm tính toán dựa trên công thức động
@@ -208,7 +232,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     if (this.updateBudgetPlan() && periodMonth <= currentMonth && key) {
       return data[key];
     }
-    return Math.round(dynamicFunction(data, this.ctz));
+    return (dynamicFunction(data, this.ctz));
   }
   // convertToZero
   ctz(value: any) {
