@@ -219,8 +219,8 @@
                         }
 
                     </mat-expansion-panel>
-                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.wetLeaseFlag){
-                    <mat-expansion-panel [expanded]="this.dataDetail?.wetLeaseFlag" #panelBudgetPlanWetLeaseState>
+                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.haveContractWetlease){
+                    <mat-expansion-panel [expanded]="this.dataDetail?.haveContractWetlease" #panelBudgetPlanWetLeaseState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">3.3
@@ -310,8 +310,8 @@
 
                         </div>
                     </mat-expansion-panel>
-                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.haveContractWetlease){
-                    <mat-expansion-panel [expanded]="this.dataDetail?.haveContractWetlease"
+                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.wetLeaseFlag){
+                    <mat-expansion-panel [expanded]="this.dataDetail?.wetLeaseFlag"
                         #panelProcurementPlanWetLeaseState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>

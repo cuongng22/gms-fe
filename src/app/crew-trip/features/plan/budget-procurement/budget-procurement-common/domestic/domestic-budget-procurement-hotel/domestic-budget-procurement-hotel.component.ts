@@ -78,7 +78,7 @@ export class DomesticBudgetProcurementHotelComponent
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       if (this.data()) {
-        this.setDataSource(this.data(), this.data().isSummary);
+        this.setDataSource(this.data().planHotels, this.data().isSummary);
       }
     });
   }
@@ -141,23 +141,25 @@ export class DomesticBudgetProcurementHotelComponent
    * @param item Giá trị từng dòng của dataSource theo công thức
    */
   private calculateData(item: any, index: number, isCalculate?: boolean) {
-    // Tổng Số phòng đơn
-    this.calculate(item, 'totalSingleRoom');
-    // Tổng Số phòng đôi
-    this.calculate(item, 'totalDoubleRoom');
-    // Thành tiền chưa vat
-    this.calculate(item, 'totalAmount', true);
-    // Thành tiền  có vat
-    this.calculate(item, 'totalAmountVat', true);
+    if (isCalculate) {
+      // Tổng Số phòng đơn
+      this.calculate(item, 'totalSingleRoom');
+      // Tổng Số phòng đôi
+      this.calculate(item, 'totalDoubleRoom');
+      // Thành tiền chưa vat
+      this.calculate(item, 'totalAmount', true);
+      // Thành tiền  có vat
+      this.calculate(item, 'totalAmountVat', true);
 
-    if (new Date(item.periodStart) < this.startDatePlanGroup) {
-      // thành tiền có vat của tháng 12 năm ngoái (12/2024 cho kế hoạch 2025)
-      this.calculate(item, 'totalAmountVatLastYear', true);
-      console.log('item.totalAmountVatLastYear: ', item.totalAmountVatLastYear);
-      item.totalAmountVat = item.totalAmountVatLastYear
+      if (new Date(item.periodStart) < this.startDatePlanGroup) {
+        // thành tiền có vat của tháng 12 năm ngoái (12/2024 cho kế hoạch 2025)
+        this.calculate(item, 'totalAmountVatLastYear', true);
+        console.log('item.totalAmountVatLastYear: ', item.totalAmountVatLastYear);
+        item.totalAmountVat = item.totalAmountVatLastYear
+      }
+      // Thành tiền có vat của năm thực hiện
+      this.calculate(item, 'totalAmountYearPerformVat', true);
     }
-    // Thành tiền có vat của năm thực hiện
-    this.calculate(item, 'totalAmountYearPerformVat', true);
   }
 
   // hàm công thức tính chung
