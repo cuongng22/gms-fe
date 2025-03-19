@@ -3088,7 +3088,8 @@ apx-chart {
   .popup-dialog {
     display: flex;
     transition: .3s;
-    max-width: 550px;
+    min-width: 550px;
+    max-width: 700px;
     min-height: 100%;
     align-items: center;
     transform: translate(0, -20px);
