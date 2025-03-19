@@ -486,7 +486,6 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
   }
 
   formGeneralValueChanges(event: any): void {
-    debugger
     if (this.category() === CategoryEnum.INTERNATIONAL) {
       this.internationalBudgetHotel.setGeneralData(event);
       this.internationalProcurementHotel?.setGeneralData(event);
