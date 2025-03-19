@@ -41,6 +41,7 @@ import {CdkVirtualScrollViewport} from "@angular/cdk/scrolling";
 import {ConfirmDeleteDialog} from "src/app/crew-trip/shared/dialog/confirm-delete-dialog";
 import {NgxUpperCaseDirectiveModule} from "ngx-upper-case-directive";
 import {SelectMultipleComponent} from "src/app/crew-trip/shared/component/select-multiple/select-multiple.component";
+import {MatListModule} from "@angular/material/list";
 
 export const BaseImport = [
   FormsModule,
@@ -109,5 +110,6 @@ export const BaseImport = [
   CdkVirtualScrollViewport,
   ConfirmDeleteDialog,
   NgxUpperCaseDirectiveModule,
-  SelectMultipleComponent
+  SelectMultipleComponent,
+  MatListModule
 ];

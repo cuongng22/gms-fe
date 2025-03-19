@@ -197,7 +197,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
       if (type === 'EXPORT') {
       } else if (type === 'DOWNLOAD') {
         const res = await this.baseService.exportFileData({
-          fileExportType: '1'
+          fileExportType: this.formType
           // ctype: this.formGroupFile.getRawValue().ctype,
           // partnerType: this.formGroupFile.getRawValue().partnerType
         });
@@ -238,18 +238,22 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
       this.formGroupFile.patchValue({
         templateName: '[Crew Trip]_Template bảng kê chi phí khách sạn_Quốc tế.xlsx', templateNameLabel: 'report-hotel-international-template.xlsx'
       })
+      this.formType = 1;
     } else if (this.formGroupFile.getRawValue().ctype === 'DOMESTIC' && this.formGroupFile.getRawValue().partnerType === 'HOTEL') {
       this.formGroupFile.patchValue({
         templateName: '[CrewTrip]_Template bảng kê chi phí khách sạn_Quốc nội.xlsx', templateNameLabel: 'report-hotel-domestic-template.xlsx'
       })
+      this.formType = 2;
     } else if (this.formGroupFile.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupFile.getRawValue().partnerType === 'TRANSPORTATION') {
       this.formGroupFile.patchValue({
         templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc tế.xlsx', templateNameLabel: 'report-transport-international-template.xlsx'
       })
+      this.formType = 3;
     } else if (this.formGroupFile.getRawValue().ctype === 'DOMESTIC' && this.formGroupFile.getRawValue().partnerType === 'TRANSPORTATION') {
       this.formGroupFile.patchValue({
         templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc nội.xlsx', templateNameLabel: 'report-transport-domestic-template.xlsx'
       })
+      this.formType = 4;
     }
   }
 
