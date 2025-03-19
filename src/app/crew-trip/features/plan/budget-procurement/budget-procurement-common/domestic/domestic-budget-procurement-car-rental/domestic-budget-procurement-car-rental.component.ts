@@ -49,7 +49,7 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
   constructor(private readonly datePipe: DatePipe, private readonly cdRef: ChangeDetectorRef) {
     effect(() => {
       if (this.data()) {
-        this.setDataSource(this.data().planBudgetCarentals, this.data().isSummary);
+        this.setDataSource(this.data().planCarentals, this.data().isSummary);
       }
     })
   }

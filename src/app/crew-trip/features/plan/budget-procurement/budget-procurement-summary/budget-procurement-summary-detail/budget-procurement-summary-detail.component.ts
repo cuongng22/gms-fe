@@ -486,6 +486,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
   }
 
   formGeneralValueChanges(event: any): void {
+    debugger
     if (this.category() === CategoryEnum.INTERNATIONAL) {
       this.internationalBudgetHotel.setGeneralData(event);
       this.internationalProcurementHotel?.setGeneralData(event);
@@ -543,15 +544,21 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     this.budgetProcurementGeneral.cdRef.detectChanges()
 
     this.planFlightRatesData = [...this.dataDetail?.planFlightRates ?? []];
-    this._internationalFlightPeriodData = {
+    this._internationalFlightPeriodData =
+    {
       isSummary: isSummary,
       planFlightPeriods: [...this.dataDetail?.planFlightPeriods ?? []],
       periodRowspan: (this.dataDetail?.listActype ?? []).length
     }
     this.internationalFlightOvernightData = [...this.dataDetail?.planOverightRates ?? []];
-    this.domesticBudgetHotelData = [...this.dataDetail?.planBudgetHotels ?? []]
+    this.domesticBudgetHotelData =
+    {
+      isSummary: isSummary,
+      planHotels: [...this.dataDetail?.planBudgetHotels ?? []]
+    }
 
-    this.internationalBudgetHotelData = {
+    this.internationalBudgetHotelData =
+    {
       isSummary: isSummary,
       aircraftTypeRowspan: (this.dataDetail?.listActype ?? []).length,
       overnightRowspan: (this.dataDetail?.planOverightRates ?? []).length,
@@ -561,18 +568,25 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       general: this.budgetProcurementGeneral.formGroupDetail.getRawValue()
     };
 
-    this.domesticBudgetCarRentalData = {
+    this.domesticBudgetCarRentalData =
+    {
       isSummary: isSummary,
-      planBudgetCarentals: [...this.dataDetail?.planBudgetCarentals ?? []]
+      planCarentals: [...this.dataDetail?.planBudgetCarentals ?? []]
     };
-    this.internationalBudgetCarRentalData = {
+    this.internationalBudgetCarRentalData =
+    {
       isSummary: isSummary,
       planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
       planCarentals: [...this.dataDetail?.planBudgetCarentals ?? []]
     }
     this.domesticBudgetWetLeaseData = [...this.dataDetail?.planBudgetWetLease ?? []];
-    this.domesticProcurementHotelData = [...this.dataDetail?.planProcurementHotels ?? []];
-    this.internationalProcurementHotelData = {
+    this.domesticProcurementHotelData =
+    {
+      isSummary: isSummary,
+      planHotels: [...this.dataDetail?.planProcurementHotels ?? []]
+    };
+    this.internationalProcurementHotelData =
+    {
       isSummary: isSummary,
       aircraftTypeRowspan: (this.dataDetail?.listActype ?? []).length,
       overnightRowspan: (this.dataDetail?.planOverightRates ?? []).length,
@@ -581,11 +595,13 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       planHotels: [...this.dataDetail?.planProcurementHotels ?? []],
       general: this.budgetProcurementGeneral.formGroupDetail.getRawValue()
     }
-    this.domesticProcurementCarRentalData = {
+    this.domesticProcurementCarRentalData =
+    {
       isSummary: isSummary,
-      planProcurementCarentals: [...this.dataDetail?.planProcurementCarentals ?? []]
+      planCarentals: [...this.dataDetail?.planProcurementCarentals ?? []]
     };
-    this.internationalProcurementCarRentalData = {
+    this.internationalProcurementCarRentalData =
+    {
       isSummary: isSummary,
       planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
       planCarentals: [...this.dataDetail?.planProcurementCarentals ?? []]
@@ -601,7 +617,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
   private _domesticBudgetCarRentalData: any = {};
   private _internationalBudgetCarRentalData: any = {};
   private _domesticBudgetWetLeaseData: any[] = [];
-  private _domesticProcurementHotelData: any[] = [];
+  private _domesticProcurementHotelData: any = {};
   private _internationalProcurementHotelData: any = {};
   private _domesticProcurementCarRentalData: any = {};
   private _internationalProcurementCarRentalData = {};
@@ -631,7 +647,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
   get domesticBudgetHotelData() {
     return this._domesticBudgetHotelData;
   }
-  set domesticBudgetHotelData(value: any[]) {
+  set domesticBudgetHotelData(value: any) {
     this._domesticBudgetHotelData = value;
   }
 
@@ -667,7 +683,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
   get domesticProcurementHotelData() {
     return this._domesticProcurementHotelData;
   }
-  set domesticProcurementHotelData(value: any[]) {
+  set domesticProcurementHotelData(value: any) {
     this._domesticProcurementHotelData = value;
   }
 
