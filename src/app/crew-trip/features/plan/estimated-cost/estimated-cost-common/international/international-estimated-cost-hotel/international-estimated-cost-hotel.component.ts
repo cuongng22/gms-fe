@@ -51,12 +51,20 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
 
   PlanCategoryEnum = PlanCategoryEnum;
 
+  periodsSpan: {
+    [key: string]: { count: number, firstIndex: number }
+  } = {};
+
+  aircraftTypeSpan: {
+    [key: string]: { count: number, firstIndex: number }
+  } = {}
+
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       console.log('effect data InternationalBudgetProcurementHotelComponent: ', this.data());
       if (this.data()) {
-        this.calculateSpan(this.data().aircraftTypeRowspan, this.data().overnightRowspan);
+        this.calculateSpan();
         this.setPlanFlightByOvernight(this.data().planOverightRates ?? []);
         this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
         this.setDataSource(this.data().planHotels ?? [], this.data().general);
@@ -79,9 +87,9 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
 
     this.dataSource.data.forEach((item: any, index) => {
       this.calculatePeriodLabel(item, index);
-      this.calculateAirCraftLabel(item, index);
       this.calculateData(item, index);
     });
+    this.calculateSpan();
     this.calculateTotal()
   };
 
@@ -90,28 +98,45 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
 
     item.period = period;
-    if (!this.periods.includes(period)) {
-      this.periods.push(period);
-      item.periodLabel = period;
-    } else {
-      item.periodLabel = '';
-    }
+    // if (!this.periods.includes(period)) {
+    //   this.periods.push(period);
+    //   item.periodLabel = period;
+    // } else {
+    //   item.periodLabel = '';
+    // }
   }
 
-  calculateAirCraftLabel(item: any, index: number) {
-    if (!this.aircraftTypes.includes(`${item.period}_${item.aircraftType}`)) {
-      this.aircraftTypes.push(`${item.period}_${item.aircraftType}`)
-      item.aircraftTypeLabel = item.aircraftType;
-    } else {
-      item.aircraftTypeLabel = '';
-    }
-  }
+  // calculateAirCraftLabel(item: any, index: number) {
+  //   if (!this.aircraftTypes.includes(`${item.period}_${item.aircraftType}`)) {
+  //     this.aircraftTypes.push(`${item.period}_${item.aircraftType}`)
+  //     item.aircraftTypeLabel = item.aircraftType;
+  //   } else {
+  //     item.aircraftTypeLabel = '';
+  //   }
+  // }
 
-  calculateSpan(aircraftTypeRowspan: number, overnightRowspan: number) {
-    this.periodRowspan = aircraftTypeRowspan * overnightRowspan;
-    this.aircraftTypeRowspan = aircraftTypeRowspan;
-    this.overnightRowspan = overnightRowspan;
-    console.log('periodRowspan: ', this.periodRowspan, 'aircraftTypeRowspan: ', this.aircraftTypeRowspan, 'overnightRowspan: ', this.overnightRowspan);
+  calculateSpan() {
+    // this.periodRowspan = aircraftTypeRowspan * overnightRowspan;
+    // this.aircraftTypeRowspan = aircraftTypeRowspan;
+    // this.overnightRowspan = overnightRowspan;
+    // console.log('periodRowspan: ', this.periodRowspan, 'aircraftTypeRowspan: ', this.aircraftTypeRowspan, 'overnightRowspan: ', this.overnightRowspan);
+    this.periodsSpan = {}
+    this.aircraftTypeSpan = {}
+    this.dataSource.data.forEach((item: any, index) => {
+      // tính toán rowspan cho cột giai đoạn
+      if (this.periodsSpan.hasOwnProperty(item.period)) {
+        this.periodsSpan[item.period].count += 1;
+      } else {
+        this.periodsSpan[item.period] = { count: 1, firstIndex: index };
+      }
+
+      // tính toán rowspan cho cột loại máy bay
+      if (this.aircraftTypeSpan.hasOwnProperty(`${item.period}_${item.aircraftType}`)) {
+        this.aircraftTypeSpan[`${item.period}_${item.aircraftType}`].count += 1;
+      } else {
+        this.aircraftTypeSpan[`${item.period}_${item.aircraftType}`] = { count: 1, firstIndex: index };
+      }
+    });
   }
 
   setGeneralData(data: any) {
@@ -121,6 +146,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
       this.dataSource.data.forEach((item: any, index) => {
         this.calculateData(item, index);
       });
+      this.calculateSpan();
       this.calculateTotal()
     }
     const earlyCheckinFlag = checkChange(this.generalData.earlyCheckinFlag, data.earlyCheckinFlag);
@@ -170,7 +196,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
             this.calculateData(dataProcessHotel[i], i);
           }
           if (length) {
-            this.calculateSpan(this.aircraftTypeRowspan, length);
+            this.calculateSpan();
           }
           this.dataSource.data = [...dataProcessHotel];
           this.calculateTotal()
@@ -184,11 +210,11 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
       case 'delete':
         if (planFlightByOvernight && planFlightByOvernight.length) {
           this.setPlanFlightByOvernight(planFlightByOvernight);
-          this.calculateSpan(this.aircraftTypeRowspan, planFlightByOvernight.length);
+          this.calculateSpan();
         }
         this.dataSource.data = [...this.dataSource.data.filter((itemFilter: any) => itemFilter.overnightId !== data.id)];
         if (length) {
-          this.calculateSpan(this.aircraftTypeRowspan, length);
+          this.calculateSpan();
         }
         this.dataSource.data.forEach((item: any, index) => {
           this.calculateData(item, index);

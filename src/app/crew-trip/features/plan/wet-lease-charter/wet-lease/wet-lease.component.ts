@@ -163,8 +163,8 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
       'totalTwinRoom',
       'totalNumberOfTrip',
       'totalForex',
-      'totalIncVAT',
       'totalExcVAT',
+      'totalIncVAT',
       'action',
     ];
     this.displayedFooterColumns = [
