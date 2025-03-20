@@ -174,12 +174,12 @@
                             @if(category() === CategoryEnum.DOMESTIC){
                             <app-domestic-budget-procurement-hotel #domesticBudgetHotel [type]="PlanCategoryEnum.BUDGET"
                                 [disabled]="checkStatusCompelted()" [data]="domesticBudgetHotelData"
-                                [yearPlan]="yearPlan()" [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [yearPlan]="yearPlan()" [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }@else {
                             <app-international-budget-procurement-hotel #internationalBudgetHotel
                                 [disabled]="checkStatusCompelted()" [data]="internationalBudgetHotelData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }
                         </div>
                     </mat-expansion-panel>
@@ -203,7 +203,7 @@
                             (domesticBudgetCarRentalData?.planCarentals??[]).length>0) {
                             <app-domestic-budget-procurement-car-rental #domesticBudgetCarRental [yearPlan]="yearPlan()"
                                 [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan"
                                 [data]="domesticBudgetCarRentalData" />
                             }
                             }@else {
@@ -212,7 +212,7 @@
                             <app-international-budget-procurement-car-rental #internationalBudgetCarRental
                                 [disabled]="checkStatusCompelted()" [data]="internationalBudgetCarRentalData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }
                             }
                         </div>
@@ -234,7 +234,7 @@
                         <div>
                             <app-domestic-budget-procurement-wet-lease [yearPlan]="yearPlan()"
                                 [disabled]="checkStatusCompelted()" [data]="domesticBudgetWetLeaseData"
-                                [type]="PlanCategoryEnum.BUDGET" [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                [type]="PlanCategoryEnum.BUDGET" [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan"
                                 #domesticBudgetWetLease />
                         </div>
                     </mat-expansion-panel>
@@ -272,13 +272,13 @@
                             <app-domestic-budget-procurement-hotel #domesticProcurementHotel
                                 [disabled]="checkStatusCompelted()" [data]="domesticProcurementHotelData"
                                 [type]="PlanCategoryEnum.PROCUREMENT" [yearPlan]="yearPlan()"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan">
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan">
                             </app-domestic-budget-procurement-hotel>
                             }@else {
                             <app-international-budget-procurement-hotel #internationalProcurementHotel
                                 [disabled]="checkStatusCompelted()" [data]="internationalProcurementHotelData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }
                             }
 
@@ -300,12 +300,12 @@
                             <app-domestic-budget-procurement-car-rental #domesticProcurementCarRental
                                 [disabled]="checkStatusCompelted()" [data]="domesticProcurementCarRentalData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }@else {
                             <app-international-budget-procurement-car-rental #internationalProcurementCarRental
                                 [disabled]="checkStatusCompelted()" [data]="internationalProcurementCarRentalData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }
                             }
 
@@ -326,7 +326,7 @@
                             @defer{
                             <app-domestic-budget-procurement-wet-lease [yearPlan]="yearPlan()"
                                 [disabled]="checkStatusCompelted()" [data]="domesticProcurementWetLeaseData"
-                                [type]="PlanCategoryEnum.PROCUREMENT" [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                [type]="PlanCategoryEnum.PROCUREMENT" [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan"
                                 #domesticProcurementWetLease />
                             }
                         </div>
