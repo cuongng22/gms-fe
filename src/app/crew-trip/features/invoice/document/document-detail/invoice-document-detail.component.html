@@ -564,7 +564,7 @@
         }
       </div>
       <form #totalab [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
-        <mat-grid-list class="mt-20" cols="12" gutterSize="24px" rowHeight="50px">
+        <mat-grid-list class="mt-20" cols="12" gutterSize="24px" rowHeight="80px">
           @if (formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL') {
             <mat-grid-tile [colspan]="3">
               <div class="w-100" sizeInput='sm'>
@@ -609,7 +609,7 @@
                   <input appThousandsSeparator formControlName="reimbursementTotalFc" matInput required
                          trim="blur" >
                   <mat-error>
-                    <app-control-error controlName="airportCode"></app-control-error>
+                    <app-control-error controlName="reimbursementTotalFc"></app-control-error>
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -658,7 +658,7 @@
                 <input appThousandsSeparator formControlName="reimbursementTotalVnd" matInput required
                        trim="blur">
                 <mat-error>
-                  <app-control-error controlName="airportCode"></app-control-error>
+                  <app-control-error controlName="reimbursementTotalVnd"></app-control-error>
                 </mat-error>
               </mat-form-field>
             </div>

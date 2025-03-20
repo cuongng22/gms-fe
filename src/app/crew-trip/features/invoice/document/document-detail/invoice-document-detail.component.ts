@@ -328,6 +328,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       await this.loadListDocumentParent();
       await Promise.all([this.detail(this.id), this.loadListFlightMarket(), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
         this.formGroupDetail.patchValue({idParent: this.formGroupDetail.getRawValue().idParent})
+        this.calTotal();
       });
     } catch (e) {
       console.log(e);
