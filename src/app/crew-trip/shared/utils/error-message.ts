@@ -1,5 +1,3 @@
-import {timeAfterValidator} from "src/app/crew-trip/shared/utils/common";
-
 export const contractCode: { [key: string]: string } = {
   required: 'Contract number' + $localize` is required`,
   maxlength: 'Contract number' + $localize` must be less than 50 characters`,
@@ -235,4 +233,11 @@ export const emailSubject: { [key: string]: string } = {
   required: 'Email subject' + $localize` is required`,
   maxlength: 'Email Subject' + $localize` must be less than 250 characters`,
 
+};
+export const reimbursementTotalFc: { [key: string]: string } = {
+  required: 'Reimbursement total Fc' + $localize` is required`,
+
+};
+export const reimbursementTotalVnd: { [key: string]: string } = {
+  required: 'Reimbursement total Vnd' + $localize` is required`,
 };
