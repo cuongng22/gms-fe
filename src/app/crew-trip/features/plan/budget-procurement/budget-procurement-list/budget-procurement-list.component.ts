@@ -1,5 +1,5 @@
 import { CommonModule, AsyncPipe } from '@angular/common';
-import { Component, DestroyRef, ElementRef, Inject, inject, model, OnInit, ViewChild } from '@angular/core';
+import { Component, DestroyRef, ElementRef, Inject, inject, model, OnInit, viewChild, ViewChild } from '@angular/core';
 import { AbstractControl, FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -68,7 +68,7 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
     reason: new FormControl('', [Validators.required, Validators.maxLength(500)])
   });
 
-
+  selectionVersion = viewChild<SelectionSuggestComponent>('selectionVersion')
   showDialogReject = false;
 
   constructor() {
@@ -86,7 +86,7 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
   }
 
   getVersion() {
-    this.baseService.versions().then(res => {
+    this.baseService.versions(PlanTypeEnum.KHNS).then(res => {
       this.versions.set(res.data);
     });
   }
@@ -149,6 +149,8 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
     dialogDetailRef.afterClosed().subscribe(async (res) => {
       if (res) {
         this.getVersion();
+        this.formGroupSearch.controls.version.setValue(res.version)
+        this.selectionVersion()?.setViewValueInit(res.version, true)
         await this.search();
       }
     });
@@ -237,7 +239,7 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
           this.formGroupDetail.controls.updateBudgetPlan.disable();
         }
       } else {
-        this.estimatedAnnualProductionService.getNewsVersion().then(res => {
+        this.estimatedAnnualProductionService.getNewsVersion('P').then(res => {
           this.formGroupDetail.patchValue({
             year: res.data.year,
             version: res.data.versionId
@@ -275,7 +277,7 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
       }
       console.log(res)
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
-      this.dialogRef.close('OK');
+      this.dialogRef.close({ version: res.data.version });
     } catch (e: any) {
       if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
         this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);

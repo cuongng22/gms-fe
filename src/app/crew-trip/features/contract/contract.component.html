@@ -14,8 +14,8 @@
         Back
       </button>
       <h5 class="mb-0 ml-10">
-        <span i18n>Annex </span>
-        <span class="text-vna">{{ '[' + contractObj.contractCode + '] ' }}</span>
+        <span i18n>Appendix </span>
+        <span class="text-vna">{{ '[' + contractObj.contractNo + '] ' }}</span>
           <span class="text-warning">{{ contractObj.contractName }}</span>
         </h5>
       </div>
@@ -30,7 +30,7 @@
       </li>
       @if (isPL()) {
       <li class="breadcrumb-item d-inline-block position-relative" i18n="@@contract">
-        Annex
+        Appendix
       </li>
       }
     </ol>
@@ -75,7 +75,8 @@
                 <input formControlName="endDate" i18n-placeholder="@@endDate" matEndDate placeholder="dd/mm/yyyy"
                        trim="blur">
               </mat-date-range-input>
-              <mat-label i18n="@@contractEndDate">Contract end date</mat-label>
+              @if(isHD()){<mat-label i18n>Contract end date</mat-label>}
+              @else{<mat-label i18n>Appendix end date</mat-label>}
               <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
               <mat-date-range-picker #picker>
                 <mat-date-range-picker-actions>
@@ -226,26 +227,26 @@
                     <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
                     <td *matCellDef="let element; let i = index" mat-cell>{{ i + 1 }}</td>
                   </ng-container>
-                  <ng-container matColumnDef="bizDocId">
+                  <ng-container matColumnDef="docNo">
                     <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Appendix No</th>
                     <td *matCellDef="let element" mat-cell>
                       <a (click)="nextStep(element.bizDocId,true)"
                          style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
-                        {{ element.bizDocId }}
+                        {{ element.docNo }}
                       </a>
                     </td>
                   </ng-container>
-                  <ng-container matColumnDef="description">
+                  <ng-container matColumnDef="docName">
                     <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Appendix Name</th>
                     <td *matCellDef="let element" mat-cell>
                       <a (click)="nextStep(element.bizDocId,true)"
                          style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
-                        {{ element.description }}
+                        {{ element.docName }}
                       </a>
                     </td>
                   </ng-container>
-                  <tr *matHeaderRowDef="['stt','bizDocId','description']" mat-header-row></tr>
-                  <tr *matRowDef="let row; columns: ['stt','bizDocId','description'];" mat-row></tr>
+                  <tr *matHeaderRowDef="['stt','docNo','docName']" mat-header-row></tr>
+                  <tr *matRowDef="let row; columns: ['stt','docNo','docName'];" mat-row></tr>
                 </table>
               </div>
             </mat-menu>
@@ -264,7 +265,7 @@
                 <a (click)="showListAnnex(element.bizDocId)"
                    class="text-vna"
                    mat-button type="button">
-                  <i class="material-symbols-outlined" i18n-title title="Annex">
+                  <i class="material-symbols-outlined" i18n-title title="Appendix">
                     contract
                   </i>
                 </a>

@@ -112,3 +112,8 @@ export const BankCharge = [
   { key: 'OUR', value: $localize`Bên chuyển trả phí` },
   { key: 'SHA', value: $localize`Mỗi bên chịu một phần` },
 ];
+
+export const PaymentType = [
+  { key: 'Chuyển khoản', value: $localize`Chuyển khoản` },
+  { key: 'Tiền mặt', value: $localize`Tiền mặt` },
+];

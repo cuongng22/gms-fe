@@ -69,13 +69,11 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
 
   override ngOnInit(): void {
     if (this.data.carRental) {
-      console.log(this.data.carRental);
       if (this.data.carRental.id && this.data.carRental.id > 0) {
         this.formGroupDetail.controls.code.disable();
       }
       this.formGroupDetail.patchValue(this.data.carRental);
       this.carRentalCodes = this.data.carRentalCodes;
-      console.log('this.data.carRentalCodes: ', this.carRentalCodes);
       this.formGroupDetail.controls.code.addAsyncValidators(AlreadyExistsValidator.existsCarRentalCode(this.carRentalService, this.data.carRental.marketCode, this.carRentalCodes));
       this.readonlyDetail.set(this.data.isViewDetail);
     }

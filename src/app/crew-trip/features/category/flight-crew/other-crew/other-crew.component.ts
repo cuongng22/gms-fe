@@ -107,7 +107,7 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
     this.formGroupDetail = this.fb.group({
       id: ['',],
       type: ['', [Validators.required]],
-      name: ['', [Validators.required]],
+      name: ['', [Validators.required, Validators.maxLength(250)]],
       nationId: ['', [Validators.required]],
       airportCodes: [''],
       desCode: [''],
@@ -115,7 +115,7 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
       flightNo: [''],
       acGroup: [''],
       acType: [''],
-      applyFor: [''],
+      applyFor: ['', [Validators.required]],
       fromDate: ['', [Validators.required]],
       toDate: ['', [Validators.required]],
       notes: ['', [Validators.maxLength(500)]],

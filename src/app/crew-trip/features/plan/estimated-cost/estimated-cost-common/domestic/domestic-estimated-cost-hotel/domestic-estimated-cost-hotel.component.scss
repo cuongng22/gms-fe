@@ -5,4 +5,9 @@
         min-width: 150px !important;
         max-width: 150px !important;
     }
+
+    .mat-mdc-header-row:nth-child(2) {
+        position: sticky;
+        top: 40px;
+    }
 }

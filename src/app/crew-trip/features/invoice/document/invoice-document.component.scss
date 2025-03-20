@@ -39,6 +39,11 @@
 }
 
 ::ng-deep {
+  .mat-mdc-list-item:hover{
+    background-color: var(--gray-300) !important;
+    cursor: pointer !important;
+    transition: background-color 0.3s ease;
+  }
   .table-responsive {
     .mat-mdc-card-content {
       .mat-mdc-table {

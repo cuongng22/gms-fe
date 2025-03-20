@@ -33,6 +33,7 @@ import {
   MatHeaderCellDef,
   MatHeaderRow,
   MatHeaderRowDef,
+  MatNoDataRow,
   MatRow,
   MatRowDef,
   MatTable,
@@ -93,6 +94,7 @@ import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant'
     SelectMultipleComponent,
     MatPaginator,
     RouterLink,
+    MatNoDataRow
   ],
   providers: [
     provideNativeDateAdapter(),
@@ -123,18 +125,18 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
       { name: 'totalNumberOfTrip', field: 'No. of trip', rowSan: 2, colSpan: 1 },
       {
         name: 'totalForex',
-        field: 'Total amount (Foreign exchange)',
+        field: 'Total amount <br/> (Foreign exchange)',
         rowSan: 2,
         colSpan: 1,
       },
-      { name: 'totalVnd', field: 'Total amount (VND)', colSpan: 2, rowSan: 1 },
+      { name: 'totalVnd', field: 'Total amount <br/> (VND)', colSpan: 2, rowSan: 1 },
       { name: 'action', field: 'Action', rowSan: 2, colSpan: 1 },
     ];
   displayedSecond: any[] = [
     { name: 'totalSingleRoom', field: 'Single Room' }, //tổng số phòng đơn
     { name: 'totalTwinRoom', field: 'Twin room' }, //tổng số phòng đôi
-    { name: 'totalIncVAT', field: 'Including VAT' },
     { name: 'totalExcVAT', field: 'Excluding VAT' },
+    { name: 'totalIncVAT', field: 'Including VAT' },
   ];
   displayedFirstArr: string[];
   displayedSecondArr: string[];

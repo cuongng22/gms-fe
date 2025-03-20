@@ -19,4 +19,10 @@ export class EmailSupplierService extends BaseService {
     const params = new HttpParams({ fromObject: body });
     return firstValueFrom(this.http.get<ListResponse<T>>(url, { params }));
   }
+
+  getAirportEmailConfig(body: any): Promise<any> {
+    const url = `${this.api}/${this.path}`;
+    const params = new HttpParams({fromObject: body});
+    return firstValueFrom(this.http.get<any>(url, {params}));
+  }
 }

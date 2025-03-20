@@ -8,7 +8,7 @@ import { provideNativeDateAdapter } from '@angular/material/core';
 import { MatDateRangeInput, MatDateRangePicker, MatDatepickerToggle, MatDatepickerCancel, MatDatepickerActions, MatDatepickerApply, MatDatepickerModule } from '@angular/material/datepicker';
 import { MatLabel, MatFormFieldModule } from '@angular/material/form-field';
 import { MatPaginator } from '@angular/material/paginator';
-import { MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatCell, MatCellDef, MatFooterRow, MatFooterRowDef, MatFooterCell, MatFooterCellDef } from '@angular/material/table';
+import { MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatRow, MatRowDef, MatCell, MatCellDef, MatFooterRow, MatFooterRowDef, MatFooterCell, MatFooterCellDef, MatNoDataRow } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
 import moment from 'moment';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
@@ -31,6 +31,7 @@ import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant'
     MatDateRangeInput, MatDateRangePicker, MatLabel, MatFormFieldModule, MatDatepickerToggle, NgxTrimDirectiveModule,
     MatButton, MatDatepickerCancel, MatDatepickerActions, MatDatepickerApply, NgxControlError, MatDatepickerModule,
     MatCardModule, MatAnchor, MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef,
+    MatNoDataRow,
     MatRow, MatRowDef, MatCell, MatCellDef, MatFooterRow, MatFooterRowDef, MatFooterCell, MatFooterCellDef,
     DatePipe, DecimalPipe, DataCalculateTotal, SelectMultipleComponent, MatPaginator, RouterLink,
     DataTransformPipe
@@ -55,7 +56,7 @@ export class CharterComponent extends CommonComponent {
   rowDef = ['airportCode', 'startDate', 'endDate', 'totalSingleRoom', 'totalTwinRoom', 'totalSingleEICRoom',
     'totalTwinEICRoom', 'totalSingleLCORoom', 'totalTwinLCORoom', 'totalNumberOfTrip', 'totalForex', 'totalExcVAT', 'totalIncVAT', 'action']
 
-  footerRowDef = ['totalSingleRoom', 'totalTwinRoom', 'totalSingleEICRoom', 'totalTwinEICRoom', 'totalSingleLCORoom',
+  footerRowDef = ['total','totalSingleRoom', 'totalTwinRoom', 'totalSingleEICRoom', 'totalTwinEICRoom', 'totalSingleLCORoom',
     'totalTwinLCORoom', 'totalNumberOfTrip', 'totalForex', 'totalExcVAT', 'totalIncVAT', 'action']
 
 

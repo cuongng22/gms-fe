@@ -136,6 +136,12 @@
         },
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
+          "options": {
+            "proxyConfig": "src/app/crew-trip/core/proxy/proxy.conf.json",
+            "allowedHosts": [
+              "*"
+            ]
+          },
           "configurations": {
             "production": {
               "buildTarget": "crew-trip:build:production"
@@ -150,10 +156,7 @@
               "buildTarget": "crew-trip:build:development,vi"
             }
           },
-          "defaultConfiguration": "development",
-          "options": {
-            "proxyConfig": "src/app/crew-trip/core/proxy/proxy.conf.json"
-          }
+          "defaultConfiguration": "development"
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n"

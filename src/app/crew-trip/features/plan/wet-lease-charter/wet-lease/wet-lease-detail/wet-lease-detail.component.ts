@@ -18,7 +18,6 @@ import { WetLeaseGeneralComponent } from './component/wet-lease-general/wet-leas
 import { WetLeaseHotelComponent } from './component/wet-lease-hotel/wet-lease-hotel.component';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { CategoryEnum } from '../../../budget-procurement/budget-procurement.model';
-import { dataExample } from './wet-lease-detail.model';
 import { WetLeaseCarRentalComponent } from './component/wet-lease-car-rental/wet-lease-car-rental.component';
 import moment from 'moment';
 import { WetLeaseService } from 'src/app/crew-trip/core/services/wet-lease.service';
@@ -62,6 +61,8 @@ export class WetLeaseDetailComponent extends CommonComponent {
   showDialogCreateData: boolean = false;
   isCreateData = false;
 
+  showDialogClose = false;
+
   constructor() {
     super();
   }
@@ -76,9 +77,10 @@ export class WetLeaseDetailComponent extends CommonComponent {
       await this.spinner.show();
       if (id) {
         let resDetail = await this.baseService.detail(this.id());
-        this.formGroupDetail.patchValue({ ...resDetail.data })
+        this.formGroupDetail.patchValue({ ...resDetail.data });
+
         this.airportCodeChange(resDetail.data.airportCode)
-        this.dataGeneral = { ...resDetail.data };
+        this.dataGeneral = { ...resDetail.data, id: this.id() };
         this.wetLeaseGeneral.setData(this.dataGeneral)
         this.planHotel = [...resDetail.data.planHotel];
         this.planTransports = [...resDetail.data.planTransports];
@@ -105,10 +107,10 @@ export class WetLeaseDetailComponent extends CommonComponent {
   setPriceHotel() {
     const _priceHotelsList: any[] = this.dataGeneral.priceHotelsList;
     this.planHotel.forEach((element: any) => {
-      Object.entries(element.hotelItem).forEach((elementHotel: any[]) => {
-        const _itemPrice = _priceHotelsList.find(item => item.hotelCode === elementHotel[0]);
-        elementHotel[1].singleRoomPrice = Number(_itemPrice.singleRoomPrice);
-        elementHotel[1].twinRoomPrice = Number(_itemPrice.twinRoomPrice);
+      Object.entries<any>(element.hotelItem).forEach(([hotelCode, hotelValue]) => {
+        const _itemPrice = _priceHotelsList.find(item => item.hotelCode === hotelCode);
+        hotelValue.singleRoomPrice = Number(_itemPrice.singleRoomPrice);
+        hotelValue.twinRoomPrice = Number(_itemPrice.twinRoomPrice);
       })
     });
   }
@@ -125,33 +127,49 @@ export class WetLeaseDetailComponent extends CommonComponent {
   createData() {
     this.wetLeaseGeneral.formGroupDetail.markAllAsTouched();
     const isRequiredHotelAndTrans = this.wetLeaseGeneral.checkRequiredHotelAndTransportation();
-    if (this.wetLeaseGeneral.formGroupDetail.valid &&
-      !this.wetLeaseGeneral.duplicateCarRental() &&
-      !this.wetLeaseGeneral.duplicateSupplierHotel() &&
-      this.wetLeaseGeneral.dataSourceCarRental.data.length > 0 &&
-      this.wetLeaseGeneral.dataSourceHotel.data.length > 0 &&
-      !isRequiredHotelAndTrans
+    const _dataGeneral = this.wetLeaseGeneral.formGroupDetail.getRawValue();
+    if (this.wetLeaseGeneral.formGroupDetail.invalid ||
+      this.wetLeaseGeneral.duplicateCarRental() ||
+      this.wetLeaseGeneral.duplicateSupplierHotel()
     ) {
-      if (this.wetLeaseHotel.dataSource.data && this.wetLeaseHotel.dataSource.data.length > 0 &&
-        this.wetLeaseCarRental.dataSource.data && this.wetLeaseCarRental.dataSource.data.length > 0
-      ) {
-        this.toggleDialogCreateData();
-      } else {
-        this.confirmCreateData()
-      }
+      return;
+    } else if (
+      (_dataGeneral.isHotel && this.wetLeaseGeneral.dataSourceHotel.data.length <= 0) ||
+      (_dataGeneral.isTransport && this.wetLeaseGeneral.dataSourceCarRental.data.length <= 0) ||
+      isRequiredHotelAndTrans
+    ) {
+      this.showError($localize`:@@cannotCreateDataWithoutHotelOrTransportationData:Cannot create data without hotel or transportation data`)
+      return;
+    } else if (
+      ((_dataGeneral.isHotel && this.wetLeaseHotel.dataSource.data && this.wetLeaseHotel.dataSource.data.length > 0)) ||
+      ((_dataGeneral.isTransport && this.wetLeaseCarRental.dataSource.data && this.wetLeaseCarRental.dataSource.data.length > 0))
+    ) {
+      this.toggleDialogCreateData();
+    } else {
+      this.confirmCreateData()
     }
+
+    // if (this.wetLeaseGeneral.formGroupDetail.valid &&
+    //   !this.wetLeaseGeneral.duplicateCarRental() &&
+    //   !this.wetLeaseGeneral.duplicateSupplierHotel() &&
+    //   (!_dataGeneral.isHotel || (_dataGeneral.isHotel && this.wetLeaseGeneral.dataSourceHotel.data.length > 0)) &&
+    //   (!_dataGeneral.isTransport || (_dataGeneral.isTransport && this.wetLeaseGeneral.dataSourceCarRental.data.length > 0)) &&
+    //   !isRequiredHotelAndTrans
+    // ) {
+
+    // }
   }
 
   async confirmCreateData() {
     this.showDialogCreateData = false;
     await this.spinner.show();
-
+    const _dataGeneral = this.wetLeaseGeneral.formGroupDetail.getRawValue();
     let _startDate = moment(this.wetLeaseGeneral.formGroupDetail.controls.startDate.value);
     let _endDate = moment(this.wetLeaseGeneral.formGroupDetail.controls.endDate.value);
 
 
-    let _priceHotelsList = [...this.wetLeaseGeneral.dataSourceHotel.data];
-    let _priceTransports = [...this.wetLeaseGeneral.dataSourceCarRental.data];
+    let _priceHotelsList = [...(_dataGeneral.isHotel ? this.wetLeaseGeneral.dataSourceHotel.data : [])];
+    let _priceTransports = [...(_dataGeneral.isTransport ? this.wetLeaseGeneral.dataSourceCarRental.data : [])];
     let _planHotel = [];
 
     while (_startDate <= _endDate) {
@@ -203,69 +221,100 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.spinner.hide()
   }
 
+  async saveAndProccess() {
+    const res = await this.save();
+    if (res?.data && !this.id()) {
+      this.router.navigate(['/plan/est-plan/wet-lease-charter/wet-lease-detail', res.data])
+    } else if (this.id()) {
+      this.getDetailById(this.id())
+    }
+  }
+
+  async saveAndClose() {
+    try {
+      await this.save();
+      debugger
+      this.router.navigate(['/plan/est-plan/wet-lease-charter'], { fragment: 'wet-lease' })
+    } catch (error) {
+      console.error(error)
+    }
+
+  }
 
   override async save(): Promise<any> {
     this.wetLeaseGeneral.formGroupDetail.markAllAsTouched();
     const isRequiredHotelAndTrans = this.wetLeaseGeneral.checkRequiredHotelAndTransportation();
-    if (this.wetLeaseGeneral.formGroupDetail.valid &&
-      !this.wetLeaseGeneral.duplicateCarRental() &&
-      !this.wetLeaseGeneral.duplicateSupplierHotel() &&
-      this.wetLeaseGeneral.dataSourceCarRental.data.length > 0 &&
-      this.wetLeaseGeneral.dataSourceHotel.data.length > 0 &&
-      !isRequiredHotelAndTrans
+    const _dataGeneral = this.wetLeaseGeneral.formGroupDetail.getRawValue();
+    if (this.wetLeaseGeneral.formGroupDetail.invalid ||
+      this.wetLeaseGeneral.duplicateCarRental() ||
+      this.wetLeaseGeneral.duplicateSupplierHotel()
     ) {
-
-      await this.spinner.show()
-      const _dataGeneral = this.wetLeaseGeneral.formGroupDetail.getRawValue();
-      const _priceHotelsList = this.wetLeaseGeneral.dataSourceHotel.data;
-      const _priceTransports = this.wetLeaseGeneral.dataSourceCarRental.data;
-      const _planHotel = this.wetLeaseHotel.dataSource.data;
-      const _planTransports = this.wetLeaseCarRental.dataSource.data;
-
-      let _body: any = { ..._dataGeneral }
-      _body.id = this.formGroupDetail.controls.id.value;
-      _body.isCompleted = this.formGroupDetail.controls.isCompleted.value;
-      _body.startDate = moment(_dataGeneral.startDate).format(this.Constant.LOCAL_DATE_FORMAT);
-      _body.endDate = moment(_dataGeneral.endDate).format(this.Constant.LOCAL_DATE_FORMAT);
-      _body.priceHotelsList = [..._priceHotelsList];
-      _body.priceTransports = [..._priceTransports];
-      _body.planHotel = [..._planHotel];
-      _body.planTransports = [..._planTransports];
-      _body.totalCountForeign = [..._planHotel.map(item => item.totalCountForeign).flat(), ..._planTransports.map(item => item.totalAmountForex).flat()].reduce((acc, value) => acc + value, 0)
-      _body.totalSingleRoom = _planHotel.map(item => item.totalQtySingleRoom).reduce((acc, value) => acc + value, 0);
-      _body.totalTwinRoom = _planHotel.map(item => item.totalQtyTwinRoom).reduce((acc, value) => acc + value, 0);
-      _body.totalNumberOfTrip = _planTransports.map(item => item.numberOfTrip).reduce((acc, value) => acc + value, 0);
-      _body.totalIncVat = [..._planHotel.map(item => item.totalIncVAT).flat(), ..._planTransports.map(item => item.totalAmountIncVAT).flat()].reduce((acc, value) => acc + value, 0);
-      _body.totalExcVat = [..._planHotel.map(item => item.totalExcVAT).flat(), ..._planTransports.map(item => item.totalAmountExcVAT).flat()].reduce((acc, value) => acc + value, 0)
-
-      console.log(_body);
-
-      try {
-        const update = !!this.formGroupDetail.getRawValue().id;
-        let res;
-        if (update) {
-          res = await this.baseService.update(_body);
-        } else {
-          res = await this.baseService.create(_body);
-        }
-        this.baseService.showSuccess(
-          update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS,
-        );
-        if (res.data && !this.id()) {
-          this.router.navigate(['/plan/est-plan/wet-lease-charter/wet-lease-detail', res.data])
-        }
-      } finally {
-        this.spinner.hide()
-      }
-      this.spinner.hide()
+      return;
+    } else if (
+      (_dataGeneral.isHotel && this.wetLeaseGeneral.dataSourceHotel.data.length <= 0) ||
+      (_dataGeneral.isTransport && this.wetLeaseGeneral.dataSourceCarRental.data.length <= 0) ||
+      isRequiredHotelAndTrans
+    ) {
+      this.showError($localize`:@@cannotSaveDataWithoutHotelOrTransportationData:Cannot save data without hotel or transportation data`)
+      return;
     }
 
+    await this.spinner.show()
+    const _priceHotelsList = _dataGeneral.isHotel ? this.wetLeaseGeneral.dataSourceHotel.data : [];
+    const _priceTransports = _dataGeneral.isTransport ? this.wetLeaseGeneral.dataSourceCarRental.data : [];
+    const _planHotel = _dataGeneral.isHotel ? this.wetLeaseHotel.dataSource.data : [];
+    const _planTransports = _dataGeneral.isTransport ? this.wetLeaseCarRental.dataSource.data : [];
+
+    let _body: any = { ..._dataGeneral }
+    _body.id = this.formGroupDetail.controls.id.value;
+    _body.isCompleted = this.formGroupDetail.controls.isCompleted.value;
+    _body.startDate = moment(_dataGeneral.startDate).format(this.Constant.LOCAL_DATE_FORMAT);
+    _body.endDate = moment(_dataGeneral.endDate).format(this.Constant.LOCAL_DATE_FORMAT);
+    _body.priceHotelsList = [..._priceHotelsList];
+    _body.priceTransports = [..._priceTransports];
+    _body.planHotel = [..._planHotel];
+    _body.planTransports = [..._planTransports];
+    _body.totalCountForeign = [..._planHotel.map(item => item.totalCountForeign).flat(), ..._planTransports.map(item => item.totalAmountForex).flat()].reduce((acc, value) => acc + value, 0)
+    _body.totalSingleRoom = _planHotel.map(item => item.totalQtySingleRoom).reduce((acc, value) => acc + value, 0);
+    _body.totalTwinRoom = _planHotel.map(item => item.totalQtyTwinRoom).reduce((acc, value) => acc + value, 0);
+    _body.totalNumberOfTrip = _planTransports.map(item => item.numberOfTrip).reduce((acc, value) => acc + value, 0);
+    _body.totalIncVat = [..._planHotel.map(item => item.totalIncVAT).flat(), ..._planTransports.map(item => item.totalAmountIncVAT).flat()].reduce((acc, value) => acc + value, 0);
+    _body.totalExcVat = [..._planHotel.map(item => item.totalExcVAT).flat(), ..._planTransports.map(item => item.totalAmountExcVAT).flat()].reduce((acc, value) => acc + value, 0)
+
+    console.log(_body);
+
+    try {
+      const update = !!this.formGroupDetail.getRawValue().id;
+      let res;
+      if (update) {
+        res = await this.baseService.update(_body);
+      } else {
+        res = await this.baseService.create(_body);
+      }
+      this.baseService.showSuccess(
+        update ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS,
+      );
+      return res;
+    } catch (error: any) {
+      console.error(error)
+      throw error;
+    } finally {
+      this.spinner.hide()
+    }
+    this.spinner.hide()
 
   }
 
   async airportCodeChange(event: string) {
     const res = await this._flightMarketService.search({ code: event, option: 0 });
     this.category.set(res.data.content[0].marketType)
+  }
+
+  wetLeaseGeneralClearData() {
+    this.wetLeaseHotel.dataSource.data = [];
+    this.planHotel = []
+    this.wetLeaseCarRental.dataSource.data = [];
+    this.planTransports = []
   }
 
   get planHotel() {
@@ -304,5 +353,8 @@ export class WetLeaseDetailComponent extends CommonComponent {
     this.showDialogCreateData = !this.showDialogCreateData;
   }
 
+  toggleDialogClose() {
+    this.showDialogClose = !this.showDialogClose;
+  }
 
 }

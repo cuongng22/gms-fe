@@ -25,7 +25,7 @@
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'totalSingleRoomEditing')"
                             class="edit-inline-table">
-                            <input matInput type="number" digitOnly [(ngModel)]="element.numberOfTrip">
+                            <input matInput type="text" [min]="0"  digitOnly [(ngModel)]="element.numberOfTrip">
                         </mat-form-field>
                     </div>
                     }
@@ -47,7 +47,7 @@
             </ng-container>
             <ng-container matColumnDef="totalAmount">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " colspan="2"
-                    i18n="@@totalAmountVND">Total amount (VND)</th>
+                    i18n="@@totalAmountVND">Total amount <br/> (VND)</th>
             </ng-container>
             <ng-container matColumnDef="totalAmountExcVat">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "

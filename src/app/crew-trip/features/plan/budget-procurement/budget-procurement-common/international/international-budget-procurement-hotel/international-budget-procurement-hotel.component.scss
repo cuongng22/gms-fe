@@ -16,13 +16,24 @@
 
     .mat-column-doubleRoomOther ,
     .mat-column-priceSingleRoom,
-    .mat-column-priceDoubleRoom,
+    .mat-column-priceDoubleRoom
+    {
+        min-width: 140px !important;
+        max-width: 140px !important;
+    }
+
+    
     .mat-column-priceSingleRoomEarly,
     .mat-column-priceDoubleRoomEarly,
     .mat-column-priceDoubleRoomLate,
     .mat-column-priceCrewTransport
     {
-        min-width: 140px !important;
-        max-width: 140px !important;
+        min-width: 180px !important;
+        max-width: 180px !important;
+    }
+
+    .mat-mdc-header-row:nth-child(2) {
+        position: sticky;
+        top: 40px;
     }
 }

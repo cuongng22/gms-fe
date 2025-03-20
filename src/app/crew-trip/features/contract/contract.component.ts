@@ -1,18 +1,13 @@
 import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {HttpStatusCode} from '@angular/common/http';
-import {Component, Input, OnInit, inject} from '@angular/core';
+import {Component, inject, Input, OnInit} from '@angular/core';
 import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {MatButtonModule} from '@angular/material/button';
 import {MatCardModule} from '@angular/material/card';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatDatepickerModule} from '@angular/material/datepicker';
-import {
-  MatError,
-  MatFormFieldModule,
-  MatLabel,
-  MatSuffix,
-} from '@angular/material/form-field';
+import {MatError, MatFormFieldModule, MatLabel, MatSuffix,} from '@angular/material/form-field';
 import {MatInput} from '@angular/material/input';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatPaginatorModule} from '@angular/material/paginator';
@@ -22,19 +17,12 @@ import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 import {NgxControlError} from 'ngxtension/control-error';
 import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
 import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
-import {HotelService} from 'src/app/crew-trip/core/services/hotel-service';
-import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {SelectMultipleComponent} from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {ListResponse} from 'src/app/crew-trip/shared/models/common.model';
-import {
-  Constant,
-  MESSAGE,
-  removeNullValues,
-} from 'src/app/crew-trip/shared/utils/constant';
-import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
+import {Constant, MESSAGE, removeNullValues,} from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-contract',
@@ -83,8 +71,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
   viewType = 'HD'; //HD-PL
   override baseService = inject(ContractService);
   flightMarketService = inject(FlightMarketService);
-  hotelService = inject(HotelService);
-  vehicleService = inject(VehicleService);
   fb = inject(FormBuilder);
 
   //variable
@@ -94,8 +80,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
   bizDocId: any;
   contractObj: any;
   listPartner: any[] = [];
-  listHotel = [];
-  listVehicle = [];
   tblAnnexData = new MatTableDataSource();
   _displayedColumns: {
     label: string;
@@ -106,26 +90,13 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }[] = [
     // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Airport code`, value: 'marketCode'},
-    {label: $localize`bizDocId`, value: 'bizDocId'},
-    {
-      label: $localize`Contract Code`,
-      label1: $localize`Appendix Code`,
-      value: 'contractCode',
-    },
-    {label: $localize`Contract No`, value: 'contractNo'},
-    {
-      label: $localize`Contract Name`,
-      label1: $localize`Appendix Name`,
-      value: 'contractName',
-    },
+    {label: $localize`BizDocId`, value: 'bizDocId'},
+    {label: $localize`Contract Code`, label1: $localize`Appendix Code`, value: 'contractCode',},
+    {label: $localize`Contract No`, label1: $localize`Appendix No`, value: 'contractNo'},
+    {label: $localize`Contract Name`, label1: $localize`Appendix Name`, value: 'contractName',},
     {label: $localize`Supplier`, value: 'partnerName'},
     {label: $localize`Service Type`, value: 'serviceObject'},
-    {
-      label: $localize`Signed Date`,
-      value: 'signedDate',
-      type: Constant.DATE,
-      format: Constant.DATE_FORMAT,
-    },
+    {label: $localize`Signed Date`, value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT,},
   ];
   @Input() contractId: any;
 
@@ -156,18 +127,20 @@ export class ContractComponent extends CommonComponent implements OnInit {
   }
 
   override async ngOnInit() {
+    const cache = JSON.parse(localStorage.getItem('viewType')!);
+    if (cache) {
+      this.viewType = cache.viewType;
+      this.contractObj = cache.contractObj;
+      this.showListAnnex(cache.bizDocId, cache.contractObj);
+    }
     await Promise.all([
-      this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}),
+      this.loadListFlightMarket(),
       this.loadListHotel(),
-      this.loadListVehiclesPartner(),
+      this.loadListVehicle(),
       this.search(),
     ]).then(() => {
-      const cache = JSON.parse(localStorage.getItem('viewType')!);
-      if (cache) {
-        this.viewType = cache.viewType;
-        this.showListAnnex(cache.bizDocId);
-      }
-      const listCombine = [...this.listVehicle, ...this.listHotel];
+
+      const listCombine = [...this.listVehicles, ...this.listHotels];
       this.listPartner = listCombine.map((s: any) => ({
         code: s.code ?? s.hotelCode,
         name: s.name
@@ -177,13 +150,26 @@ export class ContractComponent extends CommonComponent implements OnInit {
             : '',
       }));
     });
-    this.displayedColumns = [
-      'stt',
-      ...this._displayedColumns.map((s) => s.value),
-      'effectiveDate',
-      'appendixCount',
-      'action',
-    ];
+    if (this.isHD()) {
+      this.displayedColumns = [
+        'stt',
+        ...this._displayedColumns.map((s) => s.value),
+        'effectiveDate',
+        'appendixCount',
+        'action',
+      ]
+    } else {
+      this.displayedColumns = [
+        'stt',
+        'contractCode',
+        'contractNo',
+        'contractName',
+        'partnerName',
+        'marketCode',
+        'effectiveDate',
+        'action',
+      ];
+    }
   }
 
   async nextStep(id?: any, readMode?: any, action?: any) {
@@ -232,22 +218,6 @@ export class ContractComponent extends CommonComponent implements OnInit {
     this.showPopupAnnex = true;
   }
 
-  async loadListHotel() {
-    await this.hotelService.search({limit: 9999}).then((res) => {
-      if (res.data) {
-        this.listHotel = res.data.content;
-      }
-    });
-  }
-
-  async loadListVehiclesPartner() {
-    await this.vehicleService.search({limit: 9999}).then((res) => {
-      if (res.data) {
-        this.listVehicle = res.data.content;
-      }
-    });
-  }
-
   async syncDWH() {
     await this.baseService.syncContract({}).then((res) => {
       // console.log(res);
@@ -255,29 +225,34 @@ export class ContractComponent extends CommonComponent implements OnInit {
     });
   }
 
-  async showListAnnex(id: any) {
-    await this._router.navigate([], {fragment: 'annex'});
-    localStorage.setItem(
-      'viewType',
-      JSON.stringify({
-        bizDocId: id,
-        step: 2,
-        viewType: this.viewType,
-      }),
-    );
-
+  async showListAnnex(id: any, contractObj?: any) {
     this.viewType = 'PL';
+    await this._router.navigate([], {fragment: 'annex'});
     const initData = cloneDeep(this.formGroupSearchInit);
     this.formGroupSearch.patchValue({...initData, contractId: id});
-    this.contractObj = this.dataSource.data.find(
-      (value: any) => value.bizDocId == id,
-    );
+    if (contractObj) {
+      this.contractObj = contractObj
+    } else {
+      this.contractObj = this.dataSource.data.find(
+        (value: any) => value.bizDocId == id,
+      );
+    }
+
     this.formGroupDetail.patchValue({
       bizDocIdC1: this.contractObj.bizDocId,
       contractName: this.contractObj.contractName,
       contractCode: this.contractObj.contractCode,
     });
     await this.search();
+    localStorage.setItem(
+      'viewType',
+      JSON.stringify({
+        bizDocId: id,
+        step: 2,
+        viewType: this.viewType,
+        contractObj: this.contractObj
+      }),
+    );
   }
 
   async showListContract() {
@@ -312,8 +287,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
       } else if (this.isPL()) {
         this.displayedColumns = [
           'stt',
-          'bizDocId',
           'contractCode',
+          'contractNo',
           'contractName',
           'partnerName',
           'marketCode',
@@ -380,7 +355,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
   async exportAppendix(filename?: string) {
     try {
       await this.spinner.show();
-      this.baseService.exportAppendix(removeNullValues({contractId: this.contractObj.bizDocId, export: true})).then((res) => {
+      this.baseService.exportAppendix(removeNullValues({...this.formGroupSearch.value ,contractId: this.contractObj.bizDocId, export: true}))
+        .then((res) => {
         this.downloadFile(res, filename ?? res.fileName);
       });
     } catch (e: any) {

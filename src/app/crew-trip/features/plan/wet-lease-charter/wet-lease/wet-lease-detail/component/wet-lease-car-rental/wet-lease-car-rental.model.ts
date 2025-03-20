@@ -8,7 +8,7 @@ export const formula: any = {
         formula: 'item.numberOfTrip * item.unitPrice * (dataGeneral.exchangeRate ?? 1)'
     },
     totalAmountExcVAT: {
-        formula: 'item.totalAmountIncVAT - (item.totalAmountIncVAT * dataGeneral.rateVat / 100)'
+        formula: 'item.totalAmountIncVAT / ( 1 + (dataGeneral.rateVat / 100) )'
     },
 
 

@@ -7,9 +7,15 @@ import { Pipe, PipeTransform } from '@angular/core';
 export class DataCalculateTotal implements PipeTransform {
   transform(item: any[], type: string): number {
     let total = 0;
-    for (const i of item) {
-      total += i[type];
-    }
-    return total;
+    return item.map(i => i[type]).reduce((preValue, currValue) => Number(this.ctz(preValue)) + Number(this.ctz(currValue)), 0)
+  }
+
+  /**
+   * Convert to Zero
+   * @param value 
+   * @returns 
+   */
+  ctz(value: any) {
+    return value ?? 0
   }
 }
