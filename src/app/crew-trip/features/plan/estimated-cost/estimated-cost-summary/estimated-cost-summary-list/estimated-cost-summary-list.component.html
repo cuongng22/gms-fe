@@ -77,16 +77,16 @@
                     <td mat-cell *matCellDef="let element">
                         @if(element.serviceType === serviceType.HOTEL){
                         <span>
-                            <span class="text-secondary-bootstrap" i18n="@@singleRoom">Single Room</span>:
-                            {{element.unitPriceHotel | number}}
+                            <span class="text-secondary-bootstrap" i18n="@@singleRoom">Single Room</span>:<br/>
+                          <span [innerHTML]="getUnitPrice(element.unitPriceHotel)"></span> 
                         </span>
                         <br>
                         <span>
-                            <span class="text-secondary-bootstrap" i18n="@@doubleRoom">Double Room</span>:
-                            {{element.unitPriceDoubleHotel | number}}
+                            <span class="text-secondary-bootstrap" i18n="@@doubleRoom">Double Room</span>:<br/>
+                            <span [innerHTML]="getUnitPrice(element.unitPriceDoubleHotel)"></span>
                         </span>
                         }@else{
-                        {{element.unitPriceCar | number}}
+                            <span [innerHTML]="getUnitPrice(element.unitPriceCar)"></span>"
                         }
 
 

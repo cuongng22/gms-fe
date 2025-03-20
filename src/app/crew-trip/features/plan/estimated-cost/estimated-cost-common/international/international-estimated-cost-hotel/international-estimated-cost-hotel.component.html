@@ -6,11 +6,10 @@
                     i18n="@@month">
                     Month
                 </th>
-                <td mat-cell *matCellDef="let element" [attr.rowspan]="periodRowspan" class="fw-bold"
-                    [style.display]="!!element.periodLabel?'':'none'">
-                    @if(!!element.periodLabel){
-                    {{element.periodLabel}}
-                    }
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="periodsSpan[element.period].count" class="fw-bold"
+                    [style.display]="periodsSpan[element.period].firstIndex === index?'':'none'">
+                    {{element.period}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef i18n="@@total" class="fw-bold text-center"> Total </td>
             </ng-container>
@@ -20,12 +19,10 @@
                     i18n="@@aircraftType">
                     Aircraft Type
                 </th>
-                <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
-                    {{element.aircraftTypeLabel}}
-                    }
-
+                <td mat-cell *matCellDef="let element; let index = dataIndex"
+                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
+                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index ?'':'none'">
+                    {{element.aircraftType}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
@@ -168,11 +165,10 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
                     Single Room
                 </th>
-                <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
+                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
                     {{element.singleRoomEarly}}
-                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('singleRoomEarly')}} -->
@@ -182,11 +178,10 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
                     Double Room
                 </th>
-                <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
+                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
                     {{element.doubleRoomEarly}}
-                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('doubleRoomEarly')}} -->
@@ -197,8 +192,9 @@
                     i18n="@@singleRoomReserved">
                     Buffer rate <br /> (for single-gender)
                 </th>
-                <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
+                <td mat-cell *matCellDef="let element; let index = dataIndex"
+                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
+                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
                     @if(!!element.aircraftTypeLabel){
                     {{element.singleRoomEarlyReserved}}
                     }
@@ -220,11 +216,10 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
                     Single Room
                 </th>
-                <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
+                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
                     {{element.singleRoomLate}}
-                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('singleRoomLate')}} -->
@@ -234,11 +229,10 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
                     Double Room
                 </th>
-                <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                <td mat-cell *matCellDef="let element; let index= dataIndex;"
+                    [attr.rowspan]=" aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
+                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
                     {{element.doubleRoomLate}}
-                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('doubleRoomLate')}} -->
@@ -249,11 +243,10 @@
                     i18n="@@singleRoomReserved">
                     Buffer rate <br /> (for single-gender)
                 </th>
-                <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
+                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
                     {{element.singleRoomLateReserved}}
-                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('singleRoomLateReserved')}} -->
@@ -271,12 +264,11 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
                     Single Room
                 </th>
-                <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.periodLabel?'':'none'">
-                    @if(!!element.periodLabel){
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
+                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
                     {{getTotalByGroup(element,'totalSingleRoom','totalSingleRoomGroup') | number}}
                     <!-- {{element.totalSingleRoom}} -->
-                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     {{getTotal('totalSingleRoom')}}
@@ -286,12 +278,10 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
                     Double Room
                 </th>
-                <td mat-cell *matCellDef="let element" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.periodLabel?'':'none'">
-                    @if(!!element.periodLabel){
-                    <!-- {{element.totalDoubleRoom}} -->
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
+                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
                     {{getTotalByGroup(element,'totalDoubleRoom','totalDoubleRoomGroup') | number}}
-                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     {{getTotal('totalDoubleRoom')}}
@@ -305,13 +295,12 @@
                     [attr.rowspan]=2 i18n="@@totalCostOfCrewTransport">
                     Total Cost of Crew Transport <br /> (Foreign Currency)
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;" [attr.rowspan]="overnightRowspan"
-                    [style.display]="!!element.aircraftTypeLabel?'':'none'">
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
+                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
                     <!-- {{element.totalAmountForeignTransportGroup|number}} -->
-                    @if(!!element.aircraftTypeLabel){
                     {{getTotalByGroup(element,'totalAmountForeignTransport','totalAmountForeignTransportGroup') |
                     number}}
-                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('totalAmountForeignTransport') | number}} -->
@@ -329,12 +318,10 @@
                     i18n="@@excludingVat">
                     Excluding VAT
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.periodLabel?'':'none'">
-                    <!-- {{element.totalAmountForeignGroup | number}} -->
-                    @if(!!element.periodLabel){
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="periodsSpan[element.period].count" class="fw-bold"
+                    [style.display]="periodsSpan[element.period].firstIndex === index ?'':'none'">
                     {{getTotalByGroup(element,'totalAmountForeign','totalAmountForeignGroup') | number}}
-                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('totalAmountForeign') | number}} -->
@@ -345,12 +332,11 @@
                     i18n="@@includingVat">
                     Including VAT
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.periodLabel?'':'none'">
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="periodsSpan[element.period].count" class="fw-bold"
+                    [style.display]="periodsSpan[element.period].firstIndex === index ?'':'none'">
                     <!-- {{element.totalAmountForeignVatGroup | number}} -->
-                    @if(!!element.periodLabel){
                     {{getTotalByGroup(element,'totalAmountForeignVat','totalAmountForeignVatGroup') | number}}
-                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>{{getTotal('totalAmountForeignVat') | number}}</td>
             </ng-container>
@@ -366,12 +352,10 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVat">
                     Excluding VAT
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.periodLabel?'':'none'">
-                    <!-- {{element.totalAmountGroup | number}} -->
-                    @if(!!element.periodLabel){
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="periodsSpan[element.period].count" class="fw-bold"
+                    [style.display]="periodsSpan[element.period].firstIndex === index ?'':'none'">
                     {{getTotalByGroup(element,'totalAmount','totalAmountGroup') | number}}
-                    }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>{{getTotal('totalAmount') | number}}</td>
             </ng-container>
@@ -379,13 +363,10 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVat">
                     Including VAT
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;" [attr.rowspan]="periodRowspan"
-                    [style.display]="!!element.periodLabel?'':'none'">
-
-                    <!-- {{element.totalAmountVatGroup | number}} -->
-                    @if(!!element.periodLabel){
+                <td mat-cell *matCellDef="let element; let index = dataIndex;"
+                    [attr.rowspan]="periodsSpan[element.period].count" class="fw-bold"
+                    [style.display]="periodsSpan[element.period].firstIndex === index ?'':'none'">
                     {{getTotalByGroup(element,'totalAmountVat','totalAmountVatGroup') | number}}
-                    }
                 </td>
 
                 <td mat-footer-cell *matFooterCellDef class="fw-bold">

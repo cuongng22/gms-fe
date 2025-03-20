@@ -18,6 +18,7 @@ import { InputSizeComponent } from "src/app/crew-trip/shared/input/input-size.co
 import { ServiceType, PlanCategoryEnum } from "../../../budget-procurement/budget-procurement.model";
 import { CategoriesEnum, StatusesSummary, StatusSummaryEnum } from "../../estimated-cost.model";
 import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from "./estimated-cost-summary-list.model";
+import { Constant } from "src/app/crew-trip/shared/utils/constant";
 
 @Component({
   selector: 'app-estimated-cost-summary-list',
@@ -28,9 +29,11 @@ import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from "
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule
   ],
   templateUrl: './estimated-cost-summary-list.component.html',
-  styleUrl: './estimated-cost-summary-list.component.scss'
+  styleUrl: './estimated-cost-summary-list.component.scss',
+  providers: [DataTransformPipe]
 })
 export class EstimatedCostSummaryListComponent extends CommonComponent implements OnInit {
+  dataTransformPipe = inject(DataTransformPipe)
   readonly serviceType = ServiceType;
   PlanCategoryEnum = PlanCategoryEnum;
   StatusesSummary = StatusesSummary;
@@ -196,5 +199,18 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
       await this.spinner.hide();
       await this.closeConfirmDelete();
     }
+  }
+
+  getUnitPrice(unitPrice: any) {
+    const _unitPrice = JSON.parse(unitPrice);
+    if (_unitPrice) {
+      const _entries = Object.entries(_unitPrice);
+      let _result: any[] = []
+      for (const [key, value] of _entries) {
+        _result.push(`${key}: ${this.dataTransformPipe.transform(value, [Constant.NUMBER])}`);
+      }
+      return _result.join('<br/>')
+    }
+    return null;
   }
 }
