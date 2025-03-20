@@ -116,14 +116,14 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     {label: $localize`Breakfast Cc`, value: "breakfastCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Breakfast Fc`, value: "breakfastFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Cc`, value: "cc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Ci Date`, value: "ciDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Ci Fltno`, value: "ciFltno"},
-    {label: $localize`Ci Time`, value: "ciTime"},
+    {label: $localize`Date`, value: "ciDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`Flight no`, value: "ciFltno"},
+    {label: $localize`Time`, value: "ciTime", type: Constant.NUMBER},
     {label: $localize`City Tax Cc Charge`, value: "cityTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`City Tax Fc Charge`, value: "cityTaxFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Co Date`, value: "coDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Co Fltno`, value: "coFltno"},
-    {label: $localize`Co Time`, value: "coTime"},
+    {label: $localize`Date`, value: "coDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`Flight no`, value: "coFltno"},
+    {label: $localize`Time`, value: "coTime", type: Constant.NUMBER},
     {label: $localize`Date`, value: "cdate", type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Detail`, value: "detail"},
     {label: $localize`Early Checkin`, value: "earlyCheckin", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -132,7 +132,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     {label: $localize`Eci Twin Room Cc Charge`, value: "eciTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Fc`, value: "fc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Fltno`, value: "fltno"},
-    {label: $localize`Fullname`, value: "fullname", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Fullname`, value: "fullname", rowspan: "2"},
     {label: $localize`Late Checkout`, value: "lateCheckout", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Lco Single Room Cc Charge`, value: "lcoSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Lco Single Room Fc Charge`, value: "lcoSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -140,7 +140,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     {label: $localize`Night`, value: "night", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Number Of Nights`, value: "numberOfNights", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Number Of Vehicle`, value: "numberOfVehicle", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Price`, value: "price", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Price (includes VAT)`, value: "price", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Remark`, value: "remark"},
     {label: $localize`Room No`, value: "roomNo", rowspan: "2"},
     {label: $localize`Service Tax Cc Charge`, value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -167,7 +167,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     {label: $localize`Transport Charge`, value: "transportCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Twin Room Cc`, value: "twinRoomCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Twin Room Cc Charge`, value: "twinRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Unit Price`, value: "unitPrice", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Unit Price`, value: "unitPrice", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Type Room`, value: "typeRoom", rowspan: "2"}
   ];
   protected readonly LOCALE = LOCALE;
@@ -231,9 +231,9 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
           this.totalColSpan = 8;
         } else if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
           this.formType = 3;
-          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
+          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice','accessBridge','toll','transitDuty','airportParkingFee', 'totalCharge', 'remark'];
           this._displayedColumnsHeader2 = [];
-          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
+          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice','accessBridge','toll','transitDuty','airportParkingFee', 'totalCharge', 'remark'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
         } else if (this.formGroupDetail.getRawValue().ctype === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
           this.formType = 4;

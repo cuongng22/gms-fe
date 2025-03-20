@@ -1,7 +1,7 @@
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { HttpStatusCode } from '@angular/common/http';
-import { Component, DestroyRef, inject, Inject, model, OnInit } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, DestroyRef, inject, Inject, model, OnInit, viewChild } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -28,6 +28,9 @@ import { PlanTypeEnum, Statuses, years } from '../../budget-procurement/budget-p
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
+import { EstimatedAnnualProductionService } from 'src/app/crew-trip/core/services/estimated-annual-production';
+import moment from 'moment';
+import { debounceTime } from 'rxjs';
 
 @Component({
   selector: 'app-estimated-cost-list',
@@ -46,6 +49,8 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
 
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(PlanBudgetProcurementService);
+
+  selectionVersion = viewChild<SelectionSuggestComponent>('selectionVersion')
 
   versions = model<any[]>([]);
   statuses = Statuses;
@@ -77,13 +82,18 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
   override ngOnInit() {
     super.ngOnInit();
     this.years.set(years());
-    this.baseService.versions().then(res => {
-      this.versions.set(res.data);
-    });
+    this.getVersion();
     this.search();
 
     // -----------------List Budget Shopping-------------
     this.displayedColumns = ['select', 'name', 'year', 'version', 'versionProd', 'versionRate', 'time', 'status', 'action'];
+  }
+
+
+  getVersion() {
+    this.baseService.versions(PlanTypeEnum.UTH).then(res => {
+      this.versions.set(res.data);
+    });
   }
 
   async showConfirmReject(id: any) {
@@ -138,9 +148,15 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
     }
     const dialogDetailRef = this.dialog.open(DialogEstimatedCostDetail, {
       data: { isCreate: isCreate, budgetProcurementDetail: budgetProcurementDetail },
+      minWidth: 500
     });
     dialogDetailRef.afterClosed().subscribe(async (res) => {
       if (res) {
+        this.getVersion();
+        if (this.formGroupSearch.controls.version.value) {
+          this.formGroupSearch.controls.version.setValue(res.version)
+          this.selectionVersion()?.setViewValueInit(res.version, true)
+        }
         await this.search();
       }
     });
@@ -193,13 +209,13 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
 })
 export class DialogEstimatedCostDetail extends CommonComponent {
   override baseService = inject(PlanBudgetProcurementService);
-
+  estimatedAnnualProductionService = inject(EstimatedAnnualProductionService);
   override formGroupDetail = this.formBuilder.group({
     id: new FormControl(''),
-    name: new FormControl('', Validators.required),
-    year: new FormControl('', Validators.required),
+    name: new FormControl('', [Validators.required, Validators.maxLength(500)]),
+    year: new FormControl('', [Validators.required, Validators.maxLength(4), Validators.minLength(4), this.invalidYear.bind(this)]),
     version: new FormControl('', {
-      validators: [Validators.required],
+      validators: [Validators.required, this.existsVersionValidator.bind(this)],
     }),
     versionProd: new FormControl(''),
     versionRate: new FormControl(''),
@@ -207,7 +223,8 @@ export class DialogEstimatedCostDetail extends CommonComponent {
   });
 
   isCreate = model<boolean>(false);
-
+  existsVersion = false;
+  existsVersionMessage = ''
 
   constructor(
     public dialogRef: MatDialogRef<DialogEstimatedCostDetail>,
@@ -229,7 +246,20 @@ export class DialogEstimatedCostDetail extends CommonComponent {
       if (this.data.budgetProcurementDetail) {
         console.log(this.data.budgetProcurementDetail);
         this.formGroupDetail.patchValue(this.data.budgetProcurementDetail);
+      } else {
+        this.estimatedAnnualProductionService.getNewsVersion('P').then(res => {
+          this.formGroupDetail.patchValue({
+            year: res.data.year,
+            version: res.data.versionId
+          })
+        })
       }
+
+      this.formGroupDetail.controls.version.valueChanges.pipe(debounceTime(1000)).subscribe((value: any) => {
+        console.log('vaoooo version.valueChanges: ', value)
+        this.existsVersion = false;
+        this.formGroupDetail.controls.version.updateValueAndValidity()
+      })
     }
   }
 
@@ -243,21 +273,37 @@ export class DialogEstimatedCostDetail extends CommonComponent {
       await this.spinner.show();
       let res;
       if (update) {
-        res = await this.baseService.update({ ...this.formGroupDetail.value, type: PlanTypeEnum.UTH });
+        res = await this.baseService.update({ ...this.formGroupDetail.getRawValue(), type: PlanTypeEnum.UTH });
       } else {
-        res = await this.baseService.create({ ...this.formGroupDetail.value, type: PlanTypeEnum.UTH });
+        res = await this.baseService.create({ ...this.formGroupDetail.getRawValue(), type: PlanTypeEnum.UTH });
       }
       console.log(res)
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS);
-      this.dialogRef.close('OK');
+      this.dialogRef.close({ version: res.data.version });
     } catch (e: any) {
       if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
         this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
+      } else if (e.status === HttpStatusCode.Conflict) {
+        this.existsVersion = true;
+        this.formGroupDetail.controls.version.updateValueAndValidity();
+        this.existsVersionMessage = e.error.error
       }
+
       return e;
     } finally {
       this.spinner.hide();
     }
+  }
+
+  invalidYear(control: AbstractControl): ValidationErrors | null {
+    if (control.value && control.value === '0000') {
+      return { invalidYear: true }
+    }
+    return null;
+  }
+
+  existsVersionValidator(control: AbstractControl): ValidationErrors | null {
+    return this.existsVersion ? { existsVersion: true } : null;
   }
 
 }

@@ -1,6 +1,6 @@
-import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
-import { environment } from 'src/environments/environment';
+import {Injectable} from '@angular/core';
+import {Observable, Subject} from 'rxjs';
+import {environment} from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +9,8 @@ export class WebsocketService {
   private socket!: WebSocket;
   private messageSubject = new Subject<string>();
   private reconnectAttempts = 0;
-  private readonly maxReconnectAttempts = 5;
-  private readonly reconnectDelay = 3000;
+  private readonly maxReconnectAttempts = 10;
+  private readonly reconnectDelay = 20000;
   private username!: string;
 
   connect(username: string): void {
@@ -34,7 +34,7 @@ export class WebsocketService {
 
     this.socket.onclose = (event) => {
       console.log('WebSocket closed:', event);
-      this.handleReconnect(); // Gọi hàm thử kết nối lại
+      this.handleReconnect();
     };
 
     this.socket.onerror = (error) => {
@@ -45,7 +45,7 @@ export class WebsocketService {
 
   private handleReconnect(): void {
     if (this.reconnectAttempts < this.maxReconnectAttempts) {
-      const delay = this.reconnectDelay + Math.random() * 2000;
+      const delay = this.reconnectDelay;
       console.log(`WebSocket reconnecting in ${delay / 1000} seconds...`);
       setTimeout(() => {
         this.reconnectAttempts++;

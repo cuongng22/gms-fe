@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { AfterViewChecked, ChangeDetectorRef, Component, DestroyRef, effect, ElementRef, inject, input, model, OnInit, output, ViewChild } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormControl, FormsModule, ReactiveFormsModule, ValidatorFn, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,7 +11,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { RouterLink, RouterModule } from '@angular/router';
-import { debounceTime, startWith, Subject } from 'rxjs';
+import { debounceTime, startWith, Subject, Subscription } from 'rxjs';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
@@ -29,6 +29,7 @@ import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { el } from 'node_modules/@fullcalendar/core/internal-common';
 import { BudgetProcurementPriceComponent } from '../budget-procurement-price/budget-procurement-price.component';
 import { CurrencyService } from 'src/app/crew-trip/core/services/currency.service';
+import { DatepickerComponent } from 'src/app/crew-trip/shared/component/datepicker/datepicker.component';
 
 @Component({
   selector: 'app-budget-procurement-general',
@@ -38,7 +39,7 @@ import { CurrencyService } from 'src/app/crew-trip/core/services/currency.servic
     MatFormFieldModule, MatFormField, MatInputModule, InputSizeComponent, MatCheckboxModule,
     CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule, MatAutocompleteModule,
     NgxControlError, DatepickerYearMonthComponent, DigitOnlyModule, SeparatorDirective, SelectionSuggestComponent,
-    BudgetProcurementPriceComponent
+    BudgetProcurementPriceComponent, DatepickerComponent
   ],
   templateUrl: './budget-procurement-general.component.html',
   styleUrl: './budget-procurement-general.component.scss',
@@ -62,7 +63,7 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
   _exchangeRate: any
 
   @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
-  airports = model<any[]>([]);
+  // airports = model<any[]>([]);
   disabled = input<boolean>(false);
 
   CategoryEnum = CategoryEnum;
@@ -73,15 +74,11 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     effect(() => {
       if (this.disabled()) {
         this.formGroupDetail.disable();
-      } else {
-        this.formGroupDetail.enable();
       }
     }, { allowSignalWrites: true });
   }
   ngAfterViewChecked(): void {
     this.cdRef.detectChanges();
-    // this.formGroupDetail.controls.currencyCode.setValidators(ifValidator(() => this.checkRequiredCurrency(), Validators.required))
-    // this.formGroupDetail.controls.currencyCode.updateValueAndValidity()
 
   }
 
@@ -94,10 +91,10 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     // unitPriceDoubleHotel: new FormControl(''),
     rateForSingle: new FormControl(),
     procurementPlanFlag: new FormControl(false),
-    procStartDate: new FormControl('', [ifValidator(() => !!this.procurementPlanFlag, Validators.required)]),
-    procEndDate: new FormControl('', [ifValidator(() => !!this.procurementPlanFlag, Validators.required),
-    this.endDateLessThanStartDate.bind(this)
-    ]),
+    procStartDate: ['', ifValidator(() => this.procurementPlanFlag, Validators.required)],
+    procEndDate: new FormControl('', [ifValidator(() => this.procurementPlanFlag, Validators.required),
+    this.endDateLessThanStartDate.bind(this)]
+    ),
     totalTime: new FormControl('', [Validators.maxLength(3)]),
     estimateTime: new FormControl(''),
     time: new FormControl('', [Validators.maxLength(3)]),
@@ -111,38 +108,65 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     lateCheckoutContractFlag: new FormControl(false),
     haveContract: new FormControl(false),
     wetLeaseFlag: new FormControl(false),
-    currencyCode: new FormControl('',[Validators.required])
+    currencyCode: new FormControl('', [Validators.required]),
+    crewTransportFeeFlag: new FormControl(false)
+
 
   });
   _procurementPlanFlag: boolean = false;
   _haveContract: boolean = false;
 
+  procurementPlanFlagValueChanges: Subscription;
+  procEndDateValueChanges: Subscription;
+  procStartDateValueChanges: Subscription;
+  formValueChangesSub: Subscription;
 
   override ngOnInit(): void {
-    this.flightMarketService.search({ option: 0, type: this.category(), page: 0, size: 99999 }).then((res: any) => {
-      this.airports.set(res.data.content.map((item: any) => item.marketCode));
-    });
-
-    this.formGroupDetail.controls.procurementPlanFlag.valueChanges.subscribe((value: any) => {
-      this.procurementPlanFlag = !!value;
-    });
-
-    this.formGroupDetail.controls.procEndDate.valueChanges.subscribe((value: any) => {
-      this.formGroupDetail.controls.procEndDate.updateValueAndValidity({ emitEvent: false });
-      this.calculateTotalTime();
-    });
-    this.formGroupDetail.controls.procStartDate.valueChanges.subscribe((value: any) => {
-      this.formGroupDetail.controls.procEndDate.updateValueAndValidity({ emitEvent: false });
-      this.calculateTotalTime();
-    });
-
-    this.formGroupDetail.valueChanges.pipe(debounceTime(1000)).subscribe((value: any) => {
-      this.formValueChanges.emit(value);
-    });
+    this.loadListFlightMarket({ type: this.category() })
 
   }
 
+  setData(dataDetail: any) {
+    this.controlUnsubscribe()
+    this.formGroupDetail.patchValue(dataDetail);
+    this.procurementPlanFlag = !!dataDetail.procurementPlanFlag;
 
+    this.formGroupDetail.controls.category.disable();
+    this.formGroupDetail.controls.airportCode.disable();
+    this.setDefaultValueGeneral(dataDetail.procurementPlanFlag);
+
+    this.unitPriceDoubleHotel = dataDetail?.unitPriceDoubleHotel;
+    this.unitPriceSingleHotel = dataDetail?.unitPriceSingleHotel;
+    this.inputPrice = dataDetail?.inputPrice;
+    this.setVerionRate(dataDetail?.planBudgetProcurement.versionRate);
+    this.controlSubscribe();
+  }
+
+  controlUnsubscribe() {
+    this.procurementPlanFlagValueChanges?.unsubscribe();
+    this.procEndDateValueChanges?.unsubscribe();
+    this.procStartDateValueChanges?.unsubscribe();
+    this.formValueChangesSub?.unsubscribe();
+  }
+
+  controlSubscribe() {
+    this.procurementPlanFlagValueChanges = this.formGroupDetail.controls.procurementPlanFlag.valueChanges.subscribe((value: any) => {
+      this.procurementPlanFlag = !!value;
+    });
+
+    this.procEndDateValueChanges = this.formGroupDetail.controls.procEndDate.valueChanges.subscribe((value: any) => {
+      this.formGroupDetail.controls.procEndDate.updateValueAndValidity({ emitEvent: false });
+      this.calculateTotalTime();
+    });
+    this.procStartDateValueChanges = this.formGroupDetail.controls.procStartDate.valueChanges.subscribe((value: any) => {
+      this.formGroupDetail.controls.procEndDate.updateValueAndValidity({ emitEvent: false });
+      this.calculateTotalTime();
+    });
+
+    this.formValueChangesSub = this.formGroupDetail.valueChanges.pipe(debounceTime(1000)).subscribe((value: any) => {
+      this.formValueChanges.emit(value);
+    });
+  }
 
   submit(): void {
     this.formGroupDetail.updateValueAndValidity();
@@ -223,19 +247,35 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
       this.formGroupDetail.controls.budgetPlanFlag.value === undefined) {
       this.formGroupDetail.controls.budgetPlanFlag.setValue(true);
     }
-    if (isCheckProcurementPlan) {
+    if (!isCheckProcurementPlan) {
       this.formGroupDetail.controls.procStartDate.setValue(null);
       this.formGroupDetail.controls.procStartDate.markAsUntouched();
+      this.formGroupDetail.controls.procStartDate.updateValueAndValidity();
       this.formGroupDetail.controls.procEndDate.setValue(null);
       this.formGroupDetail.controls.procEndDate.markAsUntouched();
+      this.formGroupDetail.controls.procEndDate.updateValueAndValidity();
+
       this.formGroupDetail.controls.totalTime.setValue(null);
       this.formGroupDetail.controls.estimateTime.setValue(null);
       this.formGroupDetail.controls.time.setValue(null);
-      this.formGroupDetail.controls.earlyCheckinFlag.setValue(!!this.formGroupDetail.controls.earlyCheckinContractFlag.value);
-      this.formGroupDetail.controls.lateCheckoutFlag.setValue(!!this.formGroupDetail.controls.lateCheckoutContractFlag.value);
-      this.formGroupDetail.controls.num.setValue(this.procurementPlanFlag ? '1' : null);
-      this.formGroupDetail.controls.unit.setValue(this.procurementPlanFlag ? 'Gói HĐ/DV' : null);
-      this.formGroupDetail.controls.supplierMethod.setValue(this.procurementPlanFlag ? 'Chào giá/ Đàm phán' : null);
+
+      this.formGroupDetail.controls.num.setValue(null);
+      this.formGroupDetail.controls.unit.setValue(null);
+    } else {
+      this.formGroupDetail.controls.earlyCheckinFlag.setValue(
+        this.formGroupDetail.controls.earlyCheckinFlag.value ?? !!this.formGroupDetail.controls.earlyCheckinContractFlag.value);
+      this.formGroupDetail.controls.lateCheckoutFlag.setValue(
+        this.formGroupDetail.controls.lateCheckoutFlag.value ?? !!this.formGroupDetail.controls.lateCheckoutContractFlag.value);
+
+      if (!this.formGroupDetail.controls.num.value) {
+        this.formGroupDetail.controls.num.setValue('1');
+      }
+      if (!this.formGroupDetail.controls.unit.value) {
+        this.formGroupDetail.controls.unit.setValue('Gói HĐ/DV');
+      }
+      if (!this.formGroupDetail.controls.supplierMethod.value) {
+        this.formGroupDetail.controls.supplierMethod.setValue('Chào giá/ Đàm phán');
+      }
     }
   }
 
@@ -244,7 +284,6 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     return this._unitPriceDoubleHotel;
   }
   set unitPriceDoubleHotel(value: string) {
-    console.log('===> set unitPriceDoubleHotel: ', value)
     let result: string[] = [];
     if (value) {
       const entries = Object.entries(JSON.parse(value));
@@ -260,7 +299,6 @@ export class BudgetProcurementGeneralComponent extends CommonComponent implement
     return this._unitPriceSingleHotel;
   }
   set unitPriceSingleHotel(value: string) {
-    console.log('===> set unitPriceSingleHotel: ', value)
     let result: string[] = [];
     if (value) {
       const entries = Object.entries(JSON.parse(value));

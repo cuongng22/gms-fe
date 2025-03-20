@@ -19,6 +19,7 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import moment from 'moment';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { NgxControlError } from 'ngxtension/control-error';
+import { Subscription } from 'rxjs';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { HotelService } from 'src/app/crew-trip/core/services/hotel-service';
 import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
@@ -76,6 +77,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   errorDiffMonth = false;
 
   airportCodeChange = output<string>();
+  cleanData = output<void>()
 
   isRequiredSupplierHotel: boolean = false;
   isRequiredUnitPriceForSingleRoomHotel: boolean = false;
@@ -83,6 +85,11 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
 
   isRequiredSupplierTransportation: boolean = false;
   isRequiredUnitPriceIncludingVatTransport: boolean = false;
+
+  endDateValueChanges: Subscription;
+  startDateValueChanges: Subscription;
+  exchangeRateValueChanges: Subscription;
+  rateVatValueChanges: Subscription;
 
   override formGroupDetail = this.formBuilder.group({
     airportCode: ['', [Validators.required]],
@@ -101,27 +108,37 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   setData(data: any) {
     if (data) {
       const _data = { ...data }
-      this.formGroupDetail.patchValue(_data);
+      console.log('_data: ', _data)
+      if (_data.id) {
+        this.formGroupDetail.controls.airportCode.disable();
+      }
+      if (_data.airportCode) {
+        this.getHotelByAirport(_data.airportCode);
+        this.getCaRentalByAirport(_data.airportCode);
+      }
+      this.controlUnsubscribe()
+      this.formGroupDetail.patchValue(_data, { emitEvent: false });
       if (_data.priceHotelsList) {
         this.dataSourceHotel.data = [..._data.priceHotelsList];
       }
       if (_data.priceTransports) {
         this.dataSourceCarRental.data = [..._data.priceTransports];
       }
+      console.log('this.dataSourceHotel.data: ', this.dataSourceHotel.data)
+      this.controlSubscribe()
     }
   }
 
   ngAfterViewChecked(): void {
     this.cdRef.detectChanges(); // Phát hiện và cập nhật các thay đổi
     if (this.disabled() && !this.formGroupDetail.disabled) {
-      this.formGroupDetail.disable()
+      this.formGroupDetail.disable({ emitEvent: false })
     }
   }
 
   override async ngOnInit() {
     await this.spinner.show();
-    console.log(this.dataSourceHotel.data)
-    this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL })
+    await this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL })
 
     if (this.formGroupDetail.controls.airportCode.value) {
       this.getHotelByAirport(this.formGroupDetail.controls.airportCode.value);
@@ -134,21 +151,44 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     ) {
       this.getExchangeRate();
     }
-    this.spinner.hide();
-    this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
-      this.getExchangeRate()
-    });
-    this.formGroupDetail.controls.startDate.valueChanges.subscribe(value => {
-      this.getExchangeRate()
-    });
-    this.formGroupDetail.controls.isHotel.valueChanges.subscribe(value => {
+
+    this.controlSubscribe();
+
+    this.formGroupDetail.controls.isHotel.valueChanges.subscribe(() => {
       this.dataSourceHotel.data = [];
     });
 
-    this.formGroupDetail.controls.isTransport.valueChanges.subscribe(value => {
+    this.formGroupDetail.controls.isTransport.valueChanges.subscribe(() => {
       this.dataSourceCarRental.data = [];
     });
 
+    this.spinner.hide()
+
+  }
+
+  controlSubscribe() {
+    this.endDateValueChanges = this.formGroupDetail.controls.endDate.valueChanges.subscribe(value => {
+      this.getExchangeRate()
+      this.cleanData.emit()
+    });
+    this.startDateValueChanges = this.formGroupDetail.controls.startDate.valueChanges.subscribe(value => {
+      this.getExchangeRate()
+      this.cleanData.emit()
+    });
+
+    this.exchangeRateValueChanges = this.formGroupDetail.controls.exchangeRate.valueChanges.subscribe(_value => {
+      this.wetLeaseService.exchangeRateChange(_value)
+    })
+    this.formGroupDetail.controls.rateVat.valueChanges.subscribe(_value => {
+      this.wetLeaseService.rateVatChange(_value)
+    })
+  }
+
+  controlUnsubscribe() {
+    this.endDateValueChanges?.unsubscribe();
+    this.startDateValueChanges?.unsubscribe();
+    this.exchangeRateValueChanges?.unsubscribe();
+    this.rateVatValueChanges?.unsubscribe();
   }
 
   submit(): void {
@@ -177,6 +217,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     this.dataSourceCarRental.data = [];
     this.getHotelByAirport(data.value);
     this.getCaRentalByAirport(data.value);
+    debugger
     this.getExchangeRate();
     this.airportCodeChange.emit(data.value);
   }
@@ -217,9 +258,12 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
 
   hotelChange(event: any, element: any) {
     element.hotelName = event.viewValue;
+    this.cleanData.emit()
+
   }
   carRentalChange(event: any, element: any) {
     element.carRentalName = event.viewValue;
+    this.cleanData.emit()
   }
 
 
@@ -229,6 +273,11 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
+    if (['singleRoomPriceEditing', 'twinRoomPriceEditing'].includes(control)) {
+      this.wetLeaseService.roomPriceChange(data)
+    } else if ('unitPriceEditing' === control) {
+      this.wetLeaseService.unitPriceTransportationChange(data)
+    }
   }
 
   toggleDialogDeleteHotel() {
@@ -271,6 +320,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     }
     this.dataSourceHotel.data.push(addItem);
     this.dataSourceHotel.data = [...this.dataSourceHotel.data];
+    this.cleanData.emit()
   }
   showConfirmDeleteHotel(index: any) {
     this.indexDeleteHotel = index;
@@ -279,7 +329,8 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
   deleteHotel() {
     this.dataSourceHotel.data.splice(this.indexDeleteHotel, 1);
     this.dataSourceHotel.data = [...this.dataSourceHotel.data]
-    this.toggleDialogDeleteHotel()
+    this.toggleDialogDeleteHotel();
+    this.cleanData.emit()
   }
 
   duplicateCarRental() {
@@ -296,6 +347,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     }
     this.dataSourceCarRental.data.push(addItem);
     this.dataSourceCarRental.data = [...this.dataSourceCarRental.data];
+    this.cleanData.emit()
   }
   showConfirmDeleteCarRental(index: any) {
     this.indexDeleteCarRental = index;
@@ -305,6 +357,7 @@ export class WetLeaseGeneralComponent extends CommonComponent implements OnInit,
     this.dataSourceCarRental.data.splice(this.indexDeleteCarRental, 1);
     this.dataSourceCarRental.data = [...this.dataSourceCarRental.data]
     this.toggleDialogDeleteCarRental()
+    this.cleanData.emit()
   }
 
   sameMonthValidator(control: AbstractControl): ValidationErrors | null {

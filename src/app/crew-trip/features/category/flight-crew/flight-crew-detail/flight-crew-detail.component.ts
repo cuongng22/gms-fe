@@ -72,8 +72,8 @@ export class FlightCrewDetailComponent extends CommonComponent implements OnInit
     id: ['',],
     marketCode: ['', [Validators.required]],
     acType: ['', [Validators.required, this.existActypeValidator.bind(this)]],
-    pilotNumber: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
-    numberAttendant: ['', [Validators.required, Validators.min(1), Validators.max(99)]],
+    pilotNumber: ['', [Validators.required, Validators.min(1), Validators.max(99), Validators.pattern("^[0-9]+$")]],
+    numberAttendant: ['', [Validators.required, Validators.min(1), Validators.max(99), Validators.pattern("^[0-9]+$")]],
     notes: ['', [Validators.maxLength(500)]],
     status: [true,]
   });

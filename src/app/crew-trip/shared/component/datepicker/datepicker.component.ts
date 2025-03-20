@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
+import { AfterContentInit, AfterViewChecked, AfterViewInit, ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
 import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
 import { InputSizeComponent } from '../../input/input-size.component';
@@ -31,6 +31,8 @@ import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 
 })
 export class DatepickerComponent implements OnInit {
+
+
   MESSAGE = MESSAGE;
   size = input<string>('sm');
   label = input<string>('');
@@ -48,5 +50,4 @@ export class DatepickerComponent implements OnInit {
 
   ngOnInit(): void {
   }
-
 }

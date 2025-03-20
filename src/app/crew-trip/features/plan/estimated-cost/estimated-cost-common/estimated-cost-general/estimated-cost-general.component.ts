@@ -60,15 +60,13 @@ export class EstimatedCostGeneralComponent extends CommonComponent implements On
     effect(() => {
       if (this.disabled()) {
         this.formGroupDetail.disable();
-      } else {
-        this.formGroupDetail.enable();
       }
     }, { allowSignalWrites: true });
   }
 
   override formGroupDetail = this.formBuilder.group({
     category: new FormControl({ value: '', disabled: true }, Validators.required),
-    airportCode: new FormControl('', Validators.required),
+    airportCode: new FormControl({ value: '', disabled: true }, Validators.required),
     rateForSingle: new FormControl(),
     notes: new FormControl('', [Validators.maxLength(500)])
   });
@@ -103,7 +101,7 @@ export class EstimatedCostGeneralComponent extends CommonComponent implements On
    * @param isCheckProcurementPlan Để handle check lập kế hoạch mua sắm hoặc init giá trị mặc định khi load detail
    */
   setDefaultValueGeneral(): void {
-    if (!!!this.formGroupDetail.controls.rateForSingle.value) {
+    if (!this.formGroupDetail.controls.rateForSingle.value) {
       this.formGroupDetail.controls.rateForSingle.setValue('20');
     }
 

@@ -154,7 +154,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   async upload() {
     try {
       await this.spinner.show();
-      if(!(this.formGroupFile.value.fileUpload?.length??0)){
+      if (!(this.formGroupFile.value.fileUpload?.length ?? 0)) {
         this.baseService.showError(MESSAGE.FILE_UPLOAD_EMPTY);
         return;
       }
@@ -174,11 +174,10 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
           this.closeDialogFile();
         }
-      }).catch(e=>{
-        if(e.error?.message.includes('No valid')){
-          this.baseService.showError(this.MESSAGE.FILE_UPLOAD_INVALID);
-        }
-        else{
+      }).catch(e => {
+        if (e.error?.message.includes('No valid')) {
+          this.baseService.showError(this.MESSAGE.FILE_UPLOAD_INVALID_XLSX);
+        } else {
           this.baseService.showError(e.error?.message ?? this.MESSAGE.ERROR);
         }
       });
@@ -197,7 +196,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
       if (type === 'EXPORT') {
       } else if (type === 'DOWNLOAD') {
         const res = await this.baseService.exportFileData({
-          fileExportType: '1'
+          fileExportType: this.formType
           // ctype: this.formGroupFile.getRawValue().ctype,
           // partnerType: this.formGroupFile.getRawValue().partnerType
         });
@@ -238,35 +237,40 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
       this.formGroupFile.patchValue({
         templateName: '[Crew Trip]_Template bảng kê chi phí khách sạn_Quốc tế.xlsx', templateNameLabel: 'report-hotel-international-template.xlsx'
       })
+      this.formType = 1;
     } else if (this.formGroupFile.getRawValue().ctype === 'DOMESTIC' && this.formGroupFile.getRawValue().partnerType === 'HOTEL') {
       this.formGroupFile.patchValue({
         templateName: '[CrewTrip]_Template bảng kê chi phí khách sạn_Quốc nội.xlsx', templateNameLabel: 'report-hotel-domestic-template.xlsx'
       })
+      this.formType = 2;
     } else if (this.formGroupFile.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupFile.getRawValue().partnerType === 'TRANSPORTATION') {
       this.formGroupFile.patchValue({
         templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc tế.xlsx', templateNameLabel: 'report-transport-international-template.xlsx'
       })
+      this.formType = 3;
     } else if (this.formGroupFile.getRawValue().ctype === 'DOMESTIC' && this.formGroupFile.getRawValue().partnerType === 'TRANSPORTATION') {
       this.formGroupFile.patchValue({
-        templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc nội.xlsx', templateNameLabel: 'report-transport-international-template.xlsx'
+        templateName: '[Crew Trip]_Template bảng kê chi phí thuê xe_Quốc nội.xlsx', templateNameLabel: 'report-transport-domestic-template.xlsx'
       })
+      this.formType = 4;
     }
   }
 
   ctypeChange() {
     if (this.formGroupSearch.getRawValue().ctype == 'INTERNATIONAL') {
-      this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL, type: 'International'})
+      this.loadListFlightMarket({type: 'International', status: FlightMarketStatusEnum.OPERATIONAL})
     } else if (this.formGroupSearch.getRawValue().ctype == 'DOMESTIC') {
-      this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL, type: 'Domestic'})
+      this.loadListFlightMarket({type: 'Domestic', status: FlightMarketStatusEnum.OPERATIONAL})
     } else {
-      this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL})
+      this.loadListFlightMarket()
     }
   }
-  isHotel(){
+
+  isHotel() {
     return this.partnerType === 'HOTEL'
   }
 
-  isTransportation(){
+  isTransportation() {
     return this.partnerType === 'TRANSPORTATION'
   }
 }

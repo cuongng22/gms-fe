@@ -1,0 +1,13 @@
+:host::ng-deep {
+    .mat-mdc-header-row:nth-child(2) {
+        position: sticky;
+        top: 40px;
+    }
+
+    .mat-column-unitPriceExcludingVAT,
+    .mat-column-unitPriceIncludingVAT
+    {
+        min-width: 150px !important;
+        max-width: 150px !important;
+    }
+}

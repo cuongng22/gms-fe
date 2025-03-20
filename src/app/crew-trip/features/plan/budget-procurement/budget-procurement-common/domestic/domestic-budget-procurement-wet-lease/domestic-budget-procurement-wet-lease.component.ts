@@ -10,7 +10,7 @@ import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-budget-procurement-wet-lease.model';
-import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
+import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
 import { PADDING_0, PlanCategoryEnum } from '../../../budget-procurement.model';
 import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
 
@@ -96,18 +96,18 @@ export class DomesticBudgetProcurementWetLeaseComponent {
   // TÍnh dòng tổng 
   getTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
-    const startDatePlanGroup = new Date(this.yearPlan() + 1, 0, 1);
+    const startDatePlanGroup = new Date(this.yearPlan() , 0, 1);
     if (control === 'totalAmountVat') {
-      const endDatePlanGroup = new Date(this.yearPlan() + 1, 10, 1);
+      const endDatePlanGroup = new Date(this.yearPlan() , 10, 1);
       return Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
+        if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
           return Number(t[control]);
         }
         return 0;
       }).reduce((acc, value) => acc + value, 0));
     }
     return Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup)) {
+      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
         return Number(t[control]);
       }
       return 0;

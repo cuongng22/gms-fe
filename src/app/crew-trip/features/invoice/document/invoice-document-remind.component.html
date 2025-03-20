@@ -18,7 +18,7 @@
               <mat-select formControlName="statusEmail">
                 <mat-option [value]="null" i18n>-- All Status --</mat-option>
                 @for (item of listInvoiceDocumentStatusEmail; track item) {
-                <mat-option [value]="item.key">{{ item.value }}</mat-option>
+                  <mat-option [value]="item.key">{{ item.value }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -62,18 +62,19 @@
             </th>
             <td *matCellDef="let element" mat-cell>
               @if (!!element.invoiceNumber) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Invoice Number</span>: {{
-              element.invoiceNumber }} </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Invoice Number</span>: {{
+                        element.invoiceNumber
+                  }} </p>
               }
               @if (!!element.invoiceDate) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Invoice Date</span>: {{
-              element.invoiceDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]
-              }} </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Invoice Date</span>: {{
+                        element.invoiceDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]
+                  }} </p>
               }
               @if (!!element.invoiceReceiveDate) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Receiver Date</span>: {{
-              element.invoiceReceiveDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]
-              }} </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Receiver Date</span>: {{
+                        element.invoiceReceiveDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]
+                  }} </p>
               }
             </td>
           </ng-container>
@@ -82,8 +83,8 @@
             </th>
             <td *matCellDef="let element" mat-cell>
               @if (!!element.periodFrom && !!element.periodTo) {
-              {{ element.periodFrom | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
-              - {{ element.periodTo | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
+                {{ element.periodFrom | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
+                - {{ element.periodTo | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
               }
             </td>
           </ng-container>
@@ -92,18 +93,18 @@
             </th>
             <td *matCellDef="let element" mat-cell>
               @if (!!element.bizDocId) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>BizDocId</span>: {{ element.bizDocId }}
-              </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>BizDocId</span>: {{ element.bizDocId }}
+                </p>
               }
               @if (!!element.partnerName) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Partner Name</span>: {{
-              element.partnerName
-              }} </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Partner Name</span>: {{
+                        element.partnerName
+                  }} </p>
               }
               @if (!!element.partnerType) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Partner Type</span>: {{
-              element.partnerType
-              }} </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Partner Type</span>: {{
+                        element.partnerType
+                  }} </p>
               }
             </td>
           </ng-container>
@@ -126,14 +127,14 @@
             </th>
           </ng-container>
           @for (innerColumn of _displayedColumns; track innerColumn.value) {
-          <ng-container matColumnDef="{{innerColumn.value}}">
+            <ng-container matColumnDef="{{innerColumn.value}}">
               <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center"
                   [rowSpan]="(formType===1 || formType===2)?innerColumn.rowspan:1"
                   [colSpan]=innerColumn.colspan>
-          {{ innerColumn.label }}
-          </th>
-          <td
-              [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
+                {{ innerColumn.label }}
+              </th>
+              <td
+                  [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
                   mat-cell *matCellDef="let element">
             <span [ngClass]="{
           'badge': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value),
@@ -171,7 +172,7 @@
           <tr *matRowDef="let row; columns: displayedColumns;" class="input-row" mat-row></tr>
           <tr *matNoDataRow class="mat-row">
             <td [attr.colspan]="displayedColumns.length" class="mat-cell border-none text-center"><span
-              i18n>No data!</span></td>
+                i18n>No data!</span></td>
           </tr>
         </table>
       </div>
@@ -187,21 +188,21 @@
 
 <!-- Send email Popup -->
 <div
-  [class.active]="showDialogCreate"
-  class="add-new-popup"
+    [class.active]="showDialogCreate"
+    class="add-new-popup"
 >
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
       <mat-card-header>
         <mat-card-title>
           <h5 class="mb-0">
-            <span *ngIf="!formGroupDetail.value.id" i18n>Gửi email xác nhận chứng từ hóa đơn tới đối tác</span>
+            <span i18n>Send Invoice Confirmation Email to Partner</span>
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
           <button
-            (click)="closeDetail()"
-            mat-button
+              (click)="closeDetail()"
+              mat-button
           >
             <i class="ri-close-fill"></i>
           </button>
@@ -209,51 +210,53 @@
       </mat-card-header>
       <mat-card-content>
         <form [formGroup]="formGroupDetail" autocomplete="off">
-          <mat-grid-list class="mt-20" cols="12" gutterSize="24px" rowHeight="60px">
-            <mat-grid-tile [colspan]="12">
-              <div class="w-100" sizeInput='sm'>
-                <mat-form-field>
-                  <mat-label i18n>To</mat-label>
-                  <input formControlName="emailTo" matInput required
-                         trim="blur" type="text">
-                  @if (!!formGroupDetail.controls['emailTo'].hasError('required')) {
-                  <mat-error><span i18n>Email To</span><span i18n> not empty</span></mat-error>
-                  }
-                </mat-form-field>
+          <div class="row">
+            <div class="col-md-12 mt-15" sizeInput='sm'>
+              <mat-form-field>
+                <mat-label i18n>To</mat-label>
+                <input formControlName="emailTo" matInput required
+                       trim="blur" type="text">
+                <mat-error>
+                  <app-control-error controlName="emailTo" manualKey="email"></app-control-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-12 mt-15" sizeInput='sm'>
+              <mat-form-field>
+                <mat-label i18n>Cc</mat-label>
+                <input formControlName="emailCc" matInput trim="blur" type="text">
+                <mat-error>
+                  <app-control-error controlName="emailCc" manualKey="email"></app-control-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-12 mt-15" sizeInput='sm'>
+              <mat-form-field>
+                <mat-label i18n>Subject</mat-label>
+                <input formControlName="emailSubject" matInput required
+                       trim="blur" type="text">
+                <mat-error>
+                  <app-control-error controlName="emailSubject"></app-control-error>
+                </mat-error>
+              </mat-form-field>
+            </div>
+            <div class="col-md-12 mt-15" sizeInput='sm'>
+              <div class="NgxEditor__Wrapper">
+                <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
+                <ngx-editor [editor]="editor" formControlName="emailContent" required></ngx-editor>
+                <mat-error *ngxControlError="formGroupDetail.controls['emailContent']; track: 'required'" i18n>
+                  <i>Email content {{ MESSAGE.REQUIRED }}</i>
+                </mat-error>
               </div>
-            </mat-grid-tile>
-            <mat-grid-tile [colspan]="12">
-              <div class="w-100" sizeInput='sm'>
-                <mat-form-field>
-                  <mat-label i18n>Cc</mat-label>
-                  <input formControlName="emailCc" matInput trim="blur" type="text">
-                </mat-form-field>
-              </div>
-            </mat-grid-tile>
-            <mat-grid-tile [colspan]="12">
-              <div class="w-100" sizeInput='sm'>
-                <mat-form-field>
-                  <mat-label i18n>Subject</mat-label>
-                  <input formControlName="emailSubject" matInput required
-                         trim="blur" type="text">
-                  @if (!!formGroupDetail.controls['emailSubject'].hasError('required')) {
-                  <mat-error><span i18n>Email Subject</span><span i18n> not empty</span></mat-error>
-                  }
-                </mat-form-field>
-              </div>
-            </mat-grid-tile>
-            <mat-grid-tile [colspan]="12" [rowspan]="2">
-                <mat-form-field>
-                  <mat-label i18n>Content</mat-label>
-                  <textarea formControlName="emailContent" i18n-placeholder matInput></textarea>
-                  @if (!!formGroupDetail.controls['emailContent'].hasError('required')) {
-                  <mat-error><span i18n>Email Content</span><span i18n> not empty</span></mat-error>
-                  }
-                </mat-form-field>
-            </mat-grid-tile>
-          </mat-grid-list>
+            </div>
+            <div class="col-md-12 mt-15" sizeInput='sm'>
+              <file-upload [accept]="COMMON_CONFIG.FILE_ACCEPT" [multiple]="true"
+                           class="file-uploader"
+                           formControlName="fileAttachs"></file-upload>
+            </div>
+          </div>
         </form>
-        <div class="btn-box">
+        <div class="btn-box mt-20">
           <button (click)="closeDetail()" class="close-btn" i18n mat-button type="button">
             <i class="material-symbols-outlined">
               close

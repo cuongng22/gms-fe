@@ -9,7 +9,7 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { truncateDateUTC } from 'src/app/crew-trip/shared/utils/common';
+import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { PlanCategoryEnum } from '../../../../budget-procurement/budget-procurement.model';
 import { checkChange, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './international-estimated-cost-hotel.model';
@@ -39,6 +39,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
 
   generalData: any = {};
   totalByGroup: any = {};
+  resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
 
   headerRowDef1: string[] = [];
   headerRowDef2: string[] = [];
@@ -81,6 +82,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
       this.calculateAirCraftLabel(item, index);
       this.calculateData(item, index);
     });
+    this.calculateTotal()
   };
 
   calculatePeriodLabel(item: any, index: number) {
@@ -119,6 +121,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
       this.dataSource.data.forEach((item: any, index) => {
         this.calculateData(item, index);
       });
+      this.calculateTotal()
     }
     const earlyCheckinFlag = checkChange(this.generalData.earlyCheckinFlag, data.earlyCheckinFlag);
     const lateCheckoutFlag = checkChange(this.generalData.lateCheckoutFlag, data.lateCheckoutFlag);
@@ -170,6 +173,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
             this.calculateSpan(this.aircraftTypeRowspan, length);
           }
           this.dataSource.data = [...dataProcessHotel];
+          this.calculateTotal()
           console.log(this.dataSource.data);
           console.log('periodRowspan: ', this.periodRowspan);
           console.log('aircraftTypeRowspan: ', this.aircraftTypeRowspan);
@@ -189,6 +193,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
         this.dataSource.data.forEach((item: any, index) => {
           this.calculateData(item, index);
         });
+        this.calculateTotal()
         break;
     }
   }
@@ -288,26 +293,42 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     data[control] = false;
   }
 
+  calculateTotal() {
+    this.setTotal('numberFlight');
+    this.setTotal('totalSingleRoom');
+    this.setTotal('totalDoubleRoom');
+    this.setTotal('totalAmountForeignVat');
+    this.setTotal('totalAmount');
+    this.setTotal('totalAmountVat');
+  }
 
   // TÍnh dòng tổng 
-  getTotal(control: string) {
+  setTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
+    let totalValue = 0
     const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     if (control === 'totalAmountVat') {
       const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-      return Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDateUTC(new Date(t['periodStart'])) <= truncateDateUTC(endDatePlanGroup)) {
+      totalValue = Math.round(this.dataSource.data.map((t: any) => {
+        if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
           return Number(t[control]);
         }
         return 0;
       }).reduce((acc, value) => acc + value, 0));
+      this.resultTotal[control] = totalValue;
+      return
     }
-    return Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDateUTC(new Date(t['periodStart'])) >= truncateDateUTC(startDatePlanGroup)) {
+    totalValue = Math.round(this.dataSource.data.map((t: any) => {
+      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
         return Number(t[control]);
       }
       return 0;
-    }).reduce((acc, value) => acc + value, 0));;
+    }).reduce((acc, value) => acc + value, 0));
+    this.resultTotal[control] = totalValue;
+  }
+
+  getTotal(control: string) {
+    return this.resultTotal[control] ?? 0
   }
 
   // hàm công thức tính chung
@@ -346,11 +367,19 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
   calculateFormula(data: any, formula: string): number {
     // Sử dụng Function để tạo hàm động từ công thức
     const dynamicFunction = new Function(
-      'data', 'generalData',
+      'data', 'generalData', 'ctz',
       `return ${formula};`    // Công thức cần tính
     );
-    const result = dynamicFunction(data, this.generalData);
+    const result = dynamicFunction(data, this.generalData, this.ctz);
     return Math.round(result);
+  }
+
+  // convertToZero
+  ctz(value: any) {
+    if (value) {
+      return new Number(value.toString().replace(',', '.'));
+    }
+    return 0;
   }
 
   // hàm filter theo group

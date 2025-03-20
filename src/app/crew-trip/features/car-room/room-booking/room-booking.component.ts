@@ -1,5 +1,5 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatButton} from '@angular/material/button';
 import {MatCard, MatCardContent, MatCardModule} from '@angular/material/card';
 import {RoomBookingService} from 'src/app/crew-trip/core/services/room-booking.service';
@@ -15,7 +15,6 @@ import {HttpClient, HttpStatusCode} from "@angular/common/http";
 import {HotelService} from "src/app/crew-trip/core/services/hotel-service";
 import {ListResponse} from "src/app/crew-trip/shared/models/common.model";
 import {MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
-import {Validators} from "ngx-editor";
 import {
   MatCell, MatCellDef,
   MatColumnDef,
@@ -84,12 +83,13 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
       this.listYear.push(year);
     }
     this.formGroupSearch = this.fb.group({
-      scheduleType: ['',[Validators.required]],
+      scheduleType: ['', [Validators.required]],
       marketCode: ['', [Validators.required]],
       month: [currentMonth, [Validators.required]],
       year: [currentYear, [Validators.required]],
       type: ['', [Validators.required]],
-      timezone:['CC']
+      timezone: ['CC'],
+      export: [false]
     });
   }
 
@@ -136,6 +136,9 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
 
   override async search<T>(body?: any, isNextPage?: boolean, fnSearch?: (bodySearch: any) => (ListResponse<T> | any)) {
     try {
+      this.formGroupSearch.patchValue({
+        export: false,
+      });
       this.formGroupSearch.markAllAsTouched();
       if (this.formGroupSearch.invalid) {
         this.findInvalidControls(this.formGroupSearch);
@@ -179,5 +182,31 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
       return value.replace(/\n/g, '<br/>');
     }
     return value;
+  }
+
+  override async exportFileOptions(body?: any, filename?: string, sourcePath?: string) {
+    try {
+      await this.spinner.show();
+      this.formGroupSearch.markAllAsTouched();
+      if (this.formGroupSearch.invalid) {
+        this.findInvalidControls(this.formGroupSearch);
+        return;
+      }
+      this.formGroupSearch.patchValue({
+        export: true,
+      });
+      const res = await this.baseService.exportDataOptions(
+        {
+          ...(removeNullValues(body) ||
+            removeNullValues(this.formGroupSearch.value)),
+        },
+        sourcePath,
+      );
+      this.downloadFile(res.blob, filename ?? res.fileName);
+    } catch (e: any) {
+      this.baseService.showError(e.error?.error?.code ?? MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 }

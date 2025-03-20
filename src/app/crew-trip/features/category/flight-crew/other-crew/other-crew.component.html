@@ -71,13 +71,13 @@
         <ng-container matColumnDef="name">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
           >
-            Category
+            Type
           </th>
           <td mat-cell *matCellDef="let element" class="text-center">{{ element.name }}</td>
         </ng-container>
         <ng-container matColumnDef="nation">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
-            Nation
+            Country
           </th>
           <td mat-cell *matCellDef="let element" class="text-center">
             {{ element.nation }}
@@ -95,7 +95,7 @@
         <ng-container matColumnDef="des-arr">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
           >
-            Flight
+            Route
           </th>
           <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">{{ element.desCode }}
             - {{ element.arrCode }}
@@ -191,7 +191,7 @@
     [class.active]="showDialogCreate"
     class="add-new-popup"
   >
-    <div class="popup-dialog" style="min-width: 700px">
+    <div class="popup-dialog" style="min-width: 700px; max-height: 700px">
       <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
         <mat-card-header>
           <mat-card-title>
@@ -233,17 +233,19 @@
                          required>
                   @if (!!formGroupDetail.controls['name'].hasError('required')) {
                     <mat-error><span i18n>Name</span><span i18n> is required</span></mat-error>
+                  } @else if (!!formGroupDetail.controls['name'].hasError('maxlength')) {
+                    <mat-error><span i18n>Name</span><span i18n> must be less than 250 characters</span></mat-error>
                   }
                 </mat-form-field>
               </div>
               <div class="col-sm-6 col-md-6 form-group">
                 <app-selection-suggest i18n-label="@@nation" (selectionChange)="changeValueNation($event)"
                                        (clearInputEvent)="onClearInput('NATION')" required
-                                       label="Nation" attrValue="id" attrDisplay="vniName" [options]="countries"
+                                       label="Country" attrValue="id" attrDisplay="vniName" [options]="countries"
                                        formControlName="nationId" size="sm"/>
               </div>
               <div class="col-sm-6 col-md-6 form-group">
-                <app-selection-suggest i18n-label="@@airportCodes" label="Market code" [options]="markets"
+                <app-selection-suggest i18n-label="@@airportCodes" label="Airport code" [options]="markets"
                                        formControlName="airportCodes" size="sm"/>
               </div>
               <div class="col-sm-3 col-md-3 form-group">
@@ -255,7 +257,7 @@
                                        formControlName="desCode" size="sm"/>
               </div>
               <div class="col-sm-6 col-md-6 form-group">
-                <app-select-multiple size="sm" label="Number of Flight" [required]="false"
+                <app-select-multiple size="sm" label="Flight no" [required]="false"
                                      [options]="fltNoList"
                                      formControlName="flightNo">
                 </app-select-multiple>
@@ -313,7 +315,7 @@
                   }
                 </mat-form-field>
               </div>
-              <mat-checkbox formControlName="status" i18n>Status</mat-checkbox>
+              <mat-checkbox formControlName="status" i18n>Active</mat-checkbox>
             </div>
           </form>
           <div class="btn-box">

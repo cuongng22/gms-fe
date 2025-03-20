@@ -25,13 +25,14 @@ import { MESSAGE } from '../../utils/constant';
 import { NgxControlError } from 'ngxtension/control-error';
 import { Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
+import {MatTooltipModule} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-selection-suggest-2',
   standalone: true,
   imports: [FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatAutocompleteModule, CommonModule, NgxControlError,
-    MatIconModule
+    MatIconModule, MatTooltipModule
   ],
   templateUrl: './selection-suggest-2.component.html',
   styleUrl: './selection-suggest-2.component.scss',
@@ -74,7 +75,8 @@ export class SelectionSuggest2Component implements OnInit, AfterViewInit, AfterV
   @Input() errors : any;
   @Output() clearInputEvent = new EventEmitter<void>();
   @Input() formControlName: string
-  selectionChange = output<any>();
+  @Output() selectionChange = new EventEmitter<any>();
+  @Output() inputChange = new EventEmitter<any>();
 
   private _options: any[] = [];
   keySearch = new Subject<string>();
@@ -104,7 +106,6 @@ export class SelectionSuggest2Component implements OnInit, AfterViewInit, AfterV
   }
 
   ngOnInit(): void {
-    console.log(this.formControl.value)
     this.keySearch.pipe(
       debounceTime(500),
       distinctUntilChanged(),
@@ -117,10 +118,22 @@ export class SelectionSuggest2Component implements OnInit, AfterViewInit, AfterV
         this.filtered.set(optionFilter);
         return;
       }
-      this.filtered.set(optionFilter.filter(option => {
-        const valueAttrDisplay = (this.attrDisplay ? option[this.attrDisplay] : option)?.toString().toLowerCase();
-        return valueAttrDisplay.includes(value.toLowerCase());
-      }));
+      this.filtered.set(
+        optionFilter.filter(option => {
+          let valueAttrDisplay = value;
+          if (this.attrDisplay) {
+            valueAttrDisplay = option[this.attrDisplay] || '';
+            if (this.attrDisplay2) {
+              valueAttrDisplay += ' ' + (option[this.attrDisplay2] || '');
+            }
+          } else {
+            valueAttrDisplay = option.toString();
+          }
+          return valueAttrDisplay.toLowerCase().includes(value.toLowerCase());
+        })
+      );
+      this.inputChange.emit(value);
+
     });
 
     this.formControl.statusChanges.subscribe((res) => {
@@ -157,20 +170,18 @@ export class SelectionSuggest2Component implements OnInit, AfterViewInit, AfterV
 
   filter(): void {
     const filterValue = this.inputSearch.nativeElement.value;
-    this.formControl.setValue(null);
-    this.formControl.updateValueAndValidity();
+    // this.formControl.setValue(null);
+    // this.formControl.updateValueAndValidity();
     this.keySearch.next(filterValue);
   }
 
   onSelectionChange(event: any) {
-    this.viewControl.setValue(event.option.viewValue ?? null);
+    const filterValue = this.inputSearch.nativeElement.value ?? "";
+    /*this.viewControl.setValue(event.option.viewValue ?? null);
     this.viewControl.updateValueAndValidity();
     this.selectionControl.writeValue(event.option.value ?? null);
-    this.formControl.updateValueAndValidity();
-    this.selectionChange.emit({
-      value: event.option.value ?? null,
-      viewValue: event.option.viewValue ?? null,
-    });
+    this.formControl.updateValueAndValidity();*/
+    this.selectionChange.emit(filterValue);
   }
 
   @Input() set options(options: any[]) {
@@ -197,7 +208,7 @@ export class SelectionSuggest2Component implements OnInit, AfterViewInit, AfterV
   }
 
   get errorMessage(){
-    if(this.errors?.overlapValidator){
+    if(this.errors?.message){
       //this.viewControl.setErrors(this.errors.overlapValidator);
       return this.errors.message
     }

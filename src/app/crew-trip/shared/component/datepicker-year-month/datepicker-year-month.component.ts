@@ -1,16 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { Component, forwardRef, inject, input, LOCALE_ID, OnInit, Optional, Self, SimpleChanges, ViewEncapsulation } from '@angular/core';
-import { ControlValueAccessor, FormControl, FormsModule, NG_VALUE_ACCESSOR, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
-import { DateAdapter, MAT_DATE_FORMATS, MAT_DATE_LOCALE, MatNativeDateModule } from '@angular/material/core';
+import {AfterContentChecked, Component, inject, Input, input, OnInit} from '@angular/core';
+import { FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { DateAdapter, MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepicker, MatDatepickerModule } from '@angular/material/datepicker';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 
 import * as _moment from 'moment';
-import { default as _rollupMoment, Moment } from 'moment';
-import { AppDateAdapter } from './datepicker-year-month-adapter';
+import { default as _rollupMoment } from 'moment';
 import { InputSizeComponent } from '../../input/input-size.component';
 import { MESSAGE } from '../../utils/constant';
 import { NgxControlError } from 'ngxtension/control-error';
@@ -40,17 +38,7 @@ export const MONTH_MODE_FORMATS = {
   templateUrl: './datepicker-year-month.component.html',
   styleUrl: './datepicker-year-month.component.scss',
   providers: [
-    // {
-    //   provide: NG_VALUE_ACCESSOR,
-    //   useExisting: forwardRef(() => DatepickerYearMonthComponent),
-    //   multi: true
-    // },
     { provide: MAT_DATE_FORMATS, useValue: MONTH_MODE_FORMATS },
-    {
-      provide: DateAdapter,
-      useClass: AppDateAdapter,
-      deps: [MAT_DATE_LOCALE],
-    },
     { provide: DateAdapter, useClass: DatepickerYearMonthAdapter }
   ],
   hostDirectives: [NgxControlValueAccessor],
@@ -61,7 +49,7 @@ export class DatepickerYearMonthComponent implements OnInit {
   label = input<string>();
   readonly = input<boolean>(false);
   requiredLabel = input<boolean>(false);
-
+  @Input() editInlineTable = false;
 
   protected datepickerYearMonth = inject<NgxControlValueAccessor<any>>(
     NgxControlValueAccessor,
@@ -74,6 +62,7 @@ export class DatepickerYearMonthComponent implements OnInit {
   ngOnInit(): void {
   }
   get requiredControl(): boolean {
+    console.log('requiredControl: ', this.datepickerYearMonth.ngControl?.control?.hasValidator(Validators.required));
     return this.formControl.hasValidator(Validators.required);
   }
 

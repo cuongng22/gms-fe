@@ -21,7 +21,7 @@
             Estimated/Plan
         </li>
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@budgetProcurementPlan">
-            Budget & Procurement plan
+            Estimated cost
         </li>
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@summaryPlan">
             Estimated cost summary
@@ -46,7 +46,7 @@
                     </i>
                     <span i18n="@@close">Close</span>
                 </button>
-                <button class="success-btn" type="button" mat-button [disabled]="checkStatusCompelted()"
+                <button class="add-btn" type="button" mat-button [disabled]="checkStatusCompelted()"
                     (click)="completed()">
                     <i class="material-symbols-outlined">
                         check_circle
@@ -65,12 +65,21 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <app-estimated-cost-general #estimatedCostGeneral [category]="category()"
-            [disabled]="checkStatusCompelted()"
+        <app-estimated-cost-general #estimatedCostGeneral [category]="category()" [disabled]="checkStatusCompelted()"
             (formValueChanges)="formGeneralValueChanges($event)"></app-estimated-cost-general>
+        <div class="d-flex justify-content-end">
+            <button [disabled]="checkStatusCompelted()" mat-button color="primary" type="button" class="add-btn"
+                (click)="summaryData()">
+                <i class="material-symbols-outlined">
+                    directory_sync
+                </i>
+                <span i18n="@@dataSummary">Data Summary</span>
+            </button>
+        </div>
     </mat-card-content>
 </mat-card>
-<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
+<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none"
+    [ngClass]="checkDataSummary()?'d-block':'d-none'">
     <mat-card-content>
         <mat-accordion multi>
             <mat-expansion-panel class="remove-mat-expansion-panel-padding" [expanded]="true"
@@ -80,15 +89,7 @@
                         <h5 class="mb-0">II. <span i18n="@@calculationBasis">Calculation basis</span></h5>
                     </mat-panel-title>
                 </mat-expansion-panel-header>
-                <div style="position: absolute; top: 6px; right: 60px;">
-                    <button [disabled]="checkStatusCompelted()" mat-button color="primary" type="button" class="add-btn"
-                        (click)="summaryData()">
-                        <i class="material-symbols-outlined">
-                            directory_sync
-                        </i>
-                        <span i18n="@@dataSummary">Data Summary</span>
-                    </button>
-                </div>
+
                 @if (category() === CategoryEnum.DOMESTIC) {
                 <!-- <app-domestic-budget-procurement-flight-rate #domesticFlightRate [data]="planFlightRatesData" /> -->
                 <app-domestic-estimated-cost-flight-rate #domesticFlightRate [data]="planFlightRatesData" />
@@ -119,7 +120,8 @@
         </mat-accordion>
     </mat-card-content>
 </mat-card>
-<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none">
+<mat-card class="mb-10 p-0 border-radius d-block bg-white border-0 shadow-none"
+    [ngClass]="checkDataSummary()?'d-block':'d-none'">
     <mat-card-content>
         <mat-accordion multi class="mt-10">
             <mat-expansion-panel [expanded]="true" class="remove-mat-expansion-panel-padding" #panelEstimateCostState>
@@ -162,8 +164,8 @@
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">3.2
-                                    <span i18n="@@estimateCostForCarRental">
-                                        Estimate Cost for Car Rental
+                                    <span i18n="@@estimateCostForTransportation">
+                                        Estimate Cost for Transportation
                                     </span>
                                 </h6>
                             </mat-panel-title>

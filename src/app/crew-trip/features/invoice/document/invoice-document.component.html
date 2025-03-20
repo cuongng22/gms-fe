@@ -13,14 +13,10 @@
             </mat-form-field>
           </div>
           <div class="col-2" sizeInput='md'>
-            <mat-form-field>
-              <mat-label i18n>Airport Code</mat-label>
-              <mat-select formControlName="airportCode" multiple>
-                @for (item of listFlightMarket; track item) {
-                <mat-option [value]="item">{{ item }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+            <app-select-multiple [options]="listFlightMarket" [required]="false"
+                                 attrValue="" formControlName="airportCode"
+                                 label="Airport code" size="md">
+            </app-select-multiple>
           </div>
           <div class="col-2" sizeInput='md'>
             <mat-form-field>
@@ -190,18 +186,17 @@
                   mat-cell *matCellDef="let element">
             <span [ngClass]="{
           'badge': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value),
-          'text-soft-dark': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && (
-          element['statusEmail'] ==='UNSEND'|| element['statusPayment'] === 'UNPAID'),
-          'text-soft-primary': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
-          element['status'] === 'VERIFIED',
-          'text-soft-info': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) && element['status']
-          === 'MATCHED',
-          'text-soft-warning': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
-          element['status'] === 'UNMATCHED',
-          'text-soft-danger': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
-          element['status'] === 'UNVERIFIED',
-          'text-soft-vna': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value) &&
-          ['FINISHED','SEND','CLEARED','RECONCILED','PAID',].includes(element[innerColumn.value]),
+
+          'text-soft-info': innerColumn.value === 'status' && element['status'] === 'MATCHED',
+          'text-soft-warning': innerColumn.value === 'status' && element['status'] === 'UNMATCHED',
+          'text-soft-danger': innerColumn.value === 'status' && element['status'] === 'UNVERIFIED',
+
+          'text-soft-dark': (innerColumn.value === 'statusEmail' && element['statusEmail'] === 'UNSEND') ||
+          (innerColumn.value === 'statusPayment' && ['NEGOTIABLE','CLEARED BUT UNACCOUNTED', 'RECONCILED UNACCOUNTED', 'VOIDED'].includes(element['statusPayment'])),
+
+          'text-soft-vna': (innerColumn.value === 'statusEmail' && ['FINISHED', 'SEND', 'CLEARED', 'RECONCILED', 'PAID'].includes(element['statusEmail'])) ||
+          (innerColumn.value === 'status' && element['status'] === 'VERIFIED') ||
+          (innerColumn.value === 'statusPayment' && ['FINISHED', 'SEND', 'CLEARED', 'RECONCILED', 'PAID'].includes(element['statusPayment']))
           }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
               </td>
             </ng-container>
@@ -213,6 +208,7 @@
             </th>
             <td *matCellDef="let element;let i = index" mat-cell>
               <div class="action-buttons d-grid-columns-3 align-items-center justify-content-end">
+                @if(element.idInvoiceForm){
                 <a class="text-secondary"
                    mat-button type="button">
                   <i (click)="showFormHdr(element.idInvoiceForm||-1)" class="material-symbols-outlined" i18n-title
@@ -220,13 +216,34 @@
                     contract
                   </i>
                 </a>
+                }
+                @if(element.listChild.length>0){
                 <a class="text-secondary" mat-button
-                   type="button">
-                  <i (click)="nextStep(element.id,true,2,element)" class="material-symbols-outlined" i18n-title
-                     title="Detail">
-                    visibility
-                  </i>
-                </a>
+                 type="button">
+                <i class="material-symbols-outlined" i18n-title
+                   [matMenuTriggerFor]="listChild"
+                   title="Detail">
+                  visibility
+                </i>
+              </a>
+              <mat-menu  #listChild="matMenu" xPosition="before">
+                     <mat-list role="list">
+                    <mat-list-item role="listitem" (click)="nextStep(element.id,true,2,element)" >View Current Invoice</mat-list-item>
+                    <mat-list-item role="listitem" (click)="nextStep(element.listChild[0].id,true,2,element.listChild[0])">View Previous Invoice</mat-list-item>
+                </mat-list>
+              </mat-menu>
+                }
+                @else{
+                <a class="text-secondary" mat-button
+                type="button">
+               <i (click)="nextStep(element.id,true,2,element)" class="material-symbols-outlined" i18n-title
+                  title="Detail">
+                 visibility
+               </i>
+             </a>
+                }
+
+
                 <a class="text-secondary" mat-button
                    type="button">
                   <i class="material-symbols-outlined" i18n-title title="Copy">
@@ -257,7 +274,7 @@
                   </i>
                 </a>
                 }
-                @if(element.status === 'UNMATCHED'){
+                @if(element.status === 'UNMATCHED' && element.source === 'MANUAL'){
                 <a class="text-danger" mat-button
                    type="button">
                   <i (click)="showConfirmDelete(element.id)" class="material-symbols-outlined" i18n-title
@@ -275,7 +292,7 @@
               [class.selected-row]="isSelected(row)"
               mat-row></tr>
           <tr *matNoDataRow class="mat-row">
-            <td [attr.colspan]="_displayedColumnsRow.length" class="mat-cell border-none text-center"><span
+            <td [attr.colspan]="_displayedColumnsRow.length" class="mat-cell border-none text-start"><span
               i18n>No data!</span></td>
           </tr>
         </table>
@@ -286,38 +303,38 @@
                      [showFirstLastButtons]="showFirstLastButtons"
                      aria-label="Select page">
       </mat-paginator>
-
+      @if(dataSource.data.length >0){
       <div class="table-responsive mt-25">
-        <span class="fw-bold">Detailed payment information</span>
-        <table [dataSource]="tblDetail" class="table-light table-responsive"
-               mat-table>
-          <ng-container matColumnDef="stt">
-            <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
-            <td *matCellDef="let element; let i = index" class="text-center"
-                mat-cell>{{ i + 1 }}
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="serviceCode">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Code
-            </th>
-            <td *matCellDef="let element" mat-cell>
-                 <span class="label-text">
-            {{ element.serviceCode }}
-            </span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="serviceName">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Name</th>
-            <td *matCellDef="let element" mat-cell>
-                 <span class="label-text">
-            {{ element.serviceName }}
-            </span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="unit">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit</th>
-            <td *matCellDef="let element" mat-cell>
-              <span class="label-text">{{ element.unit }}</span>
+  <span class="fw-bold">Detailed payment information</span>
+  <table [dataSource]="tblDetail" class="table-light table-responsive"
+         mat-table>
+    <ng-container matColumnDef="stt">
+      <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
+      <td *matCellDef="let element; let i = index" class="text-center"
+          mat-cell>{{ i + 1 }}
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="serviceCode">
+      <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Code
+      </th>
+      <td *matCellDef="let element" mat-cell>
+           <span class="label-text">
+      {{ element.serviceCode }}
+      </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="serviceName">
+      <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Name</th>
+      <td *matCellDef="let element" mat-cell>
+           <span class="label-text">
+      {{ element.serviceName }}
+      </span>
+      </td>
+    </ng-container>
+    <ng-container matColumnDef="unit">
+      <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit</th>
+      <td *matCellDef="let element" mat-cell>
+        <span class="label-text">{{ element.unit }}</span>
             </td>
           </ng-container>
           <ng-container matColumnDef="periodOccurrence">
@@ -400,11 +417,13 @@
             *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat',];"
             class="input-row" mat-row></tr>
           <tr *matNoDataRow class="mat-row">
-            <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
+            <td [attr.colspan]="1" class="mat-cell border-none text-start"><span
               i18n>No data!</span></td>
           </tr>
         </table>
       </div>
+      }
+
     </mat-card-content>
   </mat-card>
 </ng-container>

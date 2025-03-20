@@ -11,20 +11,58 @@
       </h5>
       } @else if (isPL()) {
       <h5 class="mb-0 ml-10">
-        <span i18n>Annex Detail </span>
-        <span class="text-vna">{{ contractObj.contractCode }}</span>
-          <!--          <span class="text-warning">{{ formGroupDetail.getRawValue().contractName }}</span>-->
-        </h5>
+        @if (readMode) {
+      <span i18n>View Appendix </span>
+      <span class="text-vna"> [{{ contractObj?.contractNo }}]</span>
+      <span class="text-warning"> {{ contractObj?.contractName }}</span>
+      } @else {
+      @if (this.id) {
+      <span i18n>Edit Appendix </span>
+      } @else {
+      <span i18n>Add new Appendix </span>
+      }
+      <span class="text-vna"> [{{ contractObj?.contractNo }}] </span>
+      <span class="text-warning"> {{ contractObj?.contractName }}</span>
+      }
+      </h5>
       }
     </h5>
   </div>
   <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
-    <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      Contract
-    </li>
-    <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      Detail
-    </li>
+    @if (isHD()) {
+    @if (readMode) {
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Category</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Contract</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> View</li>
+
+    } @else {
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Category</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Contract</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Edit</li>
+    }
+
+    } @else if (isPL()) {
+
+    @if (readMode) {
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Category</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Contract</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Appendix</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> View</li>
+    } @else {
+    @if (this.id) {
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Category</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Contract</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Appendix</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Edit</li>
+    } @else {
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Category</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Contract</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Appendix</li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n> Add new</li>
+    }
+    }
+
+    }
   </ol>
 </div>
 <div (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'" class="w-100 text-end mb-10">
@@ -73,7 +111,7 @@
         <div class="col-3" sizeInput="sm">
           <mat-form-field>
             <mat-label i18n>Contract category</mat-label>
-            <mat-select formControlName="contractSpec" required>
+            <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="contractSpec" required>
               <mat-option *ngFor="let option of listContractSpec" [value]="option.key">
                 {{ option.value }}
               </mat-option>
@@ -90,9 +128,15 @@
 <mat-accordion multi>
   <mat-expansion-panel [expanded]="expandList.has('tab1')">
     <mat-expansion-panel-header i18n>
+      @if(isHD()){
       <div (click)="$event.stopPropagation();" class="title-no-event">1. General information (Data extracted from the
         CMS)
       </div>
+      }@else{
+      <div (click)="$event.stopPropagation();" class="title-no-event">1. General information
+      </div>
+      }
+
     </mat-expansion-panel-header>
     <mat-panel-description>
       <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
@@ -107,7 +151,11 @@
               }
               <input formControlName="contractCode" matInput required trim="blur">
               <mat-error>
+                @if (isHD()) {
                 <app-control-error controlName="contractCode"/>
+                } @else {
+                <app-control-error controlName="contractCode" manualKey="appendixCode"/>
+                }
               </mat-error>
             </mat-form-field>
           </div>
@@ -119,11 +167,12 @@
               <mat-label i18n>Appendix no</mat-label>
               }
               <input formControlName="contractNo" matInput required trim="blur">
-              @if (!!formGroupDetail.controls['contractNo'].hasError('required')) {
-              <mat-error><span i18n>Contract No</span><span i18n> is required</span></mat-error>
-              }
-              <mat-error *ngxControlError="formGroupDetail.controls['contractNo']; track: 'maxlength'">
-                <span i18n>Contract No</span><span i18n> must be less than 50 characters</span>
+              <mat-error>
+                @if (isHD()) {
+                <app-control-error controlName="contractNo"/>
+                } @else {
+                <app-control-error controlName="contractNo" manualKey="appendixNo"/>
+                }
               </mat-error>
             </mat-form-field>
           </div>
@@ -165,9 +214,9 @@
                      trim="blur">
               <mat-datepicker-toggle [for]="signedDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #signedDate></mat-datepicker>
-              @if (!!formGroupDetail.controls['signedDate'].hasError('required')) {
-              <mat-error><span i18n>Sign date</span><span i18n> is required</span></mat-error>
-              }
+              <mat-error>
+                <app-control-error controlName="signedDate"></app-control-error>
+              </mat-error>
             </mat-form-field>
           </div>
           <div class="col-4" sizeInput='sm'>
@@ -179,9 +228,12 @@
                          required trim="blur">
                   <mat-datepicker-toggle [for]="effectiveDate" matIconSuffix></mat-datepicker-toggle>
                   <mat-datepicker #effectiveDate></mat-datepicker>
-                  @if (!!formGroupDetail.controls['effectiveDate'].hasError('required')) {
-                  <mat-error><span i18n>Effective date</span><span i18n> is required</span></mat-error>
-                  }
+                  <mat-error>
+                    <app-control-error controlName="effectiveDate"></app-control-error>
+                  </mat-error>
+                  <mat-error *ngxControlError="formGroupDetail.controls['effectiveDate']; track: 'beforeValidatorMessage'">
+                    {{formGroupDetail.controls['effectiveDate'].errors?.['message']}}
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-6" sizeInput='sm'>
@@ -191,9 +243,9 @@
                          trim="blur">
                   <mat-datepicker-toggle [for]="expiryDate" matIconSuffix></mat-datepicker-toggle>
                   <mat-datepicker #expiryDate></mat-datepicker>
-                  @if (!!formGroupDetail.controls['expiryDate'].hasError('required')) {
-                  <mat-error><span i18n>Expiry date</span><span i18n> is required</span></mat-error>
-                  }
+                  <mat-error>
+                    <app-control-error controlName="expiryDate"></app-control-error>
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -201,7 +253,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract type</mat-label>
-              <mat-select formControlName="contractType" required>
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="contractType" required>
                 <mat-option *ngFor="let option of listContractType" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
@@ -215,9 +267,9 @@
         <!--        dong3-->
         <div class="row mt-20">
           <div class="col-4" sizeInput='sm'>
-            <mat-form-field matTooltip="{{getContractForm(formGroupDetail.controls['contractForm'].value)}}">
+            <mat-form-field>
               <mat-label i18n>Contract form</mat-label>
-              <mat-select formControlName="contractForm" required>
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="contractForm" required>
                 <mat-option *ngFor="let option of listContractForm" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
@@ -246,11 +298,12 @@
               <input formControlName="contractName" matInput
                      matTooltip="{{formGroupDetail.controls['contractName'].value}}" required
                      trim="blur">
-              @if (!!formGroupDetail.controls['contractName'].hasError('required')) {
-              <mat-error><span i18n>Contract name</span><span i18n> is required</span></mat-error>
-              }
-              <mat-error *ngxControlError="formGroupDetail.controls['contractName']; track: 'maxlength'">
-                <span i18n>Contract name</span><span i18n> must be less than 250 characters</span>
+              <mat-error>
+                @if (isHD()) {
+                <app-control-error controlName="contractName"/>
+                } @else {
+                <app-control-error controlName="contractName" manualKey="appendixName"/>
+                }
               </mat-error>
             </mat-form-field>
           </div>
@@ -258,14 +311,14 @@
         <!--        dong4-->
         <div class="row mt-20">
           <div class="col-4" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Supplier ID</mat-label>
-              <input (ngModelChange)="partnerChangeDebounce($event);this.partnerChangeBrake=false;"
-                     formControlName="partnerCode" matInput required trim="blur">
-              @if (!!formGroupDetail.controls['partnerCode'].hasError('required')) {
-              <mat-error><span i18n>Supplier ID</span><span i18n> is required</span></mat-error>
-              }
-            </mat-form-field>
+            <app-selection-suggest-2 (inputChange)="changePartnerCode($event)"
+                                     (selectionChange)="changePartnerCode($event)"
+                                     [errors]="formGroupDetail.get('partnerCode')?.errors"
+                                     [options]="listPartner"
+                                     attrDisplay="label"
+                                     attrValue="code"
+                                     formControlName="partnerCode" label="Supplier ID"
+                                     size="sm"/>
           </div>
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
@@ -298,7 +351,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Contract authority</mat-label>
-              <mat-select formControlName="negotiateCompetence" required>
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="negotiateCompetence">
                 <mat-option *ngFor="let option of listNegotiateCompetence" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
@@ -311,7 +364,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Signatory authority</mat-label>
-              <mat-select formControlName="competence" required>
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="competence">
                 <mat-option *ngFor="let option of listCompetence" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
@@ -324,7 +377,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Representative</mat-label>
-              <input formControlName="employeeSigned" matInput required trim="blur">
+              <input formControlName="employeeSigned" matInput trim="blur">
               @if (!!formGroupDetail.controls['employeeSigned'].hasError('required')) {
               <mat-error><span i18n>Representative</span><span i18n> is required</span></mat-error>
               }
@@ -336,7 +389,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Sign department</mat-label>
-              <input formControlName="signedDepartmentName" matInput required trim="blur">
+              <input formControlName="signedDepartmentName" matInput trim="blur">
               @if (!!formGroupDetail.controls['signedDepartmentName'].hasError('required')) {
               <mat-error><span i18n>Sign department</span><span i18n> is required</span></mat-error>
               }
@@ -345,7 +398,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Budget Management Unit</mat-label>
-              <input formControlName="budgetDepartmentName" matInput required trim="blur">
+              <input formControlName="budgetDepartmentName" matInput trim="blur">
               @if (!!formGroupDetail.controls['budgetDepartmentName'].hasError('required')) {
               <mat-error><span i18n>Budget Management Unit</span><span i18n> is required</span></mat-error>
               }
@@ -354,7 +407,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Proceed department</mat-label>
-              <input formControlName="proceedDepartmentName" matInput required trim="blur">
+              <input formControlName="proceedDepartmentName" matInput trim="blur">
               @if (!!formGroupDetail.controls['proceedDepartmentName'].hasError('required')) {
               <mat-error><span i18n>Proceed department</span><span i18n> is required</span></mat-error>
               }
@@ -366,7 +419,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Payment unit</mat-label>
-              <input formControlName="paidDepartmentName" matInput required trim="blur">
+              <input formControlName="paidDepartmentName" matInput trim="blur">
               @if (!!formGroupDetail.controls['paidDepartmentName'].hasError('required')) {
               <mat-error><span i18n>Payment unit</span><span i18n> is required</span></mat-error>
               }
@@ -375,7 +428,11 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Method Payments</mat-label>
-              <input formControlName="paymentType" matInput trim="blur">
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="paymentType">
+                <mat-option *ngFor="let option of listPaymentType" [value]="option.key">
+                  {{ option.value }}
+                </mat-option>
+              </mat-select>
               @if (!!formGroupDetail.controls['paymentType'].hasError('required')) {
               <mat-error><span i18n>Method Payments</span><span i18n> is required</span></mat-error>
               }
@@ -396,7 +453,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Budget Code</mat-label>
-              <mat-select formControlName="budgetCode" required>
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="budgetCode">
                 <mat-option *ngFor="let option of listBudgetCode" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
@@ -409,7 +466,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Field</mat-label>
-              <mat-select formControlName="fieldCode2" required>
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="fieldCode2">
                 <mat-option *ngFor="let option of listFieldCode2" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
@@ -428,18 +485,21 @@
                   @if (!!formGroupDetail.controls['dueDateNumber'].hasError('required')) {
                   <mat-error><span i18n>Due Date</span><span i18n> is required</span></mat-error>
                   }
+                  <mat-error>
+                    <app-control-error controlName="dueDateNumber"></app-control-error>
+                  </mat-error>
                 </mat-form-field>
               </div>
               <div class="col-6" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Handover Date</mat-label>
                   <input [matDatepicker]="handoverDate" formControlName="handoverDate" matInput
-                         required trim="blur">
+                         trim="blur">
                   <mat-datepicker-toggle [for]="handoverDate" matIconSuffix></mat-datepicker-toggle>
                   <mat-datepicker #handoverDate></mat-datepicker>
-                  @if (!!formGroupDetail.controls['handoverDate'].hasError('required')) {
-                  <mat-error><span i18n>Handover Date</span><span i18n> is required</span></mat-error>
-                  }
+                  <mat-error>
+                    <app-control-error controlName="handoverDate"></app-control-error>
+                  </mat-error>
                 </mat-form-field>
               </div>
             </div>
@@ -450,9 +510,14 @@
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab2')">
     <mat-expansion-panel-header i18n>
+      @if(isHD()){
       <div (click)="$event.stopPropagation();" class="title-no-event">2. Remittance Information (Data extracted from the
         CMS)
       </div>
+      }@else{
+      <div (click)="$event.stopPropagation();" class="title-no-event">2. Remittance Information
+      </div>
+      }
     </mat-expansion-panel-header>
     <mat-panel-description>
       <form [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
@@ -477,9 +542,6 @@
             <mat-form-field>
               <mat-label i18n>Transfer to</mat-label>
               <input formControlName="peopleName" matInput trim="blur">
-              @if (!!formGroupDetail.controls['bankAccountNoB'].hasError('required')) {
-              <mat-error><span i18n>Transfer to</span><span i18n> is required</span></mat-error>
-              }
               <mat-error *ngxControlError="formGroupDetail.controls['peopleName']; track: 'maxlength'">
                 <span i18n>Transfer to</span><span i18n> must be less than 250 characters</span>
               </mat-error>
@@ -581,7 +643,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Bank domestic Charge</mat-label>
-              <mat-select formControlName="bankCharge" required>
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="bankCharge">
                 <mat-option *ngFor="let option of listBankCharge" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
@@ -594,7 +656,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Bank aboard Charge</mat-label>
-              <mat-select formControlName="bankCharge1" required>
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="bankCharge1">
                 <mat-option *ngFor="let option of listBankCharge" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
@@ -637,7 +699,7 @@
           <div class="col-4" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Swift code intermediary bank</mat-label>
-              <input formControlName="swiftCodeB1" matInput required
+              <input formControlName="swiftCodeB1" matInput
                      trim="blur">
               @if (!!formGroupDetail.controls['swiftCodeB1'].hasError('required')) {
               <mat-error><span i18n>Swift code intermediary bank</span><span i18n> is required</span></mat-error>
@@ -653,9 +715,14 @@
   </mat-expansion-panel>
   <mat-expansion-panel [expanded]="expandList.has('tab3')">
     <mat-expansion-panel-header i18n>
-      <div (click)="$event.stopPropagation();" class="title-no-event">3. Attached Document Information (Data extracted
-        from the CMS)
+      @if(isHD()){
+      <div (click)="$event.stopPropagation();" class="title-no-event">3. Attached Document Information (Data extracted from the
+        CMS)
       </div>
+      }@else{
+      <div (click)="$event.stopPropagation();" class="title-no-event">3. Attached Document Information
+      </div>
+      }
     </mat-expansion-panel-header>
     <mat-panel-description>
       <form [formGroup]="formGroupFileUpload" autocomplete="off" class="w-100">
@@ -672,25 +739,24 @@
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>File Name</th>
                 <td *matCellDef="let element" mat-cell>
                   @if (element.fileUrl?.substr(element.fileUrl.length - 4) == '.pdf') {
-                  <a mat-button (click)="pdfViewer(environment.baseUrl+element.fileUrl)" target="_blank"
+                  <a mat-button [href]="environment.baseUrl+element.fileUrl" target="_blank"
                      class="d-flex align-items-center justify-content-between position-relative"
                      style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                   {{ element.fileName }}
                   </a>
                   } @else {
-                  <a mat-button (click)="true" [href]="environment.baseUrl+element.fileUrl" target="_blank"
+                  <a mat-button [href]="environment.baseUrl+element.fileUrl"
                      class="d-flex align-items-center justify-content-between position-relative"
                      style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                   {{ element.fileName }}
                   </a>
                   }
-
                 </td>
               </ng-container>
               <ng-container matColumnDef="action">
                 <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Action</th>
                 <td *matCellDef="let element" mat-cell>
-                  @if (element.isManual) {
+                  @if (element.isManual && !element.isFromContract && !readMode) {
                   <div class="action-buttons d-flex justify-content-center">
                     <a type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
                        (click)="confirmDeleteFile(element, element.id)">
@@ -717,7 +783,7 @@
           <!--          </div>-->
 
           <div *ngIf="!readMode" class="col-4 mt-20" sizeInput='sm'>
-            <file-upload (ngModelChange)="actionUpload()" [accept]="COMMON_CONFIG.FILE_ACCEPT" [multiple]="false"
+            <file-upload [accept]="COMMON_CONFIG.FILE_ACCEPT" [multiple]="false"
                          class="file-uploader"
                          formControlName="fileUpload"></file-upload>
           </div>
@@ -738,7 +804,6 @@
               <mat-label i18n>Airport Code</mat-label>
               <input
                 (focus)="airportCodeForcus()"
-                (ngModelChange)="marketCodeChangeDebounce($event);this.marketCodeChangeBrake=false;airportCodeChange($event)"
                 [matAutocomplete]="auto"
                 formControlName="marketCode"
                 matInput required
@@ -775,7 +840,7 @@
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
-            <app-selection-suggest (selectionchange)="nationSelected(formGroupDetail.getRawValue().nationId)"
+            <app-selection-suggest (selectionChange)="nationSelected($event)"
                                    [options]="listQuocGia"
                                    attrDisplay="vniName"
                                    attrValue="id" formControlName="nationId" i18n-label label="Country"
@@ -801,7 +866,7 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Airport Type</mat-label>
-              <mat-select formControlName="marketType">
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="marketType" required>
                 <mat-option value="International">International</mat-option>
                 <mat-option value="Domestic">Domestic</mat-option>
               </mat-select>
@@ -816,7 +881,7 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Flight Group</mat-label>
-              <mat-select formControlName="flightGroup">
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="flightGroup">
                 <mat-option value="">Choose Flight Group</mat-option>
                 <mat-option *ngFor="let option of listFlightGroup" [value]="option.key">
                   {{ option.value }}
@@ -827,7 +892,7 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Airport Status</mat-label>
-              <mat-select formControlName="statusUsage" required>
+              <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="statusUsage" required>
                 <mat-option *ngFor="let option of listStatusUsage" [value]="option.key">
                   {{ option.value }}
                 </mat-option>
@@ -867,7 +932,7 @@
               <mat-error><span i18n>Supplier Booking Email</span><span i18n> is required</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['supplierEmail']; track: 'maxlength'">
-                <span i18n>Supplier Booking Email</span><span i18n> must be less than 250 characters</span>
+                <span i18n>Supplier Booking Email</span><span i18n> must be less than 500 characters</span>
               </mat-error>
               <mat-error *ngxControlError="formGroupDetail.controls['supplierEmail']; track: 'pattern'">
                 <span i18n>Supplier Booking Email</span><span i18n> invalid</span>
@@ -933,9 +998,12 @@
         @if (!!formGroupDetail.controls['standardCheckOut'].hasError('required')) {
         <mat-error><span i18n>Standard Checkout</span><span i18n> is required</span></mat-error>
         }
-        </mat-form-field>
-      </div>
+        <mat-error *ngxControlError="formGroupDetail.controls['standardCheckOut']; track: 'pattern'">
+          <span i18n>Standard Check-out Time</span><span i18n> must be from 00:00 to 23:59</span>
+        </mat-error>
+      </mat-form-field>
     </div>
+  </div>
         }
         <!--        dong5-->
         <div class="row mt-20">
@@ -948,7 +1016,7 @@
               <mat-error><span i18n>Notes</span><span i18n> too long</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['notes']; track: 'maxlength'">
-                <span i18n>Remark</span><span i18n> must be less than 250 characters</span>
+                <span i18n>Remark</span><span i18n> must be less than 500 characters</span>
               </mat-error>
             </mat-form-field>
           </div>
@@ -1002,11 +1070,18 @@
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
                   <mat-form-field class="edit-inline-table">
-                    <input (change)="fieldUpdateValueAndValidity(row)" [matDatepicker]="fromDate" formControlName="fromDate" matInput trim="blur">
+                    <input (change)="fieldUpdateValueAndValidity(row)" [matDatepicker]="fromDate"
+                           formControlName="fromDate" matInput trim="blur">
                     <mat-datepicker-toggle [for]="fromDate" matIconSuffix></mat-datepicker-toggle>
                     <mat-datepicker #fromDate></mat-datepicker>
                     <mat-error>
                       <app-control-error controlName="fromDate"></app-control-error>
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['fromDate']; track: 'beforeValidatorMessage'">
+                      {{row.controls['fromDate'].errors?.message}}
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['fromDate']; track: 'afterValidatorMessage'">
+                      {{row.controls['fromDate'].errors?.message}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -1017,11 +1092,18 @@
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
                   <mat-form-field class="edit-inline-table">
-                    <input (change)="fieldUpdateValueAndValidity(row)" [matDatepicker]="toDate" formControlName="toDate" matInput trim="blur">
+                    <input (change)="fieldUpdateValueAndValidity(row)" [matDatepicker]="toDate" formControlName="toDate"
+                           matInput trim="blur">
                     <mat-datepicker-toggle [for]="toDate" matIconSuffix></mat-datepicker-toggle>
                     <mat-datepicker #toDate></mat-datepicker>
                     <mat-error>
                       <app-control-error controlName="toDate"></app-control-error>
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['toDate']; track: 'beforeValidatorMessage'">
+                      {{row.controls['toDate'].errors?.message}}
+                    </mat-error>
+                    <mat-error *ngxControlError="row.controls['toDate']; track: 'afterValidatorMessage'">
+                      {{row.controls['toDate'].errors?.message}}
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -1031,16 +1113,16 @@
               <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Code</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
-                  <app-selection-suggest-2 (selectionchange)="onChangeHHDV(row); fieldUpdateValueAndValidity(row)"
-                                         [editInlineTable]="true"
-                                         [errors]="row.get('serviceCode').errors"
-                                         [options]="listFeeService"
-                                         attrDisplay="code"
-                                         attrDisplay2="name"
-                                         attrValue="code" formControlName="serviceCode" i18n-label2
-                                         label2="Code"
-                                         size="sm"/>
-                  <!--<mat-error *ngxControlError="row.controls['serviceCode']; track: 'overlapValidator'">
+                  <app-selection-suggest-2 (selectionChange)="onChangeHHDV(row); fieldUpdateValueAndValidity(row)"
+                                           [editInlineTable]="true"
+                                           [errors]="row.get('serviceCode').errors"
+                                           [options]="listFeeService"
+                                           attrDisplay="code"
+                                           attrDisplay2="name"
+                                           attrValue="code" formControlName="serviceCode" i18n-label2
+                                           label2="Code"
+                                           size="sm"/>
+                  <!--<mat-error *nfgxControlError="row.controls['serviceCode']; track: 'overlapValidator'">
                     {{row.controls['serviceCode'].error}}
                   </mat-error>-->
                   <!--<mat-form-field class="edit-inline-table">
@@ -1087,7 +1169,8 @@
               <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Business code</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
-                  <app-selection-suggest [editInlineTable]="true"
+                  <app-selection-suggest (selectionChange)="vnaTransIdChange($event,row)"
+                                         [editInlineTable]="true"
                                          [options]="listMaNghiepVu"
                                          attrDisplay="name"
                                          attrValue="code"
@@ -1100,9 +1183,10 @@
               <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Budget item</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
-                  <app-selection-suggest [editInlineTable]="true"
+                  <app-selection-suggest (selectionChange)="expenseCatgIdChange($event,row)"
+                                         [editInlineTable]="true"
                                          [options]="listKhoanMucKhns"
-                                         attrDisplay="name"
+                                         attrDisplay="fullname"
                                          attrValue="code"
                                          formControlName="expenseCatgId"
                                          size="sm"/>
@@ -1192,7 +1276,7 @@
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
                   <mat-form-field class="edit-inline-table">
-                    <input formControlName="notes" matInput trim="blur">
+                    <input [matTooltip]="row.get('notes').value" formControlName="notes" matInput trim="blur">
                     <mat-error *ngxControlError="row.controls['notes']; track: 'maxlength'">
                       <span i18n>Remark</span><span i18n> must be less than 250 characters</span>
                     </mat-error>
@@ -1274,7 +1358,7 @@
                 <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                   <div class="input-cell">
                     <mat-form-field class="edit-inline-table">
-                      <mat-select formControlName="typeCheck" required>
+                      <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="typeCheck" required>
                         <mat-option *ngFor="let option of listCheckType" [value]="option.key">
                           {{ option.value }}
                         </mat-option>
@@ -1292,7 +1376,7 @@
                   <div class="input-cell time-picker">
                     <mat-form-field class="edit-inline-table">
                       <input (change)="fieldUpdateValueAndValidity(row)" [disableClick]="true" [format]="24"
-                             [ngxTimepicker]="fromHour" [required]="false"
+                             [ngxTimepicker]="fromHour"
                              formControlName="fromHour" matInput required trim="blur">
                       <ngx-material-timepicker-toggle [for]="fromHour"
                                                       class="time-picker-clock"></ngx-material-timepicker-toggle>
@@ -1401,7 +1485,7 @@
                 <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                   <div class="input-cell">
                     <mat-form-field class="edit-inline-table">
-                      <mat-select formControlName="typeCheck" required>
+                      <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="typeCheck" required>
                         <mat-option *ngFor="let option of listCheckType" [value]="option.key">
                           {{ option.value }}
                         </mat-option>
@@ -1570,7 +1654,7 @@
                 <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                   <div class="input-cell">
                     <mat-form-field class="edit-inline-table">
-                      <mat-select formControlName="typeCheck" required>
+                      <mat-select #controlEl [matTooltip]="controlEl.triggerValue" formControlName="typeCheck" required>
                         <mat-option *ngFor="let option of listCheckType" [value]="option.key">
                           {{ option.value }}
                         </mat-option>
@@ -1683,7 +1767,7 @@
 <app-confirm-dialog
   (closeDialog)="closeConfirmDeleteFile()"
   (confirm)="_doDelete()"
-  [icon]="'check_circle'"
+  [icon]="'error'"
   [mainText]="'Are you sure you want to delete?'"
   [showDialog]="showDialogDeleteFile"
   [subText]="'You will not be able to recover the deleted data!'"
@@ -1693,7 +1777,7 @@
 <app-confirm-dialog
   (closeDialog)="_closeConfirmDelete()"
   (confirm)="_doDelete()"
-  [icon]="'check_circle'"
+  [icon]="'error'"
   [mainText]="'Are you sure you want to delete?'"
   [showDialog]="_showDialogDelete"
   [subText]="'You will not be able to recover the deleted data!'"
