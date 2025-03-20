@@ -3,4 +3,5 @@ export const STORAGE_KEY = {
   ROLE: 'role',
   USER_INFO: 'user_info',
   PERMISSION: 'permissions',
+  URL_BEFORE_LOGIN: 'url_before_login',
 };

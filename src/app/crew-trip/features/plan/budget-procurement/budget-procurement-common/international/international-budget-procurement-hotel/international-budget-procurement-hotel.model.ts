@@ -79,14 +79,14 @@ export const formula: any = {
       + ' + (ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLate)  + (ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate))'
       + ' + (ctz(data.totalFlightByAircraft) * 2 * ctz(data.priceCrewTransport))'
       ,
-    formulaUpdateBudgetPlan: ' ctz(data.singleRoom) * ctz(data.priceSingleRoom) '
-      + ' + ctz(ata.doubleRoom) * ctz(data.priceDoubleRoom) '
-      + ' + ctz(data.singleRoomEarly) * ctz(data.priceSingleRoomEarly) '
-      + ' + ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly) '
-      + ' + ctz(data.singleRoomLate) * ctz(data.priceSingleRoomLate) '
-      + ' + ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate) '
-      + ' + (ctz(data.totalFlightByAircraft) * 2 * ctz(data.priceCrewTransport)) '
-      ,
+    // formulaUpdateBudgetPlan: ' ctz(data.singleRoom) * ctz(data.priceSingleRoom) '
+    //   + ' + ctz(ata.doubleRoom) * ctz(data.priceDoubleRoom) '
+    //   + ' + ctz(data.singleRoomEarly) * ctz(data.priceSingleRoomEarly) '
+    //   + ' + ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly) '
+    //   + ' + ctz(data.singleRoomLate) * ctz(data.priceSingleRoomLate) '
+    //   + ' + ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate) '
+    //   + ' + (ctz(data.totalFlightByAircraft) * 2 * ctz(data.priceCrewTransport)) '
+    //   ,
       formulaProcurement: 'ctz(data.totalAmountForeignVat) / (1 + (ctz(data.taxRate)/100)) ',
     groupFormula: 'period',
   },

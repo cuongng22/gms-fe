@@ -94,7 +94,7 @@ export class DomesticBudgetProcurementHotelComponent
   }
 
   setDataSource(data: any[], isSummary?: boolean) {
-    this.dataSource.data = [...data];
+    this.dataSource.data = [...(data??[])];
     this.getRow();
 
     this.dataSource.data.forEach((item: any, index) => {
@@ -169,11 +169,11 @@ export class DomesticBudgetProcurementHotelComponent
     // Tháng nào đã thực hiện thì tính theo công thưc mới
     const objFormula = formula[key];
     let strFomular = objFormula.formula;
-    if (this.updateBudgetPlan() && item.monthIsPerform) {
-      if (objFormula.formulaUpdateBudgetPlan) {
-        strFomular = objFormula.formulaUpdateBudgetPlan;
-      }
-    }
+    // if (this.updateBudgetPlan() && item.monthIsPerform) {
+    //   if (objFormula.formulaUpdateBudgetPlan) {
+    //     strFomular = objFormula.formulaUpdateBudgetPlan;
+    //   }
+    // }
     if (strFomular) {
       item[key] = this.calculateFormula(item, strFomular);
     }

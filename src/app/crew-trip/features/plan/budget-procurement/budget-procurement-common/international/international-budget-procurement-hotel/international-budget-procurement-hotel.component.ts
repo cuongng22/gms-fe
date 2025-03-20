@@ -520,11 +520,11 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         strFomular = objFormula.formulaProcurement;
       }
     }
-    if (this.updateBudgetPlan() && item.monthIsPerform) {
-      if (objFormula.formulaUpdateBudgetPlan) {
-        strFomular = objFormula.formulaUpdateBudgetPlan;
-      }
-    }
+    // if (this.updateBudgetPlan()) {
+    //   if (objFormula.formulaUpdateBudgetPlan) {
+    //     strFomular = objFormula.formulaUpdateBudgetPlan;
+    //   }
+    // }
     if (!!strFomular) {
       item[key] = this.calculateFormula(item, strFomular);
     }
