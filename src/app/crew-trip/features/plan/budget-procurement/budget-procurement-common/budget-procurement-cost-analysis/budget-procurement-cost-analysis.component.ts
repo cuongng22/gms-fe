@@ -32,6 +32,7 @@ import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.c
 })
 export class BudgetProcurementCostAnalysisComponent extends CommonComponent implements OnInit {
   disabled = input<boolean>(false);
+  data = input<any>();
 
   override formGroupDetail = this.formBuilder.group({
     planVsEstimate: new FormControl(),
@@ -48,6 +49,12 @@ export class BudgetProcurementCostAnalysisComponent extends CommonComponent impl
         this.formGroupDetail.disable()
       } else {
         this.formGroupDetail.enable()
+      }
+    })
+
+    effect(() => {
+      if (this.data()) {
+        this.formGroupDetail.patchValue(this.data());
       }
     })
   }
