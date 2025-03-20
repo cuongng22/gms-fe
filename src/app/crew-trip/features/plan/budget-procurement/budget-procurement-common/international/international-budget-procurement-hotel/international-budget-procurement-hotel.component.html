@@ -71,7 +71,7 @@
                     Single Room
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
-                    {{(element.monthIsPerform?null: element.singleRoom) | number}}
+                    {{((element.monthIsPerform && updateBudgetPlan() )?null: element.singleRoom) | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">
                     @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoom') | number}} }
@@ -82,7 +82,7 @@
                     Double Room
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
-                    {{(element.monthIsPerform?null:element.doubleRoom) | number}}
+                    {{((element.monthIsPerform && updateBudgetPlan() )?null:element.doubleRoom) | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">
                     @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoom') | number}} }</td>
@@ -93,7 +93,7 @@
                     Buffer rate <br /> (for single-gender)
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
-                    {{(element.monthIsPerform?null:element.singleRoomReserved) | number}}
+                    {{((element.monthIsPerform && updateBudgetPlan() )?null:element.singleRoomReserved) | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">
                     @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomReserved') | number}} }</td>
@@ -113,9 +113,12 @@
                 <td mat-cell *matCellDef="let element; let index = dataIndex"
                     [style.padding]="element['singleRoomOtherEditing']?'0px !important':''"
                     (click)="clickEdit(element, 'singleRoomOtherEditing')" class="text-right">
-                    @if(!element['singleRoomOtherEditing'] && !element.monthIsPerform){
+                    @if((element.monthIsPerform && updateBudgetPlan() )){
                     {{element.singleRoomOther | number}}
-                    }@else if(element['singleRoomOtherEditing'] && !element.monthIsPerform){
+                    }@else {
+                    @if(!element['singleRoomOtherEditing'] ){
+                    {{element.singleRoomOther | number}}
+                    }@else if(element['singleRoomOtherEditing'] ){
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'singleRoomOtherEditing')"
                             class="edit-inline-table">
@@ -125,6 +128,8 @@
                         </mat-form-field>
                     </div>
                     }
+                    }
+
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">
                     @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomOther') | number}} }</td>
@@ -136,9 +141,12 @@
                 <td mat-cell *matCellDef="let element;let index = dataIndex"
                     [style.padding]="element['doubleRoomOtherEditing']?'0px !important':''"
                     (click)="clickEdit(element, 'doubleRoomOtherEditing')" class="text-right">
-                    @if(!element['doubleRoomOtherEditing'] && !element.monthIsPerform){
+                    @if((element.monthIsPerform && updateBudgetPlan() )){
                     {{element.doubleRoomOther | number}}
-                    }@else if(element['doubleRoomOtherEditing'] && !element.monthIsPerform) {
+                    }@else {
+                    @if(!element['doubleRoomOtherEditing'] ){
+                    {{element.doubleRoomOther | number}}
+                    }@else if(element['doubleRoomOtherEditing']) {
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'doubleRoomOtherEditing')"
                             class="edit-inline-table">
@@ -148,6 +156,8 @@
                         </mat-form-field>
                     </div>
                     }
+                    }
+
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">
                     @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomOther') | number}} }
@@ -168,7 +178,7 @@
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'"
                     class="text-right">
-                    {{(element.monthIsPerform?null:element.singleRoomEarly) | number}}
+                    {{((element.monthIsPerform && updateBudgetPlan() )?null:element.singleRoomEarly) | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">
                     @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomEarly') | number}} }
@@ -182,7 +192,7 @@
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'"
                     class="text-right">
-                    {{(element.monthIsPerform?null:element.doubleRoomEarly) | number}}
+                    {{((element.monthIsPerform && updateBudgetPlan() )?null:element.doubleRoomEarly) | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">
                     @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomEarly') | number}} }
@@ -197,7 +207,7 @@
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'"
                     class="text-right">
-                    {{(element.monthIsPerform?null:element.singleRoomEarlyReserved )| number}}
+                    {{((element.monthIsPerform && updateBudgetPlan() )?null:element.singleRoomEarlyReserved )| number}}
                 </td>
 
                 <td mat-footer-cell *matFooterCellDef class="text-right">
@@ -220,7 +230,7 @@
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'"
                     class="text-right">
-                    {{(element.monthIsPerform?null:element.singleRoomLate)}}
+                    {{((element.monthIsPerform && updateBudgetPlan() )?null:element.singleRoomLate)}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">
                     @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomLate') | number}} }
@@ -234,7 +244,7 @@
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'"
                     class="text-right">
-                    {{(element.monthIsPerform?null:element.doubleRoomLate)}}
+                    {{((element.monthIsPerform && updateBudgetPlan() )?null:element.doubleRoomLate)}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">
                     @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('doubleRoomLate') | number}} }
@@ -249,7 +259,7 @@
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'"
                     class="text-right">
-                    {{(element.monthIsPerform?null:element.singleRoomLateReserved)}}
+                    {{((element.monthIsPerform && updateBudgetPlan() )?null:element.singleRoomLateReserved)}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">
                     @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomLateReserved') | number}} }
@@ -267,7 +277,7 @@
                     Single Room
                 </th>
                 <td mat-cell *matCellDef="let element" class="text-right">
-                    {{(element.monthIsPerform?null:element.totalSingleRoom) | number}}
+                    {{((element.monthIsPerform && updateBudgetPlan() )?null:element.totalSingleRoom) | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">{{getTotal('totalSingleRoom') | number}}</td>
             </ng-container>
@@ -276,7 +286,7 @@
                     Double Room
                 </th>
                 <td mat-cell *matCellDef="let element" class="text-right">
-                    {{(element.monthIsPerform?null:element.totalDoubleRoom) | number}}
+                    {{((element.monthIsPerform && updateBudgetPlan() )?null:element.totalDoubleRoom) | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">{{getTotal('totalDoubleRoom') | number}}</td>
             </ng-container>
