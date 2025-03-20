@@ -198,11 +198,11 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     const objFormula = formula[key];
     // Nếu là mua sắm thì lấy theo công thức mua sắm
     let strFomular = this.type() === PlanCategoryEnum.PROCUREMENT && objFormula.formulaProcurement ? objFormula.formulaProcurement : objFormula.formula;
-    if (this.updateBudgetPlan() && item.monthIsPerform) {
-      if (objFormula.formulaUpdateBudgetPlan) {
-        strFomular = objFormula.formulaUpdateBudgetPlan;
-      }
-    }
+    // if (this.updateBudgetPlan() && item.monthIsPerform) {
+    //   if (objFormula.formulaUpdateBudgetPlan) {
+    //     strFomular = objFormula.formulaUpdateBudgetPlan;
+    //   }
+    // }
     if (!!strFomular) {
       item[key] = this.calculateFormula(item, strFomular);
     }

@@ -1,19 +1,19 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {MatButtonModule} from '@angular/material/button';
-import {MatFormFieldModule} from '@angular/material/form-field';
-import {MatInputModule} from '@angular/material/input';
-import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {UsersService} from 'src/app/crew-trip/core/services/users-service';
-import {MatCheckbox} from '@angular/material/checkbox';
-import {HelperService} from 'src/app/crew-trip/core/services/helper.service';
-import {StorageService} from 'src/app/crew-trip/core/services/storage.service';
-import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
-import {CommonModule, Location} from '@angular/common';
-import {NgxSpinnerComponent, NgxSpinnerService} from 'ngx-spinner';
-import {BaseService} from 'src/app/crew-trip/core/services/base-service';
-import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
+import { Component, inject, OnInit } from '@angular/core';
+import { MatButtonModule } from '@angular/material/button';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { ActivatedRoute, Router, RouterLink } from '@angular/router';
+import { CustomizerSettingsService } from 'src/app/customizer-settings/customizer-settings.service';
+import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { UsersService } from 'src/app/crew-trip/core/services/users-service';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { HelperService } from 'src/app/crew-trip/core/services/helper.service';
+import { StorageService } from 'src/app/crew-trip/core/services/storage.service';
+import { STORAGE_KEY } from 'src/app/crew-trip/core/constants/config';
+import { CommonModule, Location } from '@angular/common';
+import { NgxSpinnerComponent, NgxSpinnerService } from 'ngx-spinner';
+import { BaseService } from 'src/app/crew-trip/core/services/base-service';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 
 @Component({
   selector: 'app-sign-in',
@@ -81,9 +81,12 @@ export class SignInComponent implements OnInit {
         this.storageService.set(STORAGE_KEY.ACCESS_TOKEN, resp.data.token);
         this.storageService.set(STORAGE_KEY.USER_INFO, JSON.stringify(resp.data.userInfo));
         await this.usersService.loadUserPermissions(resp.data.userInfo.email);
+        debugger
         this.route.fragment.subscribe(fragment => {
           if (fragment === '401') {
-            this.router.navigate([this.location.path()]);
+            const _url = this.location.path(false);
+            console.log(_url)
+            this.router.navigateByUrl(_url);
           } else {
             this.router.navigate(['category/crews']);
           }
@@ -92,14 +95,14 @@ export class SignInComponent implements OnInit {
       }
     } catch (error: any) {
       if (error.status === 401 && error.error?.error) {
-        this.formGroup.get('password')?.setErrors({incorrect: true});
+        this.formGroup.get('password')?.setErrors({ incorrect: true });
         this.errorMessage = error.error.error;
       } else if (error.status === 404 && error.error?.error) {
         if (error.error.error.includes('email')) {
-          this.formGroup.get('email')?.setErrors({incorrect: true});
+          this.formGroup.get('email')?.setErrors({ incorrect: true });
           this.errorMessage = error.error.error;
         } else {
-          this.formGroup.get('password')?.setErrors({incorrect: true});
+          this.formGroup.get('password')?.setErrors({ incorrect: true });
           this.errorMessage = error.error.error;
         }
       } else if (error.status === 500) {

@@ -140,7 +140,6 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
       // setData cho General
       this.budgetProcurementGeneral.setData(this.dataDetail);
-      this.budgetProcurementCostAnalysis.formGroupDetail.patchValue(this.dataDetail)
 
       this.setDataDetail();
       this.setPanelState();
