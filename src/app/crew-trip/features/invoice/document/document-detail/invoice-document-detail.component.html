@@ -112,7 +112,7 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Invoice date</mat-label>
-              <input [matDatepicker]="invoiceDate" formControlName="invoiceDate" matInput
+              <input [matDatepicker]="invoiceDate" formControlName="invoiceDate" matInput [max]="today"
                      required trim="blur">
               <mat-datepicker-toggle [for]="invoiceDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #invoiceDate></mat-datepicker>
@@ -127,7 +127,7 @@
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Receive Date</mat-label>
-              <input [matDatepicker]="invoiceReceiveDate" formControlName="invoiceReceiveDate" matInput
+              <input [matDatepicker]="invoiceReceiveDate" formControlName="invoiceReceiveDate" matInput [min]="today"
                      required trim="blur">
               <mat-datepicker-toggle [for]="invoiceReceiveDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #invoiceReceiveDate></mat-datepicker>
@@ -564,10 +564,10 @@
         }
       </div>
       <form #totalab [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
-        <mat-grid-list class="mt-20" cols="12" gutterSize="24px" rowHeight="80px">
+        <mat-grid-list class="mt-20 grid-list-form" cols="12" gutterSize="24px" rowHeight="65px">
           @if (formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL') {
             <mat-grid-tile [colspan]="3">
-              <div class="w-100" sizeInput='sm'>
+              <div class="w-100 ok" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Amount Fc Before Vat</mat-label>
                   <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput required
