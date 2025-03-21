@@ -19,7 +19,7 @@
 }
 
 .mat-column-serviceCode, .mat-column-serviceName
-.mat-column-amountFcBeforeVat, .mat-column-amountVndBeforeVat,{
+.mat-column-amountFcBeforeVat, .mat-column-amountVndBeforeVat, {
   max-width: 250px !important;
   min-width: 250px !important;
   width: 250px !important;
@@ -71,7 +71,14 @@
   }
 }
 
+
+
 ::ng-deep {
+  .grid-list-form {
+    .mat-grid-tile-content{
+      align-items: start !important;
+    }
+  }
   .input-row {
 
     height: 40px;
