@@ -15,6 +15,7 @@ import {HttpStatusCode} from "@angular/common/http";
 import moment from "moment";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
 import {debounceTime} from "rxjs";
+import {afterValidator} from "src/app/crew-trip/shared/utils/common";
 
 
 @Component({
@@ -59,6 +60,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   listDocumentType = InvoiceLookup.InvoiceDocumentType;
   listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
+  today = new Date();
   _displayedColumnsHeader1: string[] = [];
   _displayedColumnsHeader2: string[] = [];
   _displayedColumnsRow: string[] = [];
@@ -188,7 +190,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       tblInvoiceDocumentDtl: this.fb.array([]),
 
     });
-
+    // this.formGroupDetail.controls['invoiceReceiveDate'].setValidators([afterValidator(this.formGroupDetail.controls['invoiceDate'])]);
     if (!this.readMode) {
       this.formGroupDetail.controls['airportCode'].valueChanges.subscribe(async (value) => {
         if (value && !this.firstLoad) {
@@ -237,19 +239,20 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         if (value && !this.firstLoad) {
           let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
           this.formGroupDetail.patchValue({
-            paymentDueDate: _value?.format('YYYY-MM-DD') || ''
+            paymentDueDate: _value?.format('YYYY-MM-DD') || '',
+            invoiceReceiveDate: ''
           });
         }
       });
 
-      this.formGroupDetail.controls['invoiceDate'].valueChanges.subscribe((value) => {
-        if (value && !this.firstLoad) {
-          let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
-          this.formGroupDetail.patchValue({
-            paymentDueDate: _value?.format('YYYY-MM-DD') || ''
-          });
-        }
-      });
+      /* this.formGroupDetail.controls['invoiceReceiveDate'].valueChanges.subscribe((value) => {
+         if (value && !this.firstLoad) {
+           let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
+           this.formGroupDetail.patchValue({
+             paymentDueDate: _value?.format('YYYY-MM-DD') || ''
+           });
+         }
+       });*/
 
       this.formGroupDetail.controls['idParent'].valueChanges.subscribe((value) => {
         if (!this.firstLoad) {
