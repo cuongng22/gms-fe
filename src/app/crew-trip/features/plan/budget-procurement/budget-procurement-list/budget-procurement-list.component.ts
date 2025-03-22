@@ -149,8 +149,7 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
     dialogDetailRef.afterClosed().subscribe(async (res) => {
       if (res) {
         this.getVersion();
-        this.formGroupSearch.controls.version.setValue(res.version)
-        this.selectionVersion()?.setViewValueInit(res.version, true)
+        this.formGroupSearch.reset()
         await this.search();
       }
     });

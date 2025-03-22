@@ -153,10 +153,6 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
     dialogDetailRef.afterClosed().subscribe(async (res) => {
       if (res) {
         this.getVersion();
-        if (this.formGroupSearch.controls.version.value) {
-          this.formGroupSearch.controls.version.setValue(res.version)
-          this.selectionVersion()?.setViewValueInit(res.version, true)
-        }
         await this.search();
       }
     });
