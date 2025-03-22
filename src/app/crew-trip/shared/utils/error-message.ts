@@ -62,6 +62,10 @@ export const remark: { [key: string]: string } = {
   maxlength: 'Remark' + $localize` must be less than 500 characters`,
 };
 
+export const note: { [key: string]: string } = {
+  required: 'Note' + $localize` is required`,
+  maxlength: 'Note' + $localize` must be less than 500 characters`,
+};
 export const notes: { [key: string]: string } = {
   required: 'Remark' + $localize` is required`,
   maxlength: 'Remark' + $localize` must be less than 500 characters`,
@@ -153,22 +157,28 @@ export const invoiceNumber: { [key: string]: string } = {
 };
 export const invoiceDate: { [key: string]: string } = {
   required: 'Invoice date' + $localize` is required`,
+  matDatepickerMax: 'Invoice date' + $localize` must not be later than the current date`,
 };
 
 export const invoiceReceiveDate: { [key: string]: string } = {
   required: 'Receive date' + $localize` is required`,
+  afterValidator: 'Receive date' + $localize` must before invoice date`,
+  matDatepickerMax: 'Receive date' + $localize` must not be later than the current date`,
 };
 export const periodFrom: { [key: string]: string } = {
   required: 'Period from' + $localize` is required`,
+  afterValidator: 'Period from' + $localize` must before period to`,
 };
 export const periodTo: { [key: string]: string } = {
   required: 'Period to' + $localize` is required`,
+  beforeValidator: 'Period to' + $localize` must after period from`,
 };
 export const exchangeRateDate: { [key: string]: string } = {
   required: 'Exchange rate date' + $localize` is required`,
 };
 export const description: { [key: string]: string } = {
   required: 'Description' + $localize` is required`,
+  maxlength: 'Description' + $localize` must be less than 500 characters`,
 };
 
 export const serviceCode: { [key: string]: string } = {
@@ -188,7 +198,9 @@ export const nsCode: { [key: string]: string } = {
 export const quantity: { [key: string]: string } = {
   required: 'Quantity' + $localize` is required`,
   min: 'Quantity' + $localize` must be greater than 0`,
+  max: 'Quantity' + $localize` must be less than 999`,
   invalidNumber: 'Quantity' + $localize` must be integer`,
+  pattern: 'Quantity' + $localize` must be integer`,
 };
 
 export const unitPrice: { [key: string]: string } = {
