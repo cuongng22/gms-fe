@@ -94,7 +94,7 @@ export class DomesticBudgetProcurementHotelComponent
   }
 
   setDataSource(data: any[], isSummary?: boolean) {
-    this.dataSource.data = [...(data??[])];
+    this.dataSource.data = [...(data ?? [])];
     this.getRow();
 
     this.dataSource.data.forEach((item: any, index) => {
@@ -252,7 +252,9 @@ export class DomesticBudgetProcurementHotelComponent
 
   clickOutside(data: any, control: string) {
     data[control] = false;
-    if (control === 'singleRoomExtraEditing' || control === 'doubleRoomExtraEditing') {
+    if (['priceSingleRoomEditing', 'priceSingleRoomVatEditing', 'priceDoubleRoomEditing',
+      'priceDoubleRoomVatEditing', 'singleRoomExtraEditing', 'doubleRoomExtraEditing']
+      .includes(control)) {
       this.calculateData(data, 0, true)
     }
     this.calculateTotal()
