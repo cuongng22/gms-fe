@@ -74,7 +74,6 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       if (this.data() && Object.keys(this.data()).length > 0) {
         this.setPlanFlightByOvernight(this.data().planOverightRates ?? []);
         this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
-        console.log(JSON.stringify(this.data().planHotels))
         this.setDataSource(this.data().planHotels ?? [], this.data().general, this.data().isSummary);
         console.log(this.dataSource.data)
       }
@@ -150,26 +149,26 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       //Số phòng đơn late checkout dự kiến do lẻ nam nữ
       item.singleRoomLateReserved = round(item.singleRoomLateReserved);
       //Thành tiền ngoại tệ, - phòng đơn 
-      item.totalAmountForeignSingleRoom = round(item.totalAmountForeignSingleRoom);
+      // item.totalAmountForeignSingleRoom = round(item.totalAmountForeignSingleRoom);
       //Thành tiền ngoại tệ,  - phòng đôi
-      item.totalAmountForeignDoubleRoom = round(item.totalAmountForeignDoubleRoom);
+      // item.totalAmountForeignDoubleRoom = round(item.totalAmountForeignDoubleRoom);
       //Thành tiền ngoại tệ,  - phòng early-checkin
-      item.totalAmountForeignEarly = round(item.totalAmountForeignEarly);
+      // item.totalAmountForeignEarly = round(item.totalAmountForeignEarly);
       //Thành tiền ngoại tệ, - phòng late checkout
-      item.totalAmountForeignLate = round(item.totalAmountForeignLate);
+      // item.totalAmountForeignLate = round(item.totalAmountForeignLate);
       //Tổng tiền xe chở tổ bay (ngoại tệ)
-      item.totalAmountForeignTransport = round(item.totalAmountForeignTransport);
+      // item.totalAmountForeignTransport = round(item.totalAmountForeignTransport);
 
       //Tổng tiền theo loại máy bay
-      item.totalAmountAircraft = round(item.totalAmountAircraft);
+      // item.totalAmountAircraft = round(item.totalAmountAircraft);
       // Tổng tiền ngoại tệ - Chưa bao gồm VAT
-      item.totalAmountForeign = round(item.totalAmountForeign);
+      // item.totalAmountForeign = round(item.totalAmountForeign);
       // Tổng tiền ngoại tệ - bao gồm VAT
-      item.totalAmountForeignVat = round(item.totalAmountForeignVat);
+      // item.totalAmountForeignVat = round(item.totalAmountForeignVat);
       //Tổng tiền VND - chưa bao gồm VAT
-      item.totalAmount = round(item.totalAmount);
+      // item.totalAmount = round(item.totalAmount);
       //Tổng tiền VND - bao gồm VAT
-      item.totalAmountVat = round(item.totalAmountVat);
+      // item.totalAmountVat = round(item.totalAmountVat);
       //Tổng số phòng đơn
       item.totalSingleRoom = round(item.totalSingleRoom);
       //Tổng số phòng đôi
@@ -398,8 +397,10 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         //Thành tiền ngoại tệ, - phòng late checkout
         this.calculate(item, 'totalAmountForeignLate');
       }
-      //Tổng tiền xe chở tổ bay (ngoại tệ)
-      this.calculate(item, 'totalAmountForeignTransport');
+      if (this.generalData.crewTransportFeeFlag) {
+        //Tổng tiền xe chở tổ bay (ngoại tệ)
+        this.calculate(item, 'totalAmountForeignTransport');
+      }
 
       if (!this.updateBudgetPlan()) {
         //Tổng tiền theo loại máy bay
@@ -410,6 +411,12 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         this.calculate(item, 'totalAmountForeign');
         // Tổng tiền ngoại tệ - bao gồm VAT
         this.calculate(item, 'totalAmountForeignVat');
+        // Thu bảo với tháng đã thực hiện thì số tiền sẽ phải chia ( số đêm nghỉ * loại máy bay) ==> loại ngân sách
+        if (item.monthIsPerform) {
+          item.totalAmountForeign = item.totalAmountForeign / (this.planFlightByOvernight.length * this.planFlightPeriods.length);
+          item.totalAmountForeignVat = item.totalAmountForeignVat / (this.planFlightByOvernight.length * this.planFlightPeriods.length);
+
+        }
         //Tổng tiền VND - chưa bao gồm VAT
         this.calculate(item, 'totalAmount');
         //Tổng tiền VND - bao gồm VAT
@@ -526,7 +533,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     //   }
     // }
     if (!!strFomular) {
-      item[key] = this.calculateFormula(item, strFomular);
+      item[key] = this.calculateFormula(item, strFomular, key);
     }
     if (isRound) {
       item[key] = round(item[key], fractionDigits);
@@ -538,8 +545,8 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   calculateTotalByGroup(item: any, index: number, key: string, control: string) {
     const keyGroup = this.getTotalByGroupKey(item, formula[key].groupFormula); // cái này để làm key trong object Total sau này sẽ get để lấy data hiển thị ở table
     const filterData = this.dataSource.data.filter((itemFilter: any, indexFilter: number) => index >= indexFilter && this.groupFormula(itemFilter, item, formula[key].groupFormula));
-    const result = filterData.map((t: any) => round(t[key])).reduce((acc, value) => acc + value, 0);
-    this.totalByGroup[keyGroup] = { ...this.totalByGroup[keyGroup], [control]: result };
+    const result = filterData.map((t: any) => (t[key])).reduce((acc, value) => acc + value, 0);
+    this.totalByGroup[keyGroup] = { ...this.totalByGroup[keyGroup], [control]: round(result) };
   }
 
   getTotalByGroup(item: any, key: string, control: string) {
@@ -548,13 +555,40 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   }
 
   // Hàm tính toán dựa trên công thức động
-  calculateFormula(data: any, formula: string): number {
+  calculateFormula(data: any, formula: string, control?: string): number {
+
+    // --------- đoạn này để debug công thức ---------
+    // Tạo một bản sao công thức để thay thế giá trị thực tế
+    let replacedFormula = formula;
+
+    // Danh sách các biến cần thay thế
+    const variables = formula.match(/ctz\((.*?)\)/g);
+    let field = '';
+
+    if (variables) {
+      variables.forEach((match) => {
+        debugger
+        field = match
+        const dynamicFunctionDebug = new Function(
+          'data', 'generalData', 'ctz',
+          `return ${field};`    // Công thức cần tính
+        );
+        // const field = match.replace(/ctz\(|\)/g, ""); // Lấy tên biến
+        const value = dynamicFunctionDebug(data, this.generalData, this.ctz); // Lấy giá trị thực tế
+        replacedFormula = replacedFormula.replace(match, value.toString());
+      });
+    }
+    // ---- end debug công thức-----
+
     // Sử dụng Function để tạo hàm động từ công thức
     const dynamicFunction = new Function(
       'data', 'generalData', 'ctz',
       `return ${formula};`    // Công thức cần tính
     );
     const result = dynamicFunction(data, this.generalData, this.ctz);
+
+    // Log công thức sau khi thay thế giá trị thực tế
+    console.log(this.type(), data.period, control, formula, replacedFormula, result);
     return result;
   }
   // convertToZero

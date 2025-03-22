@@ -44,7 +44,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
 
   planFlightPeriods: any[] = []; // danh sách chuyến bay theo giai đoạn
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
-
+  round = round;
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       if (this.data() && Object.keys(this.data()).length > 0) {
