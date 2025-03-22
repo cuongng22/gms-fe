@@ -313,7 +313,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
               });
               this.calculateData(dataProcessHotel[i + 1], i + 1, true);
             }
-            // this.calculateData(dataProcessHotel[i], i, true);
+            this.calculateData(dataProcessHotel[i], i, true);
           }
           this.calculateTotal()
           this.dataSource.data = [...dataProcessHotel];
