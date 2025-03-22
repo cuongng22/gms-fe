@@ -16,7 +16,7 @@ import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { RouterLink, RouterModule } from '@angular/router';
 import { FileUploadModule } from '@iplab/ngx-file-upload';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { debounceTime, startWith, Subject } from 'rxjs';
+import { debounceTime, startWith, Subject, Subscription } from 'rxjs';
 import { AlreadyExistsValidator } from 'src/app/crew-trip/core/validator/already-exists';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
@@ -219,6 +219,8 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
   existsVersion = false;
   existsVersionMessage = ''
 
+  versionValueChanges: Subscription;
+
   constructor(
     public dialogRef: MatDialogRef<DialogBudgetProcurementDetail>,
     @Inject(MAT_DIALOG_DATA) public data: any,
@@ -252,12 +254,20 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
         this.formGroupDetail.controls.versionRate.disable();
       }
 
-      this.formGroupDetail.controls.version.valueChanges.pipe(debounceTime(500)).subscribe(value => {
-        this.existsVersion = false;
-        this.formGroupDetail.controls.version.updateValueAndValidity()
-      })
+
 
     }
+  }
+
+  controlUnsubscribe() {
+    this.versionValueChanges?.unsubscribe();
+  }
+
+  controlSubscribe() {
+    this.versionValueChanges = this.formGroupDetail.controls.version.valueChanges.pipe(debounceTime(500)).subscribe(value => {
+      this.existsVersion = false;
+      this.formGroupDetail.controls.version.updateValueAndValidity()
+    })
   }
 
   override async save() {
@@ -282,7 +292,9 @@ export class DialogBudgetProcurementDetail extends CommonComponent {
         this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR);
       } else if (e.status === HttpStatusCode.Conflict) {
         this.existsVersion = true;
+        this.controlUnsubscribe()
         this.formGroupDetail.controls.version.updateValueAndValidity();
+        this.controlSubscribe();
         this.existsVersionMessage = e.error.error
       }
       return e;
