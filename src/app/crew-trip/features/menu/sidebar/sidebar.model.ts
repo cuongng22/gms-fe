@@ -78,15 +78,31 @@ export const menu: Menu[] = [
         icon: 'ri-calendar-schedule-line',
       },
       {
-        path: 'flight-schedules/daily',
+        path: '',
         title: $localize`:@@dailyFlightSchedule:Daily Flight Schedule`,
         icon: 'ri-calendar-schedule-line',
-      },
-      {
-        path: 'flight-schedules/email-tracking',
-        title: $localize`:@@emailTracking:Email Tracking`,
-        icon: 'ri-calendar-schedule-line'
+        menu: [
+          {
+            title: $localize`:@@dailyFlightSchedule:Daily Flight Schedule`,
+            rootPath: '',
+            subMenu: [
+              {
+                path: 'flight-schedules/daily',
+                title: $localize`:@@flightList:Flight List`,
+                icon: 'ri-calendar-schedule-line',
+              },
+              {
+                path: 'flight-schedules/email-tracking',
+                title: $localize`:@@emailTracking:Email Tracking`,
+                icon: 'ri-calendar-schedule-line'
+              }
+            ]
+
+          }
+
+        ]
       }
+
     ]
   },
   {

@@ -363,6 +363,13 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         const _planFlightPeriod = this.planFlightPeriods.filter(itemFilter => itemFilter.periodStart === item.periodStart && itemFilter.periodEnd === item.periodEnd && itemFilter.aircraftType === item.aircraftType).map(item => item.numberOfFlight).reduce((acc, value) => acc + value, 0);
         item.planFlightPeriod = Number(_planFlightPeriod)
       }
+      item.noOfFlightOvernight = 1; // tổng số chuyến bay và số đêm nghỉ để nhóm sau đó chia cho số này vs tháng đã thực hiện monthInPerform
+      // Thu bảo với tháng đã thực hiện thì số tiền sẽ phải chia ( số đêm nghỉ * loại máy bay) ==> loại ngân sách
+      if (item.monthIsPerform) {
+        const noOfFlight = new Set(this.dataSource.data.filter((itemFilter: any) => itemFilter.period === item.period).map((item: any) => item.aircraftType));
+        item.noOfFlightOvernight = this.planFlightByOvernight.length * noOfFlight.size
+      }
+
       //Số chuyến bay theo tàu và đêm nghỉ
       this.calculate(item, 'numberOfFlights', true);
       //Số phòng đơn
@@ -411,12 +418,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         this.calculate(item, 'totalAmountForeign');
         // Tổng tiền ngoại tệ - bao gồm VAT
         this.calculate(item, 'totalAmountForeignVat');
-        // Thu bảo với tháng đã thực hiện thì số tiền sẽ phải chia ( số đêm nghỉ * loại máy bay) ==> loại ngân sách
-        if (item.monthIsPerform) {
-          item.totalAmountForeign = item.totalAmountForeign / (this.planFlightByOvernight.length * this.planFlightPeriods.length);
-          item.totalAmountForeignVat = item.totalAmountForeignVat / (this.planFlightByOvernight.length * this.planFlightPeriods.length);
 
-        }
         //Tổng tiền VND - chưa bao gồm VAT
         this.calculate(item, 'totalAmount');
         //Tổng tiền VND - bao gồm VAT
