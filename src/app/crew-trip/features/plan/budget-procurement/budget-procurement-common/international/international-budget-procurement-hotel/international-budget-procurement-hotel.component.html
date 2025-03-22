@@ -49,15 +49,15 @@
                 </td>
                 <td mat-footer-cell *matFooterCellDef></td>
             </ng-container>
-            <ng-container matColumnDef="totalFlightByAircraft" sticky>
+            <ng-container matColumnDef="numberOfFlights" sticky>
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.rowspan]="2"
                     i18n="@@numberOfFlights">
                     Number of Flights
                 </th>
                 <td mat-cell *matCellDef="let element" class="text-right">
-                    {{element.totalFlightByAircraft | number}}
+                    {{element.numberOfFlights | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="text-right">{{getTotal('totalFlightByAircraft') | number}}
+                <td mat-footer-cell *matFooterCellDef class="text-right">{{getTotal('numberOfFlights') | number}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="numberOfRooms">
@@ -93,10 +93,12 @@
                     Buffer rate <br /> (for single-gender)
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
-                    {{((element.monthIsPerform && updateBudgetPlan() )?null:element.singleRoomReserved) | number}}
+                    <!-- {{((element.monthIsPerform && updateBudgetPlan() )?null:element.singleRoomReserved) | number}} -->
+                    {{(element.singleRoomReserved) | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="text-right">
-                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomReserved') | number}} }</td>
+                    @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomReserved') | number}} }
+                </td>
             </ng-container>
 
 

@@ -71,10 +71,12 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
-      if (this.data()) {
+      if (this.data() && Object.keys(this.data()).length > 0) {
         this.setPlanFlightByOvernight(this.data().planOverightRates ?? []);
         this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
+        console.log(JSON.stringify(this.data().planHotels))
         this.setDataSource(this.data().planHotels ?? [], this.data().general, this.data().isSummary);
+        console.log(this.dataSource.data)
       }
     })
   }
@@ -114,7 +116,6 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     this.generalData = { ...generalData };
 
     this.getRow();
-
     this.aircraftTypes = [];
     this.dataSource.data.forEach((item: any, index) => {
       this.calculatePeriodLabel(item, index);
@@ -128,8 +129,8 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     const _stringData = JSON.stringify(this.dataSource.data);
     let _jsonData = JSON.parse(_stringData);
     _jsonData.forEach((item: any, index: number) => {
-      //Số chuyến bay theo tàu 
-      item.totalFlightByAircraft = round(item.totalFlightByAircraft);
+      //Số chuyến bay theo tàu và đêm nghỉ
+      item.numberOfFlights = round(item.numberOfFlights);
       //Số phòng đơn
       item.singleRoom = round(item.singleRoom);
       //Số phòng đôi
@@ -209,21 +210,22 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   }
 
   setGeneralData(data: any) {
-    const isChangeRateForSingle = checkChange(this.generalData.rateForSingle, data.rateForSingle);
-    if (isChangeRateForSingle) {
-      this.generalData = { ...data };
-      this.dataSource.data.forEach((item: any, index) => {
-        this.calculateData(item, index, true);
-      });
-      this.calculateTotal()
+    if (data && Object.keys(data).length > 0) {
+      const isChangeRateForSingle = checkChange(this.generalData.rateForSingle, data.rateForSingle);
+      if (isChangeRateForSingle) {
+        this.generalData = { ...data };
+        this.dataSource.data.forEach((item: any, index) => {
+          this.calculateData(item, index, true);
+        });
+        this.calculateTotal()
+      }
+      const earlyCheckinFlag = checkChange(this.generalData.earlyCheckinFlag, data.earlyCheckinFlag);
+      const lateCheckoutFlag = checkChange(this.generalData.lateCheckoutFlag, data.lateCheckoutFlag);
+      if (earlyCheckinFlag || lateCheckoutFlag) {
+        this.generalData = { ...data };
+        this.getRow();
+      }
     }
-    const earlyCheckinFlag = checkChange(this.generalData.earlyCheckinFlag, data.earlyCheckinFlag);
-    const lateCheckoutFlag = checkChange(this.generalData.lateCheckoutFlag, data.lateCheckoutFlag);
-    if (earlyCheckinFlag || lateCheckoutFlag) {
-      this.generalData = { ...data };
-      this.getRow();
-    }
-
   }
 
   setExchangeRate(exchangeRateData: any) {
@@ -364,8 +366,8 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         const _planFlightPeriod = this.planFlightPeriods.filter(itemFilter => itemFilter.periodStart === item.periodStart && itemFilter.periodEnd === item.periodEnd && itemFilter.aircraftType === item.aircraftType).map(item => item.numberOfFlight).reduce((acc, value) => acc + value, 0);
         item.planFlightPeriod = Number(_planFlightPeriod)
       }
-      //Số chuyến bay theo tàu 
-      this.calculate(item, 'totalFlightByAircraft', true);
+      //Số chuyến bay theo tàu và đêm nghỉ
+      this.calculate(item, 'numberOfFlights', true);
       //Số phòng đơn
       if (!item.monthIsPerform) {
         this.calculate(item, 'singleRoom', true);
@@ -486,7 +488,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   }
 
   calculateTotal() {
-    this.setTotal('totalFlightByAircraft');
+    this.setTotal('numberOfFlights');
     if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('singleRoom', true) }
     if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('doubleRoom', true) }
     if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('singleRoomReserved', true) }

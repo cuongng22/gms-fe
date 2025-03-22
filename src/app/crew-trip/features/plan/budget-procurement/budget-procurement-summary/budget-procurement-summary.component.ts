@@ -37,11 +37,11 @@ export class BudgetProcurementSummaryComponent extends CommonComponent implement
         bodySearch.category = data.category;
         this.summaryAll.search(bodySearch);
         break;
-      case 'International':
+      case CategoryEnum.INTERNATIONAL:
         this.summaryInternational.setDisplayedColumns(data.categoryOfPlan);
         this.summaryInternational.search(bodySearch);
         break;
-      case 'Domestic':
+      case CategoryEnum.DOMESTIC:
         this.summaryDomestic.setDisplayedColumns(data.categoryOfPlan);
         this.summaryDomestic.search(bodySearch);
         break;

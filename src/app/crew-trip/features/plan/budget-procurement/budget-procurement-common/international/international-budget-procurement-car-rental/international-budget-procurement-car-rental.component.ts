@@ -47,7 +47,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
-      if (this.data()) {
+      if (this.data() && Object.keys(this.data()).length > 0) {
         this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
         this.setDataSource(this.data().planCarentals ?? [], this.data().isSummary);
       }
