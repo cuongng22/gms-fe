@@ -296,7 +296,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
           this.calculateTotal();
         } else {
           // lấy id bản ghi cuối cùng để làm cơ sở ví trí thêm data
-          if (planFlightByOvernight && planFlightByOvernight.length) {
+          if (planFlightByOvernight && planFlightByOvernight.length > 0) {
             this.setPlanFlightByOvernight(planFlightByOvernight);
           }
 
@@ -307,21 +307,19 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
             if (dataHotel.overnightId == overnightId) {
               dataProcessHotel.splice(i + 1, 0, {
                 ...dataHotel,
-                periodLabel: '',
-                aircraftTypeLabel: '',
                 overnightId: data.id,
                 overnight: Number(data.numberOfOverNight),
                 flightOvernightRate: data.flightRate,
               });
               this.calculateData(dataProcessHotel[i + 1], i + 1, true);
             }
-            this.calculateData(dataProcessHotel[i], i, true);
+            // this.calculateData(dataProcessHotel[i], i, true);
           }
           this.calculateTotal()
+          this.dataSource.data = [...dataProcessHotel];
           if (length) {
             this.calculateSpan();
           }
-          this.dataSource.data = [...dataProcessHotel];
           console.log(this.dataSource.data);
           console.log('periodRowspan: ', this.periodRowspan);
           console.log('aircraftTypeRowspan: ', this.aircraftTypeRowspan);
