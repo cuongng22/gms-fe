@@ -74,13 +74,13 @@ export const formula: any = {
   totalAmountAircraft: {
     formula: 'ctz(data.totalAmountForeignSingleRoom) + ctz(data.totalAmountForeignDoubleRoom) + ctz(data.totalAmountForeignEarly) + ctz(data.totalAmountForeignLate) + ctz(data.totalAmountForeignTransport)'
   },
-  // Tổng tiền ngoại tệ - Chưa bao gồm VAT
+  // Tổng tiền ngoại tệ - Chưa bao gồm VAT, noOfFlightOvernight cái này để chia vs trường hợp tháng đã thực hiện
   totalAmountForeign: {
-    formula: '(ctz(data.singleRoom) + ctz(data.singleRoomReserved) + ctz(data.singleRoomOther)) * ctz(data.priceSingleRoom) '
-      + ' +  (ctz(data.doubleRoom) + ctz(data.doubleRoomOther) ) * ctz(data.priceDoubleRoom) '
-      + ' + (ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarly) '
-      + ' + (ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly)) '
-      + ' + (ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLate)  + (ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate))'
+    formula: '(ctz(data.singleRoom)/data.noOfFlightOvernight + ctz(data.singleRoomReserved)/data.noOfFlightOvernight + ctz(data.singleRoomOther)/data.noOfFlightOvernight) * ctz(data.priceSingleRoom) '
+      + ' +  (ctz(data.doubleRoom)/data.noOfFlightOvernight + ctz(data.doubleRoomOther)/data.noOfFlightOvernight ) * ctz(data.priceDoubleRoom) '
+      + ' + (ctz(data.singleRoomEarly)/data.noOfFlightOvernight + ctz(data.singleRoomEarlyReserved)/data.noOfFlightOvernight) * ctz(data.priceSingleRoomEarly) '
+      + ' + (ctz(data.doubleRoomEarly)/data.noOfFlightOvernight * ctz(data.priceDoubleRoomEarly)/data.noOfFlightOvernight) '
+      + ' + (ctz(data.singleRoomLate)/data.noOfFlightOvernight + ctz(data.singleRoomLateReserved)/data.noOfFlightOvernight) * ctz(data.priceSingleRoomLate)  + (ctz(data.doubleRoomLate)/data.noOfFlightOvernight * ctz(data.priceDoubleRoomLate))'
       + ' + (generalData.crewTransportFeeFlag ? (ctz(data.numberOfFlights) * 2 * ctz(data.priceCrewTransport)) : 0)'
       ,
     // formulaUpdateBudgetPlan: ' ctz(data.singleRoom) * ctz(data.priceSingleRoom) '
