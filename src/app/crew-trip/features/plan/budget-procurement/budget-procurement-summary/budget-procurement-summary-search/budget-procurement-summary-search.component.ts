@@ -60,7 +60,7 @@ export class BudgetProcurementSummarySearchComponent extends CommonComponent imp
 
   override ngOnInit(): void {
     const typeAirport = this.categoryType === CategoriesEnum.ALL || this.categoryType === 'All' ? '' : this.categoryType;
-    this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL, type: typeAirport })
+    this.loadListFlightMarket({ type: typeAirport })
   }
 
 

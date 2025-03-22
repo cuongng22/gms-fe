@@ -48,7 +48,7 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
   round = round;
   constructor(private readonly datePipe: DatePipe, private readonly cdRef: ChangeDetectorRef) {
     effect(() => {
-      if (this.data()) {
+      if (this.data() && Object.keys(this.data()).length > 0) {
         this.setDataSource(this.data().planCarentals, this.data().isSummary);
       }
     })

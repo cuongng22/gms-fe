@@ -4,23 +4,27 @@ import { PlanCategoryEnum } from '../../../budget-procurement.model';
 export const formula: any = {
 
   //Số chuyến bay theo tàu (công thức của kế hoạch mua sắm)
-  totalFlightByAircraft: {
-    formula: 'ctz(data.totalFlightMonth) * (ctz(data.flightOvernightRate)/100)',
+  // totalFlightByAircraft: {
+  //   formula: 'ctz(data.totalFlightMonth) * (ctz(data.flightOvernightRate)/100)',
+  //   formulaProcurement: 'ctz(data.planFlightPeriod) * (ctz(data.flightOvernightRate)/100)'
+  // },
+  numberOfFlights: {
+    formula: 'ctz(data.totalFlightByAircraft) * (ctz(data.flightOvernightRate)/100)',
     formulaProcurement: 'ctz(data.planFlightPeriod) * (ctz(data.flightOvernightRate)/100)'
   },
 
   //Tổng tiền xe chở tổ bay (ngoại tệ)
   totalAmountForeignTransport: {
-    formula: 'ctz(data.totalFlightByAircraft) * 2 * ctz(data.priceCrewTransportVat)',
+    formula: 'ctz(data.numberOfFlights) * 2 * ctz(data.priceCrewTransportVat)',
     groupFormula: 'period && aircraftType',
   },
   //Số phòng đơn
   singleRoom: {
-    formula: 'ctz(data.overnight) * ctz(data.totalFlightByAircraft) * ctz(data.pilotNumber) + (ctz(data.attendantNumber) % 2 === 0 ? 0 : ctz(data.totalFlightByAircraft))',
+    formula: 'ctz(data.overnight) * ctz(data.numberOfFlights) * ctz(data.pilotNumber) + (ctz(data.attendantNumber) % 2 === 0 ? 0 : ctz(data.numberOfFlights))',
   },
   //Số phòng đôi
   doubleRoom: {
-    formula: 'ctz(data.overnight) * ctz(data.totalFlightByAircraft) * (ctz(data.attendantNumber) % 2 === 0 ? (ctz(data.attendantNumber)/2) : ((ctz(data.attendantNumber) - 1)/2)) ',
+    formula: 'ctz(data.overnight) * ctz(data.numberOfFlights) * (ctz(data.attendantNumber) % 2 === 0 ? (ctz(data.attendantNumber)/2) : ((ctz(data.attendantNumber) - 1)/2)) ',
   },
   //Số phòng đơn dự phòng do lẻ nam nữ
   singleRoomReserved: {
@@ -77,7 +81,7 @@ export const formula: any = {
       + ' + (ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarly) '
       + ' + (ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly)) '
       + ' + (ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLate)  + (ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate))'
-      + ' + (ctz(data.totalFlightByAircraft) * 2 * ctz(data.priceCrewTransport))'
+      + ' + (ctz(data.numberOfFlights) * 2 * ctz(data.priceCrewTransport))'
       ,
     // formulaUpdateBudgetPlan: ' ctz(data.singleRoom) * ctz(data.priceSingleRoom) '
     //   + ' + ctz(ata.doubleRoom) * ctz(data.priceDoubleRoom) '
@@ -126,7 +130,7 @@ export function getHeaderRowDef1(contractData: any, type: string): string[] {
     { column: "month", visible: true },
     { column: "aircraftType", visible: true },
     { column: "overnight", visible: true },
-    { column: "totalFlightByAircraft", visible: true },
+    { column: "numberOfFlights", visible: true },
     { column: "numberOfRooms", visible: true },
     { column: "numberOfRoomsForOthers", visible: true },
     { column: "numberOfEstimatedEarlyCheckInRooms", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN, type) },
@@ -179,7 +183,7 @@ export function getRowDef(contractData: any, type: string): string[] {
     { column: "month", visible: true },
     { column: "aircraftType", visible: true },
     { column: "overnight", visible: true },
-    { column: "totalFlightByAircraft", visible: true },
+    { column: "numberOfFlights", visible: true },
     { column: "singleRoom", visible: true },
     { column: "doubleRoom", visible: true },
     { column: "singleRoomReserved", visible: true },

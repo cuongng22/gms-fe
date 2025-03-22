@@ -77,7 +77,7 @@ export class DomesticBudgetProcurementHotelComponent
   round = round;
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
-      if (this.data()) {
+      if (this.data() && Object.keys(this.data()).length > 0) {
         this.setDataSource(this.data().planHotels, this.data().isSummary);
       }
     });
