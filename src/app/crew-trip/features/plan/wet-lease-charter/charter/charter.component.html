@@ -1,4 +1,4 @@
-<mat-card class="border-radius p-3 d-block bg-white border-0 shadow-none">
+<mat-card class="mb-10 border-radius p-3 d-block bg-white border-0 shadow-none">
   <mat-card-content>
     <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
       <div class="row">
@@ -187,7 +187,7 @@
             {{element.totalNumberOfTrip | number}}
           </td>
           <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
-            {{ (dataSource.data | dataCalculateTotal: 'totalTwinLCORoom') | number }}
+            {{ (dataSource.data | dataCalculateTotal: 'totalNumberOfTrip') | number }}
           </td>
         </ng-container>
 
