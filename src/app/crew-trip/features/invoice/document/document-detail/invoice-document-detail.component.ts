@@ -15,7 +15,7 @@ import {HttpStatusCode} from "@angular/common/http";
 import moment from "moment";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
 import {debounceTime} from "rxjs";
-import {afterValidator} from "src/app/crew-trip/shared/utils/common";
+import {afterValidator, beforeValidator} from "src/app/crew-trip/shared/utils/common";
 
 
 @Component({
@@ -112,8 +112,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     {label: "Toll", value: "toll", type: Constant.NUMBER, rowspan: "2"},
     {label: "Total Amount Cc", value: "totalAmountCc", type: Constant.NUMBER, rowspan: "2"},
     {label: "Total Amount Fc", value: "totalAmountFc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Breakfast Cc Charge", value: "totalBreakfastCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Breakfast Fc Charge", value: "totalBreakfastFcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Breakfast Cc Charge", value: "breakfastCcCharge", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Total Breakfast Fc Charge", value: "breakfastFcCharge", type: Constant.NUMBER, rowspan: "2"},
     {label: "Total Charge", value: "totalCharge", type: Constant.NUMBER, rowspan: "2"},
     {label: "Total Charges", value: "totalCharges", type: Constant.NUMBER, rowspan: "2"},
     {label: "Total Night", value: "totalNight", type: Constant.NUMBER, rowspan: "2"},
@@ -146,7 +146,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       idParent: [],
       idContract: [],
       idInvoiceForm: [],
-      version: [],
+      version: [1],
       ctype: [InvoiceDocumentTypeEnum.STANDARD],
       invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(PATTERN.STRING_NUMBER1)]],
       invoiceDate: [],
@@ -167,8 +167,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       exchangeRate: [],
       exchangeRateDate: [],
       exchangeRateType: [],
-      description: [],
-      note: [],
+      description: [, [Validators.maxLength(500)]],
+      note: [, [Validators.maxLength(500)]],
       status: [],
       statusEmail: [],
       amountFcBeforeVat: [],
@@ -190,131 +190,13 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       tblInvoiceDocumentDtl: this.fb.array([]),
 
     });
-    // this.formGroupDetail.controls['invoiceReceiveDate'].setValidators([afterValidator(this.formGroupDetail.controls['invoiceDate'])]);
+    this.formGroupDetail.controls['periodFrom'].setValidators([afterValidator(this.formGroupDetail.controls['periodTo'])]);
+    this.formGroupDetail.controls['periodTo'].setValidators([beforeValidator(this.formGroupDetail.controls['periodFrom'])]);
+    this.formGroupDetail.controls['invoiceReceiveDate'].setValidators([afterValidator(this.formGroupDetail.controls['invoiceDate'])]);
     if (!this.readMode) {
-      this.formGroupDetail.controls['airportCode'].valueChanges.subscribe(async (value) => {
-        if (value && !this.firstLoad) {
-          try {
-            await this.spinner.show();
-            const [res, res2, res3] = await Promise.all([
-              this.contractService.getMarket({marketCode: value.toUpperCase()}),
-              this.findContract(),
-              this.loadListDocumentParent()
-            ]);
-            if (res.data) {
-              this.formGroupDetail.patchValue({
-                contractServiceType: res.data.marketType.toUpperCase(),
-              })
-            }
-          } catch (e) {
-            console.log(e);
-            this.baseService.showError(MESSAGE.ERROR);
-          } finally {
-            await this.spinner.hide();
-          }
-        }
-      });
-
-      this.formGroupDetail.controls['partnerType'].valueChanges.subscribe((value) => {
-        if (value && !this.firstLoad) {
-          this.findContract();
-        }
-      });
-
-      this.formGroupDetail.controls['periodTo'].valueChanges.subscribe((value) => {
-        if (value && !this.firstLoad) {
-          this.findContract();
-        }
-      });
-
-      this.formGroupDetail.controls['periodFrom'].valueChanges.subscribe((value) => {
-        if (value && !this.firstLoad) {
-          this.formGroupDetail.patchValue({
-            periodOccurrence: (moment(value) || value)?.format('YYYY-MM-DD') || '',
-          });
-        }
-      });
-
-      this.formGroupDetail.controls['invoiceDate'].valueChanges.subscribe((value) => {
-        if (value && !this.firstLoad) {
-          let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
-          this.formGroupDetail.patchValue({
-            paymentDueDate: _value?.format('YYYY-MM-DD') || '',
-            invoiceReceiveDate: ''
-          });
-        }
-      });
-
-      /* this.formGroupDetail.controls['invoiceReceiveDate'].valueChanges.subscribe((value) => {
-         if (value && !this.firstLoad) {
-           let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
-           this.formGroupDetail.patchValue({
-             paymentDueDate: _value?.format('YYYY-MM-DD') || ''
-           });
-         }
-       });*/
-
-      this.formGroupDetail.controls['idParent'].valueChanges.subscribe((value) => {
-        if (!this.firstLoad) {
-          this.formGroupDetail.patchValue({version: value ? 2 : 1});
-        }
-      });
+      this.subscribeManage();
     }
   }
-
-  // addRow(table: any, addType: any, init?: any) {
-  //   let row: FormGroup = this.fb.group({})
-  //   if (addType === 'tblPriceUnit') {
-  //     row = this.fb.group({
-  //       id: [],
-  //       serviceCode: [this.listFeeService[0]?.code, [Validators.required]],
-  //       vnaTransId: [, [Validators.maxLength(50)]],
-  //       expenseCatgId: [, [Validators.maxLength(50)]],
-  //       priceNoTax: [],
-  //       taxCode: [,],
-  //       taxRate: [],
-  //       originalAmount3: [],
-  //       priceWithTax: [],
-  //       notes: [, [Validators.maxLength(50)]],
-  //       bizDocId: [],
-  //       fromDate: [this.formGroupDetail.getRawValue().effectiveDate || ''],
-  //       toDate: [this.formGroupDetail.getRawValue().expiryDate || ''],
-  //       active: [],
-  //       serviceName: [this.listFeeService[0]?.name],
-  //       serviceUnit: [this.listFeeService[0]?.unit],
-  //     });
-  //     row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
-  //     // row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
-  //     row.controls['taxCode'].setValidators([Validators.maxLength(24), Validators.pattern(PATTERN.STRING)]);
-  //     init && row.patchValue(init);
-  //     table.push(row);
-  //     this.dsPriceUnit.data = table.controls;
-  //   } else if (addType === 'tblEciLco' || addType === 'tblOvernightStay') {
-  //     row = this.fb.group({
-  //       id: [,], type: [,], fromHour: ['00:00',], rate: [,], toHour: ['23:59',], active: [,], typeCheck: [,], bizdocId: [,],
-  //     });
-  //     row.controls['rate'].setValidators(lessThanValidator(2));
-  //     row.controls['toHour'].setValidators(timeBeforeValidator(row.controls['fromHour']));
-  //     table.push(row);
-  //     if (addType === 'tblEciLco') {
-  //       init && row.patchValue(init);
-  //       this.dsEciLco.data = table.controls;
-  //     } else if (addType === 'tblOvernightStay') {
-  //       init && row.patchValue(init);
-  //       this.dsOvernightStay.data = table.controls;
-  //     }
-  //   } else if (addType === 'tblDayUse') {
-  //     row = this.fb.group({
-  //       id: [,], bizdocId: [,], checkinFrom: ['00:00',], checkoutTo: ['23:59',], maxHour: [,], rate: [,], rate1: [,], active: [,],
-  //     });
-  //     row.controls['checkoutTo'].setValidators(timeBeforeValidator(row.controls['checkinFrom']));
-  //     row.controls['maxHour'].setValidators([Validators.min(0), Validators.max(24), Validators.pattern(PATTERN.NUMBER)]);
-  //     init && row.patchValue(init);
-  //     table.push(row);
-  //     this.dsDayUse.data = table.controls;
-  //   }
-  //   return row;
-  // }
 
   get tblInvoiceDocumentDtl(): FormArray {
     return this.formGroupDetail.get('tblInvoiceDocumentDtl') as FormArray;
@@ -330,17 +212,16 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       await this.spinner.show();
       await this.loadListDocumentParent();
       await Promise.all([this.detail(this.id), this.loadListFlightMarket(), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
-        this.formGroupDetail.patchValue({idParent: this.formGroupDetail.getRawValue().idParent})
+        this.formGroupDetail.patchValue({idParent: this.formGroupDetail.getRawValue().idParent});
         this.calTotal();
+        this.listFeeService = this.listFeeService.filter((s: any) => s.active);
       });
     } catch (e) {
       console.log(e);
       this.baseService.showError(MESSAGE.ERROR);
     } finally {
-      this.firstLoad = false;
       await this.spinner.hide();
     }
-
   }
 
   goBack() {
@@ -364,31 +245,9 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     this.showDialogFinish = !this.showDialogFinish;
   }
 
-  /*  async airportCodeChange($event: any) {
-      if ($event?.value) {
-        try {
-          await this.spinner.show();
-          await this.baseService.getContractByAirport($event.value).then(res => {
-            if (res.data?.bizDocId) {
-              //todo set du lieu thong tin hop dong cho form detail
-              this.formGroupDetail.patchValue({
-                paymentDueDay : 15,
-                bizDocId: res.data?.bizDocId,
-              })
-            }
-          });
-        } catch (e) {
-          console.log(e);
-          this.baseService.showError(MESSAGE.ERROR);
-        } finally {
-          await this.spinner.hide();
-        }
-      }
-    }*/
-
   async setReadMode(form: FormGroup) {
-    const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType'];
-    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType'];
+    const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType', 'exchangeRate', 'exchangeRateType'];
+    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType', 'exchangeRate', 'exchangeRateType'];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -492,6 +351,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   override async save(): Promise<any> {
     try {
+      console.log(this.formGroupDetail.controls);
       let removeNull = this.formGroupDetail.getRawValue().invoiceDocumentDtl?.filter((s: any) => s.serviceCode);
       this.formGroupDetail.patchValue({invoiceDocumentDtl: removeNull});
       this.formGroupDetail.markAllAsTouched();
@@ -573,7 +433,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       unit: ['',],
       periodOccurrence: ['', [Validators.required]],
       nsCode: ['',],
-      quantity: ['',],
+      quantity: ['', [Validators.min(0), Validators.max(999), Validators.pattern(PATTERN.NUMBER)]],
       unitPrice: ['',],
       amountFcBeforeVat: ['',],
       amountVndBeforeVat: ['',],
@@ -636,12 +496,18 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         periodTo: this.formGroupDetail.getRawValue().periodTo
       }).then((res: any) => {
         if (res.data?.bizDocId) {
+          const place0 = this.isHotel() ? "KSTB" : "XE TB";
+          const place1 = this.formGroupDetail.getRawValue().airportCode;
+          const place2 = moment(this.formGroupDetail.getRawValue().periodTo).format("MM/YYYY");
+
+          let description = `Hóa đơn ${place0} tại ${place1} tháng ${place2}`;
           this.formGroupDetail.patchValue({
             paymentDueDay: res.data?.dueDateNumber,
             bizDocId: res.data?.bizDocId,
             partnerCode: res.data?.partnerCode,
             partnerName: res.data?.partnerName,
             currency: res.data?.currency,
+            description: description
           })
           //paymentDueDate
           let invoiceDate = this.formGroupDetail.getRawValue().invoiceDate;
@@ -649,6 +515,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
           this.formGroupDetail.patchValue({
             paymentDueDate: _value?.format('YYYY-MM-DD') || ''
           });
+        } else {
+          this.showError($localize`Can not find any contract.`);
         }
       })
     }
@@ -659,4 +527,110 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     body.invoiceDocumentDtl = this.tblInvoiceDocumentDtl.value;
     return body;
   }
+
+  isHotel() {
+    return this.formGroupDetail.getRawValue().partnerType === 'HOTEL';
+  }
+
+  isTransportation() {
+    return this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION';
+  }
+
+  isInternational() {
+    return this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL';
+  }
+
+  isDomestic() {
+    return this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC';
+  }
+
+  async subscribeManage() {
+    this.formGroupDetail.controls['airportCode'].valueChanges.pipe(debounceTime(100)).subscribe(async (value) => {
+      console.log(value,!this.firstLoad)
+      if (value && !this.firstLoad) {
+        try {
+          await this.spinner.show();
+          const [res, res2, res3] = await Promise.all([
+            this.contractService.getMarket({marketCode: value.toUpperCase()}),
+            this.findContract(),
+            this.loadListDocumentParent()
+          ]);
+          if (res.data) {
+            this.formGroupDetail.patchValue({
+              contractServiceType: res.data.marketType.toUpperCase(),
+            })
+          }
+        } catch (e) {
+          console.log(e);
+          this.baseService.showError(MESSAGE.ERROR);
+        } finally {
+          await this.spinner.hide();
+        }
+      }
+    });
+    this.formGroupDetail.controls['partnerType'].valueChanges.pipe(debounceTime(100)).subscribe((value) => {
+      if (value && !this.firstLoad) {
+        this.findContract();
+      }
+    });
+    this.formGroupDetail.controls['periodTo'].valueChanges.pipe(debounceTime(100)).subscribe((value) => {
+      if (value && !this.firstLoad) {
+        this.findContract();
+      }
+    });
+    this.formGroupDetail.controls['periodFrom'].valueChanges.pipe(debounceTime(100)).subscribe((value) => {
+      if (value && !this.firstLoad) {
+        this.formGroupDetail.patchValue({
+          periodOccurrence: (moment(value) || value)?.format('YYYY-MM-DD') || '',
+        });
+      }
+    });
+    this.formGroupDetail.controls['invoiceDate'].valueChanges.pipe(debounceTime(100)).subscribe((value) => {
+      if (value && !this.firstLoad) {
+        let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
+        this.formGroupDetail.patchValue({
+          // paymentDueDate: _value?.format('YYYY-MM-DD') || '',
+          invoiceReceiveDate: ''
+        });
+      }
+    });
+    this.formGroupDetail.controls['idParent'].valueChanges.pipe(debounceTime(100)).subscribe((value) => {
+      if (!this.firstLoad) {
+        this.formGroupDetail.patchValue({version: value ? 2 : 1});
+      }
+    });
+    this.formGroupDetail.controls['currency'].valueChanges.pipe(debounceTime(100)).subscribe((value) => {
+      if (value && !this.firstLoad) {
+        this.formGroupDetail.controls['exchangeRateDate'].enable();
+      } else {
+        this.formGroupDetail.controls['exchangeRateDate'].disable();
+      }
+    });
+    this.formGroupDetail.controls['exchangeRateDate'].valueChanges.pipe(debounceTime(100)).subscribe((value) => {
+      if (value && !this.firstLoad) {
+        this.baseService.getExchangeRate({
+          currency: this.formGroupDetail.getRawValue().currency,
+          exchangeRateDate: this.formGroupDetail.getRawValue().exchangeRateDate,
+        }).then((res: any) => {
+          if (res.data) {
+            this.formGroupDetail.patchValue({
+              exchangeRate: res.data.price,
+              exchangeRateType: res.data.type,
+            });
+          }
+        });
+      }
+    });
+    this.formGroupDetail.controls['invoiceReceiveDate'].valueChanges.pipe(debounceTime(100)).subscribe((value) => {
+      if (value && !this.firstLoad) {
+        let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
+        this.formGroupDetail.patchValue({
+          paymentDueDate: _value?.format('YYYY-MM-DD') || '',
+        });
+      }
+    });
+
+  }
+
+
 }
