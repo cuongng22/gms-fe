@@ -81,7 +81,7 @@ export const formula: any = {
       + ' + (ctz(data.singleRoomEarly) + ctz(data.singleRoomEarlyReserved)) * ctz(data.priceSingleRoomEarly) '
       + ' + (ctz(data.doubleRoomEarly) * ctz(data.priceDoubleRoomEarly)) '
       + ' + (ctz(data.singleRoomLate) + ctz(data.singleRoomLateReserved)) * ctz(data.priceSingleRoomLate)  + (ctz(data.doubleRoomLate) * ctz(data.priceDoubleRoomLate))'
-      + ' + (ctz(data.numberOfFlights) * 2 * ctz(data.priceCrewTransport))'
+      + ' + (generalData.crewTransportFeeFlag ? (ctz(data.numberOfFlights) * 2 * ctz(data.priceCrewTransport)) : 0)'
       ,
     // formulaUpdateBudgetPlan: ' ctz(data.singleRoom) * ctz(data.priceSingleRoom) '
     //   + ' + ctz(ata.doubleRoom) * ctz(data.priceDoubleRoom) '
