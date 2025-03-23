@@ -232,7 +232,7 @@
             {{ (dataSource.data | dataCalculateTotal: 'totalIncVAT') | number }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="action">
+        <ng-container matColumnDef="action" stickyEnd>
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@includingVAT" [rowSpan]="2">
             Action
           </th>
@@ -264,7 +264,7 @@
             </div>
           </td>
           <td mat-footer-cell *matFooterCellDef class="text-left fw-bold">
-            
+
           </td>
         </ng-container>
         <ng-container matColumnDef="total">
