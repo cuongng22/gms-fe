@@ -84,29 +84,29 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   }
 
   ngOnInit(): void {
-    this.singleRoomOtherChange.pipe(
-      debounceTime(1000),
-      startWith('')).
-      subscribe((element: any) => {
-        if (element) {
-          console.log(element)
-          this.calculate(element, 'totalAmountForeign');
-          this.calculate(element, 'totalSingleRoom');
-          this.calculateTotalByGroup(element, element.index, 'totalAmountForeign', 'totalAmountForeignGroup');
-        }
-      });
+    // this.singleRoomOtherChange.pipe(
+    //   debounceTime(1000),
+    //   startWith('')).
+    //   subscribe((element: any) => {
+    //     if (element) {
+    //       console.log(element)
+    //       this.calculate(element, 'totalAmountForeign');
+    //       this.calculate(element, 'totalSingleRoom');
+    //       this.calculateTotalByGroup(element, element.index, 'totalAmountForeign', 'totalAmountForeignGroup');
+    //     }
+    //   });
 
-    this.doubleRoomOtherChange.pipe(
-      debounceTime(1000),
-      startWith('')).
-      subscribe((element: any) => {
-        if (element) {
-          console.log(element)
-          this.calculate(element, 'totalAmountForeign');
-          this.calculate(element, 'totalDoubleRoom');
-          this.calculateTotalByGroup(element, element.index, 'totalAmountForeign', 'totalAmountForeignGroup');
-        }
-      })
+    // this.doubleRoomOtherChange.pipe(
+    //   debounceTime(1000),
+    //   startWith('')).
+    //   subscribe((element: any) => {
+    //     if (element) {
+    //       console.log(element)
+    //       this.calculate(element, 'totalAmountForeign');
+    //       this.calculate(element, 'totalDoubleRoom');
+    //       this.calculateTotalByGroup(element, element.index, 'totalAmountForeign', 'totalAmountForeignGroup');
+    //     }
+    //   })
   }
 
   setDataSource(data: any[], generalData?: any, isSummary?: boolean) {
@@ -504,7 +504,6 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
     }
     totalValue = this.dataSource.data.map((t: any) => {
       if (control == 'singleRoom') {
-        debugger
       }
       if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
         // Nếu trường phải check tháng đã thực hiện thì sẽ check trong tháng đó đã thực hiện chưa
@@ -575,7 +574,8 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   // hàm tính tổng theo group (rowspan)
   calculateTotalByGroup(item: any, index: number, key: string, control: string) {
     const keyGroup = this.getTotalByGroupKey(item, formula[key].groupFormula); // cái này để làm key trong object Total sau này sẽ get để lấy data hiển thị ở table
-    const filterData = this.dataSource.data.filter((itemFilter: any, indexFilter: number) => index >= indexFilter && this.groupFormula(itemFilter, item, formula[key].groupFormula));
+    const filterData = this.dataSource.data.filter((itemFilter: any, indexFilter: number) =>
+      this.groupFormula(itemFilter, item, formula[key].groupFormula));
     const result = filterData.map((t: any) => (t[key])).reduce((acc, value) => acc + value, 0);
     this.totalByGroup[keyGroup] = { ...this.totalByGroup[keyGroup], [control]: round(result) };
   }
@@ -679,19 +679,19 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
 
 
-  vlcSingleRoomOther(index: number, element: any, value: any) {
-    if (value) {
-      element.index = index
-      this.singleRoomOtherChange.next(element);
-    }
-  }
+  // vlcSingleRoomOther(index: number, element: any, value: any) {
+  //   if (value) {
+  //     element.index = index
+  //     this.singleRoomOtherChange.next(element);
+  //   }
+  // }
 
-  vlcDoubleRoomOther(index: number, element: any, value: any) {
-    if (value) {
-      element.index = index
-      this.doubleRoomOtherChange.next(element);
-    }
-  }
+  // vlcDoubleRoomOther(index: number, element: any, value: any) {
+  //   if (value) {
+  //     element.index = index
+  //     this.doubleRoomOtherChange.next(element);
+  //   }
+  // }
 
   /**
    * Cập nhật giá trị cho các ô nhập trên table
@@ -699,13 +699,16 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
    * @param control 
    */
   updateValueForControl(data: any, control: string) {
-    if (control === 'priceSingleRoomVatEditing'
-      || control === 'priceDoubleRoomVatEditing'
-      || control === 'priceSingleRoomEarlyVatEditing'
-      || control === 'priceDoubleRoomEarlyVatEditing'
-      || control === 'priceSingleRoomLateVatEditing'
-      || control === 'priceDoubleRoomLateVatEditing'
-      || control === 'priceCrewTransportVatEditing'
+    // cái này là sửa phần mua sắm
+    if (this.type() === PlanCategoryEnum.PROCUREMENT &&
+      (control === 'priceSingleRoomVatEditing'
+        || control === 'priceDoubleRoomVatEditing'
+        || control === 'priceSingleRoomEarlyVatEditing'
+        || control === 'priceDoubleRoomEarlyVatEditing'
+        || control === 'priceSingleRoomLateVatEditing'
+        || control === 'priceDoubleRoomLateVatEditing'
+        || control === 'priceCrewTransportVatEditing'
+      )
     ) {
       this.dataSource.data.forEach((item: any, index: number) => {
         if (item.period === data.period) {
@@ -729,8 +732,16 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         }
 
       });
+      this.calculateTotal();
+    } else if (
+      (control === 'singleRoomOtherEditing' ||
+        control === 'doubleRoomOtherEditing'
+      )
+    ) {
+      this.calculateData(data, 0, true)
+      this.calculateTotal()
+      console.log('this.totalByGroup', this.totalByGroup)
     }
-    this.calculateTotal()
   }
 
   getNunberRound(value: any) {
