@@ -68,7 +68,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
       if (this.type() === PlanCategoryEnum.PROCUREMENT) {
         period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
       } else {
-        period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+        period = `${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
       }
       item.period = period;
       this.calculateData(item, index, isSummary);
