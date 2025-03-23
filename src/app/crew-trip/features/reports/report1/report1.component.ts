@@ -1,50 +1,31 @@
 import {
   Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  ElementRef,
   inject,
-  NO_ERRORS_SCHEMA,
   OnInit,
-  ViewChild
 } from '@angular/core';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {RouterLink} from '@angular/router';
 import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule} from '@angular/material/menu';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatCheckboxModule} from '@angular/material/checkbox';
 import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect, MatSelectModule} from '@angular/material/select';
 import {MatInput, MatInputModule} from '@angular/material/input';
 import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
-import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
-import {NoDataRowOutlet} from '@angular/cdk/table';
-import {NationService} from 'src/app/crew-trip/core/services/nation-service';
-import {UsersService} from 'src/app/crew-trip/core/services/users-service';
-import {HotelService} from 'src/app/crew-trip/core/services/hotel-service';
 import {MatDatepickerModule} from '@angular/material/datepicker';
+import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
 import {
-  DateAdapter,
-  MAT_DATE_FORMATS,
-  MAT_DATE_LOCALE,
-  MAT_NATIVE_DATE_FORMATS,
   MatNativeDateModule,
-  NativeDateAdapter,
-  provideNativeDateAdapter
 } from '@angular/material/core';
 import {MatAutocompleteModule, MatAutocompleteTrigger} from '@angular/material/autocomplete';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {map, Observable, startWith} from 'rxjs';
-import {debounceTime} from 'rxjs/operators';
-import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
 import {Constant, DATE_FORMAT_DD_MM_YYYY} from 'src/app/crew-trip/shared/utils/constant';
 import {MAT_MOMENT_DATE_FORMATS, provideMomentDateAdapter} from '@angular/material-moment-adapter';
+import {ReportService} from "src/app/crew-trip/core/services/report-service";
+import {HttpStatusCode} from "@angular/common/http";
 
 @Component({
   selector: 'app-report',
@@ -61,57 +42,34 @@ import {MAT_MOMENT_DATE_FORMATS, provideMomentDateAdapter} from '@angular/materi
   styleUrl: './report1.component.scss'
 })
 export class reportcomponent extends CommonComponent implements OnInit {
-  override baseService = inject(HotelService);
-  flightMarketService = inject(FlightMarketService);
-  @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
-  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
-  markets: any[] = [];
-  filteredOptionsMarket: any[];
+  override baseService = inject(ReportService);
+  iframeUrl: SafeResourceUrl;
+  codeReport: string = "BC_7_2";
 
-
-  override formGroupSearch = this.formBuilder.group({
-    s: [''], //Keyword Search
-    marketCode: [''],
-    contractStartDate: [''],
-    contractEndDate: [''],
-    active: [''],
-  });
-
-  constructor(public dataTransformPipe: DataTransformPipe) {
+  constructor(private sanitizer: DomSanitizer) {
     super();
   }
 
   override async ngOnInit() {
-    super.ngOnInit();
-    this.displayedColumns = ['stt', 'market', 'code','name', 'address', 'contactDetails', 'active', 'notes'];
-    this.search();
-
-    this.flightMarketService.search({option: 1}).then(res => {
-      this.markets = res.data;
-    });
-  }
-
-  filterMarket(): void {
-    const filterValue = this.marketCode.nativeElement.value.toLowerCase();
-    if (!filterValue) {
-      this.filteredOptionsMarket = this.markets;
+    await this.spinner.show();
+    try {
+      await this.loadReport()
+    } catch (error: any) {
+      this.showError(error);
     }
-    this.filteredOptionsMarket = this.markets.filter(market => market.toLowerCase().includes(filterValue));
+    await this.spinner.hide();
   }
 
-  onFocusMarket(): void {
-    this.filteredOptionsMarket = this.markets;
-    this.autocompleteTrigger.openPanel();
+  async loadReport() {
+    try {
+      let rs = this.baseService.getReportLink(this.codeReport);
+      this.iframeUrl = this.sanitizeUrl('https://crewtripreport.vietnamairlines.com/trusted/je6uoh7qTn6zVWHiwfxqVA==:G6J_26cjbpA8W5Gb93Hwcs64/views/BC_7_2/BC_7_2');
+    } catch (Error: any) {
+      console.log(Error);
+    }
   }
 
-  override search(body?: any, isNextPage?: boolean): any {
-    const contractStartDate = this.formGroupSearch.controls.contractStartDate.value;
-    const contractEndDate = this.formGroupSearch.controls.contractEndDate.value;
-    const searchValue = {
-      ...this.formGroupSearch.value,
-      contractStartDate: contractStartDate ? this.dataTransformPipe.transform(contractStartDate, ['date', Constant.DATE_FORMAT]) : null,
-      contractEndDate: contractEndDate ? this.dataTransformPipe.transform(contractEndDate, ['date', Constant.DATE_FORMAT]) : null,
-    };
-    super.search(searchValue, isNextPage);
+  sanitizeUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }
