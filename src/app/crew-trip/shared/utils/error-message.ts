@@ -206,7 +206,9 @@ export const quantity: { [key: string]: string } = {
 export const unitPrice: { [key: string]: string } = {
   required: 'Unit price' + $localize` is required`,
   min: 'Unit price' + $localize` must be greater than 0`,
+  max: 'Unit price' + $localize` must be less than 999999999`,
   invalidNumber: 'Unit price' + $localize` must be integer`,
+  pattern: 'Unit price' + $localize` must be integer`,
 };
 export const amountFcBeforeVat: { [key: string]: string } = {
   min: 'AmountVndBeforeVat' + $localize` must be greater than 0`,

@@ -82,7 +82,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
-      searchString: [], ctype: [], partnerType: [], airportCode: [], listAirportCode: [], periodFrom: [this.startOfMonth], periodTo: [this.endOfMonth],
+      searchString: [], ctype: [], partnerType: [], airportCode: [], listAirportCode: [], periodFrom: [this.startOfMonth], periodTo: [moment().format('YYYY-MM-DD')],
     });
     this.formGroupDetail = this.fb.group({
       id: [], bizDocId: [], bizDocIdC1: [], contractName: [], contractCode: []
@@ -97,7 +97,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   override async ngOnInit() {
     this.formGroupFile.patchValue({partnerType: this.partnerType});
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}), this.search(),]).then(() => {
+    await Promise.all([this.loadListFlightMarket(), this.search(),]).then(() => {
 
     });
     this.displayedColumns = ['stt', 'airportCode', 'partnerName', 'invoiceNumber', 'invoiceDate', 'invoiceReceiveDate', 'periodDate', 'totalAmount', 'action'];
