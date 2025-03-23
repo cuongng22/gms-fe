@@ -26,7 +26,7 @@ import {debounceTime} from "rxjs/operators";
   imports: [BaseImport],
   templateUrl: './contract-detail.component.html',
   styleUrl: './contract-detail.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY), DecimalPipe],
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}), DecimalPipe],
 })
 export class ContractDetailComponent extends CommonComponent implements OnInit, AfterContentInit {
   override baseService = inject(ContractService);

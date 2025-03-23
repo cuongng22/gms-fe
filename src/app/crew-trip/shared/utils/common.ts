@@ -29,12 +29,13 @@ export function beforeValidator(from: any): ValidatorFn {
   };
 }
 
-export function afterValidator(to: any): ValidatorFn {
+export function afterValidator(to: any, errorKey?: any): ValidatorFn {
   return (control: AbstractControl): ValidationErrors | null => {
     let fromMoment = moment(control.value) || null;
     let toMoment = moment(to.value) || null;
     if (fromMoment && toMoment && fromMoment.isAfter(toMoment)) {
-      return {afterValidator: true};
+      let key = errorKey ?? 'afterValidator';
+      return {[key]: true};
     }
     return null;
   };

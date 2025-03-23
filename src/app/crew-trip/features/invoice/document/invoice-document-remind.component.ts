@@ -50,7 +50,7 @@ import {BaseImport} from "src/app/crew-trip/shared/base-import";
   imports: [BaseImport],
   templateUrl: './invoice-document-remind.component.html',
   styleUrl: './invoice-document-remind.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY,{useUtc: true}),
   ]
 })
 

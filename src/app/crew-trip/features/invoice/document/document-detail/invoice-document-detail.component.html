@@ -28,24 +28,28 @@ undo
 </i>
 Back
 </button>
+@if(formGroupDetail.getRawValue().status === 'UNMATCHED'){
 <button (click)="saveAndNext()" *ngIf="!readMode" class="step-2-menu-button btn-slot-4" extended i18n mat-fab>
-<i class="material-symbols-outlined">
-redo
-</i>
-Save and reconcile
+  <i class="material-symbols-outlined">
+    redo
+  </i>
+  Save and reconcile
 </button>
+}
 <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
 <i class="material-symbols-outlined">
 save
 </i>
 Save
 </button>
+@if(formGroupDetail.getRawValue().status !== 'FINISHED'){
 <button (click)="toggleDialogFinish()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
-<i class="material-symbols-outlined">
-task_alt
-</i>
-Chốt hóa đơn
+  <i class="material-symbols-outlined">
+    task_alt
+  </i>
+  Chốt hóa đơn
 </button>
+}
 </div>
 }
 <mat-accordion multi>
@@ -89,6 +93,18 @@ Chốt hóa đơn
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
+              <mat-label i18n>Invoice date</mat-label>
+              <input [matDatepicker]="invoiceDate" [max]="today" formControlName="invoiceDate" matInput
+                     required trim="blur">
+              <mat-datepicker-toggle [for]="invoiceDate" matIconSuffix></mat-datepicker-toggle>
+              <mat-datepicker #invoiceDate></mat-datepicker>
+              <mat-error>
+                <app-control-error controlName="invoiceDate"></app-control-error>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
               <mat-label i18n>Period From</mat-label>
               <input [matDatepicker]="periodFrom" [max]="today" formControlName="periodFrom" matInput
                      required trim="blur">
@@ -97,6 +113,9 @@ Chốt hóa đơn
               <mat-error>
                 <app-control-error controlName="periodFrom"></app-control-error>
               </mat-error>
+              @if (!!formGroupDetail.controls['periodFrom'].hasError('invoiceDate')) {
+              <mat-error><span i18n>Period from</span><span i18n> must before invoice date</span></mat-error>
+              }
             </mat-form-field>
           </div>
           <div class="col-3" sizeInput='sm'>
@@ -109,20 +128,12 @@ Chốt hóa đơn
               <mat-error>
                 <app-control-error controlName="periodTo"></app-control-error>
               </mat-error>
+              @if (!!formGroupDetail.controls['periodTo'].hasError('invoiceDate')) {
+              <mat-error><span i18n>Period to</span><span i18n> must before invoice date</span></mat-error>
+              }
             </mat-form-field>
           </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Invoice date</mat-label>
-              <input [matDatepicker]="invoiceDate" [max]="today" formControlName="invoiceDate" matInput
-                     required trim="blur">
-              <mat-datepicker-toggle [for]="invoiceDate" matIconSuffix></mat-datepicker-toggle>
-              <mat-datepicker #invoiceDate></mat-datepicker>
-              <mat-error>
-                <app-control-error controlName="invoiceDate"></app-control-error>
-              </mat-error>
-            </mat-form-field>
-          </div>
+
         </div>
         <!--        dong2-->
         <div class="row mt-20">
@@ -371,15 +382,15 @@ Chốt hóa đơn
         </th>
         <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
           <div class="input-cell">
-            <app-selection-suggest
-                (selectionChange)="changeServiceFee(row);"
-                [editInlineTable]="true"
-                [options]="listFeeService"
-                attrDisplay="code"
-                attrDisplay2="name"
-                attrValue="code" formControlName="serviceCode" i18n-label2
-                label2="Code"
-                size="sm"/>
+                <app-selection-suggest-2 (selectionChange)="changeServiceFee(row);"
+                                           [editInlineTable]="true"
+                                           [errors]="row.get('serviceCode').errors"
+                                           [options]="listFeeService"
+                                           attrDisplay="code"
+                                           attrDisplay2="name"
+                                           attrValue="code" formControlName="serviceCode" i18n-label2
+                                           label2="Code"
+                                           size="sm"/>
           </div>
         </td>
       </ng-container>
@@ -560,19 +571,35 @@ Chốt hóa đơn
       <ng-container matColumnDef="vatHeader">
         <th *matHeaderCellDef class="text-center" colspan="4" i18n mat-header-cell mat-sort-header>VAT
       </ng-container>
-      <tr
+      @if(readMode){
+        <tr
+          *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader']"
+          mat-header-row></tr>
+        <tr
+          *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
+        <tr
+          *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat'];"
+          class="input-row" mat-row></tr>
+        <tr *matNoDataRow class="mat-row">
+          <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
+            i18n>No data!</span></td>
+        </tr>
+        }
+        @else{
+        <tr
           *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader','action']"
           mat-header-row></tr>
-      <tr
+        <tr
           *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
-      <tr
+        <tr
           *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat','action'];"
           class="input-row" mat-row></tr>
-      <tr *matNoDataRow class="mat-row">
-        <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
+        <tr *matNoDataRow class="mat-row">
+          <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
             i18n>No data!</span></td>
-      </tr>
-    </table>
+        </tr>
+        }
+        </table>
         }
       </div>
       <form #totalab [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
@@ -582,7 +609,7 @@ Chốt hóa đơn
             <div class="w-100 ok" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Amount Fc Before Vat</mat-label>
-                <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput required
+                <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput
                        trim="blur" >
                 <mat-error>
                   <app-control-error controlName="airportCode"></app-control-error>
@@ -594,7 +621,7 @@ Chốt hóa đơn
             <div class="w-100" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Vat Fc</mat-label>
-                <input appThousandsSeparator formControlName="vatFc" matInput required
+                <input appThousandsSeparator formControlName="vatFc" matInput
                        trim="blur" >
                 <mat-error>
                   <app-control-error controlName="airportCode"></app-control-error>
@@ -606,7 +633,7 @@ Chốt hóa đơn
             <div class="w-100" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Total Amount Fc</mat-label>
-                <input #inputElementRef3 appThousandsSeparator formControlName="totalAmountFc" matInput required
+                <input #inputElementRef3 appThousandsSeparator formControlName="totalAmountFc" matInput
                        trim="blur" >
                 <mat-error>
                   <app-control-error controlName="airportCode"></app-control-error>
@@ -618,7 +645,7 @@ Chốt hóa đơn
             <div class="w-100" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Reimbursement Total Fc</mat-label>
-                <input appThousandsSeparator formControlName="reimbursementTotalFc" matInput required
+                <input appThousandsSeparator formControlName="reimbursementTotalFc" matInput
                        trim="blur" >
                 <mat-error>
                   <app-control-error controlName="reimbursementTotalFc"></app-control-error>
@@ -631,7 +658,7 @@ Chốt hóa đơn
             <div class="w-100" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Amount Vnd Before Vat</mat-label>
-                <input #inputElementRef2 appThousandsSeparator formControlName="amountVndBeforeVat" matInput required
+                <input #inputElementRef2 appThousandsSeparator formControlName="amountVndBeforeVat" matInput
                        trim="blur">
                 <mat-error>
                   <app-control-error controlName="airportCode"></app-control-error>
@@ -643,7 +670,7 @@ Chốt hóa đơn
             <div class="w-100" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Vat Vnd</mat-label>
-                <input appThousandsSeparator formControlName="vatVnd" matInput required
+                <input appThousandsSeparator formControlName="vatVnd" matInput
                        trim="blur">
                 <mat-error>
                   <app-control-error controlName="airportCode"></app-control-error>
@@ -655,7 +682,7 @@ Chốt hóa đơn
             <div class="w-100" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Total Amount Vnd</mat-label>
-                <input #inputElementRef4 appThousandsSeparator formControlName="totalAmountVnd" matInput required
+                <input #inputElementRef4 appThousandsSeparator formControlName="totalAmountVnd" matInput
                        trim="blur">
                 <mat-error>
                   <app-control-error controlName="airportCode"></app-control-error>
@@ -667,7 +694,7 @@ Chốt hóa đơn
             <div class="w-100" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Reimbursement Total Vnd</mat-label>
-                <input appThousandsSeparator formControlName="reimbursementTotalVnd" matInput required
+                <input appThousandsSeparator formControlName="reimbursementTotalVnd" matInput
                        trim="blur">
                 <mat-error>
                   <app-control-error controlName="reimbursementTotalVnd"></app-control-error>
