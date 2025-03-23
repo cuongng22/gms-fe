@@ -101,7 +101,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       airportCode: [],
       listAirportCode: [],
       periodFrom: [this.startOfMonth],
-      periodTo: [this.endOfMonth],
+      periodTo: [moment().format('YYYY-MM-DD')],
       status: [],
       statusEmail: [],
       version: [1],
@@ -235,11 +235,15 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   async download(type: any) {
     try {
       await this.spinner.show();
-      let filename = '';
+      let body = this.formGroupSearch.getRawValue();
+      body.periodFrom = moment(body.periodFrom).isValid() ? moment(body.periodFrom).format(Constant.LOCAL_DATE_FORMAT) : null;
+      body.periodTo = moment(body.periodTo).isValid() ? moment(body.periodTo).format(Constant.LOCAL_DATE_FORMAT) : null;
+      body = removeNullValues(body);
+      body.page = 0;
+      body.limit = 999999;
+      body.exportType = InvoiceDocumentExportType.DOCUMENT_LIST
       if (type === 'EXPORT') {
-        const res = await this.baseService.exportListData({
-          exportType: InvoiceDocumentExportType.DOCUMENT_LIST
-        });
+        const res = await this.baseService.exportListData(body);
         this.downloadFile(res, 'export.xlsx');
       } else if (type === 'DOWNLOAD') {
         const res = await this.baseService.exportFileData({

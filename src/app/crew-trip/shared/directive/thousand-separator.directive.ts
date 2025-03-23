@@ -27,7 +27,12 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
     //la field tinh toan
     let snapValue = cloneDeep(initValue);
     this.control.control?.valueChanges.subscribe((value) => {
-      if (value == snapValue) {return}
+      if (value == snapValue) {
+        if (value && !isNaN(Number(value))) {
+          inputElement.value = this.formatNumber(value);
+        }
+        return;
+      }
       snapValue = value;
       const _value = String(value).replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
       if (value && !isNaN(Number(_value))) {

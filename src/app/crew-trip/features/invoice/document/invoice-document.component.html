@@ -192,10 +192,10 @@
           'text-soft-danger': innerColumn.value === 'status' && element['status'] === 'UNVERIFIED',
 
           'text-soft-dark': (innerColumn.value === 'statusEmail' && element['statusEmail'] === 'UNSEND') ||
-          (innerColumn.value === 'statusPayment' && ['NEGOTIABLE','CLEARED BUT UNACCOUNTED', 'RECONCILED UNACCOUNTED', 'VOIDED'].includes(element['statusPayment'])),
+          (innerColumn.value === 'statusPayment' && ['UNPAID','NEGOTIABLE','CLEARED BUT UNACCOUNTED', 'RECONCILED UNACCOUNTED', 'VOIDED'].includes(element['statusPayment'])),
 
           'text-soft-vna': (innerColumn.value === 'statusEmail' && ['FINISHED', 'SEND', 'CLEARED', 'RECONCILED', 'PAID'].includes(element['statusEmail'])) ||
-          (innerColumn.value === 'status' && element['status'] === 'VERIFIED') ||
+          (innerColumn.value === 'status' && ['VERIFIED','FINISHED'].includes(element['status'])) ||
           (innerColumn.value === 'statusPayment' && ['FINISHED', 'SEND', 'CLEARED', 'RECONCILED', 'PAID'].includes(element['statusPayment']))
           }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
               </td>
