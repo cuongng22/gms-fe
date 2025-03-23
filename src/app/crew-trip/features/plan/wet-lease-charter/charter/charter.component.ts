@@ -43,7 +43,10 @@ import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/sele
 import { DataCalculateTotal } from 'src/app/crew-trip/shared/data-calculate-total';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant';
+import {
+	DATE_FORMAT_DD_MM_YYYY,
+	round,
+} from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
 	selector: 'app-charter',
@@ -191,4 +194,6 @@ export class CharterComponent extends CommonComponent {
 		};
 		await this.exportFileOptions(searchParams, fileName);
 	}
+
+	protected readonly round = round;
 }

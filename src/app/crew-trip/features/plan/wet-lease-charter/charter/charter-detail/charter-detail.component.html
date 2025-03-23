@@ -9,7 +9,7 @@
             Back
         </button>
         @if (this.formGroupDetail.controls.id.value) {
-        @if (this.viewDetail() === 'true') {
+        @if (disable) {
         <h5 class="mb-0" i18n="@@addNew">
             View details
         </h5>
@@ -38,7 +38,7 @@
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@charter">
             Charter
         </li>
-        @if (this.formGroupDetail.controls.id.value) {\
+        @if (this.formGroupDetail.controls.id.value) {
         @if (this.viewDetail() === 'true') {
         <li class="breadcrumb-item d-inline-block position-relative" i18n="@@viewDetails">
             View details
