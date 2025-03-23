@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, effect, input } from '@angular/core';
+import { Component, effect, inject, input } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -15,6 +15,8 @@ import { RouterLink, RouterModule } from '@angular/router';
 import { DigitOnlyModule } from '@uiowa/digit-only';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { NgxControlError } from 'ngxtension/control-error';
+import { Subscription } from 'rxjs';
+import { CharterService } from 'src/app/crew-trip/core/services/charter.service';
 import { CategoryEnum } from 'src/app/crew-trip/features/plan/budget-procurement/budget-procurement.model';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DatepickerYearMonthComponent } from 'src/app/crew-trip/shared/component/datepicker-year-month/datepicker-year-month.component';
@@ -60,6 +62,7 @@ import { formula } from './charter-car-rental.model';
 	styleUrl: './charter-car-rental.component.scss',
 })
 export class CharterCarRentalComponent extends CommonComponent {
+	override baseService = inject(CharterService);
 	CategoryEnum = CategoryEnum;
 	headerRowDef1 = [
 		'carType',
@@ -94,8 +97,36 @@ export class CharterCarRentalComponent extends CommonComponent {
 			}
 		});
 	}
+	exchangeRateSubscription: Subscription;
+	rateVatSubscription: Subscription;
 
-	override ngOnInit(): void {}
+	override ngOnInit(): void {
+		this.exchangeRateSubscription = this.baseService.exchangeRate$.subscribe(
+			(data) => {
+				if (data) {
+					const _exchangeRate = Number(data);
+					this.dataSource.data.forEach((element) => {
+						element.exchangeRate = _exchangeRate;
+						this.calculation('totalAmountForex', element);
+						this.calculation('totalAmountIncVat', element);
+						this.calculation('totalAmountExcVat', element);
+					});
+				}
+			},
+		);
+
+		this.rateVatSubscription = this.baseService.rateVat$.subscribe((data) => {
+			if (data) {
+				const _rateVat = Number(data);
+				this.dataSource.data.forEach((element) => {
+					element.rateVat = _rateVat;
+					this.calculation('totalAmountForex', element);
+					this.calculation('totalAmountIncVat', element);
+					this.calculation('totalAmountExcVat', element);
+				});
+			}
+		});
+	}
 
 	setDataSource(value: any[]) {
 		this.dataSource.data = [...value];
