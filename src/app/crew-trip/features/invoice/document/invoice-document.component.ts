@@ -22,7 +22,7 @@ import {BaseImport} from "src/app/crew-trip/shared/base-import";
   imports: [BaseImport, InvoiceFormDetailComponent],
   templateUrl: './invoice-document.component.html',
   styleUrl: './invoice-document.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
   ]
 })
 
@@ -104,7 +104,8 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       periodTo: [moment().format('YYYY-MM-DD')],
       status: [],
       statusEmail: [],
-      version: [1],
+      version: [],
+      isLatest: [true]
     });
     this.formGroupDetail = this.fb.group({
       id: [], emailTo: ['chien12345aabb@gmail.com'], emailCc: ['chien12345aabb@gmail.com'], emailSubject: ['test'], emailContent: ['test1']

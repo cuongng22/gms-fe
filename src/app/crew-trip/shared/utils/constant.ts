@@ -105,6 +105,7 @@ export const DATE_FORMAT_DD_MM_YYYY = {
   parse: {
     dateInput: 'DD/MM/YYYY',
   },
+  useValue: { useUtc: true },
 
   display: {
     dateInput: 'DD/MM/YYYY',
