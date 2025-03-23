@@ -112,6 +112,7 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
                     Single Room
                 </th>
+                <!-- (ngModelChange)="vlcSingleRoomOther(index, element, $event)"  -->
                 <td mat-cell *matCellDef="let element; let index = dataIndex"
                     [style.padding]="element['singleRoomOtherEditing'] && !(element.monthIsPerform && updateBudgetPlan())?'0px !important':''"
                     (click)="clickEdit(element, 'singleRoomOtherEditing')" class="text-right">
@@ -126,7 +127,8 @@
                             class="edit-inline-table">
                             <input appThousandsSeparator matInput type="text" digitOnly
                                 [(ngModel)]="element.singleRoomOther"
-                                (ngModelChange)="vlcSingleRoomOther(index, element, $event)" [disabled]="disabled()">
+                                
+                                [disabled]="disabled()">
                         </mat-form-field>
                     </div>
                     }
@@ -136,6 +138,7 @@
                 <td mat-footer-cell *matFooterCellDef class="text-right">
                     @if(type() === PlanCategoryEnum.BUDGET){ {{getTotal('singleRoomOther') | number}} }</td>
             </ng-container>
+            <!-- (ngModelChange)="vlcDoubleRoomOther(index, element, $event)"  -->
             <ng-container matColumnDef="doubleRoomOther">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
                     Double Room
@@ -154,7 +157,8 @@
                             class="edit-inline-table">
                             <input appThousandsSeparator matInput type="text" digitOnly
                                 [(ngModel)]="element.doubleRoomOther"
-                                (ngModelChange)="vlcDoubleRoomOther(index, element, $event)" [disabled]="disabled()">
+                                
+                                [disabled]="disabled()">
                         </mat-form-field>
                     </div>
                     }
@@ -316,7 +320,7 @@
                     <div sizeInput="lg">
                         <mat-form-field (clickOutside)="clickOutside(element,'priceSingleRoomVatEditing')"
                             class="edit-inline-table">
-                            <input appThousandsSeparator matInput type="text" digitOnly
+                            <input appThousandsSeparator matInput type="text" digitOnly [decimal]="true" decimalSeparator="."
                                 [(ngModel)]="element.priceSingleRoomVat" [disabled]="disabled()">
                         </mat-form-field>
                     </div>
@@ -341,7 +345,7 @@
                     <div sizeInput="lg">
                         <mat-form-field (clickOutside)="clickOutside(element,'priceDoubleRoomEditing')"
                             class="edit-inline-table">
-                            <input appThousandsSeparator matInput type="text" digitOnly
+                            <input appThousandsSeparator matInput type="text" digitOnly [decimal]="true" decimalSeparator="."
                                 [(ngModel)]="element.priceDoubleRoomVat" [disabled]="disabled()">
                         </mat-form-field>
                     </div>
@@ -523,8 +527,6 @@
                     [attr.rowspan]="periodsSpan[element.period].count" class="fw-bold"
                     [style.display]="periodsSpan[element.period].firstIndex === index ?'':'none'" class="text-right"
                     class="text-right">
-                    <!-- {{element.totalAmountForeignGroup | number}} -->
-
                     {{getTotalByGroup(element,'totalAmountForeign','totalAmountForeignGroup') | number}}
 
                 </td>
