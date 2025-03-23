@@ -44,8 +44,8 @@
             <mat-form-field>
               <mat-label i18n>Period Date</mat-label>
               <mat-date-range-input [rangePicker]="picker">
-                <input formControlName="periodFrom" matStartDate placeholder="Start date">
-                <input formControlName="periodTo" matEndDate placeholder="End date">
+                <input formControlName="periodFrom" matStartDate placeholder="dd/mm/yyyy">
+                <input formControlName="periodTo" matEndDate placeholder="dd/mm/yyyy">
               </mat-date-range-input>
               <!--              <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>-->
               <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>

@@ -38,7 +38,7 @@
                                [dataObject]="dataObject"
                                [id]="id"
                                [readMode]="readMode"
-                               [titleHeader]="id?'Detailed Statement':'Add new invoice'" i18n-titleHeader>
+                               [titleHeader]="id?readMode?'View Invoice':'Update Invoice':'Add new invoice'" i18n-titleHeader>
   </app-invoice-document-detail>
 </ng-container>
 <!-- review -->

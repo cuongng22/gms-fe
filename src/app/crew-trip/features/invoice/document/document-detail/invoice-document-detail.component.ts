@@ -25,8 +25,7 @@ import {quantity} from "src/app/crew-trip/shared/utils/error-message";
   imports: [BaseImport],
   templateUrl: './invoice-document-detail.component.html',
   styleUrl: './invoice-document-detail.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
-
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
   ]
 })
 
@@ -222,7 +221,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       invoiceReceiveDate: [],
       periodFrom: [],
       periodTo: [],
-      periodOccurrence: [],
+      periodOccurrence: [, [Validators.required]],
       paymentDueDay: [],
       paymentDueDate: [],
       bizDocId: [],
@@ -259,9 +258,11 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       tblInvoiceDocumentDtl: this.fb.array([]),
 
     });
-    this.formGroupDetail.controls['periodFrom'].setValidators([afterValidator(this.formGroupDetail.controls['periodTo'])]);
-    this.formGroupDetail.controls['periodTo'].setValidators([beforeValidator(this.formGroupDetail.controls['periodFrom'])]);
-    this.formGroupDetail.controls['invoiceReceiveDate'].setValidators([afterValidator(this.formGroupDetail.controls['invoiceDate'])]);
+    this.formGroupDetail.controls['periodFrom'].setValidators([afterValidator(this.formGroupDetail.controls['periodTo']),
+      afterValidator(this.formGroupDetail.controls['invoiceDate'], 'invoiceDate')]);
+    this.formGroupDetail.controls['periodTo'].setValidators([beforeValidator(this.formGroupDetail.controls['periodFrom']),
+      afterValidator(this.formGroupDetail.controls['invoiceDate'], 'invoiceDate')]);
+    this.formGroupDetail.controls['invoiceReceiveDate'].setValidators([beforeValidator(this.formGroupDetail.controls['invoiceDate'])]);
     if (!this.readMode) {
       this.subscribeMain();
     }
@@ -284,7 +285,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         this.formGroupDetail.patchValue({idParent: this.formGroupDetail.getRawValue().idParent});
         this.calTotal();
         this.listFeeService = this.listFeeService.filter((s: any) => s.active);
-
+        this.setReadModeDtl([this.tblInvoiceDocumentDtl]);
       });
     } catch (e) {
       console.log(e);
@@ -312,15 +313,26 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   saveAndFinish() {
     this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.FINISHED})
     this.save();
+    this.goBack();
   }
 
   toggleDialogFinish() {
+    this.formGroupDetail.markAllAsTouched();
+    if (this.formGroupDetail.invalid) {
+      this.findInvalidControls(this.formGroupDetail);
+      return;
+    }
     this.showDialogFinish = !this.showDialogFinish;
   }
 
   async setReadMode(form: FormGroup) {
-    const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType', 'exchangeRate', 'exchangeRateType'];
-    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType', 'exchangeRate', 'exchangeRateType'];
+    const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency',
+      'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version',
+      'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status', 'periodOccurrence'];
+    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType',
+      'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version',
+      'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status', 'periodOccurrence'];
+
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -333,12 +345,33 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         }
         //edit
         else {
-          if (disableFieldEdit.includes(k)) {
+          //status finish
+          if (this.dataObject.status === InvoiceDocumentStatusEnum.FINISHED) {
             v.disable();
+            this.formGroupDetail.controls['exchangeRateDate'].enable();
+          } else {
+            if (disableFieldEdit.includes(k)) {
+              v.disable();
+            }
           }
         }
 
       }
+    });
+  }
+
+  async setReadModeDtl(formArrays?: any) {
+    if (!formArrays) {
+      formArrays = [this.tblInvoiceDocumentDtl];
+    }
+    formArrays.forEach((formArray: any) => {
+      if (!this.readMode) return;
+      const groups = formArray.controls as FormGroup[];
+      groups.forEach((fGroup) => {
+        Object.values(fGroup.controls).forEach((control) => {
+          control.disable();
+        });
+      });
     });
   }
 
@@ -406,7 +439,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       const fileUpload = this.formGroupDetail.getRawValue().fileUpload[0];
       //validate
       // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
-      if (fileUpload.size > 5 * 1048576) {
+      if (fileUpload.size > 20 * 1048576) {
         this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
         return;
       }
@@ -437,7 +470,11 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   override async save(): Promise<any> {
     try {
-      console.log(this.formGroupDetail.controls);
+      console.log(this.formGroupDetail.controls)
+      if (!this.formGroupDetail.getRawValue().bizDocId) {
+        this.showError($localize`Can not find any contract.`);
+        return;
+      }
       let removeNull = this.formGroupDetail.getRawValue().invoiceDocumentDtl?.filter((s: any) => s.serviceCode);
       this.formGroupDetail.patchValue({invoiceDocumentDtl: removeNull});
       this.formGroupDetail.markAllAsTouched();
@@ -584,8 +621,18 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
           this.formGroupDetail.patchValue({
             paymentDueDate: _value?.format('YYYY-MM-DD') || ''
           });
+
+          //du lieu priceunit hd
+          res.data?.priceUnitInfo.forEach((s: any) => {
+            let item = {
+              serviceCode: s.serviceCode,
+              vat: s.taxRate
+            }
+            let row = this.addRow(item);
+            this.changeServiceFee(row);
+          })
         } else {
-          this.showError($localize`Can not find any contract.`);
+          // this.showError($localize`Can not find any contract.`);
         }
       })
     }
@@ -664,6 +711,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       });
       this.formGroupDetail.controls['periodFrom'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
         if (value && !this.firstLoad) {
+          console.log(value)
           this.formGroupDetail.patchValue({
             periodOccurrence: (moment(value) || value)?.format('YYYY-MM-DD') || '',
           });
@@ -684,7 +732,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         }
       });
       this.formGroupDetail.controls['currency'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (value && !this.firstLoad) {
+        if (value) {
           this.formGroupDetail.controls['exchangeRateDate'].enable();
         } else {
           this.formGroupDetail.controls['exchangeRateDate'].disable();
@@ -699,6 +747,9 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
               this.formGroupDetail.patchValue({
                 exchangeRate: res.data.price, exchangeRateType: res.data.type,
               });
+              this.tblInvoiceDocumentDtl.controls.forEach(s => {
+                this.calRow(s);
+              })
             }
           });
         }
