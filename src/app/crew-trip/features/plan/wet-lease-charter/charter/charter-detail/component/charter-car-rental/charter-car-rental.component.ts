@@ -107,7 +107,7 @@ export class CharterCarRentalComponent extends CommonComponent {
 	}
 	calWithFormula(formula: string, item: any) {
 		const formulaFunction = new Function('item', `return ${formula};`);
-		return Math.round(formulaFunction(item));
+		return formulaFunction(item);
 	}
 
 	calculation(control: string, item: any) {
