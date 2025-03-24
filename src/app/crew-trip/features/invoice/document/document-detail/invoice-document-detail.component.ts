@@ -478,6 +478,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       let removeNull = this.formGroupDetail.getRawValue().invoiceDocumentDtl?.filter((s: any) => s.serviceCode);
       this.formGroupDetail.patchValue({invoiceDocumentDtl: removeNull});
       this.formGroupDetail.markAllAsTouched();
+      this.formGroupDetail.updateValueAndValidity();
       if (this.formGroupDetail.invalid) {
         this.findInvalidControls(this.formGroupDetail);
         return;
