@@ -1,7 +1,7 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 import moment from 'moment';
-import { sprintf } from 'sprintf-js';
-import { Constant } from './utils/constant';
+import {sprintf} from 'sprintf-js';
+import {Constant} from './utils/constant';
 
 @Pipe({
   name: 'dataTransformPipe',
@@ -15,7 +15,7 @@ export class DataTransformPipe implements PipeTransform {
       const utcOffset = args[2];
       if (type === 'number') {
         // return value.toLocaleString('vi-VN');
-        return value.toLocaleString('en-US');
+        return value.toLocaleString('en-US', {maximumFractionDigits: format ? format : 2});
       } else if (type === Constant.DATE) {
         if (utcOffset) {
           return moment.utc(value).isValid() ? moment.utc(value).utcOffset(utcOffset).format(format) : '';
