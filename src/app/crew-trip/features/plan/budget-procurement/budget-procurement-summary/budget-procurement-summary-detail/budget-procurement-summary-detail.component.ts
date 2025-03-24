@@ -199,7 +199,8 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
         procStartDate ? this.dataTransformPipe.transform(procStartDate, ['date', this.Constant.MONTH_FORMAT]) : null,
         procEndDate ? this.dataTransformPipe.transform(procEndDate, ['date', this.Constant.MONTH_FORMAT]) : null,
         !!this.budgetProcurementGeneral.formGroupDetail.controls.earlyCheckinFlag.value,
-        !!this.budgetProcurementGeneral.formGroupDetail.controls.lateCheckoutFlag.value
+        !!this.budgetProcurementGeneral.formGroupDetail.controls.lateCheckoutFlag.value,
+        !!this.budgetProcurementGeneral.formGroupDetail.controls.haveContract.value
       );
       const response = await this.baseService.dataSummary(requestBody);//summaryDataExample;//summaryDataExample1;//
       this.dataDetail = {

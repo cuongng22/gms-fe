@@ -371,13 +371,12 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         item.planFlightPeriod = Number(_planFlightPeriod)
       }
       item.noOfFlightOvernight = 1; // tổng số chuyến bay và số đêm nghỉ để nhóm sau đó chia cho số này vs tháng đã thực hiện monthInPerform
-      item.noOfOvernight = 1; // tổng số đêm nghỉ
+      item.noOfOvernight = this.planFlightByOvernight.length ?? 1
       // Thu bảo với tháng đã thực hiện thì số tiền sẽ phải chia ( số đêm nghỉ * loại máy bay) ==> loại ngân sách
       if (item.monthIsPerform) {
         // const noOfFlight = new Set(this.dataSource.data.filter((itemFilter: any) => itemFilter.period === item.period).map((item: any) => item.aircraftType));
         // item.noOfFlightOvernight = (this.planFlightByOvernight.length ?? 1) * noOfFlight.size;
         item.noOfFlightOvernight = this.periodsSpan[item.period].count ?? 1;
-        item.noOfOvernight = this.planFlightByOvernight.length ?? 1
       }
 
       //Số chuyến bay theo tàu và đêm nghỉ
@@ -594,10 +593,13 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
 
     // Danh sách các biến cần thay thế
     const variables = formula.match(/ctz\((.*?)\)/g);
+    const matchMonthIsPerform = formula.match(/data.monthIsPerform/g);
     let field = '';
-
-    if (variables) {
-      variables.forEach((match) => {
+    let arr: any[] = [];
+    variables?.forEach((match) => arr.push(match))
+    matchMonthIsPerform?.forEach((match) => arr.push(match))
+    if (arr) {
+      arr.forEach((match) => {
         field = match
         const dynamicFunctionDebug = new Function(
           'data', 'generalData', 'ctz',
@@ -605,7 +607,7 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         );
         // const field = match.replace(/ctz\(|\)/g, ""); // Lấy tên biến
         const value = dynamicFunctionDebug(data, this.generalData, this.ctz); // Lấy giá trị thực tế
-        replacedFormula = replacedFormula.replace(match, value.toString());
+        replacedFormula = replacedFormula.replace(match, (value + ''));
       });
     }
     // ---- end debug công thức-----

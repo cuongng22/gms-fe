@@ -9,11 +9,13 @@ export class DataSummayRequest {
     procEndDate: string;
     earlyCheckinFlag: boolean = false;
     lateCheckoutFlag: boolean = false;
+    haveContract: boolean = false;
 
 
     constructor(id: number, planBudgetProcurementId: number, yearPlan: number,
         airportCode: string, procStartDate: string, procEndDate: string,
-        earlyCheckinFlag: boolean = false, lateCheckoutFlag: boolean = false
+        earlyCheckinFlag: boolean = false, lateCheckoutFlag: boolean = false,
+        haveContract: boolean = false
     ) {
         this.id = id;
         this.planBudgetProcurementId = planBudgetProcurementId;
@@ -23,6 +25,7 @@ export class DataSummayRequest {
         this.procEndDate = procEndDate;
         this.earlyCheckinFlag = earlyCheckinFlag;
         this.lateCheckoutFlag = lateCheckoutFlag;
+        this.haveContract = haveContract;
     }
 }
 
@@ -3118,7 +3121,7 @@ export const summaryDataExample = {
     "status": 200
 };
 
-export const  summaryDataExample1 = {
+export const summaryDataExample1 = {
     "data": {
         "id": 91,
         "name": "HAN",

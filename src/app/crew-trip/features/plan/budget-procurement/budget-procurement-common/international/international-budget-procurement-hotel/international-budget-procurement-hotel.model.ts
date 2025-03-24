@@ -62,47 +62,56 @@ export const formula: any = {
   },
   //Tổng số phòng đơn
   totalSingleRoom: {
-    formula: 'ctz(data.singleRoom)/data.noOfFlightOvernight + ctz(data.singleRoomReserved)/data.noOfFlightOvernight + ctz(data.singleRoomOther)/data.noOfFlightOvernight',
+    formula: 'ctz(data.singleRoom)/ctz(data.noOfFlightOvernight) + ctz(data.singleRoomReserved)/ctz(data.noOfFlightOvernight) + ctz(data.singleRoomOther)/ctz(data.noOfFlightOvernight)',
   },
   //Tổng số phòng đôi
   totalDoubleRoom: {
-    formula: 'ctz(data.doubleRoom)/data.noOfFlightOvernight + ctz(data.doubleRoomOther)/data.noOfFlightOvernight',
+    formula: 'ctz(data.doubleRoom)/ctz(data.noOfFlightOvernight) + ctz(data.doubleRoomOther)/ctz(data.noOfFlightOvernight)',
   },
   //Thành tiền ngoại tệ, - phòng đơn 
   totalAmountForeignSingleRoom: {
-    // formula: '(ctz(data.singleRoom)/data.noOfFlightOvernight + ctz(data.singleRoomReserved)/data.noOfFlightOvernight + ctz(data.singleRoomOther)/data.noOfFlightOvernight) * ctz(data.priceSingleRoomVat) '
+    // formula: '(ctz(data.singleRoom)/ctz(data.noOfFlightOvernight) + ctz(data.singleRoomReserved)/ctz(data.noOfFlightOvernight) + ctz(data.singleRoomOther)/ctz(data.noOfFlightOvernight)) * ctz(data.priceSingleRoomVat) '
     formula: 'ctz(data.totalSingleRoom) * ctz(data.priceSingleRoom)'
   },
   //Thành tiền ngoại tệ, - phòng đơn  có Vat
   totalAmountForeignSingleRoomVat: {
-    // formula: '(ctz(data.singleRoom)/data.noOfFlightOvernight + ctz(data.singleRoomReserved)/data.noOfFlightOvernight + ctz(data.singleRoomOther)/data.noOfFlightOvernight) * ctz(data.priceSingleRoomVat) '
+    // formula: '(ctz(data.singleRoom)/ctz(data.noOfFlightOvernight) + ctz(data.singleRoomReserved)/ctz(data.noOfFlightOvernight) + ctz(data.singleRoomOther)/ctz(data.noOfFlightOvernight)) * ctz(data.priceSingleRoomVat) '
     formula: 'ctz(data.totalSingleRoom) * ctz(data.priceSingleRoomVat)'
   },
   //Thành tiền ngoại tệ,  - phòng đôi
   totalAmountForeignDoubleRoom: {
-    // formula: '(ctz(data.doubleRoom)/data.noOfFlightOvernight + ctz(data.doubleRoomOther)/data.noOfFlightOvernight) * ctz(data.priceDoubleRoomVat)'
+    // formula: '(ctz(data.doubleRoom)/ctz(data.noOfFlightOvernight) + ctz(data.doubleRoomOther)/ctz(data.noOfFlightOvernight)) * ctz(data.priceDoubleRoomVat)'
     formula: 'ctz(data.totalDoubleRoom) * ctz(data.priceDoubleRoom)'
   },
   //Thành tiền ngoại tệ,  - phòng đôi có vat
   totalAmountForeignDoubleRoomVat: {
-    // formula: '(ctz(data.doubleRoom)/data.noOfFlightOvernight + ctz(data.doubleRoomOther)/data.noOfFlightOvernight) * ctz(data.priceDoubleRoomVat)'
+    // formula: '(ctz(data.doubleRoom)/ctz(data.noOfFlightOvernight) + ctz(data.doubleRoomOther)/ctz(data.noOfFlightOvernight)) * ctz(data.priceDoubleRoomVat)'
     formula: 'ctz(data.totalDoubleRoom) * ctz(data.priceDoubleRoomVat)'
   },
   //Thành tiền ngoại tệ,  - phòng early-checkin 
+  // với case các phòng early và late thì Thu bảo sẽ chia nếu tháng đã thực hiện thì chia theo giai đoạn, chưa thực hiện chia theo đêm nghỉ
   totalAmountForeignEarly: {
-    formula: '(ctz(data.singleRoomEarly)/data.noOfOvernight + ctz(data.singleRoomEarlyReserved)/data.noOfOvernight) * ctz(data.priceSingleRoomEarly)  + (ctz(data.doubleRoomEarly)/data.noOfOvernight * ctz(data.priceDoubleRoomEarly))'
+    formula: '(ctz(data.singleRoomEarly)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight)) '
+      + ' + ctz(data.singleRoomEarlyReserved)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight))) * ctz(data.priceSingleRoomEarly)  '
+      + ' + (ctz(data.doubleRoomEarly)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight)) * ctz(data.priceDoubleRoomEarly))'
   },
   //Thành tiền ngoại tệ,  - phòng early-checkin 
   totalAmountForeignEarlyVat: {
-    formula: '(ctz(data.singleRoomEarly)/data.noOfOvernight + ctz(data.singleRoomEarlyReserved)/data.noOfOvernight) * ctz(data.priceSingleRoomEarlyVat)  + (ctz(data.doubleRoomEarly)/data.noOfOvernight * ctz(data.priceDoubleRoomEarlyVat))'
+    formula: '(ctz(data.singleRoomEarly)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight)) '
+      + ' + ctz(data.singleRoomEarlyReserved)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight))) * ctz(data.priceSingleRoomEarlyVat)  '
+      + ' + (ctz(data.doubleRoomEarly)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight)) * ctz(data.priceDoubleRoomEarlyVat))'
   },
   //Thành tiền ngoại tệ, - phòng late checkout
   totalAmountForeignLate: {
-    formula: '(ctz(data.singleRoomLate)/data.noOfOvernight + ctz(data.singleRoomLateReserved)/data.noOfOvernight) * ctz(data.priceSingleRoomLate)  + (ctz(data.doubleRoomLate)/data.noOfOvernight * ctz(data.priceDoubleRoomLate))'
+    formula: '(ctz(data.singleRoomLate)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight)) '
+      + ' + ctz(data.singleRoomLateReserved)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight))) * ctz(data.priceSingleRoomLate)  '
+      + ' + (ctz(data.doubleRoomLate)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight)) * ctz(data.priceDoubleRoomLate))'
   },
   //Thành tiền ngoại tệ, - phòng late checkout có VAT
   totalAmountForeignLateVat: {
-    formula: '(ctz(data.singleRoomLate)/data.noOfOvernight + ctz(data.singleRoomLateReserved)/data.noOfOvernight) * ctz(data.priceSingleRoomLateVat)  + (ctz(data.doubleRoomLate)/data.noOfOvernight * ctz(data.priceDoubleRoomLateVat))'
+    formula: '(ctz(data.singleRoomLate)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight)) '
+      + ' + ctz(data.singleRoomLateReserved)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight))) * ctz(data.priceSingleRoomLateVat) '
+      + ' + (ctz(data.doubleRoomLate)/(!!data.monthIsPerform ? ctz(data.noOfFlightOvernight) : ctz(data.noOfOvernight)) * ctz(data.priceDoubleRoomLateVat))'
   },
   //Tổng tiền theo loại máy bay
   totalAmountAircraft: {
@@ -110,11 +119,11 @@ export const formula: any = {
   },
   // Tổng tiền ngoại tệ - Chưa bao gồm VAT, noOfFlightOvernight cái này để chia vs trường hợp tháng đã thực hiện
   totalAmountForeign: {
-    // formula: '(ctz(data.singleRoom)/data.noOfFlightOvernight + ctz(data.singleRoomReserved)/data.noOfFlightOvernight + ctz(data.singleRoomOther)/data.noOfFlightOvernight) * ctz(data.priceSingleRoom) '
-    //   + ' +  (ctz(data.doubleRoom)/data.noOfFlightOvernight + ctz(data.doubleRoomOther)/data.noOfFlightOvernight ) * ctz(data.priceDoubleRoom) '
-    //   + ' + (ctz(data.singleRoomEarly)/data.noOfOvernight + ctz(data.singleRoomEarlyReserved)/data.noOfOvernight) * ctz(data.priceSingleRoomEarly) '
-    //   + ' + (ctz(data.doubleRoomEarly)/data.noOfOvernight * ctz(data.priceDoubleRoomEarly)) '
-    //   + ' + (ctz(data.singleRoomLate)/data.noOfOvernight + ctz(data.singleRoomLateReserved)/data.noOfOvernight) * ctz(data.priceSingleRoomLate)  + (ctz(data.doubleRoomLate)/data.noOfOvernight * ctz(data.priceDoubleRoomLate))'
+    // formula: '(ctz(data.singleRoom)/ctz(data.noOfFlightOvernight) + ctz(data.singleRoomReserved)/ctz(data.noOfFlightOvernight) + ctz(data.singleRoomOther)/ctz(data.noOfFlightOvernight)) * ctz(data.priceSingleRoom) '
+    //   + ' +  (ctz(data.doubleRoom)/ctz(data.noOfFlightOvernight) + ctz(data.doubleRoomOther)/ctz(data.noOfFlightOvernight) ) * ctz(data.priceDoubleRoom) '
+    //   + ' + (ctz(data.singleRoomEarly)/ctz(data.noOfOvernight) + ctz(data.singleRoomEarlyReserved)/ctz(data.noOfOvernight)) * ctz(data.priceSingleRoomEarly) '
+    //   + ' + (ctz(data.doubleRoomEarly)/ctz(data.noOfOvernight) * ctz(data.priceDoubleRoomEarly)) '
+    //   + ' + (ctz(data.singleRoomLate)/ctz(data.noOfOvernight) + ctz(data.singleRoomLateReserved)/ctz(data.noOfOvernight)) * ctz(data.priceSingleRoomLate)  + (ctz(data.doubleRoomLate)/ctz(data.noOfOvernight) * ctz(data.priceDoubleRoomLate))'
     //   + ' + (generalData.crewTransportFeeFlag ? (ctz(data.numberOfFlights) * 2 * ctz(data.priceCrewTransport)) : 0)'
     formula: '(ctz(data.totalSingleRoom) * ctz(data.priceSingleRoom))'
       + ' + (ctz(data.totalDoubleRoom) * ctz(data.priceDoubleRoom))'
@@ -137,9 +146,9 @@ export const formula: any = {
   totalAmountForeignVat: {
     formula: 'ctz(data.totalAmountForeignSingleRoomVat) '
       + '+ ctz(data.totalAmountForeignDoubleRoomVat)'
-      + '+ ctz(data.totalAmountForeignEarly)'
-      + '+ ctz(data.totalAmountForeignLate)'
-      + '+ ctz(data.totalAmountForeignTransport)',
+      + '+ ctz(data.totalAmountForeignEarlyVat)'
+      + '+ ctz(data.totalAmountForeignLateVat)'
+      + '+ ctz(data.totalAmountForeignTransVat)',
     groupFormula: 'period',
   },
   //Tổng tiền VND - bao gồm VAT
