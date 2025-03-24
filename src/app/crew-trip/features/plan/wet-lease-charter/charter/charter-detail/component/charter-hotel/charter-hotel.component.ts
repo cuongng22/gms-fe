@@ -28,177 +28,176 @@ import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.c
 import { getHeaderRowDef1, getRowDef } from './charter-hotel.model';
 
 @Component({
-	selector: 'app-charter-hotel',
-	standalone: true,
-	imports: [
-		MatCardModule,
-		FormsModule,
-		ReactiveFormsModule,
-		MatSelectModule,
-		MatButtonModule,
-		MatFormFieldModule,
-		MatFormField,
-		MatInputModule,
-		InputSizeComponent,
-		MatCheckboxModule,
-		CommonModule,
-		MatTableModule,
-		DataTransformPipe,
-		RouterLink,
-		RouterModule,
-		MatMenuModule,
-		MatAutocompleteModule,
-		NgxControlError,
-		DatepickerYearMonthComponent,
-		DigitOnlyModule,
-		SeparatorDirective,
-		SelectionSuggestComponent,
-		DatepickerComponent,
-		MatDatepickerModule,
-		NgxControlError,
-		ClickOutside,
-	],
-	templateUrl: './charter-hotel.component.html',
-	styleUrl: './charter-hotel.component.scss',
+  selector: 'app-charter-hotel',
+  standalone: true,
+  imports: [
+    MatCardModule,
+    FormsModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatFormFieldModule,
+    MatFormField,
+    MatInputModule,
+    InputSizeComponent,
+    MatCheckboxModule,
+    CommonModule,
+    MatTableModule,
+    DataTransformPipe,
+    RouterLink,
+    RouterModule,
+    MatMenuModule,
+    MatAutocompleteModule,
+    NgxControlError,
+    DatepickerYearMonthComponent,
+    DigitOnlyModule,
+    SeparatorDirective,
+    SelectionSuggestComponent,
+    DatepickerComponent,
+    MatDatepickerModule,
+    NgxControlError,
+    ClickOutside,
+  ],
+  templateUrl: './charter-hotel.component.html',
+  styleUrl: './charter-hotel.component.scss',
 })
 export class CharterHotelComponent
-	extends CommonComponent
-	implements OnDestroy
-{
-	override baseService: CharterService = inject(CharterService);
-	disabled = input<boolean>(false);
-	category = input.required<CategoryEnum>(); // quốc tế hoặc quốc nội
-	dataGeneral = input<any>();
-	CategoryEnum = CategoryEnum;
-	headerRowDef1: string[] = [];
-	headerRowDef2 = ['totalExcVAT', 'totalIncVAT'];
-	rowDef: string[] = [];
-	totalRowDef = ['total', 'totalForex', 'totalExcVAT', 'totalIncVAT'];
-	data = input<any[]>();
+  extends CommonComponent
+  implements OnDestroy {
+  override baseService: CharterService = inject(CharterService);
+  disabled = input<boolean>(false);
+  category = input.required<CategoryEnum>(); // quốc tế hoặc quốc nội
+  dataGeneral = input<any>();
+  CategoryEnum = CategoryEnum;
+  headerRowDef1: string[] = [];
+  headerRowDef2 = ['totalExcVAT', 'totalIncVAT'];
+  rowDef: string[] = [];
+  totalRowDef = ['total', 'totalForex', 'totalExcVAT', 'totalIncVAT'];
+  data = input<any[]>();
 
-	Math = Math;
-	hotelSubscription: Subscription;
-	exchangeRateSubscription: Subscription;
-	rateVatSubscription: Subscription;
+  Math = Math;
+  hotelSubscription: Subscription;
+  exchangeRateSubscription: Subscription;
+  rateVatSubscription: Subscription;
 
-	constructor() {
-		super();
-		effect(() => {
-			if (this.data()) {
-				this.setDataSource(this.data() ?? {});
-			}
-		});
+  constructor() {
+    super();
+    effect(() => {
+      if (this.data()) {
+        this.setDataSource(this.data() ?? {});
+      }
+    });
 
-		effect(() => {
-			if (this.dataGeneral()) {
-				this.headerRowDef1 = getHeaderRowDef1(this.dataGeneral());
-				this.rowDef = getRowDef(this.dataGeneral());
-			}
-		});
-	}
-	ngOnDestroy(): void {
-		this.hotelSubscription.unsubscribe();
-		this.exchangeRateSubscription.unsubscribe();
-		this.rateVatSubscription.unsubscribe();
-	}
-	override ngOnInit(): void {
-		// this.dataSource.data = Object.entries(planHotels);
+    effect(() => {
+      if (this.dataGeneral()) {
+        this.headerRowDef1 = getHeaderRowDef1(this.dataGeneral());
+        this.rowDef = getRowDef(this.dataGeneral());
+      }
+    });
+  }
+  ngOnDestroy(): void {
+    this.hotelSubscription.unsubscribe();
+    this.exchangeRateSubscription.unsubscribe();
+    this.rateVatSubscription.unsubscribe();
+  }
+  override ngOnInit(): void {
+    // this.dataSource.data = Object.entries(planHotels);
 
-		this.hotelSubscription = this.baseService.hotel$.subscribe((data) => {
-			if (data) {
-				this.dataSource.data.forEach((element) => {
-					element[1].numberOfNight = Number(data.numberOfNight);
-					element[1].priceRoom = Number(data.priceSingleRoom);
-					element[1].priceRoomECI = Number(data.priceSingleRoomECI);
-					element[1].priceRoomLCO = Number(data.priceSingleRoomLCO);
-					this.calTotalCountForeign(element[1]);
-					this.calTotalAmount(element[1]);
-				});
-			}
-		});
+    this.hotelSubscription = this.baseService.hotel$.subscribe((data) => {
+      if (data) {
+        this.dataSource.data.forEach((element) => {
+          element[1].numberOfNight = Number(data.numberOfNight);
+          element[1].priceRoom = Number(data.priceSingleRoom);
+          element[1].priceRoomECI = Number(data.priceSingleRoomECI);
+          element[1].priceRoomLCO = Number(data.priceSingleRoomLCO);
+          this.calTotalCountForeign(element[1]);
+          this.calTotalAmount(element[1]);
+        });
+      }
+    });
 
-		this.exchangeRateSubscription = this.baseService.exchangeRate$.subscribe(
-			(data) => {
-				if (data) {
-					const _exchangeRate = Number(data);
-					this.dataSource.data.forEach((element) => {
-						element[1].exchangeRate = _exchangeRate;
-						this.calTotalAmount(element[1]);
-					});
-				}
-			},
-		);
+    this.exchangeRateSubscription = this.baseService.exchangeRate$.subscribe(
+      (data) => {
+        if (data) {
+          const _exchangeRate = Number(data);
+          this.dataSource.data.forEach((element) => {
+            element[1].exchangeRate = _exchangeRate;
+            this.calTotalAmount(element[1]);
+          });
+        }
+      },
+    );
 
-		this.rateVatSubscription = this.baseService.rateVat$.subscribe((data) => {
-			if (data) {
-				const _rateVat = Number(data);
-				this.dataSource.data.forEach((element) => {
-					element[1].rateVat = _rateVat;
-					this.calTotalAmount(element[1]);
-				});
-			}
-		});
-	}
+    this.rateVatSubscription = this.baseService.rateVat$.subscribe((data) => {
+      if (data) {
+        const _rateVat = Number(data);
+        this.dataSource.data.forEach((element) => {
+          element[1].rateVat = _rateVat;
+          this.calTotalAmount(element[1]);
+        });
+      }
+    });
+  }
 
-	setDataSource(value: any) {
-		this.dataSource.data = Object.entries(value);
-		this.dataSource.data.forEach((element) => {
-			this.calTotalCountForeign(element[1]);
-			this.calTotalAmount(element[1]);
-		});
-	}
+  setDataSource(value: any) {
+    this.dataSource.data = Object.entries(value);
+    this.dataSource.data.forEach((element) => {
+      this.calTotalCountForeign(element[1]);
+      this.calTotalAmount(element[1]);
+    });
+  }
 
-	getTotal(formula: string) {
-		return Math.round(
-			this.dataSource.data
-				.map((item: any) => {
-					return Number(this.calWithFormula(formula, item));
-				})
-				.reduce((acc, value) => acc + value, 0),
-		);
-	}
+  getTotal(formula: string) {
+    return Math.round(
+      this.dataSource.data
+        .map((item: any) => {
+          return Number(this.calWithFormula(formula, item));
+        })
+        .reduce((acc, value) => acc + value, 0),
+    );
+  }
 
-	calWithFormula(formula: string, item: any, dataGeneral?: any) {
-		const formulaFunction = new Function(
-			'item',
-			'dataGeneral',
-			`return ${formula};`,
-		);
-		return this.Math.round(formulaFunction(item, dataGeneral));
-	}
+  calWithFormula(formula: string, item: any, dataGeneral?: any) {
+    const formulaFunction = new Function(
+      'item',
+      'dataGeneral',
+      `return ${formula};`,
+    );
+    return this.Math.round(formulaFunction(item, dataGeneral));
+  }
 
-	// tính tiền ngoại tệ
-	calTotalCountForeign(element: any) {
-		const _totalForex =
-			Number(element.priceRoom ?? 0) *
-				Number(element.totalNormalRoom ?? 0) *
-				Number(element.numberOfNight ?? 0) +
-			Number(element.priceRoomECI ?? 0) * Number(element.totalECIRoom ?? 0) +
-			Number(element.priceRoomLCO ?? 0) * Number(element.totalLCORoom ?? 0);
-		if (this.category() === CategoryEnum.INTERNATIONAL) {
-			element.totalForex = Math.round(_totalForex);
-		} else {
-			element.totalForex = 0;
-		}
-		return _totalForex;
-	}
+  // tính tiền ngoại tệ
+  calTotalCountForeign(element: any) {
+    const _totalForex =
+      Number(element.priceRoom ?? 0) *
+      Number(element.totalNormalRoom ?? 0) *
+      Number(element.numberOfNight ?? 0) +
+      Number(element.priceRoomECI ?? 0) * Number(element.totalECIRoom ?? 0) +
+      Number(element.priceRoomLCO ?? 0) * Number(element.totalLCORoom ?? 0);
+    if (this.category() === CategoryEnum.INTERNATIONAL) {
+      element.totalForex = Math.round(_totalForex);
+    } else {
+      element.totalForex = 0;
+    }
+    return _totalForex;
+  }
 
-	// tính thành tiền chưa vat và có vat
-	calTotalAmount(element: any) {
-		const tmp =
-			this.calTotalCountForeign(element) * (element.exchangeRate ?? 1);
-		element.totalIncVAT = this.Math.round(tmp);
-		element.totalExcVAT = this.Math.round(
-			tmp / (1 + (this.dataGeneral().rateVat ?? 0) / 100),
-		);
-	}
+  // tính thành tiền chưa vat và có vat
+  calTotalAmount(element: any) {
+    const tmp =
+      this.calTotalCountForeign(element) * (element.exchangeRate ?? 1);
+    element.totalIncVAT = this.Math.round(tmp);
+    element.totalExcVAT = this.Math.round(
+      tmp / (1 + (element.rateVat ?? 0) / 100),
+    );
+  }
 
-	clickEdit(data: any, control: string) {
-		data[control] = true;
-	}
-	clickOutside(data: any, control: string) {
-		data[control] = false;
-		this.calTotalCountForeign(data);
-		this.calTotalAmount(data);
-	}
+  clickEdit(data: any, control: string) {
+    data[control] = true;
+  }
+  clickOutside(data: any, control: string) {
+    data[control] = false;
+    this.calTotalCountForeign(data);
+    this.calTotalAmount(data);
+  }
 }
