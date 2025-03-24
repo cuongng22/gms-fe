@@ -378,10 +378,10 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   calRow(row: any) {
     let rate = this.formGroupDetail.getRawValue().exchangeRate ?? 0;
     row.patchValue({
-      amountFcBeforeVat: (row.getRawValue().quantity * row.getRawValue().unitPrice)?.toFixed(2),
-      amountVndBeforeVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100)?.toFixed(2),
-      amountFcVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat)?.toFixed(2),
-      amountVndVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100 * row.getRawValue().vat)?.toFixed(2), // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
+      amountFcBeforeVat: (row.getRawValue().quantity * row.getRawValue().unitPrice)?.toFixed(4),
+      amountVndBeforeVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100)?.toFixed(4),
+      amountFcVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat)?.toFixed(4),
+      amountVndVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100 * row.getRawValue().vat)?.toFixed(4), // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
     });
   }
 
@@ -478,6 +478,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       let removeNull = this.formGroupDetail.getRawValue().invoiceDocumentDtl?.filter((s: any) => s.serviceCode);
       this.formGroupDetail.patchValue({invoiceDocumentDtl: removeNull});
       this.formGroupDetail.markAllAsTouched();
+      this.formGroupDetail.updateValueAndValidity();
       if (this.formGroupDetail.invalid) {
         this.findInvalidControls(this.formGroupDetail);
         return;

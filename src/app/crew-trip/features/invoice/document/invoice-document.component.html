@@ -24,7 +24,7 @@
               <mat-select formControlName="status">
                 <mat-option [value]="null" i18n>-- All Status --</mat-option>
                 @for (item of listInvoiceDocumentStatus; track item) {
-                <mat-option [value]="item.key">{{ item.value }}</mat-option>
+                  <mat-option [value]="item.key">{{ item.value }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -35,7 +35,7 @@
               <mat-select formControlName="statusEmail">
                 <mat-option [value]="null" i18n>-- All Status --</mat-option>
                 @for (item of listInvoiceDocumentStatusEmail; track item) {
-                <mat-option [value]="item.key">{{ item.value }}</mat-option>
+                  <mat-option [value]="item.key">{{ item.value }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -51,10 +51,10 @@
               <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
               @if (!!formGroupSearch.controls['periodFrom'].hasError('matStartDateInvalid')) {
-              <mat-error>Invalid start date</mat-error>
+                <mat-error>Invalid start date</mat-error>
               }
               @if (!!formGroupSearch.controls['periodTo'].hasError('matEndDateInvalid')) {
-              <mat-error>Invalid end date</mat-error>
+                <mat-error>Invalid end date</mat-error>
               }
             </mat-form-field>
           </div>
@@ -111,18 +111,19 @@
             </th>
             <td *matCellDef="let element" mat-cell>
               @if (!!element.invoiceNumber) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Invoice Number</span>: {{
-              element.invoiceNumber }} </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Invoice Number</span>: {{
+                        element.invoiceNumber
+                  }} </p>
               }
               @if (!!element.invoiceDate) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Invoice Date</span>: {{
-              element.invoiceDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]
-              }} </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Invoice Date</span>: {{
+                        element.invoiceDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]
+                  }} </p>
               }
               @if (!!element.invoiceReceiveDate) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Receiver Date</span>: {{
-              element.invoiceReceiveDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]
-              }} </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Receiver Date</span>: {{
+                        element.invoiceReceiveDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT]
+                  }} </p>
               }
             </td>
           </ng-container>
@@ -131,8 +132,8 @@
             </th>
             <td *matCellDef="let element" mat-cell>
               @if (!!element.periodFrom && !!element.periodTo) {
-              {{ element.periodFrom | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
-              - {{ element.periodTo | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
+                {{ element.periodFrom | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
+                - {{ element.periodTo | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
               }
             </td>
           </ng-container>
@@ -141,18 +142,18 @@
             </th>
             <td *matCellDef="let element" mat-cell>
               @if (!!element.bizDocId) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>BizDocId</span>: {{ element.bizDocId }}
-              </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>BizDocId</span>: {{ element.bizDocId }}
+                </p>
               }
               @if (!!element.partnerName) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Partner Name</span>: {{
-              element.partnerName
-              }} </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Partner Name</span>: {{
+                        element.partnerName
+                  }} </p>
               }
               @if (!!element.partnerType) {
-              <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Partner Type</span>: {{
-              element.partnerType
-              }} </p>
+                <p class="mt-0 mb-0"><span class="text-secondary-bootstrap" i18n>Partner Type</span>: {{
+                        element.partnerType
+                  }} </p>
               }
             </td>
           </ng-container>
@@ -175,14 +176,14 @@
             </th>
           </ng-container>
           @for (innerColumn of _displayedColumnsAll; track innerColumn.value) {
-          <ng-container matColumnDef="{{innerColumn.value}}">
+            <ng-container matColumnDef="{{innerColumn.value}}">
               <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center"
                   [rowSpan]="(formType===1 || formType===2)?innerColumn.rowspan:1"
                   [colSpan]=innerColumn.colspan>
-          {{ innerColumn.label }}
-          </th>
-          <td
-              [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
+                {{ innerColumn.label }}
+              </th>
+              <td
+                  [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
                   mat-cell *matCellDef="let element">
             <span [ngClass]="{
           'badge': ['status', 'statusEmail', 'statusPayment'].includes(innerColumn.value),
@@ -208,39 +209,39 @@
             </th>
             <td *matCellDef="let element;let i = index" mat-cell>
               <div class="action-buttons d-grid-columns-3 align-items-center justify-content-end">
-                @if(element.idInvoiceForm){
-                <a class="text-secondary"
-                   mat-button type="button">
-                  <i (click)="showFormHdr(element.idInvoiceForm||-1)" class="material-symbols-outlined" i18n-title
-                     title="Detailed Statement">
-                    contract
-                  </i>
-                </a>
+                @if (element.idInvoiceForm) {
+                  <a class="text-secondary"
+                     mat-button type="button">
+                    <i (click)="showFormHdr(element.idInvoiceForm||-1)" class="material-symbols-outlined" i18n-title
+                       title="Detailed Statement">
+                      contract
+                    </i>
+                  </a>
                 }
-                @if(element.listChild.length>0){
-                <a class="text-secondary" mat-button
-                 type="button">
-                <i class="material-symbols-outlined" i18n-title
-                   [matMenuTriggerFor]="listChild"
-                   title="Detail">
-                  visibility
-                </i>
-              </a>
-              <mat-menu  #listChild="matMenu" xPosition="before">
-                     <mat-list role="list">
-                    <mat-list-item role="listitem" (click)="nextStep(element.id,true,2,element)" >View Current Invoice</mat-list-item>
-                    <mat-list-item role="listitem" (click)="nextStep(element.listChild[0].id,true,2,element.listChild[0])">View Previous Invoice</mat-list-item>
-                </mat-list>
-              </mat-menu>
-                }
-                @else{
-                <a class="text-secondary" mat-button
-                type="button">
-               <i (click)="nextStep(element.id,true,2,element)" class="material-symbols-outlined" i18n-title
-                  title="Detail">
-                 visibility
-               </i>
-             </a>
+                @if (element.listChild.length > 0) {
+                  <a class="text-secondary" mat-button
+                     type="button">
+                    <i class="material-symbols-outlined" i18n-title
+                       [matMenuTriggerFor]="listChild"
+                       title="Detail">
+                      visibility
+                    </i>
+                  </a>
+                  <mat-menu #listChild="matMenu" xPosition="before">
+                    <mat-list role="list">
+                      <mat-list-item role="listitem" (click)="nextStep(element.id,true,2,element)">View Current Invoice</mat-list-item>
+                      <mat-list-item role="listitem" (click)="nextStep(element.listChild[0].id,true,2,element.listChild[0])">View Previous Invoice
+                      </mat-list-item>
+                    </mat-list>
+                  </mat-menu>
+                } @else {
+                  <a class="text-secondary" mat-button
+                     type="button">
+                    <i (click)="nextStep(element.id,true,2,element)" class="material-symbols-outlined" i18n-title
+                       title="Detail">
+                      visibility
+                    </i>
+                  </a>
                 }
 
 
@@ -250,13 +251,13 @@
                     file_copy
                   </i>
                 </a>
-                @if(element.status === 'FINISHED' && element.statusEmail === 'UNSEND'){
-                <a class="text-secondary" mat-button
-                   type="button">
-                  <i (click)="showDialogSendEmail(element)" class="material-symbols-outlined" i18n-title title="Email">
-                    email
-                  </i>
-                </a>
+                @if (element.status === 'FINISHED' && element.statusEmail === 'UNSEND') {
+                  <a class="text-secondary" mat-button
+                     type="button">
+                    <i (click)="showDialogSendEmail(element)" class="material-symbols-outlined" i18n-title title="Email">
+                      email
+                    </i>
+                  </a>
                 }
                 <a class="text-warning" mat-button
                    type="button">
@@ -265,35 +266,35 @@
                     edit
                   </i>
                 </a>
-                @if(element.status === 'UNMATCHED'){
-                <a class="text-success" mat-button
-                   type="button">
-                  <i (click)="nextStep(element.id,false,3,element)" class="material-symbols-outlined" i18n-title
-                     title="Verify">
-                    task_alt
-                  </i>
-                </a>
+                @if (element.status === 'UNMATCHED') {
+                  <a class="text-success" mat-button
+                     type="button">
+                    <i (click)="nextStep(element.id,false,3,element)" class="material-symbols-outlined" i18n-title
+                       title="Verify">
+                      task_alt
+                    </i>
+                  </a>
                 }
-                @if(element.status === 'UNMATCHED' && element.source === 'MANUAL'){
-                <a class="text-danger" mat-button
-                   type="button">
-                  <i (click)="showConfirmDelete(element.id)" class="material-symbols-outlined" i18n-title
-                     title="Delete">
-                    delete
-                  </i>
-                </a>
+                @if (element.status === 'UNMATCHED' && element.source === 'MANUAL') {
+                  <a class="text-danger" mat-button
+                     type="button">
+                    <i (click)="showConfirmDelete(element.id)" class="material-symbols-outlined" i18n-title
+                       title="Delete">
+                      delete
+                    </i>
+                  </a>
                 }
               </div>
             </td>
           </ng-container>
           <tr *matHeaderRowDef="_displayedColumnsHeader1" mat-header-row></tr>
           <tr *matHeaderRowDef="_displayedColumnsHeader2" mat-header-row></tr>
-          <tr (click)="showDocumentDtl(row)" *matRowDef="let row; columns: _displayedColumnsRow;" class="input-row clickable-row"
-              [class.selected-row]="isSelected(row)"
+          <tr (click)="showDocumentDtl(row)" *matRowDef="let row; columns: _displayedColumnsRow;" [class.selected-row]="isSelected(row)"
+              class="input-row clickable-row"
               mat-row></tr>
           <tr *matNoDataRow class="mat-row">
             <td [attr.colspan]="_displayedColumnsRow.length" class="mat-cell border-none text-start"><span
-              i18n>No data!</span></td>
+                i18n>No data!</span></td>
           </tr>
         </table>
       </div>
@@ -303,130 +304,131 @@
                      [showFirstLastButtons]="showFirstLastButtons"
                      aria-label="Select page">
       </mat-paginator>
-      @if(dataSource.data.length >0){
-      <div class="table-responsive mt-25">
-  <span class="fw-bold">Detailed payment information</span>
-  <table [dataSource]="tblDetail" class="table-light table-responsive"
-         mat-table>
-    <ng-container matColumnDef="stt">
-      <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
-      <td *matCellDef="let element; let i = index" class="text-center"
-          mat-cell>{{ i + 1 }}
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="serviceCode">
-      <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Code
-      </th>
-      <td *matCellDef="let element" mat-cell>
+      @if (dataSource.data.length > 0) {
+        <div class="table-responsive mt-25">
+          <span class="fw-bold">Detailed payment information</span>
+          <table [dataSource]="tblDetail" class="table-light table-responsive"
+                 mat-table>
+            <ng-container matColumnDef="stt">
+              <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
+              <td *matCellDef="let element; let i = index" class="text-center"
+                  mat-cell>{{ i + 1 }}
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="serviceCode">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Code
+              </th>
+              <td *matCellDef="let element" mat-cell>
            <span class="label-text">
       {{ element.serviceCode }}
       </span>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="serviceName">
-      <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Name</th>
-      <td *matCellDef="let element" mat-cell>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="serviceName">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Service Name</th>
+              <td *matCellDef="let element" mat-cell>
            <span class="label-text">
       {{ element.serviceName }}
       </span>
-      </td>
-    </ng-container>
-    <ng-container matColumnDef="unit">
-      <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit</th>
-      <td *matCellDef="let element" mat-cell>
-        <span class="label-text">{{ element.unit }}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="periodOccurrence">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Period
-              Occurrence
-            </th>
-            <td *matCellDef="let element" mat-cell>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="unit">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit</th>
+              <td *matCellDef="let element" mat-cell>
+                <span class="label-text">{{ element.unit }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="periodOccurrence">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Period
+                Occurrence
+              </th>
+              <td *matCellDef="let element" mat-cell>
               <span
-                class="label-text">{{ element.periodOccurrence | dataTransformPipe:[Constant.DATE, Constant.MONTH_FORMAT] }}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="nsCode">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">NS Code</th>
-            <td *matCellDef="let element" mat-cell>
-              <span class="label-text">{{ element.nsCode }}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="quantity">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Quantity
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              <span class="label-text">{{ element.quantity | dataTransformPipe:[Constant.NUMBER] }}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="unitPrice">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit Price
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              <span class="label-text">{{ element.unitPrice | dataTransformPipe:[Constant.NUMBER] }}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="amountFcBeforeVat">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
-              Amount Fc Before Vat
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              <span class="label-text">{{ element.amountFcBeforeVat | dataTransformPipe:[Constant.NUMBER] }}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="amountVndBeforeVat">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
-              Amount Vnd Before Vat
-            </th>
-            <td *matCellDef="let element" mat-cell>
-              <span class="label-text">{{ element.amountVndBeforeVat | dataTransformPipe:[Constant.NUMBER] }}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="amountFcVat">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Fc</th>
-            <td *matCellDef="let element" mat-cell>
-              <span class="label-text">{{ element.amountFcVat | dataTransformPipe:[Constant.NUMBER] }}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="amountVndVat">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Vnd</th>
-            <td *matCellDef="let element" mat-cell>
-              <span class="label-text">{{ element.amountVndVat | dataTransformPipe:[Constant.NUMBER] }}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="vatType">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Vat Type</th>
-            <td *matCellDef="let element" mat-cell>
-              <span class="label-text">{{ element.vatType }}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="vat">
-            <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">%VAT</th>
-            <td *matCellDef="let element" mat-cell>
-              <span class="label-text">{{ element.vat | dataTransformPipe:[Constant.NUMBER] }}</span>
-            </td>
-          </ng-container>
-          <ng-container matColumnDef="vatHeader">
-            <th *matHeaderCellDef class="text-center" colspan="4" i18n mat-header-cell mat-sort-header>VAT
-          </ng-container>
-          <tr
-            *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader']"
-            mat-header-row></tr>
-          <tr *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
-          <tr
-            *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat',];"
-            class="input-row" mat-row></tr>
-          <tr *matNoDataRow class="mat-row">
-            <td [attr.colspan]="1" class="mat-cell border-none text-start"><span
-              i18n>No data!</span></td>
-          </tr>
-        </table>
-      </div>
+                  class="label-text">{{ element.periodOccurrence | dataTransformPipe:[Constant.DATE, Constant.MONTH_FORMAT] }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="nsCode">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">NS Code</th>
+              <td *matCellDef="let element" mat-cell>
+                <span class="label-text">{{ element.nsCode }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="quantity">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Quantity
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                <span class="label-text">{{ element.quantity | dataTransformPipe:[Constant.NUMBER] }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="unitPrice">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit Price
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                <span class="label-text">{{ element.unitPrice | dataTransformPipe:[Constant.NUMBER] }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="amountFcBeforeVat">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
+                Amount Fc Before Vat
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                <span class="label-text">{{ element.amountFcBeforeVat | dataTransformPipe:[Constant.NUMBER, 4] }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="amountVndBeforeVat">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
+                Amount Vnd Before Vat
+              </th>
+              <td *matCellDef="let element" mat-cell>
+                <span class="label-text">{{ element.amountVndBeforeVat | dataTransformPipe:[Constant.NUMBER, 4] }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="amountFcVat">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Fc</th>
+              <td *matCellDef="let element" mat-cell>
+                <span class="label-text">{{ element.amountFcVat | dataTransformPipe:[Constant.NUMBER, 4] }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="amountVndVat">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Vnd</th>
+              <td *matCellDef="let element" mat-cell>
+                <span class="label-text">{{ element.amountVndVat | dataTransformPipe:[Constant.NUMBER, 4] }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="vatType">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Vat Type</th>
+              <td *matCellDef="let element" mat-cell>
+                <span class="label-text">{{ element.vatType }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="vat">
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">%VAT</th>
+              <td *matCellDef="let element" mat-cell>
+                <span class="label-text">{{ element.vat | dataTransformPipe:[Constant.NUMBER] }}</span>
+              </td>
+            </ng-container>
+            <ng-container matColumnDef="vatHeader">
+              <th *matHeaderCellDef class="text-center" colspan="4" i18n mat-header-cell mat-sort-header>VAT
+            </ng-container>
+            <tr
+                *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader']"
+                mat-header-row></tr>
+            <tr *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
+            <tr
+                *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat',];"
+                class="input-row" mat-row></tr>
+            <tr *matNoDataRow class="mat-row">
+              <td [attr.colspan]="1" class="mat-cell border-none text-start"><span
+                  i18n>No data!</span></td>
+            </tr>
+          </table>
+        </div>
       }
 
     </mat-card-content>
   </mat-card>
 </ng-container>
+
 <div [class.active]="isShowFormHdr" class="add-new-popup">
   <div class="popup-dialog popup-dialog-info" style="margin-top: 80px">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
@@ -438,7 +440,7 @@
         </mat-card-title>
         <mat-card-content>
           <div class="btn-box text-right mb-20">
-            <button (click)="isShowFormHdr=false;" class="close-btn  min-with-100 mlr-5" mat-button
+            <button (click)="closeInvoiceForm()" class="close-btn  min-with-100 mlr-5" mat-button
                     type="button">
               <i class="material-symbols-outlined">
                 close
@@ -456,8 +458,8 @@
 </div>
 <!-- Send email Popup -->
 <div
-  [class.active]="showDialogCreate"
-  class="add-new-popup"
+    [class.active]="showDialogCreate"
+    class="add-new-popup"
 >
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
@@ -469,8 +471,8 @@
         </mat-card-title>
         <mat-card-subtitle>
           <button
-            (click)="closeDetail()"
-            mat-button
+              (click)="closeDetail()"
+              mat-button
           >
             <i class="ri-close-fill"></i>
           </button>
@@ -486,7 +488,7 @@
                   <input formControlName="emailTo" matInput required
                          trim="blur" type="text">
                   @if (!!formGroupDetail.controls['emailTo'].hasError('required')) {
-                  <mat-error><span i18n>Email To</span><span i18n> not empty</span></mat-error>
+                    <mat-error><span i18n>Email To</span><span i18n> not empty</span></mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -506,7 +508,7 @@
                   <input formControlName="emailSubject" matInput required
                          trim="blur" type="text">
                   @if (!!formGroupDetail.controls['emailSubject'].hasError('required')) {
-                  <mat-error><span i18n>Email Subject</span><span i18n> not empty</span></mat-error>
+                    <mat-error><span i18n>Email Subject</span><span i18n> not empty</span></mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -516,7 +518,7 @@
                 <mat-label i18n>Content</mat-label>
                 <textarea formControlName="emailContent" i18n-placeholder matInput></textarea>
                 @if (!!formGroupDetail.controls['emailContent'].hasError('required')) {
-                <mat-error><span i18n>Email Content</span><span i18n> not empty</span></mat-error>
+                  <mat-error><span i18n>Email Content</span><span i18n> not empty</span></mat-error>
                 }
               </mat-form-field>
             </mat-grid-tile>
@@ -543,7 +545,7 @@
   </div>
 </div>
 <app-confirm-delete-dialog
-  (closeDialog)="closeConfirmDelete()"
-  (confirmDelete)="delete()"
-  [showDialogDelete]="showDialogDelete">
+    (closeDialog)="closeConfirmDelete()"
+    (confirmDelete)="delete()"
+    [showDialogDelete]="showDialogDelete">
 </app-confirm-delete-dialog>

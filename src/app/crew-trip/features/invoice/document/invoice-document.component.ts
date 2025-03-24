@@ -346,4 +346,12 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   isSelected(row: any): boolean {
     return this.selectedRow === row.id;
   }
+
+  closeInvoiceForm() {
+    this.isShowFormHdr = false;
+    setTimeout(() => {
+      this.formHdrId = null;
+    }, 300);
+  }
+
 }
