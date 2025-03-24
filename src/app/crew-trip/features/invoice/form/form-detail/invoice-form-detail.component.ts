@@ -205,6 +205,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   override async ngOnInit() {
     try {
       await this.spinner.show();
+      console.log(this.id,'12938210932')
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         this.setReadMode(this.formGroupDetail)]).then(() => {
         if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {

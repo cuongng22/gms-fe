@@ -2,7 +2,7 @@
   <div class="d-md-flex align-items-center">
     <h5 class="mb-0 d-inline ml-10">
       <h5 class="mb-0 ml-10">
-        <span i18n>Detailed Statement</span>
+        <span i18n>Reconsile invoice</span>
       </h5>
     </h5>
 
@@ -12,7 +12,10 @@
       Invoice
     </li>
     <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      Review
+      List of invoice
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n>
+      Reconsile invoice
     </li>
   </ol>
 </div>
@@ -23,12 +26,14 @@
     </i>
     Back
   </button>
-  <button (click)="toggleDialogUnMatched()" *ngIf="!readMode && formGroupDetail.getRawValue().status === InvoiceDocumentStatusEnum.UNMATCHED"
+  <button (click)="toggleDialogUnMatched()" *ngIf="!readMode &&
+          ([InvoiceDocumentStatusEnum.UNMATCHED,
+          InvoiceDocumentStatusEnum.UNVERIFIED]).includes(formGroupDetail.getRawValue().status)"
           class="step-2-menu-button btn-slot-4" extended i18n mat-fab>
     <i class="material-symbols-outlined">
       edit
     </i>
-    Lưu và cập nhật chứng từ
+    Save and Update
   </button>
   <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
     <i class="material-symbols-outlined">
@@ -36,7 +41,11 @@
     </i>
     Save
   </button>
-  <button (click)="toggleDialogFinish()" *ngIf="!readMode && formGroupDetail.getRawValue().status === InvoiceDocumentStatusEnum.MATCHED" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+  <button (click)="toggleDialogFinish()"
+          *ngIf="!readMode &&
+          ([InvoiceDocumentStatusEnum.MATCHED,
+          InvoiceDocumentStatusEnum.VERIFIED]).includes(formGroupDetail.getRawValue().status)"
+          class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
     <i class="material-symbols-outlined">
       save
     </i>
@@ -172,6 +181,9 @@
             <textarea cdkAutosizeMaxRows="5" cdkAutosizeMinRows="2" cdkTextareaAutosize formControlName="note"
                       i18n-placeholder
                       matInput trim="blur"></textarea>
+            <mat-error>
+              <app-control-error controlName="note"></app-control-error>
+            </mat-error>
           </mat-form-field>
         </div>
         <!--        dong4-->
@@ -207,7 +219,7 @@
       <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
         <mat-card-content>
           <mat-tab-group mat-align-tabs="start" mat-stretch-tabs="false">
-            <mat-tab i18n-label label="Đối soát chung">
+            <mat-tab i18n-label label="General reconciliation">
               <div class="w-100 text-end">
                 <button (click)="download()" class="add-btn right-0 mb-10" i18n mat-button
                         type="button">
@@ -222,9 +234,7 @@
                        class="table-light table-responsive"
                        mat-table>
                   <ng-container matColumnDef="label">
-                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Thông tin
-                      đối soát
-                    </th>
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Reconciliation information</th>
                     <td *matCellDef="let element" mat-cell>
                       @if (element.ord?.length == 1) {
                         <span class="fw-bold">{{ element.label }}</span>
@@ -234,23 +244,21 @@
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="aves">
-                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Nguồn dữ
-                      liệu AVES
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>AVES
                     </th>
                     <td *matCellDef="let element" [class.text-danger]="+element.diff != 0" class="text-right" mat-cell>
                       {{ element.aves | dataTransformPipe:[Constant.NUMBER] }}
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="form">
-                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Nguồn
-                      bảng kê chứng từ
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Detailed statement
                     </th>
                     <td *matCellDef="let element" [class.text-danger]="+element.diff != 0" class="text-right" mat-cell>
                       {{ element.form | dataTransformPipe:[Constant.NUMBER] }}
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="diff">
-                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Chênh lệch
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Difference
                     </th>
                     <td *matCellDef="let element" [class.text-danger]="+element.diff != 0" class="text-right" mat-cell>
                       {{ element.diff | dataTransformPipe:[Constant.NUMBER] }}
@@ -265,7 +273,7 @@
                 </table>
               </div>
             </mat-tab>
-            <mat-tab i18n-label label="Đối soát chi tiết">
+            <mat-tab i18n-label label="Detailed reconciliation">
               <div class="table-responsive">
                 <table [dataSource]="formGroupDetail.getRawValue().invoiceDocumentReviewForm" class="table-light table-responsive"
                        mat-table>
@@ -335,22 +343,22 @@
 </mat-accordion>
 
 <app-confirm-dialog
-    i18n-mainText
-    i18n-subText
-    [icon] = "'check_circle'"
-    [mainText]=""
-    [subText]="'Chứng từ hóa đơn đã được đối soát và có chênh lệch, bạn có muốn cập nhật lại thông tin thanh toán của chứng từ này không?'"
     (closeDialog)="toggleDialogUnMatched()"
     (confirm)="saveAndNext()"
-    [showDialog]="showDialogUnMatched">
+    [icon]="'check_circle'"
+    [mainText]=""
+    [showDialog]="showDialogUnMatched"
+    [subText]="'Chứng từ hóa đơn đã được đối soát và có chênh lệch, bạn có muốn cập nhật lại thông tin thanh toán của chứng từ này không?'"
+    i18n-mainText
+    i18n-subText>
 </app-confirm-dialog>
 <app-confirm-dialog
-    i18n-mainText
-    i18n-subText
-    [icon] = "'check_circle'"
-    [mainText]="'Bạn có chắc chắn chốt số liệu chứng từ hóa đơn này không?'"
-    [subText]="'Số liệu chứng từ hóa đơn này sẽ không được chỉnh sửa sau khi đã chốt!'"
     (closeDialog)="toggleDialogFinish()"
     (confirm)="saveAndFinish()"
-    [showDialog]="showDialogFinish">
+    [icon]="'check_circle'"
+    [mainText]="'Bạn có chắc chắn chốt số liệu chứng từ hóa đơn này không?'"
+    [showDialog]="showDialogFinish"
+    [subText]="'Số liệu chứng từ hóa đơn này sẽ không được chỉnh sửa sau khi đã chốt!'"
+    i18n-mainText
+    i18n-subText>
 </app-confirm-dialog>
