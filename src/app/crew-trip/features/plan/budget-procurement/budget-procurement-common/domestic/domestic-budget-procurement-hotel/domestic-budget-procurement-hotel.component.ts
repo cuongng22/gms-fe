@@ -253,7 +253,8 @@ export class DomesticBudgetProcurementHotelComponent
   clickOutside(data: any, control: string) {
     data[control] = false;
     if (['priceSingleRoomEditing', 'priceSingleRoomVatEditing', 'priceDoubleRoomEditing',
-      'priceDoubleRoomVatEditing', 'singleRoomExtraEditing', 'doubleRoomExtraEditing']
+      'priceDoubleRoomVatEditing', 'singleRoomExtraEditing', 'doubleRoomExtraEditing',
+      'singleRoomEditing']
       .includes(control)) {
       this.calculateData(data, 0, true)
     }
