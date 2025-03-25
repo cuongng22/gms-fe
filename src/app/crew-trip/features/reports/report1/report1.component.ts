@@ -62,8 +62,11 @@ export class reportcomponent extends CommonComponent implements OnInit {
 
   async loadReport() {
     try {
-      let rs = this.baseService.getReportLink(this.codeReport);
-      this.iframeUrl = this.sanitizeUrl('https://crewtripreport.vietnamairlines.com/trusted/je6uoh7qTn6zVWHiwfxqVA==:G6J_26cjbpA8W5Gb93Hwcs64/views/BC_7_2/BC_7_2');
+      this.baseService.getReportLink(this.codeReport).then(res => {
+        console.log("rsssss:",res.data)
+        this.iframeUrl = this.sanitizeUrl(res.data);
+        // this.iframeUrl = this.sanitizeUrl('https://crewtripreport.vietnamairlines.com/trusted/je6uoh7qTn6zVWHiwfxqVA==:G6J_26cjbpA8W5Gb93Hwcs64/views/BC_7_2/BC_7_2');
+      });
     } catch (Error: any) {
       console.log(Error);
     }
