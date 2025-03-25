@@ -258,6 +258,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       tblInvoiceDocumentDtl: this.fb.array([]),
 
     });
+    this.formGroupDetail.controls['invoiceDate'].setValidators([beforeValidator(this.formGroupDetail.controls['periodFrom']),
+      beforeValidator(this.formGroupDetail.controls['periodTo'])]);
     this.formGroupDetail.controls['periodFrom'].setValidators([afterValidator(this.formGroupDetail.controls['periodTo']),
       afterValidator(this.formGroupDetail.controls['invoiceDate'], 'invoiceDate')]);
     this.formGroupDetail.controls['periodTo'].setValidators([beforeValidator(this.formGroupDetail.controls['periodFrom']),
@@ -380,7 +382,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     row.patchValue({
       amountFcBeforeVat: (row.getRawValue().quantity * row.getRawValue().unitPrice)?.toFixed(4),
       amountVndBeforeVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100)?.toFixed(4),
-      amountFcVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat)?.toFixed(4),
+      amountFcVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat / 100)?.toFixed(4),
       amountVndVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100 * row.getRawValue().vat)?.toFixed(4), // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
     });
   }
@@ -708,11 +710,11 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       this.formGroupDetail.controls['periodTo'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
         if (value && !this.firstLoad) {
           this.findContract();
+          this.formGroupDetail.controls['invoiceDate'].updateValueAndValidity();
         }
       });
       this.formGroupDetail.controls['periodFrom'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
         if (value && !this.firstLoad) {
-          console.log(value)
           this.formGroupDetail.patchValue({
             periodOccurrence: (moment(value) || value)?.format('YYYY-MM-DD') || '',
           });
@@ -720,11 +722,11 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       });
       this.formGroupDetail.controls['invoiceDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
         if (value && !this.firstLoad) {
-          let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
           this.formGroupDetail.patchValue({
-            // paymentDueDate: _value?.format('YYYY-MM-DD') || '',
             invoiceReceiveDate: ''
           });
+          this.formGroupDetail.controls['periodTo'].updateValueAndValidity();
+          this.formGroupDetail.controls['periodFrom'].updateValueAndValidity();
         }
       });
       this.formGroupDetail.controls['idParent'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {

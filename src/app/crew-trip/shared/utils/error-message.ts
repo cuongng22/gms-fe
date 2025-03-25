@@ -158,6 +158,7 @@ export const invoiceNumber: { [key: string]: string } = {
 export const invoiceDate: { [key: string]: string } = {
   required: 'Invoice date' + $localize` is required`,
   matDatepickerMax: 'Invoice date' + $localize` must not be later than the current date`,
+  beforeValidator: 'Invoice date' + $localize` must after period date`,
 };
 
 export const invoiceReceiveDate: { [key: string]: string } = {
