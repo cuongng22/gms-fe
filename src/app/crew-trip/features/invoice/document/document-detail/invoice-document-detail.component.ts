@@ -710,7 +710,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       this.formGroupDetail.controls['periodTo'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
         if (value && !this.firstLoad) {
           this.findContract();
-          this.formGroupDetail.controls['invoiceDate'].updateValueAndValidity();
+          // this.formGroupDetail.controls['invoiceDate'].updateValueAndValidity();
         }
       });
       this.formGroupDetail.controls['periodFrom'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
@@ -723,10 +723,12 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       this.formGroupDetail.controls['invoiceDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
         if (value && !this.firstLoad) {
           this.formGroupDetail.patchValue({
-            invoiceReceiveDate: ''
+            invoiceReceiveDate: '',
+            periodFrom: '',
+            periodTo: ''
           });
-          this.formGroupDetail.controls['periodTo'].updateValueAndValidity();
-          this.formGroupDetail.controls['periodFrom'].updateValueAndValidity();
+          // this.formGroupDetail.controls['periodTo'].updateValueAndValidity();
+          // this.formGroupDetail.controls['periodFrom'].updateValueAndValidity();
         }
       });
       this.formGroupDetail.controls['idParent'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
