@@ -56,7 +56,8 @@ export class DialogExtraCrewComponent extends CommonComponent {
     fltIdIn: ['', Validators.required],
     gender: [''],
     phoneNumber: [''],
-    position: ['']
+    position: [''],
+    isEdit: [false]
   })
 
   crews: any[] = [];
@@ -73,7 +74,7 @@ export class DialogExtraCrewComponent extends CommonComponent {
   updateFlag = false;
 
 
-  override async ngOnInit() {
+  override async ngOnInit(): Promise<void> {
     this.formGroupDetail.controls.gender.disable();
     this.formGroupDetail.controls.phoneNumber.disable();
     this.formGroupDetail.controls.position.disable();
@@ -96,9 +97,11 @@ export class DialogExtraCrewComponent extends CommonComponent {
           fltIdIn: this.data.dataUpdate.FLT_ID_IN,
           gender: this.data.dataUpdate.GENDER,
           phoneNumber: this.data.dataUpdate.FULLNAME,
-          position: this.crews.find(item => item.persCode === this.data.dataUpdate.PERSCODE).function
+          position: this.crews.find(item => item.persCode === this.data.dataUpdate.PERSCODE).function,
+          isEdit: this.data.dataUpdate.isEdit
         });
         this.updateFlag = true
+        this.formGroupDetail.controls.persCode.disable();
       } else {
         this.updateFlag = false
       }
@@ -132,9 +135,10 @@ export class DialogExtraCrewComponent extends CommonComponent {
     }
   }
 
-  override async save() {
+  override async save(): Promise<void> {
     try {
       this.formGroupDetail.markAllAsTouched();
+      debugger
       if (this.formGroupDetail.invalid) {
         this.findInvalidControls(this.formGroupDetail);
         return;
@@ -154,9 +158,7 @@ export class DialogExtraCrewComponent extends CommonComponent {
       } else {
         res = await this.baseService.createExtraCrews(this.formGroupDetail.getRawValue());
       }
-      await this.search();
       this.baseService.showSuccess(this.updateFlag ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS);
-      await this.closeDetail();
       return res;
     } catch (e: any) {
       if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
@@ -165,6 +167,7 @@ export class DialogExtraCrewComponent extends CommonComponent {
       return e;
     } finally {
       await this.spinner.hide();
+      this.close()
     }
   }
 

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -12,7 +12,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTabsModule } from '@angular/material/tabs';
-import { RouterLink } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
@@ -36,5 +36,18 @@ import { EstimatedFlightScheduleComponent } from './estimated-flight-schedule/es
   providers: [DataTransformPipe]
 })
 export class DailyFlightSchedulesComponent extends CommonComponent {
+  router = inject(ActivatedRoute);
+  selectedTab: number; // dùng để active tab
 
+  override ngOnInit(): void {
+    this.router.fragment.subscribe(res => {
+      if (res === 'estimated') {
+        this.selectedTab = 0
+      } else if (res === 'monthly') {
+        this.selectedTab = 1
+      } else {
+        this.selectedTab = 0
+      }
+    })
+  }
 }

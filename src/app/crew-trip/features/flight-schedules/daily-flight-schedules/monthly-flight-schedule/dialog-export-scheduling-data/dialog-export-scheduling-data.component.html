@@ -2,7 +2,7 @@
     <mat-card-header class="p-15">
         <mat-card-title>
             <h5 class="mb-2" i18n="@@addExtraCrew">
-                Export scheduling Hotel/Car rental
+                Export scheduling Hotel/Transportation
             </h5>
         </mat-card-title>
         <mat-card-subtitle>
@@ -12,7 +12,7 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <form [formGroup]="formGroupDetail" (ngSubmit)="save()" autocomplete="off">
+        <form [formGroup]="formGroupDetail" (ngSubmit)="export()" autocomplete="off">
             <div class="row mb-2">
                 <mat-radio-group>
                     <mat-radio-button value="1" i18n="@@pilot">Pilot</mat-radio-button>
@@ -44,20 +44,34 @@
                                 </button>
                             </mat-date-range-picker-actions>
                         </mat-date-range-picker>
-                        <mat-error *ngxControlError="formGroupDetail.controls.exportStartDate; track: 'required'">
+                        <ng-container></ng-container>
+                        <mat-error
+                            [ngClass]="{'display-none': formGroupDetail.controls.exportStartDate.hasError('matDatepickerParse')}"
+                            *ngxControlError="formGroupDetail.controls.exportStartDate; track: 'required'">
                             {{MESSAGE.MESSAGE_START_DATE_REQUIRED}}
                         </mat-error>
-                        <mat-error *ngxControlError="formGroupDetail.controls.exportEndDate; track: 'required'">
+                        <mat-error
+                            [ngClass]="{'display-none': formGroupDetail.controls.exportEndDate.hasError('matDatepickerParse')}"
+                            *ngxControlError="formGroupDetail.controls.exportEndDate; track: 'required'">
                             {{MESSAGE.MESSAGE_END_DATE_REQUIRED}}
+                        </mat-error>
+                        <mat-error
+                            *ngxControlError="formGroupDetail.controls.exportStartDate; track: 'matDatepickerParse'"
+                            i18n="@@contractPeriodInvalidFormat">
+                            Start Date {{MESSAGE.FORMAT_INVALID}}
+                        </mat-error>
+                        <mat-error
+                            *ngxControlError="formGroupDetail.controls.exportEndDate; track: 'matDatepickerParse'"
+                            i18n="@@contractPeriodInvalidFormat">
+                            End Date {{MESSAGE.FORMAT_INVALID}}
                         </mat-error>
                         @if (formGroupDetail.controls.exportStartDate.value &&
                         formGroupDetail.controls.exportEndDate.value
                         && formGroupDetail.controls.exportEndDate.value <
-                            formGroupDetail.controls.exportStartDate.value) { 
-                            <mat-error>
+                            formGroupDetail.controls.exportStartDate.value) { <mat-error>
                             {{MESSAGE.END_DATE_LESS_THAN_START_DATE}}
                             </mat-error>
-                        }
+                            }
                     </mat-form-field>
                 </div>
             </div>
@@ -83,7 +97,8 @@
     </mat-card-content>
     <mat-card-footer>
         <div class="mt-5">
-           <span class="text-danger">Note:</span> Don't forget to send a notification email to your hotel/car rental partners about the flight changes. Go to
+            <span class="text-danger">Note:</span> Don't forget to send a notification email to your
+            hotel/transportation partners about the flight changes. Go to
             the <b>'Email Tracking'</b> screen after exporting the updated schedule.
         </div>
     </mat-card-footer>
