@@ -16,7 +16,7 @@ export class ReportService extends BaseService {
   }
 
   getReportLink(reportCode: string) {
-    const url = `${this.api}/${this.path}/viewName=${reportCode}`;
+    const url = `${this.api}/${this.path}?viewName=${reportCode}`;
     return firstValueFrom(this.http.get<any>(url));
   }
 }
