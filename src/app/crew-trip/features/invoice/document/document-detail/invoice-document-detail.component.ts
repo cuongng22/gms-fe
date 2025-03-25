@@ -289,14 +289,12 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         this.listFeeService = this.listFeeService.filter((s: any) => s.active);
         this.setReadModeDtl([this.tblInvoiceDocumentDtl]);
         if (this.isDataClone()) {
-          console.log(this.formGroupDetail.getRawValue(),11111111)
           this.formGroupDetail.patchValue({
             id: null,
             idParent: null,
             idInvoiceForm: null,
             invoiceNumber: null,
           });
-          console.log(this.formGroupDetail.getRawValue(),22222)
         }
       });
     } catch (e) {
