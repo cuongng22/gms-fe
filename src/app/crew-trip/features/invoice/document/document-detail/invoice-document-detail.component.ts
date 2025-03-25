@@ -14,7 +14,7 @@ import {ContractService} from "src/app/crew-trip/core/services/contract-service"
 import {HttpStatusCode} from "@angular/common/http";
 import moment from "moment";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
-import {debounceTime, filter, pairwise, Subscription} from "rxjs";
+import {debounceTime, filter, pairwise} from "rxjs";
 import {afterValidator, beforeValidator} from "src/app/crew-trip/shared/utils/common";
 import {quantity} from "src/app/crew-trip/shared/utils/error-message";
 
@@ -288,6 +288,16 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         this.calTotal();
         this.listFeeService = this.listFeeService.filter((s: any) => s.active);
         this.setReadModeDtl([this.tblInvoiceDocumentDtl]);
+        if (this.isDataClone()) {
+          console.log(this.formGroupDetail.getRawValue(),11111111)
+          this.formGroupDetail.patchValue({
+            id: null,
+            idParent: null,
+            idInvoiceForm: null,
+            invoiceNumber: null,
+          });
+          console.log(this.formGroupDetail.getRawValue(),22222)
+        }
       });
     } catch (e) {
       console.log(e);
@@ -582,15 +592,20 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   override async detail(id: any) {
-    await super.detail(id);
+    await super.detail(this.isDataClone() ? this.dataObject.id : id);
     this.formGroupDetail.getRawValue().invoiceDocumentDtl?.forEach((s: any) => {
+      if (this.isDataClone()) {
+        s.id = null;
+      }
       this.addRow(s);
     });
     if (!!!id) {
       this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.UNMATCHED});
     }
     this.listDocumentParent = [...this.listDocumentParent, {
-      id: this.formGroupDetail.getRawValue()._id, invoiceNumber: this.formGroupDetail.getRawValue()._invoiceNumber, invoiceDate: this.formGroupDetail.getRawValue()._invoiceDate,
+      id: this.formGroupDetail.getRawValue()._id,
+      invoiceNumber: this.formGroupDetail.getRawValue()._invoiceNumber,
+      invoiceDate: this.formGroupDetail.getRawValue()._invoiceDate,
     }];
   }
 
@@ -788,5 +803,9 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     } finally {
       this._showDialogDelete = false;
     }
+  }
+
+  isDataClone() {
+    return this.id === 0 && this.dataObject;
   }
 }
