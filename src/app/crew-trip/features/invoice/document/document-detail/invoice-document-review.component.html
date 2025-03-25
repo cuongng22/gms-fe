@@ -2,7 +2,7 @@
   <div class="d-md-flex align-items-center">
     <h5 class="mb-0 d-inline ml-10">
       <h5 class="mb-0 ml-10">
-        <span i18n>Reconsile invoice</span>
+        <span i18n>Reconcile invoice</span>
       </h5>
     </h5>
 
@@ -15,7 +15,7 @@
       List of invoice
     </li>
     <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      Reconsile invoice
+      Reconcile invoice
     </li>
   </ol>
 </div>
@@ -41,7 +41,7 @@
     </i>
     Save
   </button>
-  <!--<button (click)="toggleDialogFinish()"
+  <button (click)="toggleDialogFinish()"
           *ngIf="!readMode &&
           ([InvoiceDocumentStatusEnum.MATCHED,
           InvoiceDocumentStatusEnum.VERIFIED]).includes(formGroupDetail.getRawValue().status)"
@@ -49,15 +49,7 @@
     <i class="material-symbols-outlined">
       save
     </i>
-    Chốt hóa đơn
-  </button>-->
-  <button (click)="toggleDialogFinish()"
-          *ngIf="!readMode"
-          class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
-    <i class="material-symbols-outlined">
-      save
-    </i>
-    Chốt hóa đơn
+    Confirm
   </button>
 </div>
 <mat-accordion multi>
