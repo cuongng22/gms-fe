@@ -217,8 +217,18 @@ export const routes: Routes = [
         path: 'flight-schedules',
         children: [
           { path: 'seasonal', component: SeasonalSchedulesComponent },
-          { path: 'daily', component: DailyFlightSchedulesComponent },
-          { path: 'other', component: OtherFlightScheduleComponent },
+          {
+            path: 'daily', children: [
+              {
+                path: '', component: DailyFlightSchedulesComponent
+              },
+              {
+                path: 'other',
+                component: OtherFlightScheduleComponent
+              },
+            ]
+          },
+
           { path: 'email-tracking', component: EmailTrackingComponent }
         ],
       },

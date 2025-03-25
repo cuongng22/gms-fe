@@ -75,6 +75,10 @@ export class DailyFlightSchedulesSearchComponent implements OnInit {
 
 
   onSearch() {
+    this.formGroupSearch.markAllAsTouched();
+    if (this.formGroupSearch.invalid) {
+      return;
+    }
     const bodySearch = {
       ...this.formGroupSearch.value,
       timezone: this.airports.find((item: any) => item.marketCode === this.formGroupSearch.value.airport)?.timezone

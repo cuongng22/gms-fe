@@ -63,6 +63,15 @@ export class OtherFlightScheduleComponent extends CommonComponent {
   }
   async onSearch(event: any) {
     const response = await this.search(event, false, this.baseService.searchExtraCrews.bind(this.baseService));
+    if (response.data && response.data.length > 0) {
+      const _data = response.data.map((item: any) => {
+        const _checkinDate = new Date(item.FLIGHT_DATE_IN.split(" ")[0])
+        const _checkoutDate = new Date(item.FLIGHT_DATE_OUT.split(" ")[0])
+        const _currDate = new Date
+        const _isShow = _checkinDate < _currDate && _checkoutDate < _currDate
+        return { ...item, isShow: _isShow }
+      })
+    }
     this.dataSource.data = response.data;
   }
 
@@ -80,6 +89,8 @@ export class OtherFlightScheduleComponent extends CommonComponent {
         minWidth: 750,
         minHeight: 500,
         data: this.dailyFlightSchedulesSearch().formGroupSearch.value
+      }).afterClosed().subscribe(() => {
+        this.dailyFlightSchedulesSearch().onSearch()
       })
     }
 
@@ -90,9 +101,11 @@ export class OtherFlightScheduleComponent extends CommonComponent {
       minWidth: 750,
       minHeight: 500,
       data: {
-        dataUpdate: item,
+        dataUpdate: { ...item, isEdit: true },
         ...this.dailyFlightSchedulesSearch().formGroupSearch.value
       }
+    }).afterClosed().subscribe(() => {
+      this.dailyFlightSchedulesSearch().onSearch()
     })
   }
 
@@ -120,7 +133,7 @@ export class OtherFlightScheduleComponent extends CommonComponent {
       await this.spinner.show();
       const res = await this.baseService.deleteCrewsExtra(this.formGroupDetail.getRawValue());
       this.baseService.showSuccess(this.MESSAGE.DELETE_SUCCESS);
-      await this.search(this.dailyFlightSchedulesSearch().formGroupSearch.value, true, this.baseService.searchExtraCrews.bind(this.baseService));
+      await this.onSearch(this.dailyFlightSchedulesSearch().formGroupSearch.value);
       return res;
     } catch (e: any) {
       this.baseService.showError((e.error?.error) ?? (e.error?.error?.code) ?? this.MESSAGE.ERROR);
