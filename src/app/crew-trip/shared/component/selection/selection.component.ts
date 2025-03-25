@@ -1,10 +1,10 @@
-import {Component, Input, Optional, Self, SimpleChanges, OnChanges} from '@angular/core';
-import {ControlValueAccessor, FormControl, FormsModule, NgControl, ReactiveFormsModule} from '@angular/forms';
-import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
-import {MatOption} from '@angular/material/core';
-import {MatSelect, MatSelectChange} from '@angular/material/select';
-import {CommonModule, NgIf} from '@angular/common';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import { Component, Input, Optional, Self, SimpleChanges, OnChanges } from '@angular/core';
+import { ControlValueAccessor, FormControl, FormsModule, NgControl, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatOption } from '@angular/material/core';
+import { MatSelect, MatSelectChange } from '@angular/material/select';
+import { CommonModule, NgIf } from '@angular/common';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 
 @Component({
   selector: 'app-selection',
@@ -49,7 +49,9 @@ export class SelectionComponent implements ControlValueAccessor {
       this.ngControl.valueAccessor = this;
     }
   }
-
+  get requiredControl(): boolean {
+    return this.formControl.hasValidator(Validators.required);
+  }
   onChange = (value: any) => {
   };
   onTouched = () => {
@@ -65,12 +67,12 @@ export class SelectionComponent implements ControlValueAccessor {
 
   writeValue(value: any): void {
     if (this.formControl?.value !== value) {
-      this.formControl.setValue(value, {emitEvent: false});
+      this.formControl.setValue(value, { emitEvent: false });
     }
   }
 
   validate() {
-    return this.formControl?.valid ? null : {invalid: true};
+    return this.formControl?.valid ? null : { invalid: true };
   }
 
   ngOnChanges(changes: SimpleChanges): void {
@@ -81,9 +83,9 @@ export class SelectionComponent implements ControlValueAccessor {
 
   private updateEnableState() {
     if (!this.readonly) {
-      this.formControl.enable({emitEvent: false});
+      this.formControl.enable({ emitEvent: false });
     } else {
-      this.formControl.disable({emitEvent: false});
+      this.formControl.disable({ emitEvent: false });
     }
   }
 }

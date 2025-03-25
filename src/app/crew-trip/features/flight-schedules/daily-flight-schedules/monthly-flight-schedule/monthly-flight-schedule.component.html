@@ -15,14 +15,22 @@
                 </i>
                 <span i18n="@@exportSchedulingData">Export Scheduling Data</span>
             </button>
-            <button class="add-btn mr-10" type="button" mat-button
-                (click)="exportFile(null,'monthly-flight-schedule.xlsx')">
+
+            <button [matMenuTriggerFor]="menu" class="add-btn mr-10" type="button" mat-button>
                 <i class="material-symbols-outlined">
                     download
                 </i>
                 <span i18n="@@export">Export</span>
             </button>
-            <button class="add-btn mr-10" type="button" mat-button [routerLink]="['/flight-schedules/other']">
+            <mat-menu #menu="matMenu">
+                <button mat-menu-item (click)="exportFile(null,'monthly-flight-schedule.xlsx')">
+                    <span>Flight list</span>
+                </button>
+                <button mat-menu-item (click)="exportCrewList('list-of-flight-crew.xlsx')">
+                    <span>List of flight crew</span>
+                </button>
+            </mat-menu>
+            <button class="add-btn mr-10" type="button" mat-button [routerLink]="['/flight-schedules/daily/other']">
                 <i class="material-symbols-outlined">
                     person_add
                 </i>
@@ -64,7 +72,7 @@
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@fc">
                                 FC
                             </span>:
-                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element)">
+                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element,'FC')">
                                 {{element.pilotCount}}
                             </a>
                         </span>
@@ -73,7 +81,7 @@
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@cc">
                                 CC
                             </span>:
-                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element)">
+                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element,'CC')">
                                 {{element.cabinCrewCount}}
                             </a>
                         </span>
@@ -82,7 +90,7 @@
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@extraCrew">
                                 Extra Crew
                             </span>:
-                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element)">
+                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element,'Extra Crew')">
                                 {{element.extra}}
                             </a>
                         </span>

@@ -58,7 +58,11 @@ export class DialogMonthlyFlightScheduleDetailComponent extends CommonComponent 
   ];
   flightInfo: any;
   override async ngOnInit() {
-    this.displayedColumns = [(this.data?.isUpdate ? 'select' : 'stt'), ...this._displayedColumns.map(s => s.value), 'nonOvernight'];
+    this.displayedColumns = [(this.data?.isUpdate ? 'select' : 'stt'), ...this._displayedColumns.map(s => s.value)];
+    if (!this.data?.isUpdate) {
+      this.displayedColumns.push('overnight');
+    }
+    this.displayedColumns.push('nonOvernight')
     this.onSearch()
   }
 
@@ -73,6 +77,15 @@ export class DialogMonthlyFlightScheduleDetailComponent extends CommonComponent 
   }
 
   async updateNonOvernight() {
+    console.log(this.selection.selected)
+    if (this.selection.selected.length <= 0) {
+      this.showError($localize`:@@cannotUpdateOvernightStatusWhenNoRecordsAreSelected:Cannot update overnight status when no records are selected`)
+    } else {
+      this.toggleDialogDelete()
+    }
+  }
+
+  async confirmUpdateNonOvernight() {
     console.log(this.selection.selected)
     if (this.selection.selected.length > 0) {
       try {
@@ -97,6 +110,7 @@ export class DialogMonthlyFlightScheduleDetailComponent extends CommonComponent 
         return e;
       } finally {
         await this.spinner.hide();
+        this.toggleDialogDelete()
       }
     }
   }
