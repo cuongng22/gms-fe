@@ -38,7 +38,7 @@ import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/th
 import {InvoiceDocumentService} from "src/app/crew-trip/core/services/invoice-document-service";
 import {ContractService} from "src/app/crew-trip/core/services/contract-service";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {InvoiceDocumentExportType, InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentExportType, InvoiceDocumentStatus, InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {HttpStatusCode} from "@angular/common/http";
 import {InvoiceDocumentComponent} from "src/app/crew-trip/features/invoice/document/invoice-document.component";
 import {InvoiceDocumentRemindComponent} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
@@ -53,7 +53,7 @@ import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-
   imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, DatepickerYearMonthComponent, ThousandsSeparatorDirective, InvoiceDocumentComponent, InvoiceDocumentRemindComponent, ConfirmDialog, ControlErrorComponent],
   templateUrl: './invoice-document-review.component.html',
   styleUrl: './invoice-document-review.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY,{useUtc: true}),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
 
   ]
 })
@@ -201,7 +201,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
       exchangeRateDate: [],
       exchangeRateType: [],
       description: [],
-      note: [,[Validators.maxLength(500)]],
+      note: [, [Validators.maxLength(500)]],
       status: [],
       statusEmail: [],
       amountFcBeforeVat: [],
@@ -262,8 +262,9 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
         }
 
         //
+        let reviewStatus = this.reviewMatch() ? InvoiceDocumentStatusEnum.VERIFIED : InvoiceDocumentStatusEnum.UNVERIFIED
         let filterForm = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((s: any) => s.sourceData == 'FORM');
-        this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm});
+        this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm, status: reviewStatus});
 
       });
 
@@ -283,7 +284,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
   async setReadMode(form: FormGroup) {
     const disableField = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version'];
-    const enableField = ['note', 'status'];
+    const enableField = ['note',];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -482,5 +483,9 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
         (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
       );
     } else return true;
+  }
+
+  reviewMatch() {
+    return !this.formGroupDetail.getRawValue().invoiceDocumentReviewProjection.some((item:any) => item.diff !== null && item.diff !== 0);
   }
 }
