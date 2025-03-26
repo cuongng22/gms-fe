@@ -74,7 +74,7 @@
       <mat-card-title>
       </mat-card-title>
       <mat-card-subtitle>
-        <button class="add-btn mr-10" i18n mat-button
+        <button (click)="download()" class="add-btn mr-10" i18n mat-button
                 type="button">
           <i class="material-symbols-outlined">
             download
@@ -139,7 +139,7 @@
                   <ng-container matColumnDef="invoiceNumber">
                     <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Invoice Number</th>
                     <td *matCellDef="let element" mat-cell>
-                      <a (click)="showDocumentHdr(element.invoiceNumber||-1)"
+                      <a (click)="showDocumentHdr(element.id||-1)"
                          style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                         {{ element.invoiceNumber }}
                       </a>

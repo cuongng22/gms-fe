@@ -19,15 +19,11 @@ import {NoDataRowOutlet} from '@angular/cdk/table';
 import {ContractDetailComponent} from 'src/app/crew-trip/features/contract/contract-detail/contract-detail.component';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {InvoiceFormComponent} from "src/app/crew-trip/features/invoice/form/invoice-form.component";
-import {
-  InvoiceFormDetailComponent
-} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
+import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
 import {InvoiceDocumentDetailComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-detail.component";
 import {InvoiceDocumentReviewComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-review.component";
 import {InvoiceDocumentComponent} from "src/app/crew-trip/features/invoice/document/invoice-document.component";
-import {
-  InvoiceDocumentRemindComponent
-} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
+import {InvoiceDocumentRemindComponent} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
 
 
 @Component({
@@ -62,9 +58,9 @@ export class InvoiceDocumentTabComponent implements OnInit {
   }
 
   nextStepEmit($event: any) {
-    this.step = $event[2];
     this.id = $event[0];
     this.readMode = $event[1];
+    this.step = $event[2];
     this.dataObject = $event[3];
   }
 

@@ -14,4 +14,16 @@ export class InvoiceActualCostService extends BaseService {
     this.path = 'invoice/actual-cost';
   }
 
+  async exportListData(body: any) {
+    const url = `${this.api}/${this.path}/export-data`;
+    const httpOptionsExport = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/octet-stream'
+      }),
+      responseType: 'blob' as any,
+    };
+    return firstValueFrom(this.http.post<Blob>(url,body, httpOptionsExport));
+  }
+
 }
