@@ -38,12 +38,10 @@ import {ThousandsSeparatorDirective} from "src/app/crew-trip/shared/directive/th
 import {InvoiceDocumentService} from "src/app/crew-trip/core/services/invoice-document-service";
 import {ContractService} from "src/app/crew-trip/core/services/contract-service";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {InvoiceDocumentExportType, InvoiceDocumentStatus, InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {HttpStatusCode} from "@angular/common/http";
+import {InvoiceDocumentExportType, InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {InvoiceDocumentComponent} from "src/app/crew-trip/features/invoice/document/invoice-document.component";
 import {InvoiceDocumentRemindComponent} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
 import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog";
-import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
 import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
 
 
@@ -257,14 +255,14 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
         let filterForm = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((s: any) => s.sourceData == 'FORM');
         let filterAves = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((s: any) => s.sourceData == 'AVES');
         //check diff
-     /*   filterForm.forEach(form=>{
-          if (this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
-            let avesRow =   filterAves.find(aves=>aves.ciFltno == form.ciFltno && aves.ciDate == form.ciDate);
-            if(!avesRow || avesRow.)
-          }
+        /*   filterForm.forEach(form=>{
+             if (this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
+               let avesRow =   filterAves.find(aves=>aves.ciFltno == form.ciFltno && aves.ciDate == form.ciDate);
+               if(!avesRow || avesRow.)
+             }
 
-        });*/
-        console.log(this.dataObject,'dataObjectdataObjectdataObject')
+           });*/
+        console.log(this.dataObject, 'dataObjectdataObjectdataObject')
         this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm, status: reviewStatus});
       });
 
@@ -300,7 +298,10 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     try {
       await this.spinner.show();
       const res = await this.baseService.exportListData({
-        id: this.id, exportType: InvoiceDocumentExportType.DOCUMENT_REVIEW
+        id: this.id,
+        ctype:this.formType,
+        exportType: type === 'DETAIL' ? InvoiceDocumentExportType.DOCUMENT_REVIEW_DETAIL : InvoiceDocumentExportType.DOCUMENT_REVIEW
+
       });
       this.downloadFile(res, 'export.xlsx');
     } catch (e) {
@@ -309,7 +310,6 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
       await this.spinner.hide();
     }
   }
-
 
 
   override async save(): Promise<any> {
