@@ -63,11 +63,9 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   readMode = true;
   action = 'edit';
   id: any;
-  listPartner: any[] = [];
-  listHotel = [];
-  listVehicle = [];
-  listAirportCode = [];
   listInvoice: any[];
+  startOfMonth = moment().startOf('year').format('YYYY-MM-DD');
+  endOfMonth = moment().format('YYYY-MM-DD');
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
   _displayedColumns: {
@@ -114,8 +112,8 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
       partnerType: [],
       airportCode: [],
       listAirportCode: [],
-      periodFrom: [],
-      periodTo: [],
+      periodFrom: [this.startOfMonth],
+      periodTo: [moment().format('YYYY-MM-DD')],
     });
     this.formGroupDetail = this.fb.group({
       id: [], bizDocId: [], bizDocIdC1: [], contractName: [], contractCode: []
