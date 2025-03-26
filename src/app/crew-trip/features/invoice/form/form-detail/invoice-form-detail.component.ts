@@ -205,7 +205,6 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   override async ngOnInit() {
     try {
       await this.spinner.show();
-      console.log(this.id,'12938210932')
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         this.setReadMode(this.formGroupDetail)]).then(() => {
         if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
@@ -273,8 +272,6 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   calTotal(column: any) {
     if (column.type === Constant.NUMBER) {
       return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev: any, cur: any) => {
-        // prev + +cur[column.value]
-        let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl;
         if (cur.typeRoom === 'CC Twin room') {
           return prev + +(cur[column.value] / 2);
         } else {
