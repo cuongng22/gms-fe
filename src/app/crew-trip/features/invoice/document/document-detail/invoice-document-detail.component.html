@@ -28,7 +28,7 @@
       </i>
       Back
     </button>
-    @if (formGroupDetail.getRawValue().status === 'UNMATCHED') {
+    @if (formGroupDetail.getRawValue().status === 'UNMATCHED' && formGroupDetail.getRawValue().version === 1) {
       <button (click)="saveAndNext()" *ngIf="!readMode" class="step-2-menu-button btn-slot-4" extended i18n mat-fab>
         <i class="material-symbols-outlined">
           redo

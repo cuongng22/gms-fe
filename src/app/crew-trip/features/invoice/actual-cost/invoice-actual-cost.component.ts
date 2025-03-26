@@ -3,7 +3,7 @@ import {RouterLink} from '@angular/router';
 import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule, MatMenuTrigger} from '@angular/material/menu';
+import {MatMenuModule} from '@angular/material/menu';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -25,7 +25,6 @@ import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ListResponse} from 'src/app/crew-trip/shared/models/common.model';
 import {HttpStatusCode} from '@angular/common/http';
-import {InvoiceFormService} from 'src/app/crew-trip/core/services/invoice-form-service';
 import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FileUploadModule} from "@iplab/ngx-file-upload";
@@ -34,8 +33,7 @@ import {InvoiceActualCostService} from "src/app/crew-trip/core/services/invoice-
 import moment from "moment";
 import {InvoiceDocumentDetailComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-detail.component";
 import {InvoiceDocumentService} from "src/app/crew-trip/core/services/invoice-document-service";
-import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
-import {InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentExportType, InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 
 
 @Component({
@@ -252,20 +250,22 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
 
   async getListInvoiceDocument(item: any) {
     try {
-      await this.spinner.show();
       this.listInvoice = [];
-      await this.invoiceDocumentService.search({
-        page: this.pageIndex,
-        size: this.pageSize,
-        limit: this.pageSize,
-        partnerCode: item.partnerCode,
-        airportCode: item.airportCode,
-        periodFrom: moment(item.periodOccurrence).startOf('month').format('YYYY-MM-DD'),
-        periodTo: moment(item.periodOccurrence).endOf('month').format('YYYY-MM-DD'),
-        status: InvoiceDocumentStatusEnum.FINISHED
-      }).then((res: any) => {
-        this.listInvoice = res?.data?.content;
-      });
+      if (moment(item.periodOccurrence).isValid() && item.partnerCode && item.airportCode) {
+        await this.spinner.show();
+        await this.invoiceDocumentService.search({
+          page: this.pageIndex,
+          size: this.pageSize,
+          limit: this.pageSize,
+          partnerCode: item.partnerCode,
+          airportCode: item.airportCode,
+          periodFrom: moment(item.periodOccurrence).startOf('month').format('YYYY-MM-DD'),
+          periodTo: moment(item.periodOccurrence).endOf('month').format('YYYY-MM-DD'),
+          status: InvoiceDocumentStatusEnum.FINISHED
+        }).then((res: any) => {
+          this.listInvoice = res?.data?.content;
+        });
+      }
     } catch (e: any) {
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
     } finally {
@@ -273,36 +273,30 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
     }
   }
 
-
-  /*override async search<T>(body?: any, isNextPage?: boolean) {
+  async download() {
     try {
       await this.spinner.show();
-      if (!isNextPage) {
-        this.pageIndex = Constant.PAGE;
-      }
-      let res = await this.baseService.search<ListResponse<T>>({
-        page: this.pageIndex,
-        size: this.pageSize,
-        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
-      });
-
-      if (res) {
-        if (res.code === HttpStatusCode.Ok) {
-          this.dataSource.data = res.data.content;
-          this.totalElement = res.data.totalElements;
-        }
-        return res;
-      }
-    } catch (e: any) {
-      this.baseService.showError(e.error?.message ?? MESSAGE.ERROR);
+      let body = this.formGroupSearch.getRawValue();
+      body.periodFrom = moment(body.periodFrom).isValid() ? moment(body.periodFrom).format(Constant.LOCAL_DATE_FORMAT) : null;
+      body.periodTo = moment(body.periodTo).isValid() ? moment(body.periodTo).format(Constant.LOCAL_DATE_FORMAT) : null;
+      body = removeNullValues(body);
+      body.page = 0;
+      body.limit = 999999;
+      const res = await this.baseService.exportListData(body);
+      this.downloadFile(res, 'export.xlsx');
+    } catch (e) {
+      console.log(e)
     } finally {
       await this.spinner.hide();
     }
-  }*/
+  }
+
   closeInvoiceDocument() {
     this.isShowDocumentHdr = false;
     setTimeout(() => {
       this.documentHdrId = null;
     }, 300);
   }
+
+
 }

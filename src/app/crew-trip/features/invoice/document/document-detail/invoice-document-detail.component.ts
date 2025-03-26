@@ -356,7 +356,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         //edit
         else {
           //status finish
-          if (this.dataObject.status === InvoiceDocumentStatusEnum.FINISHED) {
+          if (this.dataObject?.status === InvoiceDocumentStatusEnum.FINISHED) {
             v.disable();
             this.formGroupDetail.controls['exchangeRateDate'].enable();
           } else {
@@ -639,7 +639,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
           });
 
           //du lieu priceunit hd
-          res.data?.priceUnitInfo.forEach((s: any) => {
+          this.tblInvoiceDocumentDtl=this.fb.array([]);
+            res.data?.priceUnitInfo.forEach((s: any) => {
             let item = {
               serviceCode: s.serviceCode,
               vat: s.taxRate

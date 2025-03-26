@@ -264,7 +264,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
           }
 
         });*/
-
+        console.log(this.dataObject,'dataObjectdataObjectdataObject')
         this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm, status: reviewStatus});
       });
 
@@ -327,7 +327,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
   calTotal(column: any) {
     if (column.type === Constant.NUMBER) {
-      return this.formGroupDetail.getRawValue().invoiceDocumentReviewForm.reduce((prev: any, cur: any) => {
+      return this.formGroupDetail.getRawValue().invoiceDocumentReviewForm?.reduce((prev: any, cur: any) => {
         // prev + +cur[column.value]
         if (cur.typeRoom === 'CC Twin room') {
           return prev + +(cur[column.value] / 2);
