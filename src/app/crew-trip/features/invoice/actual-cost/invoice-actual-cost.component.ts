@@ -35,6 +35,7 @@ import moment from "moment";
 import {InvoiceDocumentDetailComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-detail.component";
 import {InvoiceDocumentService} from "src/app/crew-trip/core/services/invoice-document-service";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
+import {InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 
 
 @Component({
@@ -43,7 +44,7 @@ import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight
   imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, InvoiceDocumentDetailComponent],
   templateUrl: './invoice-actual-cost.component.html',
   styleUrl: './invoice-actual-cost.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY,{useUtc: true}),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
   ]
 })
 
@@ -240,7 +241,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   }
 
   showDocumentHdr(documentHdrId: any) {
-    documentHdrId = 42;
+    // documentHdrId = 42;
     if (+documentHdrId > 0) {
       this.documentHdrId = documentHdrId;
       this.isShowDocumentHdr = true;
@@ -257,6 +258,11 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
         page: this.pageIndex,
         size: this.pageSize,
         limit: this.pageSize,
+        partnerCode: item.partnerCode,
+        airportCode: item.airportCode,
+        periodFrom: moment(item.periodOccurrence).startOf('month').format('YYYY-MM-DD'),
+        periodTo: moment(item.periodOccurrence).endOf('month').format('YYYY-MM-DD'),
+        status: InvoiceDocumentStatusEnum.FINISHED
       }).then((res: any) => {
         this.listInvoice = res?.data?.content;
       });
@@ -293,4 +299,10 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
       await this.spinner.hide();
     }
   }*/
+  closeInvoiceDocument() {
+    this.isShowDocumentHdr = false;
+    setTimeout(() => {
+      this.documentHdrId = null;
+    }, 300);
+  }
 }
