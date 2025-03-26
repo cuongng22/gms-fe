@@ -274,6 +274,15 @@
               </div>
             </mat-tab>
             <mat-tab i18n-label label="Detailed reconciliation">
+              <div class="w-100 text-end">
+                <button (click)="download('DETAIL')" class="add-btn right-0 mb-10" i18n mat-button
+                        type="button">
+                  <i class="material-symbols-outlined">
+                    download
+                  </i>
+                  Export
+                </button>
+              </div>
               <div class="table-responsive">
                 <table [dataSource]="formGroupDetail.getRawValue().invoiceDocumentReviewForm" class="table-light table-responsive"
                        mat-table>
