@@ -45,6 +45,6 @@
 <ng-container *ngIf="step==3">
   <app-invoice-document-review (backStepEmit)="backStepEmit($event)"
                                (nextStepEmit)="nextStepEmit($event)"
-                               [id]="id" [readMode]="readMode">
+                               [id]="id" [readMode]="readMode" [dataObject]="dataObject">
   </app-invoice-document-review>
 </ng-container>
