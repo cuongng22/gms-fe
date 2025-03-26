@@ -60,8 +60,10 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   readMode = true;
   action = 'edit';
   id: any;
-  startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-  endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
+  // startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+  // endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
+  startOfMonth = moment().startOf('year').format('YYYY-MM-DD');
+  endOfMonth = moment().format('YYYY-MM-DD');
 
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
