@@ -153,7 +153,6 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   }
 
   override async search<T>(body?: any, isNextPage?: boolean) {
-    console.log(this.formGroupSearch)
     try {
       this.formGroupSearch.patchValue({
         listAirportCode: this.formGroupSearch.getRawValue().airportCode,
@@ -257,6 +256,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
           limit: this.pageSize,
           partnerCode: item.partnerCode,
           airportCode: item.airportCode,
+          listAirportCode: item.airportCode,
           periodFrom: moment(item.periodOccurrence).startOf('month').format('YYYY-MM-DD'),
           periodTo: moment(item.periodOccurrence).endOf('month').format('YYYY-MM-DD'),
           status: InvoiceDocumentStatusEnum.FINISHED
