@@ -43,12 +43,14 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
   PlanCategoryEnum = PlanCategoryEnum;
 
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
+  planFlightByOvernight: any[] = []; //tỉ lệ chuyến bay theo số đêm nghỉ
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       console.log('effect data DomesticBudgetProcurementHotelComponent: ', this.data())
-      if (this.data()) {
-        this.setDataSource(this.data());
+      if (this.data() && Object.keys(this.data()).length > 0) {
+        this.setPlanFlightByOvernight(this.data().planOverightRates ?? []);
+        this.setDataSource(this.data().planHotels, this.data().isSummary);
       }
     })
   }
@@ -60,14 +62,14 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
   }
 
 
-  setDataSource(data: any[]) {
+  setDataSource(data: any[], isSummary?: boolean) {
     this.dataSource.data = [...data];
     this.getRow();
 
     this.dataSource.data.forEach((item: any, index) => {
-      let period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+      let period = `${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
       item.periodLabel = period;
-      this.calculateData(item, index);
+      this.calculateData(item, index, isSummary);
     });
     this.calculateTotal()
   };
@@ -82,17 +84,19 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
    * 
    * @param item Giá trị từng dòng của dataSource theo công thức
    */
-  private calculateData(item: any, index: number) {
-    // Tổng Số phòng đơn
-    // this.calculate(item, 'totalSingleRoom');
-    // // Tổng Số phòng đôi
-    // this.calculate(item, 'totalDoubleRoom');
-    // Thành tiền chưa vat
-    this.calculate(item, 'totalAmount');
-    // Thành tiền chưa có vat
-    this.calculate(item, 'totalAmountVat');
-    // Thành tiền có vat của năm thực hiện
-    // this.calculate(item, 'totalAmountYearPerformVat');
+  private calculateData(item: any, index: number, isSummary?: boolean) {
+    if (isSummary) {
+      // Tổng Số phòng đơn
+      this.calculate(item, 'totalSingleRoom');
+      // // Tổng Số phòng đôi
+      this.calculate(item, 'totalDoubleRoom');
+      // Thành tiền chưa vat
+      this.calculate(item, 'totalAmount');
+      // Thành tiền chưa có vat
+      this.calculate(item, 'totalAmountVat');
+      // Thành tiền có vat của năm thực hiện
+      // this.calculate(item, 'totalAmountYearPerformVat');
+    }
   }
 
 
@@ -114,6 +118,8 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
     this.setTotal('doubleRoomYearPerform')
     this.setTotal('singleRoom')
     this.setTotal('doubleRoom')
+    this.setTotal('singleRoomExtra')
+    this.setTotal('doubleRoomExtra')
     this.setTotal('totalAmount')
     this.setTotal('totalAmountVat')
   }
@@ -154,6 +160,9 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
     return this.resultTotal[control] ?? 0
   }
 
+  setPlanFlightByOvernight(data: any[]) {
+    this.planFlightByOvernight = [...data];
+  }
 
 
   clickEdit(data: any, control: string) {
@@ -161,6 +170,11 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
+    if (['singleRoomExtraEditing', 'doubleRoomExtraEditing']
+      .includes(control)) {
+      this.calculateData(data, 0, true)
+    }
+    this.calculateTotal()
   }
 
 }
