@@ -4,6 +4,7 @@ export function getHeaderRowDef1(contractData: any): string[] {
         { column: "month", visible: true },
         { column: "totalRoomsInCurrentYear", visible: true },
         { column: "estimatedRoomsInPlannedYear", visible: true },
+        { column: "extraRoom", visible: true },
         { column: "totalAmount", visible: true },
     ]
     return columns.filter((column: any) => column.visible).map((column: any) => column.column)
@@ -15,7 +16,8 @@ export function getHeaderRowDef2(contractData: any): string[] {
         { column: "doubleRoomYearPerform", visible: true },
         { column: "singleRoom", visible: true }, // Số phòng đơn
         { column: "doubleRoom", visible: true }, // Số phòng đôi
-
+        { column: "singleRoomExtra", visible: true },
+        { column: "doubleRoomExtra", visible: true },
         { column: "totalAmountExcludingVat", visible: true },
         { column: "totalAmountIncludingVAT", visible: true },
     ];
@@ -29,6 +31,8 @@ export function getRowDef(contractData: any): string[] {
         { column: "doubleRoomYearPerform", visible: true },
         { column: "singleRoom", visible: true },
         { column: "doubleRoom", visible: true },
+        { column: "singleRoomExtra", visible: true },
+        { column: "doubleRoomExtra", visible: true },
         { column: "totalAmountExcludingVat", visible: true },
         { column: "totalAmountIncludingVAT", visible: true },
     ];

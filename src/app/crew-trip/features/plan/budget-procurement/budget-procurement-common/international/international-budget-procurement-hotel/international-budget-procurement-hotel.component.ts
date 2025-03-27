@@ -373,16 +373,12 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       item.noOfFlightOvernight = 1; // tổng số chuyến bay và số đêm nghỉ để nhóm sau đó chia cho số này vs tháng đã thực hiện monthInPerform
       item.noOfOvernight = this.planFlightByOvernight.length ?? 1
       // Thu bảo với tháng đã thực hiện thì số tiền sẽ phải chia ( số đêm nghỉ * loại máy bay) ==> loại ngân sách
-      if (item.monthIsPerform) {
-        // const noOfFlight = new Set(this.dataSource.data.filter((itemFilter: any) => itemFilter.period === item.period).map((item: any) => item.aircraftType));
-        // item.noOfFlightOvernight = (this.planFlightByOvernight.length ?? 1) * noOfFlight.size;
-        item.noOfFlightOvernight = this.periodsSpan[item.period].count ?? 1;
-      }
 
       //Số chuyến bay theo tàu và đêm nghỉ
       this.calculate(item, 'numberOfFlights', true);
-      //Số phòng đơn
-      if (!item.monthIsPerform) {
+      if (item.monthIsPerform) {
+        item.noOfFlightOvernight = this.periodsSpan[item.period].count ?? 1;
+      } else {
         this.calculate(item, 'singleRoom', true);
         //Số phòng đôi
         this.calculate(item, 'doubleRoom', true);
@@ -402,11 +398,11 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         //Số phòng đơn late checkout dự kiến do lẻ nam nữ
         this.calculate(item, 'singleRoomLateReserved', true);
 
-        //Tổng số phòng đơn
-        this.calculate(item, 'totalSingleRoom');
-        //Tổng số phòng đôi
-        this.calculate(item, 'totalDoubleRoom');
       }
+      //Tổng số phòng đơn
+      this.calculate(item, 'totalSingleRoom');
+      //Tổng số phòng đôi
+      this.calculate(item, 'totalDoubleRoom');
       //Thành tiền ngoại tệ, - phòng đơn 
       this.calculate(item, 'totalAmountForeignSingleRoom');
       //Thành tiền ngoại tệ, - phòng đơn có vat
@@ -502,8 +498,6 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       return
     }
     totalValue = this.dataSource.data.map((t: any) => {
-      if (control == 'singleRoom') {
-      }
       if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
         // Nếu trường phải check tháng đã thực hiện thì sẽ check trong tháng đó đã thực hiện chưa
         let value = round(Number(t[control]));

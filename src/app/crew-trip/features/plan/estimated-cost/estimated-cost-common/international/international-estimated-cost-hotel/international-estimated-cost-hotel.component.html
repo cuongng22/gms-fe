@@ -71,7 +71,7 @@
                     Single Room
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.singleRoom}}
+                    {{element.monthIsPerform?null:element.singleRoom}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('singleRoom')}} -->
@@ -82,7 +82,7 @@
                     Double Room
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.doubleRoom}}
+                    {{element.monthIsPerform?null:element.doubleRoom}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('doubleRoom')}} -->
@@ -94,7 +94,7 @@
                     Buffer rate <br /> (for single-gender)
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.singleRoomReserved}}
+                    {{element.monthIsPerform?null:element.singleRoomReserved}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('singleRoomReserved')}} -->
@@ -113,11 +113,9 @@
                     Single Room
                 </th>
                 <td mat-cell *matCellDef="let element"
-                    [style.padding]="element['singleRoomOtherEditing']?'0px !important':''"
+                    [style.padding]="element['singleRoomOtherEditing'] && !element.monthIsPerform?'0px !important':''"
                     (click)="clickEdit(element, 'singleRoomOtherEditing')">
-                    @if(!element['singleRoomOtherEditing']){
-                    {{element.singleRoomOther}}
-                    }@else {
+                    @if(element['singleRoomOtherEditing'] && !element.monthIsPerform) {
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'singleRoomOtherEditing')"
                             class="edit-inline-table">
@@ -125,6 +123,8 @@
                                 [disabled]="disabled()">
                         </mat-form-field>
                     </div>
+                    }@else {
+                    {{element.singleRoomOther}}
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
@@ -136,11 +136,9 @@
                     Double Room
                 </th>
                 <td mat-cell *matCellDef="let element"
-                    [style.padding]="element['doubleRoomOtherEditing']?'0px !important':''"
+                    [style.padding]="element['doubleRoomOtherEditing'] && !element.monthIsPerform?'0px !important':''"
                     (click)="clickEdit(element, 'doubleRoomOtherEditing')">
-                    @if(!element['doubleRoomOtherEditing']){
-                    {{element.doubleRoomOther}}
-                    }@else {
+                    @if(element['doubleRoomOtherEditing'] && !element.monthIsPerform){
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'doubleRoomOtherEditing')"
                             class="edit-inline-table">
@@ -148,6 +146,8 @@
                                 [disabled]="disabled()">
                         </mat-form-field>
                     </div>
+                    }@else {
+                    {{element.doubleRoomOther}}
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
@@ -168,7 +168,7 @@
                 <td mat-cell *matCellDef="let element; let index = dataIndex;"
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
-                    {{element.singleRoomEarly}}
+                    {{element.monthIsPerform?null:element.singleRoomEarly}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('singleRoomEarly')}} -->
@@ -181,7 +181,7 @@
                 <td mat-cell *matCellDef="let element; let index = dataIndex;"
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
-                    {{element.doubleRoomEarly}}
+                    {{element.monthIsPerform?null:element.doubleRoomEarly}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('doubleRoomEarly')}} -->
@@ -195,9 +195,7 @@
                 <td mat-cell *matCellDef="let element; let index = dataIndex"
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
-                    @if(!!element.aircraftTypeLabel){
-                    {{element.singleRoomEarlyReserved}}
-                    }
+                    {{element.monthIsPerform?null:element.singleRoomEarlyReserved}}
                 </td>
 
                 <td mat-footer-cell *matFooterCellDef>
@@ -219,7 +217,7 @@
                 <td mat-cell *matCellDef="let element; let index = dataIndex;"
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
-                    {{element.singleRoomLate}}
+                    {{element.monthIsPerform?null:element.singleRoomLate}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('singleRoomLate')}} -->
@@ -232,7 +230,7 @@
                 <td mat-cell *matCellDef="let element; let index= dataIndex;"
                     [attr.rowspan]=" aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
-                    {{element.doubleRoomLate}}
+                    {{element.monthIsPerform?null:element.doubleRoomLate}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('doubleRoomLate')}} -->
@@ -246,7 +244,7 @@
                 <td mat-cell *matCellDef="let element; let index = dataIndex;"
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
-                    {{element.singleRoomLateReserved}}
+                    {{element.monthIsPerform?null:element.singleRoomLateReserved}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
                     <!-- {{getTotal('singleRoomLateReserved')}} -->
@@ -265,8 +263,8 @@
                     Single Room
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;"
-                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
-                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
+                    [attr.rowspan]="periodsSpan[element.period].count" class="fw-bold"
+                    [style.display]="periodsSpan[element.period].firstIndex === index?'':'none'">
                     {{getTotalByGroup(element,'totalSingleRoom','totalSingleRoomGroup') | number}}
                     <!-- {{element.totalSingleRoom}} -->
                 </td>
@@ -279,8 +277,8 @@
                     Double Room
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;"
-                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
-                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
+                    [attr.rowspan]="periodsSpan[element.period].count" class="fw-bold"
+                    [style.display]="periodsSpan[element.period].firstIndex === index?'':'none'">
                     {{getTotalByGroup(element,'totalDoubleRoom','totalDoubleRoomGroup') | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
@@ -299,7 +297,7 @@
                     [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
                     [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'">
                     <!-- {{element.totalAmountForeignTransportGroup|number}} -->
-                    {{getTotalByGroup(element,'totalAmountForeignTransport','totalAmountForeignTransportGroup') |
+                    {{getTotalByGroup(element,'totalAmountForeignTransVat','totalAmountForeignTransVatGroup') |
                     number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
@@ -324,7 +322,7 @@
                     {{getTotalByGroup(element,'totalAmountForeign','totalAmountForeignGroup') | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef>
-                    <!-- {{getTotal('totalAmountForeign') | number}} -->
+                    {{getTotal('totalAmountForeign') | number}}
                 </td>
             </ng-container>
             <ng-container matColumnDef="totalAmountForeignVat">

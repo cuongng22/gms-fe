@@ -85,8 +85,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   private _internationalFlightOvernightData: any[] = [];
   private _internationalEstimatedCostHotelData: any;
   private _internationalEstimatedCostCarRentalData: any[] = [];
-  private _domesticEstimatedCostHotelData: any[] = [];
-  private _domesticEstimatedCostCarRentalData: any[] = [];
+  private _domesticEstimatedCostHotelData: any = {};
+  private _domesticEstimatedCostCarRentalData: any = {};
 
   constructor() {
     super();
@@ -154,7 +154,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
         planBudgetCarentals: response.data.planBudgetCarentals ?? [],
         listActype: response.data.listActype ?? [],
       };
-      this.setDataDetail();
+      this.setDataDetail(true);
     } catch (error) {
     } finally {
       this.showDialogSummary = false;
@@ -273,7 +273,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   }
 
   // Lấy data cho các component con
-  setDataDetail() {
+  setDataDetail(isSummary: boolean = false) {
     // set đơn giá phòng đơn, đơn giá phòng đôi
     this.estimatedCostGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
     this.estimatedCostGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
@@ -284,8 +284,14 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     //   periodRowspan: (this.dataDetail?.listActype ?? []).length
     // }
     this.internationalFlightOvernightData = [...this.dataDetail?.planOverightRates ?? []];
-    this.domesticEstimatedCostHotelData = [...this.dataDetail?.planBudgetHotels ?? []];
+    this.domesticEstimatedCostHotelData =
+    {
+      isSummary: isSummary,
+      planHotels: [...this.dataDetail?.planBudgetHotels ?? []],
+    }
+      ;
     this.internationalEstimatedCostHotelData = {
+      isSummary: isSummary,
       aircraftTypeRowspan: (this.dataDetail?.listActype ?? []).length,
       overnightRowspan: (this.dataDetail?.planOverightRates ?? []).length,
       planOverightRates: [...this.dataDetail?.planOverightRates ?? []],
@@ -293,8 +299,12 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
       planHotels: [...this.dataDetail?.planBudgetHotels ?? []],
       general: this.estimatedCostGeneral.formGroupDetail.value
     };
-    this.domesticEstimatedCostCarRentalData = [...this.dataDetail?.planBudgetCarentals ?? []];
+    this.domesticEstimatedCostCarRentalData = {
+      isSummary: isSummary,
+      planCarentals: [...this.dataDetail?.planBudgetCarentals ?? []]
+    }
     this.internationalEstimatedCostCarRentalData = {
+      isSummary: isSummary,
       planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
       planCarentals: [...this.dataDetail?.planBudgetCarentals ?? []]
     }
@@ -350,7 +360,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     return this._domesticEstimatedCostHotelData;
   }
 
-  set domesticEstimatedCostHotelData(value: any[]) {
+  set domesticEstimatedCostHotelData(value: any) {
     this._domesticEstimatedCostHotelData = value;
   }
 
@@ -358,7 +368,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     return this._domesticEstimatedCostCarRentalData;
   }
 
-  set domesticEstimatedCostCarRentalData(value: any[]) {
+  set domesticEstimatedCostCarRentalData(value: any) {
     this._domesticEstimatedCostCarRentalData = value;
   }
 
