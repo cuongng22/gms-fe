@@ -12,7 +12,8 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { PlanCategoryEnum } from '../../../../budget-procurement/budget-procurement.model';
-import { checkChange, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './international-estimated-cost-hotel.model';
+import { checkChange, checkVisibleColumn, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './international-estimated-cost-hotel.model';
+import { FlagTypeEnum } from '../../../../budget-procurement/budget-procurement-common/international/international-budget-procurement-hotel/international-budget-procurement-hotel.model';
 
 @Component({
   selector: 'app-international-estimated-cost-hotel',
@@ -67,7 +68,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
         this.calculateSpan();
         this.setPlanFlightByOvernight(this.data().planOverightRates ?? []);
         this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
-        this.setDataSource(this.data().planHotels ?? [], this.data().general);
+        this.setDataSource(this.data().planHotels ?? [], this.data().general, this.data().isSummary);
       }
     })
   }
@@ -78,51 +79,35 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
   ngOnInit(): void {
   }
 
-  setDataSource(data: any[], generalData?: any) {
+  setDataSource(data: any[], generalData?: any, isSummary?: boolean) {
     this.periods = []
     this.dataSource.data = [...data];
     this.generalData = { ...generalData };
 
     this.getRow();
 
-    this.dataSource.data.forEach((item: any, index) => {
-      this.calculatePeriodLabel(item, index);
-      this.calculateData(item, index);
-    });
     this.calculateSpan();
+    this.dataSource.data.forEach((item: any, index) => {
+      this.calculateData(item, index, isSummary);
+    });
     this.calculateTotal()
   };
 
-  calculatePeriodLabel(item: any, index: number) {
-    let period = '';
-    period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+  // calculatePeriodLabel(item: any, index: number) {
+  //   let period = '';
+  //   period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
 
-    item.period = period;
-    // if (!this.periods.includes(period)) {
-    //   this.periods.push(period);
-    //   item.periodLabel = period;
-    // } else {
-    //   item.periodLabel = '';
-    // }
-  }
-
-  // calculateAirCraftLabel(item: any, index: number) {
-  //   if (!this.aircraftTypes.includes(`${item.period}_${item.aircraftType}`)) {
-  //     this.aircraftTypes.push(`${item.period}_${item.aircraftType}`)
-  //     item.aircraftTypeLabel = item.aircraftType;
-  //   } else {
-  //     item.aircraftTypeLabel = '';
-  //   }
+  //   item.period = period;
   // }
 
+
   calculateSpan() {
-    // this.periodRowspan = aircraftTypeRowspan * overnightRowspan;
-    // this.aircraftTypeRowspan = aircraftTypeRowspan;
-    // this.overnightRowspan = overnightRowspan;
-    // console.log('periodRowspan: ', this.periodRowspan, 'aircraftTypeRowspan: ', this.aircraftTypeRowspan, 'overnightRowspan: ', this.overnightRowspan);
     this.periodsSpan = {}
     this.aircraftTypeSpan = {}
     this.dataSource.data.forEach((item: any, index) => {
+
+      item.period = `${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;;
+
       // tính toán rowspan cho cột giai đoạn
       if (this.periodsSpan.hasOwnProperty(item.period)) {
         this.periodsSpan[item.period].count += 1;
@@ -131,11 +116,13 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
       }
 
       // tính toán rowspan cho cột loại máy bay
-      if (this.aircraftTypeSpan.hasOwnProperty(`${item.period}_${item.aircraftType}`)) {
-        this.aircraftTypeSpan[`${item.period}_${item.aircraftType}`].count += 1;
+      const aircraftTypeKey = `${item.period}_${item.aircraftType}`;
+      if (this.aircraftTypeSpan.hasOwnProperty(aircraftTypeKey)) {
+        this.aircraftTypeSpan[aircraftTypeKey].count += 1;
       } else {
-        this.aircraftTypeSpan[`${item.period}_${item.aircraftType}`] = { count: 1, firstIndex: index };
+        this.aircraftTypeSpan[aircraftTypeKey] = { count: 1, firstIndex: index };
       }
+      item.aircraftTypeGroup = aircraftTypeKey;
     });
   }
 
@@ -144,7 +131,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     if (isChangeRateForSingle) {
       this.generalData = { ...data };
       this.dataSource.data.forEach((item: any, index) => {
-        this.calculateData(item, index);
+        this.calculateData(item, index, true);
       });
       this.calculateSpan();
       this.calculateTotal()
@@ -170,7 +157,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
               item.overnight = Number(data.numberOfOverNight);
               item.flightOvernightRate = data.flightRate;
             }
-            this.calculateData(item, index);
+            this.calculateData(item, index, true);
           });
         } else {
           // lấy id bản ghi cuối cùng để làm cơ sở ví trí thêm data
@@ -191,9 +178,9 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
                 overnight: Number(data.numberOfOverNight),
                 flightOvernightRate: data.flightRate,
               });
-              this.calculateData(dataProcessHotel[i + 1], i + 1);
+              this.calculateData(dataProcessHotel[i + 1], i + 1, true);
             }
-            this.calculateData(dataProcessHotel[i], i);
+            this.calculateData(dataProcessHotel[i], i, true);
           }
           if (length) {
             this.calculateSpan();
@@ -217,7 +204,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
           this.calculateSpan();
         }
         this.dataSource.data.forEach((item: any, index) => {
-          this.calculateData(item, index);
+          this.calculateData(item, index, true);
         });
         this.calculateTotal()
         break;
@@ -236,74 +223,93 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
    * 
    * @param item Giá trị từng dòng của dataSource theo công thức
    */
-  private calculateData(item: any, index: number) {
+  private calculateData(item: any, index: number, isSummary?: boolean) {
+    if (isSummary) {
+      const _flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOverNight === item.overnight).map(item => item.flightRate);
+      item.flightOvernightRate = Number(_flightOvernightRate)
+      
+      item.noOfFlightOvernight = 1; // tổng số chuyến bay và số đêm nghỉ để nhóm sau đó chia cho số này vs tháng đã thực hiện monthInPerform
+      item.noOfOvernight = this.planFlightByOvernight.length ?? 1
 
-    // if (this.type() === PlanCategoryEnum.PROCUREMENT) {
-    //   // thêm tỉ lệ chuyến bay nghỉ đêm
-    //   item.flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOvernight === item.overnight).map(item => item.flightRate);
+      //Số chuyến bay theo tàu 
+      this.calculate(item, 'numberOfFlights');
+      // Thu bảo với tháng đã thực hiện thì số tiền sẽ phải chia ( số đêm nghỉ * loại máy bay) ==> loại ngân sách
+      if (item.monthIsPerform) {
+        item.noOfFlightOvernight = this.periodsSpan[item.period].count ?? 1;
+        item.totalSingleRoomIsPerform = item.totalSingleRoom;
+        item.totalDoubleRoomIsPerform = item.totalDoubleRoom;
 
-    //   // thêm số chuyến bay theo giai đoạn
-    //   item.planFlightPeriod = this.planFlightPeriods.filter(itemFilter => itemFilter.periodStart === item.periodStart && itemFilter.periodEnd === item.periodEnd && itemFilter.aircraftType === item.aircraftType).map(item => item.numberOfFlight).reduce((acc, value) => acc + value, 0);
-    //   //Số chuyến bay theo tàu 
-    //   this.calculate(item, 'totalFlightByAircraft');
-    // }
-    //Số phòng đơn
-    this.calculate(item, 'singleRoom');
-    //Số phòng đôi
-    this.calculate(item, 'doubleRoom');
-    //Số phòng đơn dự phòng do lẻ nam nữ
-    this.calculate(item, 'singleRoomReserved');
-    //Số phòng đơn early-checkin dự kiến
-    this.calculate(item, 'singleRoomEarly');
-    //Số phòng đôi early-checkin dự kiến
-    this.calculate(item, 'doubleRoomEarly');
-    //Số phòng đơn early-checkin dự kiến do lẻ nam nữ
-    this.calculate(item, 'singleRoomEarlyReserved');
-    //Số phòng đơn late checkout dự kiến
-    this.calculate(item, 'singleRoomLate');
-    //Số phòng đôi late checkout dự kiến
-    this.calculate(item, 'doubleRoomLate');
-    //Số phòng đơn late checkout dự kiến do lẻ nam nữ
-    this.calculate(item, 'singleRoomLateReserved');
-    //Thành tiền ngoại tệ, - phòng đơn 
-    this.calculate(item, 'totalAmountForeignSingleRoom');
-    //Thành tiền ngoại tệ,  - phòng đôi
-    this.calculate(item, 'totalAmountForeignDoubleRoom');
-    if (this.generalData.earlyCheckinFeeFlag) {
-      //Thành tiền ngoại tệ,  - phòng early-checkin
-      this.calculate(item, 'totalAmountForeignEarly');
+      } else {
+        //Số phòng đơn
+        this.calculate(item, 'singleRoom');
+        //Số phòng đôi
+        this.calculate(item, 'doubleRoom');
+        //Số phòng đơn dự phòng do lẻ nam nữ
+        this.calculate(item, 'singleRoomReserved');
+        //Số phòng đơn early-checkin dự kiến
+        this.calculate(item, 'singleRoomEarly');
+        //Số phòng đôi early-checkin dự kiến
+        this.calculate(item, 'doubleRoomEarly');
+        //Số phòng đơn early-checkin dự kiến do lẻ nam nữ
+        this.calculate(item, 'singleRoomEarlyReserved');
+        //Số phòng đơn late checkout dự kiến
+        this.calculate(item, 'singleRoomLate');
+        //Số phòng đôi late checkout dự kiến
+        this.calculate(item, 'doubleRoomLate');
+        //Số phòng đơn late checkout dự kiến do lẻ nam nữ
+        this.calculate(item, 'singleRoomLateReserved');
+
+      }
+      //Tổng số phòng đơn
+      this.calculate(item, 'totalSingleRoom');
+      //Tổng số phòng đôi
+      this.calculate(item, 'totalDoubleRoom');
+      //Thành tiền ngoại tệ, - phòng đơn 
+      this.calculate(item, 'totalAmountForeignSingleRoom');
+      //Thành tiền ngoại tệ, - phòng đơn có Vat
+      this.calculate(item, 'totalAmountForeignSingleRoomVat');
+      //Thành tiền ngoại tệ,  - phòng đôi
+      this.calculate(item, 'totalAmountForeignDoubleRoom');
+      //Thành tiền ngoại tệ,  - phòng đôi có Vat
+      this.calculate(item, 'totalAmountForeignDoubleRoomVat');
+      if (checkVisibleColumn(this.generalData, FlagTypeEnum.EARLY_CHECKIN)) {
+        //Thành tiền ngoại tệ,  - phòng early-checkin
+        this.calculate(item, 'totalAmountForeignEarly');
+        //Thành tiền ngoại tệ,  - phòng early-checkin có vat
+        this.calculate(item, 'totalAmountForeignEarlyVat');
+      }
+      if (checkVisibleColumn(this.generalData, FlagTypeEnum.LATE_CHECKOUT)) {
+        //Thành tiền ngoại tệ, - phòng late checkout
+        this.calculate(item, 'totalAmountForeignLate');
+        //Thành tiền ngoại tệ, - phòng late checkout có Vat
+        this.calculate(item, 'totalAmountForeignLateVat');
+      }
+      if (this.generalData.crewTransportFeeFlag) {
+        //Tổng tiền xe chở tổ bay (ngoại tệ)
+        this.calculate(item, 'totalAmountForeignTransport');
+        //Tổng tiền xe chở tổ bay (ngoại tệ) có vat
+        this.calculate(item, 'totalAmountForeignTransVat');
+      }
+      // if (!this.updateBudgetPlan()) {
+      //   //Tổng tiền theo loại máy bay
+      //   this.calculate(item, 'totalAmountAircraft');
+      // }
+
+      // Tổng tiền ngoại tệ - Chưa bao gồm VAT
+      this.calculate(item, 'totalAmountForeign');
+      // Tổng tiền ngoại tệ - bao gồm VAT
+      this.calculate(item, 'totalAmountForeignVat');
+      //Tổng tiền VND - bao gồm VAT
+      this.calculate(item, 'totalAmountVat');
+      //Tổng tiền VND - chưa bao gồm VAT
+      this.calculate(item, 'totalAmount');
+
     }
-    if (this.generalData.lateCheckoutFeeFlag) {
-      //Thành tiền ngoại tệ, - phòng late checkout
-      this.calculate(item, 'totalAmountForeignLate');
-    }
-    //Tổng tiền xe chở tổ bay (ngoại tệ)
-    this.calculate(item, 'totalAmountForeignTransport');
-
-    // if (!this.updateBudgetPlan()) {
-    //   //Tổng tiền theo loại máy bay
-    //   this.calculate(item, 'totalAmountAircraft');
-    // }
-
-    // Tổng tiền ngoại tệ - Chưa bao gồm VAT
-    this.calculate(item, 'totalAmountForeign');
-    // Tổng tiền ngoại tệ - bao gồm VAT
-    this.calculate(item, 'totalAmountForeignVat');
-    //Tổng tiền VND - bao gồm VAT
-    this.calculate(item, 'totalAmountVat');
-    //Tổng tiền VND - chưa bao gồm VAT
-    this.calculate(item, 'totalAmount');
-    //Tổng số phòng đơn
-    this.calculate(item, 'totalSingleRoom');
-    //Tổng số phòng đôi
-    this.calculate(item, 'totalDoubleRoom');
-
-
     /**
    * TÍnh toán dòng tổng
    * @param item giá trị từng dòng dataSource
    */
-    this.calculateTotalByGroup(item, index, 'totalAmountForeignTransport', 'totalAmountForeignTransportGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmountForeignTransVat', 'totalAmountForeignTransVatGroup');
     this.calculateTotalByGroup(item, index, 'totalAmountForeign', 'totalAmountForeignGroup');
     this.calculateTotalByGroup(item, index, 'totalAmountForeignVat', 'totalAmountForeignVatGroup');
     this.calculateTotalByGroup(item, index, 'totalAmount', 'totalAmountGroup');
@@ -363,7 +369,12 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     // Check lập kế hoạch sản lượng thay đổi
     // Tháng nào đã thực hiện thì tính theo công thưc mới
     const objFormula = formula[key];
-    let strFomular = objFormula.formula;
+    let strFomular
+    try {
+      strFomular = objFormula.formula;
+    } catch (err) {
+      console.log(key, err)
+    }
     // if (this.updateBudgetPlan() && item.monthIsPerform) {
     //   if (objFormula.formulaUpdateBudgetPlan) {
     //     strFomular = objFormula.formulaUpdateBudgetPlan;

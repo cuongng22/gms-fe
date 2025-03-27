@@ -46,8 +46,8 @@ export class DomesticEstimatedCostCarRentalComponent {
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       console.log('effect data DomesticEstimatedCostCarRentalComponent: ', this.data())
-      if (this.data()) {
-        this.setDataSource(this.data());
+      if (this.data() && Object.keys(this.data()).length > 0) {
+        this.setDataSource(this.data().planCarentals, this.data().isSummary);
       }
     })
   }
@@ -55,7 +55,7 @@ export class DomesticEstimatedCostCarRentalComponent {
     this.getRow();
   }
 
-  setDataSource(data: any) {
+  setDataSource(data: any, isSummary?: boolean) {
     this.dataSource.data = [...data]
     this.getRow();
     this.dataSource.data.forEach((item: any, index) => {
@@ -65,8 +65,8 @@ export class DomesticEstimatedCostCarRentalComponent {
     this.calculateTotal()
   }
   calculateTotal() {
-    this.setTotal('singleRoomYearPerform')
-    this.setTotal('noOfTrip')
+    this.setTotal('numberVehicles')
+    this.setTotal('numberVehiclesYearPerform')
     this.setTotal('singleRoom')
     this.setTotal('doubleRoom')
     this.setTotal('totalAmount')

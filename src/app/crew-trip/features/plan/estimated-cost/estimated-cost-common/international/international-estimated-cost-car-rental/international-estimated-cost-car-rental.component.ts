@@ -46,9 +46,9 @@ export class InternationalEstimatedCostCarRentalComponent implements OnInit, Aft
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       console.log('effect data InternationalEstimatedCostCarRentalComponent: ', this.data())
-      if (this.data()) {
+      if (this.data() && Object.keys(this.data()).length > 0) {
         this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
-        this.setDataSource(this.data().planCarentals ?? []);
+        this.setDataSource(this.data().planCarentals ?? [], this.data().isSummary);
       }
     })
   }
@@ -60,37 +60,40 @@ export class InternationalEstimatedCostCarRentalComponent implements OnInit, Aft
 
   }
 
-  setDataSource(data: any[]) {
+  setDataSource(data: any[], isSummary?: boolean) {
     this.dataSource.data = [...data];
     this.dataSource.data.forEach((item: any, index) => {
       let period = '';
       period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
 
       item.period = period;
-      this.calculateData(item, index);
+      this.calculateData(item, index, isSummary);
     });
     this.calculateTotal()
   }
 
-  private calculateData(item: any, index: number) {
+  private calculateData(item: any, index: number, isSummary?: boolean) {
+    if (isSummary) {
 
-    // if (this.type() === 'PROCUREMENT') {
-    //   //Số lượng chuyến bay theo giai đoạn
-    //   item.numberFlight = this.planFlightPeriods.filter((t: any) =>
-    //     t.periodStart === item.periodStart && t.periodEnd === item.periodEnd
-    //   ).map((t: any) => t.numberOfFlight).reduce((acc, value) => acc + value, 0);
-    // }
+      // if (this.type() === 'PROCUREMENT') {
+      //   //Số lượng chuyến bay theo giai đoạn
+      //   item.numberFlight = this.planFlightPeriods.filter((t: any) =>
+      //     t.periodStart === item.periodStart && t.periodEnd === item.periodEnd
+      //   ).map((t: any) => t.numberOfFlight).reduce((acc, value) => acc + value, 0);
+      // }
 
-    //Số lượt xe
-    this.calculate(item, 'numberVehicles');
-    //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
-    this.calculate(item, 'totalAmountForeign');
-    //Thành tiền (ngoại tệ) - Bao gồm VAT
-    this.calculate(item, 'totalAmountForeignVat');
-    //Thành tiền VND (Chưa bao gồm VAT)
-    this.calculate(item, 'totalAmount');
-    //Thành tiền VND (Bao gồm VAT)
-    this.calculate(item, 'totalAmountVat');
+      //Số lượt xe
+      this.calculate(item, 'numberVehicles');
+      //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
+      this.calculate(item, 'totalAmountForeign');
+      //Thành tiền (ngoại tệ) - Bao gồm VAT
+      this.calculate(item, 'totalAmountForeignVat');
+      //Thành tiền VND (Chưa bao gồm VAT)
+      this.calculate(item, 'totalAmount');
+      //Thành tiền VND (Bao gồm VAT)
+      this.calculate(item, 'totalAmountVat');
+    }
+
 
   }
   setPlanFlightPeriods(data: any[]) {
