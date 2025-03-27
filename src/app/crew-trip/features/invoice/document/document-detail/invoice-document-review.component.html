@@ -306,42 +306,45 @@
                     <th *matHeaderCellDef class="text-center " colspan="3" mat-header-cell mat-sort-header>Checkout</th>
                   </ng-container>
                   @for (innerColumn of _displayedColumnsAll; track innerColumn.value) {
-                  <ng-container matColumnDef="{{innerColumn.value}}">
-              <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center"
-                  [rowSpan]="(formType===1 || formType===2)?innerColumn.rowspan:1"
-                  [colSpan]=innerColumn.colspan>
-                  {{ innerColumn.label }}
-                  </th>
-                  <td
-                      [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
-                  [attr.rowspan]="getRowSpan(i,innerColumn,element)"
-                  [style.display]="shouldShowRowSpan(i,innerColumn) ? '' : 'none'"
-                  mat-cell *matCellDef="let element;let i = index">
+                    <ng-container matColumnDef="{{innerColumn.value}}">
+                      <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center"
+                          [rowSpan]="(formType===1 || formType===2)?innerColumn.rowspan:1"
+                          [colSpan]=innerColumn.colspan>
+                        {{ innerColumn.label }}
+                      </th>
+                      <td
+                          [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
+                          [attr.rowspan]="getRowSpan(i,innerColumn,element)"
+                          [style.display]="shouldShowRowSpan(i,innerColumn) ? '' : 'none'"
+                          mat-cell *matCellDef="let element;let i = index">
                 <span [ngClass]="{
                   'badge': innerColumn.value === 'activeLabel',
                   'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
                   'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
                   }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
-              </td>
-              <td mat-footer-cell *matFooterCellDef class="text-right">
-                @if (innerColumn.displayTotal) {
-                  <span>
+                      </td>
+                      <td mat-footer-cell *matFooterCellDef class="text-right">
+                        @if (innerColumn.displayTotal) {
+                          <span>
                     {{ calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
                       </span>
-                  }
-                  </td>
+                        }
+                      </td>
 
-                </ng-container>
+                    </ng-container>
                   }
                   <tr *matHeaderRowDef="_displayedColumnsHeader1" mat-header-row></tr>
                   <tr *matHeaderRowDef="_displayedColumnsHeader2" mat-header-row></tr>
                   <!--<tr *matHeaderRowDef="['stt','accessBridge']"
                       mat-header-row></tr>-->
-                  <tr *matRowDef="let row; columns: _displayedColumnsRow;" class="input-row" mat-row></tr>
+                  <tr *matRowDef="let row; columns: _displayedColumnsRow;"
+                      [class.reconcile-row1]="+row.reconcile==1"
+                      [class.reconcile-row2]="+row.reconcile==2" class="input-row"
+                      mat-row></tr>
                   <tr *matFooterRowDef="_displayedColumnsFooter" class="fw-bold" mat-footer-row></tr>
                   <tr *matNoDataRow class="mat-row">
                     <td [attr.colspan]="_displayedColumnsRow.length" class="mat-cell border-none text-center"><span
-                      i18n>No data!</span></td>
+                        i18n>No data!</span></td>
                   </tr>
                 </table>
               </div>
