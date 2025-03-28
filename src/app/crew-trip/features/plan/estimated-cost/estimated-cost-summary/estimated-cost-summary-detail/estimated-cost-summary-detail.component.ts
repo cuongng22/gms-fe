@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
-import { RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { EstimatedCostGeneralComponent } from '../../estimated-cost-common/estimated-cost-general/estimated-cost-general.component';
@@ -49,6 +49,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   override baseService = inject(PlanBudgetProcurementService);
   private datePipe = inject(DatePipe);
   private cdRef = inject(ChangeDetectorRef);
+  private readonly router = inject(Router)
 
 
   id = input.required<number>();
@@ -63,6 +64,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
   dataDetail: any;
   showDialogSummary = false;
+  showDialogClose = false;
 
   @ViewChild('panelCalculationBasisState', { static: false }) panelCalculationBasisState: MatExpansionPanel; // II
   @ViewChild('panelFlightOvernightState', { static: false }) panelFlightOvernightState: MatExpansionPanel; // tỉ lệ ngủ đêm
@@ -379,5 +381,34 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
   checkStatusCompelted(): boolean {
     return this.dataDetail?.status === StatusSummaryEnum.COMPLETED;
+  }
+
+  toggleDialogClose() {
+    this.showDialogClose = !this.showDialogClose;
+  }
+
+  closeEvent() {
+    if (this.checkStatusCompelted()) {
+      this.router.navigate(['/plan/est-plan/est-cost', this.estCostId(), 'summary']);
+    } else {
+      this.toggleDialogClose();
+    }
+  }
+
+
+  async confirmClose() {
+    try {
+      await this.spinner.show()
+      const resSave = await this.processSave();
+      this.showSuccess(this.MESSAGE.UPDATE_SUCCESS)
+      if (resSave.result) {
+        this.router.navigate(['/plan/est-plan/est-cost', this.estCostId(), 'summary']);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.spinner.hide()
+    }
+
   }
 }

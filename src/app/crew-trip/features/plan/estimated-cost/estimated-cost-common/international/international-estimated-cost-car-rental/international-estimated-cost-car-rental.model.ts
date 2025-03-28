@@ -60,11 +60,11 @@ export const formula: any = {
     },
     //Thành tiền VND (Chưa bao gồm VAT) = Thành tiền ngoại tệ chưa bao gồm VAT * tỷ giá theo từng tháng
     totalAmount: {
-        formula: 'ctz(data.totalAmountForeign) * ctz(data.rate)'
+        formula: 'ctz(data.totalAmountForeign) * ctz(data.rateInPeriod)'
     },
     //Thành tiền VND (Bao gồm VAT) = Thành tiền ngoại tệ bao gồm VAT * tỷ giá theo từng tháng
     totalAmountVat: {
-        formula: 'ctz(data.totalAmountForeignVat) * ctz(data.rate)'
+        formula: 'ctz(data.totalAmountForeignVat) * ctz(data.rateInPeriod)'
     }
 
 }

@@ -73,12 +73,14 @@ export class DomesticBudgetProcurementHotelComponent
   startDatePlanGroup: any;
   endDatePlanGroup: any;
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
+  general: any = {}
 
   round = round;
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       if (this.data() && Object.keys(this.data()).length > 0) {
         this.setDataSource(this.data().planHotels, this.data().isSummary);
+        this.setGeneral(this.data().general)
       }
     });
   }
@@ -109,6 +111,10 @@ export class DomesticBudgetProcurementHotelComponent
       this.calculateData(item, index, isSummary);
     });
     this.calculateTotal()
+  }
+
+  setGeneral(data: any) {
+    this.general = data;
   }
 
   getDataSource() {
@@ -254,7 +260,7 @@ export class DomesticBudgetProcurementHotelComponent
     data[control] = false;
     if (['priceSingleRoomEditing', 'priceSingleRoomVatEditing', 'priceDoubleRoomEditing',
       'priceDoubleRoomVatEditing', 'singleRoomExtraEditing', 'doubleRoomExtraEditing',
-      'singleRoomEditing', 'doubleRoomEditing']
+      'singleRoomEditing', 'doubleRoomEditing', 'singleRoomYearPerformEditing', 'doubleRoomYearPerformEditing']
       .includes(control)) {
       this.calculateData(data, 0, true)
     }
