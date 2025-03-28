@@ -160,7 +160,7 @@
                                     zoom_in
                                 </i>
                             </button>
-                            @if (categoryType() !== CategoriesEnum.ALL) {
+                            @if (categoryType() !== CategoriesEnum.ALL && element.status !== StatusSummaryEnum.COMPLETED) {
                                 <button type="button" mat-button title="Delete" i18n-title="@@delete" class="text-danger"
                                 (click)="showConfirmDelete(element.id)">
                                 <i class="material-symbols-outlined text-danger">

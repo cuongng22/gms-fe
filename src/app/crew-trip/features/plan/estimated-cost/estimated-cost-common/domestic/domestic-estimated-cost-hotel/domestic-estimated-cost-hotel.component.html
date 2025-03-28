@@ -29,10 +29,10 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
                     Single Room
                 </th>
-                <td mat-cell *matCellDef="let element">
-                    {{element.singleRoomYearPerform}}
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{element.singleRoomYearPerform|number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right ">
                     {{getTotal('singleRoomYearPerform') | number}}
                 </td>
             </ng-container>
@@ -40,10 +40,10 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
                     Double Room
                 </th>
-                <td mat-cell *matCellDef="let element">
-                    {{element.doubleRoomYearPerform}}
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{element.doubleRoomYearPerform|number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right ">
                     {{getTotal('doubleRoomYearPerform') | number}}
                 </td>
             </ng-container>
@@ -58,10 +58,10 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
                     Single Room
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.singleRoom}}
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.singleRoom|number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right ">
                     {{getTotal('singleRoom') | number}}
                 <td>
             </ng-container>
@@ -69,10 +69,10 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
                     Double Room
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.doubleRoom}}
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.doubleRoom|number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right ">
                     {{getTotal('doubleRoom') | number}}
                 </td>
             </ng-container>
@@ -138,20 +138,20 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVAT">
                     Excluding VAT
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.totalAmount}}
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.totalAmount |number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('totalAmount') | number}}
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right ">{{getTotal('totalAmount') | number}}
                 <td>
             </ng-container>
             <ng-container matColumnDef="totalAmountIncludingVAT">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVAT">
                     Including VAT
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.totalAmountVat}}
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.totalAmountVat|number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('totalAmountVat') | number}}</td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotal('totalAmountVat') | number}}</td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="headerRowDef1; sticky:true"></tr>

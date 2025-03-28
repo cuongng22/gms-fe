@@ -10,7 +10,7 @@ import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
-import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import { Constant, round } from 'src/app/crew-trip/shared/utils/constant';
 import { PlanCategoryEnum } from '../../../../budget-procurement/budget-procurement.model';
 import { checkChange, checkVisibleColumn, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './international-estimated-cost-hotel.model';
 import { FlagTypeEnum } from '../../../../budget-procurement/budget-procurement-common/international/international-budget-procurement-hotel/international-budget-procurement-hotel.model';
@@ -59,7 +59,8 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
   aircraftTypeSpan: {
     [key: string]: { count: number, firstIndex: number }
   } = {}
-
+  startDatePlanGroup: any;
+  endDatePlanGroup: any;
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
@@ -77,6 +78,8 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
   }
 
   ngOnInit(): void {
+    this.startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
+    this.endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
   }
 
   setDataSource(data: any[], generalData?: any, isSummary?: boolean) {
@@ -227,7 +230,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     if (isSummary) {
       const _flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOverNight === item.overnight).map(item => item.flightRate);
       item.flightOvernightRate = Number(_flightOvernightRate)
-      
+
       item.noOfFlightOvernight = 1; // tổng số chuyến bay và số đêm nghỉ để nhóm sau đó chia cho số này vs tháng đã thực hiện monthInPerform
       item.noOfOvernight = this.planFlightByOvernight.length ?? 1
 
@@ -338,24 +341,24 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
   setTotal(control: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     let totalValue = 0
-    const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     if (control === 'totalAmountVat') {
-      const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-      totalValue = Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
-          return Number(t[control]);
+      // const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
+      totalValue = this.dataSource.data.map((t: any) => {
+        if (truncateDate(new Date(t['periodStart'])) <= truncateDate(this.endDatePlanGroup)) {
+          return round(Number(t[control]));
+        } else {
+          return round(Number(t['totalAmountYearPerformVat']))
         }
-        return 0;
-      }).reduce((acc, value) => acc + value, 0));
+      }).reduce((acc, value) => acc + value, 0);
       this.resultTotal[control] = totalValue;
-      return
+      return;
     }
-    totalValue = Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
-        return Number(t[control]);
+    totalValue = this.dataSource.data.map((t: any) => {
+      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(this.startDatePlanGroup)) {
+        return round(Number(t[control]));
       }
       return 0;
-    }).reduce((acc, value) => acc + value, 0));
+    }).reduce((acc, value) => acc + value, 0);
     this.resultTotal[control] = totalValue;
   }
 

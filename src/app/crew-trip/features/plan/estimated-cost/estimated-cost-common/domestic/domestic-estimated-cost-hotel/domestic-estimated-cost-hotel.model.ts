@@ -51,11 +51,11 @@ export const formula: any = {
     },
     // Thành tiền chưa vat
     totalAmount: {
-        formula: '(ctz(data.singleRoom) * ctz(data.priceSingleRoom)) + (ctz(data.doubleRoom) * ctz(data.priceDoubleRoom))'
+        formula: '(ctz(data.totalSingleRoom) * ctz(data.priceSingleRoom)) + (ctz(data.totalDoubleRoom) * ctz(data.priceDoubleRoom))'
     },
     // Thành tiền chưa có vat
     totalAmountVat: {
-        formula: '(ctz(data.singleRoom) * ctz(data.priceSingleRoomVat)) + (ctz(data.doubleRoom) * ctz(data.priceDoubleRoomVat))'
+        formula: '(ctz(data.totalSingleRoom) * ctz(data.priceSingleRoomVat)) + (ctz(data.totalDoubleRoom) * ctz(data.priceDoubleRoomVat))'
     },
     totalAmountYearPerformVat: {
         formula: '(ctz(data.singleRoomYearPerform) * ctz(data.priceSingleRoomVat)) + (ctz(data.doubleRoomYearPerform) * ctz(data.priceDoubleRoomVat))'
