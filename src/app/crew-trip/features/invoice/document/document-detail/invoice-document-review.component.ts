@@ -253,16 +253,6 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
         let reviewStatus = this.reviewMatch() ? InvoiceDocumentStatusEnum.VERIFIED : InvoiceDocumentStatusEnum.UNVERIFIED
         let filterForm = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((s: any) => s.sourceData == 'FORM');
-        let filterAves = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((s: any) => s.sourceData == 'AVES');
-        //check diff
-        /*   filterForm.forEach(form=>{
-             if (this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
-               let avesRow =   filterAves.find(aves=>aves.ciFltno == form.ciFltno && aves.ciDate == form.ciDate);
-               if(!avesRow || avesRow.)
-             }
-
-           });*/
-        console.log(this.dataObject, 'dataObjectdataObjectdataObject')
         this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm, status: reviewStatus});
       });
 
