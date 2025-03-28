@@ -1,43 +1,44 @@
 @if (this.dataSource.data && this.dataSource.data.length > 0) {
-    <div class="row">
-        <div class="flightPeriod">
-            <div class="table-responsive">
-                <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
-                    <ng-container matColumnDef="period">
-                        <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                            i18n="@@period">
-                            Period
-                        </th>
-                        <td mat-cell *matCellDef="let element" [attr.rowspan]="periodRowspan"
-                            [style.display]="!!element.period?'':'none'">
-                            {{element.period}}
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="aircraftType">
-                        <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                            i18n="@@aircraftType">
-                            Aircraft Type
-                        </th>
-                        <td mat-cell *matCellDef="let element">
-                            {{element.aircraftType}}
-                        </td>
-                    </ng-container>
-                    <ng-container matColumnDef="numberOfFlight">
-                        <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                            i18n="@@numberOfFlights">
-                            Number of Flights
-                        </th>
-                        <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
-                            {{element.numberOfFlight | number}}
-                        </td>
-                    </ng-container>
-                    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                    <tr class="mat-row" *matNoDataRow>
-                        <td class="mat-cell text-center" colspan="3">No data!</td>
-                    </tr>
-                </table>
-            </div>
+<div class="row">
+    <div class="flightPeriod">
+        <div class="table-responsive">
+            <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+                <ng-container matColumnDef="period">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@period">
+                        Period
+                    </th>
+                    <td mat-cell *matCellDef="let element; let index = dataIndex "
+                        [attr.rowspan]="periodsSpan[element.period].count" class="fw-bold"
+                        [style.display]="periodsSpan[element.period].firstIndex === index ?'':'none'">
+                        {{element.period}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="aircraftType">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@aircraftType">
+                        Aircraft Type
+                    </th>
+                    <td mat-cell *matCellDef="let element">
+                        {{element.aircraftType}}
+                    </td>
+                </ng-container>
+                <ng-container matColumnDef="numberOfFlight">
+                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+                        i18n="@@numberOfFlights">
+                        Number of Flights
+                    </th>
+                    <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
+                        {{element.numberOfFlight | number}}
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+                <tr class="mat-row" *matNoDataRow>
+                    <td class="mat-cell text-center" colspan="3">No data!</td>
+                </tr>
+            </table>
         </div>
     </div>
+</div>
 }
