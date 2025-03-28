@@ -17,10 +17,10 @@
                     i18n="@@numberOfCarBookingsCompleted" [attr.rowspan]="2">
                     Number of car bookings completed
                 </th>
-                <td mat-cell *matCellDef="let element">
-                    {{element.numberVehiclesYearPerform}}
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{element.numberVehiclesYearPerform|number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('numberVehiclesYearPerform') | number}}
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right ">{{getTotal('numberVehiclesYearPerform') | number}}
                 </td>
             </ng-container>
 
@@ -29,10 +29,10 @@
                     i18n="@@numberOfCarBookingsEstimatedForThisYear" [attr.rowspan]="2">
                     Number of car bookings estimated for this year
                 </th>
-                <td mat-cell *matCellDef="let element">
-                    {{element.numberVehicles}}
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{element.numberVehicles|number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('numberVehicles') | number}}
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right ">{{getTotal('numberVehicles') | number}}
                 </td>
             </ng-container>
 
@@ -46,20 +46,20 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@singleRoom">
                     Excluding VAT
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.unitPriceExcludingVAT}}
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.unitPriceExcludingVAT|number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('singleRoom') | number}}
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotal('singleRoom') | number}}
                 <td>
             </ng-container>
             <ng-container matColumnDef="unitPriceIncludingVAT">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@doubleRoom">
                     Including VAT
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.unitPriceIncludingVAT}}
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.unitPriceIncludingVAT|number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('doubleRoom') | number}}</td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotal('doubleRoom') | number}}</td>
             </ng-container>
 
             <ng-container matColumnDef="totalAmount">
@@ -72,20 +72,20 @@
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@excludingVAT">
                     Excluding VAT
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.totalAmount}}
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.totalAmount|number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('totalAmount') | number}}
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotal('totalAmount') | number}}
                 <td>
             </ng-container>
             <ng-container matColumnDef="totalAmountIncludingVAT">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" i18n="@@includingVAT">
                     Including VAT
                 </th>
-                <td mat-cell *matCellDef="let element; let index = dataIndex;">
-                    {{element.totalAmountVat}}
+                <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
+                    {{element.totalAmountVat|number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">{{getTotal('totalAmountVat') | number}}</td>
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotal('totalAmountVat') | number}}</td>
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="headerRowDef1; sticky:true"></tr>

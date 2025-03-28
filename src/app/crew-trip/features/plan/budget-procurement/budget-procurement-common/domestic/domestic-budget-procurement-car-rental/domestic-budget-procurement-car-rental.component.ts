@@ -46,10 +46,13 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
 
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
   round = round;
+  general: any = {}
+
   constructor(private readonly datePipe: DatePipe, private readonly cdRef: ChangeDetectorRef) {
     effect(() => {
       if (this.data() && Object.keys(this.data()).length > 0) {
         this.setDataSource(this.data().planCarentals, this.data().isSummary);
+        this.setGeneral(this.data().general)
       }
     })
   }
@@ -192,4 +195,7 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
     this.calculateTotal()
   }
 
+  setGeneral(data: any) {
+    this.general = data;
+  }
 }
