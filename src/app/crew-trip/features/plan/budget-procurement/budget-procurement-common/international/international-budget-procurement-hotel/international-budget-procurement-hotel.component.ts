@@ -75,7 +75,6 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
         this.setPlanFlightByOvernight(this.data().planOverightRates ?? []);
         this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
         this.setDataSource(this.data().planHotels ?? [], this.data().general, this.data().isSummary);
-        console.log(this.dataSource.data)
       }
     })
   }
