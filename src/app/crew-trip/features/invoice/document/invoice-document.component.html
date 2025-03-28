@@ -275,6 +275,15 @@
                     </i>
                   </a>
                 }
+                @else{
+                <a class="text-secondary" mat-button
+   type="button">
+  <i (click)="nextStep(element.id,true,3,element)" class="material-symbols-outlined" i18n-title
+     title="View reconciliation">
+    text_compare
+  </i>
+</a>
+                }
                 @if (element.status === 'UNMATCHED' && element.source === 'MANUAL') {
                   <a class="text-danger" mat-button
                      type="button">
