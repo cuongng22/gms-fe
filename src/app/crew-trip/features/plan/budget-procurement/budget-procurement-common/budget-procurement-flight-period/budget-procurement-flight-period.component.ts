@@ -26,8 +26,9 @@ export class BudgetProcurementFlightPeriodComponent implements OnInit, AfterView
   dataSource = new MatTableDataSource();
   displayedColumns: string[] = ['period', 'aircraftType', 'numberOfFlight'];
   periodRowspan = 0;
-  periods: string[] = [];
   data = input<any>();
+  periodsSpan: any = {};
+  aircraftTypeSpan: any = {};
 
   constructor(private datePipe: DatePipe, private dataTransformPipe: DataTransformPipe) {
     effect(() => {
@@ -46,21 +47,31 @@ export class BudgetProcurementFlightPeriodComponent implements OnInit, AfterView
   }
 
   setDataSource(data: any[]) {
-    this.periods = [];
+
     this.dataSource.data = [...data];
     this.periodRowspan = this.dataSource.data.map((item: any) => item.aircraftType).
       filter((value: any, index: any, self: any) => self.indexOf(value) === index).length;
 
-    this.dataSource.data.forEach((item: any) => {
-      const period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
-      // const period = `${item.periodStartStr} - ${item.periodEndStr}`;
-      if (!this.periods.includes(period)) {
-        this.periods.push(period);
-        item.period = period;
-      }
-    });
+    this.calculateSpan();
   }
 
+
+  calculateSpan() {
+    this.periodsSpan = {}
+    this.aircraftTypeSpan = {}
+    this.dataSource.data.forEach((item: any, index) => {
+      item.period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;;
+
+      // tính toán rowspan cho cột giai đoạn
+      if (this.periodsSpan.hasOwnProperty(item.period)) {
+        this.periodsSpan[item.period].count += 1;
+      } else {
+        this.periodsSpan[item.period] = { count: 1, firstIndex: index };
+      }
+
+      item.periodStartDate = new Date(item.periodStart)
+    });
+  }
 
   clickEdit(data: any) {
     data.editing = true;
