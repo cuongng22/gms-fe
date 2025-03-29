@@ -196,4 +196,5 @@ export class CharterComponent extends CommonComponent {
 	}
 
 	protected readonly round = round;
+	protected readonly Math = Math;
 }
