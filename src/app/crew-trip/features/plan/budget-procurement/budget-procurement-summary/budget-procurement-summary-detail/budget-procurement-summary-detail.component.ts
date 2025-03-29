@@ -179,10 +179,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
       this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.updateValueAndValidity();
       this.budgetProcurementGeneral.formGroupDetail.controls.procEndDate.updateValueAndValidity();
-      if (!this.budgetProcurementGeneral.checkRequiredCurrency()) {
-        this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.clearValidators();
-        this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.updateValueAndValidity();
-      }
+
       this.budgetProcurementGeneral.formGroupDetail.markAllAsTouched();
       this.budgetProcurementGeneral.formGroupDetail.updateValueAndValidity();
       if (this.budgetProcurementGeneral.formGroupDetail.invalid) {
@@ -614,6 +611,15 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
       general: this.budgetProcurementGeneral.formGroupDetail.getRawValue()
     }
     this.domesticProcurementWetLeaseData = [...this.dataDetail?.planProcumentWetLease ?? []];
+
+
+    if (!this.budgetProcurementGeneral.checkRequiredCurrency()) {
+      this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.clearValidators();
+      this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.updateValueAndValidity();
+    } else {
+      this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.addValidators(Validators.required);
+    }
+
   }
 
   private _planFlightRatesData: any[] = [];

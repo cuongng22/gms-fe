@@ -139,7 +139,7 @@
                     Excluding VAT
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
-                    {{element.totalAmount |number}}
+                    {{round(element.totalAmount) |number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right ">{{getTotal('totalAmount') | number}}
                 <td>
@@ -149,7 +149,7 @@
                     Including VAT
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;" class="text-right">
-                    {{element.totalAmountVat|number}}
+                    {{round(element.totalAmountVat)|number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">{{getTotal('totalAmountVat') | number}}</td>
             </ng-container>
