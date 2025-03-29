@@ -202,7 +202,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
       if (this.category() === CategoryEnum.DOMESTIC) {
         planFlightRates = [...this.cleanData(this.domesticFlightRate.dataSource.data ?? [])];
-        planBudgetHotels = [...this.cleanData(this.domesticEstimatedCostHotel.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.domesticEstimatedCostHotel.getDataSource() ?? [])];
         planBudgetCarentals = [...this.cleanData(this.domesticEstimatedCostCarRental.dataSource.data ?? [])];
         // planProcurementHotels = [...this.cleanData(this.domesticProcurementHotel.dataSource.data ?? [])];
         // planProcurementCarentals = [...this.cleanData(this.domesticProcurementCarRental.dataSource.data ?? [])];
@@ -212,8 +212,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
         // }
       } else {
         planOverightRates = [...this.cleanData(this.internationalEstimatedCostOvernight.dataSource.data ?? [])];
-        planBudgetHotels = [...this.cleanData(this.internationalEstimatedCostHotel.dataSource.data ?? [])];
-        planBudgetCarentals = [...this.cleanData(this.internationalEstimatedCostCarRental.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.internationalEstimatedCostHotel.getDataSource() ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.internationalEstimatedCostCarRental.getDataSource() ?? [])];
       }
 
       const data = {

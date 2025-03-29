@@ -2,8 +2,8 @@
     <div class="table-responsive max-height-600">
         <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
             <ng-container matColumnDef="month">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center"
-                    [attr.rowspan]="2" i18n="@@month">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.rowspan]="2"
+                    i18n="@@month">
                     Month
                 </th>
                 <td mat-cell *matCellDef="let element" class="fw-bold">
@@ -13,15 +13,15 @@
             </ng-container>
 
             <ng-container matColumnDef="numberOfFlights">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center"
-                    [attr.rowspan]="2" i18n="@@numberOfFlights">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.rowspan]="2"
+                    i18n="@@numberOfFlights">
                     Number of Flights
                 </th>
-                <td mat-cell *matCellDef="let element">
+                <td mat-cell *matCellDef="let element" class="text-right">
                     {{element.numberFlight | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                     {{getTotal('numberFlight') | number}} 
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    {{getTotal('numberFlight') | number}}
                 </td>
             </ng-container>
 
@@ -30,20 +30,20 @@
                     [attr.rowspan]="2" i18n="@@noOfTrip">
                     No. of Trip
                 </th>
-                <td mat-cell *matCellDef="let element">
+                <td mat-cell *matCellDef="let element" class="text-right">
                     {{element.numberVehicles | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                     {{getTotal('numberVehicles') | number}} 
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    {{getTotal('numberVehicles') | number}}
                 </td>
             </ng-container>
 
             <ng-container matColumnDef="extraTransfer">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center"
-                    [attr.rowspan]="2" i18n="@@extraTransfer">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.rowspan]="2"
+                    i18n="@@extraTransfer">
                     Extra transfer
                 </th>
-                <td mat-cell *matCellDef="let element"
+                <td mat-cell *matCellDef="let element" class="text-right"
                     [style.padding]="element['extraTransferEditing']?'0px !important':''"
                     (click)="clickEdit(element, 'extraTransferEditing')">
                     @if(!element['extraTransferEditing']){
@@ -52,31 +52,31 @@
                     <div sizeInput="xs">
                         <mat-form-field (clickOutside)="clickOutside(element,'extraTransferEditing')"
                             class="edit-inline-table">
-                            <input type="text" digitOnly matInput [(ngModel)]="element.extraTransfer" [disabled]="disabled()"
-                                >
+                            <input type="text" digitOnly matInput [(ngModel)]="element.extraTransfer"
+                                [disabled]="disabled()">
                         </mat-form-field>
                     </div>
                     }
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
-                     {{getTotal('extraTransfer') | number}} 
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
+                    {{getTotal('extraTransfer') | number}}
                 </td>
             </ng-container>
-            
+
             <ng-container matColumnDef="unitPrice">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center"
-                    [attr.rowspan]="2" i18n="@@unitPriceVat">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.rowspan]="2"
+                    i18n="@@unitPriceVat">
                     Unit Price <br /> (Including VAT)
                 </th>
-                <td mat-cell *matCellDef="let element">
-                    {{element.unitPrice | number}}
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{element.unitPriceVat | number}}
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold"></td>
             </ng-container>
 
             <ng-container matColumnDef="totalAmountForeign">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center"
-                    [attr.colspan]="2" i18n="@@totalAmountForeign">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
+                    i18n="@@totalAmountForeign">
                     Total Amount <br /> (Foreign Currency)
                 </th>
             </ng-container>
@@ -86,10 +86,10 @@
                     i18n="@@excludingVat">
                     Excluding VAT
                 </th>
-                <td mat-cell *matCellDef="let element">
-                    {{element.totalAmountForeign | number}}
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{round(element.totalAmountForeign) | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
                     {{getTotal('totalAmountForeign') | number}}
                 </td>
             </ng-container>
@@ -99,10 +99,10 @@
                     i18n="@@includingVat">
                     Including VAT
                 </th>
-                <td mat-cell *matCellDef="let element">
-                    {{element.totalAmountForeignVat | number}}
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{round(element.totalAmountForeignVat) | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
                     {{getTotal('totalAmountForeignVat') | number}}
                 </td>
             </ng-container>
@@ -120,10 +120,10 @@
                     i18n="@@excludingVat">
                     Excluding VAT
                 </th>
-                <td mat-cell *matCellDef="let element">
-                    {{element.totalAmount | number}}
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{round(element.totalAmount) | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
                     {{getTotal('totalAmount') | number}}
                 </td>
             </ng-container>
@@ -133,10 +133,10 @@
                     i18n="@@includingVat">
                     Including VAT
                 </th>
-                <td mat-cell *matCellDef="let element">
-                    {{element.totalAmountVat | number}}
+                <td mat-cell *matCellDef="let element" class="text-right">
+                    {{round(element.totalAmountVat) | number}}
                 </td>
-                <td mat-footer-cell *matFooterCellDef class="fw-bold">
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
                     {{getTotal('totalAmountVat') | number}}
                 </td>
             </ng-container>

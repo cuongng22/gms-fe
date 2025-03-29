@@ -10,7 +10,7 @@ import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
-import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import { Constant, round } from 'src/app/crew-trip/shared/utils/constant';
 import { PlanCategoryEnum, PADDING_0 } from '../../../../budget-procurement/budget-procurement.model';
 import { getHeaderRowDef1, getHeaderRowDef2, getRowDef, formula } from './domestic-estimated-cost-hotel.model';
 
@@ -44,6 +44,7 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
 
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
   planFlightByOvernight: any[] = []; //tỉ lệ chuyến bay theo số đêm nghỉ
+  round = round;
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
@@ -101,7 +102,7 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
 
 
   // hàm công thức tính chung
-  calculate(item: any, key: string) {
+  calculate(item: any, key: string, isRound?: boolean, fractionDigits?: number) {
     // let data: any = this.dataSource.data[index];
     // Check lập kế hoạch sản lượng thay đổi
     // Tháng nào đã thực hiện thì tính theo công thưc mới
@@ -109,6 +110,9 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
     let strFomular = objFormula.formula;
     if (!!strFomular) {
       item[key] = this.calculateFormula(item, strFomular);
+    }
+    if (isRound) {
+      item[key] = round(item[key], fractionDigits);
     }
     return item[key];
   }
@@ -120,8 +124,8 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
     this.setTotal('doubleRoom')
     this.setTotal('singleRoomExtra')
     this.setTotal('doubleRoomExtra')
-    this.setTotal('totalAmount')
-    this.setTotal('totalAmountVat')
+    this.setTotal('totalAmount', true)
+    this.setTotal('totalAmountVat', true)
   }
 
   // Hàm tính toán dựa trên công thức động
@@ -132,7 +136,7 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
       `return ${formula};`    // Công thức cần tính
     );
     const result = dynamicFunction(data, null, this.ctz);
-    return Math.round(result);
+    return (result);
   }
 
   // convertToZero
@@ -144,12 +148,12 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
   }
 
   // TÍnh dòng tổng 
-  setTotal(control: string) {
+  setTotal(control: string, isRound?: boolean, fractionDigits?: number) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     const totalValue = Math.round(this.dataSource.data.map((t: any) => {
       if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
-        return Number(t[control]);
+        return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
       }
       return 0;
     }).reduce((acc, value) => acc + value, 0));
@@ -175,6 +179,25 @@ export class DomesticEstimatedCostHotelComponent implements OnInit, AfterViewChe
       this.calculateData(data, 0, true)
     }
     this.calculateTotal()
+  }
+
+  getDataSource() {
+    const _stringData = JSON.stringify(this.dataSource.data);
+    let _jsonData = JSON.parse(_stringData);
+    _jsonData.forEach((item: any, index: number) => {
+      // Tổng Số phòng đơn
+      item.totalSingleRoom = round(item.totalSingleRoom);
+      // Tổng Số phòng đôi
+      item.totalDoubleRoom = round(item.totalDoubleRoom);
+      // Thành tiền chưa vat
+      item.totalAmount = round(item.totalAmount);
+      // Thành tiền  có vat
+      item.totalAmountVat = round(item.totalAmountVat);
+
+      // Thành tiền có vat của năm thực hiện
+      item.totalAmountYearPerformVat = round(item.totalAmountYearPerformVat);
+    });
+    return _jsonData;
   }
 
 }
