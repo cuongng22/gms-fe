@@ -1,6 +1,11 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { DatePipe, DecimalPipe, NgClass, NgForOf, NgIf } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {
+	FormBuilder,
+	FormsModule,
+	ReactiveFormsModule,
+	Validators,
+} from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
@@ -61,6 +66,9 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 		MatFooterCell,
 		MatFooterCellDef,
 		DataCalculateTotal,
+		NgClass,
+		NgIf,
+		NgForOf,
 	],
 	templateUrl: './car-cost-tracking.component.html',
 	styleUrl: './car-cost-tracking.component.scss',
@@ -109,7 +117,7 @@ export class CarCostTrackingComponent
 	constructor() {
 		super();
 		this.formGroupSearch = this.fb.group({
-			marketCode: [''],
+			marketCode: ['', Validators.required],
 			month: [''],
 			year: [],
 		});
@@ -138,10 +146,9 @@ export class CarCostTrackingComponent
 		for (let i = 1; i <= 12; i++) {
 			this.monthSelection.push(i < 10 ? '0' + i : '' + i);
 		}
-		//Create list year
 		const currentYear = new Date().getFullYear();
-		const startYear = Math.floor(currentYear / 100) * 100;
-		const endYear = startYear + 99;
+		const startYear = currentYear - 5;
+		const endYear = currentYear + 5;
 
 		for (let year = startYear; year <= endYear; year++) {
 			this.listYear.push(year);
