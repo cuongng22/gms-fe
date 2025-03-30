@@ -281,6 +281,19 @@
                     {{getTotal('totalDoubleRoom')}}
                 </td>
             </ng-container>
+            <ng-container matColumnDef="priceCrewTransport">
+                <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.rowspan]=2
+                    i18n="@@unitPricePerTrip">
+                    Unit Price per Trip
+                </th>
+                <td mat-cell *matCellDef="let element; let index = dataIndex"
+                    [attr.rowspan]="periodsSpan[element.period].count" class="text-right"
+                    [style.display]="periodsSpan[element.period].firstIndex === index?'':'none'">
+                    {{element.priceCrewTransportVat | number}}
+                </td>
+                <td mat-footer-cell *matFooterCellDef>
+                </td>
+            </ng-container>
 
 
 
@@ -290,9 +303,8 @@
                     Total Cost of Crew Transport <br /> (Foreign Currency)
                 </th>
                 <td mat-cell *matCellDef="let element; let index = dataIndex;"
-                    [attr.rowspan]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].count"
-                    [style.display]="aircraftTypeSpan[(element.period+'_'+element.aircraftType)].firstIndex === index?'':'none'"
-                    class="text-right">
+                    [attr.rowspan]="periodsSpan[element.period].count" class="text-right"
+                    [style.display]="periodsSpan[element.period].firstIndex === index?'':'none'" class="text-right">
                     <!-- {{element.totalAmountForeignTransportGroup|number}} -->
                     {{getTotalByGroup(element,'totalAmountForeignTransVat','totalAmountForeignTransVatGroup') |
                     number}}
