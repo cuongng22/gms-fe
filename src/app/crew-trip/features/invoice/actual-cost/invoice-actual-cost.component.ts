@@ -34,12 +34,13 @@ import moment from "moment";
 import {InvoiceDocumentDetailComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-detail.component";
 import {InvoiceDocumentService} from "src/app/crew-trip/core/services/invoice-document-service";
 import {InvoiceDocumentExportType, InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {SelectMultipleComponent} from "src/app/crew-trip/shared/component/select-multiple/select-multiple.component";
 
 
 @Component({
   selector: 'app-invoice-actual-cost',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, InvoiceDocumentDetailComponent],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, InvoiceDocumentDetailComponent, SelectMultipleComponent],
   templateUrl: './invoice-actual-cost.component.html',
   styleUrl: './invoice-actual-cost.component.scss',
   providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
@@ -69,10 +70,10 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
   _displayedColumns: {
-    label: string; value: string, type?: string, format?: string
+    label: string; value: string, type?: string, format?: string,sticky?:boolean
   }[] = [
-    {label: $localize`Partner Name`, value: 'partnerName'},
-    {label: $localize`Airport Code`, value: 'airportCode'},
+    {label: $localize`Partner Name`, value: 'partnerName', sticky:true},
+    {label: $localize`Airport Code`, value: 'airportCode', sticky:true},
     {label: $localize`Type`, value: 'ctype'},
     {label: $localize`Period Occurrence`, value: 'periodOccurrence', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Currency`, value: 'currency'},
