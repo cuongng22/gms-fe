@@ -57,7 +57,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string, sticky?: boolean
   }[] = [
     {label: $localize`Airport Code`, value: 'airportCode', rowspan: "2", sticky:true},
-    {label: $localize`Invoice Number`, value: 'invoiceNumber', rowspan: "2", sticky:true},
+    {label: $localize`Invoice Number`, value: 'invoiceNumber', rowspan: "2"},
     {label: $localize`Invoice Date`, value: 'invoiceDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
     {label: $localize`InvoiceReceive Date`, value: 'invoiceReceiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
     {label: $localize`Period From`, value: 'periodFrom', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
