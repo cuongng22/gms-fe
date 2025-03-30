@@ -24,14 +24,10 @@
             </mat-form-field>
           </div>
           <div class="col-2" sizeInput='md'>
-            <mat-form-field>
-              <mat-label i18n>Airport Code</mat-label>
-              <mat-select formControlName="airportCode" multiple>
-                @for (item of listFlightMarket; track item) {
-                <mat-option [value]="item">{{ item }}</mat-option>
-                }
-              </mat-select>
-            </mat-form-field>
+            <app-select-multiple [options]="listFlightMarket" [required]="false"
+                                 attrValue="" formControlName="airportCode"
+                                 label="Airport code" size="md">
+            </app-select-multiple>
           </div>
           <div class="col-3" sizeInput='md'>
             <mat-form-field>
@@ -87,14 +83,14 @@
       <div class="table-responsive">
         <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true"
                style="border-collapse: separate;">
-          <ng-container matColumnDef="stt">
+          <ng-container matColumnDef="stt" sticky>
             <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
             <td *matCellDef="let element; let i = dataIndex" class="text-center"
                 mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
             </td>
           </ng-container>
           @for (innerColumn of _displayedColumns; track innerColumn.value) {
-          <ng-container matColumnDef="{{innerColumn.value}}">
+          <ng-container matColumnDef="{{innerColumn.value}}" [sticky]="innerColumn.sticky">
               <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
               <td mat-cell *matCellDef="let element">
               <span [ngClass]="{
