@@ -45,20 +45,22 @@
                     </i>
                     <span i18n="@@close">Close</span>
                 </button>
-                <button class="add-btn" type="button" mat-button [disabled]="checkStatusCompelted()"
-                    (click)="completed()">
+                @if(!checkStatusCompelted()){
+                <button class="add-btn" type="button" mat-button (click)="completed()">
                     <i class="material-symbols-outlined">
                         check_circle
                     </i>
                     <span i18n="@@completed">Completed</span>
                 </button>
-                <button mat-button color="primary" type="button" class="add-btn min-with-100 mlr-5" (click)="save()"
-                    [disabled]="checkStatusCompelted()">
+                }
+                @if(!checkStatusCompelted()){
+                <button mat-button color="primary" type="button" class="add-btn min-with-100 mlr-5" (click)="save()">
                     <i class="material-symbols-outlined">
                         save
                     </i>
                     <span i18n="@@save">Save</span>
                 </button>
+                }
             </div>
 
         </mat-card-subtitle>
@@ -67,13 +69,14 @@
         <app-estimated-cost-general #estimatedCostGeneral [category]="category()" [disabled]="checkStatusCompelted()"
             (formValueChanges)="formGeneralValueChanges($event)"></app-estimated-cost-general>
         <div class="d-flex justify-content-end">
-            <button [disabled]="checkStatusCompelted()" mat-button color="primary" type="button" class="add-btn"
-                (click)="summaryData()">
+            @if(!checkStatusCompelted()){
+            <button mat-button color="primary" type="button" class="add-btn" (click)="summaryData()">
                 <i class="material-symbols-outlined">
                     directory_sync
                 </i>
                 <span i18n="@@dataSummary">Data Summary</span>
             </button>
+            }
         </div>
     </mat-card-content>
 </mat-card>
