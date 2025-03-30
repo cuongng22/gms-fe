@@ -343,23 +343,23 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
   setTotal(control: string, isRound?: boolean, fractionDigits?: number) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     let totalValue = 0
-    if (control === 'totalAmountVat') {
-      // const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-      totalValue = this.dataSource.data.map((t: any) => {
-        if (truncateDate(new Date(t['periodStart'])) <= truncateDate(this.endDatePlanGroup)) {
-          return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
-        } else {
-          return isRound ? round(Number(t['totalAmountYearPerformVat']), fractionDigits) : Number(t['totalAmountYearPerformVat'])
-        }
-      }).reduce((acc, value) => acc + value, 0);
-      this.resultTotal[control] = totalValue;
-      return;
-    }
+    // if (control === 'totalAmountVat') {
+    //   // const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
+    //   totalValue = this.dataSource.data.map((t: any) => {
+    //     if (truncateDate(new Date(t['periodStart'])) <= truncateDate(this.endDatePlanGroup)) {
+    //       return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
+    //     } else {
+    //       return isRound ? round(Number(t['totalAmountYearPerformVat']), fractionDigits) : Number(t['totalAmountYearPerformVat'])
+    //     }
+    //   }).reduce((acc, value) => acc + value, 0);
+    //   this.resultTotal[control] = totalValue;
+    //   return;
+    // }
     totalValue = this.dataSource.data.map((t: any) => {
-      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(this.startDatePlanGroup)) {
+      // if (truncateDate(new Date(t['periodStart'])) >= truncateDate(this.startDatePlanGroup)) {
         return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
-      }
-      return 0;
+      // }
+      // return 0;
     }).reduce((acc, value) => acc + value, 0);
     this.resultTotal[control] = totalValue;
   }
