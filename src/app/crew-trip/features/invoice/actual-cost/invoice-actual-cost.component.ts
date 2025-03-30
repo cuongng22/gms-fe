@@ -166,8 +166,8 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
       }
       let res;
       let req = body || this.formGroupSearch.getRawValue();
-      req.periodFrom = moment.isMoment(req.periodFrom) ? req.periodFrom.format(Constant.LOCAL_DATE_FORMAT) : null;
-      req.periodTo = moment.isMoment(req.periodTo) ? req.periodTo.format(Constant.LOCAL_DATE_FORMAT) : null;
+      req.periodFrom = moment(req.periodFrom).isValid() ? moment(req.periodFrom).format(Constant.LOCAL_DATE_FORMAT) : null;
+      req.periodTo = moment(req.periodTo).isValid() ? moment(req.periodTo).format(Constant.LOCAL_DATE_FORMAT) : null;
       res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,
