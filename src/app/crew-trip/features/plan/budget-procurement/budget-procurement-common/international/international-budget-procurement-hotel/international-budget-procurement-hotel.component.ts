@@ -462,11 +462,11 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
    * TÍnh toán dòng tổng
    * @param item giá trị từng dòng dataSource
    */
-    this.calculateTotalByGroup(item, index, 'totalAmountForeignTransVat', 'totalAmountForeignTransVatGroup');
-    this.calculateTotalByGroup(item, index, 'totalAmountForeign', 'totalAmountForeignGroup');
-    this.calculateTotalByGroup(item, index, 'totalAmountForeignVat', 'totalAmountForeignVatGroup');
-    this.calculateTotalByGroup(item, index, 'totalAmount', 'totalAmountGroup');
-    this.calculateTotalByGroup(item, index, 'totalAmountVat', 'totalAmountVatGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmountForeignTransVat', 'totalAmountForeignTransVatGroup', true);
+    this.calculateTotalByGroup(item, index, 'totalAmountForeign', 'totalAmountForeignGroup', true);
+    this.calculateTotalByGroup(item, index, 'totalAmountForeignVat', 'totalAmountForeignVatGroup', true);
+    this.calculateTotalByGroup(item, index, 'totalAmount', 'totalAmountGroup', true);
+    this.calculateTotalByGroup(item, index, 'totalAmountVat', 'totalAmountVatGroup', true);
   }
 
   clickEdit(data: any, control: string) {
@@ -568,11 +568,11 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
   }
 
   // hàm tính tổng theo group (rowspan)
-  calculateTotalByGroup(item: any, index: number, key: string, control: string) {
+  calculateTotalByGroup(item: any, index: number, key: string, control: string, isRound?: boolean, fractionDigits?: number) {
     const keyGroup = this.getTotalByGroupKey(item, formula[key].groupFormula); // cái này để làm key trong object Total sau này sẽ get để lấy data hiển thị ở table
     const filterData = this.dataSource.data.filter((itemFilter: any, indexFilter: number) =>
       this.groupFormula(itemFilter, item, formula[key].groupFormula));
-    const result = filterData.map((t: any) => (t[key])).reduce((acc, value) => acc + value, 0);
+    const result = filterData.map((t: any) => (t[key])).reduce((acc, value) => (isRound ? round(acc, fractionDigits) : acc) + (isRound ? round(value, fractionDigits) : value), 0);
     this.totalByGroup[keyGroup] = { ...this.totalByGroup[keyGroup], [control]: round(result) };
   }
 
