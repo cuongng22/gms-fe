@@ -106,7 +106,7 @@
                 mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
             </td>
           </ng-container>
-          <ng-container matColumnDef="invoice">
+          <ng-container matColumnDef="invoice" sticky>
             <th *matHeaderCellDef class="text-center " mat-header-cell mat-sort-header rowspan="2">Invoice
             </th>
             <td *matCellDef="let element" mat-cell>
