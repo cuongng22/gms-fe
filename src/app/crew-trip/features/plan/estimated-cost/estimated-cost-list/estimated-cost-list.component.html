@@ -164,7 +164,9 @@
                         element.status === 'approved'
                         ){ -->
                         @if(
-                        element.status === 'dom_int_completed'
+                        element.status === 'dom_int_completed' ||
+                        element.status === 'confirmed' ||
+                        element.status === 'approved'
                         ){
                         <span>
                             <span class="text-secondary-bootstrap" i18n="@@completionDate">Completion Date</span>:

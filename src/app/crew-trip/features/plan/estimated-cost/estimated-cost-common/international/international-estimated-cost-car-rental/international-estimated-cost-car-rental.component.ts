@@ -117,23 +117,23 @@ export class InternationalEstimatedCostCarRentalComponent implements OnInit, Aft
   setTotal(control: string, isRound?: boolean, fractionDigits?: number) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     let totalValue = 0
-    const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
-    if (control === 'totalAmountVat') {
-      const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-      totalValue = Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
-          return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
-        }
-        return 0;
-      }).reduce((acc, value) => acc + value, 0));
-      this.resultTotal[control] = totalValue;
-      return
-    }
-    totalValue = Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
+    // const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
+    // if (control === 'totalAmountVat') {
+    //   const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
+    //   totalValue = (this.dataSource.data.map((t: any) => {
+    //     if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
+    //       return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
+    //     }
+    //     return 0;
+    //   }).reduce((acc, value) => acc + value, 0));
+    //   this.resultTotal[control] = totalValue;
+    //   return
+    // }
+    totalValue = (this.dataSource.data.map((t: any) => {
+      // if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
         return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
-      }
-      return 0;
+      // }
+      // return 0;
     }).reduce((acc, value) => acc + value, 0));;
     this.resultTotal[control] = totalValue;
   }
