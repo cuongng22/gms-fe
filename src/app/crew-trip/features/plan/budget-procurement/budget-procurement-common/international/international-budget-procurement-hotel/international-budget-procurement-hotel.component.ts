@@ -507,6 +507,10 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       }
       return 0;
     }).reduce((acc, value) => acc + value, 0);
+    // Nếu các cột đc merge thì sẽ phải chia cho số đêm nghỉ
+    if (['singleRoomEarly', 'doubleRoomEarly', 'singleRoomEarlyReserved', 'singleRoomLate', 'doubleRoomLate', 'singleRoomLateReserved'].includes(control)) {
+      totalValue = round(totalValue / (this.planFlightByOvernight.length ?? 1))
+    }
     this.resultTotal[control] = totalValue;
   }
 

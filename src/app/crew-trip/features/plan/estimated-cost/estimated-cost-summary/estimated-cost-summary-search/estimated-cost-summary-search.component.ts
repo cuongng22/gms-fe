@@ -64,7 +64,7 @@ export class EstimatedCostSummarySearchComponent extends CommonComponent impleme
 
   override ngOnInit(): void {
     const typeAirport = this.categoryType === CategoriesEnum.ALL ? '' : this.categoryType;
-    this.loadListFlightMarket({ status: FlightMarketStatusEnum.OPERATIONAL, type: typeAirport })
+    this.loadListFlightMarket({ type: typeAirport })
   }
 
 
