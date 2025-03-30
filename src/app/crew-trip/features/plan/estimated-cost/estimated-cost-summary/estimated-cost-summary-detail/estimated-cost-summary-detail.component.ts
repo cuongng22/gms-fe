@@ -105,6 +105,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   ngAfterViewChecked(): void {
   }
 
+
+
   async getDetailSummary() {
     try {
       await this.spinner.show();

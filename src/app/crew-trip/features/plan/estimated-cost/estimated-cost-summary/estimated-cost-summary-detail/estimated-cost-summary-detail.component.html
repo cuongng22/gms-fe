@@ -163,7 +163,7 @@
                         </div>
                     </mat-expansion-panel>
                     @if(domesticEstimatedCostCarRentalData.length>0 ||
-                    internationalEstimatedCostCarRentalData.length>0){
+                    internationalEstimatedCostCarRentalData?.planCarentals?.length>0){
                     <mat-expansion-panel [expanded]="true" #panelEstimateCostCarRentalState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
@@ -184,7 +184,7 @@
                                 [yearPlan]="yearPlan()" [disabled]="checkStatusCompelted()"
                                 [data]="domesticEstimatedCostCarRentalData" />
                             }@else if(category() === CategoryEnum.INTERNATIONAL &&
-                            internationalEstimatedCostCarRentalData.length>0){
+                            internationalEstimatedCostCarRentalData?.planCarentals?.length>0){
                             <!-- <app-international-budget-procurement-car-rental #internationalBudgetCarRental
                                     [disabled]="checkStatusCompelted()" [data]="internationalBudgetCarRentalData"
                                     [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
