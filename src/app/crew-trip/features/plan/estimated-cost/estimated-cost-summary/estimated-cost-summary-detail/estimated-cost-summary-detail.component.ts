@@ -105,6 +105,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   ngAfterViewChecked(): void {
   }
 
+
+
   async getDetailSummary() {
     try {
       await this.spinner.show();
@@ -137,19 +139,23 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   async confirmSummaryData() {
     try {
       this.spinner.show();
-      const requestBody = new DataSummayRequest(this.id() ?? 0,
-        this.estCostId() ?? 0,
-        this.yearPlan() ?? 0,
-        this.airportCode() ?? '',
-        '',
-        '',
-        false,
-        false
-      );
+      const requestBody =
+      {
+        id: this.id() ?? 0,
+        planBudgetProcurementId: this.estCostId() ?? 0,
+        yearPlan: this.yearPlan() ?? 0,
+        airportCode: this.airportCode() ?? '',
+        earlyCheckinFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.earlyCheckinFlag.value,
+        lateCheckoutFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.lateCheckoutFlag.value,
+        haveContract: !!this.estimatedCostGeneral.formGroupDetail.controls.haveContract.value,
+        earlyCheckinContractFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.earlyCheckinContractFlag.value,
+        lateCheckoutContractFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.lateCheckoutContractFlag.value,
+      }
       const response = await this.baseService.dataSummary(requestBody);//summaryDataExample;//summaryDataExample1;//
       this.dataDetail = {
         ...response.data,
         ...this.estimatedCostGeneral.formGroupDetail.getRawValue(),
+        crewTransportFeeFlag: response.data.crewTransportFeeFlag,
         planFlightRates: response.data.planFlightRates ?? [],
         planOverightRates: response.data.planOverightRates ?? [],
         planBudgetHotels: response.data.planBudgetHotels ?? [],
@@ -202,8 +208,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
       if (this.category() === CategoryEnum.DOMESTIC) {
         planFlightRates = [...this.cleanData(this.domesticFlightRate.dataSource.data ?? [])];
-        planBudgetHotels = [...this.cleanData(this.domesticEstimatedCostHotel.getDataSource() ?? [])];
-        planBudgetCarentals = [...this.cleanData(this.domesticEstimatedCostCarRental.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.domesticEstimatedCostHotel?.getDataSource() ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.domesticEstimatedCostCarRental?.dataSource.data ?? [])];
         // planProcurementHotels = [...this.cleanData(this.domesticProcurementHotel.dataSource.data ?? [])];
         // planProcurementCarentals = [...this.cleanData(this.domesticProcurementCarRental.dataSource.data ?? [])];
         // if (this.dataDetail?.wetLeaseFlag) {
@@ -212,8 +218,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
         // }
       } else {
         planOverightRates = [...this.cleanData(this.internationalEstimatedCostOvernight.dataSource.data ?? [])];
-        planBudgetHotels = [...this.cleanData(this.internationalEstimatedCostHotel.getDataSource() ?? [])];
-        planBudgetCarentals = [...this.cleanData(this.internationalEstimatedCostCarRental.getDataSource() ?? [])];
+        planBudgetHotels = [...this.cleanData(this.internationalEstimatedCostHotel?.getDataSource() ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.internationalEstimatedCostCarRental?.getDataSource() ?? [])];
       }
 
       const data = {
@@ -258,7 +264,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
   overnightValueChange(event: any): void {
     console.log('overnightValueChange: ', event);
-    this.internationalEstimatedCostHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.internationalEstimatedCostOvernight.dataSource.data);
+    this.internationalEstimatedCostHotel.setOvernightRates(event, event.actionType, this.internationalEstimatedCostOvernight.dataSource.data);
   }
 
   checkDataSummary() {
@@ -279,6 +285,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     // set đơn giá phòng đơn, đơn giá phòng đôi
     this.estimatedCostGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
     this.estimatedCostGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
+    this.estimatedCostGeneral.formGroupDetail.controls.crewTransportFeeFlag.setValue(this.dataDetail?.crewTransportFeeFlag);
 
     this.planFlightRatesData = [...this.dataDetail?.planFlightRates ?? []];
     // this._internationalFlightPeriodData = {
@@ -299,7 +306,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
       planOverightRates: [...this.dataDetail?.planOverightRates ?? []],
       planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
       planHotels: [...this.dataDetail?.planBudgetHotels ?? []],
-      general: this.estimatedCostGeneral.formGroupDetail.value
+      general: this.estimatedCostGeneral.formGroupDetail.getRawValue()
     };
     this.domesticEstimatedCostCarRentalData = {
       isSummary: isSummary,

@@ -162,6 +162,7 @@ export function getHeaderRowDef1(contractData: any): string[] {
         { column: "numberOfEstimatedEarlyCheckInRooms", visible: checkVisibleColumn(contractData, FlagTypeEnum.EARLY_CHECKIN) },
         { column: "numberOfEstimatedLateCheckoutRooms", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT) },
         { column: 'totalRoom', visible: true },
+        { column: "priceCrewTransport", visible: !!contractData.crewTransportFeeFlag }, // (Đơn giá xe chở tổ bay/lượt) 
         { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
         { column: "totalAmountForeignColspan", visible: true },
         { column: "totalAmountColspan", visible: true }
@@ -211,6 +212,7 @@ export function getRowDef(contractData: any): string[] {
         { column: "singleRoomLateReserved", visible: checkVisibleColumn(contractData, FlagTypeEnum.LATE_CHECKOUT) },
         { column: 'totalSingleRoom', visible: true },
         { column: 'totalDoubleRoom', visible: true },
+        { column: "priceCrewTransport", visible: !!contractData.crewTransportFeeFlag },
         { column: "totalAmountForeignTransport", visible: !!contractData.crewTransportFeeFlag },
         { column: "totalAmountForeign", visible: true },
         { column: "totalAmountForeignVat", visible: true },
