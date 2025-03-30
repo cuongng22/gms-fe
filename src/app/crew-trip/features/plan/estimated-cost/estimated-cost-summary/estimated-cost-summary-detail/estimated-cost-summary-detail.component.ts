@@ -151,20 +151,11 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
         earlyCheckinContractFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.earlyCheckinContractFlag.value,
         lateCheckoutContractFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.lateCheckoutContractFlag.value,
       }
-
-      new DataSummayRequest(this.id() ?? 0,
-        this.estCostId() ?? 0,
-        this.yearPlan() ?? 0,
-        this.airportCode() ?? '',
-        '',
-        '',
-        false,
-        false
-      );
       const response = await this.baseService.dataSummary(requestBody);//summaryDataExample;//summaryDataExample1;//
       this.dataDetail = {
         ...response.data,
         ...this.estimatedCostGeneral.formGroupDetail.getRawValue(),
+        crewTransportFeeFlag: response.data.crewTransportFeeFlag,
         planFlightRates: response.data.planFlightRates ?? [],
         planOverightRates: response.data.planOverightRates ?? [],
         planBudgetHotels: response.data.planBudgetHotels ?? [],
@@ -294,6 +285,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     // set đơn giá phòng đơn, đơn giá phòng đôi
     this.estimatedCostGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
     this.estimatedCostGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
+    this.estimatedCostGeneral.formGroupDetail.controls.crewTransportFeeFlag.setValue(this.dataDetail?.crewTransportFeeFlag);
 
     this.planFlightRatesData = [...this.dataDetail?.planFlightRates ?? []];
     // this._internationalFlightPeriodData = {
@@ -314,7 +306,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
       planOverightRates: [...this.dataDetail?.planOverightRates ?? []],
       planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
       planHotels: [...this.dataDetail?.planBudgetHotels ?? []],
-      general: this.estimatedCostGeneral.formGroupDetail.value
+      general: this.estimatedCostGeneral.formGroupDetail.getRawValue()
     };
     this.domesticEstimatedCostCarRentalData = {
       isSummary: isSummary,
