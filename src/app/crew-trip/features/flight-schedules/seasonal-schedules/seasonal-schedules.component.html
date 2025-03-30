@@ -19,16 +19,23 @@
     <mat-card-content>
         <form [formGroup]="formGroupSearch" (ngSubmit)="search()" autocomplete="off">
             <div class="row">
-
                 <div class="col mb-2">
-                    <app-selection-suggest label="Departure Airport" i18n-label="@@departureAirport"
-                        formControlName="depApSched" [options]="flightMarkets" />
+                    <app-selection formControlName="type" [options]="seasons" label="Seasonal flights"
+                        i18n-label="@@seasonalFlights"></app-selection>
+                </div>
+                <div class="col mb-2">
+                    <app-selection formControlName="year" [options]="years" label="Year"
+                        i18n-label="@@year" attrValue="value" attrDisplay="value"></app-selection>
+                </div>
+                <div class="col mb-2">
+                    <app-selection-suggest label="Airport" i18n-label="@@airport" formControlName="depApSched"
+                        [options]="flightMarkets" />
                 </div>
 
-                <div class="col mb-2">
+                <!-- <div class="col mb-2">
                     <app-selection-suggest label="Arrival Airport" i18n-label="@@arrivalAirport"
                         formControlName="arrApSched" [options]="flightMarkets" />
-                </div>
+                </div> -->
 
                 <div class="col mb-2">
                     <app-selection-suggest label="Aircraft" i18n-label="@@aircraft" formControlName="acType"

@@ -162,6 +162,8 @@
                             }
                         </div>
                     </mat-expansion-panel>
+                    @if(domesticEstimatedCostCarRentalData.length>0 ||
+                    internationalEstimatedCostCarRentalData.length>0){
                     <mat-expansion-panel [expanded]="true" #panelEstimateCostCarRentalState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
@@ -173,25 +175,28 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            @if(category() === CategoryEnum.DOMESTIC){
+                            @if(category() === CategoryEnum.DOMESTIC && domesticEstimatedCostCarRentalData.length>0){
                             <!-- <app-domestic-budget-procurement-car-rental #domesticBudgetCarRental [yearPlan]="yearPlan()"
-                                [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
-                                [data]="domesticBudgetCarRentalData" /> -->
+                                    [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
+                                    [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                    [data]="domesticBudgetCarRentalData" /> -->
                             <app-domestic-estimated-cost-car-rental #domesticEstimatedCostCarRental
                                 [yearPlan]="yearPlan()" [disabled]="checkStatusCompelted()"
                                 [data]="domesticEstimatedCostCarRentalData" />
-                            }@else {
+                            }@else if(category() === CategoryEnum.INTERNATIONAL &&
+                            internationalEstimatedCostCarRentalData.length>0){
                             <!-- <app-international-budget-procurement-car-rental #internationalBudgetCarRental
-                                [disabled]="checkStatusCompelted()" [data]="internationalBudgetCarRentalData"
-                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" /> -->
+                                    [disabled]="checkStatusCompelted()" [data]="internationalBudgetCarRentalData"
+                                    [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
+                                    [updateBudgetPlan]="dataDetail?.updateBudgetPlan" /> -->
                             <app-international-estimated-cost-car-rental #internationalEstimatedCostCarRental
                                 [disabled]="checkStatusCompelted()" [data]="internationalEstimatedCostCarRentalData"
                                 [yearPlan]="yearPlan()" />
                             }
                         </div>
                     </mat-expansion-panel>
+                    }
+
                 </mat-accordion>
             </mat-expansion-panel>
         </mat-accordion>

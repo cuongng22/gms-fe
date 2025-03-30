@@ -12,6 +12,7 @@ import { ClickOutside } from 'ngxtension/click-outside';
 import { Subject, debounceTime } from 'rxjs';
 import { ShowMessageComponent } from 'src/app/crew-trip/shared/component/show-message/show-message.component';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { checkChange } from '../international-estimated-cost-hotel/international-estimated-cost-hotel.model';
 
 @Component({
   selector: 'app-international-estimated-cost-overnight',
@@ -33,6 +34,7 @@ export class InternationalEstimatedCostOvernightComponent extends ShowMessageCom
 
   data = input<any>();
   disabled = input<boolean>(false);
+  prevData: any[] = [];
 
   constructor() {
     super();
@@ -45,14 +47,20 @@ export class InternationalEstimatedCostOvernightComponent extends ShowMessageCom
   }
 
   ngOnInit(): void {
-    this.overnightChange.pipe(debounceTime(2000)).subscribe((data: any) => {
-      if (data.control === 'numberOfOverNight') {
-        if (this.invalid()) {
-          return;
-        }
+    this.overnightChange.subscribe((data: any) => {
+      if (this.invalid()) {
+        return;
       }
+      if (this.dataSource.data.some((item: any) => !item.numberOfOverNight || !item.flightRate)) {
+        console.log('có 1 bản ghi bị null')
+        return;
+      }
+
       const overnight = this.dataSource.data.find((item: any) => item.id === data.id) as any;
-      if (overnight && !!overnight.numberOfOverNight && !!overnight.flightRate) {
+      const prevOvernight = this.prevData.find((item: any) => item.id === data.id);
+      if (overnight && !!overnight.numberOfOverNight && !!overnight.flightRate
+        && (checkChange(overnight.numberOfOverNight, prevOvernight?.numberOfOverNight) || checkChange(overnight.flightRate, prevOvernight?.flightRate))) {
+        this.prevData = JSON.parse(JSON.stringify([...this.dataSource.data]))
         this.valueChange.emit({ ...overnight, actionType: 'edit', overnightLength: this.dataSource.data.length });
       }
     });
@@ -60,6 +68,7 @@ export class InternationalEstimatedCostOvernightComponent extends ShowMessageCom
 
   setDataSource(data: any[]) {
     this.dataSource.data = [...data];
+    this.prevData = JSON.parse(JSON.stringify([...data]))
   }
 
   add() {
@@ -71,11 +80,11 @@ export class InternationalEstimatedCostOvernightComponent extends ShowMessageCom
     }
     this.dataSource.data.push(addItem);
     this.dataSource.data = [...this.dataSource.data];
+    this.prevData = JSON.parse(JSON.stringify([...this.dataSource.data]))
   }
 
-  edit(event: any, id: number, control?: string) {
-    console.log(event);
-    this.overnightChange.next({ id, value: event, control });
+  edit(element: any) {
+    this.overnightChange.next(element);
   }
 
   delete() {
@@ -106,6 +115,7 @@ export class InternationalEstimatedCostOvernightComponent extends ShowMessageCom
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
+    this.edit(data);
   }
   toggleDialogDelete() {
     this.showDialogDelete = !this.showDialogDelete;

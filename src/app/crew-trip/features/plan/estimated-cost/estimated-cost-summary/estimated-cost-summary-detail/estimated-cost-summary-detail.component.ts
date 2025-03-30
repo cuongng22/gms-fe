@@ -258,7 +258,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
   overnightValueChange(event: any): void {
     console.log('overnightValueChange: ', event);
-    this.internationalEstimatedCostHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.internationalEstimatedCostOvernight.dataSource.data);
+    this.internationalEstimatedCostHotel.setOvernightRates(event, event.actionType, this.internationalEstimatedCostOvernight.dataSource.data);
   }
 
   checkDataSummary() {
