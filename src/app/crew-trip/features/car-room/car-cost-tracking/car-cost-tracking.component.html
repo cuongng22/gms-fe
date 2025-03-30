@@ -92,13 +92,14 @@
                   {{ element[col.key] }}
                 }
               </td>
-              @if (['unitPrice', 'accessBridge', 'toll', 'airportParkFee',
+              @if (['accessBridge', 'toll', 'airportParkFee',
                 'transitDuty', 'totalCharge', 'totalChargeVnd', 'numberOfFc', 'numberOfVehicle', 'numberOfCc', 'numberOfCrew'].includes(col.name)) {
                 <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
                   {{ (dataSource.data | dataCalculateTotal: col.key) | number }}
                 </td>
               } @else {
-
+                <td mat-footer-cell *matFooterCellDef class="text-center fw-bold">
+                </td>
               }
             }
           </ng-container>
