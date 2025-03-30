@@ -100,7 +100,7 @@
       <div class="table-responsive">
         <table [dataSource]="dataSource" class="table-light table-responsive" mat-table
                style="border-collapse: separate;">
-          <ng-container matColumnDef="stt">
+          <ng-container matColumnDef="stt" sticky>
             <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
             <td *matCellDef="let element; let i = index" class="text-center"
                 mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
@@ -176,7 +176,7 @@
             </th>
           </ng-container>
           @for (innerColumn of _displayedColumnsAll; track innerColumn.value) {
-            <ng-container matColumnDef="{{innerColumn.value}}">
+            <ng-container matColumnDef="{{innerColumn.value}}" [sticky]="innerColumn.sticky">
               <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center"
                   [rowSpan]="(formType===1 || formType===2)?innerColumn.rowspan:1"
                   [colSpan]=innerColumn.colspan>
