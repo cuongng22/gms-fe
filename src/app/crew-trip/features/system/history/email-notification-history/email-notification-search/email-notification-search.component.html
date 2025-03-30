@@ -1,0 +1,63 @@
+<!--Search-->
+<mat-card class="mb-0 pt-0  pl-0 pr-0 pb-0 border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-content>
+        <form [formGroup]="formGroupSearch" (ngSubmit)="onSearch()" autocomplete="off">
+            <div class="row m-0">
+                <div class="col mb-2" sizeInput="sm">
+                    <mat-form-field>
+                        <mat-label i18n="@@keyword">Keyword</mat-label>
+                        <input matInput formControlName="title">
+                    </mat-form-field>
+                </div>
+                <div class="col mb-2">
+                    <app-selection class="" size="sm" i18n-label="@@categoryOfPlan" label="Category of plan"
+                        [options]="status" [isFirstBlank]="true" labelFirst="--- All status ---" i18n-labelFirst="@@allStatus"  formControlName="status" attrValue="code"
+                        attrDisplay="value"></app-selection>
+                </div>
+
+                <div class="col mb-2" sizeInput="sm">
+                    <mat-form-field class="mb-1">
+                        <mat-date-range-input [rangePicker]="timeSendPicker">
+                            <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="dd/mm/yyyy"
+                                formControlName="startTimeSend">
+                            <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
+                                formControlName="endTimeSend">
+                        </mat-date-range-input>
+                        <mat-label i18n="@@timeSend">Time send</mat-label>
+                        <mat-datepicker-toggle matIconSuffix [for]="timeSendPicker"></mat-datepicker-toggle>
+                        <mat-date-range-picker #timeSendPicker>
+                            <mat-date-range-picker-actions>
+                                <button sizeButton="sm" mat-button matDateRangePickerCancel
+                                    i18n="@@cancel">Cancel</button>
+                                <button sizeButton="sm" mat-raised-button color="primary" matDateRangePickerApply
+                                    i18n="@@apply">Apply
+                                </button>
+                            </mat-date-range-picker-actions>
+                        </mat-date-range-picker>
+                        <mat-error
+                            *ngxControlError="formGroupSearch.controls.startTimeSend; track: 'matDatepickerParse'"
+                            i18n="@@timeInvalidFormat">
+                            Time invalid format
+                        </mat-error>
+                        <mat-error *ngxControlError="formGroupSearch.controls.endTimeSend; track: 'matDatepickerParse'"
+                            i18n="@@timeInvalidFormat">
+                            Time invalid format
+                        </mat-error>
+                    </mat-form-field>
+                </div>
+                <div class="col mx-auto d-flex justify-content-sm-center justify-content-lg-start ">
+                    <mat-card-header class="mb-0 search">
+                        <mat-card-title>
+                            <button class="search-btn" type="submit" mat-button>
+                                <i class="material-symbols-outlined">
+                                    search
+                                </i>
+                                <span i18n="@@search">Search</span>
+                            </button>
+                        </mat-card-title>
+                    </mat-card-header>
+                </div>
+            </div>
+        </form>
+    </mat-card-content>
+</mat-card>
