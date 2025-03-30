@@ -48,7 +48,7 @@ export class PlanBudgetProcurementService extends BaseService {
         return firstValueFrom(this.http.get<T>(url, this.httpOptions));
     }
 
-    dataSummary<T = any>(body: DataSummayRequest): Promise<T> {
+    dataSummary<T = any>(body: any): Promise<T> {
         const url = `${this.api}/${this.path}/summary`;
         return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
     }
