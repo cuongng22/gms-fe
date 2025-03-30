@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, ElementRef, inject, ViewChild } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -22,6 +22,11 @@ import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/se
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { Constant, DATE_FORMAT_DD_MM_YYYY, removeNullValues } from 'src/app/crew-trip/shared/utils/constant';
+import { SelectComponent } from "../../../../ui-elements/select/select.component";
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
+import { values } from 'lodash';
+import { Seasons } from './seasonal-schedules.model';
+import { years } from '../../plan/budget-procurement/budget-procurement.model';
 
 @Component({
   selector: 'app-seasonal-schedules',
@@ -30,7 +35,8 @@ import { Constant, DATE_FORMAT_DD_MM_YYYY, removeNullValues } from 'src/app/crew
     MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, SelectionSuggestComponent, DataTransformPipe
+    MatTableModule, MatPaginatorModule, SelectionSuggestComponent, DataTransformPipe,
+    SelectionComponent
   ],
   templateUrl: './seasonal-schedules.component.html',
   styleUrl: './seasonal-schedules.component.scss',
@@ -44,7 +50,9 @@ export class SeasonalSchedulesComponent extends CommonComponent {
   dataTransformPipe = inject(DataTransformPipe);
   airplaneService = inject(AirplaneService);
   flightMarkets: any[] = [];
-  airplanes: any[] = []
+  airplanes: any[] = [];
+  seasons = Seasons;
+  years: any[];
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string, class?: string }[] = [
     // { label: $localize`:@@pid:PID`, value: 'pid' },
@@ -62,8 +70,9 @@ export class SeasonalSchedulesComponent extends CommonComponent {
 
 
   override formGroupSearch = this.formBuilder.group({
+    type: [''],
+    year: new FormControl<number>(new Date().getFullYear()),
     depApSched: [''],
-    arrApSched: [''],
     acType: ['']
   });
 
@@ -73,6 +82,7 @@ export class SeasonalSchedulesComponent extends CommonComponent {
 
   override async ngOnInit() {
     super.ngOnInit();
+    this.years = years();
     // this.displayedColumns = ['stt', 'market', 'code', 'name', 'address', 'contactDetails', 'active', 'notes'];
     this.displayedColumns = [...this._displayedColumns.map(s => s.value)];
     this.flightMarketService.search({ option: 1 }).then((res: any) => {

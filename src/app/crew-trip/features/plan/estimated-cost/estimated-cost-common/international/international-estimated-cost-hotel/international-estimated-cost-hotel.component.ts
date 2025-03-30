@@ -149,70 +149,73 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
 
   }
 
-  setOvernightRates(data: any, actionType: string, length?: number, planFlightByOvernight?: any[]) {
-    let checkExists: boolean;
+  setOvernightRates(data: any, actionType: string, planFlightByOvernight?: any[]) {
     switch (actionType) {
       case 'edit':
-        // Kiểm tra xem đã tồn tại id của ngủ đêm nay chưa, nếu chưa chuyển sang thêm mới
-        checkExists = this.dataSource.data.some((item: any, index) => item.overnightId == data.id);
-        if (checkExists) {
-          this.dataSource.data.forEach((item: any, index) => {
-            if (item.overnightId === data.id) {
-              item.overnight = Number(data.numberOfOverNight);
-              item.flightOvernightRate = data.flightRate;
-            }
-            this.calculateData(item, index, true);
-          });
-        } else {
-          // lấy id bản ghi cuối cùng để làm cơ sở ví trí thêm data
-          if (planFlightByOvernight && planFlightByOvernight.length) {
-            this.setPlanFlightByOvernight(planFlightByOvernight);
-          }
-
-          const overnightId = (this.dataSource.data[this.dataSource.data.length - 1] as any).overnightId;
-          const dataProcessHotel = [...this.dataSource.data];
-          for (let i = dataProcessHotel.length - 1; i >= 0; i--) {
-            const dataHotel = (this.dataSource.data[i] as any);
-            if (dataHotel.overnightId == overnightId) {
-              dataProcessHotel.splice(i + 1, 0, {
-                ...dataHotel,
-                periodLabel: '',
-                aircraftTypeLabel: '',
-                overnightId: data.id,
-                overnight: Number(data.numberOfOverNight),
-                flightOvernightRate: data.flightRate,
-              });
-              this.calculateData(dataProcessHotel[i + 1], i + 1, true);
-            }
-            this.calculateData(dataProcessHotel[i], i, true);
-          }
-          if (length) {
-            this.calculateSpan();
-          }
-          this.dataSource.data = [...dataProcessHotel];
-          this.calculateTotal()
-          console.log(this.dataSource.data);
-          console.log('periodRowspan: ', this.periodRowspan);
-          console.log('aircraftTypeRowspan: ', this.aircraftTypeRowspan);
-          console.log('overnightRowspan: ', this.overnightRowspan)
-        }
-
+        this.handleEditOvernightRates(data, planFlightByOvernight);
         break;
       case 'delete':
-        if (planFlightByOvernight && planFlightByOvernight.length) {
-          this.setPlanFlightByOvernight(planFlightByOvernight);
-          this.calculateSpan();
-        }
-        this.dataSource.data = [...this.dataSource.data.filter((itemFilter: any) => itemFilter.overnightId !== data.id)];
-        if (length) {
-          this.calculateSpan();
-        }
-        this.dataSource.data.forEach((item: any, index) => {
-          this.calculateData(item, index, true);
-        });
-        this.calculateTotal()
+        this.handleDeleteOvernightRates(data, planFlightByOvernight);
         break;
     }
+  }
+
+  private handleEditOvernightRates(data: any, planFlightByOvernight?: any[]) {
+    const checkExists = this.dataSource.data.some((item: any) => item.overnightId == data.id);
+    if (checkExists) {
+      this.updateExistingOvernightRates(data);
+    } else {
+      this.addNewOvernightRates(data, planFlightByOvernight);
+    }
+  }
+
+  private updateExistingOvernightRates(data: any) {
+    this.dataSource.data.forEach((item: any, index) => {
+      if (item.overnightId === data.id) {
+        item.overnight = Number(data.numberOfOverNight);
+        item.flightOvernightRate = data.flightRate;
+      }
+      this.calculateData(item, index, true);
+    });
+  }
+
+  private addNewOvernightRates(data: any, planFlightByOvernight?: any[]) {
+    if (planFlightByOvernight?.length) {
+      this.setPlanFlightByOvernight(planFlightByOvernight);
+    }
+
+    const overnightId = (this.dataSource.data[this.dataSource.data.length - 1] as any).overnightId;
+    const dataProcessHotel = [...this.dataSource.data];
+    for (let i = dataProcessHotel.length - 1; i >= 0; i--) {
+      const dataHotel = (this.dataSource.data[i] as any);
+      if (dataHotel.overnightId == overnightId) {
+        dataProcessHotel.splice(i + 1, 0, {
+          ...dataHotel,
+          overnightId: data.id,
+          overnight: Number(data.numberOfOverNight),
+          flightOvernightRate: data.flightRate,
+        });
+        this.calculateData(dataProcessHotel[i + 1], i + 1, true);
+      }
+      this.calculateData(dataProcessHotel[i], i, true);
+    }
+    this.dataSource.data = [...dataProcessHotel];
+    this.calculateSpan();
+    this.calculateTotal();
+    console.log(this.dataSource.data);
+  }
+
+  private handleDeleteOvernightRates(data: any, planFlightByOvernight?: any[]) {
+    if (planFlightByOvernight?.length) {
+      this.setPlanFlightByOvernight(planFlightByOvernight);
+      this.calculateSpan();
+    }
+    this.dataSource.data = [...this.dataSource.data.filter((itemFilter: any) => itemFilter.overnightId !== data.id)];
+    this.calculateSpan();
+    this.dataSource.data.forEach((item: any, index) => {
+      this.calculateData(item, index, true);
+    });
+    this.calculateTotal();
   }
 
   setPlanFlightByOvernight(data: any[]) {
@@ -357,7 +360,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     // }
     totalValue = this.dataSource.data.map((t: any) => {
       // if (truncateDate(new Date(t['periodStart'])) >= truncateDate(this.startDatePlanGroup)) {
-        return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
+      return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
       // }
       // return 0;
     }).reduce((acc, value) => acc + value, 0);
