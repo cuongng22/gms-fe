@@ -139,7 +139,20 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   async confirmSummaryData() {
     try {
       this.spinner.show();
-      const requestBody = new DataSummayRequest(this.id() ?? 0,
+      const requestBody =
+      {
+        id: this.id() ?? 0,
+        planBudgetProcurementId: this.estCostId() ?? 0,
+        yearPlan: this.yearPlan() ?? 0,
+        airportCode: this.airportCode() ?? '',
+        earlyCheckinFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.earlyCheckinFlag.value,
+        lateCheckoutFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.lateCheckoutFlag.value,
+        haveContract: !!this.estimatedCostGeneral.formGroupDetail.controls.haveContract.value,
+        earlyCheckinContractFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.earlyCheckinContractFlag.value,
+        lateCheckoutContractFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.lateCheckoutContractFlag.value,
+      }
+
+      new DataSummayRequest(this.id() ?? 0,
         this.estCostId() ?? 0,
         this.yearPlan() ?? 0,
         this.airportCode() ?? '',
@@ -204,8 +217,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
       if (this.category() === CategoryEnum.DOMESTIC) {
         planFlightRates = [...this.cleanData(this.domesticFlightRate.dataSource.data ?? [])];
-        planBudgetHotels = [...this.cleanData(this.domesticEstimatedCostHotel.getDataSource() ?? [])];
-        planBudgetCarentals = [...this.cleanData(this.domesticEstimatedCostCarRental.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.domesticEstimatedCostHotel?.getDataSource() ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.domesticEstimatedCostCarRental?.dataSource.data ?? [])];
         // planProcurementHotels = [...this.cleanData(this.domesticProcurementHotel.dataSource.data ?? [])];
         // planProcurementCarentals = [...this.cleanData(this.domesticProcurementCarRental.dataSource.data ?? [])];
         // if (this.dataDetail?.wetLeaseFlag) {
@@ -214,8 +227,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
         // }
       } else {
         planOverightRates = [...this.cleanData(this.internationalEstimatedCostOvernight.dataSource.data ?? [])];
-        planBudgetHotels = [...this.cleanData(this.internationalEstimatedCostHotel.getDataSource() ?? [])];
-        planBudgetCarentals = [...this.cleanData(this.internationalEstimatedCostCarRental.getDataSource() ?? [])];
+        planBudgetHotels = [...this.cleanData(this.internationalEstimatedCostHotel?.getDataSource() ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.internationalEstimatedCostCarRental?.getDataSource() ?? [])];
       }
 
       const data = {

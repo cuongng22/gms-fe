@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
-import { Component, ElementRef, inject, ViewChild } from '@angular/core';
-import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { AsyncPipe, CommonModule } from '@angular/common';
+import { Component, ElementRef, Inject, inject, ViewChild } from '@angular/core';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
@@ -27,6 +27,12 @@ import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection
 import { values } from 'lodash';
 import { Seasons } from './seasonal-schedules.model';
 import { years } from '../../plan/budget-procurement/budget-procurement.model';
+import { MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { RouterLink, RouterModule } from '@angular/router';
+import { FileUploadModule } from '@iplab/ngx-file-upload';
+import { DigitOnlyModule } from '@uiowa/digit-only';
+import { NgxControlError } from 'ngxtension/control-error';
 
 @Component({
   selector: 'app-seasonal-schedules',
@@ -115,4 +121,70 @@ export class SeasonalSchedulesComponent extends CommonComponent {
   //   super.search(searchValue, isNextPage);
   // }
 
+  async sync() {
+    this.dialog.open(DialogExportSeasonalSchedules, {
+      minWidth: 600
+    }).afterClosed().subscribe(() => {
+      this.search()
+    })
+  }
+
+
+}
+
+
+
+@Component({
+  selector: 'dialog-export-seasonal-schedules',
+  templateUrl: 'dialog-export-seasonal-schedules.component.html',
+  standalone: true,
+  imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose, MatCheckboxModule,
+    MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
+    MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe,
+    FileUploadModule, DigitOnlyModule,
+    NgxControlError, SelectionComponent
+  ],
+})
+export class DialogExportSeasonalSchedules extends CommonComponent {
+  override baseService = inject(SeasonalSchedulesService);
+  seasons = Seasons;
+  years: any[];
+  override formGroupDetail = this.formBuilder.group({
+
+    year: new FormControl(new Date().getFullYear(), [Validators.required]),
+    type: new FormControl('', [Validators.required])
+  });
+
+
+  constructor(
+    public dialogRef: MatDialogRef<DialogExportSeasonalSchedules>,
+    @Inject(MAT_DIALOG_DATA) public data: any,
+  ) {
+    super();
+  }
+
+  override ngOnInit(): void {
+    this.years = years();
+  }
+
+  async sync() {
+    try {
+      this.formGroupDetail.markAllAsTouched();
+      if (this.formGroupDetail.invalid) {
+        return;
+      }
+      const res = await this.baseService.synchronize(this.formGroupDetail.getRawValue())
+      this.baseService.showSuccess(this.MESSAGE.SYNC_SUCCESS);
+      this.close()
+    } catch (e: any) {
+      return e;
+    } finally {
+      this.spinner.hide();
+    }
+  }
+  close() {
+    this.dialogRef.close()
+  }
 }

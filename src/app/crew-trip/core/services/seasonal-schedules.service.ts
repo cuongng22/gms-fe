@@ -2,6 +2,7 @@ import { HttpHeaders, HttpParams } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { firstValueFrom } from 'rxjs';
 import { BaseService } from 'src/app/crew-trip/core/services/base-service';
+import { ListResponse } from '../../shared/models/common.model';
 
 @Injectable({
     providedIn: 'root'
@@ -32,5 +33,10 @@ export class SeasonalSchedulesService extends BaseService {
             }
         }
         return { blob: response.body as Blob, fileName };
+    }
+    synchronize(body: any) {
+        const url = `${this.api}/${this.path}/synchronize`;
+        const params = new HttpParams({ fromObject: body });
+        return firstValueFrom(this.http.get<any>(url, { params }));
     }
 }
