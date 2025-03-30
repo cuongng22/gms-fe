@@ -76,22 +76,21 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
 
-  override formGroupDetail = this.fb.group({
-    id: ['',],
-    marketCode: ['', [Validators.required]],
-    nightCount: [''],
-    rate: [''],
-    notes: ['']
-  });
 
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
       marketCode: ['',]
     });
+    this.formGroupDetail = this.fb.group({
+      id: ['',],
+      marketCode: ['', [Validators.required]],
+      nightCount: [''],
+      rate: ['', [Validators.min(1)]],
+      notes: ['']
+    });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
-
-
+    this.formGroupDetailInit = {...this.formGroupDetail.value};
   }
 
   override async ngOnInit() {
@@ -156,6 +155,34 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
   async downloadFileError() {
     if (this.uploadFileError.blob) {
       this.downloadFile(this.uploadFileError.blob, this.uploadFileError.fileName ?? 'file-error.xlsx');
+    }
+  }
+
+  override async save() {
+    try {
+      this.formGroupDetail.markAllAsTouched();
+      this.formGroupDetail.updateValueAndValidity();
+      if (this.formGroupDetail.invalid) {
+        this.findInvalidControls(this.formGroupDetail);
+        return;
+      }
+      const update = !!this.formGroupDetail.getRawValue().id;
+      await this.spinner.show();
+      let res;
+      if (update) {
+        res = await this.baseService.update(this.formGroupDetail.getRawValue());
+      } else {
+        res = await this.baseService.create(this.formGroupDetail.getRawValue());
+      }
+      await this.search();
+      this.baseService.showSuccess(
+        update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,
+      );
+      this.showDialogCreate = false;
+      return res;
+    } catch (e: any) {
+    } finally {
+      await this.spinner.hide();
     }
   }
 
