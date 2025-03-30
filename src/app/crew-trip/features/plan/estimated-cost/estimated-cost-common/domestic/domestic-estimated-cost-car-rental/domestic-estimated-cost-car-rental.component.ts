@@ -77,12 +77,12 @@ export class DomesticEstimatedCostCarRentalComponent {
   // TÍnh dòng tổng 
   setTotal(control: string, isRound?: boolean, fractionDigits?: number) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
-    const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
+    // const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     const totalValue = Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
+      // if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
         return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
-      }
-      return 0;
+      // }
+      // return 0;
     }).reduce((acc, value) => acc + value, 0));
     this.resultTotal[control] = totalValue;
   }
