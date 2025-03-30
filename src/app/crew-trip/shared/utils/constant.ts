@@ -63,6 +63,8 @@ export class MESSAGE {
 
   static HOTEL_CANNOT_BE_DELETED = $localize`:@@hotelCannotBeDeleted:Hotel cannot be deleted. It is being used in a contract.`;
   static CAR_COMPANY_CANNOT_BE_DELETED = $localize`:@@carCompanyCannotBeDeleted:Car company cannot be deleted. It is being used in a contract.`;
+
+  static SYNC_SUCCESS = $localize`:@@synchronizeSuccessfully:Synchronize successfully`;
 }
 
 export class LOCALE {

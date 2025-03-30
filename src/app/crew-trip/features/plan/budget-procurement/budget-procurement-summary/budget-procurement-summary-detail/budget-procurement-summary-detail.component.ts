@@ -189,16 +189,21 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
       const procStartDate = this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.value;
       const procEndDate = this.budgetProcurementGeneral.formGroupDetail.controls.procEndDate.value;
-      const requestBody = new DataSummayRequest(this.id() ?? 0,
-        this.planBudgetProcurementId() ?? 0,
-        this.yearPlan() ?? 0,
-        this.airportCode() ?? '',
-        procStartDate ? this.dataTransformPipe.transform(procStartDate, ['date', this.Constant.MONTH_FORMAT]) : null,
-        procEndDate ? this.dataTransformPipe.transform(procEndDate, ['date', this.Constant.MONTH_FORMAT]) : null,
-        !!this.budgetProcurementGeneral.formGroupDetail.controls.earlyCheckinFlag.value,
-        !!this.budgetProcurementGeneral.formGroupDetail.controls.lateCheckoutFlag.value,
-        !!this.budgetProcurementGeneral.formGroupDetail.controls.haveContract.value
-      );
+      const requestBody =
+      {
+        id: this.id() ?? 0,
+        planBudgetProcurementId: this.planBudgetProcurementId() ?? 0,
+        yearPlan: this.yearPlan() ?? 0,
+        airportCode: this.airportCode() ?? '',
+        procStartDate: procStartDate ? this.dataTransformPipe.transform(procStartDate, ['date', this.Constant.MONTH_FORMAT]) : null,
+        procEndDate: procEndDate ? this.dataTransformPipe.transform(procEndDate, ['date', this.Constant.MONTH_FORMAT]) : null,
+        earlyCheckinFlag: !!this.budgetProcurementGeneral.formGroupDetail.controls.earlyCheckinFlag.value,
+        lateCheckoutFlag: !!this.budgetProcurementGeneral.formGroupDetail.controls.lateCheckoutFlag.value,
+        haveContract: !!this.budgetProcurementGeneral.formGroupDetail.controls.haveContract.value,
+        earlyCheckinContractFlag: !!this.budgetProcurementGeneral.formGroupDetail.controls.earlyCheckinContractFlag.value,
+        lateCheckoutContractFlag: !!this.budgetProcurementGeneral.formGroupDetail.controls.lateCheckoutContractFlag.value,
+      }
+
       const response = await this.baseService.dataSummary(requestBody);//summaryDataExample;//summaryDataExample1;//
       this.dataDetail = {
         ...response.data,
