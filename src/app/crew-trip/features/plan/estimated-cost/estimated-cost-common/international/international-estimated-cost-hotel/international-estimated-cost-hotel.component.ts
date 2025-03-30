@@ -323,7 +323,6 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     this.calculateTotalByGroup(item, index, 'totalAmountVat', 'totalAmountVatGroup', true);
     this.calculateTotalByGroup(item, index, 'totalSingleRoom', 'totalSingleRoomGroup');
     this.calculateTotalByGroup(item, index, 'totalDoubleRoom', 'totalDoubleRoomGroup');
-    console.log(this.totalByGroup)
   }
 
   clickEdit(data: any, control: string) {
