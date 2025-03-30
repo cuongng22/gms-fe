@@ -538,7 +538,6 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     this.budgetProcurementGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
     this.budgetProcurementGeneral.inputPrice = this.dataDetail?.inputPrice;
     this.budgetProcurementGeneral.formGroupDetail.controls.crewTransportFeeFlag.setValue(this.dataDetail?.crewTransportFeeFlag);
-    this.budgetProcurementGeneral.formGroupDetail.controls.haveContract.setValue(this.dataDetail?.haveContract);
     this.budgetProcurementGeneral.cdRef.detectChanges()
 
     this.planFlightRatesData = [...this.dataDetail?.planFlightRates ?? []];
