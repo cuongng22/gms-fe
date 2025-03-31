@@ -4,18 +4,15 @@
       <h5 class="mb-0 d-inline ml-10">
         <h5 class="mb-0 ml-10">
           <span i18n>Detailed Statement</span>
-@if(formType==1){
-    <span i18n> for Hotel - International</span>
-}
-@else if(formType==2){
-    <span i18n> for Hotel - Domestic</span>
-}
-@else if(formType==3){
-    <span i18n> for Transportation - International</span>
-}
-@else if(formType==4){
-    <span i18n> for Transportation - Domestic</span>
-}
+          @if (formType == 1) {
+            <span i18n> for Hotel - International</span>
+          } @else if (formType == 2) {
+            <span i18n> for Hotel - Domestic</span>
+          } @else if (formType == 3) {
+            <span i18n> for Transportation - International</span>
+          } @else if (formType == 4) {
+            <span i18n> for Transportation - Domestic</span>
+          }
 
         </h5>
       </h5>
@@ -27,15 +24,14 @@
       <li class="breadcrumb-item d-inline-block position-relative" i18n>
         Detailed Statement
       </li>
-      @if(formType==1 || formType==2){
-      <li class="breadcrumb-item d-inline-block position-relative" i18n>
-        View Detailed Statement for Hotels
-      </li>
-      }
-      @else if(formType==3 || formType==4){
-      <li class="breadcrumb-item d-inline-block position-relative" i18n>
-        View Detailed Statement for Transportation
-      </li>
+      @if (formType == 1 || formType == 2) {
+        <li class="breadcrumb-item d-inline-block position-relative" i18n>
+          View Detailed Statement for Hotels
+        </li>
+      } @else if (formType == 3 || formType == 4) {
+        <li class="breadcrumb-item d-inline-block position-relative" i18n>
+          View Detailed Statement for Transportation
+        </li>
       }
     </ol>
   </div>
@@ -168,7 +164,7 @@
                   <a (click)="download(element)"
                      class="d-flex align-items-center justify-content-between position-relative"
                      style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
-                    {{ element.fileName +'.'+ element.fileType}}
+                    {{ element.fileName + '.' + element.fileType }}
                   </a>
                 </td>
               </ng-container>

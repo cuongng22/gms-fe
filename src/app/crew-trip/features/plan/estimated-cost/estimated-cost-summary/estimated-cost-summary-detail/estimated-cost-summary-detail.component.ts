@@ -11,7 +11,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
-import { RouterLink, RouterModule } from '@angular/router';
+import { Router, RouterLink, RouterModule } from '@angular/router';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { EstimatedCostGeneralComponent } from '../../estimated-cost-common/estimated-cost-general/estimated-cost-general.component';
@@ -49,6 +49,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   override baseService = inject(PlanBudgetProcurementService);
   private datePipe = inject(DatePipe);
   private cdRef = inject(ChangeDetectorRef);
+  private readonly router = inject(Router)
 
 
   id = input.required<number>();
@@ -63,6 +64,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
   dataDetail: any;
   showDialogSummary = false;
+  showDialogClose = false;
 
   @ViewChild('panelCalculationBasisState', { static: false }) panelCalculationBasisState: MatExpansionPanel; // II
   @ViewChild('panelFlightOvernightState', { static: false }) panelFlightOvernightState: MatExpansionPanel; // tỉ lệ ngủ đêm
@@ -85,8 +87,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   private _internationalFlightOvernightData: any[] = [];
   private _internationalEstimatedCostHotelData: any;
   private _internationalEstimatedCostCarRentalData: any[] = [];
-  private _domesticEstimatedCostHotelData: any[] = [];
-  private _domesticEstimatedCostCarRentalData: any[] = [];
+  private _domesticEstimatedCostHotelData: any = {};
+  private _domesticEstimatedCostCarRentalData: any = {};
 
   constructor() {
     super();
@@ -102,6 +104,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
   ngAfterViewChecked(): void {
   }
+
+
 
   async getDetailSummary() {
     try {
@@ -135,26 +139,30 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   async confirmSummaryData() {
     try {
       this.spinner.show();
-      const requestBody = new DataSummayRequest(this.id() ?? 0,
-        this.estCostId() ?? 0,
-        this.yearPlan() ?? 0,
-        this.airportCode() ?? '',
-        '',
-        '',
-        false,
-        false
-      );
+      const requestBody =
+      {
+        id: this.id() ?? 0,
+        planBudgetProcurementId: this.estCostId() ?? 0,
+        yearPlan: this.yearPlan() ?? 0,
+        airportCode: this.airportCode() ?? '',
+        earlyCheckinFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.earlyCheckinFlag.value,
+        lateCheckoutFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.lateCheckoutFlag.value,
+        haveContract: !!this.estimatedCostGeneral.formGroupDetail.controls.haveContract.value,
+        earlyCheckinContractFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.earlyCheckinContractFlag.value,
+        lateCheckoutContractFlag: !!this.estimatedCostGeneral.formGroupDetail.controls.lateCheckoutContractFlag.value,
+      }
       const response = await this.baseService.dataSummary(requestBody);//summaryDataExample;//summaryDataExample1;//
       this.dataDetail = {
         ...response.data,
         ...this.estimatedCostGeneral.formGroupDetail.getRawValue(),
+        crewTransportFeeFlag: response.data.crewTransportFeeFlag,
         planFlightRates: response.data.planFlightRates ?? [],
         planOverightRates: response.data.planOverightRates ?? [],
         planBudgetHotels: response.data.planBudgetHotels ?? [],
         planBudgetCarentals: response.data.planBudgetCarentals ?? [],
         listActype: response.data.listActype ?? [],
       };
-      this.setDataDetail();
+      this.setDataDetail(true);
     } catch (error) {
     } finally {
       this.showDialogSummary = false;
@@ -200,8 +208,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
       if (this.category() === CategoryEnum.DOMESTIC) {
         planFlightRates = [...this.cleanData(this.domesticFlightRate.dataSource.data ?? [])];
-        planBudgetHotels = [...this.cleanData(this.domesticEstimatedCostHotel.dataSource.data ?? [])];
-        planBudgetCarentals = [...this.cleanData(this.domesticEstimatedCostCarRental.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.domesticEstimatedCostHotel?.getDataSource() ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.domesticEstimatedCostCarRental?.dataSource.data ?? [])];
         // planProcurementHotels = [...this.cleanData(this.domesticProcurementHotel.dataSource.data ?? [])];
         // planProcurementCarentals = [...this.cleanData(this.domesticProcurementCarRental.dataSource.data ?? [])];
         // if (this.dataDetail?.wetLeaseFlag) {
@@ -210,8 +218,8 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
         // }
       } else {
         planOverightRates = [...this.cleanData(this.internationalEstimatedCostOvernight.dataSource.data ?? [])];
-        planBudgetHotels = [...this.cleanData(this.internationalEstimatedCostHotel.dataSource.data ?? [])];
-        planBudgetCarentals = [...this.cleanData(this.internationalEstimatedCostCarRental.dataSource.data ?? [])];
+        planBudgetHotels = [...this.cleanData(this.internationalEstimatedCostHotel?.getDataSource() ?? [])];
+        planBudgetCarentals = [...this.cleanData(this.internationalEstimatedCostCarRental?.getDataSource() ?? [])];
       }
 
       const data = {
@@ -256,7 +264,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
   overnightValueChange(event: any): void {
     console.log('overnightValueChange: ', event);
-    this.internationalEstimatedCostHotel.setOvernightRates(event, event.actionType, event.overnightLength, this.internationalEstimatedCostOvernight.dataSource.data);
+    this.internationalEstimatedCostHotel.setOvernightRates(event, event.actionType, this.internationalEstimatedCostOvernight.dataSource.data);
   }
 
   checkDataSummary() {
@@ -273,10 +281,11 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   }
 
   // Lấy data cho các component con
-  setDataDetail() {
+  setDataDetail(isSummary: boolean = false) {
     // set đơn giá phòng đơn, đơn giá phòng đôi
     this.estimatedCostGeneral.unitPriceDoubleHotel = this.dataDetail?.unitPriceDoubleHotel;
     this.estimatedCostGeneral.unitPriceSingleHotel = this.dataDetail?.unitPriceSingleHotel;
+    this.estimatedCostGeneral.formGroupDetail.controls.crewTransportFeeFlag.setValue(this.dataDetail?.crewTransportFeeFlag);
 
     this.planFlightRatesData = [...this.dataDetail?.planFlightRates ?? []];
     // this._internationalFlightPeriodData = {
@@ -284,17 +293,27 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     //   periodRowspan: (this.dataDetail?.listActype ?? []).length
     // }
     this.internationalFlightOvernightData = [...this.dataDetail?.planOverightRates ?? []];
-    this.domesticEstimatedCostHotelData = [...this.dataDetail?.planBudgetHotels ?? []];
+    this.domesticEstimatedCostHotelData =
+    {
+      isSummary: isSummary,
+      planHotels: [...this.dataDetail?.planBudgetHotels ?? []],
+    }
+      ;
     this.internationalEstimatedCostHotelData = {
+      isSummary: isSummary,
       aircraftTypeRowspan: (this.dataDetail?.listActype ?? []).length,
       overnightRowspan: (this.dataDetail?.planOverightRates ?? []).length,
       planOverightRates: [...this.dataDetail?.planOverightRates ?? []],
       planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
       planHotels: [...this.dataDetail?.planBudgetHotels ?? []],
-      general: this.estimatedCostGeneral.formGroupDetail.value
+      general: this.estimatedCostGeneral.formGroupDetail.getRawValue()
     };
-    this.domesticEstimatedCostCarRentalData = [...this.dataDetail?.planBudgetCarentals ?? []];
+    this.domesticEstimatedCostCarRentalData = {
+      isSummary: isSummary,
+      planCarentals: [...this.dataDetail?.planBudgetCarentals ?? []]
+    }
     this.internationalEstimatedCostCarRentalData = {
+      isSummary: isSummary,
       planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
       planCarentals: [...this.dataDetail?.planBudgetCarentals ?? []]
     }
@@ -350,7 +369,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     return this._domesticEstimatedCostHotelData;
   }
 
-  set domesticEstimatedCostHotelData(value: any[]) {
+  set domesticEstimatedCostHotelData(value: any) {
     this._domesticEstimatedCostHotelData = value;
   }
 
@@ -358,7 +377,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
     return this._domesticEstimatedCostCarRentalData;
   }
 
-  set domesticEstimatedCostCarRentalData(value: any[]) {
+  set domesticEstimatedCostCarRentalData(value: any) {
     this._domesticEstimatedCostCarRentalData = value;
   }
 
@@ -369,5 +388,34 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
   checkStatusCompelted(): boolean {
     return this.dataDetail?.status === StatusSummaryEnum.COMPLETED;
+  }
+
+  toggleDialogClose() {
+    this.showDialogClose = !this.showDialogClose;
+  }
+
+  closeEvent() {
+    if (this.checkStatusCompelted()) {
+      this.router.navigate(['/plan/est-plan/est-cost', this.estCostId(), 'summary']);
+    } else {
+      this.toggleDialogClose();
+    }
+  }
+
+
+  async confirmClose() {
+    try {
+      await this.spinner.show()
+      const resSave = await this.processSave();
+      this.showSuccess(this.MESSAGE.UPDATE_SUCCESS)
+      if (resSave.result) {
+        this.router.navigate(['/plan/est-plan/est-cost', this.estCostId(), 'summary']);
+      }
+    } catch (error) {
+      console.error(error);
+    } finally {
+      this.spinner.hide()
+    }
+
   }
 }

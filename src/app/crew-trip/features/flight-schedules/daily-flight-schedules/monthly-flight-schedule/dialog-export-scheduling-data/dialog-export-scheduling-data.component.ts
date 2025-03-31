@@ -5,7 +5,7 @@ import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
-import { MatNativeDateModule } from '@angular/material/core';
+import { MAT_DATE_FORMATS, MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogTitle } from '@angular/material/dialog';
 import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
@@ -44,6 +44,7 @@ import { DialogData } from 'src/app/ui-elements/dialog/basic-dialog/basic-dialog
   styleUrl: './dialog-export-scheduling-data.component.scss',
   providers: [DataTransformPipe,
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+    { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
   ],
 })
 export class DialogExportSchedulingDataComponent extends CommonComponent {
@@ -53,8 +54,8 @@ export class DialogExportSchedulingDataComponent extends CommonComponent {
 
   override formGroupDetail = this.formBuilder.group({
     airport: ['', [Validators.required]],
-    exportStartDate: ['',[Validators.required]],
-    exportEndDate: ['',[Validators.required]]
+    exportStartDate: ['', [Validators.required]],
+    exportEndDate: ['', [Validators.required]]
   });
 
   airports: any[] = [];
@@ -73,6 +74,10 @@ export class DialogExportSchedulingDataComponent extends CommonComponent {
 
   close() {
     this.dialogRef.close()
+  }
+
+  export() {
+    console.log(this, this.formGroupDetail)
   }
 
 }

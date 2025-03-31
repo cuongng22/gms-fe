@@ -152,8 +152,7 @@
                         i18n="@@time">Time
                     </th>
                     <td mat-cell *matCellDef="let element" [ngClass]="{'text-disable':element.disable}">
-                        @if(element.status === 'international_completed' ||
-                        element.status === 'domestic_completed' ||
+                        @if(
                         element.status === 'dom_int_completed' ||
                         element.status === 'confirmed' ||
                         element.status === 'approved'

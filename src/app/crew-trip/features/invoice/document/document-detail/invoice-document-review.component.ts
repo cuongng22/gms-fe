@@ -11,7 +11,7 @@ import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
 import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
 import {MatOption, MatSelect} from '@angular/material/select';
 import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
 import {MatTab, MatTabGroup} from '@angular/material/tabs';
 import {NgxEditorModule} from 'ngx-editor';
 import {MatAccordion, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle} from '@angular/material/expansion';
@@ -39,20 +39,19 @@ import {InvoiceDocumentService} from "src/app/crew-trip/core/services/invoice-do
 import {ContractService} from "src/app/crew-trip/core/services/contract-service";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {InvoiceDocumentExportType, InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {HttpStatusCode} from "@angular/common/http";
 import {InvoiceDocumentComponent} from "src/app/crew-trip/features/invoice/document/invoice-document.component";
 import {InvoiceDocumentRemindComponent} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
 import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog";
-import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
+import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
 
 
 @Component({
   selector: 'app-invoice-document-review',
   standalone: true,
-  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, DatepickerYearMonthComponent, ThousandsSeparatorDirective, InvoiceDocumentComponent, InvoiceDocumentRemindComponent, ConfirmDialog],
+  imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe, CdkTextareaAutosize, DatepickerYearMonthComponent, ThousandsSeparatorDirective, InvoiceDocumentComponent, InvoiceDocumentRemindComponent, ConfirmDialog, ControlErrorComponent],
   templateUrl: './invoice-document-review.component.html',
   styleUrl: './invoice-document-review.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
 
   ]
 })
@@ -99,7 +98,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     format?: string,
     rowspan?: string,
     colspan?: string,
-    displayTotal?: boolean
+    displayTotal?: boolean,
   }[] = [
     {label: $localize`Access Bridge`, value: "accessBridge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Accommodation Tax Cc Charge`, value: "accommodationTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -108,14 +107,14 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     {label: $localize`Breakfast Cc`, value: "breakfastCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Breakfast Fc`, value: "breakfastFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Cc`, value: "cc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Ci Date`, value: "ciDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Ci Fltno`, value: "ciFltno"},
-    {label: $localize`Ci Time`, value: "ciTime"},
+    {label: $localize`Date`, value: "ciDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`Flight no`, value: "ciFltno"},
+    {label: $localize`Time`, value: "ciTime", type: Constant.NUMBER},
     {label: $localize`City Tax Cc Charge`, value: "cityTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`City Tax Fc Charge`, value: "cityTaxFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Co Date`, value: "coDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Co Fltno`, value: "coFltno"},
-    {label: $localize`Co Time`, value: "coTime"},
+    {label: $localize`Date`, value: "coDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`Flight no`, value: "coFltno"},
+    {label: $localize`Time`, value: "coTime", type: Constant.NUMBER},
     {label: $localize`Date`, value: "cdate", type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Detail`, value: "detail"},
     {label: $localize`Early Checkin`, value: "earlyCheckin", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -124,7 +123,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     {label: $localize`Eci Twin Room Cc Charge`, value: "eciTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Fc`, value: "fc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Fltno`, value: "fltno"},
-    {label: $localize`Fullname`, value: "fullname", type: Constant.NUMBER, rowspan: "2"},
+    {label: $localize`Fullname`, value: "fullname", rowspan: "2"},
     {label: $localize`Late Checkout`, value: "lateCheckout", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Lco Single Room Cc Charge`, value: "lcoSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Lco Single Room Fc Charge`, value: "lcoSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -132,7 +131,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     {label: $localize`Night`, value: "night", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Number Of Nights`, value: "numberOfNights", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Number Of Vehicle`, value: "numberOfVehicle", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Price`, value: "price", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Price (includes VAT)`, value: "price", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Remark`, value: "remark"},
     {label: $localize`Room No`, value: "roomNo", rowspan: "2"},
     {label: $localize`Service Tax Cc Charge`, value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -145,8 +144,8 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     {label: $localize`Toll`, value: "toll", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Amount Cc`, value: "totalAmountCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Amount Fc`, value: "totalAmountFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Total Breakfast Cc Charge`, value: "totalBreakfastCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Total Breakfast Fc Charge`, value: "totalBreakfastFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Breakfast Cc Charge`, value: "breakfastCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Breakfast Fc Charge`, value: "breakfastFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Charge`, value: "totalCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Charges`, value: "totalCharges", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Night`, value: "totalNight", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -159,7 +158,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     {label: $localize`Transport Charge`, value: "transportCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Twin Room Cc`, value: "twinRoomCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Twin Room Cc Charge`, value: "twinRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Unit Price`, value: "unitPrice", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Unit Price`, value: "unitPrice", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Type Room`, value: "typeRoom", rowspan: "2"}
   ];
   ready: boolean = false;
@@ -200,7 +199,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
       exchangeRateDate: [],
       exchangeRateType: [],
       description: [],
-      note: [],
+      note: [, [Validators.maxLength(500)]],
       status: [],
       statusEmail: [],
       amountFcBeforeVat: [],
@@ -226,17 +225,9 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
       await Promise.all([this.detail(this.id), this.loadListFlightMarket(), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
         if (this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
           this.formType = 1;
-          this._displayedColumnsHeader1 = ['stt', 'checkin2col', 'checkout2col', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights', 'earlyCheckin',
-            'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge', 'singleRoomCcCharge',
-            'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge', 'lcoTwinRoomCcCharge',
-            'totalBreakfastFcCharge', 'totalBreakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge', 'accommodationTaxFcCharge',
-            'accommodationTaxCcCharge', 'transportCharge', 'totalCharges', 'remark'];
+          this._displayedColumnsHeader1 = ['stt', 'checkin2col', 'checkout2col', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights', 'earlyCheckin', 'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge', 'singleRoomCcCharge', 'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge', 'lcoTwinRoomCcCharge', 'breakfastFcCharge', 'breakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge', 'accommodationTaxFcCharge', 'accommodationTaxCcCharge', 'transportCharge', 'totalCharges', 'remark'];
           this._displayedColumnsHeader2 = ['ciFltno', 'ciDate', 'coFltno', 'coDate'];
-          this._displayedColumnsRow = ['stt', 'ciFltno', 'ciDate', 'coFltno', 'coDate', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights',
-            'earlyCheckin', 'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge',
-            'singleRoomCcCharge', 'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge',
-            'lcoTwinRoomCcCharge', 'totalBreakfastFcCharge', 'totalBreakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge',
-            'accommodationTaxFcCharge', 'accommodationTaxCcCharge', 'transportCharge', 'totalCharges', 'remark'];
+          this._displayedColumnsRow = ['stt', 'ciFltno', 'ciDate', 'coFltno', 'coDate', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights', 'earlyCheckin', 'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge', 'singleRoomCcCharge', 'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge', 'lcoTwinRoomCcCharge', 'breakfastFcCharge', 'breakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge', 'accommodationTaxFcCharge', 'accommodationTaxCcCharge', 'transportCharge', 'totalCharges', 'remark'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
           this.totalColSpan = 5;
         } else if (this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
@@ -248,9 +239,9 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
           this.totalColSpan = 8;
         } else if (this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
           this.formType = 3;
-          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
+          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'accessBridge', 'toll', 'transitDuty', 'airportParkingFee', 'totalCharge', 'remark'];
           this._displayedColumnsHeader2 = [];
-          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
+          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'accessBridge', 'toll', 'transitDuty', 'airportParkingFee', 'totalCharge', 'remark'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
         } else if (this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
           this.formType = 4;
@@ -260,10 +251,9 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
         }
 
-        //
+        let reviewStatus = this.reviewMatch() ? InvoiceDocumentStatusEnum.VERIFIED : InvoiceDocumentStatusEnum.UNVERIFIED
         let filterForm = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((s: any) => s.sourceData == 'FORM');
-        this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm});
-
+        this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm, status: reviewStatus});
       });
 
     } catch (e) {
@@ -282,7 +272,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
   async setReadMode(form: FormGroup) {
     const disableField = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version'];
-    const enableField = ['note', 'status'];
+    const enableField = ['note',];
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -299,7 +289,9 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
       await this.spinner.show();
       const res = await this.baseService.exportListData({
         id: this.id,
-        exportType: InvoiceDocumentExportType.DOCUMENT_REVIEW
+        ctype:this.formType,
+        exportType: type === 'DETAIL' ? InvoiceDocumentExportType.DOCUMENT_REVIEW_DETAIL : InvoiceDocumentExportType.DOCUMENT_REVIEW
+
       });
       this.downloadFile(res, 'export.xlsx');
     } catch (e) {
@@ -309,57 +301,6 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     }
   }
 
-  changeServiceFee($event: any, row: any, type: any) {
-    if (type === 'code') {
-      row.unit = this.listFeeService.find((s: any) => s.code == $event.value)?.unit;
-      row.serviceName = this.listFeeService.find((s: any) => s.code == $event.value)?.name;
-    } else if (type === 'name') {
-      row.unit = this.listFeeService.find((s: any) => s.name == $event.value)?.unit;
-      row.serviceCode = this.listFeeService.find((s: any) => s.name == $event.value)?.code;
-    }
-  }
-
-  async actionUpload() {
-    try {
-      await this.spinner.show();
-      const formUpload = new FormData();
-      const fileUpload = this.formGroupDetail.getRawValue().fileUpload[0];
-      //validate
-      // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
-      if (fileUpload.size > 5 * 1048576) {
-        this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
-        return;
-      }
-      formUpload.append('file', fileUpload, fileUpload.name);
-      formUpload.append('body', JSON.stringify({
-        fileFolder: '/document',
-      }));
-      await this.baseService.uploadFileCommon(formUpload).then(res => {
-        if (res.code == HttpStatusCode.Ok) {
-          let listFile = [...this.formGroupDetail.getRawValue().fileAttachments, {
-            ctype: 'MANUAL',
-            fileName: fileUpload.name,
-            fileSize: fileUpload.size,
-            fileUrl: res.data,
-            fileType: fileUpload.name.split('.').pop(),
-          }];
-          this.formGroupDetail.patchValue({fileAttachments: listFile});
-        }
-      });
-    } catch (e: any) {
-      console.log(e);
-      this.baseService.showError((e.error?.error?.file) ?? (e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
-    } finally {
-      await this.spinner.hide();
-      this.formGroupDetail.patchValue({fileUpload: []});
-
-    }
-
-  }
-
-  test() {
-    console.log(this.formGroupDetail.getRawValue())
-  }
 
   override async save(): Promise<any> {
     let res = await super.save();
@@ -368,61 +309,16 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     }
   }
 
-  validField(row: any, cell: any, inputRef?: any) {
-    if (!row[cell]) {
-      return 'Not empty';
-    } else if ((cell == 'col614' || cell == 'col624' || cell == 'col634' || cell == 'col635') && row[cell] > 2) {
-      inputRef.control.setErrors({invalid: true});
-      return 'Must less than 2';
-    } else if (cell == 'col633') {
-      const regex = /^(>?)([1-9]|1[0-9]|2[0-4])$/;
-      if (!regex.test(row[cell])) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Not valid';
-      }
-    } else if (cell == 'col613') {
-      const from = +(row['col612'].replace(':', ''));
-      const to = +(row['col613'].replace(':', ''));
-      if (to < from) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Must after from';
-      }
-    } else if (cell == 'col623') {
-      const from = +(row['col622'].replace(':', ''));
-      const to = +(row['col623'].replace(':', ''));
-      if (to < from) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Must after from';
-      }
-    } else if (cell == 'col632') {
-      const from = +(row['col631'].replace(':', ''));
-      const to = +(row['col632'].replace(':', ''));
-      if (to < from) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Must after from';
-      }
-    }
-    return '';
-  }
 
   addDtl() {
     let listDtl = [...this.formGroupDetail.getRawValue().invoiceDocumentDtl, {}];
     this.formGroupDetail.patchValue({invoiceDocumentDtl: listDtl});
   }
 
-  /*  calTotal(column: any) {
-      if (column.type === Constant.NUMBER) {
-        return this.formGroupDetail.getRawValue().invoiceDocumentReview.reduce((prev: any, cur: any) => prev + +cur[column.value], 0);
-      } else {
-        return '';
-      }
-    }*/
-
   calTotal(column: any) {
     if (column.type === Constant.NUMBER) {
-      return this.formGroupDetail.getRawValue().invoiceDocumentReview.reduce((prev: any, cur: any) => {
+      return this.formGroupDetail.getRawValue().invoiceDocumentReviewForm?.reduce((prev: any, cur: any) => {
         // prev + +cur[column.value]
-        let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReview;
         if (cur.typeRoom === 'CC Twin room') {
           return prev + +(cur[column.value] / 2);
         } else {
@@ -454,19 +350,18 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
   saveAndFinish() {
     this.formGroupDetail.patchValue({
-      invoiceDocumentReviewProjection: null,
-      status: InvoiceDocumentStatusEnum.FINISHED
+      invoiceDocumentReviewProjection: null, status: InvoiceDocumentStatusEnum.FINISHED
     })
     this.save();
   }
 
   getRowSpan(index: number, innerColumn: any, data: any): number {
-    if (data.typeRoom === 'CC Twin room' &&
-      ['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
-      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((item: any) => item.typeRoom === 'CC Twin room');
+    if (data.typeRoom === 'CC Twin room' && ['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
+      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm.filter((item: any) => item.typeRoom === 'CC Twin room');
       let currentRow = dtl[index];
       let nextRow = dtl[index + 1];
-      if (nextRow?.roomNo === currentRow?.roomNo && nextRow?.ciDate === currentRow?.ciDate) {
+      // if (nextRow?.roomNo === currentRow?.roomNo && nextRow?.ciDate === currentRow?.ciDate) {
+      if (nextRow?.roomNo === currentRow?.roomNo) {
         return 2;
       } else return 1;
     } else {return 1;}
@@ -474,12 +369,14 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
   shouldShowRowSpan(index: number, innerColumn: any): boolean {
     if (['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
-      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReview
-      return (
-        index === 0 || dtl[index]?.typeRoom !== 'CC Twin room' ||
-        dtl[index]?.roomNo !== dtl[index - 1]?.roomNo ||
-        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
+      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm
+      return (index === 0 || dtl[index]?.typeRoom !== 'CC Twin room' || dtl[index]?.roomNo !== dtl[index - 1]?.roomNo
+        // (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
       );
     } else return true;
+  }
+
+  reviewMatch() {
+    return !this.formGroupDetail.getRawValue().invoiceDocumentReviewProjection.some((item: any) => item.diff !== null && item.diff !== 0);
   }
 }

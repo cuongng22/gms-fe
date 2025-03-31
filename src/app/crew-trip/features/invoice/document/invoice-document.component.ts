@@ -22,7 +22,7 @@ import {BaseImport} from "src/app/crew-trip/shared/base-import";
   imports: [BaseImport, InvoiceFormDetailComponent],
   templateUrl: './invoice-document.component.html',
   styleUrl: './invoice-document.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
   ]
 })
 
@@ -54,9 +54,9 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   _displayedColumnsRow: string[] = [];
   _displayedColumnsFooter: string[] = [];
   _displayedColumnsAll: {
-    label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string
+    label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string, sticky?: boolean
   }[] = [
-    {label: $localize`Airport Code`, value: 'airportCode', rowspan: "2"},
+    {label: $localize`Airport Code`, value: 'airportCode', rowspan: "2", sticky:true},
     {label: $localize`Invoice Number`, value: 'invoiceNumber', rowspan: "2"},
     {label: $localize`Invoice Date`, value: 'invoiceDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
     {label: $localize`InvoiceReceive Date`, value: 'invoiceReceiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
@@ -101,10 +101,11 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       airportCode: [],
       listAirportCode: [],
       periodFrom: [this.startOfMonth],
-      periodTo: [this.endOfMonth],
+      periodTo: [moment().format('YYYY-MM-DD')],
       status: [],
       statusEmail: [],
-      version: [1],
+      version: [],
+      isLatest: [true]
     });
     this.formGroupDetail = this.fb.group({
       id: [], emailTo: ['chien12345aabb@gmail.com'], emailCc: ['chien12345aabb@gmail.com'], emailSubject: ['test'], emailContent: ['test1']
@@ -235,11 +236,15 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   async download(type: any) {
     try {
       await this.spinner.show();
-      let filename = '';
+      let body = this.formGroupSearch.getRawValue();
+      body.periodFrom = moment(body.periodFrom).isValid() ? moment(body.periodFrom).format(Constant.LOCAL_DATE_FORMAT) : null;
+      body.periodTo = moment(body.periodTo).isValid() ? moment(body.periodTo).format(Constant.LOCAL_DATE_FORMAT) : null;
+      body = removeNullValues(body);
+      body.page = 0;
+      body.limit = 999999;
+      body.exportType = InvoiceDocumentExportType.DOCUMENT_LIST
       if (type === 'EXPORT') {
-        const res = await this.baseService.exportListData({
-          exportType: InvoiceDocumentExportType.DOCUMENT_LIST
-        });
+        const res = await this.baseService.exportListData(body);
         this.downloadFile(res, 'export.xlsx');
       } else if (type === 'DOWNLOAD') {
         const res = await this.baseService.exportFileData({
@@ -341,4 +346,12 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   isSelected(row: any): boolean {
     return this.selectedRow === row.id;
   }
+
+  closeInvoiceForm() {
+    this.isShowFormHdr = false;
+    setTimeout(() => {
+      this.formHdrId = null;
+    }, 300);
+  }
+
 }

@@ -135,4 +135,11 @@ export class InvoiceDocumentService extends BaseService {
     };
     return firstValueFrom(this.http.post(url, body, headers));
   }
+  getExchangeRate(body: any): Promise<any> {
+    const url = `${this.api}/invoice/common/get-exchange-rate`;
+    const headers = {
+      headers: new HttpHeaders()
+    };
+    return firstValueFrom(this.http.post(url, body, headers));
+  }
 }

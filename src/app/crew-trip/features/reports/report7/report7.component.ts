@@ -45,6 +45,8 @@ import {debounceTime} from 'rxjs/operators';
 import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
 import {Constant, DATE_FORMAT_DD_MM_YYYY} from 'src/app/crew-trip/shared/utils/constant';
 import {MAT_MOMENT_DATE_FORMATS, provideMomentDateAdapter} from '@angular/material-moment-adapter';
+import {ReportService} from "src/app/crew-trip/core/services/report-service";
+import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-report',
@@ -61,57 +63,37 @@ import {MAT_MOMENT_DATE_FORMATS, provideMomentDateAdapter} from '@angular/materi
   styleUrl: './report7.component.scss'
 })
 export class reportcomponent7 extends CommonComponent implements OnInit {
-  override baseService = inject(HotelService);
-  flightMarketService = inject(FlightMarketService);
-  @ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
-  @ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
-  markets: any[] = [];
-  filteredOptionsMarket: any[];
+  override baseService = inject(ReportService);
+  iframeUrl: SafeResourceUrl;
+  codeReport: string = "BC_7_2";
 
-
-  override formGroupSearch = this.formBuilder.group({
-    s: [''], //Keyword Search
-    marketCode: [''],
-    contractStartDate: [''],
-    contractEndDate: [''],
-    active: [''],
-  });
-
-  constructor(public dataTransformPipe: DataTransformPipe) {
+  constructor(private sanitizer: DomSanitizer) {
     super();
   }
 
   override async ngOnInit() {
-    super.ngOnInit();
-    this.displayedColumns = ['stt', 'market', 'code','name', 'address', 'contactDetails', 'active', 'notes'];
-    this.search();
-
-    this.flightMarketService.search({option: 1}).then(res => {
-      this.markets = res.data;
-    });
-  }
-
-  filterMarket(): void {
-    const filterValue = this.marketCode.nativeElement.value.toLowerCase();
-    if (!filterValue) {
-      this.filteredOptionsMarket = this.markets;
+    await this.spinner.show();
+    try {
+      await this.loadReport()
+    } catch (error: any) {
+      this.showError(error);
     }
-    this.filteredOptionsMarket = this.markets.filter(market => market.toLowerCase().includes(filterValue));
+    await this.spinner.hide();
   }
 
-  onFocusMarket(): void {
-    this.filteredOptionsMarket = this.markets;
-    this.autocompleteTrigger.openPanel();
+  async loadReport() {
+    try {
+      this.baseService.getReportLink(this.codeReport).then(res => {
+        console.log("rsssss:",res.data)
+        this.iframeUrl = this.sanitizeUrl(res.data);
+        // this.iframeUrl = this.sanitizeUrl('https://crewtripreport.vietnamairlines.com/trusted/je6uoh7qTn6zVWHiwfxqVA==:G6J_26cjbpA8W5Gb93Hwcs64/views/BC_7_2/BC_7_2');
+      });
+    } catch (Error: any) {
+      console.log(Error);
+    }
   }
 
-  override search(body?: any, isNextPage?: boolean): any {
-    const contractStartDate = this.formGroupSearch.controls.contractStartDate.value;
-    const contractEndDate = this.formGroupSearch.controls.contractEndDate.value;
-    const searchValue = {
-      ...this.formGroupSearch.value,
-      contractStartDate: contractStartDate ? this.dataTransformPipe.transform(contractStartDate, ['date', Constant.DATE_FORMAT]) : null,
-      contractEndDate: contractEndDate ? this.dataTransformPipe.transform(contractEndDate, ['date', Constant.DATE_FORMAT]) : null,
-    };
-    super.search(searchValue, isNextPage);
+  sanitizeUrl(url: string): SafeResourceUrl {
+    return this.sanitizer.bypassSecurityTrustResourceUrl(url);
   }
 }

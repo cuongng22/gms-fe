@@ -19,7 +19,7 @@
 
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
-        <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
+        <mat-tab-group [selectedIndex]="selectedTab" mat-stretch-tabs="false" mat-align-tabs="start">
             <mat-tab label="Estimated Flight Schedule" i18n="@@estimatedFlightSchedule">
                 <ng-template matTabContent>
                     <app-estimated-flight-schedule />

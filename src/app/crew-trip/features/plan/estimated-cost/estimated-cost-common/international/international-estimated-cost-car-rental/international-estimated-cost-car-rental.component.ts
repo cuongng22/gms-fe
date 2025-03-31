@@ -10,7 +10,7 @@ import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
-import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import { Constant, round } from 'src/app/crew-trip/shared/utils/constant';
 import { PlanCategoryEnum } from '../../../../budget-procurement/budget-procurement.model';
 import { getHeaderRowDef1, getHeaderRowDef2, getRowDef, formula } from './international-estimated-cost-car-rental.model';
 
@@ -42,13 +42,14 @@ export class InternationalEstimatedCostCarRentalComponent implements OnInit, Aft
 
   planFlightPeriods: any[] = []; // danh sách chuyến bay theo giai đoạn
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
+  round = round;
 
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       console.log('effect data InternationalEstimatedCostCarRentalComponent: ', this.data())
-      if (this.data()) {
+      if (this.data() && Object.keys(this.data()).length > 0) {
         this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
-        this.setDataSource(this.data().planCarentals ?? []);
+        this.setDataSource(this.data().planCarentals ?? [], this.data().isSummary);
       }
     })
   }
@@ -60,37 +61,42 @@ export class InternationalEstimatedCostCarRentalComponent implements OnInit, Aft
 
   }
 
-  setDataSource(data: any[]) {
+  setDataSource(data: any[], isSummary?: boolean) {
     this.dataSource.data = [...data];
     this.dataSource.data.forEach((item: any, index) => {
       let period = '';
       period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
 
       item.period = period;
-      this.calculateData(item, index);
+      this.calculateData(item, index, isSummary);
     });
     this.calculateTotal()
   }
 
-  private calculateData(item: any, index: number) {
+  private calculateData(item: any, index: number, isSummary?: boolean) {
+    if (isSummary) {
 
-    // if (this.type() === 'PROCUREMENT') {
-    //   //Số lượng chuyến bay theo giai đoạn
-    //   item.numberFlight = this.planFlightPeriods.filter((t: any) =>
-    //     t.periodStart === item.periodStart && t.periodEnd === item.periodEnd
-    //   ).map((t: any) => t.numberOfFlight).reduce((acc, value) => acc + value, 0);
-    // }
+      // if (this.type() === 'PROCUREMENT') {
+      //   //Số lượng chuyến bay theo giai đoạn
+      //   item.numberFlight = this.planFlightPeriods.filter((t: any) =>
+      //     t.periodStart === item.periodStart && t.periodEnd === item.periodEnd
+      //   ).map((t: any) => t.numberOfFlight).reduce((acc, value) => acc + value, 0);
+      // }
 
-    //Số lượt xe
-    this.calculate(item, 'numberVehicles');
-    //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
-    this.calculate(item, 'totalAmountForeign');
-    //Thành tiền (ngoại tệ) - Bao gồm VAT
-    this.calculate(item, 'totalAmountForeignVat');
-    //Thành tiền VND (Chưa bao gồm VAT)
-    this.calculate(item, 'totalAmount');
-    //Thành tiền VND (Bao gồm VAT)
-    this.calculate(item, 'totalAmountVat');
+      if (!item.monthIsPerform) {
+        //Số lượt xe
+        this.calculate(item, 'numberVehicles', true);
+      }
+      //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
+      this.calculate(item, 'totalAmountForeign');
+      //Thành tiền (ngoại tệ) - Bao gồm VAT
+      this.calculate(item, 'totalAmountForeignVat');
+      //Thành tiền VND (Chưa bao gồm VAT)
+      this.calculate(item, 'totalAmount');
+      //Thành tiền VND (Bao gồm VAT)
+      this.calculate(item, 'totalAmountVat');
+    }
+
 
   }
   setPlanFlightPeriods(data: any[]) {
@@ -101,33 +107,33 @@ export class InternationalEstimatedCostCarRentalComponent implements OnInit, Aft
     this.setTotal('numberFlight')
     this.setTotal('numberVehicles')
     this.setTotal('extraTransfer')
-    this.setTotal('totalAmountForeign')
-    this.setTotal('totalAmountForeignVat')
-    this.setTotal('totalAmount')
-    this.setTotal('totalAmountVat')
+    this.setTotal('totalAmountForeign', true)
+    this.setTotal('totalAmountForeignVat', true)
+    this.setTotal('totalAmount', true)
+    this.setTotal('totalAmountVat', true)
   }
 
   // TÍnh dòng tổng 
-  setTotal(control: string) {
+  setTotal(control: string, isRound?: boolean, fractionDigits?: number) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     let totalValue = 0
-    const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
-    if (control === 'totalAmountVat') {
-      const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-      totalValue = Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
-          return Number(t[control]);
-        }
-        return 0;
-      }).reduce((acc, value) => acc + value, 0));
-      this.resultTotal[control] = totalValue;
-      return
-    }
-    totalValue = Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
-        return Number(t[control]);
-      }
-      return 0;
+    // const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
+    // if (control === 'totalAmountVat') {
+    //   const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
+    //   totalValue = (this.dataSource.data.map((t: any) => {
+    //     if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
+    //       return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
+    //     }
+    //     return 0;
+    //   }).reduce((acc, value) => acc + value, 0));
+    //   this.resultTotal[control] = totalValue;
+    //   return
+    // }
+    totalValue = (this.dataSource.data.map((t: any) => {
+      // if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
+        return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
+      // }
+      // return 0;
     }).reduce((acc, value) => acc + value, 0));;
     this.resultTotal[control] = totalValue;
   }
@@ -137,7 +143,7 @@ export class InternationalEstimatedCostCarRentalComponent implements OnInit, Aft
   }
 
   // hàm công thức tính chung
-  calculate(item: any, key: string) {
+  calculate(item: any, key: string, isRound?: boolean, fractionDigits?: number) {
     // Check lập kế hoạch sản lượng thay đổi
     // Tháng nào đã thực hiện thì tính theo công thưc mới
     const objFormula = formula[key];
@@ -145,6 +151,9 @@ export class InternationalEstimatedCostCarRentalComponent implements OnInit, Aft
     let strFomular = objFormula.formula;
     if (!!strFomular) {
       item[key] = this.calculateFormula(item, strFomular);
+    }
+    if (isRound) {
+      item[key] = round(item[key], fractionDigits);
     }
     return item[key];
   }
@@ -169,7 +178,7 @@ export class InternationalEstimatedCostCarRentalComponent implements OnInit, Aft
     if (periodMonth <= currentMonth && key) {
       return data[key];
     }
-    return Math.round(dynamicFunction(data, this.ctz));
+    return (dynamicFunction(data, this.ctz));
   }
 
   // convertToZero
@@ -206,6 +215,24 @@ export class InternationalEstimatedCostCarRentalComponent implements OnInit, Aft
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
+    this.calculateData(data, 0, true);
+    this.calculateTotal()
+  }
+
+  getDataSource() {
+    const _stringData = JSON.stringify(this.dataSource.data);
+    let _jsonData = JSON.parse(_stringData);
+    _jsonData.forEach((item: any, index: number) => {
+      //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
+      item.totalAmountForeign = round(item.totalAmountForeign);
+      //Thành tiền (ngoại tệ) - Bao gồm VAT
+      item.totalAmountForeignVat = round(item.totalAmountForeignVat);
+      //Thành tiền VND (Chưa bao gồm VAT)
+      item.totalAmount = round(item.totalAmount);
+      //Thành tiền VND (Bao gồm VAT)
+      item.totalAmountVat = round(item.totalAmountVat);
+    })
+    return _jsonData;
   }
 
 }

@@ -2,7 +2,7 @@ import {Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, Quer
 import {MatTableDataSource} from '@angular/material/table';
 import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {Constant, DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE, PATTERN} from 'src/app/crew-trip/shared/utils/constant';
+import {DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE, PATTERN} from 'src/app/crew-trip/shared/utils/constant';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
 import {transform} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
@@ -14,7 +14,9 @@ import {ContractService} from "src/app/crew-trip/core/services/contract-service"
 import {HttpStatusCode} from "@angular/common/http";
 import moment from "moment";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
-import {debounceTime} from "rxjs";
+import {debounceTime, filter, pairwise} from "rxjs";
+import {afterValidator, beforeValidator} from "src/app/crew-trip/shared/utils/common";
+import {quantity} from "src/app/crew-trip/shared/utils/error-message";
 
 
 @Component({
@@ -23,8 +25,7 @@ import {debounceTime} from "rxjs";
   imports: [BaseImport],
   templateUrl: './invoice-document-detail.component.html',
   styleUrl: './invoice-document-detail.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
-
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
   ]
 })
 
@@ -59,6 +60,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   listDocumentType = InvoiceLookup.InvoiceDocumentType;
   listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
+  today = new Date();
+
   _displayedColumnsHeader1: string[] = [];
   _displayedColumnsHeader2: string[] = [];
   _displayedColumnsRow: string[] = [];
@@ -66,65 +69,65 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   _displayedColumnsAll: {
     label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string
   }[] = [
-    {label: "Access Bridge", value: "accessBridge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Accommodation Tax Cc Charge", value: "accommodationTaxCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Accommodation Tax Fc Charge", value: "accommodationTaxFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Airport Parking Fee", value: "airportParkingFee", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Breakfast Cc", value: "breakfastCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Breakfast Fc", value: "breakfastFc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Cc", value: "cc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Ci Date", value: "ciDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: "Access Bridge", value: "accessBridge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Accommodation Tax Cc Charge", value: "accommodationTaxCcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Accommodation Tax Fc Charge", value: "accommodationTaxFcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Airport Parking Fee", value: "airportParkingFee", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Breakfast Cc", value: "breakfastCc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Breakfast Fc", value: "breakfastFc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Cc", value: "cc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Ci Date", value: "ciDate", type: "Constant.DATE", format: "Constant.DATE_FORMAT"},
     {label: "Ci Fltno", value: "ciFltno"},
     {label: "Ci Time", value: "ciTime"},
-    {label: "City Tax Cc Charge", value: "cityTaxCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "City Tax Fc Charge", value: "cityTaxFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Co Date", value: "coDate", type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: "City Tax Cc Charge", value: "cityTaxCcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "City Tax Fc Charge", value: "cityTaxFcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Co Date", value: "coDate", type: "Constant.DATE", format: "Constant.DATE_FORMAT"},
     {label: "Co Fltno", value: "coFltno"},
     {label: "Co Time", value: "coTime"},
-    {label: "Cdate", value: "cdate", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Detail", value: "detail", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Early Checkin", value: "earlyCheckin", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Eci Single Room Cc Charge", value: "eciSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Eci Single Room Fc Charge", value: "eciSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Eci Twin Room Cc Charge", value: "eciTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Fc", value: "fc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Fltno", value: "fltno", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Fullname", value: "fullname", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Late Checkout", value: "lateCheckout", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Lco Single Room Cc Charge", value: "lcoSingleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Lco Single Room Fc Charge", value: "lcoSingleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Lco Twin Room Cc Charge", value: "lcoTwinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Night", value: "night", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Number Of Nights", value: "numberOfNights", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Number Of Vehicle", value: "numberOfVehicle", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Price", value: "price", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Remark", value: "remark", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Cdate", value: "cdate", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Detail", value: "detail", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Early Checkin", value: "earlyCheckin", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Eci Single Room Cc Charge", value: "eciSingleRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Eci Single Room Fc Charge", value: "eciSingleRoomFcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Eci Twin Room Cc Charge", value: "eciTwinRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Fc", value: "fc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Fltno", value: "fltno", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Fullname", value: "fullname", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Late Checkout", value: "lateCheckout", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Lco Single Room Cc Charge", value: "lcoSingleRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Lco Single Room Fc Charge", value: "lcoSingleRoomFcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Lco Twin Room Cc Charge", value: "lcoTwinRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Night", value: "night", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Number Of Nights", value: "numberOfNights", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Number Of Vehicle", value: "numberOfVehicle", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Price", value: "price", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Remark", value: "remark", type: "Constant.NUMBER", rowspan: "2"},
     {label: "Room No", value: "roomNo", rowspan: "2"},
-    {label: "Service Tax Cc Charge", value: "serviceTaxCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Service Tax Fc Charge", value: "serviceTaxFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Single Room Cc", value: "singleRoomCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Single Room Cc Charge", value: "singleRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Single Room Fc", value: "singleRoomFc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Single Room Fc Charge", value: "singleRoomFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Time Stay", value: "timeStay", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Toll", value: "toll", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Amount Cc", value: "totalAmountCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Amount Fc", value: "totalAmountFc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Breakfast Cc Charge", value: "totalBreakfastCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Breakfast Fc Charge", value: "totalBreakfastFcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Charge", value: "totalCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Charges", value: "totalCharges", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Night", value: "totalNight", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Revenue", value: "totalRevenue", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Single Rooms Cc", value: "totalSingleRoomsCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Single Rooms Fc", value: "totalSingleRoomsFc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Twin Rooms Cc", value: "totalTwinRoomsCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Total Vat", value: "totalVat", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Transit Duty", value: "transitDuty", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Transport Charge", value: "transportCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Twin Room Cc", value: "twinRoomCc", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Twin Room Cc Charge", value: "twinRoomCcCharge", type: Constant.NUMBER, rowspan: "2"},
-    {label: "Unit Price", value: "unitPrice", type: Constant.NUMBER, rowspan: "2"},
+    {label: "Service Tax Cc Charge", value: "serviceTaxCcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Service Tax Fc Charge", value: "serviceTaxFcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Single Room Cc", value: "singleRoomCc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Single Room Cc Charge", value: "singleRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Single Room Fc", value: "singleRoomFc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Single Room Fc Charge", value: "singleRoomFcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Time Stay", value: "timeStay", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Toll", value: "toll", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Amount Cc", value: "totalAmountCc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Amount Fc", value: "totalAmountFc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Breakfast Cc Charge", value: "breakfastCcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Breakfast Fc Charge", value: "breakfastFcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Charge", value: "totalCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Charges", value: "totalCharges", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Night", value: "totalNight", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Revenue", value: "totalRevenue", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Single Rooms Cc", value: "totalSingleRoomsCc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Single Rooms Fc", value: "totalSingleRoomsFc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Twin Rooms Cc", value: "totalTwinRoomsCc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Vat", value: "totalVat", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Transit Duty", value: "transitDuty", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Transport Charge", value: "transportCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Twin Room Cc", value: "twinRoomCc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Twin Room Cc Charge", value: "twinRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Unit Price", value: "unitPrice", type: "Constant.NUMBER", rowspan: "2"},
     {label: "Type Room", value: "typeRoom", rowspan: "2"},
   ];
   ready: boolean = false;
@@ -132,6 +135,9 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   @ViewChild('totalab') totalab: ElementRef;
   public listDocumentParent: any[] = [];
   showDialogFinish = false;
+  runSubscribe = true;
+  _showDialogDelete = false;
+  deleteObj: any;
   protected readonly LOCALE = LOCALE;
   protected readonly transform = transform;
   protected readonly DATE_FORMAT_DD_MM_YYYY = DATE_FORMAT_DD_MM_YYYY;
@@ -144,14 +150,14 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       idParent: [],
       idContract: [],
       idInvoiceForm: [],
-      version: [],
+      version: [1],
       ctype: [InvoiceDocumentTypeEnum.STANDARD],
       invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(PATTERN.STRING_NUMBER1)]],
       invoiceDate: [],
       invoiceReceiveDate: [],
       periodFrom: [],
       periodTo: [],
-      periodOccurrence: [],
+      periodOccurrence: [, [Validators.required]],
       paymentDueDay: [],
       paymentDueDate: [],
       bizDocId: [],
@@ -165,8 +171,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       exchangeRate: [],
       exchangeRateDate: [],
       exchangeRateType: [],
-      description: [],
-      note: [],
+      description: [, [Validators.maxLength(500)]],
+      note: [, [Validators.maxLength(500)]],
       status: [],
       statusEmail: [],
       amountFcBeforeVat: [],
@@ -188,130 +194,17 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       tblInvoiceDocumentDtl: this.fb.array([]),
 
     });
-
+    this.formGroupDetail.controls['invoiceDate'].setValidators([beforeValidator(this.formGroupDetail.controls['periodFrom']),
+      beforeValidator(this.formGroupDetail.controls['periodTo'])]);
+    this.formGroupDetail.controls['periodFrom'].setValidators([afterValidator(this.formGroupDetail.controls['periodTo']),
+      afterValidator(this.formGroupDetail.controls['invoiceDate'], 'invoiceDate')]);
+    this.formGroupDetail.controls['periodTo'].setValidators([beforeValidator(this.formGroupDetail.controls['periodFrom']),
+      afterValidator(this.formGroupDetail.controls['invoiceDate'], 'invoiceDate')]);
+    this.formGroupDetail.controls['invoiceReceiveDate'].setValidators([beforeValidator(this.formGroupDetail.controls['invoiceDate'])]);
     if (!this.readMode) {
-      this.formGroupDetail.controls['airportCode'].valueChanges.subscribe(async (value) => {
-        if (value && !this.firstLoad) {
-          try {
-            await this.spinner.show();
-            const [res, res2, res3] = await Promise.all([
-              this.contractService.getMarket({marketCode: value.toUpperCase()}),
-              this.findContract(),
-              this.loadListDocumentParent()
-            ]);
-            if (res.data) {
-              this.formGroupDetail.patchValue({
-                contractServiceType: res.data.marketType.toUpperCase(),
-              })
-            }
-          } catch (e) {
-            console.log(e);
-            this.baseService.showError(MESSAGE.ERROR);
-          } finally {
-            await this.spinner.hide();
-          }
-        }
-      });
-
-      this.formGroupDetail.controls['partnerType'].valueChanges.subscribe((value) => {
-        if (value && !this.firstLoad) {
-          this.findContract();
-        }
-      });
-
-      this.formGroupDetail.controls['periodTo'].valueChanges.subscribe((value) => {
-        if (value && !this.firstLoad) {
-          this.findContract();
-        }
-      });
-
-      this.formGroupDetail.controls['periodFrom'].valueChanges.subscribe((value) => {
-        if (value && !this.firstLoad) {
-          this.formGroupDetail.patchValue({
-            periodOccurrence: (moment(value) || value)?.format('YYYY-MM-DD') || '',
-          });
-        }
-      });
-
-      this.formGroupDetail.controls['invoiceDate'].valueChanges.subscribe((value) => {
-        if (value && !this.firstLoad) {
-          let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
-          this.formGroupDetail.patchValue({
-            paymentDueDate: _value?.format('YYYY-MM-DD') || ''
-          });
-        }
-      });
-
-      this.formGroupDetail.controls['invoiceDate'].valueChanges.subscribe((value) => {
-        if (value && !this.firstLoad) {
-          let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
-          this.formGroupDetail.patchValue({
-            paymentDueDate: _value?.format('YYYY-MM-DD') || ''
-          });
-        }
-      });
-
-      this.formGroupDetail.controls['idParent'].valueChanges.subscribe((value) => {
-        if (!this.firstLoad) {
-          this.formGroupDetail.patchValue({version: value ? 2 : 1});
-        }
-      });
+      this.subscribeMain();
     }
   }
-
-  // addRow(table: any, addType: any, init?: any) {
-  //   let row: FormGroup = this.fb.group({})
-  //   if (addType === 'tblPriceUnit') {
-  //     row = this.fb.group({
-  //       id: [],
-  //       serviceCode: [this.listFeeService[0]?.code, [Validators.required]],
-  //       vnaTransId: [, [Validators.maxLength(50)]],
-  //       expenseCatgId: [, [Validators.maxLength(50)]],
-  //       priceNoTax: [],
-  //       taxCode: [,],
-  //       taxRate: [],
-  //       originalAmount3: [],
-  //       priceWithTax: [],
-  //       notes: [, [Validators.maxLength(50)]],
-  //       bizDocId: [],
-  //       fromDate: [this.formGroupDetail.getRawValue().effectiveDate || ''],
-  //       toDate: [this.formGroupDetail.getRawValue().expiryDate || ''],
-  //       active: [],
-  //       serviceName: [this.listFeeService[0]?.name],
-  //       serviceUnit: [this.listFeeService[0]?.unit],
-  //     });
-  //     row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
-  //     // row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate'])]);
-  //     row.controls['taxCode'].setValidators([Validators.maxLength(24), Validators.pattern(PATTERN.STRING)]);
-  //     init && row.patchValue(init);
-  //     table.push(row);
-  //     this.dsPriceUnit.data = table.controls;
-  //   } else if (addType === 'tblEciLco' || addType === 'tblOvernightStay') {
-  //     row = this.fb.group({
-  //       id: [,], type: [,], fromHour: ['00:00',], rate: [,], toHour: ['23:59',], active: [,], typeCheck: [,], bizdocId: [,],
-  //     });
-  //     row.controls['rate'].setValidators(lessThanValidator(2));
-  //     row.controls['toHour'].setValidators(timeBeforeValidator(row.controls['fromHour']));
-  //     table.push(row);
-  //     if (addType === 'tblEciLco') {
-  //       init && row.patchValue(init);
-  //       this.dsEciLco.data = table.controls;
-  //     } else if (addType === 'tblOvernightStay') {
-  //       init && row.patchValue(init);
-  //       this.dsOvernightStay.data = table.controls;
-  //     }
-  //   } else if (addType === 'tblDayUse') {
-  //     row = this.fb.group({
-  //       id: [,], bizdocId: [,], checkinFrom: ['00:00',], checkoutTo: ['23:59',], maxHour: [,], rate: [,], rate1: [,], active: [,],
-  //     });
-  //     row.controls['checkoutTo'].setValidators(timeBeforeValidator(row.controls['checkinFrom']));
-  //     row.controls['maxHour'].setValidators([Validators.min(0), Validators.max(24), Validators.pattern(PATTERN.NUMBER)]);
-  //     init && row.patchValue(init);
-  //     table.push(row);
-  //     this.dsDayUse.data = table.controls;
-  //   }
-  //   return row;
-  // }
 
   get tblInvoiceDocumentDtl(): FormArray {
     return this.formGroupDetail.get('tblInvoiceDocumentDtl') as FormArray;
@@ -327,16 +220,28 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       await this.spinner.show();
       await this.loadListDocumentParent();
       await Promise.all([this.detail(this.id), this.loadListFlightMarket(), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
-        this.formGroupDetail.patchValue({idParent: this.formGroupDetail.getRawValue().idParent})
+        this.formGroupDetail.patchValue({idParent: this.formGroupDetail.getRawValue().idParent});
+        this.calTotal();
+        this.listFeeService = this.listFeeService.filter((s: any) => s.active);
+        this.setReadModeDtl([this.tblInvoiceDocumentDtl]);
+        if (this.isDataClone()) {
+          this.formGroupDetail.patchValue({
+            id: null,
+            idParent: null,
+            idInvoiceForm: null,
+            invoiceNumber: null,
+          });
+        }
       });
     } catch (e) {
       console.log(e);
       this.baseService.showError(MESSAGE.ERROR);
     } finally {
-      this.firstLoad = false;
+      setTimeout(() => {
+        this.firstLoad = false;
+      }, 1000);
       await this.spinner.hide();
     }
-
   }
 
   goBack() {
@@ -354,37 +259,26 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   saveAndFinish() {
     this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.FINISHED})
     this.save();
+    this.goBack();
   }
 
   toggleDialogFinish() {
+    this.formGroupDetail.markAllAsTouched();
+    if (this.formGroupDetail.invalid) {
+      this.findInvalidControls(this.formGroupDetail);
+      return;
+    }
     this.showDialogFinish = !this.showDialogFinish;
   }
 
-  /*  async airportCodeChange($event: any) {
-      if ($event?.value) {
-        try {
-          await this.spinner.show();
-          await this.baseService.getContractByAirport($event.value).then(res => {
-            if (res.data?.bizDocId) {
-              //todo set du lieu thong tin hop dong cho form detail
-              this.formGroupDetail.patchValue({
-                paymentDueDay : 15,
-                bizDocId: res.data?.bizDocId,
-              })
-            }
-          });
-        } catch (e) {
-          console.log(e);
-          this.baseService.showError(MESSAGE.ERROR);
-        } finally {
-          await this.spinner.hide();
-        }
-      }
-    }*/
-
   async setReadMode(form: FormGroup) {
-    const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType'];
-    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType', 'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version', 'contractServiceType'];
+    const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency',
+      'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version',
+      'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status', 'periodOccurrence'];
+    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType',
+      'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version',
+      'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status', 'periodOccurrence'];
+
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
         v.disable();
@@ -397,8 +291,14 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         }
         //edit
         else {
-          if (disableFieldEdit.includes(k)) {
+          //status finish
+          if (this.dataObject?.status === InvoiceDocumentStatusEnum.FINISHED) {
             v.disable();
+            this.formGroupDetail.controls['exchangeRateDate'].enable();
+          } else {
+            if (disableFieldEdit.includes(k)) {
+              v.disable();
+            }
           }
         }
 
@@ -406,23 +306,52 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     });
   }
 
+  async setReadModeDtl(formArrays?: any) {
+    if (!formArrays) {
+      formArrays = [this.tblInvoiceDocumentDtl];
+    }
+    formArrays.forEach((formArray: any) => {
+      if (!this.readMode) return;
+      const groups = formArray.controls as FormGroup[];
+      groups.forEach((fGroup) => {
+        Object.values(fGroup.controls).forEach((control) => {
+          control.disable();
+        });
+      });
+    });
+  }
+
+  calRow(row: any) {
+    let rate = this.formGroupDetail.getRawValue().exchangeRate ?? 0;
+    row.patchValue({
+      amountFcBeforeVat: (row.getRawValue().quantity * row.getRawValue().unitPrice)?.toFixed(4),
+      amountVndBeforeVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100)?.toFixed(4),
+      amountFcVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat / 100)?.toFixed(4),
+      amountVndVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100 * row.getRawValue().vat)?.toFixed(4), // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
+    });
+  }
+
   calTotal() {
     let jsonValue = this.bodyBuilder();
     let sum = jsonValue.invoiceDocumentDtl?.reduce((prev: any, cur: any) => {
-      prev.amountFcBeforeVat += cur.amountFcBeforeVat;
-      prev.vatFc += cur.amountFcVat;
-      prev.amountVndBeforeVat += cur.amountVndBeforeVat;
-      prev.vatVnd += cur.amountVndVat;
-      prev.totalAmountFc += cur.amountFcBeforeVat + cur.amountFcVat;
-      prev.totalAmountVnd += cur.amountVndBeforeVat + cur.amountVndVat;
+      prev.amountFcBeforeVat += +cur.amountFcBeforeVat;
+      prev.vatFc += +cur.amountFcVat;
+      prev.amountVndBeforeVat += +cur.amountVndBeforeVat;
+      prev.vatVnd += +cur.amountVndVat;
+      prev.totalAmountFc += +cur.amountFcBeforeVat + +cur.amountFcVat;
+      prev.totalAmountVnd += +cur.amountVndBeforeVat + +cur.amountVndVat;
       return prev;
     }, {amountFcBeforeVat: 0, vatFc: 0, amountVndBeforeVat: 0, vatVnd: 0, totalAmountFc: 0, totalAmountVnd: 0,});
+    Object.keys(sum).forEach(key => {
+      sum[key] = (+sum[key]).toFixed(2);
+    });
     this.formGroupDetail.patchValue(sum);
-    const inputs = this.totalab.nativeElement.querySelectorAll('input');
+
+    /*const inputs = this.totalab.nativeElement.querySelectorAll('input');
     inputs.forEach((inputRef: any) => {
       inputRef.dispatchEvent(new Event('focus'));
       inputRef.dispatchEvent(new Event('blur'));
-    });
+    });*/
   }
 
   async download(fileRow: any) {
@@ -449,7 +378,6 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     });
   }
 
-
   async actionUpload() {
     try {
       await this.spinner.show();
@@ -457,7 +385,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       const fileUpload = this.formGroupDetail.getRawValue().fileUpload[0];
       //validate
       // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
-      if (fileUpload.size > 5 * 1048576) {
+      if (fileUpload.size > 20 * 1048576) {
         this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
         return;
       }
@@ -488,9 +416,15 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   override async save(): Promise<any> {
     try {
+      console.log(this.formGroupDetail.controls)
+      if (!this.formGroupDetail.getRawValue().bizDocId) {
+        this.showError($localize`Can not find any contract.`);
+        return;
+      }
       let removeNull = this.formGroupDetail.getRawValue().invoiceDocumentDtl?.filter((s: any) => s.serviceCode);
       this.formGroupDetail.patchValue({invoiceDocumentDtl: removeNull});
       this.formGroupDetail.markAllAsTouched();
+      this.formGroupDetail.updateValueAndValidity();
       if (this.formGroupDetail.invalid) {
         this.findInvalidControls(this.formGroupDetail);
         return;
@@ -504,16 +438,12 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       } else {
         res = await this.baseService.create(req);
       }
-      this.baseService.showSuccess(
-        update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,
-      );
+      this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,);
       this.goBack();
       return res;
     } catch (e: any) {
       console.log(e)
-      this.baseService.showError(
-        e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
-      );
+      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,);
     } finally {
       await this.spinner.hide();
     }
@@ -567,10 +497,10 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       serviceCode: ['', [Validators.required]],
       serviceName: ['',],
       unit: ['',],
-      periodOccurrence: ['', [Validators.required]],
-      nsCode: ['',],
-      quantity: ['',],
-      unitPrice: ['',],
+      periodOccurrence: [this.formGroupDetail.getRawValue().periodOccurrence, [Validators.required]],
+      nsCode: ['D2',],
+      quantity: ['', [Validators.min(0), Validators.max(999), Validators.pattern(PATTERN.NUMBER2)]],
+      unitPrice: ['', [Validators.min(0), Validators.max(999999999), Validators.pattern(PATTERN.NUMBER2)]],
       amountFcBeforeVat: ['',],
       amountVndBeforeVat: ['',],
       amountFcVat: ['',],
@@ -579,9 +509,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       vat: ['',],
     });
     init && row.patchValue(init);
-    row.valueChanges.pipe(debounceTime(100)).subscribe(value => {
-      this.calTotal();
-    });
+    this.subscribeMain(row);
     this.tblInvoiceDocumentDtl.push(row);
     this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
     return row;
@@ -598,46 +526,46 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   override async detail(id: any) {
-    await super.detail(id);
+    await super.detail(this.isDataClone() ? this.dataObject.id : id);
     this.formGroupDetail.getRawValue().invoiceDocumentDtl?.forEach((s: any) => {
+      if (this.isDataClone()) {
+        s.id = null;
+      }
       this.addRow(s);
     });
     if (!!!id) {
       this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.UNMATCHED});
     }
-    this.listDocumentParent = [...this.listDocumentParent,
-      {
-        id: this.formGroupDetail.getRawValue()._id,
-        invoiceNumber: this.formGroupDetail.getRawValue()._invoiceNumber,
-        invoiceDate: this.formGroupDetail.getRawValue()._invoiceDate,
-      }];
+    this.listDocumentParent = [...this.listDocumentParent, {
+      id: this.formGroupDetail.getRawValue()._id,
+      invoiceNumber: this.formGroupDetail.getRawValue()._invoiceNumber,
+      invoiceDate: this.formGroupDetail.getRawValue()._invoiceDate,
+    }];
   }
 
   findContract() {
     this.formGroupDetail.patchValue({
-      paymentDueDay: '',
-      bizDocId: '',
-      partnerCode: '',
-      partnerName: '',
-      currency: '',
-      paymentDueDate: ''
+      paymentDueDay: '', bizDocId: '', partnerCode: '', partnerName: '', currency: '', paymentDueDate: ''
     });
-    if (this.formGroupDetail.getRawValue().airportCode &&
-      this.formGroupDetail.getRawValue().partnerType &&
-      this.formGroupDetail.getRawValue().periodTo
-    ) {
+    if (this.formGroupDetail.getRawValue().airportCode && this.formGroupDetail.getRawValue().partnerType && this.formGroupDetail.getRawValue().periodTo) {
       this.baseService.findContract({
         airportCode: this.formGroupDetail.getRawValue().airportCode,
         partnerType: this.formGroupDetail.getRawValue().partnerType,
         periodTo: this.formGroupDetail.getRawValue().periodTo
       }).then((res: any) => {
         if (res.data?.bizDocId) {
+          const place0 = this.isHotel() ? "KSTB" : "XE TB";
+          const place1 = this.formGroupDetail.getRawValue().airportCode;
+          const place2 = moment(this.formGroupDetail.getRawValue().periodTo).format("MM/YYYY");
+
+          let description = `Hóa đơn ${place0} tại ${place1} tháng ${place2}`;
           this.formGroupDetail.patchValue({
             paymentDueDay: res.data?.dueDateNumber,
             bizDocId: res.data?.bizDocId,
             partnerCode: res.data?.partnerCode,
             partnerName: res.data?.partnerName,
             currency: res.data?.currency,
+            description: description
           })
           //paymentDueDate
           let invoiceDate = this.formGroupDetail.getRawValue().invoiceDate;
@@ -645,6 +573,19 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
           this.formGroupDetail.patchValue({
             paymentDueDate: _value?.format('YYYY-MM-DD') || ''
           });
+
+          //du lieu priceunit hd
+          this.tblInvoiceDocumentDtl = this.fb.array([]);
+          res.data?.priceUnitInfo.forEach((s: any) => {
+            let item = {
+              serviceCode: s.serviceCode,
+              vat: s.taxRate
+            }
+            let row = this.addRow(item);
+            this.changeServiceFee(row);
+          })
+        } else {
+          // this.showError($localize`Can not find any contract.`);
         }
       })
     }
@@ -654,5 +595,152 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     let body = this.formGroupDetail.getRawValue();
     body.invoiceDocumentDtl = this.tblInvoiceDocumentDtl.value;
     return body;
+  }
+
+  isHotel() {
+    return this.formGroupDetail.getRawValue().partnerType === 'HOTEL';
+  }
+
+  isTransportation() {
+    return this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION';
+  }
+
+  isInternational() {
+    return this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL';
+  }
+
+  isDomestic() {
+    return this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC';
+  }
+
+  async subscribeMain(row?: any) {
+    if (row) {
+      row.controls['unitPrice'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
+        if (prev !== curr && !this.firstLoad) {
+          await this.calRow(row);
+          await this.calTotal();
+        }
+      });
+      row.controls['quantity'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
+        if (prev !== curr && !this.firstLoad) {
+          await this.calRow(row);
+          await this.calTotal();
+        }
+      });
+      row.controls['vat'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
+        if (prev !== curr && !this.firstLoad) {
+          await this.calRow(row);
+          await this.calTotal();
+        }
+      });
+    } else {
+      this.formGroupDetail.controls['airportCode'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe(async (value) => {
+        if (value && !this.firstLoad) {
+          try {
+            await this.spinner.show();
+            const [res, res2, res3] = await Promise.all([this.contractService.getMarket({marketCode: value.toUpperCase()}), this.findContract(), this.loadListDocumentParent()]);
+            if (res.data) {
+              this.formGroupDetail.patchValue({
+                contractServiceType: res.data.marketType.toUpperCase(),
+              })
+            }
+          } catch (e) {
+            console.log(e);
+            this.baseService.showError(MESSAGE.ERROR);
+          } finally {
+            await this.spinner.hide();
+          }
+        }
+      });
+      this.formGroupDetail.controls['partnerType'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
+        if (value && !this.firstLoad) {
+          this.findContract();
+        }
+      });
+      this.formGroupDetail.controls['periodTo'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
+        if (value && !this.firstLoad) {
+          this.findContract();
+          // this.formGroupDetail.controls['invoiceDate'].updateValueAndValidity();
+        }
+      });
+      this.formGroupDetail.controls['periodFrom'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
+        if (value && !this.firstLoad) {
+          this.formGroupDetail.patchValue({
+            periodOccurrence: (moment(value) || value)?.format('YYYY-MM-DD') || '',
+          });
+        }
+      });
+      this.formGroupDetail.controls['invoiceDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
+        if (value && !this.firstLoad) {
+          this.formGroupDetail.patchValue({
+            invoiceReceiveDate: '',
+            periodFrom: '',
+            periodTo: ''
+          });
+          // this.formGroupDetail.controls['periodTo'].updateValueAndValidity();
+          // this.formGroupDetail.controls['periodFrom'].updateValueAndValidity();
+        }
+      });
+      this.formGroupDetail.controls['idParent'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
+        if (!this.firstLoad) {
+          this.formGroupDetail.patchValue({version: value ? 2 : 1});
+        }
+      });
+      this.formGroupDetail.controls['currency'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
+        if (value) {
+          this.formGroupDetail.controls['exchangeRateDate'].enable();
+        } else {
+          this.formGroupDetail.controls['exchangeRateDate'].disable();
+        }
+      });
+      this.formGroupDetail.controls['exchangeRateDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
+        if (value && !this.firstLoad) {
+          this.baseService.getExchangeRate({
+            currency: this.formGroupDetail.getRawValue().currency, exchangeRateDate: this.formGroupDetail.getRawValue().exchangeRateDate,
+          }).then((res: any) => {
+            if (res.data) {
+              this.formGroupDetail.patchValue({
+                exchangeRate: res.data.price, exchangeRateType: res.data.type,
+              });
+              this.tblInvoiceDocumentDtl.controls.forEach(s => {
+                this.calRow(s);
+              })
+            }
+          });
+        }
+      });
+      this.formGroupDetail.controls['invoiceReceiveDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
+        if (value && !this.firstLoad) {
+          let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
+          this.formGroupDetail.patchValue({
+            paymentDueDate: _value?.format('YYYY-MM-DD') || '',
+          });
+        }
+      });
+    }
+  }
+
+  async _confirmDelete(element?: any, index?: any) {
+    this.deleteObj = {...element.value, index: index};
+    this._showDialogDelete = true;
+  }
+
+  async _closeConfirmDelete() {
+    this._showDialogDelete = false;
+  }
+
+  async _doDelete() {
+    try {
+      this.tblInvoiceDocumentDtl.removeAt(this.deleteObj.index);
+      this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
+    } catch (e) {
+      console.log(e);
+    } finally {
+      this._showDialogDelete = false;
+    }
+  }
+
+  isDataClone() {
+    return this.id === 0 && this.dataObject;
   }
 }

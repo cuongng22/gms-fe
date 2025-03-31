@@ -3,7 +3,7 @@ import {RouterLink} from '@angular/router';
 import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
 import {MatCardModule} from '@angular/material/card';
 import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule, MatMenuTrigger} from '@angular/material/menu';
+import {MatMenuModule} from '@angular/material/menu';
 import {MatTableModule} from '@angular/material/table';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatCheckboxModule} from '@angular/material/checkbox';
@@ -25,7 +25,6 @@ import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
 import {MatDatepickerModule} from '@angular/material/datepicker';
 import {ListResponse} from 'src/app/crew-trip/shared/models/common.model';
 import {HttpStatusCode} from '@angular/common/http';
-import {InvoiceFormService} from 'src/app/crew-trip/core/services/invoice-form-service';
 import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
 import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
 import {FileUploadModule} from "@iplab/ngx-file-upload";
@@ -34,16 +33,17 @@ import {InvoiceActualCostService} from "src/app/crew-trip/core/services/invoice-
 import moment from "moment";
 import {InvoiceDocumentDetailComponent} from "src/app/crew-trip/features/invoice/document/document-detail/invoice-document-detail.component";
 import {InvoiceDocumentService} from "src/app/crew-trip/core/services/invoice-document-service";
-import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
+import {InvoiceDocumentExportType, InvoiceDocumentStatusEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {SelectMultipleComponent} from "src/app/crew-trip/shared/component/select-multiple/select-multiple.component";
 
 
 @Component({
   selector: 'app-invoice-actual-cost',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, InvoiceDocumentDetailComponent],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, InvoiceDocumentDetailComponent, SelectMultipleComponent],
   templateUrl: './invoice-actual-cost.component.html',
   styleUrl: './invoice-actual-cost.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
   ]
 })
 
@@ -64,18 +64,16 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   readMode = true;
   action = 'edit';
   id: any;
-  listPartner: any[] = [];
-  listHotel = [];
-  listVehicle = [];
-  listAirportCode = [];
   listInvoice: any[];
+  startOfMonth = moment().startOf('year').format('YYYY-MM-DD');
+  endOfMonth = moment().format('YYYY-MM-DD');
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
   _displayedColumns: {
-    label: string; value: string, type?: string, format?: string
+    label: string; value: string, type?: string, format?: string,sticky?:boolean
   }[] = [
-    {label: $localize`Partner Name`, value: 'partnerName'},
-    {label: $localize`Airport Code`, value: 'airportCode'},
+    {label: $localize`Partner Name`, value: 'partnerName', sticky:true},
+    {label: $localize`Airport Code`, value: 'airportCode', sticky:true},
     {label: $localize`Type`, value: 'ctype'},
     {label: $localize`Period Occurrence`, value: 'periodOccurrence', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Currency`, value: 'currency'},
@@ -115,8 +113,8 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
       partnerType: [],
       airportCode: [],
       listAirportCode: [],
-      periodFrom: [],
-      periodTo: [],
+      periodFrom: [this.startOfMonth],
+      periodTo: [moment().format('YYYY-MM-DD')],
     });
     this.formGroupDetail = this.fb.group({
       id: [], bizDocId: [], bizDocIdC1: [], contractName: [], contractCode: []
@@ -156,7 +154,6 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   }
 
   override async search<T>(body?: any, isNextPage?: boolean) {
-    console.log(this.formGroupSearch)
     try {
       this.formGroupSearch.patchValue({
         listAirportCode: this.formGroupSearch.getRawValue().airportCode,
@@ -169,8 +166,8 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
       }
       let res;
       let req = body || this.formGroupSearch.getRawValue();
-      req.periodFrom = moment.isMoment(req.periodFrom) ? req.periodFrom.format(Constant.LOCAL_DATE_FORMAT) : null;
-      req.periodTo = moment.isMoment(req.periodTo) ? req.periodTo.format(Constant.LOCAL_DATE_FORMAT) : null;
+      req.periodFrom = moment(req.periodFrom).isValid() ? moment(req.periodFrom).format(Constant.LOCAL_DATE_FORMAT) : null;
+      req.periodTo = moment(req.periodTo).isValid() ? moment(req.periodTo).format(Constant.LOCAL_DATE_FORMAT) : null;
       res = await this.baseService.search<ListResponse<T>>({
         page: this.pageIndex,
         size: this.pageSize,
@@ -240,7 +237,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   }
 
   showDocumentHdr(documentHdrId: any) {
-    documentHdrId = 42;
+    // documentHdrId = 42;
     if (+documentHdrId > 0) {
       this.documentHdrId = documentHdrId;
       this.isShowDocumentHdr = true;
@@ -251,15 +248,23 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
 
   async getListInvoiceDocument(item: any) {
     try {
-      await this.spinner.show();
       this.listInvoice = [];
-      await this.invoiceDocumentService.search({
-        page: this.pageIndex,
-        size: this.pageSize,
-        limit: this.pageSize,
-      }).then((res: any) => {
-        this.listInvoice = res?.data?.content;
-      });
+      if (moment(item.periodOccurrence).isValid() && item.partnerCode && item.airportCode) {
+        await this.spinner.show();
+        await this.invoiceDocumentService.search({
+          page: this.pageIndex,
+          size: this.pageSize,
+          limit: this.pageSize,
+          partnerCode: item.partnerCode,
+          airportCode: item.airportCode,
+          listAirportCode: item.airportCode,
+          periodFrom: moment(item.periodOccurrence).startOf('month').format('YYYY-MM-DD'),
+          periodTo: moment(item.periodOccurrence).endOf('month').format('YYYY-MM-DD'),
+          status: InvoiceDocumentStatusEnum.FINISHED
+        }).then((res: any) => {
+          this.listInvoice = res?.data?.content;
+        });
+      }
     } catch (e: any) {
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);
     } finally {
@@ -267,30 +272,30 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
     }
   }
 
-
-  /*override async search<T>(body?: any, isNextPage?: boolean) {
+  async download() {
     try {
       await this.spinner.show();
-      if (!isNextPage) {
-        this.pageIndex = Constant.PAGE;
-      }
-      let res = await this.baseService.search<ListResponse<T>>({
-        page: this.pageIndex,
-        size: this.pageSize,
-        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
-      });
-
-      if (res) {
-        if (res.code === HttpStatusCode.Ok) {
-          this.dataSource.data = res.data.content;
-          this.totalElement = res.data.totalElements;
-        }
-        return res;
-      }
-    } catch (e: any) {
-      this.baseService.showError(e.error?.message ?? MESSAGE.ERROR);
+      let body = this.formGroupSearch.getRawValue();
+      body.periodFrom = moment(body.periodFrom).isValid() ? moment(body.periodFrom).format(Constant.LOCAL_DATE_FORMAT) : null;
+      body.periodTo = moment(body.periodTo).isValid() ? moment(body.periodTo).format(Constant.LOCAL_DATE_FORMAT) : null;
+      body = removeNullValues(body);
+      body.page = 0;
+      body.limit = 999999;
+      const res = await this.baseService.exportListData(body);
+      this.downloadFile(res, 'export.xlsx');
+    } catch (e) {
+      console.log(e)
     } finally {
       await this.spinner.hide();
     }
-  }*/
+  }
+
+  closeInvoiceDocument() {
+    this.isShowDocumentHdr = false;
+    setTimeout(() => {
+      this.documentHdrId = null;
+    }, 300);
+  }
+
+
 }

@@ -1,122 +1,122 @@
 <mat-card class="border-radius d-block bg-white border-0 shadow-none">
-  <mat-card-header class="p-15">
-    <mat-card-title>
-      <h5 class="mb-0" i18n="@@crewInformation">
-        {{ (!this.formGroupDetail.value.id ? 'Add new' : 'Edit') }}
-      </h5>
-    </mat-card-title>
-  </mat-card-header>
-  <mat-card-content>
-    <form [formGroup]="formGroupDetail" autocomplete="off">
-      <div class="row">
-        <div class="col-sm-12 col-md-12">
-          <div class="form-group mb-20" sizeInput="md">
-            <mat-form-field class="mb-1">
-              <mat-label i18n="@@airportCode">Airport code</mat-label>
-              <input type="text" #marketCode matInput formControlName="marketCode"
-                     [matAutocomplete]="marketComplete"
-                     (input)="filterMarket()" (focus)="onFocusMarket()">
-              <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
-                <mat-option [value]="null">
-                  -- Choose airport code --
-                </mat-option>
-                <mat-option *ngFor="let option of filteredOptionsMarket" [value]="option">
-                  {{ option }}
-                </mat-option>
-              </mat-autocomplete>
-              @if (!!formGroupDetail.controls['marketCode'].hasError('required')) {
-                <mat-error><span i18n>Airport code</span><span i18n> is required</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-12">
-          <div class="form-group mb-20" sizeInput="md">
-            <mat-form-field>
-              <mat-label>Acgroup</mat-label>
-              <mat-select formControlName="acType">
-                <mat-option [value]="null">Choose actype</mat-option>
-                <mat-option *ngFor="let type of acTypes" [value]="type.acgroup">
-                  {{ type.acgroup }}
-                </mat-option>
-              </mat-select>
-              @if (!!formGroupDetail.controls['acType'].hasError('existActype')) {
-                <mat-error>{{ messageErrorActype }}</mat-error>
-              } @else if (!!formGroupDetail.controls['acType'].hasError('required')) {
-                <mat-error><span i18n>Ac type</span><span i18n> is required</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-6">
-          <div class="form-group mb-20" sizeInput="md">
-            <mat-form-field>
-              <mat-label i18n>Pilot number</mat-label>
-              <input formControlName="pilotNumber" matInput
-                     min="1" max="99" required type="number">
-              @if (!!formGroupDetail.controls['pilotNumber'].hasError('required')) {
-                <mat-error><span i18n>Pilot number</span><span i18n> is required</span></mat-error>
-              } @else if (!!formGroupDetail.controls['pilotNumber'].hasError('min')) {
-                <mat-error><span i18n>Pilot number</span><span i18n> must be greater than 1</span></mat-error>
-              } @else if (!!formGroupDetail.controls['pilotNumber'].hasError('max')) {
-                <mat-error><span i18n>Pilot number</span><span i18n> must be less than 99</span></mat-error>
-              } @else if (!!formGroupDetail.controls['pilotNumber'].hasError('pattern')) {
-                <mat-error><span i18n>Pilot number</span><span i18n> must be an integer</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="col-sm-6 col-md-6">
-          <div class="form-group mb-20" sizeInput="md">
-            <mat-form-field>
-              <mat-label i18n>Attendant number</mat-label>
-              <input formControlName="numberAttendant" matInput step="1"
-                     min="1" max="99" required type="number">
-              @if (!!formGroupDetail.controls['numberAttendant'].hasError('required')) {
-                <mat-error><span i18n>Attendant number</span><span i18n> is required</span></mat-error>
-              } @else if (!!formGroupDetail.controls['numberAttendant'].hasError('min')) {
-                <mat-error><span i18n>Attendant number</span><span i18n> must be greater than 1</span></mat-error>
-              } @else if (!!formGroupDetail.controls['numberAttendant'].hasError('max')) {
-                <mat-error><span i18n>Attendant number</span><span i18n> must be less than 99</span></mat-error>
-              } @else if (!!formGroupDetail.controls['numberAttendant'].hasError('pattern')) {
-                <mat-error><span i18n>Attendant number</span><span i18n> must be an integer</span></mat-error>
-              }
-            </mat-form-field>
-          </div>
-        </div>
-        <div class="col-sm-12 col-md-12">
-          <mat-form-field>
-            <mat-label i18n>Remark</mat-label>
-            <textarea formControlName="notes" matInput></textarea>
-            <mat-hint align="end">{{ formGroupDetail.value.notes?.length }} / 500</mat-hint>
-            @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
-              <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
-            }
-          </mat-form-field>
-        </div>
-        <mat-checkbox formControlName="status" i18n>Active</mat-checkbox>
-      </div>
+	<mat-card-header class="p-15">
+		<mat-card-title class="d-flex justify-content-between align-items-center w-100">
+			<h5 class="mb-0 text-start" i18n="@@crewInformation">
+				{{ !this.formGroupDetail.value.id ? 'Add new' : 'Edit' }}
+			</h5>
+			<button type="button" mat-icon-button (click)="close()">
+				<mat-icon class="material-symbols-outlined">close</mat-icon>
+			</button>
+		</mat-card-title>
 
-      <div class="btn-box d-flex justify-content-end">
-        <button type="button" mat-button (click)="close()" class="close-btn  min-with-100 mlr-5">
-          <i class="material-symbols-outlined">
-            close
-          </i>
-          <span i18n="@@cancel">Close</span>
-        </button>
-        <button
-          (click)="save()"
-          class="add-btn"
-          i18n mat-button
-        >
-          <i class="material-symbols-outlined">
-            save
-          </i>
-          Save
-        </button>
+	</mat-card-header>
+	<mat-card-content>
+		<form [formGroup]="formGroupDetail" autocomplete="off">
+			<div class="row">
+				<div class="col-sm-12 col-md-12">
+					<div class="form-group mb-20" sizeInput="md">
+						<mat-form-field class="mb-1">
+							<mat-label i18n="@@airportCode">Airport code</mat-label>
+							<input type="text" #marketCode matInput formControlName="marketCode"
+										 [matAutocomplete]="marketComplete"
+										 (input)="filterMarket()" (focus)="onFocusMarket()">
+							<mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
+								<mat-option [value]="null">
+									-- Choose airport code --
+								</mat-option>
+								<mat-option *ngFor="let option of filteredOptionsMarket" [value]="option">
+									{{ option }}
+								</mat-option>
+							</mat-autocomplete>
+							@if (formGroupDetail.controls['acType'].hasError('required')) {
+								<mat-error><span i18n>Acgroup</span><span i18n> is required</span></mat-error>
+							}
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-12">
+					<div class="form-group mb-20" sizeInput="md">
+						<mat-form-field>
+							<mat-label>Acgroup</mat-label>
+							<mat-select formControlName="acType">
+								<mat-option [value]="null">Choose actype</mat-option>
+								<mat-option *ngFor="let type of acTypes" [value]="type.acgroup">
+									{{ type.acgroup }}
+								</mat-option>
+							</mat-select>
+							@if (!!formGroupDetail.controls['acType'].hasError('existActype')) {
+								<mat-error>{{ messageErrorActype }}</mat-error>
+							} @else if (formGroupDetail.controls['acType'].hasError('required')) {
+								<mat-error><span i18n>Acgroup</span><span i18n> is required</span></mat-error>
+							}
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-6">
+					<div class="form-group mb-20" sizeInput="md">
+						<mat-form-field>
+							<mat-label i18n>Pilot number</mat-label>
+							<input formControlName="pilotNumber" matInput
+										 min="1" max="99" required type="number">
+							@if (!!formGroupDetail.controls['pilotNumber'].hasError('required')) {
+								<mat-error><span i18n>Pilot number</span><span i18n> is required</span></mat-error>
+							} @else if (!!formGroupDetail.controls['pilotNumber'].hasError('min')) {
+								<mat-error><span i18n>Pilot number</span><span i18n> must be greater than 1</span></mat-error>
+							} @else if (!!formGroupDetail.controls['pilotNumber'].hasError('max')) {
+								<mat-error><span i18n>Pilot number</span><span i18n> must be less than 99</span></mat-error>
+							}
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-6 col-md-6">
+					<div class="form-group mb-20" sizeInput="md">
+						<mat-form-field>
+							<mat-label i18n>Attendant number</mat-label>
+							<input formControlName="numberAttendant" matInput
+										 min="1" max="99" required type="number">
+							@if (!!formGroupDetail.controls['numberAttendant'].hasError('required')) {
+								<mat-error><span i18n>Attendant number</span><span i18n> is required</span></mat-error>
+							} @else if (!!formGroupDetail.controls['numberAttendant'].hasError('min')) {
+								<mat-error><span i18n>Attendant number</span><span i18n> must be greater than 1</span></mat-error>
+							} @else if (!!formGroupDetail.controls['numberAttendant'].hasError('max')) {
+								<mat-error><span i18n>Attendant number</span><span i18n> must be less than 99</span></mat-error>
+							}
+						</mat-form-field>
+					</div>
+				</div>
+				<div class="col-sm-12 col-md-12">
+					<mat-form-field>
+						<mat-label i18n>Remark</mat-label>
+						<textarea formControlName="notes" matInput></textarea>
+						<mat-hint align="end">{{ formGroupDetail.value.notes?.length }} / 500</mat-hint>
+						@if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
+							<mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
+						}
+					</mat-form-field>
+				</div>
+				<mat-checkbox formControlName="status" i18n>Status</mat-checkbox>
+			</div>
 
-      </div>
-    </form>
+			<div class="btn-box d-flex justify-content-end">
+				<button type="button" mat-button (click)="close()" class="close-btn  min-with-100 mlr-5">
+					<i class="material-symbols-outlined">
+						close
+					</i>
+					<span i18n="@@cancel">Close</span>
+				</button>
+				<button
+					(click)="save()"
+					class="add-btn"
+					i18n mat-button
+				>
+					<i class="material-symbols-outlined">
+						save
+					</i>
+					Save
+				</button>
 
-  </mat-card-content>
+			</div>
+		</form>
+
+	</mat-card-content>
 </mat-card>

@@ -46,10 +46,13 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
 
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
   round = round;
+  general: any = {}
+
   constructor(private readonly datePipe: DatePipe, private readonly cdRef: ChangeDetectorRef) {
     effect(() => {
-      if (this.data()) {
+      if (this.data() && Object.keys(this.data()).length > 0) {
         this.setDataSource(this.data().planCarentals, this.data().isSummary);
+        this.setGeneral(this.data().general)
       }
     })
   }
@@ -89,10 +92,10 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
     if (this.type() === PlanCategoryEnum.BUDGET && control === 'totalAmountVat') {
       const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
       totalValue = Math.round(this.dataSource.data.map((t: any) => {
-        if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup) && truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
+        if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
           return round(Number(t[control]));
         } else {
-          return round(Number(t['totalAmountYearPerformVat']))
+          return round(Number(t['totalAmountVatPerform']));
         }
       }).reduce((acc, value) => acc + value, 0));
       this.resultTotal[control] = totalValue;
@@ -114,10 +117,16 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
    */
   private calculateData(item: any, index: number, isCalculate?: boolean) {
     if (isCalculate) {
-      // Tổng Số phòng đơn
+      // Số tiền chưa Vat
       this.calculate(item, 'totalAmount', true);
-      // Tổng Số phòng đôi
+      // Số tiền có Vat
       this.calculate(item, 'totalAmountVat', true);
+
+
+      // Số tiền chưa Vat của năm thực hiện
+      this.calculate(item, 'totalAmountPerform', true);
+      // Số tiền có Vat của năm thực hiện
+      this.calculate(item, 'totalAmountVatPerform', true);
     }
   }
 
@@ -130,11 +139,11 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
     // Tháng nào đã thực hiện thì tính theo công thưc mới
     const objFormula = formula[key];
     let strFomular = objFormula.formula;
-    if (this.updateBudgetPlan() && item.monthIsPerform) {
-      if (objFormula.formulaUpdateBudgetPlan) {
-        strFomular = objFormula.formulaUpdateBudgetPlan;
-      }
-    }
+    // if (item.monthIsPerform) {
+    //   if (objFormula.formulaYearPerform) {
+    //     strFomular = objFormula.formulaYearPerform;
+    //   }
+    // }
     if (strFomular) {
       item[key] = this.calculateFormula(item, strFomular);
     }
@@ -186,4 +195,7 @@ export class DomesticBudgetProcurementCarRentalComponent implements AfterViewChe
     this.calculateTotal()
   }
 
+  setGeneral(data: any) {
+    this.general = data;
+  }
 }

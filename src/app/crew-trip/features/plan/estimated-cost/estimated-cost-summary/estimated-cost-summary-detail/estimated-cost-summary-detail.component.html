@@ -39,27 +39,28 @@
         </mat-card-title>
         <mat-card-subtitle>
             <div (scroll)="onScroll()" [ngClass]="isSticky ? 'fixed' : 'notfixed'">
-                <button type="button" mat-button class="close-btn  min-with-100 mlr-5"
-                    [routerLink]="['/plan/est-plan/est-cost',estCostId(),'summary']">
+                <button type="button" mat-button class="close-btn  min-with-100 mlr-5" (click)="closeEvent()">
                     <i class="material-symbols-outlined">
                         close
                     </i>
                     <span i18n="@@close">Close</span>
                 </button>
-                <button class="add-btn" type="button" mat-button [disabled]="checkStatusCompelted()"
-                    (click)="completed()">
+                @if(!checkStatusCompelted()){
+                <button class="add-btn" type="button" mat-button (click)="completed()">
                     <i class="material-symbols-outlined">
                         check_circle
                     </i>
                     <span i18n="@@completed">Completed</span>
                 </button>
-                <button mat-button color="primary" type="button" class="add-btn min-with-100 mlr-5" (click)="save()"
-                    [disabled]="checkStatusCompelted()">
+                }
+                @if(!checkStatusCompelted()){
+                <button mat-button color="primary" type="button" class="add-btn min-with-100 mlr-5" (click)="save()">
                     <i class="material-symbols-outlined">
                         save
                     </i>
                     <span i18n="@@save">Save</span>
                 </button>
+                }
             </div>
 
         </mat-card-subtitle>
@@ -68,13 +69,14 @@
         <app-estimated-cost-general #estimatedCostGeneral [category]="category()" [disabled]="checkStatusCompelted()"
             (formValueChanges)="formGeneralValueChanges($event)"></app-estimated-cost-general>
         <div class="d-flex justify-content-end">
-            <button [disabled]="checkStatusCompelted()" mat-button color="primary" type="button" class="add-btn"
-                (click)="summaryData()">
+            @if(!checkStatusCompelted()){
+            <button mat-button color="primary" type="button" class="add-btn" (click)="summaryData()">
                 <i class="material-symbols-outlined">
                     directory_sync
                 </i>
                 <span i18n="@@dataSummary">Data Summary</span>
             </button>
+            }
         </div>
     </mat-card-content>
 </mat-card>
@@ -160,6 +162,8 @@
                             }
                         </div>
                     </mat-expansion-panel>
+                    @if(domesticEstimatedCostCarRentalData.length>0 ||
+                    internationalEstimatedCostCarRentalData?.planCarentals?.length>0){
                     <mat-expansion-panel [expanded]="true" #panelEstimateCostCarRentalState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
@@ -171,25 +175,28 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            @if(category() === CategoryEnum.DOMESTIC){
+                            @if(category() === CategoryEnum.DOMESTIC && domesticEstimatedCostCarRentalData.length>0){
                             <!-- <app-domestic-budget-procurement-car-rental #domesticBudgetCarRental [yearPlan]="yearPlan()"
-                                [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
-                                [data]="domesticBudgetCarRentalData" /> -->
+                                    [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
+                                    [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                    [data]="domesticBudgetCarRentalData" /> -->
                             <app-domestic-estimated-cost-car-rental #domesticEstimatedCostCarRental
                                 [yearPlan]="yearPlan()" [disabled]="checkStatusCompelted()"
                                 [data]="domesticEstimatedCostCarRentalData" />
-                            }@else {
+                            }@else if(category() === CategoryEnum.INTERNATIONAL &&
+                            internationalEstimatedCostCarRentalData?.planCarentals?.length>0){
                             <!-- <app-international-budget-procurement-car-rental #internationalBudgetCarRental
-                                [disabled]="checkStatusCompelted()" [data]="internationalBudgetCarRentalData"
-                                [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" /> -->
+                                    [disabled]="checkStatusCompelted()" [data]="internationalBudgetCarRentalData"
+                                    [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
+                                    [updateBudgetPlan]="dataDetail?.updateBudgetPlan" /> -->
                             <app-international-estimated-cost-car-rental #internationalEstimatedCostCarRental
                                 [disabled]="checkStatusCompelted()" [data]="internationalEstimatedCostCarRentalData"
                                 [yearPlan]="yearPlan()" />
                             }
                         </div>
                     </mat-expansion-panel>
+                    }
+
                 </mat-accordion>
             </mat-expansion-panel>
         </mat-accordion>
@@ -222,6 +229,40 @@
                             save
                         </i>
                         <span i18n="@@confirm">Confirm</span>
+                    </button>
+
+                </div>
+            </mat-card-content>
+        </mat-card>
+    </div>
+</div>
+
+
+<div class="add-new-popup" [class.active]="showDialogClose">
+    <div class="popup-dialog dialog-delete-with" style="width: 600px !important; max-width: 600px !important;">
+        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+            <mat-card-content>
+                <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        error
+                    </span>
+                </div>
+                <div class="text-center mb-20">
+                    <h3 class="mb-0" i18n="@@summaryMessage">Do you want to save the edited data?</h3>
+                </div>
+                <div class="btn-box text-center">
+                    <button type="button" mat-button [routerLink]="['/plan/est-plan/est-cost',estCostId(),'summary']"
+                        class="close-btn  min-with-100 mlr-5">
+                        <i class="material-symbols-outlined">
+                            close
+                        </i>
+                        <span i18n="@@no">No</span>
+                    </button>
+                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="confirmClose()">
+                        <i class="material-symbols-outlined">
+                            save
+                        </i>
+                        <span i18n="@@yes">Yes</span>
                     </button>
 
                 </div>

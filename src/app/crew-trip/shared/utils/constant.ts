@@ -47,6 +47,8 @@ export class MESSAGE {
   static FILE_UPLOAD_EMPTY = $localize`The file must not be empty`;
   static FILE_UPLOAD_INVALID = $localize`The file import is not valid`;
   static FILE_UPLOAD_INVALID_XLSX = $localize`File type must be .xlsx`;
+  static SUCCESS = $localize`:@@success:Success`;
+  static FAILURE = $localize`:@@failure:Failure`;
 
   static LABEL_START_DATE = $localize`:@@startDate:Start Date`;
   static MESSAGE_START_DATE_REQUIRED = $localize`:@@startDateRequired:Start Date is required`;
@@ -63,6 +65,8 @@ export class MESSAGE {
 
   static HOTEL_CANNOT_BE_DELETED = $localize`:@@hotelCannotBeDeleted:Hotel cannot be deleted. It is being used in a contract.`;
   static CAR_COMPANY_CANNOT_BE_DELETED = $localize`:@@carCompanyCannotBeDeleted:Car company cannot be deleted. It is being used in a contract.`;
+
+  static SYNC_SUCCESS = $localize`:@@synchronizeSuccessfully:Synchronize successfully`;
 }
 
 export class LOCALE {
@@ -105,6 +109,7 @@ export const DATE_FORMAT_DD_MM_YYYY = {
   parse: {
     dateInput: 'DD/MM/YYYY',
   },
+  useValue: { useUtc: true },
 
   display: {
     dateInput: 'DD/MM/YYYY',
@@ -133,6 +138,7 @@ export class PATTERN {
   static STRING = '^[a-zA-Z]+$' //chu
   static NUMBER = '^[0-9]+$' //so
   static NUMBER1 = '^[0-9/.]+$' //so '/'
+  static NUMBER2 = '^[0-9]+(\\.[0-9]+)?$';//so thap phan
   static STRING_NUMBER1 = '^[a-zA-Z0-9-.]+$' //chu va so . -
 }
 
@@ -176,10 +182,10 @@ export function round(data: any | any[], fractionDigits?: number) {
 }
 
 
-  // convertToZero
-  export function ctz(value: any) {
-    if (value) {
-      return new Number(value.toString().replace(',', '.'));
-    }
-    return 0;
+// convertToZero
+export function ctz(value: any) {
+  if (value) {
+    return new Number(value.toString().replace(',', '.'));
   }
+  return 0;
+}
