@@ -44,6 +44,7 @@ export const InvoiceDocumentStatusPayment = [
   {key: 'RECONCILED UNACCOUNTED', value: $localize`RECONCILED UNACCOUNTED`},
   {key: 'PAID', value: $localize`PAID`},
   {key: 'VOIDED', value: $localize`VOIDED`},
+  {key: 'UNPAID', value: $localize`UNPAID`},
 
 ];
 

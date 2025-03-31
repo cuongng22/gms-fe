@@ -13,6 +13,7 @@ import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { PlanCategoryEnum } from '../../../../budget-procurement/budget-procurement.model';
 import { getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-estimated-cost-car-rental.model';
+import { round } from 'lodash';
 
 @Component({
   selector: 'app-domestic-estimated-cost-car-rental',
@@ -42,12 +43,12 @@ export class DomesticEstimatedCostCarRentalComponent {
   PlanCategoryEnum = PlanCategoryEnum;
 
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
-
+  round = round;
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
       console.log('effect data DomesticEstimatedCostCarRentalComponent: ', this.data())
-      if (this.data()) {
-        this.setDataSource(this.data());
+      if (this.data() && Object.keys(this.data()).length > 0) {
+        this.setDataSource(this.data().planCarentals, this.data().isSummary);
       }
     })
   }
@@ -55,7 +56,7 @@ export class DomesticEstimatedCostCarRentalComponent {
     this.getRow();
   }
 
-  setDataSource(data: any) {
+  setDataSource(data: any, isSummary?: boolean) {
     this.dataSource.data = [...data]
     this.getRow();
     this.dataSource.data.forEach((item: any, index) => {
@@ -65,23 +66,23 @@ export class DomesticEstimatedCostCarRentalComponent {
     this.calculateTotal()
   }
   calculateTotal() {
-    this.setTotal('singleRoomYearPerform')
-    this.setTotal('noOfTrip')
+    this.setTotal('numberVehicles')
+    this.setTotal('numberVehiclesYearPerform')
     this.setTotal('singleRoom')
     this.setTotal('doubleRoom')
-    this.setTotal('totalAmount')
-    this.setTotal('totalAmountVat')
+    this.setTotal('totalAmount', true)
+    this.setTotal('totalAmountVat', true)
   }
 
   // TÍnh dòng tổng 
-  setTotal(control: string) {
+  setTotal(control: string, isRound?: boolean, fractionDigits?: number) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
-    const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
+    // const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     const totalValue = Math.round(this.dataSource.data.map((t: any) => {
-      if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
-        return Number(t[control]);
-      }
-      return 0;
+      // if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
+        return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
+      // }
+      // return 0;
     }).reduce((acc, value) => acc + value, 0));
     this.resultTotal[control] = totalValue;
   }

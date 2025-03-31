@@ -2,7 +2,7 @@
     <mat-card-header class="p-15">
         <mat-card-title>
             <h5 class="mb-0" i18n="@@hotelInformation">
-                {{readonlyDetail()?'View':(this.data?.hotel?.id?'Edit':'Add new')}}
+                {{readonlyDetail()?'View':(this.data?.hotel?.id && this.data?.hotel?.id >0  ?'Edit':'Add new')}}
             </h5>
         </mat-card-title>
         <mat-card-subtitle>

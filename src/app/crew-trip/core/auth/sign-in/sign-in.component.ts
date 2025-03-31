@@ -44,7 +44,6 @@ export class SignInComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     // this.usersService.showError('Token hết hạn hoặc không hợp lệ');
-    // this.translate.setDefaultLang('en');
     this.themeService.isToggled$.subscribe(isToggled => {
       this.isToggled = isToggled;
     });
@@ -84,7 +83,9 @@ export class SignInComponent implements OnInit {
         await this.usersService.loadUserPermissions(resp.data.userInfo.email);
         this.route.fragment.subscribe(fragment => {
           if (fragment === '401') {
-            this.router.navigate([this.location.path()]);
+            const _url = this.location.path(false);
+            console.log(_url)
+            this.router.navigateByUrl(_url);
           } else {
             this.router.navigate(['category/crews']);
           }

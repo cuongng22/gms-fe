@@ -25,6 +25,7 @@ import { DialogMonthlyFlightScheduleDetailComponent } from './dialog-monthly-fli
 import { Constant, removeNullValues } from 'src/app/crew-trip/shared/utils/constant';
 import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
 import { HttpStatusCode } from '@angular/common/http';
+import { MatMenuModule } from '@angular/material/menu';
 
 @Component({
   selector: 'app-monthly-flight-schedule',
@@ -34,7 +35,7 @@ import { HttpStatusCode } from '@angular/common/http';
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, DataTransformPipe,
-    SelectionSuggestComponent, DailyFlightSchedulesSearchComponent, RouterLink
+    SelectionSuggestComponent, DailyFlightSchedulesSearchComponent, RouterLink, MatMenuModule
   ],
   templateUrl: './monthly-flight-schedule.component.html',
   styleUrl: './monthly-flight-schedule.component.scss',
@@ -79,6 +80,9 @@ export class MonthlyFlightScheduleComponent extends CommonComponent {
   override async exportFile(body?: any, filename?: string) {
     super.exportFile(this.dailyFlightSchedulesSearch().formGroupSearch.value, filename, 'export-flight-crew-in-month')
   }
+  exportCrewList(filename?: string) {
+    super.exportFile(this.dailyFlightSchedulesSearch().formGroupSearch.value, filename, 'export-crew-list')
+  }
 
 
   getColorByRemark(row: any) {
@@ -114,13 +118,22 @@ export class MonthlyFlightScheduleComponent extends CommonComponent {
     })
   }
 
-  flightCrewDetail(element: any) {
+  flightCrewDetail(element: any, type?: string) {
+    let _label;
+    if (type === 'FC') {
+      _label = $localize`:@@flightPilotList:Flight Pilot List`
+    } else if (type === 'CC') {
+      _label = $localize`:@@flightAttendantsList:Flight Attendants list`;
+    } else if (type === 'Extra Crew') {
+      _label = $localize`:@@extraCrewList:Extra Crew List`;
+    }
     this.dialog.open(DialogMonthlyFlightScheduleDetailComponent, {
       minWidth: 1300,
       data: {
         isUpdate: false,
         ...this.dailyFlightSchedulesSearch().formGroupSearch.value,
-        ...element
+        ...element,
+        label: _label
       }
     })
   }

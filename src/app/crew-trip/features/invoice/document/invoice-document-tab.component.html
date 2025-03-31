@@ -38,13 +38,13 @@
                                [dataObject]="dataObject"
                                [id]="id"
                                [readMode]="readMode"
-                               [titleHeader]="id?'Detailed Statement':'Add new invoice'" i18n-titleHeader>
+                               [titleHeader]="id?readMode?'View Invoice':'Update Invoice':'Add new invoice'" i18n-titleHeader>
   </app-invoice-document-detail>
 </ng-container>
 <!-- review -->
 <ng-container *ngIf="step==3">
   <app-invoice-document-review (backStepEmit)="backStepEmit($event)"
                                (nextStepEmit)="nextStepEmit($event)"
-                               [id]="id" [readMode]="readMode">
+                               [id]="id" [readMode]="readMode" [dataObject]="dataObject">
   </app-invoice-document-review>
 </ng-container>

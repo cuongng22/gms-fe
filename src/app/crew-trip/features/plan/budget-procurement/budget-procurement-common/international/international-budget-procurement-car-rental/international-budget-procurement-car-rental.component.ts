@@ -44,10 +44,10 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
 
   planFlightPeriods: any[] = []; // danh sách chuyến bay theo giai đoạn
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
-
+  round = round;
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
-      if (this.data()) {
+      if (this.data() && Object.keys(this.data()).length > 0) {
         this.setPlanFlightPeriods(this.data().planFlightPeriods ?? []);
         this.setDataSource(this.data().planCarentals ?? [], this.data().isSummary);
       }
@@ -68,7 +68,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
       if (this.type() === PlanCategoryEnum.PROCUREMENT) {
         period = `T${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])} - T${this.dataTransformPipe.transform(item.periodEnd, [Constant.DATE, Constant.MONTH_FORMAT])}`;
       } else {
-        period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
+        period = `${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
       }
       item.period = period;
       this.calculateData(item, index, isSummary);
@@ -152,24 +152,24 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   }
 
   // TÍnh dòng tổng 
-  setTotal(control: string) {
+  setTotal(control: string, isRound?: boolean, fractionDigits?: number) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     let totalValue = 0
     const startDatePlanGroup = new Date(this.yearPlan(), 0, 1);
     if (this.type() === PlanCategoryEnum.BUDGET && ['totalAmountVat', 'totalAmountForeignVat'].includes(control)) {
       const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-      totalValue = Math.round(this.dataSource.data.map((t: any) => {
+      totalValue = (this.dataSource.data.map((t: any) => {
         if (truncateDate(new Date(t['periodStart'])) <= truncateDate(endDatePlanGroup)) {
-          return round(Number(t[control]));
+          return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
         }
         return 0;
       }).reduce((acc, value) => acc + value, 0));
       this.resultTotal[control] = totalValue;
       return
     }
-    totalValue = Math.round(this.dataSource.data.map((t: any) => {
+    totalValue = (this.dataSource.data.map((t: any) => {
       if (truncateDate(new Date(t['periodStart'])) >= truncateDate(startDatePlanGroup)) {
-        return round(Number(t[control]));
+        return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
       }
       return 0;
     }).reduce((acc, value) => acc + value, 0));
@@ -184,10 +184,10 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('numberFlight') }
     if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('numberVehicles') }
     if (this.type() === PlanCategoryEnum.BUDGET) { this.setTotal('extraTransfer') }
-    this.setTotal('totalAmountForeign')
-    this.setTotal('totalAmountForeignVat')
-    this.setTotal('totalAmount')
-    this.setTotal('totalAmountVat')
+    this.setTotal('totalAmountForeign', true)
+    this.setTotal('totalAmountForeignVat', true)
+    this.setTotal('totalAmount', true)
+    this.setTotal('totalAmountVat', true)
 
   }
 
@@ -198,11 +198,11 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     const objFormula = formula[key];
     // Nếu là mua sắm thì lấy theo công thức mua sắm
     let strFomular = this.type() === PlanCategoryEnum.PROCUREMENT && objFormula.formulaProcurement ? objFormula.formulaProcurement : objFormula.formula;
-    if (this.updateBudgetPlan() && item.monthIsPerform) {
-      if (objFormula.formulaUpdateBudgetPlan) {
-        strFomular = objFormula.formulaUpdateBudgetPlan;
-      }
-    }
+    // if (this.updateBudgetPlan() && item.monthIsPerform) {
+    //   if (objFormula.formulaUpdateBudgetPlan) {
+    //     strFomular = objFormula.formulaUpdateBudgetPlan;
+    //   }
+    // }
     if (!!strFomular) {
       item[key] = this.calculateFormula(item, strFomular);
     }

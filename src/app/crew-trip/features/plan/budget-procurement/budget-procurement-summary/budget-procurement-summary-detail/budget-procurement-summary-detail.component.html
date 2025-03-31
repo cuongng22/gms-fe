@@ -45,20 +45,22 @@
                     </i>
                     <span i18n="@@close">Close</span>
                 </button>
-                <button class="add-btn" type="button" mat-button [disabled]="checkStatusCompelted()"
-                    (click)="completed()">
+                @if(!checkStatusCompelted()){
+                <button class="add-btn" type="button" mat-button (click)="completed()">
                     <i class="material-symbols-outlined">
                         check_circle
                     </i>
                     <span i18n="@@completed">Completed</span>
                 </button>
-                <button mat-button color="primary" type="button" class="add-btn min-with-100 mlr-5" (click)="save()"
-                    [disabled]="checkStatusCompelted()">
+                }
+                @if(!checkStatusCompelted()){
+                <button mat-button color="primary" type="button" class="add-btn min-with-100 mlr-5" (click)="save()">
                     <i class="material-symbols-outlined">
                         save
                     </i>
                     <span i18n="@@save">Save</span>
                 </button>
+                }
             </div>
 
         </mat-card-subtitle>
@@ -68,13 +70,15 @@
             [disabled]="checkStatusCompelted()" (formValueChanges)="formGeneralValueChanges($event)"
             (exchangeRateChange)="exchangeRateChange($event)" (priceChange)="priceChange($event)" />
         <div class="d-flex justify-content-end">
-            <button [disabled]="checkStatusCompelted()" mat-button color="primary" type="button" class="add-btn"
+            @if(!checkStatusCompelted()){
+            <button  mat-button color="primary" type="button" class="add-btn"
                 (click)="summaryData()">
                 <i class="material-symbols-outlined">
                     directory_sync
                 </i>
                 <span i18n="@@dataSummary">Data Summary</span>
             </button>
+            }
         </div>
     </mat-card-content>
 </mat-card>
@@ -174,12 +178,13 @@
                             @if(category() === CategoryEnum.DOMESTIC){
                             <app-domestic-budget-procurement-hotel #domesticBudgetHotel [type]="PlanCategoryEnum.BUDGET"
                                 [disabled]="checkStatusCompelted()" [data]="domesticBudgetHotelData"
-                                [yearPlan]="yearPlan()" [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [yearPlan]="yearPlan()"
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }@else {
                             <app-international-budget-procurement-hotel #internationalBudgetHotel
                                 [disabled]="checkStatusCompelted()" [data]="internationalBudgetHotelData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }
                         </div>
                     </mat-expansion-panel>
@@ -203,7 +208,7 @@
                             (domesticBudgetCarRentalData?.planCarentals??[]).length>0) {
                             <app-domestic-budget-procurement-car-rental #domesticBudgetCarRental [yearPlan]="yearPlan()"
                                 [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan"
                                 [data]="domesticBudgetCarRentalData" />
                             }
                             }@else {
@@ -212,15 +217,15 @@
                             <app-international-budget-procurement-car-rental #internationalBudgetCarRental
                                 [disabled]="checkStatusCompelted()" [data]="internationalBudgetCarRentalData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.BUDGET"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }
                             }
                         </div>
                         }
 
                     </mat-expansion-panel>
-                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.haveContractWetlease){
-                    <mat-expansion-panel [expanded]="this.dataDetail?.haveContractWetlease" #panelBudgetPlanWetLeaseState>
+                    @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.wetLeaseFlag){
+                    <mat-expansion-panel [expanded]="this.dataDetail?.wetLeaseFlag" #panelBudgetPlanWetLeaseState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">3.3
@@ -233,7 +238,8 @@
                         <div>
                             <app-domestic-budget-procurement-wet-lease [yearPlan]="yearPlan()"
                                 [disabled]="checkStatusCompelted()" [data]="domesticBudgetWetLeaseData"
-                                [type]="PlanCategoryEnum.BUDGET" [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                [type]="PlanCategoryEnum.BUDGET"
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan"
                                 #domesticBudgetWetLease />
                         </div>
                     </mat-expansion-panel>
@@ -271,13 +277,13 @@
                             <app-domestic-budget-procurement-hotel #domesticProcurementHotel
                                 [disabled]="checkStatusCompelted()" [data]="domesticProcurementHotelData"
                                 [type]="PlanCategoryEnum.PROCUREMENT" [yearPlan]="yearPlan()"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan">
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan">
                             </app-domestic-budget-procurement-hotel>
                             }@else {
                             <app-international-budget-procurement-hotel #internationalProcurementHotel
                                 [disabled]="checkStatusCompelted()" [data]="internationalProcurementHotelData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }
                             }
 
@@ -299,20 +305,19 @@
                             <app-domestic-budget-procurement-car-rental #domesticProcurementCarRental
                                 [disabled]="checkStatusCompelted()" [data]="domesticProcurementCarRentalData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }@else {
                             <app-international-budget-procurement-car-rental #internationalProcurementCarRental
                                 [disabled]="checkStatusCompelted()" [data]="internationalProcurementCarRentalData"
                                 [yearPlan]="yearPlan()" [type]="PlanCategoryEnum.PROCUREMENT"
-                                [updateBudgetPlan]="dataDetail?.updateBudgetPlan" />
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan" />
                             }
                             }
 
                         </div>
                     </mat-expansion-panel>
                     @if(category() === CategoryEnum.DOMESTIC && !!dataDetail?.wetLeaseFlag){
-                    <mat-expansion-panel [expanded]="this.dataDetail?.wetLeaseFlag"
-                        #panelProcurementPlanWetLeaseState>
+                    <mat-expansion-panel [expanded]="this.dataDetail?.wetLeaseFlag" #panelProcurementPlanWetLeaseState>
                         <mat-expansion-panel-header>
                             <mat-panel-title>
                                 <h6 class="mb-0">4.3
@@ -326,7 +331,8 @@
                             @defer{
                             <app-domestic-budget-procurement-wet-lease [yearPlan]="yearPlan()"
                                 [disabled]="checkStatusCompelted()" [data]="domesticProcurementWetLeaseData"
-                                [type]="PlanCategoryEnum.PROCUREMENT" [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
+                                [type]="PlanCategoryEnum.PROCUREMENT"
+                                [updateBudgetPlan]="dataDetail?.planBudgetProcurement?.updateBudgetPlan"
                                 #domesticProcurementWetLease />
                             }
                         </div>
@@ -350,7 +356,7 @@
                 </mat-expansion-panel-header>
                 <div>
                     @defer{
-                    <app-budget-procurement-cost-analysis #budgetProcurementCostAnalysis
+                    <app-budget-procurement-cost-analysis #budgetProcurementCostAnalysis [data]="dataDetail"
                         [disabled]="checkStatusCompelted()" />
                     }
                 </div>

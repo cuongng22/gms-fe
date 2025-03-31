@@ -68,7 +68,15 @@ export class EstimatedCostGeneralComponent extends CommonComponent implements On
     category: new FormControl({ value: '', disabled: true }, Validators.required),
     airportCode: new FormControl({ value: '', disabled: true }, Validators.required),
     rateForSingle: new FormControl(),
-    notes: new FormControl('', [Validators.maxLength(500)])
+    notes: new FormControl('', [Validators.maxLength(500)]),
+    // thêm trường để check hiển thị, ko làm gì cả
+    earlyCheckinContractFlag: new FormControl(false),
+    lateCheckoutContractFlag: new FormControl(false),
+    haveContract: new FormControl(false),
+    wetLeaseFlag: new FormControl(false),
+    crewTransportFeeFlag: new FormControl(false),
+    earlyCheckinFlag: new FormControl(false),
+    lateCheckoutFlag: new FormControl(false),
   });
 
 

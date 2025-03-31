@@ -1,5 +1,5 @@
 @for (error of allErrorTrack; track error) {
-<mat-error *ngxControlError="control; track: error">
+<mat-error style="white-space: normal" *ngxControlError="control; track: error">
 {{ manualKey?getErrorMessage(manualKey)[error]:getErrorMessage(controlName)[error] }}
 </mat-error>
 }

@@ -147,11 +147,11 @@
                     {{getTotalPlannedBudget(item) | number}}</td>
                 }@else if(item.includes('ft2TotalCountForeign')) {
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
-                    {{(category() === CategoryEnum.INTERNATIONAL ? getTotalPlannedBudget(item) : 0) | number}}
+<!--                    {{(category() === CategoryEnum.INTERNATIONAL ? getTotalPlannedBudget(item) : 0) | number}}-->
                 </td>
                 } @else {
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
-                    {{getTotalPlannedBudget(item) | number}}</td>
+<!--                    {{getTotalPlannedBudget(item) | number}}</td>-->
                 }
             </ng-container>
             }

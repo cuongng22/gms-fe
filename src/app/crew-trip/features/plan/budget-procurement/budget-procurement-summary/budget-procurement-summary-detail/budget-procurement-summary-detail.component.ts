@@ -140,7 +140,6 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
       // setData cho General
       this.budgetProcurementGeneral.setData(this.dataDetail);
-      this.budgetProcurementCostAnalysis.formGroupDetail.patchValue(this.dataDetail)
 
       this.setDataDetail();
       this.setPanelState();
@@ -180,10 +179,7 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
       this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.updateValueAndValidity();
       this.budgetProcurementGeneral.formGroupDetail.controls.procEndDate.updateValueAndValidity();
-      if (!this.budgetProcurementGeneral.checkRequiredCurrency()) {
-        this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.clearValidators();
-        this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.updateValueAndValidity();
-      }
+
       this.budgetProcurementGeneral.formGroupDetail.markAllAsTouched();
       this.budgetProcurementGeneral.formGroupDetail.updateValueAndValidity();
       if (this.budgetProcurementGeneral.formGroupDetail.invalid) {
@@ -193,19 +189,26 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
 
       const procStartDate = this.budgetProcurementGeneral.formGroupDetail.controls.procStartDate.value;
       const procEndDate = this.budgetProcurementGeneral.formGroupDetail.controls.procEndDate.value;
-      const requestBody = new DataSummayRequest(this.id() ?? 0,
-        this.planBudgetProcurementId() ?? 0,
-        this.yearPlan() ?? 0,
-        this.airportCode() ?? '',
-        procStartDate ? this.dataTransformPipe.transform(procStartDate, ['date', this.Constant.MONTH_FORMAT]) : null,
-        procEndDate ? this.dataTransformPipe.transform(procEndDate, ['date', this.Constant.MONTH_FORMAT]) : null,
-        !!this.budgetProcurementGeneral.formGroupDetail.controls.earlyCheckinFlag.value,
-        !!this.budgetProcurementGeneral.formGroupDetail.controls.lateCheckoutFlag.value
-      );
+      const requestBody =
+      {
+        id: this.id() ?? 0,
+        planBudgetProcurementId: this.planBudgetProcurementId() ?? 0,
+        yearPlan: this.yearPlan() ?? 0,
+        airportCode: this.airportCode() ?? '',
+        procStartDate: procStartDate ? this.dataTransformPipe.transform(procStartDate, ['date', this.Constant.MONTH_FORMAT]) : null,
+        procEndDate: procEndDate ? this.dataTransformPipe.transform(procEndDate, ['date', this.Constant.MONTH_FORMAT]) : null,
+        earlyCheckinFlag: !!this.budgetProcurementGeneral.formGroupDetail.controls.earlyCheckinFlag.value,
+        lateCheckoutFlag: !!this.budgetProcurementGeneral.formGroupDetail.controls.lateCheckoutFlag.value,
+        haveContract: !!this.budgetProcurementGeneral.formGroupDetail.controls.haveContract.value,
+        earlyCheckinContractFlag: !!this.budgetProcurementGeneral.formGroupDetail.controls.earlyCheckinContractFlag.value,
+        lateCheckoutContractFlag: !!this.budgetProcurementGeneral.formGroupDetail.controls.lateCheckoutContractFlag.value,
+      }
+
       const response = await this.baseService.dataSummary(requestBody);//summaryDataExample;//summaryDataExample1;//
       this.dataDetail = {
         ...response.data,
         ...this.budgetProcurementGeneral.formGroupDetail.getRawValue(),
+        haveContract: response.data.haveContract,
         crewTransportFeeFlag: response.data?.crewTransportFeeFlag,
         planFlightRates: response.data.planFlightRates ?? [],
         planFlightPeriods: response.data.planFlightPeriods ?? [],
@@ -553,7 +556,8 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     this.domesticBudgetHotelData =
     {
       isSummary: isSummary,
-      planHotels: [...this.dataDetail?.planBudgetHotels ?? []]
+      planHotels: [...this.dataDetail?.planBudgetHotels ?? []],
+      general: this.budgetProcurementGeneral.formGroupDetail.getRawValue()
     }
 
     this.internationalBudgetHotelData =
@@ -570,19 +574,22 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     this.domesticBudgetCarRentalData =
     {
       isSummary: isSummary,
-      planCarentals: [...this.dataDetail?.planBudgetCarentals ?? []]
+      planCarentals: [...this.dataDetail?.planBudgetCarentals ?? []],
+      general: this.budgetProcurementGeneral.formGroupDetail.getRawValue()
     };
     this.internationalBudgetCarRentalData =
     {
       isSummary: isSummary,
       planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
-      planCarentals: [...this.dataDetail?.planBudgetCarentals ?? []]
+      planCarentals: [...this.dataDetail?.planBudgetCarentals ?? []],
+      general: this.budgetProcurementGeneral.formGroupDetail.getRawValue()
     }
     this.domesticBudgetWetLeaseData = [...this.dataDetail?.planBudgetWetLease ?? []];
     this.domesticProcurementHotelData =
     {
       isSummary: isSummary,
-      planHotels: [...this.dataDetail?.planProcurementHotels ?? []]
+      planHotels: [...this.dataDetail?.planProcurementHotels ?? []],
+      general: this.budgetProcurementGeneral.formGroupDetail.getRawValue()
     };
     this.internationalProcurementHotelData =
     {
@@ -597,15 +604,26 @@ export class BudgetProcurementSummaryDetailComponent extends CommonComponent imp
     this.domesticProcurementCarRentalData =
     {
       isSummary: isSummary,
-      planCarentals: [...this.dataDetail?.planProcurementCarentals ?? []]
+      planCarentals: [...this.dataDetail?.planProcurementCarentals ?? []],
+      general: this.budgetProcurementGeneral.formGroupDetail.getRawValue()
     };
     this.internationalProcurementCarRentalData =
     {
       isSummary: isSummary,
       planFlightPeriods: [...this.dataDetail.planFlightPeriods ?? []],
-      planCarentals: [...this.dataDetail?.planProcurementCarentals ?? []]
+      planCarentals: [...this.dataDetail?.planProcurementCarentals ?? []],
+      general: this.budgetProcurementGeneral.formGroupDetail.getRawValue()
     }
     this.domesticProcurementWetLeaseData = [...this.dataDetail?.planProcumentWetLease ?? []];
+
+
+    if (!this.budgetProcurementGeneral.checkRequiredCurrency()) {
+      this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.clearValidators();
+      this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.updateValueAndValidity();
+    } else {
+      this.budgetProcurementGeneral.formGroupDetail.controls.currencyCode.addValidators(Validators.required);
+    }
+
   }
 
   private _planFlightRatesData: any[] = [];

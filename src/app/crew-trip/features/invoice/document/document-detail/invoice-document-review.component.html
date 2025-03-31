@@ -2,7 +2,7 @@
   <div class="d-md-flex align-items-center">
     <h5 class="mb-0 d-inline ml-10">
       <h5 class="mb-0 ml-10">
-        <span i18n>Detailed Statement</span>
+        <span i18n>Reconcile invoice</span>
       </h5>
     </h5>
 
@@ -12,7 +12,10 @@
       Invoice
     </li>
     <li class="breadcrumb-item d-inline-block position-relative" i18n>
-      Review
+      List of invoice
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n>
+      Reconcile invoice
     </li>
   </ol>
 </div>
@@ -23,12 +26,14 @@
     </i>
     Back
   </button>
-  <button (click)="toggleDialogUnMatched()" *ngIf="!readMode && formGroupDetail.getRawValue().status === InvoiceDocumentStatusEnum.UNMATCHED"
+  <button (click)="toggleDialogUnMatched()" *ngIf="!readMode &&
+          ([InvoiceDocumentStatusEnum.UNMATCHED,
+          InvoiceDocumentStatusEnum.UNVERIFIED]).includes(formGroupDetail.getRawValue().status)"
           class="step-2-menu-button btn-slot-4" extended i18n mat-fab>
     <i class="material-symbols-outlined">
       edit
     </i>
-    Lưu và cập nhật chứng từ
+    Save and Update
   </button>
   <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
     <i class="material-symbols-outlined">
@@ -36,11 +41,15 @@
     </i>
     Save
   </button>
-  <button (click)="toggleDialogFinish()" *ngIf="!readMode && formGroupDetail.getRawValue().status === InvoiceDocumentStatusEnum.MATCHED" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+  <button (click)="toggleDialogFinish()"
+          *ngIf="!readMode &&
+          ([InvoiceDocumentStatusEnum.MATCHED,
+          InvoiceDocumentStatusEnum.VERIFIED]).includes(formGroupDetail.getRawValue().status)"
+          class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
     <i class="material-symbols-outlined">
       save
     </i>
-    Chốt hóa đơn
+    Confirm
   </button>
 </div>
 <mat-accordion multi>
@@ -57,11 +66,11 @@
               <mat-label i18n>Airport code</mat-label>
               <mat-select formControlName="airportCode" required>
                 @for (item of listFlightMarket; track item) {
-                  <mat-option [value]="item">{{ item }}</mat-option>
+                <mat-option [value]="item">{{ item }}</mat-option>
                 }
               </mat-select>
               @if (!!formGroupDetail.controls['airportCode'].hasError('required')) {
-                <mat-error><span i18n>Airport Code</span><span i18n> not empty</span></mat-error>
+              <mat-error><span i18n>Airport Code</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -70,10 +79,10 @@
               <mat-label i18n>Invoice number</mat-label>
               <input formControlName="invoiceNumber" matInput>
               @if (!!formGroupDetail.controls['invoiceNumber'].hasError('required')) {
-                <mat-error><span i18n>Invoice Number</span><span i18n> not empty</span></mat-error>
+              <mat-error><span i18n>Invoice Number</span><span i18n> not empty</span></mat-error>
               }
               @if (!!formGroupDetail.controls['invoiceNumber'].hasError('maxlength')) {
-                <mat-error><span i18n>Invoice Number must be less than 50 characters</span></mat-error>
+              <mat-error><span i18n>Invoice Number must be less than 50 characters</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -85,7 +94,7 @@
               <mat-datepicker-toggle [for]="invoiceDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #invoiceDate></mat-datepicker>
               @if (!!formGroupDetail.controls['invoiceDate'].hasError('required')) {
-                <mat-error><span i18n>Invoice Date</span><span i18n> not empty</span></mat-error>
+              <mat-error><span i18n>Invoice Date</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -97,7 +106,7 @@
               <mat-datepicker-toggle [for]="invoiceReceiveDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #invoiceReceiveDate></mat-datepicker>
               @if (!!formGroupDetail.controls['invoiceReceiveDate'].hasError('required')) {
-                <mat-error><span i18n>ReceiveDate Date</span><span i18n> not empty</span></mat-error>
+              <mat-error><span i18n>ReceiveDate Date</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -109,7 +118,7 @@
               <mat-datepicker-toggle [for]="periodFrom" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #periodFrom></mat-datepicker>
               @if (!!formGroupDetail.controls['periodFrom'].hasError('required')) {
-                <mat-error><span i18n>Period From</span><span i18n> not empty</span></mat-error>
+              <mat-error><span i18n>Period From</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -121,7 +130,7 @@
               <mat-datepicker-toggle [for]="periodTo" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #periodTo></mat-datepicker>
               @if (!!formGroupDetail.controls['periodTo'].hasError('required')) {
-                <mat-error><span i18n>Period To</span><span i18n> not empty</span></mat-error>
+              <mat-error><span i18n>Period To</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -133,7 +142,7 @@
               <mat-label i18n>BizDocId</mat-label>
               <input formControlName="bizDocId" matInput trim="blur">
               @if (!!formGroupDetail.controls['bizDocId'].hasError('required')) {
-                <mat-error><span i18n>BizDocId</span><span i18n> not empty</span></mat-error>
+              <mat-error><span i18n>BizDocId</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -142,7 +151,7 @@
               <mat-label i18n>Partner Code</mat-label>
               <input formControlName="partnerCode" matInput trim="blur">
               @if (!!formGroupDetail.controls['partnerCode'].hasError('required')) {
-                <mat-error><span i18n>Partner Code</span><span i18n> not empty</span></mat-error>
+              <mat-error><span i18n>Partner Code</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -151,7 +160,7 @@
               <mat-label i18n>Partner Name</mat-label>
               <input formControlName="partnerName" matInput trim="blur">
               @if (!!formGroupDetail.controls['partnerName'].hasError('required')) {
-                <mat-error><span i18n>Partner Name</span><span i18n> not empty</span></mat-error>
+              <mat-error><span i18n>Partner Name</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -160,7 +169,7 @@
               <mat-label i18n>Partner Type</mat-label>
               <input formControlName="partnerType" matInput trim="blur">
               @if (!!formGroupDetail.controls['partnerType'].hasError('required')) {
-                <mat-error><span i18n>Partner Type</span><span i18n> not empty</span></mat-error>
+              <mat-error><span i18n>Partner Type</span><span i18n> not empty</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -172,6 +181,9 @@
             <textarea cdkAutosizeMaxRows="5" cdkAutosizeMinRows="2" cdkTextareaAutosize formControlName="note"
                       i18n-placeholder
                       matInput trim="blur"></textarea>
+            <mat-error>
+              <app-control-error controlName="note"></app-control-error>
+            </mat-error>
           </mat-form-field>
         </div>
         <!--        dong4-->
@@ -182,7 +194,7 @@
               <mat-select formControlName="status">
                 <mat-option [value]="null" i18n>-- All Status --</mat-option>
                 @for (item of listInvoiceDocumentStatus; track item) {
-                  <mat-option [value]="item.key">{{ item.value }}</mat-option>
+                <mat-option [value]="item.key">{{ item.value }}</mat-option>
                 }
               </mat-select>
             </mat-form-field>
@@ -207,7 +219,7 @@
       <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
         <mat-card-content>
           <mat-tab-group mat-align-tabs="start" mat-stretch-tabs="false">
-            <mat-tab i18n-label label="Đối soát chung">
+            <mat-tab i18n-label label="General reconciliation">
               <div class="w-100 text-end">
                 <button (click)="download()" class="add-btn right-0 mb-10" i18n mat-button
                         type="button">
@@ -222,35 +234,33 @@
                        class="table-light table-responsive"
                        mat-table>
                   <ng-container matColumnDef="label">
-                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Thông tin
-                      đối soát
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Reconciliation
+                      information
                     </th>
                     <td *matCellDef="let element" mat-cell>
                       @if (element.ord?.length == 1) {
-                        <span class="fw-bold">{{ element.label }}</span>
+                      <span class="fw-bold">{{ element.label }}</span>
                       } @else {
-                        <span class="pl-10">{{ '- ' + element.label }}</span>
+                      <span class="pl-10">{{ '- ' + element.label }}</span>
                       }
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="aves">
-                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Nguồn dữ
-                      liệu AVES
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>AVES
                     </th>
                     <td *matCellDef="let element" [class.text-danger]="+element.diff != 0" class="text-right" mat-cell>
                       {{ element.aves | dataTransformPipe:[Constant.NUMBER] }}
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="form">
-                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Nguồn
-                      bảng kê chứng từ
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Detailed statement
                     </th>
                     <td *matCellDef="let element" [class.text-danger]="+element.diff != 0" class="text-right" mat-cell>
                       {{ element.form | dataTransformPipe:[Constant.NUMBER] }}
                     </td>
                   </ng-container>
                   <ng-container matColumnDef="diff">
-                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Chênh lệch
+                    <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header>Difference
                     </th>
                     <td *matCellDef="let element" [class.text-danger]="+element.diff != 0" class="text-right" mat-cell>
                       {{ element.diff | dataTransformPipe:[Constant.NUMBER] }}
@@ -260,14 +270,24 @@
                   <tr *matRowDef="let row; columns: ['label','aves','form','diff'];" class="input-row" mat-row></tr>
                   <tr *matNoDataRow class="mat-row">
                     <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
-                        i18n>No data!</span></td>
+                      i18n>No data!</span></td>
                   </tr>
                 </table>
               </div>
             </mat-tab>
-            <mat-tab i18n-label label="Đối soát chi tiết">
+            <mat-tab i18n-label label="Detailed reconciliation">
+              <div class="w-100 text-end">
+                <button (click)="download('DETAIL')" class="add-btn right-0 mb-10" i18n mat-button
+                        type="button">
+                  <i class="material-symbols-outlined">
+                    download
+                  </i>
+                  Export
+                </button>
+              </div>
               <div class="table-responsive">
-                <table [dataSource]="formGroupDetail.getRawValue().invoiceDocumentReviewForm" class="table-light table-responsive"
+                <table [dataSource]="formGroupDetail.getRawValue().invoiceDocumentReviewForm"
+                       class="table-light table-responsive"
                        mat-table>
                   <ng-container matColumnDef="stt">
                     <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
@@ -289,40 +309,45 @@
                     <th *matHeaderCellDef class="text-center " colspan="3" mat-header-cell mat-sort-header>Checkout</th>
                   </ng-container>
                   @for (innerColumn of _displayedColumnsAll; track innerColumn.value) {
-                    <ng-container matColumnDef="{{innerColumn.value}}">
+                  <ng-container matColumnDef="{{innerColumn.value}}">
                       <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center"
                           [rowSpan]="(formType===1 || formType===2)?innerColumn.rowspan:1"
                           [colSpan]=innerColumn.colspan>
-                        {{ innerColumn.label }}
-                      </th>
-                      <td
-                          [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
+                  {{ innerColumn.label }}
+                  </th>
+                  <td
+                      [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
                           [attr.rowspan]="getRowSpan(i,innerColumn,element)"
                           [style.display]="shouldShowRowSpan(i,innerColumn) ? '' : 'none'"
-                          mat-cell *matCellDef="let element; let i = index">
+                          mat-cell *matCellDef="let element;let i = index">
                 <span [ngClass]="{
-          'badge': innerColumn.value === 'activeLabel',
-          'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
-          'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
-          }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
+                  'badge': innerColumn.value === 'activeLabel',
+                  'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
+                  'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
+                  }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
                       </td>
                       <td mat-footer-cell *matFooterCellDef class="text-right">
                         @if (innerColumn.displayTotal) {
-                          <span>
+                  <span>
                     {{ calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
                       </span>
-                        }
-                      </td>
+                  }
+                  </td>
 
-                    </ng-container>
+                </ng-container>
                   }
                   <tr *matHeaderRowDef="_displayedColumnsHeader1" mat-header-row></tr>
                   <tr *matHeaderRowDef="_displayedColumnsHeader2" mat-header-row></tr>
-                  <tr *matRowDef="let row; columns: _displayedColumnsRow;" class="input-row" mat-row></tr>
+                  <!--<tr *matHeaderRowDef="['stt','accessBridge']"
+                      mat-header-row></tr>-->
+                  <tr *matRowDef="let row; columns: _displayedColumnsRow;"
+                      [class.reconcile-row1]="+row.reconcile==1"
+                      [class.reconcile-row2]="+row.reconcile==2" class="input-row"
+                      mat-row></tr>
                   <tr *matFooterRowDef="_displayedColumnsFooter" class="fw-bold" mat-footer-row></tr>
                   <tr *matNoDataRow class="mat-row">
                     <td [attr.colspan]="_displayedColumnsRow.length" class="mat-cell border-none text-center"><span
-                        i18n>No data!</span></td>
+                      i18n>No data!</span></td>
                   </tr>
                 </table>
               </div>
@@ -335,22 +360,22 @@
 </mat-accordion>
 
 <app-confirm-dialog
-    i18n-mainText
-    i18n-subText
-    [icon] = "'check_circle'"
-    [mainText]=""
-    [subText]="'Chứng từ hóa đơn đã được đối soát và có chênh lệch, bạn có muốn cập nhật lại thông tin thanh toán của chứng từ này không?'"
-    (closeDialog)="toggleDialogUnMatched()"
-    (confirm)="saveAndNext()"
-    [showDialog]="showDialogUnMatched">
+  (closeDialog)="toggleDialogUnMatched()"
+  (confirm)="saveAndNext()"
+  [icon]="'check_circle'"
+  [mainText]=""
+  [showDialog]="showDialogUnMatched"
+  [subText]="'Chứng từ hóa đơn đã được đối soát và có chênh lệch, bạn có muốn cập nhật lại thông tin thanh toán của chứng từ này không?'"
+  i18n-mainText
+  i18n-subText>
 </app-confirm-dialog>
 <app-confirm-dialog
-    i18n-mainText
-    i18n-subText
-    [icon] = "'check_circle'"
-    [mainText]="'Bạn có chắc chắn chốt số liệu chứng từ hóa đơn này không?'"
-    [subText]="'Số liệu chứng từ hóa đơn này sẽ không được chỉnh sửa sau khi đã chốt!'"
-    (closeDialog)="toggleDialogFinish()"
-    (confirm)="saveAndFinish()"
-    [showDialog]="showDialogFinish">
+  (closeDialog)="toggleDialogFinish()"
+  (confirm)="saveAndFinish()"
+  [icon]="'check_circle'"
+  [mainText]="'Bạn có chắc chắn chốt số liệu chứng từ hóa đơn này không?'"
+  [showDialog]="showDialogFinish"
+  [subText]="'Số liệu chứng từ hóa đơn này sẽ không được chỉnh sửa sau khi đã chốt!'"
+  i18n-mainText
+  i18n-subText>
 </app-confirm-dialog>

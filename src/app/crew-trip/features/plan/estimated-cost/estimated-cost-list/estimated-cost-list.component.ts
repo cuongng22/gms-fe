@@ -153,10 +153,6 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
     dialogDetailRef.afterClosed().subscribe(async (res) => {
       if (res) {
         this.getVersion();
-        if (this.formGroupSearch.controls.version.value) {
-          this.formGroupSearch.controls.version.setValue(res.version)
-          this.selectionVersion()?.setViewValueInit(res.version, true)
-        }
         await this.search();
       }
     });
@@ -247,7 +243,7 @@ export class DialogEstimatedCostDetail extends CommonComponent {
         console.log(this.data.budgetProcurementDetail);
         this.formGroupDetail.patchValue(this.data.budgetProcurementDetail);
       } else {
-        this.estimatedAnnualProductionService.getNewsVersion('P').then(res => {
+        this.estimatedAnnualProductionService.getNewsVersion('E').then(res => {
           this.formGroupDetail.patchValue({
             year: res.data.year,
             version: res.data.versionId

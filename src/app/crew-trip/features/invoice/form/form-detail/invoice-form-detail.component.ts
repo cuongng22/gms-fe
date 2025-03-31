@@ -49,7 +49,7 @@ import {elementAt} from "rxjs";
   imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe],
   templateUrl: './invoice-form-detail.component.html',
   styleUrl: './invoice-form-detail.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY,{useUtc: true}),
 
   ]
 })
@@ -153,8 +153,8 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     {label: $localize`Toll`, value: "toll", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Amount Cc`, value: "totalAmountCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Amount Fc`, value: "totalAmountFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Total Breakfast Cc Charge`, value: "totalBreakfastCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Total Breakfast Fc Charge`, value: "totalBreakfastFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Breakfast Cc Charge`, value: "breakfastCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Breakfast Fc Charge`, value: "breakfastFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Charge`, value: "totalCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Charges`, value: "totalCharges", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Night`, value: "totalNight", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -212,13 +212,13 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
           this._displayedColumnsHeader1 = ['stt', 'checkin2col', 'checkout2col', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights', 'earlyCheckin',
             'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge', 'singleRoomCcCharge',
             'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge', 'lcoTwinRoomCcCharge',
-            'totalBreakfastFcCharge', 'totalBreakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge', 'accommodationTaxFcCharge',
+            'breakfastFcCharge', 'breakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge', 'accommodationTaxFcCharge',
             'accommodationTaxCcCharge', 'transportCharge', 'totalCharges', 'remark'];
           this._displayedColumnsHeader2 = ['ciFltno', 'ciDate', 'coFltno', 'coDate'];
           this._displayedColumnsRow = ['stt', 'ciFltno', 'ciDate', 'coFltno', 'coDate', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights',
             'earlyCheckin', 'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge',
             'singleRoomCcCharge', 'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge',
-            'lcoTwinRoomCcCharge', 'totalBreakfastFcCharge', 'totalBreakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge',
+            'lcoTwinRoomCcCharge', 'breakfastFcCharge', 'breakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge',
             'accommodationTaxFcCharge', 'accommodationTaxCcCharge', 'transportCharge', 'totalCharges', 'remark'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
           this.totalColSpan = 5;
@@ -272,8 +272,6 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   calTotal(column: any) {
     if (column.type === Constant.NUMBER) {
       return this.formGroupDetail.getRawValue().invoiceFormDtl.reduce((prev: any, cur: any) => {
-        // prev + +cur[column.value]
-        let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl;
         if (cur.typeRoom === 'CC Twin room') {
           return prev + +(cur[column.value] / 2);
         } else {

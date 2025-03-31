@@ -73,12 +73,14 @@ export class DomesticBudgetProcurementHotelComponent
   startDatePlanGroup: any;
   endDatePlanGroup: any;
   resultTotal: { [key: string]: number } = {}; // dùng để lưu trữ giá trị tổng cho dòng cuối cùng trong bảng
+  general: any = {}
 
   round = round;
   constructor(private datePipe: DatePipe, private cdRef: ChangeDetectorRef) {
     effect(() => {
-      if (this.data()) {
+      if (this.data() && Object.keys(this.data()).length > 0) {
         this.setDataSource(this.data().planHotels, this.data().isSummary);
+        this.setGeneral(this.data().general)
       }
     });
   }
@@ -94,7 +96,7 @@ export class DomesticBudgetProcurementHotelComponent
   }
 
   setDataSource(data: any[], isSummary?: boolean) {
-    this.dataSource.data = [...data];
+    this.dataSource.data = [...(data ?? [])];
     this.getRow();
 
     this.dataSource.data.forEach((item: any, index) => {
@@ -109,6 +111,10 @@ export class DomesticBudgetProcurementHotelComponent
       this.calculateData(item, index, isSummary);
     });
     this.calculateTotal()
+  }
+
+  setGeneral(data: any) {
+    this.general = data;
   }
 
   getDataSource() {
@@ -169,11 +175,11 @@ export class DomesticBudgetProcurementHotelComponent
     // Tháng nào đã thực hiện thì tính theo công thưc mới
     const objFormula = formula[key];
     let strFomular = objFormula.formula;
-    if (this.updateBudgetPlan() && item.monthIsPerform) {
-      if (objFormula.formulaUpdateBudgetPlan) {
-        strFomular = objFormula.formulaUpdateBudgetPlan;
-      }
-    }
+    // if (this.updateBudgetPlan() && item.monthIsPerform) {
+    //   if (objFormula.formulaUpdateBudgetPlan) {
+    //     strFomular = objFormula.formulaUpdateBudgetPlan;
+    //   }
+    // }
     if (strFomular) {
       item[key] = this.calculateFormula(item, strFomular);
     }
@@ -252,7 +258,10 @@ export class DomesticBudgetProcurementHotelComponent
 
   clickOutside(data: any, control: string) {
     data[control] = false;
-    if (control === 'singleRoomExtraEditing' || control === 'doubleRoomExtraEditing') {
+    if (['priceSingleRoomEditing', 'priceSingleRoomVatEditing', 'priceDoubleRoomEditing',
+      'priceDoubleRoomVatEditing', 'singleRoomExtraEditing', 'doubleRoomExtraEditing',
+      'singleRoomEditing', 'doubleRoomEditing', 'singleRoomYearPerformEditing', 'doubleRoomYearPerformEditing']
+      .includes(control)) {
       this.calculateData(data, 0, true)
     }
     this.calculateTotal()

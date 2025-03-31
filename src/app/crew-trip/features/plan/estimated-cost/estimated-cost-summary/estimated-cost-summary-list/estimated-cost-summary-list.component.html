@@ -77,16 +77,16 @@
                     <td mat-cell *matCellDef="let element">
                         @if(element.serviceType === serviceType.HOTEL){
                         <span>
-                            <span class="text-secondary-bootstrap" i18n="@@singleRoom">Single Room</span>:
-                            {{element.unitPriceHotel | number}}
+                            <span class="text-secondary-bootstrap" i18n="@@singleRoom">Single Room</span>:<br/>
+                          <span [innerHTML]="getUnitPrice(element.unitPriceSingleHotel)"></span> 
                         </span>
                         <br>
                         <span>
-                            <span class="text-secondary-bootstrap" i18n="@@doubleRoom">Double Room</span>:
-                            {{element.unitPriceDoubleHotel | number}}
+                            <span class="text-secondary-bootstrap" i18n="@@doubleRoom">Double Room</span>:<br/>
+                            <span [innerHTML]="getUnitPrice(element.unitPriceDoubleHotel)"></span>
                         </span>
                         }@else{
-                        {{element.unitPriceCar | number}}
+                            <span [innerHTML]="getUnitPrice(element.unitPriceCar)"></span>
                         }
 
 
@@ -160,7 +160,7 @@
                                     zoom_in
                                 </i>
                             </button>
-                            @if (categoryType() !== CategoriesEnum.ALL) {
+                            @if (categoryType() !== CategoriesEnum.ALL && element.status !== StatusSummaryEnum.COMPLETED) {
                                 <button type="button" mat-button title="Delete" i18n-title="@@delete" class="text-danger"
                                 (click)="showConfirmDelete(element.id)">
                                 <i class="material-symbols-outlined text-danger">

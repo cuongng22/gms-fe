@@ -1,9 +1,16 @@
 <mat-card class="border-radius d-block bg-white border-0 shadow-none">
     <mat-card-header class="p-15">
         <mat-card-title>
+            @if(formGroupDetail.controls.isEdit.value){
+            <h5 class="mb-2" i18n="@@editExtraCrew">
+                Edit Extra Crew
+            </h5>
+            }@else {
             <h5 class="mb-2" i18n="@@addExtraCrew">
                 Add Extra Crew
             </h5>
+            }
+
         </mat-card-title>
         <mat-card-subtitle>
             <button mat-button (click)="close()">
@@ -17,7 +24,8 @@
                 <div class="col">
                     <div class="form-group mb-20">
                         <app-selection-suggest size="md" [options]="crews" label="Full Name" i18n-label="fullName"
-                            (selectionChange)="fullNameSelectionChange($event)" formControlName="persCode" attrValue="persCode" attrDisplay="fullNameDisplay" />
+                            (selectionChange)="fullNameSelectionChange($event)" formControlName="persCode"
+                            attrValue="persCode" attrDisplay="fullNameDisplay" />
                     </div>
                 </div>
                 <div class="col">

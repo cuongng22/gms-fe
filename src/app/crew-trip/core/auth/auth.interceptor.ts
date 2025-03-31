@@ -7,16 +7,17 @@ import {
   HttpRequest,
   HttpStatusCode
 } from '@angular/common/http';
-import { from, Observable, tap, throwError, timeout } from 'rxjs';
-import { catchError } from 'rxjs/operators';
-import { inject } from '@angular/core';
-import { Router } from '@angular/router';
-import { BaseService } from '../services/base-service';
-import { MESSAGE, COMMON_CONFIG } from '../../shared/utils/constant';
-import { STORAGE_KEY } from 'src/app/crew-trip/core/constants/config';
-import { LanguageService } from 'src/app/crew-trip/core/services/language.service';
-import { UsersService } from 'src/app/crew-trip/core/services/users-service';
-import { NgxSpinnerService } from 'ngx-spinner';
+import {from, Observable, tap, throwError, timeout} from 'rxjs';
+import {catchError} from 'rxjs/operators';
+import {inject} from '@angular/core';
+import {Router} from '@angular/router';
+import {BaseService} from '../services/base-service';
+import {MESSAGE, COMMON_CONFIG} from '../../shared/utils/constant';
+import {STORAGE_KEY} from 'src/app/crew-trip/core/constants/config';
+import {LanguageService} from 'src/app/crew-trip/core/services/language.service';
+import {UsersService} from 'src/app/crew-trip/core/services/users-service';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {StorageService} from '../services/storage.service';
 
 
 export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> {
@@ -36,10 +37,12 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
   let requestTimeout = COMMON_CONFIG.TIMEOUT;
   if (
     req.url.includes('/api/productivity') ||
-    req.url.includes('api/plan-budget-procurement/summary')) {
-    requestTimeout = 1000000;
+    req.url.includes('api/plan-budget-procurement/summary') ||
+    req.url.includes('/api/aves/room-tracking') ||
+    req.url.includes('/api/aves/transport-tracking')) {
+    requestTimeout = 1500000;
   }
-  const authReq = req.clone({ headers });
+  const authReq = req.clone({headers});
   return next(authReq).pipe(timeout(requestTimeout), tap(event => {
     if (event.type === HttpEventType.Response) {
       // console.log(req.url, 'returned a response with status', event.status);
@@ -80,7 +83,7 @@ export function loggingInterceptor(req: HttpRequest<unknown>, next: HttpHandlerF
           }
         } else if (errorResponse.status === HttpStatusCode.Conflict ||
           errorResponse.status === HttpStatusCode.NotFound) {
-        }  else if (errorResponse.status === HttpStatusCode.TooManyRequests) {
+        } else if (errorResponse.status === HttpStatusCode.TooManyRequests) {
           baseService.showError(errorResponse?.error?.error ?? MESSAGE.ERROR);
         } else {
           baseService.showError(errorResponse?.error?.error ?? MESSAGE.ERROR);

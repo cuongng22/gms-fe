@@ -18,7 +18,7 @@ export class ControlErrorComponent {
   errorMessages: any = ERROR_MESSAGE;
   allErrorTrack = ['invalidNumberDecimal', 'required', 'pattern', 'max', 'min', 'timeBeforeValidator', 'timeAfterValidator',
     'lessThanValidator', 'maxlength', 'invalidNumber', 'beforeValidator', 'afterValidator', 'minlength', 'matDatepickerParse',
-    'overlapValidator'];
+    'overlapValidator','matDatepickerMax'];
 
   constructor(@Optional() @SkipSelf() private controlContainer?: ControlContainer) {
   }

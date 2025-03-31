@@ -1,4 +1,4 @@
-<mat-card class="border-radius p-3 d-block bg-white border-0 shadow-none">
+<mat-card class="mb-10 border-radius p-3 d-block bg-white border-0 shadow-none">
   <mat-card-content>
     <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
       <div class="row">
@@ -187,7 +187,7 @@
             {{element.totalNumberOfTrip | number}}
           </td>
           <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
-            {{ (dataSource.data | dataCalculateTotal: 'totalTwinLCORoom') | number }}
+            {{ (dataSource.data | dataCalculateTotal: 'totalNumberOfTrip') | number }}
           </td>
         </ng-container>
 
@@ -197,10 +197,10 @@
             Total amount <br /> (Foreign exchange)
           </th>
           <td mat-cell *matCellDef="let element;" class="text-right">
-            {{element.totalForex | number}}
+            {{round(element.totalForex) | number}}
           </td>
           <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
-            {{ (dataSource.data | dataCalculateTotal: 'totalForex') | number }}
+            {{ round((dataSource.data | dataCalculateTotal: 'totalForex')) | number }}
           </td>
         </ng-container>
 
@@ -215,10 +215,10 @@
             Excluding VAT
           </th>
           <td mat-cell *matCellDef="let element;" class="text-right">
-            {{element.totalExcVAT | number}}
+            {{ Math.round(element.totalExcVAT) | number}}
           </td>
           <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
-            {{ (dataSource.data | dataCalculateTotal: 'totalExcVAT') | number }}
+            {{ Math.round(dataSource.data | dataCalculateTotal: 'totalExcVAT') | number }}
           </td>
         </ng-container>
         <ng-container matColumnDef="totalIncVAT">
@@ -226,13 +226,13 @@
             Including VAT
           </th>
           <td mat-cell *matCellDef="let element;" class="text-right">
-            {{element.totalIncVAT | number}}
+            {{ Math.round(element.totalIncVAT)  | number}}
           </td>
           <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
-            {{ (dataSource.data | dataCalculateTotal: 'totalIncVAT') | number }}
+            {{ Math.round(dataSource.data | dataCalculateTotal: 'totalIncVAT') | number }}
           </td>
         </ng-container>
-        <ng-container matColumnDef="action">
+        <ng-container matColumnDef="action" stickyEnd>
           <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@includingVAT" [rowSpan]="2">
             Action
           </th>
@@ -264,7 +264,7 @@
             </div>
           </td>
           <td mat-footer-cell *matFooterCellDef class="text-left fw-bold">
-            
+
           </td>
         </ng-container>
         <ng-container matColumnDef="total">

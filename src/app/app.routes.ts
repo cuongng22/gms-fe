@@ -69,6 +69,8 @@ import { EstimatedCostComponent } from './crew-trip/features/plan/estimated-cost
 import { EstimatedCostListComponent } from './crew-trip/features/plan/estimated-cost/estimated-cost-list/estimated-cost-list.component';
 import { EstimatedCostSummaryComponent } from './crew-trip/features/plan/estimated-cost/estimated-cost-summary/estimated-cost-summary.component';
 import { EstimatedCostSummaryDetailComponent } from './crew-trip/features/plan/estimated-cost/estimated-cost-summary/estimated-cost-summary-detail/estimated-cost-summary-detail.component';
+import { LoginHistoryComponent } from './crew-trip/features/system/history/login-history/login-history.component';
+import { EmailNotificationHistoryComponent } from './crew-trip/features/system/history/email-notification-history/email-notification-history.component';
 
 
 export const routes: Routes = [
@@ -102,6 +104,13 @@ export const routes: Routes = [
           { path: 'email-supplier', component: EmailSupplierComponent },
           { path: 'noti-warning', component: NotificationComponent },
         ],
+      },
+      {
+        path: 'system/history',
+        children: [
+          { path: 'login', component: LoginHistoryComponent },
+          { path: 'email-noti', component: EmailNotificationHistoryComponent },
+        ]
       },
       {
         path: 'plan',
@@ -217,8 +226,18 @@ export const routes: Routes = [
         path: 'flight-schedules',
         children: [
           { path: 'seasonal', component: SeasonalSchedulesComponent },
-          { path: 'daily', component: DailyFlightSchedulesComponent },
-          { path: 'other', component: OtherFlightScheduleComponent },
+          {
+            path: 'daily', children: [
+              {
+                path: '', component: DailyFlightSchedulesComponent
+              },
+              {
+                path: 'other',
+                component: OtherFlightScheduleComponent
+              },
+            ]
+          },
+
           { path: 'email-tracking', component: EmailTrackingComponent }
         ],
       },
@@ -280,5 +299,6 @@ export const routes: Routes = [
       { path: 'reset-password', component: ResetPasswordComponent },
     ],
   },
+
   { path: '**', component: NotFoundComponent },
 ];

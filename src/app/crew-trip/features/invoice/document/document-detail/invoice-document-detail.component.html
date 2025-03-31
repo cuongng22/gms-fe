@@ -28,24 +28,28 @@
       </i>
       Back
     </button>
-    <button (click)="saveAndNext()" *ngIf="!readMode" class="step-2-menu-button btn-slot-4" extended i18n mat-fab>
-      <i class="material-symbols-outlined">
-        redo
-      </i>
-      Save and reconcile
-    </button>
+    @if (formGroupDetail.getRawValue().status === 'UNMATCHED' && formGroupDetail.getRawValue().version === 1) {
+      <button (click)="saveAndNext()" *ngIf="!readMode" class="step-2-menu-button btn-slot-4" extended i18n mat-fab>
+        <i class="material-symbols-outlined">
+          redo
+        </i>
+        Save and reconcile
+      </button>
+    }
     <button (click)="save()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
       <i class="material-symbols-outlined">
         save
       </i>
       Save
     </button>
-    <button (click)="toggleDialogFinish()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
-      <i class="material-symbols-outlined">
-        task_alt
-      </i>
-      Chốt hóa đơn
-    </button>
+    @if (formGroupDetail.getRawValue().status !== 'FINISHED') {
+      <button (click)="toggleDialogFinish()" *ngIf="!readMode" class="step-2-menu-button btn-slot-1" extended i18n mat-fab>
+        <i class="material-symbols-outlined">
+          task_alt
+        </i>
+        Confirm
+      </button>
+    }
   </div>
 }
 <mat-accordion multi>
@@ -89,6 +93,64 @@
           </div>
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
+              <mat-label i18n>Invoice date</mat-label>
+              <input [matDatepicker]="invoiceDate" [max]="today" formControlName="invoiceDate" matInput
+                     required trim="blur">
+              <mat-datepicker-toggle [for]="invoiceDate" matIconSuffix></mat-datepicker-toggle>
+              <mat-datepicker #invoiceDate></mat-datepicker>
+              <mat-error>
+                <app-control-error controlName="invoiceDate"></app-control-error>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Period From</mat-label>
+              <input [matDatepicker]="periodFrom" [max]="today" formControlName="periodFrom" matInput
+                     required trim="blur">
+              <mat-datepicker-toggle [for]="periodFrom" matIconSuffix></mat-datepicker-toggle>
+              <mat-datepicker #periodFrom></mat-datepicker>
+              <mat-error>
+                <app-control-error controlName="periodFrom"></app-control-error>
+              </mat-error>
+              @if (!!formGroupDetail.controls['periodFrom'].hasError('invoiceDate')) {
+                <mat-error><span i18n>Period from</span><span i18n> must before invoice date</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Period To</mat-label>
+              <input [matDatepicker]="periodTo" [max]="today" formControlName="periodTo" matInput
+                     required trim="blur">
+              <mat-datepicker-toggle [for]="periodTo" matIconSuffix></mat-datepicker-toggle>
+              <mat-datepicker #periodTo></mat-datepicker>
+              <mat-error>
+                <app-control-error controlName="periodTo"></app-control-error>
+              </mat-error>
+              @if (!!formGroupDetail.controls['periodTo'].hasError('invoiceDate')) {
+                <mat-error><span i18n>Period to</span><span i18n> must before invoice date</span></mat-error>
+              }
+            </mat-form-field>
+          </div>
+
+        </div>
+        <!--        dong2-->
+        <div class="row mt-20">
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Receive Date</mat-label>
+              <input [matDatepicker]="invoiceReceiveDate" [max]="today" formControlName="invoiceReceiveDate" matInput
+                     required trim="blur">
+              <mat-datepicker-toggle [for]="invoiceReceiveDate" matIconSuffix></mat-datepicker-toggle>
+              <mat-datepicker #invoiceReceiveDate></mat-datepicker>
+              <mat-error>
+                <app-control-error controlName="invoiceReceiveDate"></app-control-error>
+              </mat-error>
+            </mat-form-field>
+          </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
               <mat-label i18n>Invoice number</mat-label>
               <input formControlName="invoiceNumber" matInput required trim="blur" upperCase="blur">
               <mat-error>
@@ -106,57 +168,6 @@
               </mat-select>
               <mat-error>
                 <app-control-error controlName="ctype"></app-control-error>
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Invoice date</mat-label>
-              <input [matDatepicker]="invoiceDate" formControlName="invoiceDate" matInput
-                     required trim="blur">
-              <mat-datepicker-toggle [for]="invoiceDate" matIconSuffix></mat-datepicker-toggle>
-              <mat-datepicker #invoiceDate></mat-datepicker>
-              <mat-error>
-                <app-control-error controlName="invoiceDate"></app-control-error>
-              </mat-error>
-            </mat-form-field>
-          </div>
-        </div>
-        <!--        dong2-->
-        <div class="row mt-20">
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Receive Date</mat-label>
-              <input [matDatepicker]="invoiceReceiveDate" formControlName="invoiceReceiveDate" matInput
-                     required trim="blur">
-              <mat-datepicker-toggle [for]="invoiceReceiveDate" matIconSuffix></mat-datepicker-toggle>
-              <mat-datepicker #invoiceReceiveDate></mat-datepicker>
-              <mat-error>
-                <app-control-error controlName="invoiceReceiveDate"></app-control-error>
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Period From</mat-label>
-              <input [matDatepicker]="periodFrom" formControlName="periodFrom" matInput
-                     required trim="blur">
-              <mat-datepicker-toggle [for]="periodFrom" matIconSuffix></mat-datepicker-toggle>
-              <mat-datepicker #periodFrom></mat-datepicker>
-              <mat-error>
-                <app-control-error controlName="periodFrom"></app-control-error>
-              </mat-error>
-            </mat-form-field>
-          </div>
-          <div class="col-3" sizeInput='sm'>
-            <mat-form-field>
-              <mat-label i18n>Period To</mat-label>
-              <input [matDatepicker]="periodTo" formControlName="periodTo" matInput
-                     required trim="blur">
-              <mat-datepicker-toggle [for]="periodTo" matIconSuffix></mat-datepicker-toggle>
-              <mat-datepicker #periodTo></mat-datepicker>
-              <mat-error>
-                <app-control-error controlName="periodTo"></app-control-error>
               </mat-error>
             </mat-form-field>
           </div>
@@ -210,7 +221,7 @@
         </div>
         <!--        dong4-->
         <div class="row mt-20">
-          <div class="col-3" sizeInput='sm'>
+          <div class="col-9" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Partner Name</mat-label>
               <input formControlName="partnerName" matInput trim="blur">
@@ -228,6 +239,9 @@
               </mat-error>
             </mat-form-field>
           </div>
+        </div>
+        <!--        dong5-->
+        <div class="row mt-20">
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Currency</mat-label>
@@ -249,9 +263,6 @@
               </mat-error>
             </mat-form-field>
           </div>
-        </div>
-        <!--        dong5-->
-        <div class="row mt-20">
           <div class="col-3" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Exchange Rate</mat-label>
@@ -270,8 +281,6 @@
               </mat-error>
             </mat-form-field>
           </div>
-          <div class="col-3" sizeInput='sm'></div>
-          <div class="col-3" sizeInput='sm'></div>
         </div>
         <!--        dong6-->
         <div class="row mt-20">
@@ -359,7 +368,7 @@
         </button>
       </div>
       <div class="table-responsive">
-        @defer (on timer(1000)) {
+        @defer (on timer(700)) {
           <table [dataSource]="dsInvoiceDocumentDtl" class="table-light table-responsive"
                  mat-table>
             <ng-container matColumnDef="stt">
@@ -373,15 +382,15 @@
               </th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
-                  <app-selection-suggest-2
-                      (selectionChange)="changeServiceFee(row);"
-                      [editInlineTable]="true"
-                      [options]="listFeeService"
-                      attrDisplay="code"
-                      attrDisplay2="name"
-                      attrValue="code" formControlName="serviceCode" i18n-label2
-                      label2="Code"
-                      size="sm"/>
+                  <app-selection-suggest-2 (selectionChange)="changeServiceFee(row);"
+                                           [editInlineTable]="true"
+                                           [errors]="row.get('serviceCode').errors"
+                                           [options]="listFeeService"
+                                           attrDisplay="code"
+                                           attrDisplay2="name"
+                                           attrValue="code" formControlName="serviceCode" i18n-label2
+                                           label2="Code"
+                                           size="sm"/>
                 </div>
               </td>
             </ng-container>
@@ -442,8 +451,8 @@
                 <div class="input-cell">
                   <mat-form-field class="edit-inline-table">
                     <input appThousandsSeparator formControlName="quantity" matInput required trim="blur">
-                    <mat-error *ngxControlError="row.controls['quantity']; track: 'required'">
-                      <span i18n>Quantity </span><span i18n> is required</span>
+                    <mat-error>
+                      <app-control-error controlName="quantity"></app-control-error>
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -456,8 +465,8 @@
                 <div class="input-cell">
                   <mat-form-field class="edit-inline-table">
                     <input appThousandsSeparator formControlName="unitPrice" matInput required trim="blur">
-                    <mat-error *ngxControlError="row.controls['unitPrice']; track: 'required'">
-                      <span i18n>Unit Price </span><span i18n> is required</span>
+                    <mat-error>
+                      <app-control-error controlName="unitPrice"></app-control-error>
                     </mat-error>
                   </mat-form-field>
                 </div>
@@ -545,33 +554,62 @@
                 </div>
               </td>
             </ng-container>
+            <ng-container matColumnDef="action" stickyEnd>
+              <th *matHeaderCellDef i18n mat-header-cell mat-sort-header rowspan="2">Action</th>
+              <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
+                <div class="action-buttons align-items-center text-center">
+                  <a (click)="_confirmDelete(row,i)" *ngIf="!readMode"
+                     class="text-danger"
+                     mat-button type="button">
+                    <i class="material-symbols-outlined" i18n-title title="Delete">
+                      delete
+                    </i>
+                  </a>
+                </div>
+              </td>
+            </ng-container>
             <ng-container matColumnDef="vatHeader">
               <th *matHeaderCellDef class="text-center" colspan="4" i18n mat-header-cell mat-sort-header>VAT
             </ng-container>
-            <tr
-                *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader']"
-                mat-header-row></tr>
-            <tr
-                *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
-            <tr
-                *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat',];"
-                class="input-row" mat-row></tr>
-            <tr *matNoDataRow class="mat-row">
-              <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
-                  i18n>No data!</span></td>
-            </tr>
+            @if (readMode) {
+              <tr
+                  *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader']"
+                  mat-header-row></tr>
+              <tr
+                  *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
+              <tr
+                  *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat'];"
+                  class="input-row" mat-row></tr>
+              <tr *matNoDataRow class="mat-row">
+                <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
+                    i18n>No data!</span></td>
+              </tr>
+            } @else {
+              <tr
+                  *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader','action']"
+                  mat-header-row></tr>
+              <tr
+                  *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
+              <tr
+                  *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat','action'];"
+                  class="input-row" mat-row></tr>
+              <tr *matNoDataRow class="mat-row">
+                <td [attr.colspan]="1" class="mat-cell border-none text-center"><span
+                    i18n>No data!</span></td>
+              </tr>
+            }
           </table>
         }
       </div>
       <form #totalab [formGroup]="formGroupDetail" autocomplete="off" class="w-100">
-        <mat-grid-list class="mt-20" cols="12" gutterSize="24px" rowHeight="50px">
-          @if (formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL') {
+        <mat-grid-list class="mt-20 grid-list-form" cols="12" gutterSize="24px" rowHeight="65px">
+          @if (isInternational()) {
             <mat-grid-tile [colspan]="3">
-              <div class="w-100" sizeInput='sm'>
+              <div class="w-100 ok" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Amount Fc Before Vat</mat-label>
-                  <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput required
-                         trim="blur" >
+                  <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput
+                         trim="blur">
                   <mat-error>
                     <app-control-error controlName="airportCode"></app-control-error>
                   </mat-error>
@@ -582,8 +620,8 @@
               <div class="w-100" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Vat Fc</mat-label>
-                  <input appThousandsSeparator formControlName="vatFc" matInput required
-                         trim="blur" >
+                  <input appThousandsSeparator formControlName="vatFc" matInput
+                         trim="blur">
                   <mat-error>
                     <app-control-error controlName="airportCode"></app-control-error>
                   </mat-error>
@@ -594,8 +632,8 @@
               <div class="w-100" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Total Amount Fc</mat-label>
-                  <input #inputElementRef3 appThousandsSeparator formControlName="totalAmountFc" matInput required
-                         trim="blur" >
+                  <input #inputElementRef3 appThousandsSeparator formControlName="totalAmountFc" matInput
+                         trim="blur">
                   <mat-error>
                     <app-control-error controlName="airportCode"></app-control-error>
                   </mat-error>
@@ -606,10 +644,10 @@
               <div class="w-100" sizeInput='sm'>
                 <mat-form-field>
                   <mat-label i18n>Reimbursement Total Fc</mat-label>
-                  <input appThousandsSeparator formControlName="reimbursementTotalFc" matInput required
-                         trim="blur" >
+                  <input appThousandsSeparator formControlName="reimbursementTotalFc" matInput
+                         trim="blur">
                   <mat-error>
-                    <app-control-error controlName="airportCode"></app-control-error>
+                    <app-control-error controlName="reimbursementTotalFc"></app-control-error>
                   </mat-error>
                 </mat-form-field>
               </div>
@@ -619,8 +657,8 @@
             <div class="w-100" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Amount Vnd Before Vat</mat-label>
-                <input #inputElementRef2 appThousandsSeparator formControlName="amountVndBeforeVat" matInput required
-                       trim="blur" >
+                <input #inputElementRef2 appThousandsSeparator formControlName="amountVndBeforeVat" matInput
+                       trim="blur">
                 <mat-error>
                   <app-control-error controlName="airportCode"></app-control-error>
                 </mat-error>
@@ -631,8 +669,8 @@
             <div class="w-100" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Vat Vnd</mat-label>
-                <input appThousandsSeparator formControlName="vatVnd" matInput required
-                       trim="blur" >
+                <input appThousandsSeparator formControlName="vatVnd" matInput
+                       trim="blur">
                 <mat-error>
                   <app-control-error controlName="airportCode"></app-control-error>
                 </mat-error>
@@ -643,8 +681,8 @@
             <div class="w-100" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Total Amount Vnd</mat-label>
-                <input #inputElementRef4 appThousandsSeparator formControlName="totalAmountVnd" matInput required
-                       trim="blur" >
+                <input #inputElementRef4 appThousandsSeparator formControlName="totalAmountVnd" matInput
+                       trim="blur">
                 <mat-error>
                   <app-control-error controlName="airportCode"></app-control-error>
                 </mat-error>
@@ -655,10 +693,10 @@
             <div class="w-100" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>Reimbursement Total Vnd</mat-label>
-                <input appThousandsSeparator formControlName="reimbursementTotalVnd" matInput required
+                <input appThousandsSeparator formControlName="reimbursementTotalVnd" matInput
                        trim="blur">
                 <mat-error>
-                  <app-control-error controlName="airportCode"></app-control-error>
+                  <app-control-error controlName="reimbursementTotalVnd"></app-control-error>
                 </mat-error>
               </mat-form-field>
             </div>
@@ -714,6 +752,16 @@
     [mainText]="'Bạn có chắc chắn chốt số liệu chứng từ hóa đơn này không?'"
     [showDialog]="showDialogFinish"
     [subText]="'Số liệu chứng từ hóa đơn này sẽ không được chỉnh sửa sau khi đã chốt!'"
+    i18n-mainText
+    i18n-subText>
+</app-confirm-dialog>
+<app-confirm-dialog
+    (closeDialog)="_closeConfirmDelete()"
+    (confirm)="_doDelete()"
+    [icon]="'error'"
+    [mainText]="'Are you sure you want to delete?'"
+    [showDialog]="_showDialogDelete"
+    [subText]="'You will not be able to recover the deleted data!'"
     i18n-mainText
     i18n-subText>
 </app-confirm-dialog>

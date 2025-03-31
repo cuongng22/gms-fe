@@ -41,7 +41,7 @@ import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight
   imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent, MatDatepickerModule, MatHint, InvoiceFormDetailComponent, MatRadioGroup, MatRadioButton, FileUploadModule, SelectMultipleComponent],
   templateUrl: './invoice-form.component.html',
   styleUrl: './invoice-form.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),]
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY,{useUtc: true}),]
 })
 
 
@@ -60,8 +60,10 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   readMode = true;
   action = 'edit';
   id: any;
-  startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
-  endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
+  // startOfMonth = moment().startOf('month').format('YYYY-MM-DD');
+  // endOfMonth = moment().endOf('month').format('YYYY-MM-DD');
+  startOfMonth = moment().startOf('year').format('YYYY-MM-DD');
+  endOfMonth = moment().format('YYYY-MM-DD');
 
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
@@ -82,7 +84,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
-      searchString: [], ctype: [], partnerType: [], airportCode: [], listAirportCode: [], periodFrom: [this.startOfMonth], periodTo: [this.endOfMonth],
+      searchString: [], ctype: [], partnerType: [], airportCode: [], listAirportCode: [], periodFrom: [this.startOfMonth], periodTo: [moment().format('YYYY-MM-DD')],
     });
     this.formGroupDetail = this.fb.group({
       id: [], bizDocId: [], bizDocIdC1: [], contractName: [], contractCode: []
@@ -97,7 +99,7 @@ export class InvoiceFormComponent extends CommonComponent implements OnInit {
   override async ngOnInit() {
     this.formGroupFile.patchValue({partnerType: this.partnerType});
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.loadListFlightMarket({status: FlightMarketStatusEnum.OPERATIONAL}), this.search(),]).then(() => {
+    await Promise.all([this.loadListFlightMarket(), this.search(),]).then(() => {
 
     });
     this.displayedColumns = ['stt', 'airportCode', 'partnerName', 'invoiceNumber', 'invoiceDate', 'invoiceReceiveDate', 'periodDate', 'totalAmount', 'action'];
