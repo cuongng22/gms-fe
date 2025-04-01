@@ -11,11 +11,14 @@
                             @if(invalid()){
                             <span class="text-danger">Duplicate Number of Overnight Stays</span>
                             }
-                            <button [disabled]="disabled()" mat-button class="mini-vna-btn" (click)="add()">
+                            @if(!disabled()){
+                            <button mat-button class="mini-vna-btn" (click)="add()">
                                 <i class="material-symbols-outlined">
                                     add
                                 </i>
                             </button>
+                            }
+
                         </div>
                     </th>
                 </ng-container>

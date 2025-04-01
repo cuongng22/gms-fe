@@ -169,7 +169,7 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
       }
     } else {
       this.spinner.hide();
-      this.showError($localize`:@@cannotUpdateCompletionStatusIfNoPlanIsSelected:Cannot update completion status if no plan is selected`)
+      this.showError($localize`:@@cannotUpdateCompletionStatusIfNoEstimatedCostIsSelected:Cannot update completion status if no estimated cost is selected`)
     }
   }
 
