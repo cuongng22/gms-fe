@@ -43,6 +43,7 @@ import {InvoiceDocumentComponent} from "src/app/crew-trip/features/invoice/docum
 import {InvoiceDocumentRemindComponent} from "src/app/crew-trip/features/invoice/document/invoice-document-remind.component";
 import {ConfirmDialog} from "src/app/crew-trip/shared/dialog/confirm-dialog/confirm-dialog";
 import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
+import moment from "moment";
 
 
 @Component({
@@ -78,7 +79,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   @Input() formType: any;
   tblAttachedDocument = new MatTableDataSource();
-  tblUnitPrice = new MatTableDataSource();
+  tblDocumentReviewForm = new MatTableDataSource();
   expandList = new Set<string>(['tab1', 'tab2', 'tab3']);
   formGroupFileUpload!: FormGroup;
   showDialogDeleteFile = false;
@@ -217,6 +218,12 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
       invoiceDocumentReview: [],
       invoiceDocumentReviewForm: []
     });
+    this.formGroupSearch = this.fb.group({
+      fltNo: [],
+      fltDate: [],
+      dateFrom: [],
+      dateTo: [],
+    });
   }
 
   override async ngOnInit() {
@@ -253,6 +260,20 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
         let reviewStatus = this.reviewMatch() ? InvoiceDocumentStatusEnum.VERIFIED : InvoiceDocumentStatusEnum.UNVERIFIED
         let filterForm = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((s: any) => s.sourceData == 'FORM');
+        this.tblDocumentReviewForm.data = filterForm;
+        this.tblDocumentReviewForm.filterPredicate = (data: any, filter: any) => {
+          const searchTerms = JSON.parse(filter);
+          console.log(data.ciDate, moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT), data)
+          console.log(data.ciDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT))
+          let fltNoSearch = searchTerms.fltNo ? (data.ciFltno?.toUpperCase().includes(searchTerms.fltNo) ||
+            data.coFltno?.toUpperCase().includes(searchTerms.fltNo) ||
+            data.fltno?.toUpperCase().includes(searchTerms.fltNo)) : true;
+          let fltDateSearch = searchTerms.fltDate ? (data.ciDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT) ||
+            data.cDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT) ||
+            data.cdate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT)
+          ) : true
+          return (fltNoSearch && fltDateSearch);
+        };
         this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm, status: reviewStatus});
       });
 
@@ -289,7 +310,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
       await this.spinner.show();
       const res = await this.baseService.exportListData({
         id: this.id,
-        ctype:this.formType,
+        ctype: this.formType,
         exportType: type === 'DETAIL' ? InvoiceDocumentExportType.DOCUMENT_REVIEW_DETAIL : InvoiceDocumentExportType.DOCUMENT_REVIEW
 
       });
@@ -317,7 +338,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
   calTotal(column: any) {
     if (column.type === Constant.NUMBER) {
-      return this.formGroupDetail.getRawValue().invoiceDocumentReviewForm?.reduce((prev: any, cur: any) => {
+      return this.tblDocumentReviewForm.filteredData?.reduce((prev: any, cur: any) => {
         // prev + +cur[column.value]
         if (cur.typeRoom === 'CC Twin room') {
           return prev + +(cur[column.value] / 2);
@@ -378,5 +399,16 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
   reviewMatch() {
     return !this.formGroupDetail.getRawValue().invoiceDocumentReviewProjection.some((item: any) => item.diff !== null && item.diff !== 0);
+  }
+
+  filterDetailTable() {
+    if (this.formGroupSearch.getRawValue().fltNo || this.formGroupSearch.getRawValue().fltDate) {
+      this.tblDocumentReviewForm.filter = JSON.stringify({
+        fltNo: this.formGroupSearch.getRawValue().fltNo,
+        fltDate: this.formGroupSearch.getRawValue().fltDate
+      });
+    } else {
+      this.tblDocumentReviewForm.filter = '';
+    }
   }
 }
