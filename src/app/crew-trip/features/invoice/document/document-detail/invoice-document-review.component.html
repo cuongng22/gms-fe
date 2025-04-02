@@ -302,7 +302,7 @@
                     </button>
                   </div>
                   <div class="col-1" sizeInput='md'>
-                  <button (click)="download('DETAIL')" class="add-btn position-absolute right-0" i18n mat-button
+                    <button (click)="download('DETAIL')" class="add-btn position-absolute right-0" i18n mat-button
                             type="button">
                       <i class="material-symbols-outlined">
                         download
@@ -347,6 +347,8 @@
                           [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
                           [attr.rowspan]="getRowSpan(i,innerColumn,element)"
                           [style.display]="shouldShowRowSpan(i,innerColumn) ? '' : 'none'"
+                          [class.reconcile-row1]="+element.reconcile==1 && ['ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime','fltno', 'cdate'].includes(innerColumn.value)"
+                          [class.reconcile-row2]="+element.reconcile==2 && ['ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime','fltno', 'cdate'].includes(innerColumn.value)"
                           mat-cell *matCellDef="let element;let i = index">
                 <span [ngClass]="{
                   'badge': innerColumn.value === 'activeLabel',
@@ -369,8 +371,7 @@
                   <!--<tr *matHeaderRowDef="['stt','accessBridge']"
                       mat-header-row></tr>-->
                   <tr *matRowDef="let row; columns: _displayedColumnsRow;"
-                      [class.reconcile-row1]="+row.reconcile==1"
-                      [class.reconcile-row2]="+row.reconcile==2" class="input-row"
+                      class="input-row"
                       mat-row></tr>
                   <tr *matFooterRowDef="_displayedColumnsFooter" class="fw-bold" mat-footer-row></tr>
                   <tr *matNoDataRow class="mat-row">
