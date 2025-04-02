@@ -13,16 +13,11 @@
   </ol>
 </div>
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
-<!--  <ngx-tableau [serverUrl]="serverUrl"-->
-<!--               [report]="report"-->
-<!--               [ticket]="ticket"-->
-<!--               [options]="vizOptions"-->
-<!--               [filters]="vizFilters"></ngx-tableau>-->
   <tableau-viz
     id="tableauViz"
     [attr.src]="iframeUrl"
     width="100%"
-    height="800"
+    height="600"
   ></tableau-viz>
 </mat-card>
 
