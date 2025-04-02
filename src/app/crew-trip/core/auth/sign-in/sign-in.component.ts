@@ -44,7 +44,6 @@ export class SignInComponent implements OnInit {
     private route: ActivatedRoute
   ) {
     // this.usersService.showError('Token hết hạn hoặc không hợp lệ');
-    // this.translate.setDefaultLang('en');
     this.themeService.isToggled$.subscribe(isToggled => {
       this.isToggled = isToggled;
     });
