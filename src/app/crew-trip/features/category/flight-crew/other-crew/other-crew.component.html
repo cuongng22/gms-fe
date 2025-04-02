@@ -289,7 +289,7 @@
                   <mat-datepicker-toggle [for]="fromDate" matIconSuffix></mat-datepicker-toggle>
                   <mat-datepicker #fromDate></mat-datepicker>
                   @if (!!formGroupDetail.controls['fromDate'].hasError('required')) {
-                    <mat-error><span i18n>Apply from</span><span i18n> is required</span></mat-error>
+                    <mat-error><span i18n>Start date</span><span i18n> is required</span></mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -301,7 +301,7 @@
                   <mat-datepicker-toggle [for]="toDate" matIconSuffix></mat-datepicker-toggle>
                   <mat-datepicker #toDate></mat-datepicker>
                   @if (!!formGroupDetail.controls['toDate'].hasError('required')) {
-                    <mat-error><span i18n>Apply to</span><span i18n> is required</span></mat-error>
+                    <mat-error><span i18n>End date</span><span i18n> is required</span></mat-error>
                   }
                 </mat-form-field>
               </div>

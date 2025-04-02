@@ -217,7 +217,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
 			_priceHotelsList.forEach((element) => {
 				let hotelItem = {
 					hotelCode: element.hotelCode,
-					hotelName: element.hotelName,
+					hotelName: element.hotelCode,
 					totalSingleRoom: 0,
 					totalTwinRoom: 0,
 					twinRoomPrice: Number(element.twinRoomPrice),
@@ -236,7 +236,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
 		_priceTransports.forEach((element) => {
 			const _carRental = {
 				transportCode: element.carRentalCode,
-				transportName: element.carRentalName,
+				transportName: element.carRentalCode,
 				numberOfTrip: 0,
 				unitPrice: Number(element.unitPrice),
 				totalAmountForex: 0,
@@ -306,7 +306,9 @@ export class WetLeaseDetailComponent extends CommonComponent {
 
 		await this.spinner.show();
 		const _priceHotelsList = _dataGeneral.isHotel
-			? this.wetLeaseGeneral.dataSourceHotel.data
+			? [...this.wetLeaseGeneral.dataSourceHotel.data.map((item) => {
+				return { ...item, hotelName: item.hotelCode }
+			})]
 			: [];
 		const _priceTransports = _dataGeneral.isTransport
 			? this.wetLeaseGeneral.dataSourceCarRental.data
