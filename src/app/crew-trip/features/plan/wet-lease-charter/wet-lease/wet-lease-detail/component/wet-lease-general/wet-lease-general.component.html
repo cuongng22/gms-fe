@@ -99,8 +99,8 @@
         </ng-container>
         <ng-container matColumnDef="supplierName">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center mat-column-200"
-            i18n="@@supplierName">
-            Supplier name
+            i18n="@@category">
+            Category
           </th>
           <td sizeInput="xs" mat-cell *matCellDef="let element; let i = dataIndex" class="mat-column-200"
             [style.padding]="element.hotelEditing && !!!disabled() ?'0px !important':''"
@@ -195,23 +195,23 @@
         <ng-container matColumnDef="invalidSupplier">
           <td mat-footer-cell *matFooterCellDef class="text-left  pl-0">
             @if (duplicateSupplierHotel()) {
-            <p class="mb-0 text-danger" i18n="@@duplicateSuppliersInList">Duplicate suppliers in list</p>
+            <p class="mb-0 text-danger" i18n="@@duplicateCategoryInList">Duplicate category in list</p>
             }
             @if(isRequiredSupplierHotel) {
-            <p class="mb-0 text-danger" i18n="@@supplierIsRequired">Supplier is required</p>
+            <p class="mb-0 text-danger" i18n="@@categoryIsRequired">Category is required</p>
             }
 
           </td>
-          <ng-container matColumnDef="requiredUnitPriceForSingleRoom">
-            <td mat-footer-cell *matFooterCellDef class="text-left  pl-0">
-              @if (isRequiredUnitPriceForSingleRoomHotel) {
+          <ng-container matColumnDef="requiredUnitPrice">
+            <td mat-footer-cell *matFooterCellDef class="text-left  pl-0" [colSpan]="2">
+              @if (isRequiredUnitPrice) {
               <p class="mb-0 text-danger" i18n="@@unitPriceForSingleRoomIncludingVATRequired">
-                Unit price for single room (Including VAT) {{MESSAGE.REQUIRED}}
+                Unit price {{MESSAGE.REQUIRED}}
               </p>
               }
             </td>
           </ng-container>
-          <ng-container matColumnDef="requiredUnitPriceForTwinRoom">
+          <!-- <ng-container matColumnDef="requiredUnitPriceForTwinRoom">
             <td mat-footer-cell *matFooterCellDef class="text-left  pl-0">
               @if (isRequiredUnitPriceForTwinRoomHotel) {
               <p class="mb-0 text-danger" i18n="@@unitPriceForTwinRoomIncludingVATRequired">
@@ -219,14 +219,13 @@
               </p>
               }
             </td>
-          </ng-container>
+          </ng-container> -->
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="['addBtn']"></tr>
         <tr mat-header-row *matHeaderRowDef="displayedColumnsHotel"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsHotel;"></tr>
-        <tr mat-row
-          *matFooterRowDef="['invalidSupplier','requiredUnitPriceForSingleRoom', 'requiredUnitPriceForTwinRoom']"
-          [hidden]="!duplicateSupplierHotel() && !isRequiredSupplierHotel && !isRequiredUnitPriceForSingleRoomHotel && !isRequiredUnitPriceForTwinRoomHotel">
+        <tr mat-row *matFooterRowDef="['invalidSupplier','requiredUnitPrice']"
+          [hidden]="!duplicateSupplierHotel() && !isRequiredSupplierHotel && !isRequiredUnitPrice">
         </tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center" colspan="4">No data!</td>
@@ -337,10 +336,10 @@
         <ng-container matColumnDef="invalidSupplier">
           <td mat-footer-cell *matFooterCellDef class="text-left text-danger pl-0">
             @if (duplicateCarRental()) {
-            <p class="mb-0 text-danger" i18n="@@duplicateSuppliersInList">Duplicate suppliers in list</p>
+            <p class="mb-0 text-danger" i18n="@@duplicateCategoryInList">Duplicate category in list</p>
             }
             @if(isRequiredSupplierTransportation) {
-            <p class="mb-0 text-danger" i18n="@@supplierIsRequired">Supplier is required</p>
+            <p class="mb-0 text-danger" i18n="@@categoryIsRequired">Category is required</p>
             }
           </td>
         </ng-container>

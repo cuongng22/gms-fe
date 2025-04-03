@@ -63,7 +63,7 @@ export class LoginHistoryComponent extends CommonComponent {
   //     "actionDetail": "User logged in by email: dxhop@gimasys.com",
   //     "ipConfig": null
   // }
-  override displayedColumns: string[] = ['stt', 'createdByUsername', 'device', 'ipConfig', 'loginTime', 'logOutTime'];
+  override displayedColumns: string[] = ['stt', 'createdByUsername', 'device', 'ipConfig', 'loginTime'];
   override formGroupSearch = this.formBuilder.group({
     createdByUsername: [],
     startTimeSend: new FormControl<Moment | string | Date>(''),
@@ -76,8 +76,8 @@ export class LoginHistoryComponent extends CommonComponent {
 
   onSearch() {
     let body = this.formGroupSearch.getRawValue();
-    // body.startTimeSend = ((body.startTimeSend) ? (body.startTimeSend as Moment).format(this.Constant.LOCAL_DATE_FORMAT):'');
-    // body.endTimeSend = ((body.endTimeSend) ? (body.endTimeSend as Moment).format(this.Constant.LOCAL_DATE_FORMAT) : '');
+    body.startTimeSend = ((body.startTimeSend) ? (body.startTimeSend as Moment).format(this.Constant.DATE_FORMAT_YYYYMMDD) : '');
+    body.endTimeSend = ((body.endTimeSend) ? (body.endTimeSend as Moment).format(this.Constant.DATE_FORMAT_YYYYMMDD) : '');
 
     this.search(body)
   }

@@ -26,6 +26,7 @@ import { SeparatorDirective } from 'src/app/crew-trip/shared/directive/separator
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.component';
 import { formula } from './wet-lease-hotel.model';
+import moment from 'moment';
 
 @Component({
 	selector: 'app-wet-lease-hotel',
@@ -64,8 +65,7 @@ import { formula } from './wet-lease-hotel.model';
 })
 export class WetLeaseHotelComponent
 	extends CommonComponent
-	implements OnDestroy
-{
+	implements OnDestroy {
 	override baseService: WetLeaseService = inject(WetLeaseService);
 	CategoryEnum = CategoryEnum;
 	headerRowDef1Common = [
@@ -215,7 +215,8 @@ export class WetLeaseHotelComponent
 	}
 
 	setDataSource(value: any[]) {
-		this.dataSource.data = [...value];
+		const _value = value.sort((a, b) => moment(a.wetLeaseDate).toDate().getTime() - moment(b.wetLeaseDate).toDate().getTime());
+		this.dataSource.data = [..._value];
 	}
 
 	processColumnTable() {
@@ -302,16 +303,9 @@ export class WetLeaseHotelComponent
 					(this.totalPlannedBudget[control] ?? 0) + Number(result),
 				);
 			}
-		} else if (
-			['ft2TotalExcVAT', 'ft2TotalIncVAT', 'ft2TotalCountForeign'].includes(
-				control,
-			)
-		) {
+		} else if (['ft2TotalExcVAT', 'ft2TotalIncVAT', 'ft2TotalCountForeign'].includes(control,)) {
 			if (_formula) {
-				this.totalPlannedBudget[control] = Math.round(
-					(this.totalPlannedBudget[control] ?? 0) +
-						Number(this.calWithFormula(_formula, element, this.dataGeneral())),
-				);
+				this.totalPlannedBudget[control] = Math.round((this.totalPlannedBudget[control] ?? 0) + Number(this.calWithFormula(_formula, element, this.dataGeneral())));
 			}
 		} else {
 			this.totalPlannedBudget[control] = null;
@@ -344,9 +338,9 @@ export class WetLeaseHotelComponent
 			.map(([_hotelCode, _hotelValue]) => {
 				return (
 					Number(_hotelValue.singleRoomPrice ?? 0) *
-						Number(_hotelValue.totalSingleRoom ?? 0) +
+					Number(_hotelValue.totalSingleRoom ?? 0) +
 					Number(_hotelValue.twinRoomPrice ?? 0) *
-						Number(_hotelValue.totalTwinRoom ?? 0)
+					Number(_hotelValue.totalTwinRoom ?? 0)
 				);
 			})
 			.reduce((acc, value) => acc + value, 0);
@@ -364,7 +358,7 @@ export class WetLeaseHotelComponent
 		// element.totalIncVAT = (element.totalExcVAT) + (element.totalExcVAT * (this.dataGeneral().rateVat ?? 0) / 100)
 		element.totalIncVAT = Math.round(
 			this.calTotalCountForeign(element) *
-				(this.dataGeneral().exchangeRate ?? 1),
+			(this.dataGeneral().exchangeRate ?? 1),
 		);
 		element.totalExcVAT = Math.round(
 			element.totalIncVAT / (1 + (this.dataGeneral().rateVat ?? 0) / 100),

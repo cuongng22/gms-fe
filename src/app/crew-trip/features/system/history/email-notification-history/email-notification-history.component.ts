@@ -9,21 +9,42 @@ import { BaseService } from 'src/app/crew-trip/core/services/base-service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { EmailHistoryService } from 'src/app/crew-trip/core/services/email-history.service';
 import { EmailComponent } from './email/email.component';
+import moment, { Moment } from 'moment';
+import { NotificationComponent } from './notification/notification.component';
 
 @Component({
   selector: 'app-email-notification-history',
   standalone: true,
   imports: [RouterLink, MatCardModule, MatTabsModule,
-    EmailNotificationSearchComponent, EmailComponent],
+    EmailNotificationSearchComponent, EmailComponent, NotificationComponent],
   templateUrl: './email-notification-history.component.html',
   styleUrl: './email-notification-history.component.scss'
 })
 export class EmailNotificationHistoryComponent extends CommonComponent {
   @ViewChild('appEmail') appEmail: EmailComponent;
+  @ViewChild('appNotification') appNotification: NotificationComponent;
+  @ViewChild('appEmailNotificationSearchEmail') appEmailNotificationSearchEmail: EmailNotificationSearchComponent;
+  @ViewChild('appEmailNotificationSearchNoti') appEmailNotificationSearchNoti: EmailNotificationSearchComponent;
 
   async onSearch(data: any, type: string) {
     if (type === 'EMAIL') {
+      if (data) {
+        data.startTimeSend = ((data?.startTimeSend) ? (moment(data.startTimeSend)).format(this.Constant.DATE_FORMAT_YYYYMMDD) : '');
+        data.endTimeSend = ((data?.endTimeSend) ? (moment(data.endTimeSend)).format(this.Constant.DATE_FORMAT_YYYYMMDD) : '');
+      }
       this.appEmail.search(data);
+    } else {
+      data.startTime = ((data?.startTimeSend) ? (moment(data.startTimeSend)).format(this.Constant.DATE_FORMAT_YYYYMMDD) : '');
+      data.endTime = ((data?.endTimeSend) ? (moment(data.endTimeSend)).format(this.Constant.DATE_FORMAT_YYYYMMDD) : '');
+      this.appNotification.search({ ...data, mode: 1 })
+    }
+  }
+
+  reloadSearch(type: string) {
+    if (type === 'EMAIL') {
+      this.appEmailNotificationSearchEmail.onSearch()
+    } else {
+      this.appEmailNotificationSearchNoti.onSearch()
     }
   }
 }
