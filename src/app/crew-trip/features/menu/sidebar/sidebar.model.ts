@@ -52,8 +52,8 @@ export const menu: Menu[] = [
 				icon: 'ri-exchange-cny-line',
 			},
 			{
-				path: 'category/flight-crew',
-				title: $localize`:@@flightCrew:Flight Crew`,
+				path: 'category/other-crew',
+				title: $localize`:@@flightCrew:Other crew`,
 				icon: 'ri-id-card-line',
 			},
 			{
@@ -327,7 +327,7 @@ export const menu: Menu[] = [
 							{
 								path: 'system/admin/users',
 								title: $localize`:@@accounts:Accounts`,
-								icon: 'ri-group-line',
+                icon: 'ri-calendar-schedule-line',
 							},
 							{
 								path: 'system/admin/roles',
@@ -345,6 +345,11 @@ export const menu: Menu[] = [
 						title: $localize`:@@config:Config`,
 						rootPath: '',
 						subMenu: [
+              {
+                path: 'system/config/flight-crew',
+                title: $localize`:@@flightCrew:Flight crew`,
+                icon: 'ri-id-card-line',
+              },
 							{
 								path: 'system/config/group-mail',
 								title: $localize`:@@groupsMail:Groups mail`,
