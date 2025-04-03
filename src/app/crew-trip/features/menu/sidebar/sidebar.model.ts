@@ -386,11 +386,11 @@ export const menu: Menu[] = [
 								title: $localize`:@@emailNoti:Email & Notification History`,
 								icon: 'ri-mail-add-line',
 							},
-							{
-								path: 'system/history/data-sync',
-								title: $localize`:@@dataSync:Data Sync History`,
-								icon: 'ri-mail-add-line',
-							},
+							// {
+							// 	path: 'system/history/data-sync',
+							// 	title: $localize`:@@dataSync:Data Sync History`,
+							// 	icon: 'ri-mail-add-line',
+							// },
 						],
 					},
 				],
