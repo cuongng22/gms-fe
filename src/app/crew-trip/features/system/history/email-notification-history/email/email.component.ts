@@ -10,6 +10,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTable, MatColumnDef, MatHeaderCell, MatHeaderCellDef, MatHeaderRow, MatHeaderRowDef, MatNoDataRow, MatRow, MatRowDef, MatCell, MatCellDef, MatFooterRow, MatFooterRowDef, MatFooterCell, MatFooterCellDef } from '@angular/material/table';
 import { RouterLink } from '@angular/router';
+import { Moment } from 'moment';
 import { Editor, NgxEditorModule } from 'ngx-editor';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { NgxControlError } from 'ngxtension/control-error';
@@ -20,6 +21,7 @@ import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/sele
 import { DataCalculateTotal } from 'src/app/crew-trip/shared/data-calculate-total';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
 
 @Component({
   selector: 'app-email',
@@ -55,4 +57,5 @@ export class EmailComponent extends CommonComponent {
     this.detail(id);
     this.toggleDialogCreate()
   }
+
 }
