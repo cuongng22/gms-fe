@@ -462,11 +462,11 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
    * TÍnh toán dòng tổng
    * @param item giá trị từng dòng dataSource
    */
-    this.calculateTotalByGroup(item, index, 'totalAmountForeignTransVat', 'totalAmountForeignTransVatGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmountForeign', 'totalAmountForeignGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmountForeignVat', 'totalAmountForeignVatGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmount', 'totalAmountGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmountVat', 'totalAmountVatGroup', true);
+    this.calculateTotalByGroup(item, index, 'totalAmountForeignTransVat', 'totalAmountForeignTransVatGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmountForeign', 'totalAmountForeignGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmountForeignVat', 'totalAmountForeignVatGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmount', 'totalAmountGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmountVat', 'totalAmountVatGroup');
   }
 
   clickEdit(data: any, control: string) {

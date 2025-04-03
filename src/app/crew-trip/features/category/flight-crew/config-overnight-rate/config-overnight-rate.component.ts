@@ -1,5 +1,12 @@
 import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
-import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import {
+  AbstractControl,
+  FormBuilder,
+  FormControl,
+  FormsModule,
+  ReactiveFormsModule, ValidationErrors,
+  Validators
+} from '@angular/forms';
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
 import {MatAnchor, MatButton, MatButtonModule} from '@angular/material/button';
@@ -53,6 +60,7 @@ import {InputComponent} from 'src/app/ui-elements/input/input.component';
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 import {OtherCrewComponent} from 'src/app/crew-trip/features/category/flight-crew/other-crew/other-crew.component';
 import {SelectionComponent} from 'src/app/crew-trip/shared/component/selection/selection.component';
+import { HttpStatusCode } from '@angular/common/http';
 
 @Component({
   selector: 'app-config-overnight-rate',
@@ -72,10 +80,10 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
   markets: string[] = [];
   filteredOptionsMarket: any[];
   showDialogUpload = false;
-
+  existCode = false;
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
-
+  messageErrorMarketcode: string;
 
   constructor() {
     super();
@@ -84,10 +92,10 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
     });
     this.formGroupDetail = this.fb.group({
       id: ['',],
-      marketCode: ['', [Validators.required]],
-      nightCount: [''],
+      marketCode: ['', [Validators.required, this.existCodeValidator.bind(this)]],
+      nightCount: ['',[Validators.min(1),Validators.max(2)]],
       rate: ['', [Validators.min(1)]],
-      notes: ['']
+      notes: ['',[Validators.maxLength(500)]]
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
@@ -136,9 +144,9 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
         this.uploadFileError = res;
         if (!res.totalErrors) {
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
-          this.search();
           this.toggleDialogUpload();
         }
+        this.search();
       }
     } catch (e: any) {
       this.baseService.showError(e.error?.error ?? e.error?.error?.code ?? MESSAGE.ERROR);
@@ -160,30 +168,24 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
 
   override async save() {
     try {
-      this.formGroupDetail.markAllAsTouched();
-      this.formGroupDetail.updateValueAndValidity();
-      if (this.formGroupDetail.invalid) {
-        this.findInvalidControls(this.formGroupDetail);
-        return;
-      }
-      const update = !!this.formGroupDetail.getRawValue().id;
-      await this.spinner.show();
-      let res;
-      if (update) {
-        res = await this.baseService.update(this.formGroupDetail.getRawValue());
-      } else {
-        res = await this.baseService.create(this.formGroupDetail.getRawValue());
-      }
-      await this.search();
-      this.baseService.showSuccess(
-        update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,
-      );
+      this.messageErrorMarketcode = '';
+      const value = await super.save();
       this.showDialogCreate = false;
-      return res;
-    } catch (e: any) {
-    } finally {
-      await this.spinner.hide();
+    } catch (error: any) {
+      if (error.status === HttpStatusCode.Conflict) {
+        this.existCode = true;
+        this.messageErrorMarketcode = error.error?.error || 'Conflict error';
+        this.formGroupDetail.controls['marketCode'].updateValueAndValidity();
+        this.existCode = false;
+      } else {
+        console.error('Unexpected error:', error);
+      }
     }
   }
+
+  existCodeValidator(control: AbstractControl): ValidationErrors | null {
+    return this.existCode ? {existCode: true} : null;
+  }
+
 
 }

@@ -175,7 +175,8 @@
                             </mat-panel-title>
                         </mat-expansion-panel-header>
                         <div>
-                            @if(category() === CategoryEnum.DOMESTIC && domesticEstimatedCostCarRentalData.length>0){
+                            @if(category() === CategoryEnum.DOMESTIC &&
+                            domesticEstimatedCostCarRentalData?.planCarentals?.length>0){
                             <!-- <app-domestic-budget-procurement-car-rental #domesticBudgetCarRental [yearPlan]="yearPlan()"
                                     [disabled]="checkStatusCompelted()" [type]="PlanCategoryEnum.BUDGET"
                                     [updateBudgetPlan]="dataDetail?.updateBudgetPlan"
