@@ -10,9 +10,9 @@ import { ClickOutside } from 'ngxtension/click-outside';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
-import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import { Constant, ctz } from 'src/app/crew-trip/shared/utils/constant';
 import { PlanCategoryEnum } from '../../../../budget-procurement/budget-procurement.model';
-import { getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-estimated-cost-car-rental.model';
+import { formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './domestic-estimated-cost-car-rental.model';
 import { round } from 'lodash';
 
 @Component({
@@ -62,6 +62,7 @@ export class DomesticEstimatedCostCarRentalComponent {
     this.dataSource.data.forEach((item: any, index) => {
       let period = `Tháng ${this.dataTransformPipe.transform(item.periodStart, [Constant.DATE, Constant.MONTH_FORMAT])}`;
       item.periodLabel = period;
+      this.calculateData(item, index, isSummary);
     });
     this.calculateTotal()
   }
@@ -96,4 +97,59 @@ export class DomesticEstimatedCostCarRentalComponent {
     this.headerRowDef2 = getHeaderRowDef2();
     this.rowDef = getRowDef();
   }
+
+
+  
+    /**
+     *
+     * @param item Giá trị từng dòng của dataSource theo công thức
+     */
+    private calculateData(item: any, index: number, isCalculate?: boolean) {
+      if (isCalculate) {
+        // Số tiền chưa Vat
+        this.calculate(item, 'totalAmount', true);
+        // Số tiền có Vat
+        this.calculate(item, 'totalAmountVat', true);
+  
+  
+        // Số tiền chưa Vat của năm thực hiện
+        this.calculate(item, 'totalAmountPerform', true);
+        // Số tiền có Vat của năm thực hiện
+        this.calculate(item, 'totalAmountVatPerform', true);
+      }
+    }
+  
+  
+  
+    // hàm công thức tính chung
+    calculate(item: any, key: string, isRound?: boolean, fractionDigits?: number) {
+      // let data: any = this.dataSource.data[index];
+      // Check lập kế hoạch sản lượng thay đổi
+      // Tháng nào đã thực hiện thì tính theo công thưc mới
+      const objFormula = formula[key];
+      let strFomular = objFormula.formula;
+      // if (item.monthIsPerform) {
+      //   if (objFormula.formulaYearPerform) {
+      //     strFomular = objFormula.formulaYearPerform;
+      //   }
+      // }
+      if (strFomular) {
+        item[key] = this.calculateFormula(item, strFomular);
+      }
+      if (isRound) {
+        item[key] = round(item[key], fractionDigits);
+      }
+      return item[key];
+    }
+  
+    // Hàm tính toán dựa trên công thức động
+    calculateFormula(data: any, formula: string): number {
+      // Sử dụng Function để tạo hàm động từ công thức
+      const dynamicFunction = new Function(
+        'data', 'generalData', 'ctz',
+        `return ${formula};`    // Công thức cần tính
+      );
+      const result = dynamicFunction(data, null, ctz);
+      return result;
+    }
 }

@@ -58,6 +58,7 @@
     "ngx-owl-carousel-o": "^18.0.0",
     "ngx-scrollbar": "^15.0.1",
     "ngx-spinner": "^17.0.0",
+    "ngx-tableau": "^2.1.0",
     "ngx-trim-directive": "^3.0.1",
     "ngx-upper-case-directive": "^2.0.0",
     "ngxtension": "^4.1.0",

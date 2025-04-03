@@ -107,15 +107,21 @@
             (click)="clickEdit(element,'hotelEditing')">
             @if(!element.hotelEditing || !!disabled()){
             <div class="d-flex justify-content-between">
-              {{element.hotelName}}
+              {{element.hotelCode}}
             </div>
             }@else {
-            <div sizeInput="xs">
+            <!-- <div sizeInput="xs">
               <div (clickOutside)="clickOutside(element,'hotelEditing')" class="edit-inline-table">
                 <app-selection-suggest [editInlineTable]="true" [options]="hotels" attrValue="hotelCode"
                   attrDisplay="hotelName" [(ngModel)]="element.hotelCode" [ngModelOptions]="{standalone: true}"
                   appThousandsSeparator (selectionChange)="hotelChange($event, element)" />
               </div>
+            </div> -->
+            <div sizeInput="xs">
+              <mat-form-field (clickOutside)="clickOutside(element,'hotelEditing')" class="edit-inline-table">
+                <input matInput type="text" maxlength="150" [(ngModel)]="element.hotelCode"
+                  [ngModelOptions]="{standalone: true}" [disabled]="!!disabled()">
+              </mat-form-field>
             </div>
             }
           </td>
@@ -264,15 +270,21 @@
             (click)="clickEdit(element,'carRentalEditing')">
             @if(!element.carRentalEditing || !!disabled()){
             <div class="d-flex justify-content-between">
-              {{element.carRentalName}}
+              {{element.carRentalCode}}
             </div>
             }@else {
-            <div sizeInput="xs">
+            <!-- <div sizeInput="xs">
               <div (clickOutside)="clickOutside(element,'carRentalEditing')" class="edit-inline-table">
                 <app-selection-suggest [editInlineTable]="true" [options]="carRentals" attrValue="carRentalCode"
                   attrDisplay="carRentalName" [(ngModel)]="element.carRentalCode" [ngModelOptions]="{standalone: true}"
                   (selectionChange)="carRentalChange($event, element)" />
               </div>
+            </div> -->
+            <div sizeInput="xs">
+              <mat-form-field (clickOutside)="clickOutside(element,'carRentalEditing')" class="edit-inline-table">
+                <input matInput type="text" maxlength="150" [(ngModel)]="element.carRentalCode"
+                  [ngModelOptions]="{standalone: true}" [disabled]="!!disabled()">
+              </mat-form-field>
             </div>
             }
           </td>

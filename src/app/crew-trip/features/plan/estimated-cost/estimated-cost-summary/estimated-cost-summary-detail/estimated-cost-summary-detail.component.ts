@@ -257,7 +257,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
 
   formGeneralValueChanges(event: any): void {
     if (this.category() === CategoryEnum.INTERNATIONAL) {
-      // this.internationalBudgetHotel.setGeneralData(event);
+      this.internationalEstimatedCostHotel.setGeneralData(event);
     }
   }
 

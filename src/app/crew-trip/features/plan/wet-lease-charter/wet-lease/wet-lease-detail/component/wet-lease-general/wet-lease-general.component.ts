@@ -90,8 +90,7 @@ import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant'
 })
 export class WetLeaseGeneralComponent
 	extends CommonComponent
-	implements OnInit, AfterViewChecked
-{
+	implements OnInit, AfterViewChecked {
 	flightMarketService = inject(FlightMarketService);
 	hotelService = inject(HotelService);
 	vehicleService = inject(VehicleService);
@@ -116,9 +115,6 @@ export class WetLeaseGeneralComponent
 	indexDeleteCarRental: any;
 
 	disabled = input<boolean>(false);
-
-	hotels: any[] = [];
-	carRentals: any[] = [];
 	maxDate: any;
 	errorDiffMonth = false;
 
@@ -158,10 +154,6 @@ export class WetLeaseGeneralComponent
 			if (_data.id) {
 				this.formGroupDetail.controls.airportCode.disable();
 			}
-			if (_data.airportCode) {
-				this.getHotelByAirport(_data.airportCode);
-				this.getCaRentalByAirport(_data.airportCode);
-			}
 			this.controlUnsubscribe();
 			this.formGroupDetail.patchValue(_data, { emitEvent: false });
 			if (_data.priceHotelsList) {
@@ -188,12 +180,6 @@ export class WetLeaseGeneralComponent
 			status: FlightMarketStatusEnum.OPERATIONAL,
 		});
 
-		if (this.formGroupDetail.controls.airportCode.value) {
-			this.getHotelByAirport(this.formGroupDetail.controls.airportCode.value);
-			this.getCaRentalByAirport(
-				this.formGroupDetail.controls.airportCode.value,
-			);
-		}
 		if (
 			this.formGroupDetail.controls.airportCode.value &&
 			this.formGroupDetail.controls.startDate.value &&
@@ -273,36 +259,10 @@ export class WetLeaseGeneralComponent
 	airportChange(data: any) {
 		this.dataSourceHotel.data = [];
 		this.dataSourceCarRental.data = [];
-		this.getHotelByAirport(data.value);
-		this.getCaRentalByAirport(data.value);
 		this.getExchangeRate();
 		this.airportCodeChange.emit(data.value);
 	}
 
-	async getHotelByAirport(airportCode: string) {
-		let res: ListResponse<any> = await this.hotelService.search<
-			ListResponse<any>
-		>({ page: 0, limit: 9999999, marketCode: airportCode });
-		this.hotels = res.data.content.map((item) => {
-			return {
-				id: item.id,
-				hotelCode: item.hotelCode,
-				hotelName: item.hotelName,
-			};
-		});
-	}
-
-	async getCaRentalByAirport(airportCode: string) {
-		let res: ListResponse<any> = await this.vehicleService.search<
-			ListResponse<any>
-		>({ page: 0, limit: 9999999, marketCode: airportCode });
-		this.carRentals = res.data.content.map((item) => {
-			return {
-				carRentalCode: item.code,
-				carRentalName: item.name,
-			};
-		});
-	}
 
 	async getExchangeRate() {
 		if (
