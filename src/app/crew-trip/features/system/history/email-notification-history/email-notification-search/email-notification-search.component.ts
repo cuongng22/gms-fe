@@ -1,6 +1,6 @@
 import { CommonModule, AsyncPipe } from '@angular/common';
 import { Component, input, output } from '@angular/core';
-import { FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -11,6 +11,7 @@ import { MatFormFieldModule, MatFormField } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatSelectModule } from '@angular/material/select';
 import { RouterLink, RouterModule } from '@angular/router';
+import { Moment } from 'moment';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgxControlError } from 'ngxtension/control-error';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
@@ -46,12 +47,12 @@ export class EmailNotificationSearchComponent extends CommonComponent {
   override formGroupSearch = this.formBuilder.group({
     title: [''],
     status: [''],
-    startTimeSend: [''],
-    endTimeSend: [''],
+    startTimeSend: new FormControl<Moment | string | Date>(''),
+    endTimeSend: new FormControl<Moment | string | Date>(''),
   });
 
 
   onSearch() {
-    this.searchEvent.emit(this.formGroupSearch.value)
+    this.searchEvent.emit(this.formGroupSearch.getRawValue())
   }
 }

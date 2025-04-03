@@ -196,11 +196,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
 			this.wetLeaseGeneral.formGroupDetail.controls.endDate.value,
 		);
 
-		let _priceHotelsList = [
-			...(_dataGeneral.isHotel
-				? this.wetLeaseGeneral.dataSourceHotel.data
-				: []),
-		];
+		let _priceHotelsList = [...(_dataGeneral.isHotel ? this.wetLeaseGeneral.dataSourceHotel.data : []),];
 		let _priceTransports = [
 			...(_dataGeneral.isTransport
 				? this.wetLeaseGeneral.dataSourceCarRental.data
@@ -220,8 +216,8 @@ export class WetLeaseDetailComponent extends CommonComponent {
 					hotelName: element.hotelCode,
 					totalSingleRoom: 0,
 					totalTwinRoom: 0,
-					twinRoomPrice: Number(element.twinRoomPrice),
-					singleRoomPrice: Number(element.singleRoomPrice),
+					twinRoomPrice: element.twinRoomPrice ? Number(element.twinRoomPrice) : 0,
+					singleRoomPrice: element.singleRoomPrice ? Number(element.singleRoomPrice) : 0,
 				};
 				planHotelItem.hotelItem[element.hotelCode] = hotelItem;
 			});
@@ -231,6 +227,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
 
 		this.planHotel = _planHotel;
 		this.priceHotel = _priceHotelsList;
+		console.log(this.priceHotel)
 
 		let _planTransports: any[] = [];
 		_priceTransports.forEach((element) => {

@@ -122,8 +122,8 @@ export class WetLeaseGeneralComponent
 	cleanData = output<void>();
 
 	isRequiredSupplierHotel: boolean = false;
-	isRequiredUnitPriceForSingleRoomHotel: boolean = false;
-	isRequiredUnitPriceForTwinRoomHotel: boolean = false;
+	isRequiredUnitPrice: boolean = false;
+	// isRequiredUnitPriceForTwinRoomHotel: boolean = false;
 
 	isRequiredSupplierTransportation: boolean = false;
 	isRequiredUnitPriceIncludingVatTransport: boolean = false;
@@ -191,39 +191,36 @@ export class WetLeaseGeneralComponent
 
 		this.controlSubscribe();
 
-		this.formGroupDetail.controls.isHotel.valueChanges.subscribe(() => {
-			this.dataSourceHotel.data = [];
-		});
+		// this.formGroupDetail.controls.isHotel.valueChanges.subscribe(() => {
+		// 	this.dataSourceHotel.data = [];
+		// });
 
-		this.formGroupDetail.controls.isTransport.valueChanges.subscribe(() => {
-			this.dataSourceCarRental.data = [];
-		});
+		// this.formGroupDetail.controls.isTransport.valueChanges.subscribe(() => {
+		// 	this.dataSourceCarRental.data = [];
+		// });
 
 		this.spinner.hide();
 	}
 
 	controlSubscribe() {
-		this.endDateValueChanges =
-			this.formGroupDetail.controls.endDate.valueChanges.subscribe((value) => {
+		this.endDateValueChanges = this.formGroupDetail.controls.endDate.valueChanges.subscribe((value) => {
+			this.getExchangeRate();
+			this.cleanData.emit();
+		});
+		this.startDateValueChanges = this.formGroupDetail.controls.startDate.valueChanges.subscribe(
+			(value) => {
 				this.getExchangeRate();
 				this.cleanData.emit();
-			});
-		this.startDateValueChanges =
-			this.formGroupDetail.controls.startDate.valueChanges.subscribe(
-				(value) => {
-					this.getExchangeRate();
-					this.cleanData.emit();
-				},
-			);
+			},
+		);
 
-		this.exchangeRateValueChanges =
-			this.formGroupDetail.controls.exchangeRate.valueChanges.subscribe(
-				(_value) => {
-					this.wetLeaseService.exchangeRateChange(_value);
-				},
-			);
-		this.formGroupDetail.controls.rateVat.valueChanges.subscribe((_value) => {
-			this.wetLeaseService.rateVatChange(_value);
+		this.exchangeRateValueChanges = this.formGroupDetail.controls.exchangeRate.valueChanges.subscribe(
+			(_value) => {
+				this.wetLeaseService.exchangeRateChange(_value);
+			},
+		);
+		this.rateVatValueChanges = this.formGroupDetail.controls.rateVat.valueChanges.subscribe((_value) => {
+			this.wetLeaseService.rateVatChange(_value ?? 0);
 		});
 	}
 
@@ -257,8 +254,8 @@ export class WetLeaseGeneralComponent
 	}
 
 	airportChange(data: any) {
-		this.dataSourceHotel.data = [];
-		this.dataSourceCarRental.data = [];
+		// this.dataSourceHotel.data = [];
+		// this.dataSourceCarRental.data = [];
 		this.getExchangeRate();
 		this.airportCodeChange.emit(data.value);
 	}
@@ -331,12 +328,12 @@ export class WetLeaseGeneralComponent
 		this.isRequiredSupplierHotel = this.dataSourceHotel.data.some(
 			(item: any) => !item.hotelCode,
 		);
-		this.isRequiredUnitPriceForSingleRoomHotel = this.dataSourceHotel.data.some(
-			(item: any) => !item.singleRoomPrice,
+		this.isRequiredUnitPrice = this.dataSourceHotel.data.some(
+			(item: any) => !item.singleRoomPrice && !item.twinRoomPrice,
 		);
-		this.isRequiredUnitPriceForTwinRoomHotel = this.dataSourceHotel.data.some(
-			(item: any) => !item.twinRoomPrice,
-		);
+		// this.isRequiredUnitPriceForTwinRoomHotel = this.dataSourceHotel.data.some(
+		// 	(item: any) => !item.twinRoomPrice,
+		// );
 
 		this.isRequiredSupplierTransportation = this.dataSourceCarRental.data.some(
 			(item: any) => !item.carRentalCode,
@@ -346,8 +343,8 @@ export class WetLeaseGeneralComponent
 
 		return (
 			this.isRequiredSupplierHotel ||
-			this.isRequiredUnitPriceForSingleRoomHotel ||
-			this.isRequiredUnitPriceForTwinRoomHotel ||
+			this.isRequiredUnitPrice ||
+			// this.isRequiredUnitPriceForTwinRoomHotel ||
 			this.isRequiredSupplierTransportation ||
 			this.isRequiredUnitPriceIncludingVatTransport
 		);

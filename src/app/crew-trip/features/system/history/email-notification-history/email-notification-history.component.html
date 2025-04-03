@@ -24,7 +24,8 @@
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
             <mat-tab label="Email" i18n="@@email">
                 <ng-template matTabContent>
-                    <app-email-notification-search type="EMAIL" (searchEvent)="onSearch($event, 'EMAIL')">
+                    <app-email-notification-search #appEmailNotificationSearchEmail type="EMAIL"
+                        (searchEvent)="onSearch($event, 'EMAIL')">
                     </app-email-notification-search>
                     <app-email #appEmail></app-email>
                     <!-- <app-budget-procurement-summary-list [categoryType]="CategoryEnum.INTERNATIONAL"
@@ -35,8 +36,11 @@
             </mat-tab>
             <mat-tab label="Notification" i18n="@@notification">
                 <ng-template matTabContent>
-                    <app-email-notification-search type="NOTIFICATION" (searchEvent)="onSearch($event, 'NOTIFICATION')">
+                    <app-email-notification-search #appEmailNotificationSearchNoti type="NOTIFICATION"
+                        (searchEvent)="onSearch($event, 'NOTIFICATION')">
                     </app-email-notification-search>
+                    <app-notification (reloadSearch)="reloadSearch( 'NOTIFICATION')"
+                        #appNotification></app-notification>
                     <!-- <app-budget-procurement-summary-list [categoryType]="CategoryEnum.DOMESTIC"
                         [planBudgetProcurementId]="id()" #budgetProcurementSummaryListDomestic>
                     </app-budget-procurement-summary-list> -->
