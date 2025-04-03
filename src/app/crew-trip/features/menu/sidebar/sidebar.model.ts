@@ -16,9 +16,14 @@ export interface subMenu {
 export const menu: Menu[] = [
 	{
 		title: $localize`:@@Dashboard:DASHBOARD`,
-		rootPath: 'dashboard',
-		subMenu: [],
-		roleCode: []
+		rootPath: 'reports',
+    roleCode: [],
+		subMenu: [ {
+      path: 'reports/dashboard',
+      title: $localize`:@@dashBoard:Dashboard`,
+      icon: 'ri-dashboard-3-line',
+      roleCode: ['']
+    }],
 	},
 	{
 		title: $localize`:@@category:CATEGORY`,

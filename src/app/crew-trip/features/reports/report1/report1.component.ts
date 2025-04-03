@@ -25,7 +25,6 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {Constant, DATE_FORMAT_DD_MM_YYYY} from 'src/app/crew-trip/shared/utils/constant';
 import {MAT_MOMENT_DATE_FORMATS, provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {ReportService} from 'src/app/crew-trip/core/services/report-service';
-import { TableauModule } from 'ngx-tableau';
 
 
 @Component({
@@ -49,7 +48,6 @@ import { TableauModule } from 'ngx-tableau';
 		CommonModule,
 		MatTableModule,
 		MatPaginatorModule,
-		TableauModule,
 	],
 	providers: [
 		DataTransformPipe,
@@ -64,7 +62,7 @@ export class reportcomponent extends CommonComponent implements OnInit {
   serverUrl: string;
   ticket: string;
   report: string;
-	codeReport = 'BC_7_2';
+	codeReport = 'BC_7_1';
 
 	constructor(private sanitizer: DomSanitizer) {
 		super();
@@ -84,22 +82,7 @@ export class reportcomponent extends CommonComponent implements OnInit {
 		try {
 			this.baseService.getReportLink(this.codeReport).then((res) => {
 				this.iframeUrl = res.data;
-        // const serverEndIndex = this.iframeUrl.indexOf('/trusted/');
-        // this.serverUrl = this.iframeUrl.substring(0, serverEndIndex);
-        //
-        // const ticketStartIndex = serverEndIndex + '/trusted/'.length;
-        // const ticketEndIndex = this.iframeUrl.indexOf('/views/');
-        // this.ticket = this.iframeUrl.substring(ticketStartIndex, ticketEndIndex);
-        //
-        // const reportStartIndex = ticketEndIndex + 1;
-        // const queryIndex = this.iframeUrl.indexOf('?');
-        // this.report = queryIndex === -1 ? this.iframeUrl.substring(reportStartIndex) : this.iframeUrl.substring(reportStartIndex, queryIndex);
-        // // Log để kiểm tra giá trị
-        // console.log('Server URL:', this.serverUrl);
-        // console.log('Ticket:', this.ticket);
-        // console.log('Report:', this.report);
-				// this.iframeUrl = this.sanitizeUrl('https://crewtripreport.vietnamairlines.com/trusted/je6uoh7qTn6zVWHiwfxqVA==:G6J_26cjbpA8W5Gb93Hwcs64/views/BC_7_2/BC_7_2');
-			});
+       	});
 		} catch (Error: any) {
 			console.log(Error);
 		}
