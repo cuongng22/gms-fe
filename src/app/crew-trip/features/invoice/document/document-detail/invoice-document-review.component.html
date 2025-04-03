@@ -354,7 +354,13 @@
                   'badge': innerColumn.value === 'activeLabel',
                   'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
                   'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
-                  }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}</span>
+                  }">{{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+                  @if (element.aves && ((element[innerColumn.value] || 0) != (element.aves[innerColumn.value] || 0)) && innerColumn.type == Constant.NUMBER) {
+                    <span class="text-danger">
+                      ({{ element.aves[innerColumn.value] || 0|dataTransformPipe:[innerColumn.type, innerColumn.format] }})
+                    </span>
+                  }
+                    </span>
                       </td>
                       <td mat-footer-cell *matFooterCellDef class="text-right">
                         @if (innerColumn.displayTotal) {
