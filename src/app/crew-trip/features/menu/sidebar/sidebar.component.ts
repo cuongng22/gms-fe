@@ -7,6 +7,7 @@ import {ToggleService} from 'src/app/common/header/toggle.service';
 import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
 import {menu} from './sidebar.model';
 import {take} from 'rxjs';
+import { UsersService } from 'src/app/crew-trip/core/services/users-service';
 
 @Component({
   selector: 'app-sidebar',
@@ -24,6 +25,7 @@ import {take} from 'rxjs';
 })
 export class SidebarComponent implements OnInit {
   router = inject(Router);
+  userService = inject(UsersService);
 
   menu = menu;
 
