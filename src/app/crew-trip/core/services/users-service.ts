@@ -100,6 +100,7 @@ export class UsersService extends BaseService {
   }
 
   hasPermission(permission: string): boolean {
+    if(permission == '')  return true;
     let permissions = this.permissionsSubject.getValue();
     if (permissions.length === 0) {
       const storedPermissions = localStorage.getItem(STORAGE_KEY.PERMISSION);

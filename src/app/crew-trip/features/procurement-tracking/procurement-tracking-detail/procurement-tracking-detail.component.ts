@@ -159,7 +159,8 @@ export class ProcurementTrackingDetailComponent extends CommonComponent implemen
   }
 
   override async save(): Promise<any> {
-    this.formGroupDetail.markAllAsTouched()
+    this.formGroupDetail.markAllAsTouched();
+    console.log(this.formGroupDetail.controls)
     if (this.formGroupDetail.invalid) {
       return;
     }

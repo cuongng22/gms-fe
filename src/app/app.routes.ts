@@ -71,6 +71,8 @@ import { EstimatedCostSummaryComponent } from './crew-trip/features/plan/estimat
 import { EstimatedCostSummaryDetailComponent } from './crew-trip/features/plan/estimated-cost/estimated-cost-summary/estimated-cost-summary-detail/estimated-cost-summary-detail.component';
 import { LoginHistoryComponent } from './crew-trip/features/system/history/login-history/login-history.component';
 import { EmailNotificationHistoryComponent } from './crew-trip/features/system/history/email-notification-history/email-notification-history.component';
+import { OtherCrewComponent } from 'src/app/crew-trip/features/category/flight-crew/other-crew/other-crew.component';
+import { DashboardComponent } from 'src/app/crew-trip/features/reports/dashboard/dashboard.component';
 
 
 export const routes: Routes = [
@@ -99,6 +101,7 @@ export const routes: Routes = [
       {
         path: 'system/config',
         children: [
+          { path: 'flight-crew', component: FlightCrewComponent },
           { path: 'group-mail', component: GroupMailComponent },
           { path: 'information-plane', component: AircraftDataComponent },
           { path: 'email-supplier', component: EmailSupplierComponent },
@@ -198,7 +201,7 @@ export const routes: Routes = [
           { path: 'nation', component: NationComponent },
           { path: 'cost', component: ServiceFeeComponent },
           { path: 'crews', component: CrewsComponent },
-          { path: 'flight-crew', component: FlightCrewComponent },
+          { path: 'other-crew', component: OtherCrewComponent },
           { path: 'vehicle', component: VehicleComponent },
           { path: 'hotel', component: HotelComponent },
           { path: 'nation', component: NationComponent },
@@ -265,6 +268,7 @@ export const routes: Routes = [
           { path: 'report8', component: reportcomponent8 },
           { path: 'report9', component: reportcomponent9 },
           { path: 'report10', component: reportcomponent10 },
+          { path: 'dashboard', component: DashboardComponent},
         ],
       },
       { path: 'profile', component: ProfileComponent },

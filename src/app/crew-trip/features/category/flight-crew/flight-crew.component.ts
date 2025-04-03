@@ -102,7 +102,7 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
 	markets: string[] = [];
 	filteredOptionsMarket: any[];
 	listActype: any[] = [];
-	activeTab = 0;
+  activeTab = 0;
 
 	override formGroupDetail = this.fb.group({
 		id: [''],
