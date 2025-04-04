@@ -457,12 +457,12 @@ export const menu: Menu[] = [
 								icon: 'ri-mail-add-line',
 								roleCode: []
 							},
-							{
-								path: 'system/history/data-sync',
-								title: $localize`:@@dataSync:Data Sync History`,
-								icon: 'ri-mail-add-line',
-								roleCode: []
-							},
+							// {
+							// 	path: 'system/history/data-sync',
+							// 	title: $localize`:@@dataSync:Data Sync History`,
+							// 	icon: 'ri-mail-add-line',
+							// 	roleCode: []
+							// },
 						],
 					},
 				],
