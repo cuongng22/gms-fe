@@ -33,7 +33,6 @@ import { EmailSupplierComponent } from 'src/app/crew-trip/features/system/config
 import { GroupMailComponent } from 'src/app/crew-trip/features/system/config/group-mail/group-mail.component';
 import { UsersComponent } from 'src/app/crew-trip/features/system/users/users.component';
 import { WetLeaseDetailComponent } from 'src/app/crew-trip/features/plan/wet-lease-charter/wet-lease/wet-lease-detail/wet-lease-detail.component';
-import { WetLeaseComponent } from 'src/app/crew-trip/features/plan/wet-lease-charter/wet-lease/wet-lease.component';
 import { NotFoundComponent } from 'src/app/not-found/not-found.component';
 import { CrewsDetailComponent } from './crew-trip/features/category/crews/crews-detail/crews-detail.component';
 import { FlightMarketDetailComponent } from './crew-trip/features/category/flight-market/flight-market-detail/flight-market-detail.component';
@@ -60,9 +59,9 @@ import { AutocompleteComponent } from './ui-elements/autocomplete/autocomplete.c
 import { DailyFlightSchedulesComponent } from './crew-trip/features/flight-schedules/daily-flight-schedules/daily-flight-schedules.component';
 import { OtherFlightScheduleComponent } from './crew-trip/features/flight-schedules/daily-flight-schedules/monthly-flight-schedule/other-flight-schedule/other-flight-schedule.component';
 import { EmailTrackingComponent } from './crew-trip/features/flight-schedules/email-tracking/email-tracking.component';
-import { NotificationComponent } from "src/app/crew-trip/features/system/config/notification/notification.component";
-import { CarBookingComponent } from "src/app/crew-trip/features/car-room/car-booking/car-booking.component";
-import { InvoiceActualCostTabComponent } from "src/app/crew-trip/features/invoice/actual-cost/invoice-actual-cost-tab.component";
+import { NotificationComponent } from 'src/app/crew-trip/features/system/config/notification/notification.component';
+import { CarBookingComponent } from 'src/app/crew-trip/features/car-room/car-booking/car-booking.component';
+import { InvoiceActualCostTabComponent } from 'src/app/crew-trip/features/invoice/actual-cost/invoice-actual-cost-tab.component';
 import { WetLeaseCharterComponent } from './crew-trip/features/plan/wet-lease-charter/wet-lease-charter.component';
 import { CharterDetailComponent } from './crew-trip/features/plan/wet-lease-charter/charter/charter-detail/charter-detail.component';
 import { EstimatedCostComponent } from './crew-trip/features/plan/estimated-cost/estimated-cost.component';
@@ -73,236 +72,254 @@ import { LoginHistoryComponent } from './crew-trip/features/system/history/login
 import { EmailNotificationHistoryComponent } from './crew-trip/features/system/history/email-notification-history/email-notification-history.component';
 import { OtherCrewComponent } from 'src/app/crew-trip/features/category/flight-crew/other-crew/other-crew.component';
 import { DashboardComponent } from 'src/app/crew-trip/features/reports/dashboard/dashboard.component';
-
+import { Report11Component } from 'src/app/crew-trip/features/reports/report11/report11.component';
 
 export const routes: Routes = [
-  {
-    path: '',
-    component: FirstPageComponent,
-    canActivate: [RedirectGuard],
-    // redirectTo: 'auth/login',
-    // pathMatch: 'full',
-  },
-  {
-    path: '',
-    component: FirstPageComponent,
-    canActivate: [AuthGuard],
-    children: [
-      { path: 'ke-hoach', component: KeHoachComponent },
-      { path: 'contract', component: ContractComponent },
-      {
-        path: 'system/admin',
-        children: [
-          { path: 'users', component: UsersComponent },
-          { path: 'roles', component: RolesComponent },
-          { path: 'functions', component: FunctionsComponent },
-        ],
-      },
-      {
-        path: 'system/config',
-        children: [
-          { path: 'flight-crew', component: FlightCrewComponent },
-          { path: 'group-mail', component: GroupMailComponent },
-          { path: 'information-plane', component: AircraftDataComponent },
-          { path: 'email-supplier', component: EmailSupplierComponent },
-          { path: 'noti-warning', component: NotificationComponent },
-        ],
-      },
-      {
-        path: 'system/history',
-        children: [
-          { path: 'login', component: LoginHistoryComponent },
-          { path: 'email-noti', component: EmailNotificationHistoryComponent },
-        ]
-      },
-      {
-        path: 'plan',
-        children: [
-          {
-            path: 'est-plan',
-            children: [
-              {
-                path: 'wet-lease-charter',
-                children: [
-                  { path: '', component: WetLeaseCharterComponent },
-                  { path: 'wet-lease-detail/:id', component: WetLeaseDetailComponent },
-                  { path: 'wet-lease-detail', component: WetLeaseDetailComponent },
-                  { path: 'charter-detail/:id', component: CharterDetailComponent },
-                  { path: 'charter-detail', component: CharterDetailComponent },
-                ],
-              }
-            ],
-          },
-          {
-            path: 'est-plan/procurement-tracking',
-            children: [
-              { path: '', component: ProcurementTrackingComponent },
-              {
-                path: 'detail',
-                component: ProcurementTrackingDetailComponent,
-              },
-              {
-                path: 'detail/:id',
-                component: ProcurementTrackingDetailComponent,
-              },
-            ],
-          },
-          { path: 'rate/uth', component: RateUthComponent },
-          { path: 'rate/planned', component: RatePlannedComponent },
-          {
-            path: 'production/five-year-plan',
-            component: FiveYearPlanComponent,
-          },
-          {
-            path: 'production/est-annual-production',
-            component: EstAnnualProductionComponent,
-          },
-          { path: 'production/planned', component: AnnualProductionComponent },
-          {
-            path: 'est-plan/budget-procurement',
-            component: BudgetProcurementComponent,
-            children: [
-              { path: '', component: BudgetProcurementListComponent },
-              {
-                path: ':id/summary',
-                component: BudgetProcurementSummaryComponent,
-                pathMatch: 'full',
-              },
-              {
-                path: ':plan-budget-procurement-id/summary/:id/detail',
-                component: BudgetProcurementSummaryDetailComponent,
-              },
-            ],
-          },
-          {
-            path: 'est-plan/est-cost', component: EstimatedCostComponent,
-            children: [
-              { path: '', component: EstimatedCostListComponent },
-              {
-                path: ':id/summary', component: EstimatedCostSummaryComponent, pathMatch: 'full',
-              },
-              {
-                path: ':est-cost-id/summary/:id/detail',
-                component: EstimatedCostSummaryDetailComponent
-              }
-            ]
-          }
-        ]
-      },
-      {
-        path: 'category',
-        children: [
-          { path: 'vehicle', component: VehicleComponent },
-          { path: 'contract', component: ContractComponent },
-          { path: 'contract/annex', component: ContractComponent },
-          { path: 'contract/detail', component: ContractDetailComponent },
-          { path: 'act-rate', component: ActRateComponent },
-          { path: 'hotel', component: HotelComponent },
-          { path: 'nation', component: NationComponent },
-          { path: 'cost', component: ServiceFeeComponent },
-          { path: 'crews', component: CrewsComponent },
-          { path: 'other-crew', component: OtherCrewComponent },
-          { path: 'vehicle', component: VehicleComponent },
-          { path: 'hotel', component: HotelComponent },
-          { path: 'nation', component: NationComponent },
-          {
-            path: 'crews',
-            component: CrewsComponent,
-            children: [
-              { path: '', component: CrewsComponent },
-              { path: 'detail', component: CrewsDetailComponent },
-            ],
-          },
-          { path: 'autocomplete', component: AutocompleteComponent },
-          {
-            path: 'flight-market',
-            component: FlightMarketComponent,
-            children: [
-              { path: '', component: FlightMarketListComponent },
-              { path: 'detail', component: FlightMarketDetailComponent },
-              { path: 'detail/:id', component: FlightMarketDetailComponent },
-            ],
-          },
-        ],
-      },
-      {
-        path: 'flight-schedules',
-        children: [
-          { path: 'seasonal', component: SeasonalSchedulesComponent },
-          {
-            path: 'daily', children: [
-              {
-                path: '', component: DailyFlightSchedulesComponent
-              },
-              {
-                path: 'other',
-                component: OtherFlightScheduleComponent
-              },
-            ]
-          },
+	{
+		path: '',
+		component: FirstPageComponent,
+		canActivate: [RedirectGuard],
+		// redirectTo: 'auth/login',
+		// pathMatch: 'full',
+	},
+	{
+		path: '',
+		component: FirstPageComponent,
+		canActivate: [AuthGuard],
+		children: [
+			{ path: 'ke-hoach', component: KeHoachComponent },
+			{ path: 'contract', component: ContractComponent },
+			{
+				path: 'system/admin',
+				children: [
+					{ path: 'users', component: UsersComponent },
+					{ path: 'roles', component: RolesComponent },
+					{ path: 'functions', component: FunctionsComponent },
+				],
+			},
+			{
+				path: 'system/config',
+				children: [
+					{ path: 'flight-crew', component: FlightCrewComponent },
+					{ path: 'group-mail', component: GroupMailComponent },
+					{ path: 'information-plane', component: AircraftDataComponent },
+					{ path: 'email-supplier', component: EmailSupplierComponent },
+					{ path: 'noti-warning', component: NotificationComponent },
+				],
+			},
+			{
+				path: 'system/history',
+				children: [
+					{ path: 'login', component: LoginHistoryComponent },
+					{ path: 'email-noti', component: EmailNotificationHistoryComponent },
+				],
+			},
+			{
+				path: 'plan',
+				children: [
+					{
+						path: 'est-plan',
+						children: [
+							{
+								path: 'wet-lease-charter',
+								children: [
+									{ path: '', component: WetLeaseCharterComponent },
+									{
+										path: 'wet-lease-detail/:id',
+										component: WetLeaseDetailComponent,
+									},
+									{
+										path: 'wet-lease-detail',
+										component: WetLeaseDetailComponent,
+									},
+									{
+										path: 'charter-detail/:id',
+										component: CharterDetailComponent,
+									},
+									{ path: 'charter-detail', component: CharterDetailComponent },
+								],
+							},
+						],
+					},
+					{
+						path: 'est-plan/procurement-tracking',
+						children: [
+							{ path: '', component: ProcurementTrackingComponent },
+							{
+								path: 'detail',
+								component: ProcurementTrackingDetailComponent,
+							},
+							{
+								path: 'detail/:id',
+								component: ProcurementTrackingDetailComponent,
+							},
+						],
+					},
+					{ path: 'rate/uth', component: RateUthComponent },
+					{ path: 'rate/planned', component: RatePlannedComponent },
+					{
+						path: 'production/five-year-plan',
+						component: FiveYearPlanComponent,
+					},
+					{
+						path: 'production/est-annual-production',
+						component: EstAnnualProductionComponent,
+					},
+					{ path: 'production/planned', component: AnnualProductionComponent },
+					{
+						path: 'est-plan/budget-procurement',
+						component: BudgetProcurementComponent,
+						children: [
+							{ path: '', component: BudgetProcurementListComponent },
+							{
+								path: ':id/summary',
+								component: BudgetProcurementSummaryComponent,
+								pathMatch: 'full',
+							},
+							{
+								path: ':plan-budget-procurement-id/summary/:id/detail',
+								component: BudgetProcurementSummaryDetailComponent,
+							},
+						],
+					},
+					{
+						path: 'est-plan/est-cost',
+						component: EstimatedCostComponent,
+						children: [
+							{ path: '', component: EstimatedCostListComponent },
+							{
+								path: ':id/summary',
+								component: EstimatedCostSummaryComponent,
+								pathMatch: 'full',
+							},
+							{
+								path: ':est-cost-id/summary/:id/detail',
+								component: EstimatedCostSummaryDetailComponent,
+							},
+						],
+					},
+				],
+			},
+			{
+				path: 'category',
+				children: [
+					{ path: 'vehicle', component: VehicleComponent },
+					{ path: 'contract', component: ContractComponent },
+					{ path: 'contract/annex', component: ContractComponent },
+					{ path: 'contract/detail', component: ContractDetailComponent },
+					{ path: 'act-rate', component: ActRateComponent },
+					{ path: 'hotel', component: HotelComponent },
+					{ path: 'nation', component: NationComponent },
+					{ path: 'cost', component: ServiceFeeComponent },
+					{ path: 'crews', component: CrewsComponent },
+					{ path: 'other-crew', component: OtherCrewComponent },
+					{ path: 'vehicle', component: VehicleComponent },
+					{ path: 'hotel', component: HotelComponent },
+					{ path: 'nation', component: NationComponent },
+					{
+						path: 'crews',
+						component: CrewsComponent,
+						children: [
+							{ path: '', component: CrewsComponent },
+							{ path: 'detail', component: CrewsDetailComponent },
+						],
+					},
+					{ path: 'autocomplete', component: AutocompleteComponent },
+					{
+						path: 'flight-market',
+						component: FlightMarketComponent,
+						children: [
+							{ path: '', component: FlightMarketListComponent },
+							{ path: 'detail', component: FlightMarketDetailComponent },
+							{ path: 'detail/:id', component: FlightMarketDetailComponent },
+						],
+					},
+				],
+			},
+			{
+				path: 'flight-schedules',
+				children: [
+					{ path: 'seasonal', component: SeasonalSchedulesComponent },
+					{
+						path: 'daily',
+						children: [
+							{
+								path: '',
+								component: DailyFlightSchedulesComponent,
+							},
+							{
+								path: 'other',
+								component: OtherFlightScheduleComponent,
+							},
+						],
+					},
 
-          { path: 'email-tracking', component: EmailTrackingComponent }
-        ],
-      },
-      {
-        path: 'invoice',
-        children: [
-          { path: 'invoice-form-tab', component: InvoiceFormTabComponent },
-          {
-            path: 'invoice-document-tab',
-            component: InvoiceDocumentTabComponent,
-          },
-          { path: 'invoice-actual-cost-tab', component: InvoiceActualCostTabComponent },
-        ],
-      },
-      {
-        path: 'reports',
-        children: [
-          { path: 'report1', component: reportcomponent },
-          { path: 'report2', component: reportcomponent2 },
-          { path: 'report3', component: reportcomponent3 },
-          { path: 'report4', component: reportcomponent4 },
-          { path: 'report5', component: reportcomponent5 },
-          { path: 'report6', component: reportcomponent6 },
-          { path: 'report7', component: reportcomponent7 },
-          { path: 'report8', component: reportcomponent8 },
-          { path: 'report9', component: reportcomponent9 },
-          { path: 'report10', component: reportcomponent10 },
-          { path: 'dashboard', component: DashboardComponent},
-        ],
-      },
-      { path: 'profile', component: ProfileComponent },
-      {
-        path: 'service',
-        children: [
-          {
-            path: 'hotel/cost-tracking',
-            component: HotelCostTrackingContainerComponent,
-          },
-          {
-            path: 'hotel/room-booking',
-            component: RoomBookingComponent,
-          },
-          {
-            path: 'car/cost-tracking',
-            component: CarCostTrackingComponent,
-          },
-          {
-            path: 'car/car-booking',
-            component: CarBookingComponent,
-          },
-        ],
-      },
-    ],
-  },
-  {
-    path: 'auth',
-    children: [
-      { path: 'login', component: SignInComponent },
-      { path: 'forgot-password', component: ForgotPasswordComponent },
-      { path: 'reset-password', component: ResetPasswordComponent },
-    ],
-  },
+					{ path: 'email-tracking', component: EmailTrackingComponent },
+				],
+			},
+			{
+				path: 'invoice',
+				children: [
+					{ path: 'invoice-form-tab', component: InvoiceFormTabComponent },
+					{
+						path: 'invoice-document-tab',
+						component: InvoiceDocumentTabComponent,
+					},
+					{
+						path: 'invoice-actual-cost-tab',
+						component: InvoiceActualCostTabComponent,
+					},
+				],
+			},
+			{
+				path: 'reports',
+				children: [
+					{ path: 'report1', component: reportcomponent },
+					{ path: 'report2', component: reportcomponent2 },
+					{ path: 'report3', component: reportcomponent3 },
+					{ path: 'report4', component: reportcomponent4 },
+					{ path: 'report5', component: reportcomponent5 },
+					{ path: 'report6', component: reportcomponent6 },
+					{ path: 'report7', component: reportcomponent7 },
+					{ path: 'report8', component: reportcomponent8 },
+					{ path: 'report9', component: reportcomponent9 },
+					{ path: 'report10', component: reportcomponent10 },
+					{ path: 'report11', component: Report11Component},
+					{ path: 'dashboard', component: DashboardComponent },
+				],
+			},
+			{ path: 'profile', component: ProfileComponent },
+			{
+				path: 'service',
+				children: [
+					{
+						path: 'hotel/cost-tracking',
+						component: HotelCostTrackingContainerComponent,
+					},
+					{
+						path: 'hotel/room-booking',
+						component: RoomBookingComponent,
+					},
+					{
+						path: 'car/cost-tracking',
+						component: CarCostTrackingComponent,
+					},
+					{
+						path: 'car/car-booking',
+						component: CarBookingComponent,
+					},
+				],
+			},
+		],
+	},
+	{
+		path: 'auth',
+		children: [
+			{ path: 'login', component: SignInComponent },
+			{ path: 'forgot-password', component: ForgotPasswordComponent },
+			{ path: 'reset-password', component: ResetPasswordComponent },
+		],
+	},
 
-  { path: '**', component: NotFoundComponent },
+	{ path: '**', component: NotFoundComponent },
 ];

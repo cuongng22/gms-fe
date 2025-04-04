@@ -364,11 +364,18 @@ export const menu: Menu[] = [
 			},
 			{
 				path: 'reports/report10',
-				title: $localize`:@@budgetReport:Cost planning report `,
+				title: $localize`:@@budgetReport:Cost planning - Actual report`,
 				icon: 'ri-folder-chart-line',
 				menu: [],
 				roleCode: []
 			},
+      {
+        path: 'reports/report11',
+        title: $localize`:@@budgetReport:Cost planning - Estimate cost report `,
+        icon: 'ri-folder-chart-line',
+        menu: [],
+        roleCode: []
+      },
 		],
 	},
 
