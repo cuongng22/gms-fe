@@ -86,6 +86,7 @@ export const routes: Routes = [
 		path: '',
 		component: FirstPageComponent,
 		canActivate: [AuthGuard],
+		data: { permissionCodes: [] },
 		children: [
 			{ path: 'ke-hoach', component: KeHoachComponent },
 			{ path: 'contract', component: ContractComponent },
@@ -112,7 +113,7 @@ export const routes: Routes = [
 				children: [
 					{ path: 'login', component: LoginHistoryComponent },
 					{ path: 'email-noti', component: EmailNotificationHistoryComponent },
-				],
+				]
 			},
 			{
 				path: 'plan',
@@ -124,21 +125,12 @@ export const routes: Routes = [
 								path: 'wet-lease-charter',
 								children: [
 									{ path: '', component: WetLeaseCharterComponent },
-									{
-										path: 'wet-lease-detail/:id',
-										component: WetLeaseDetailComponent,
-									},
-									{
-										path: 'wet-lease-detail',
-										component: WetLeaseDetailComponent,
-									},
-									{
-										path: 'charter-detail/:id',
-										component: CharterDetailComponent,
-									},
+									{ path: 'wet-lease-detail/:id', component: WetLeaseDetailComponent },
+									{ path: 'wet-lease-detail', component: WetLeaseDetailComponent },
+									{ path: 'charter-detail/:id', component: CharterDetailComponent },
 									{ path: 'charter-detail', component: CharterDetailComponent },
 								],
-							},
+							}
 						],
 					},
 					{
@@ -183,22 +175,19 @@ export const routes: Routes = [
 						],
 					},
 					{
-						path: 'est-plan/est-cost',
-						component: EstimatedCostComponent,
+						path: 'est-plan/est-cost', component: EstimatedCostComponent,
 						children: [
 							{ path: '', component: EstimatedCostListComponent },
 							{
-								path: ':id/summary',
-								component: EstimatedCostSummaryComponent,
-								pathMatch: 'full',
+								path: ':id/summary', component: EstimatedCostSummaryComponent, pathMatch: 'full',
 							},
 							{
 								path: ':est-cost-id/summary/:id/detail',
-								component: EstimatedCostSummaryDetailComponent,
-							},
-						],
-					},
-				],
+								component: EstimatedCostSummaryDetailComponent
+							}
+						]
+					}
+				]
 			},
 			{
 				path: 'category',
@@ -241,20 +230,18 @@ export const routes: Routes = [
 				children: [
 					{ path: 'seasonal', component: SeasonalSchedulesComponent },
 					{
-						path: 'daily',
-						children: [
+						path: 'daily', children: [
 							{
-								path: '',
-								component: DailyFlightSchedulesComponent,
+								path: '', component: DailyFlightSchedulesComponent
 							},
 							{
 								path: 'other',
-								component: OtherFlightScheduleComponent,
+								component: OtherFlightScheduleComponent
 							},
-						],
+						]
 					},
 
-					{ path: 'email-tracking', component: EmailTrackingComponent },
+					{ path: 'email-tracking', component: EmailTrackingComponent }
 				],
 			},
 			{
@@ -265,10 +252,7 @@ export const routes: Routes = [
 						path: 'invoice-document-tab',
 						component: InvoiceDocumentTabComponent,
 					},
-					{
-						path: 'invoice-actual-cost-tab',
-						component: InvoiceActualCostTabComponent,
-					},
+					{ path: 'invoice-actual-cost-tab', component: InvoiceActualCostTabComponent },
 				],
 			},
 			{
@@ -284,7 +268,6 @@ export const routes: Routes = [
 					{ path: 'report8', component: reportcomponent8 },
 					{ path: 'report9', component: reportcomponent9 },
 					{ path: 'report10', component: reportcomponent10 },
-					{ path: 'report11', component: Report11Component},
 					{ path: 'dashboard', component: DashboardComponent },
 				],
 			},
