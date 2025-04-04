@@ -87,6 +87,7 @@ export const routes: Routes = [
     path: '',
     component: FirstPageComponent,
     canActivate: [AuthGuard],
+    data: { permissionCodes: [] },
     children: [
       { path: 'ke-hoach', component: KeHoachComponent },
       { path: 'contract', component: ContractComponent },
@@ -268,7 +269,7 @@ export const routes: Routes = [
           { path: 'report8', component: reportcomponent8 },
           { path: 'report9', component: reportcomponent9 },
           { path: 'report10', component: reportcomponent10 },
-          { path: 'dashboard', component: DashboardComponent},
+          { path: 'dashboard', component: DashboardComponent },
         ],
       },
       { path: 'profile', component: ProfileComponent },

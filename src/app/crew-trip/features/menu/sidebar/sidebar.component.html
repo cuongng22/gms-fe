@@ -24,7 +24,7 @@
           @for (menu1 of menu; track $index) {
           <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
             (closed)="panelOpenState.set(false)" [expanded]="isActive(menu1.rootPath)"
-            [class.active]="isActive(menu1.rootPath)">
+            [class.active]="isActive(menu1.rootPath)" *appHasPermission="menu1.permissionCode">
             <!-- Menu -->
             <mat-expansion-panel-header>
               <mat-panel-title>
@@ -38,9 +38,9 @@
             <ul class="sidebar-sub-menu">
               @for (subMenu1 of menu1.subMenu; track $index) {
               @if (subMenu1.path != null && subMenu1.path !== '') {
-              <li class="sidemenu-item">
-                <a [routerLink]="subMenu1.path" class="sidemenu-link" [ngClass]="subMenu1.icon" (click)="reloadByFragment(subMenu1.path)"
-                  [class.active]="isActive(subMenu1.path)">
+              <li class="sidemenu-item" *appHasPermission="subMenu1.permissionCode">
+                <a [routerLink]="subMenu1.path" class="sidemenu-link" [ngClass]="subMenu1.icon"
+                  (click)="reloadByFragment(subMenu1.path)" [class.active]="isActive(subMenu1.path)">
                   <span class="title text-white" style="font-family: 'Aperto', sans-serif;">
                     {{ subMenu1.title }}
                   </span>
@@ -51,7 +51,8 @@
               @if (subMenu1.menu) {
               @for (menu2 of subMenu1.menu; track $index) {
               <mat-expansion-panel class="menu-level-1 right-aligned-header" (opened)="panelOpenState.set(true)"
-                (closed)="panelOpenState.set(false)" [expanded]="isActive(menu2.rootPath)">
+                *appHasPermission="menu2.permissionCode" (closed)="panelOpenState.set(false)"
+                [expanded]="isActive(menu2.rootPath)">
                 <!-- Menu -->
                 <mat-expansion-panel-header>
                   <mat-panel-title>
@@ -65,7 +66,7 @@
                 @if (menu2.subMenu.length > 0) {
                 <ul class="sidebar-sub-menu">
                   @for (subMenu2 of menu2.subMenu; track $index) {
-                  <li class="sidemenu-item">
+                  <li class="sidemenu-item" *appHasPermission="subMenu2.permissionCode">
                     <a [routerLink]="subMenu2.path" routerLinkActive="active" class="sidemenu-link"
                       [ngClass]="subMenu2.icon">
                       <span class="title text-white" style="font-family: 'Aperto', sans-serif;">

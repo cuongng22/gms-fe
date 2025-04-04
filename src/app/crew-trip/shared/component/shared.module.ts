@@ -5,6 +5,7 @@ import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection
 import { SelectionSuggestComponent } from './selection-suggest/selection-suggest.component';
 import { DatepickerYearMonthComponent } from './datepicker-year-month/datepicker-year-month.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
+import { HasPermissionDirective } from '../directive/has-permission.directive';
 
 @NgModule({
   declarations: [],
@@ -12,13 +13,15 @@ import { DatepickerComponent } from './datepicker/datepicker.component';
     InputComponent,
     SelectionComponent,
     DatepickerYearMonthComponent,
-    SelectionSuggestComponent
+    SelectionSuggestComponent,
+    HasPermissionDirective
   ],
   exports: [
     InputComponent,
     SelectionComponent,
     DatepickerYearMonthComponent,
-    SelectionSuggestComponent
+    SelectionSuggestComponent,
+    HasPermissionDirective
   ],
   providers: [
     {
