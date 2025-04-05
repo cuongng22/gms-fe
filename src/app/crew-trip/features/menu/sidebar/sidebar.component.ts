@@ -1,13 +1,14 @@
-import {CommonModule, NgClass} from '@angular/common';
-import {Component, inject, OnInit, signal} from '@angular/core';
-import {MatExpansionModule} from '@angular/material/expansion';
-import {ActivatedRoute, Router, RouterLink, RouterLinkActive} from '@angular/router';
-import {NgScrollbarModule} from 'ngx-scrollbar';
-import {ToggleService} from 'src/app/common/header/toggle.service';
-import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
-import {menu} from './sidebar.model';
-import {take} from 'rxjs';
+import { CommonModule, NgClass } from '@angular/common';
+import { Component, inject, OnInit, signal } from '@angular/core';
+import { MatExpansionModule } from '@angular/material/expansion';
+import { ActivatedRoute, Router, RouterLink, RouterLinkActive } from '@angular/router';
+import { NgScrollbarModule } from 'ngx-scrollbar';
+import { ToggleService } from 'src/app/common/header/toggle.service';
+import { CustomizerSettingsService } from 'src/app/customizer-settings/customizer-settings.service';
+import { menu } from './sidebar.model';
+import { take } from 'rxjs';
 import { UsersService } from 'src/app/crew-trip/core/services/users-service';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-sidebar',
@@ -19,6 +20,7 @@ import { UsersService } from 'src/app/crew-trip/core/services/users-service';
     RouterLinkActive,
     RouterLink,
     NgClass,
+    HasPermissionDirective
   ],
   templateUrl: './sidebar.component.html',
   styleUrl: './sidebar.component.scss',
@@ -67,7 +69,7 @@ export class SidebarComponent implements OnInit {
   reloadByFragment(uri: any) {
     this.route.fragment.pipe(take(1)).subscribe(fragment => {
       if (fragment) {
-        this.router.navigateByUrl('/', {skipLocationChange: true}).then(() => {
+        this.router.navigateByUrl('/', { skipLocationChange: true }).then(() => {
           this.router.navigate([uri])
         });
       }
