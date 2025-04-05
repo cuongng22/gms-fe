@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { ReportService } from 'src/app/crew-trip/core/services/report-service';
@@ -25,6 +25,7 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule
   ],
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	templateUrl: './dashboard.component.html',
 	styleUrl: './dashboard.component.scss',
 })
