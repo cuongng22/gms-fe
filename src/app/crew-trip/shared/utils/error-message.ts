@@ -73,13 +73,13 @@ export const notes: { [key: string]: string } = {
 
 export const fromDate: { [key: string]: string } = {
   required: 'From date' + $localize` is required`,
-  afterValidator: 'From date' + $localize` must before to date`,
+  afterValidator: 'From date' + $localize` must be before to date`,
   matDatepickerParse: 'From date' + $localize` invalid format`,
   overlapValidator: 'Already exists in this period',
 };
 export const toDate: { [key: string]: string } = {
   required: 'To date' + $localize` is required`,
-  beforeValidator: 'To date' + $localize` must after from date`,
+  beforeValidator: 'To date' + $localize` must be after from date`,
   matDatepickerParse: 'To date' + $localize` invalid format`,
   overlapValidator: 'Already exists in this period',
 
@@ -87,27 +87,27 @@ export const toDate: { [key: string]: string } = {
 
 export const checkinFrom: { [key: string]: string } = {
   required: 'Checkin from' + $localize` is required`,
-  afterValidator: 'Checkin from' + $localize` must before checkout to`,
-  timeAfterValidator: 'Checkin from' + $localize` must before checkout to`,
+  afterValidator: 'Checkin from' + $localize` must be before checkout to`,
+  timeAfterValidator: 'Checkin from' + $localize` must be before checkout to`,
   pattern: 'Checkin from' + $localize` must be from 00:00 to 23:59`,
 
 };
 export const checkoutTo: { [key: string]: string } = {
   required: 'Checkout to' + $localize` is required`,
-  beforeValidator: 'Checkout to' + $localize` must after checkin from`,
-  timeBeforeValidator: 'Checkout to' + $localize` must after checkin from`,
+  beforeValidator: 'Checkout to' + $localize` must be after checkin from`,
+  timeBeforeValidator: 'Checkout to' + $localize` must be after checkin from`,
   pattern: 'Checkout to' + $localize` must be from 00:00 to 23:59`,
 };
 
 export const fromHour: { [key: string]: string } = {
   required: 'Hour from' + $localize` is required`,
-  timeAfterValidator: 'Hour from' + $localize` must before hour to`,
+  timeAfterValidator: 'Hour from' + $localize` must be before hour to`,
   pattern: 'Hour from' + $localize` must be from 00:00 to 23:59`,
 };
 
 export const toHour: { [key: string]: string } = {
   required: 'Hour to' + $localize` is required`,
-  timeBeforeValidator: 'Hour to' + $localize` must after hour from`,
+  timeBeforeValidator: 'Hour to' + $localize` must be after hour from`,
   pattern: 'Hour to' + $localize` must be from 00:00 to 23:59`,
 };
 
@@ -158,21 +158,21 @@ export const invoiceNumber: { [key: string]: string } = {
 export const invoiceDate: { [key: string]: string } = {
   required: 'Invoice date' + $localize` is required`,
   matDatepickerMax: 'Invoice date' + $localize` must not be later than the current date`,
-  beforeValidator: 'Invoice date' + $localize` must after period date`,
+  beforeValidator: 'Invoice date' + $localize` must be after period date`,
 };
 
 export const invoiceReceiveDate: { [key: string]: string } = {
   required: 'Receive date' + $localize` is required`,
-  beforeValidator: 'Receive date' + $localize` must after invoice date`,
+  beforeValidator: 'Receive date' + $localize` must be after invoice date`,
   matDatepickerMax: 'Receive date' + $localize` must not be later than the current date`,
 };
 export const periodFrom: { [key: string]: string } = {
   required: 'Period from' + $localize` is required`,
-  afterValidator: 'Period from' + $localize` must before period to`,
+  afterValidator: 'Period from' + $localize` must be before period to`,
 };
 export const periodTo: { [key: string]: string } = {
   required: 'Period to' + $localize` is required`,
-  beforeValidator: 'Period to' + $localize` must after period from`,
+  beforeValidator: 'Period to' + $localize` must be after period from`,
 };
 export const exchangeRateDate: { [key: string]: string } = {
   required: 'Exchange rate date' + $localize` is required`,
