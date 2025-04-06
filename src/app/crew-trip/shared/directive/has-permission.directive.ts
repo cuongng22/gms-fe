@@ -16,7 +16,6 @@ export class HasPermissionDirective {
 
   @Input()
   set appHasPermission(value: string | string[]) {
-    debugger
     this.permissionCodes = typeof value === 'string' ? [value] : value;
     this.updateView();
   }
