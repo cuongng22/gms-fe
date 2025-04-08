@@ -362,7 +362,8 @@
     </mat-expansion-panel-header>
     <mat-panel-description class="d-block">
       <div class="w-100 text-end">
-        <button (click)="addRow()" *ngIf="!readMode && this.formGroupDetail.getRawValue().periodOccurrence" class="add-btn right-0 mb-10" i18n mat-button type="button">
+        <button (click)="addRow()" *ngIf="!readMode && this.formGroupDetail.getRawValue().periodOccurrence" class="add-btn right-0 mb-10" i18n
+                mat-button type="button">
           <i class="material-symbols-outlined">
             add
           </i>
@@ -575,10 +576,10 @@
             </ng-container>
             @if (readMode) {
               <tr
-                  *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader']"
+                  *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader']; sticky: true"
                   mat-header-row></tr>
               <tr
-                  *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
+                  *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']; sticky: true" mat-header-row></tr>
               <tr
                   *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat'];"
                   class="input-row" mat-row></tr>
@@ -588,10 +589,10 @@
               </tr>
             } @else {
               <tr
-                  *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader','action']"
+                  *matHeaderRowDef="['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatHeader','action']; sticky: true"
                   mat-header-row></tr>
               <tr
-                  *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']" mat-header-row></tr>
+                  *matHeaderRowDef="['vatType','vat','amountFcVat','amountVndVat']; sticky: true" mat-header-row></tr>
               <tr
                   *matRowDef="let row; columns: ['stt','serviceCode','serviceName','unit','periodOccurrence','nsCode','quantity','unitPrice','amountFcBeforeVat','amountVndBeforeVat','vatType','vat','amountFcVat','amountVndVat','action'];"
                   class="input-row" mat-row></tr>

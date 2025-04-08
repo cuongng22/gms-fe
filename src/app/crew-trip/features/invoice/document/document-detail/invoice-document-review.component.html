@@ -405,7 +405,7 @@
     [icon]="'check_circle'"
     [mainText]=""
     [showDialog]="showDialogUnMatched"
-    [subText]="'Chứng từ hóa đơn đã được đối soát và có chênh lệch, bạn có muốn cập nhật lại thông tin thanh toán của chứng từ này không?'"
+    [subText]="'This invoice document has already been reconciled and has discrepancies. Do you want to update the payment information for this document?'"
     i18n-mainText
     i18n-subText>
 </app-confirm-dialog>
@@ -413,9 +413,9 @@
     (closeDialog)="toggleDialogFinish()"
     (confirm)="saveAndFinish()"
     [icon]="'check_circle'"
-    [mainText]="'Bạn có chắc chắn chốt số liệu chứng từ hóa đơn này không?'"
+    [mainText]="'Are you sure you want to confirm this invoice?'"
     [showDialog]="showDialogFinish"
-    [subText]="'Số liệu chứng từ hóa đơn này sẽ không được chỉnh sửa sau khi đã chốt!'"
+    [subText]="'The data of this invoice cannot be modified after confirmation!'"
     i18n-mainText
     i18n-subText>
 </app-confirm-dialog>
