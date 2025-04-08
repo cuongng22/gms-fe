@@ -20,12 +20,14 @@
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
         <mat-tab-group [selectedIndex]="selectedTab" mat-stretch-tabs="false" mat-align-tabs="start">
-            <mat-tab label="Estimated Flight Schedule" i18n="@@estimatedFlightSchedule">
+            <mat-tab label="Estimated Flight Schedule" i18n="@@estimatedFlightSchedule"
+                *appHasPermission="['API_DAILY_FLIGHT_SCHEDULE_PLAN_LIST']">
                 <ng-template matTabContent>
                     <app-estimated-flight-schedule />
                 </ng-template>
             </mat-tab>
-            <mat-tab label="Monthly Flight Schedule" i18n="@@monthlyFlightSchedule">
+            <mat-tab label="Monthly Flight Schedule" i18n="@@monthlyFlightSchedule"
+                *appHasPermission="['API_DAILY_FLIGHT_SCHEDULE_IN_MONTH_LIST']">
                 <ng-template matTabContent>
                     <app-monthly-flight-schedule />
                 </ng-template>

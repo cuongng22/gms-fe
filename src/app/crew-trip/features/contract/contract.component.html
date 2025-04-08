@@ -16,9 +16,9 @@
       <h5 class="mb-0 ml-10">
         <span i18n>Appendix </span>
         <span class="text-vna">{{ '[' + contractObj.contractNo + '] ' }}</span>
-          <span class="text-warning">{{ contractObj.contractName }}</span>
-        </h5>
-      </div>
+        <span class="text-warning">{{ contractObj.contractName }}</span>
+      </h5>
+    </div>
     }
 
     <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
@@ -50,20 +50,13 @@
             </mat-form-field>
           </div>
           <div *ngIf="isHD()" class="col-2" sizeInput="md">
-            <app-select-multiple [options]="listFlightMarket" [required]="false"
-                                 attrValue="" formControlName="marketCodes"
-                                 label="Airport code" size="md">
+            <app-select-multiple [options]="listFlightMarket" [required]="false" attrValue=""
+              formControlName="marketCodes" label="Airport code" size="md">
             </app-select-multiple>
           </div>
           <div *ngIf="isHD()" class="col-2" sizeInput='md'>
-            <app-select-multiple [options]="listPartner"
-                                 [required]="false"
-                                 attrDisplay="name"
-                                 attrValue="code"
-                                 formControlName="partnerCode"
-                                 label="Supplier"
-                                 size="md"
-            >
+            <app-select-multiple [options]="listPartner" [required]="false" attrDisplay="name" attrValue="code"
+              formControlName="partnerCode" label="Supplier" size="md">
 
             </app-select-multiple>
           </div>
@@ -71,30 +64,26 @@
             <mat-form-field>
               <mat-date-range-input [rangePicker]="picker">
                 <input formControlName="startDate" i18n-placeholder="@@startDate" matStartDate placeholder="dd/mm/yyyy"
-                       trim="blur">
+                  trim="blur">
                 <input formControlName="endDate" i18n-placeholder="@@endDate" matEndDate placeholder="dd/mm/yyyy"
-                       trim="blur">
+                  trim="blur">
               </mat-date-range-input>
               @if(isHD()){<mat-label i18n>Contract end date</mat-label>}
               @else{<mat-label i18n>Appendix end date</mat-label>}
               <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
               <mat-date-range-picker #picker>
                 <mat-date-range-picker-actions>
-                  <button i18n="@@cancel" mat-button matDateRangePickerCancel
-                          sizeButton="sm">Cancel
+                  <button i18n="@@cancel" mat-button matDateRangePickerCancel sizeButton="sm">Cancel
                   </button>
-                  <button color="primary" i18n="@@apply" mat-raised-button matDateRangePickerApply
-                          sizeButton="sm">Apply
+                  <button color="primary" i18n="@@apply" mat-raised-button matDateRangePickerApply sizeButton="sm">Apply
                   </button>
                 </mat-date-range-picker-actions>
               </mat-date-range-picker>
-              <mat-error
-                *ngxControlError="formGroupSearch.controls['startDate']; track: 'matDatepickerParse'"
+              <mat-error *ngxControlError="formGroupSearch.controls['startDate']; track: 'matDatepickerParse'"
                 i18n="@@contractPeriodInvalidFormat">
                 Date invalid format
               </mat-error>
-              <mat-error
-                *ngxControlError="formGroupSearch.controls['endDate']; track: 'matDatepickerParse'"
+              <mat-error *ngxControlError="formGroupSearch.controls['endDate']; track: 'matDatepickerParse'"
                 i18n="@@contractPeriodInvalidFormat">
                 Date invalid format
               </mat-error>
@@ -132,47 +121,47 @@
         </button>
         <mat-menu #planMenu="matMenu" class="card-header-menu" yPosition="below">
           <ul class="p-0 mt-0 mb-0 list-unstyled">
-            <li>
-              <button (click)="exportFile({ export: true, exportType: 'ALL' }, 'Contract-list.xlsx')"
-                      i18n
-                      mat-menu-item
-                      type="button">
+            <li *appHasPermission="['']">
+              <button (click)="exportFile({ export: true, exportType: 'ALL' }, 'Contract-list.xlsx')" i18n mat-menu-item
+                type="button">
                 Contract list
               </button>
             </li>
             <li>
-              <button (click)="exportFile({export: true, exportType: 'BUY'}, 'Contract-to-be-renewed.xlsx')" mat-menu-item
-                      type="button">Contract to
+              <button (click)="exportFile({export: true, exportType: 'BUY'}, 'Contract-to-be-renewed.xlsx')"
+                mat-menu-item type="button">Contract to
                 be renewed
               </button>
             </li>
             <li>
-              <button (click)="exportFile({export: true, exportType: 'PRICE'}, 'Unit-price-list.xlsx')" mat-menu-item type="button">Unit price
+              <button (click)="exportFile({export: true, exportType: 'PRICE'}, 'Unit-price-list.xlsx')" mat-menu-item
+                type="button">Unit price
                 list
               </button>
             </li>
           </ul>
         </mat-menu>
-          <button (click)="syncDWH()" class="add-btn" mat-button type="button">
-            <i class="material-symbols-outlined">
-              sync
-            </i>
-            <span i18n>Sync</span>
-          </button>
+        <button (click)="syncDWH()" class="add-btn" mat-button type="button">
+          <i class="material-symbols-outlined">
+            sync
+          </i>
+          <span i18n>Sync</span>
+        </button>
         }
         @if (isPL()) {
-        <button (click)="exportAppendix('Appendix-list.xlsx')" class="add-btn mr-10" i18n mat-button type="button">
+        <button *appHasPermission="['API_CONTRACT_APPENDIX_LIST']" (click)="exportAppendix('Appendix-list.xlsx')"
+          class="add-btn mr-10" i18n mat-button type="button">
           <i class="material-symbols-outlined">
             download
           </i>
           Export
         </button>
-          <button (click)="nextStep(null,false)" class="add-btn" mat-button type="button">
-            <i class="material-symbols-outlined">
-              add
-            </i>
-            <span i18n>Add new</span>
-          </button>
+        <button (click)="nextStep(null,false)" class="add-btn" mat-button type="button">
+          <i class="material-symbols-outlined">
+            add
+          </i>
+          <span i18n>Add new</span>
+        </button>
         }
       </mat-card-subtitle>
     </mat-card-header>
@@ -181,30 +170,30 @@
         <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true">
           <ng-container matColumnDef="stt">
             <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
-            <td *matCellDef="let element; let i = dataIndex" class="text-center"
-                mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
+            <td *matCellDef="let element; let i = dataIndex" class="text-center" mat-cell>{{ (pageIndex * pageSize) + i
+              + 1 }}
             </td>
           </ng-container>
           @for (innerColumn of _displayedColumns; track innerColumn.value) {
           <ng-container matColumnDef="{{innerColumn.value}}">
-              <th mat-sort-header mat-header-cell *matHeaderCellDef>{{
-          (isPL() && innerColumn.label1 ? innerColumn.label1 : innerColumn.label)| titlecase }}</th>
-              <td mat-cell *matCellDef="let element">
+            <th mat-sort-header mat-header-cell *matHeaderCellDef>{{
+              (isPL() && innerColumn.label1 ? innerColumn.label1 : innerColumn.label)| titlecase }}</th>
+            <td mat-cell *matCellDef="let element">
               <span [ngClass]="{
           'badge rounded-pill': innerColumn.value === 'isActiveLabel',
           'text-bg-vna': innerColumn.value === 'isActiveLabel' && element['isActive'] == 1,
           'text-bg-vna-danger': innerColumn.value === 'isActiveLabel' && element['isActive'] == 0
           }">{{
-          element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-          }}</span>
-              </td>
-            </ng-container>
+                element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+                }}</span>
+            </td>
+          </ng-container>
           }
           <ng-container matColumnDef="effectiveDate">
             <th *matHeaderCellDef mat-header-cell mat-sort-header>Effective Date</th>
             <td *matCellDef="let element" mat-cell>{{
               element.effectiveDate | dataTransformPipe:[Constant.DATE,
-                Constant.DATE_FORMAT]
+              Constant.DATE_FORMAT]
               }}
               - {{ element.expiryDate | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
             </td>
@@ -212,11 +201,10 @@
           <ng-container matColumnDef="appendixCount" stickyEnd>
             <th *matHeaderCellDef mat-header-cell mat-sort-header>Appendix</th>
             <td *matCellDef="let element;let i = dataIndex"
-                [class]="{'status-color-1':element.optionOutput == 1,'status-color-2':element.optionOutput == 2,'status-color-3':element.optionOutput == 3}"
-                class="text-center"
-                mat-cell>
+              [class]="{'status-color-1':element.optionOutput == 1,'status-color-2':element.optionOutput == 2,'status-color-3':element.optionOutput == 3}"
+              class="text-center" mat-cell>
               <a (click)="showAnnex(i)" [matMenuTriggerFor]="listAnnex"
-                 style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
+                style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                 {{ element.appendixCount }}
               </a>
             </td>
@@ -231,7 +219,7 @@
                     <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Appendix No</th>
                     <td *matCellDef="let element" mat-cell>
                       <a (click)="nextStep(element.bizDocId,true)"
-                         style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
+                        style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                         {{ element.docNo }}
                       </a>
                     </td>
@@ -240,7 +228,7 @@
                     <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Appendix Name</th>
                     <td *matCellDef="let element" mat-cell>
                       <a (click)="nextStep(element.bizDocId,true)"
-                         style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
+                        style="color: rgba(0,0,255,0.7); text-decoration: underline; cursor: pointer;">
                         {{ element.docName }}
                       </a>
                     </td>
@@ -256,15 +244,12 @@
             <th *matHeaderCellDef class="text-end" i18n mat-header-cell>
               Action
             </th>
-            <td
-              *matCellDef="let element;let i = index"
+            <td *matCellDef="let element;let i = index"
               [class]="{'status-color-1':element.optionOutput == 1,'status-color-2':element.optionOutput == 2,'status-color-3':element.optionOutput == 3}"
               mat-cell>
               @if (isHD()) {
               <div class="action-buttons d-flex align-items-center justify-content-end">
-                <a (click)="showListAnnex(element.bizDocId)"
-                   class="text-vna"
-                   mat-button type="button">
+                <a (click)="showListAnnex(element.bizDocId)" class="text-vna" mat-button type="button">
                   <i class="material-symbols-outlined" i18n-title title="Appendix">
                     contract
                   </i>
@@ -303,12 +288,12 @@
           </ng-container>
           <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
           <tr *matRowDef="let row; columns: displayedColumns;"
-              [class]="{'status-color-1':row.optionOutput == 1,'status-color-2':row.optionOutput == 2,'status-color-3':row.optionOutput == 3}"
-              mat-row>
+            [class]="{'status-color-1':row.optionOutput == 1,'status-color-2':row.optionOutput == 2,'status-color-3':row.optionOutput == 3}"
+            mat-row>
           </tr>
           <tr *matNoDataRow class="mat-row">
-            <td [attr.colspan]="displayedColumns.length" class="mat-cell border-none text-center"><span
-              i18n>No data!</span></td>
+            <td [attr.colspan]="displayedColumns.length" class="mat-cell border-none text-center"><span i18n>No
+                data!</span></td>
           </tr>
           <!--        <tr mat-row *matRowDef="let row; columns: ['child'];"></tr>-->
 
@@ -316,22 +301,24 @@
       </div>
       <!--<mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons (page)="onPageChange($event)" ></mat-paginator>-->
       <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageIndex]="pageIndex"
-                     [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize"
-                     [showFirstLastButtons]="showFirstLastButtons"
-                     aria-label="Select page">
+        [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [showFirstLastButtons]="showFirstLastButtons"
+        aria-label="Select page">
       </mat-paginator>
       @if (isHD()) {
       <div class="caption-panel">
         <div class="caption-item">Status:</div>
         <div class="caption-item">
           <div class="status-color status-color-1"></div>
-          <span i18n>Expiring contract</span></div>
+          <span i18n>Expiring contract</span>
+        </div>
         <div class="caption-item">
           <div class="status-color status-color-2"></div>
-          <span i18n>Expired contract</span></div>
+          <span i18n>Expired contract</span>
+        </div>
         <div class="caption-item">
           <div class="status-color status-color-3"></div>
-          <span i18n>Contract to be renewed</span></div>
+          <span i18n>Contract to be renewed</span>
+        </div>
       </div>
       }
     </mat-card-content>
@@ -343,20 +330,19 @@
     <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
       <mat-card-content>
         <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
+          <span class="material-symbols-outlined font-size-5rem">
+            error
+          </span>
         </div>
         <div class="text-center mb-20">
           <h3 class="mb-0" i18n>Are you sure you want to delete?</h3>
         </div>
         <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n>
-                        You will not be able to recover the deleted data!</span>
+          <span class="font-weight-normal color-black font-size-19" i18n>
+            You will not be able to recover the deleted data!</span>
         </div>
         <div class="btn-box text-center">
-          <button (click)="closeConfirmDelete()" class="close-btn  min-with-100 mlr-5" mat-button
-                  type="button">
+          <button (click)="closeConfirmDelete()" class="close-btn  min-with-100 mlr-5" mat-button type="button">
             <i class="material-symbols-outlined">
               close
             </i>

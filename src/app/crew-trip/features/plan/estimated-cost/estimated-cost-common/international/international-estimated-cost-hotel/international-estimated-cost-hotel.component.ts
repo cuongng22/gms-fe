@@ -131,9 +131,9 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
   }
 
   setGeneralData(data: any) {
-    const isChangeRateForSingle = checkChange(this.generalData.rateForSingle, data.rateForSingle);
+    const isChangeRateForSingle = checkChange(Number(this.generalData.rateForSingle), Number(data.rateForSingle));
     if (isChangeRateForSingle) {
-      this.generalData = { ...data };
+      this.generalData = { ...data, rateForSingle: Number(data.rateForSingle) };
       this.dataSource.data.forEach((item: any, index) => {
         this.calculateData(item, index, true);
       });
@@ -231,13 +231,14 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
    * @param item Giá trị từng dòng của dataSource theo công thức
    */
   private calculateData(item: any, index: number, isSummary?: boolean) {
+
+    const _flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOverNight === item.overnight).map(item => item.flightRate);
+    item.flightOvernightRate = Number(_flightOvernightRate)
+
+    item.noOfFlightOvernight = 1; // tổng số chuyến bay và số đêm nghỉ để nhóm sau đó chia cho số này vs tháng đã thực hiện monthInPerform
+    item.noOfOvernight = this.planFlightByOvernight.length ?? 1
+
     if (isSummary) {
-      const _flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOverNight === item.overnight).map(item => item.flightRate);
-      item.flightOvernightRate = Number(_flightOvernightRate)
-
-      item.noOfFlightOvernight = 1; // tổng số chuyến bay và số đêm nghỉ để nhóm sau đó chia cho số này vs tháng đã thực hiện monthInPerform
-      item.noOfOvernight = this.planFlightByOvernight.length ?? 1
-
       //Số chuyến bay theo tàu 
       this.calculate(item, 'numberOfFlights', true);
       // Thu bảo với tháng đã thực hiện thì số tiền sẽ phải chia ( số đêm nghỉ * loại máy bay) ==> loại ngân sách
@@ -316,11 +317,11 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
    * TÍnh toán dòng tổng
    * @param item giá trị từng dòng dataSource
    */
-    this.calculateTotalByGroup(item, index, 'totalAmountForeignTransVat', 'totalAmountForeignTransVatGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmountForeign', 'totalAmountForeignGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmountForeignVat', 'totalAmountForeignVatGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmount', 'totalAmountGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmountVat', 'totalAmountVatGroup', true);
+    this.calculateTotalByGroup(item, index, 'totalAmountForeignTransVat', 'totalAmountForeignTransVatGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmountForeign', 'totalAmountForeignGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmountForeignVat', 'totalAmountForeignVatGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmount', 'totalAmountGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmountVat', 'totalAmountVatGroup');
     this.calculateTotalByGroup(item, index, 'totalSingleRoom', 'totalSingleRoomGroup');
     this.calculateTotalByGroup(item, index, 'totalDoubleRoom', 'totalDoubleRoomGroup');
   }
@@ -391,7 +392,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     //   }
     // }
     if (!!strFomular) {
-      item[key] = this.calculateFormula(item, strFomular);
+      item[key] = this.calculateFormula(item, strFomular, key);
     }
     if (isRound) {
       item[key] = round(item[key], fractionDigits);
@@ -404,7 +405,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     const keyGroup = this.getTotalByGroupKey(item, formula[key].groupFormula); // cái này để làm key trong object Total sau này sẽ get để lấy data hiển thị ở table
     const filterData = this.dataSource.data.filter((itemFilter: any, indexFilter: number) => this.groupFormula(itemFilter, item, formula[key].groupFormula));
     const result = filterData.map((t: any) => t[key]).reduce((acc, value) => (isRound ? round(acc, fractionDigits) : acc) + (isRound ? round(value, fractionDigits) : value), 0);
-    this.totalByGroup[keyGroup] = { ...this.totalByGroup[keyGroup], [control]: result };
+    this.totalByGroup[keyGroup] = { ...this.totalByGroup[keyGroup], [control]: round(result) };
   }
 
   getTotalByGroup(item: any, key: string, control: string) {
@@ -414,13 +415,43 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
 
 
   // Hàm tính toán dựa trên công thức động
-  calculateFormula(data: any, formula: string): number {
+  calculateFormula(data: any, formula: string, control?: string): number {
+    // --------- đoạn này để debug công thức ---------
+    // Tạo một bản sao công thức để thay thế giá trị thực tế
+    let replacedFormula = formula;
+
+    if (data.period === '04/2025') {
+      // Danh sách các biến cần thay thế
+      const variables = formula.match(/ctz\((.*?)\)/g);
+      const matchMonthIsPerform = formula.match(/data.monthIsPerform/g);
+      let field = '';
+      let arr: any[] = [];
+      variables?.forEach((match) => arr.push(match))
+      matchMonthIsPerform?.forEach((match) => arr.push(match))
+      if (arr) {
+        arr.forEach((match) => {
+          field = match
+          const dynamicFunctionDebug = new Function(
+            'data', 'generalData', 'ctz',
+            `return ${field};`    // Công thức cần tính
+          );
+          // const field = match.replace(/ctz\(|\)/g, ""); // Lấy tên biến
+          const value = dynamicFunctionDebug(data, this.generalData, this.ctz); // Lấy giá trị thực tế
+          replacedFormula = replacedFormula.replace(match, (value + ''));
+        });
+      }
+      // ---- end debug công thức-----
+    }
     // Sử dụng Function để tạo hàm động từ công thức
     const dynamicFunction = new Function(
       'data', 'generalData', 'ctz',
       `return ${formula};`    // Công thức cần tính
     );
     const result = dynamicFunction(data, this.generalData, this.ctz);
+    // Log công thức sau khi thay thế giá trị thực tế
+    if (data.period === '04/2025') {
+      console.log(data.period, control, formula, replacedFormula, result);
+    }
     return (result);
   }
 
@@ -506,18 +537,18 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
       //Số phòng đơn late checkout dự kiến do lẻ nam nữ
       item.singleRoomLateReserved = round(item.singleRoomLateReserved);
       //Tổng số phòng đơn
-      item.totalSingleRoom = round(item.totalSingleRoom);
+      // item.totalSingleRoom = round(item.totalSingleRoom);
       //Tổng số phòng đôi
-      item.totalDoubleRoom = round(item.totalDoubleRoom);
+      // item.totalDoubleRoom = round(item.totalDoubleRoom);
 
       //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
-      item.totalAmountForeign = round(item.totalAmountForeign);
+      // item.totalAmountForeign = round(item.totalAmountForeign);
       //Thành tiền (ngoại tệ) - Bao gồm VAT
-      item.totalAmountForeignVat = round(item.totalAmountForeignVat);
+      // item.totalAmountForeignVat = round(item.totalAmountForeignVat);
       //Thành tiền VND (Chưa bao gồm VAT)
-      item.totalAmount = round(item.totalAmount);
+      // item.totalAmount = round(item.totalAmount);
       //Thành tiền VND (Bao gồm VAT)
-      item.totalAmountVat = round(item.totalAmountVat);
+      // item.totalAmountVat = round(item.totalAmountVat);
     })
     return _jsonData;
   }

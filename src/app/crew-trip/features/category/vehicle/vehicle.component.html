@@ -102,7 +102,8 @@
       <!-- <h5 i18n="@@carRentalCompanies">Car Rental company</h5> -->
     </mat-card-title>
     <mat-card-subtitle>
-      <button class="add-btn" type="button" mat-button (click)="exportFile(null,'Car Rentals.xlsx')">
+      <button *appHasPermission="['API_VEHICLES_EXPORT_LIST']" class="add-btn" type="button" mat-button
+        (click)="exportFile(null,'Car Rentals.xlsx')">
         <i class="material-symbols-outlined">
           download
         </i>

@@ -12,11 +12,14 @@
                             @if(invalid()){
                             <span class="text-danger">Duplicate Number of Overnight Stays</span>
                             }
-                            <button [disabled]="disabled()" mat-button class="mini-vna-btn" (click)="add()">
+                            @if(!disabled()){
+                            <button mat-button class="mini-vna-btn" (click)="add()">
                                 <i class="material-symbols-outlined">
                                     add
                                 </i>
                             </button>
+                            }
+
                         </div>
                     </th>
                 </ng-container>
@@ -77,16 +80,18 @@
                         class="font-weight-bold text-center" i18n="@@action">
                         Action
                     </th>
+                    @if(!disabled()){
                     <td mat-cell *matCellDef="let element; let i = dataIndex">
                         <div class="action-buttons d-flex justify-content-end">
                             <button type="button" mat-button title="Delete" i18n-title="@@delete" class="text-danger"
-                                [disabled]="disabled()" (click)="showConfirmDelete(i)">
+                                (click)="showConfirmDelete(i)">
                                 <span class="material-symbols-outlined text-danger">
                                     delete
                                 </span>
                             </button>
                         </div>
                     </td>
+                    }
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="['addBtn']"></tr>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

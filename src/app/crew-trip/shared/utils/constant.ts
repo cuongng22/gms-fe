@@ -47,6 +47,8 @@ export class MESSAGE {
   static FILE_UPLOAD_EMPTY = $localize`The file must not be empty`;
   static FILE_UPLOAD_INVALID = $localize`The file import is not valid`;
   static FILE_UPLOAD_INVALID_XLSX = $localize`File type must be .xlsx`;
+  static SUCCESS = $localize`:@@success:Success`;
+  static FAILURE = $localize`:@@failure:Failure`;
 
   static LABEL_START_DATE = $localize`:@@startDate:Start Date`;
   static MESSAGE_START_DATE_REQUIRED = $localize`:@@startDateRequired:Start Date is required`;
@@ -138,6 +140,7 @@ export class PATTERN {
   static NUMBER1 = '^[0-9/.]+$' //so '/'
   static NUMBER2 = '^[0-9]+(\\.[0-9]+)?$';//so thap phan
   static STRING_NUMBER1 = '^[a-zA-Z0-9-.]+$' //chu va so . -
+  static STRING_NUMBER2 = '^[a-zA-Z0-9-./]+$' //chu va so . -
 }
 
 export function round(data: any | any[], fractionDigits?: number) {
@@ -180,10 +183,10 @@ export function round(data: any | any[], fractionDigits?: number) {
 }
 
 
-  // convertToZero
-  export function ctz(value: any) {
-    if (value) {
-      return new Number(value.toString().replace(',', '.'));
-    }
-    return 0;
+// convertToZero
+export function ctz(value: any) {
+  if (value) {
+    return new Number(value.toString().replace(',', '.'));
   }
+  return 0;
+}

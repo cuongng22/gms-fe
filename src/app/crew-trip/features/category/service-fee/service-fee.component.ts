@@ -1,30 +1,34 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
-import {CommonModule, NgClass, NgIf} from '@angular/common';
-import {MatCardModule} from '@angular/material/card';
-import {UsersService} from 'src/app/crew-trip/core/services/users-service';
-import {MatError, MatFormField, MatLabel, MatSuffix} from '@angular/material/form-field';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatInput} from '@angular/material/input';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {HttpStatusCode} from '@angular/common/http';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
+import { CommonModule, NgClass, NgIf } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { UsersService } from 'src/app/crew-trip/core/services/users-service';
+import { MatError, MatFormField, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInput } from '@angular/material/input';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-service';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { HttpStatusCode } from '@angular/common/http';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 
 @Component({
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatSuffix],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatSuffix,
+    HasPermissionDirective
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   selector: 'app-service-fee',
   standalone: true,
   styleUrl: 'service-fee.component.scss',
-  templateUrl: 'service-fee.component.html'
+  templateUrl: 'service-fee.component.html',
+  providers: [HasPermissionDirective]
 })
 
 
@@ -36,11 +40,11 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
   //variable
   _displayedColumns: {
     label: string; value: string, type?: string, format?: string
-  }[] = [{label: $localize`Code`, value: 'code'}, {
-      label: $localize`Cost category name`, value: 'name'
-    }, {label: $localize`Unit`, value: 'unit'}, {label: $localize`Note`, value: 'description'}, {
-      label: $localize`Status`, value: 'activeLabel'
-    }, {label: $localize`DataSource`, value: 'dataSource'},];
+  }[] = [{ label: $localize`Code`, value: 'code' }, {
+    label: $localize`Cost category name`, value: 'name'
+  }, { label: $localize`Unit`, value: 'unit' }, { label: $localize`Note`, value: 'description' }, {
+    label: $localize`Status`, value: 'activeLabel'
+  }, { label: $localize`DataSource`, value: 'dataSource' },];
   existCode = false;
 
   constructor() {
@@ -56,8 +60,8 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
       description: ['', [Validators.maxLength(500)]],
       active: [true,]
     });
-    this.formGroupSearchInit = {...this.formGroupSearch.value};
-    this.formGroupDetailInit = {...this.formGroupDetail.value};
+    this.formGroupSearchInit = { ...this.formGroupSearch.value };
+    this.formGroupDetailInit = { ...this.formGroupDetail.value };
   }
 
   override async ngOnInit() {
@@ -103,6 +107,6 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
 
 
   existCodeValidator(control: AbstractControl): ValidationErrors | null {
-    return this.existCode ? {existCode: true} : null;
+    return this.existCode ? { existCode: true } : null;
   }
 }

@@ -89,19 +89,32 @@ export const formula: any = {
     },
     //Thành tiền ngoại tệ,  - phòng early-checkin 
     totalAmountForeignEarly: {
-        formula: '(ctz(data.singleRoomEarly)/data.noOfOvernight + ctz(data.singleRoomEarlyReserved)/data.noOfOvernight) * ctz(data.priceSingleRoomEarly)  + (ctz(data.doubleRoomEarly)/data.noOfOvernight * ctz(data.priceDoubleRoomEarly))'
+        formula: '(ctz(data.singleRoomEarly)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight) '
+            + ' + ctz(data.singleRoomEarlyReserved)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight)) '
+            + ' * ctz(data.priceSingleRoomEarly)  '
+            + ' + (ctz(data.doubleRoomEarly)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight) '
+            + ' * ctz(data.priceDoubleRoomEarly))'
     },
     //Thành tiền ngoại tệ,  - phòng early-checkin  có Vat
     totalAmountForeignEarlyVat: {
-        formula: '(ctz(data.singleRoomEarly)/data.noOfOvernight + ctz(data.singleRoomEarlyReserved)/data.noOfOvernight) * ctz(data.priceSingleRoomEarlyVat)  + (ctz(data.doubleRoomEarly)/data.noOfOvernight * ctz(data.priceDoubleRoomEarlyVat))'
+        formula: '(ctz(data.singleRoomEarly)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight) '
+            + ' + ctz(data.singleRoomEarlyReserved)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight)) '
+            + ' * ctz(data.priceSingleRoomEarlyVat)  + (ctz(data.doubleRoomEarly)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight) '
+            + ' * ctz(data.priceDoubleRoomEarlyVat))'
     },
     //Thành tiền ngoại tệ, - phòng late checkout
     totalAmountForeignLate: {
-        formula: '(ctz(data.singleRoomLate)/data.noOfOvernight + ctz(data.singleRoomLateReserved)/data.noOfOvernight) * ctz(data.priceSingleRoomLate)  + (ctz(data.doubleRoomLate)/data.noOfOvernight * ctz(data.priceDoubleRoomLate))'
+        formula: '(ctz(data.singleRoomLate)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight) '
+            + ' + ctz(data.singleRoomLateReserved)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight)) '
+            + ' * ctz(data.priceSingleRoomLate)  + (ctz(data.doubleRoomLate)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight) '
+            + ' * ctz(data.priceDoubleRoomLate))'
     },
     //Thành tiền ngoại tệ, - phòng late checkout có VAT
     totalAmountForeignLateVat: {
-        formula: '(ctz(data.singleRoomLate)/data.noOfOvernight + ctz(data.singleRoomLateReserved)/data.noOfOvernight) * ctz(data.priceSingleRoomLateVat)  + (ctz(data.doubleRoomLate)/data.noOfOvernight * ctz(data.priceDoubleRoomLateVat))'
+        formula: '(ctz(data.singleRoomLate)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight) '
+            + ' + ctz(data.singleRoomLateReserved)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight)) '
+            + ' * ctz(data.priceSingleRoomLateVat)  + (ctz(data.doubleRoomLate)/(data.monthIsPerform ? data.noOfFlightOvernight : data.noOfOvernight) '
+            + ' * ctz(data.priceDoubleRoomLateVat))'
     },
     //Tổng tiền theo loại máy bay
     totalAmountAircraft: {
@@ -222,10 +235,10 @@ export function getRowDef(contractData: any): string[] {
     return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
 
-const FlagTypeEnum = {
-    EARLY_CHECKIN: 'earlyCheckinFeeFlag',
-    LATE_CHECKOUT: 'lateCheckoutFeeFlag',
-    CREW_TRANSPORT: 'priceCrewTransportFlag'
+export const FlagTypeEnum = {
+    EARLY_CHECKIN: 'earlyCheckinFlag',
+    LATE_CHECKOUT: 'lateCheckoutFlag',
+    CREW_TRANSPORT: 'crewTransportFeeFlag'
 }
 
 export function checkVisibleColumn(contractData: any, flagType: string): boolean {
@@ -236,14 +249,15 @@ export function checkVisibleColumn(contractData: any, flagType: string): boolean
             return true;
         }
 
-    } else {
-        if (flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFlag) {
-            return true;
-        } else if (flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFlag) {
-            return true
-        }
-
     }
+    // else {
+    //     if (flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFlag) {
+    //         return true;
+    //     } else if (flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFlag) {
+    //         return true
+    //     }
+
+    // }
     return false
 }
 

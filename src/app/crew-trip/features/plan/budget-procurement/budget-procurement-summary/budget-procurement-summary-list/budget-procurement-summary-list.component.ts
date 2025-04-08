@@ -18,7 +18,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from './budget-procurement-summary-list.model';
 import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
 import { CAR_RENTAL, CategoryEnum, HOTEL, PlanCategoryEnum, ServiceType, StatusEnum, StatusSummaryEnum } from '../../budget-procurement.model';
-import { Constant } from 'src/app/crew-trip/shared/utils/constant';
+import { Constant, round } from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-budget-procurement-summary-list',
@@ -45,6 +45,7 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
   displayedColumnTotals: string[] = [];
 
   bodySearch: any;
+  round = round;
 
   override formGroupDetail = this.formBuilder.group({
     id: ''
@@ -113,9 +114,10 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
     }
   }
 
-  getTotal(control: string, serviceType: string) {
+  getTotal(control: string, serviceType: string, isRound?: boolean) {
     return this.dataSource.data.filter((t: any) => t.serviceType === serviceType)
-      .map((t: any) => Number(t[getControlTotal(control, serviceType)])).reduce((acc, value) => acc + value, 0);
+      .map((t: any) => isRound ? round(Number(t[getControlTotal(control, serviceType)])) :
+        Number(t[getControlTotal(control, serviceType)])).reduce((acc, value) => acc + value, 0);
   }
 
 

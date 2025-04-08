@@ -1,3 +1,17 @@
+<!-- Breadcrumb -->
+<div class="breadcrumb-card mb-10 d-md-flex align-items-center justify-content-between">
+  <h5 class="mb-0" i18n="@@flightCrew">
+    Other crew
+  </h5>
+  <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
+      Category
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative">
+      Other crew
+    </li>
+  </ol>
+</div>
 <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
   <mat-card-content>
     <form [formGroup]="formGroupSearch" autocomplete="off">
@@ -44,14 +58,15 @@
     <mat-card-title>
     </mat-card-title>
     <mat-card-subtitle>
-      <button class="add-btn mr-10" type="button" mat-button
-              (click)="exportFileOptions(null,'FlightCrewOther.xlsx')">
+      <button *appHasPermission="['API_CREW_FLIGHTS_OTHERS_LIST']" class="add-btn mr-10" type="button" mat-button
+        (click)="exportFileOptions(null,'FlightCrewOther.xlsx')">
         <i class="material-symbols-outlined">
           download
         </i>
         <span i18n="@@export">Export</span>
       </button>
-      <button (click)="showDialogDetail()" class="add-btn" i18n mat-button type="button">
+      <button *appHasPermission="['API_CREW_FLIGHTS_OTHERS_INSERT']" (click)="showDialogDetail()" class="add-btn" i18n
+        mat-button type="button">
         <i class="material-symbols-outlined">
           add
         </i>
@@ -69,8 +84,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="name">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-          >
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
             Type
           </th>
           <td mat-cell *matCellDef="let element" class="text-center">{{ element.name }}</td>
@@ -84,8 +98,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="airportCodes">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-          >
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
             Airport Code
           </th>
           <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
@@ -93,8 +106,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="des-arr">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-          >
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
             Route
           </th>
           <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">{{ element.desCode }}
@@ -102,8 +114,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="flightNo">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-          >
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
             Flight no
           </th>
           <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
@@ -111,8 +122,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="acGroup">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-          >
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
             Ac group
           </th>
           <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
@@ -120,8 +130,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="acType">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-          >
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
             Ac type
           </th>
           <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
@@ -129,8 +138,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="applyFor">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-          >
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
             Apply
           </th>
           <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
@@ -138,8 +146,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="time">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-          >
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
             Time apply
           </th>
           <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
@@ -158,12 +165,13 @@
             <div class="action-buttons d-flex align-items-center justify-content-end">
               <a mat-button type="button">
               </a>
-              <a class="text-warning" (click)="showDialogDetail(element.id)" mat-button type="button">
+              <a *appHasPermission="['API_CREW_FLIGHTS_OTHERS_UPDATE']" class="text-warning"
+                (click)="showDialogDetail(element.id)" mat-button type="button">
                 <i class="material-symbols-outlined" i18n-title title="Edit">
                   edit
                 </i>
               </a>
-              <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">
+              <a *appHasPermission="[]" (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">
                 <i class="material-symbols-outlined" title="Delete">
                   delete
                 </i>
@@ -179,18 +187,14 @@
       </table>
     </div>
     <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-                   [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
-                   [pageIndex]="pageIndex"
-                   aria-label="Select page" i18n-aria-label="@@selectPage">
+      [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+      aria-label="Select page" i18n-aria-label="@@selectPage">
     </mat-paginator>
   </mat-card-content>
 
 
   <!-- Add New Popup -->
-  <div
-    [class.active]="showDialogCreate"
-    class="add-new-popup"
-  >
+  <div [class.active]="showDialogCreate" class="add-new-popup">
     <div class="popup-dialog" style="min-width: 700px; max-height: 700px">
       <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
         <mat-card-header>
@@ -201,10 +205,7 @@
             </h5>
           </mat-card-title>
           <mat-card-subtitle>
-            <button
-              (click)="closeDetail()"
-              mat-button
-            >
+            <button (click)="closeDetail()" mat-button>
               <i class="ri-close-fill"></i>
             </button>
           </mat-card-subtitle>
@@ -222,86 +223,76 @@
                     </mat-option>
                   </mat-select>
                   @if (!!formGroupDetail.controls['type'].hasError('required')) {
-                    <mat-error><span i18n>Type</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>Type</span><span i18n> is required</span></mat-error>
                   }
                 </mat-form-field>
               </div>
               <div class="col-sm-12 col-md-12 form-group" sizeInput="sm">
                 <mat-form-field>
                   <mat-label i18n>Name</mat-label>
-                  <input formControlName="name" matInput
-                         required>
+                  <input formControlName="name" matInput required>
                   @if (!!formGroupDetail.controls['name'].hasError('required')) {
-                    <mat-error><span i18n>Name</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>Name</span><span i18n> is required</span></mat-error>
                   } @else if (!!formGroupDetail.controls['name'].hasError('maxlength')) {
-                    <mat-error><span i18n>Name</span><span i18n> must be less than 250 characters</span></mat-error>
+                  <mat-error><span i18n>Name</span><span i18n> must be less than 250 characters</span></mat-error>
                   }
                 </mat-form-field>
               </div>
               <div class="col-sm-6 col-md-6 form-group">
                 <app-selection-suggest i18n-label="@@nation" (selectionChange)="changeValueNation($event)"
-                                       (clearInputEvent)="onClearInput('NATION')" required
-                                       label="Country" attrValue="id" attrDisplay="vniName" [options]="countries"
-                                       formControlName="nationId" size="sm"/>
+                  (clearInputEvent)="onClearInput('NATION')" required label="Country" attrValue="id"
+                  attrDisplay="vniName" [options]="countries" formControlName="nationId" size="sm" />
               </div>
               <div class="col-sm-6 col-md-6 form-group">
                 <app-selection-suggest i18n-label="@@airportCodes" label="Airport code" [options]="markets"
-                                       formControlName="airportCodes" size="sm"/>
+                  formControlName="airportCodes" size="sm" />
               </div>
               <div class="col-sm-3 col-md-3 form-group">
                 <app-selection-suggest i18n-label="@@airportCodes" label="ORG" [options]="airportList"
-                                       formControlName="arrCode" size="sm"/>
+                  formControlName="arrCode" size="sm" />
               </div>
               <div class="col-sm-3 col-md-3 form-group">
                 <app-selection-suggest i18n-label="@@airportCodes" label="DST" [options]="airportList"
-                                       formControlName="desCode" size="sm"/>
+                  formControlName="desCode" size="sm" />
               </div>
               <div class="col-sm-6 col-md-6 form-group">
-                <app-select-multiple size="sm" label="Flight no" [required]="false"
-                                     [options]="fltNoList"
-                                     formControlName="flightNo">
+                <app-select-multiple size="sm" label="Flight no" [required]="false" [options]="fltNoList"
+                  formControlName="flightNo">
                 </app-select-multiple>
               </div>
               <div class="col-sm-6 col-md-6 form-group">
                 <app-selection-suggest (selectionChange)="changeAcGroup($event)"
-                                       (clearInputEvent)="onClearInput('ACGROUP')"
-                                       label="AC Group" [options]="acGroupList"
-                                       formControlName="acGroup" size="sm"/>
+                  (clearInputEvent)="onClearInput('ACGROUP')" label="AC Group" [options]="acGroupList"
+                  formControlName="acGroup" size="sm" />
               </div>
               <div class="col-sm-6 col-md-6 form-group">
-                <app-selection-suggest attrDisplay="actype" attrValue="actype"
-                                       label="AC Type" [options]="acTypeList"
-                                       formControlName="acType" size="sm"/>
+                <app-selection-suggest attrDisplay="actype" attrValue="actype" label="AC Type" [options]="acTypeList"
+                  formControlName="acType" size="sm" />
               </div>
               <div class="col-sm-12 col-md-12 form-group">
-                <app-select-multiple size="sm" label="User"
-                                     [required]="true" [options]="targetPersonals" attrValue="code"
-                                     attrDisplay="label"
-                                     [isSearch]="false"
-                                     formControlName="applyFor">
+                <app-select-multiple size="sm" label="User" [required]="true" [options]="targetPersonals"
+                  attrValue="code" attrDisplay="label" [isSearch]="false" formControlName="applyFor">
                 </app-select-multiple>
               </div>
               <div class="col-sm-6 col-md-6 form-group">
                 <mat-form-field>
                   <mat-label i18n>Start Date</mat-label>
-                  <input [matDatepicker]="fromDate" formControlName="fromDate" matInput required
-                         trim="blur">
+                  <input [matDatepicker]="fromDate" formControlName="fromDate" matInput required trim="blur">
                   <mat-datepicker-toggle [for]="fromDate" matIconSuffix></mat-datepicker-toggle>
                   <mat-datepicker #fromDate></mat-datepicker>
                   @if (!!formGroupDetail.controls['fromDate'].hasError('required')) {
-                    <mat-error><span i18n>Apply from</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>Start date</span><span i18n> is required</span></mat-error>
                   }
                 </mat-form-field>
               </div>
               <div class="col-sm-6 col-md-6 form-group">
                 <mat-form-field size="sm">
                   <mat-label i18n>End Date</mat-label>
-                  <input [matDatepicker]="toDate" formControlName="toDate" matInput
-                         trim="blur">
+                  <input [matDatepicker]="toDate" formControlName="toDate" matInput trim="blur">
                   <mat-datepicker-toggle [for]="toDate" matIconSuffix></mat-datepicker-toggle>
                   <mat-datepicker #toDate></mat-datepicker>
                   @if (!!formGroupDetail.controls['toDate'].hasError('required')) {
-                    <mat-error><span i18n>Apply to</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>End date</span><span i18n> is required</span></mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -311,7 +302,7 @@
                   <textarea formControlName="notes" matInput></textarea>
                   <mat-hint align="end">{{ formGroupDetail.value.notes?.length }} / 500</mat-hint>
                   @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
-                    <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
+                  <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -325,11 +316,7 @@
               </i>
               Close
             </button>
-            <button
-              (click)="save()"
-              class="add-btn"
-              i18n mat-button
-            >
+            <button (click)="save()" class="add-btn" i18n mat-button>
               <i class="material-symbols-outlined">
                 save
               </i>
@@ -347,20 +334,19 @@
       <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
         <mat-card-content>
           <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
+            <span class="material-symbols-outlined font-size-5rem">
+              error
+            </span>
           </div>
           <div class="text-center mb-20">
             <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
           </div>
           <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
-                        You will not be able to recover the deleted data!</span>
+            <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+              You will not be able to recover the deleted data!</span>
           </div>
           <div class="btn-box text-center">
-            <button type="button" mat-button (click)="closeConfirmDelete()"
-                    class="close-btn  min-with-100 mlr-5">
+            <button type="button" mat-button (click)="closeConfirmDelete()" class="close-btn  min-with-100 mlr-5">
               <i class="material-symbols-outlined">
                 close
               </i>

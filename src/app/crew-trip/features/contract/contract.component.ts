@@ -1,28 +1,29 @@
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
-import {HttpStatusCode} from '@angular/common/http';
-import {Component, inject, Input, OnInit} from '@angular/core';
-import {FormBuilder, ReactiveFormsModule} from '@angular/forms';
-import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule} from '@angular/material/card';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatError, MatFormFieldModule, MatLabel, MatSuffix,} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatTableDataSource, MatTableModule} from '@angular/material/table';
-import {cloneDeep} from 'lodash';
-import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
-import {NgxControlError} from 'ngxtension/control-error';
-import {ContractService} from 'src/app/crew-trip/core/services/contract-service';
-import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {SelectMultipleComponent} from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {ListResponse} from 'src/app/crew-trip/shared/models/common.model';
-import {Constant, MESSAGE, removeNullValues,} from 'src/app/crew-trip/shared/utils/constant';
+import { CommonModule, NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { HttpStatusCode } from '@angular/common/http';
+import { Component, inject, Input, OnInit } from '@angular/core';
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatError, MatFormFieldModule, MatLabel, MatSuffix, } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
+import { cloneDeep } from 'lodash';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { NgxControlError } from 'ngxtension/control-error';
+import { ContractService } from 'src/app/crew-trip/core/services/contract-service';
+import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
+import { Constant, MESSAGE, removeNullValues, } from 'src/app/crew-trip/shared/utils/constant';
+import { HasPermissionDirective } from '../../shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-contract',
@@ -49,7 +50,7 @@ import {Constant, MESSAGE, removeNullValues,} from 'src/app/crew-trip/shared/uti
     MatDatepickerModule,
     NgxTrimDirectiveModule,
     SelectMultipleComponent,
-    NgxControlError,
+    NgxControlError, HasPermissionDirective
   ],
   templateUrl: './contract.component.html',
   styleUrl: './contract.component.scss',
@@ -65,6 +66,7 @@ import {Constant, MESSAGE, removeNullValues,} from 'src/app/crew-trip/shared/uti
         monthYearA11yLabel: 'MM/YYYY',
       },
     }),
+    HasPermissionDirective
   ],
 })
 export class ContractComponent extends CommonComponent implements OnInit {
@@ -88,16 +90,16 @@ export class ContractComponent extends CommonComponent implements OnInit {
     type?: string;
     format?: string;
   }[] = [
-    // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-    {label: $localize`Airport code`, value: 'marketCode'},
-    {label: $localize`BizDocId`, value: 'bizDocId'},
-    {label: $localize`Contract Code`, label1: $localize`Appendix Code`, value: 'contractCode',},
-    {label: $localize`Contract No`, label1: $localize`Appendix No`, value: 'contractNo'},
-    {label: $localize`Contract Name`, label1: $localize`Appendix Name`, value: 'contractName',},
-    {label: $localize`Supplier`, value: 'partnerName'},
-    {label: $localize`Service Type`, value: 'serviceObject'},
-    {label: $localize`Signed Date`, value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT,},
-  ];
+      // {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
+      { label: $localize`Airport code`, value: 'marketCode' },
+      { label: $localize`BizDocId`, value: 'bizDocId' },
+      { label: $localize`Contract Code`, label1: $localize`Appendix Code`, value: 'contractCode', },
+      { label: $localize`Contract No`, label1: $localize`Appendix No`, value: 'contractNo' },
+      { label: $localize`Contract Name`, label1: $localize`Appendix Name`, value: 'contractName', },
+      { label: $localize`Supplier`, value: 'partnerName' },
+      { label: $localize`Service Type`, value: 'serviceObject' },
+      { label: $localize`Signed Date`, value: 'signedDate', type: Constant.DATE, format: Constant.DATE_FORMAT, },
+    ];
   @Input() contractId: any;
 
   showPopupAnnex = false;
@@ -122,8 +124,8 @@ export class ContractComponent extends CommonComponent implements OnInit {
       contractName: [],
       contractCode: [],
     });
-    this.formGroupSearchInit = {...this.formGroupSearch.value};
-    this.formGroupDetailInit = {...this.formGroupDetail.value};
+    this.formGroupSearchInit = { ...this.formGroupSearch.value };
+    this.formGroupDetailInit = { ...this.formGroupDetail.value };
   }
 
   override async ngOnInit() {
@@ -227,9 +229,9 @@ export class ContractComponent extends CommonComponent implements OnInit {
 
   async showListAnnex(id: any, contractObj?: any) {
     this.viewType = 'PL';
-    await this._router.navigate([], {fragment: 'annex'});
+    await this._router.navigate([], { fragment: 'annex' });
     const initData = cloneDeep(this.formGroupSearchInit);
-    this.formGroupSearch.patchValue({...initData, contractId: id});
+    this.formGroupSearch.patchValue({ ...initData, contractId: id });
     if (contractObj) {
       this.contractObj = contractObj
     } else {
@@ -344,7 +346,7 @@ export class ContractComponent extends CommonComponent implements OnInit {
         .then((res) => {
           this.downloadFile(res, filename ?? res.fileName);
         });
-      this.formGroupSearch.patchValue({export: false, exportType: 'ALL'});
+      this.formGroupSearch.patchValue({ export: false, exportType: 'ALL' });
     } catch (e: any) {
       this.baseService.showError(e.error?.error?.code ?? MESSAGE.ERROR);
     } finally {
@@ -355,10 +357,10 @@ export class ContractComponent extends CommonComponent implements OnInit {
   async exportAppendix(filename?: string) {
     try {
       await this.spinner.show();
-      this.baseService.exportAppendix(removeNullValues({...this.formGroupSearch.value ,contractId: this.contractObj.bizDocId, export: true}))
+      this.baseService.exportAppendix(removeNullValues({ ...this.formGroupSearch.value, contractId: this.contractObj.bizDocId, export: true }))
         .then((res) => {
-        this.downloadFile(res, filename ?? res.fileName);
-      });
+          this.downloadFile(res, filename ?? res.fileName);
+        });
     } catch (e: any) {
       console.log(e);
       this.baseService.showError(e.error?.error?.code ?? MESSAGE.ERROR);

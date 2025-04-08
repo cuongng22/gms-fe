@@ -102,8 +102,8 @@
                 </div>
 
                 <div class="col-sm-12 col-md-12">
-                    <div class="form-group mb-20" sizeInput="md">
-                        <mat-form-field>
+                    <div class="form-group mb-20">
+                        <!-- <mat-form-field>
                             <mat-label i18n="@@emailBooking">Email</mat-label>
                             <input trim="blur" type="email" matInput formControlName="email" required>
                             <mat-error *ngxControlError="formGroupDetail.controls.email; track: 'required'"
@@ -118,6 +118,33 @@
                                 i18n="@@emailMaxlength">
                                 Email {{ MESSAGE.MAX_LENGTH_INVALID | dataTransformPipe:[Constant.STRING_FORMAT, 250]}}
                             </mat-error>
+                        </mat-form-field> -->
+                        <mat-form-field>
+                            <mat-label i18n="@@emailBooking:email">Email</mat-label>
+                            <mat-chip-grid formControlName="email" #chipGrid aria-label="Enter email">
+                                @for (email of emails(); track email) {
+                                <mat-chip-row (removed)="remove(email)" [editable]="true" (edited)="edit(email, $event)"
+                                    [aria-description]="'press enter to edit ' + email">
+                                    {{email}}
+                                    <button matChipRemove [attr.aria-label]="'remove ' + email">
+                                        <i class="material-symbols-outlined" style="font-size: 15px;">
+                                            close
+                                        </i>
+                                    </button>
+                                </mat-chip-row>
+                                }
+                                <input placeholder="New email..." [matChipInputFor]="chipGrid"
+                                    (input)="emailInputChange($event)"
+                                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                                    (matChipInputTokenEnd)="add($event)" />
+
+                            </mat-chip-grid>
+                            @if(mailFormatInvalid){
+                            <mat-error i18n="@@eemailBooking:mailFormatInvalid">
+                                Email {{MESSAGE.FORMAT_INVALID}}
+                            </mat-error>
+                            }
+
                         </mat-form-field>
                     </div>
                 </div>

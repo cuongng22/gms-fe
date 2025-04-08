@@ -169,9 +169,9 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       //Tổng tiền VND - bao gồm VAT
       // item.totalAmountVat = round(item.totalAmountVat);
       //Tổng số phòng đơn
-      item.totalSingleRoom = round(item.totalSingleRoom);
+      // item.totalSingleRoom = round(item.totalSingleRoom);
       //Tổng số phòng đôi
-      item.totalDoubleRoom = round(item.totalDoubleRoom);
+      // item.totalDoubleRoom = round(item.totalDoubleRoom);
     })
     return _jsonData;
   }
@@ -361,18 +361,18 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
    */
   private calculateData(item: any, index: number, isSummary?: boolean) {
     // thêm tỉ lệ chuyến bay nghỉ đêm
-    if (isSummary) {
-      const _flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOverNight === item.overnight).map(item => item.flightRate);
-      item.flightOvernightRate = Number(_flightOvernightRate)
-      if (this.type() === PlanCategoryEnum.PROCUREMENT) {
-        // thêm số chuyến bay theo giai đoạn
-        const _planFlightPeriod = this.planFlightPeriods.filter(itemFilter => itemFilter.periodStart === item.periodStart && itemFilter.periodEnd === item.periodEnd && itemFilter.aircraftType === item.aircraftType).map(item => item.numberOfFlight).reduce((acc, value) => acc + value, 0);
-        item.planFlightPeriod = Number(_planFlightPeriod)
-      }
-      item.noOfFlightOvernight = 1; // tổng số chuyến bay và số đêm nghỉ để nhóm sau đó chia cho số này vs tháng đã thực hiện monthInPerform
-      item.noOfOvernight = this.planFlightByOvernight.length ?? 1
-      // Thu bảo với tháng đã thực hiện thì số tiền sẽ phải chia ( số đêm nghỉ * loại máy bay) ==> loại ngân sách
 
+    const _flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOverNight === item.overnight).map(item => item.flightRate);
+    item.flightOvernightRate = Number(_flightOvernightRate)
+    if (this.type() === PlanCategoryEnum.PROCUREMENT) {
+      // thêm số chuyến bay theo giai đoạn
+      const _planFlightPeriod = this.planFlightPeriods.filter(itemFilter => itemFilter.periodStart === item.periodStart && itemFilter.periodEnd === item.periodEnd && itemFilter.aircraftType === item.aircraftType).map(item => item.numberOfFlight).reduce((acc, value) => acc + value, 0);
+      item.planFlightPeriod = Number(_planFlightPeriod)
+    }
+    item.noOfFlightOvernight = 1; // tổng số chuyến bay và số đêm nghỉ để nhóm sau đó chia cho số này vs tháng đã thực hiện monthInPerform
+    item.noOfOvernight = this.planFlightByOvernight.length ?? 1
+    // Thu bảo với tháng đã thực hiện thì số tiền sẽ phải chia ( số đêm nghỉ * loại máy bay) ==> loại ngân sách
+    if (isSummary) {
       //Số chuyến bay theo tàu và đêm nghỉ
       this.calculate(item, 'numberOfFlights', true);
       if (item.monthIsPerform) {
@@ -462,11 +462,11 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
    * TÍnh toán dòng tổng
    * @param item giá trị từng dòng dataSource
    */
-    this.calculateTotalByGroup(item, index, 'totalAmountForeignTransVat', 'totalAmountForeignTransVatGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmountForeign', 'totalAmountForeignGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmountForeignVat', 'totalAmountForeignVatGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmount', 'totalAmountGroup', true);
-    this.calculateTotalByGroup(item, index, 'totalAmountVat', 'totalAmountVatGroup', true);
+    this.calculateTotalByGroup(item, index, 'totalAmountForeignTransVat', 'totalAmountForeignTransVatGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmountForeign', 'totalAmountForeignGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmountForeignVat', 'totalAmountForeignVatGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmount', 'totalAmountGroup');
+    this.calculateTotalByGroup(item, index, 'totalAmountVat', 'totalAmountVatGroup');
   }
 
   clickEdit(data: any, control: string) {

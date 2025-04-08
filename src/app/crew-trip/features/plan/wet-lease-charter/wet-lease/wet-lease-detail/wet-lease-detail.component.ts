@@ -196,11 +196,7 @@ export class WetLeaseDetailComponent extends CommonComponent {
 			this.wetLeaseGeneral.formGroupDetail.controls.endDate.value,
 		);
 
-		let _priceHotelsList = [
-			...(_dataGeneral.isHotel
-				? this.wetLeaseGeneral.dataSourceHotel.data
-				: []),
-		];
+		let _priceHotelsList = [...(_dataGeneral.isHotel ? this.wetLeaseGeneral.dataSourceHotel.data : []),];
 		let _priceTransports = [
 			...(_dataGeneral.isTransport
 				? this.wetLeaseGeneral.dataSourceCarRental.data
@@ -217,11 +213,11 @@ export class WetLeaseDetailComponent extends CommonComponent {
 			_priceHotelsList.forEach((element) => {
 				let hotelItem = {
 					hotelCode: element.hotelCode,
-					hotelName: element.hotelName,
+					hotelName: element.hotelCode,
 					totalSingleRoom: 0,
 					totalTwinRoom: 0,
-					twinRoomPrice: Number(element.twinRoomPrice),
-					singleRoomPrice: Number(element.singleRoomPrice),
+					twinRoomPrice: element.twinRoomPrice ? Number(element.twinRoomPrice) : 0,
+					singleRoomPrice: element.singleRoomPrice ? Number(element.singleRoomPrice) : 0,
 				};
 				planHotelItem.hotelItem[element.hotelCode] = hotelItem;
 			});
@@ -231,12 +227,13 @@ export class WetLeaseDetailComponent extends CommonComponent {
 
 		this.planHotel = _planHotel;
 		this.priceHotel = _priceHotelsList;
+		console.log(this.priceHotel)
 
 		let _planTransports: any[] = [];
 		_priceTransports.forEach((element) => {
 			const _carRental = {
 				transportCode: element.carRentalCode,
-				transportName: element.carRentalName,
+				transportName: element.carRentalCode,
 				numberOfTrip: 0,
 				unitPrice: Number(element.unitPrice),
 				totalAmountForex: 0,
@@ -306,7 +303,9 @@ export class WetLeaseDetailComponent extends CommonComponent {
 
 		await this.spinner.show();
 		const _priceHotelsList = _dataGeneral.isHotel
-			? this.wetLeaseGeneral.dataSourceHotel.data
+			? [...this.wetLeaseGeneral.dataSourceHotel.data.map((item) => {
+				return { ...item, hotelName: item.hotelCode }
+			})]
 			: [];
 		const _priceTransports = _dataGeneral.isTransport
 			? this.wetLeaseGeneral.dataSourceCarRental.data

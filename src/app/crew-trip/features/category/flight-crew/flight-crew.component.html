@@ -4,10 +4,13 @@
     Flight crew
   </h5>
   <ol class="breadcrumb list-unstyled mt-0 mb-0 p-0">
-    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@category">
-      Category
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@system">
+      System
     </li>
-    <li class="breadcrumb-item d-inline-block position-relative">
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@config">
+      Config
+    </li>
+    <li class="breadcrumb-item d-inline-block position-relative" i18n="@@flightCrew">
       Flight crew
     </li>
   </ol>
@@ -220,16 +223,14 @@
         </mat-card>
       </div>
     </div>
-
-
   </mat-tab>
-  <mat-tab label="Other Crew">
-    <ng-container *ngIf="activeTab === 1">
-      <app-other-crew></app-other-crew>
-    </ng-container>
-  </mat-tab>
+<!--  <mat-tab label="Other Crew">-->
+<!--    <ng-container *ngIf="activeTab === 1">-->
+<!--      <app-other-crew></app-other-crew>-->
+<!--    </ng-container>-->
+<!--  </mat-tab>-->
   <mat-tab label="Overnight rate configuration">
-    <ng-container *ngIf="activeTab === 2">
+    <ng-container *ngIf="activeTab === 1">
       <app-config-overnight-rate></app-config-overnight-rate>
     </ng-container>
   </mat-tab>

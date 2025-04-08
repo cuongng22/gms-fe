@@ -21,7 +21,7 @@
             @for (item of hotelHeaderRowDef1; track $index) {
             <ng-container [matColumnDef]="item.hotelCode">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " colspan="2">
-                    {{item.hotelName}}
+                    {{item.hotelCode}}
                 </th>
             </ng-container>
             <ng-container [matColumnDef]="'totalSingleRoom_'+item.hotelCode">
@@ -37,14 +37,14 @@
                         <mat-form-field
                             (clickOutside)="clickOutside(element.hotelItem[item.hotelCode],'totalSingleRoomEditing',element)"
                             class="edit-inline-table">
-                            <input matInput type="text" digitOnly [decimal]="true" decimalSeparator="."  appThousandsSeparator
-                                [(ngModel)]="element.hotelItem[item.hotelCode].totalSingleRoom">
+                            <input matInput type="text" digitOnly [decimal]="true" decimalSeparator="."
+                                appThousandsSeparator [(ngModel)]="element.hotelItem[item.hotelCode].totalSingleRoom">
                         </mat-form-field>
                     </div>
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
-                    {{getTotal('item.hotelItem[\''+item.hotelCode+'\'].totalSingleRoom') | number}}
+                    <!-- {{getTotal('item.hotelItem[\''+item.hotelCode+'\'].totalSingleRoom') | number}} -->
                 </td>
             </ng-container>
             <ng-container [matColumnDef]="'totalTwinRoom_'+item.hotelCode">
@@ -68,7 +68,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
-                    {{getTotal('item.hotelItem[\''+item.hotelCode+'\'].totalTwinRoom') | number}}
+                    <!-- {{getTotal('item.hotelItem[\''+item.hotelCode+'\'].totalTwinRoom') | number}} -->
                 </td>
             </ng-container>
             }
@@ -112,7 +112,7 @@
 
             <ng-container matColumnDef="totalAmount">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " colspan="2"
-                    i18n="@@totalAmountVND">Total amount <br/> (VND)</th>
+                    i18n="@@totalAmountVND">Total amount <br /> (VND)</th>
             </ng-container>
             <ng-container matColumnDef="totalExcVAT">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center "
@@ -147,11 +147,13 @@
                     {{getTotalPlannedBudget(item) | number}}</td>
                 }@else if(item.includes('ft2TotalCountForeign')) {
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
-<!--                    {{(category() === CategoryEnum.INTERNATIONAL ? getTotalPlannedBudget(item) : 0) | number}}-->
+                    {{(category() === CategoryEnum.INTERNATIONAL ? getTotalPlannedBudget(item) : 0) | number}}
                 </td>
-                } @else {
+                } @else if(item.includes('ft2TotalQtySingleRoom') || item.includes('ft2TotalQtyTwinRoom')) {
+                <td mat-footer-cell *matFooterCellDef class="fw-bold text-right"></td>
+                }@else{
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
-<!--                    {{getTotalPlannedBudget(item) | number}}</td>-->
+                    {{getTotalPlannedBudget(item) | number}}</td>
                 }
             </ng-container>
             }

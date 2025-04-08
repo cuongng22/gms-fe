@@ -1,6 +1,6 @@
-import {AfterContentInit, Directive, ElementRef, HostListener, Input} from '@angular/core';
-import {NgControl} from '@angular/forms';
-import {clone, cloneDeep, isNaN, parseInt} from "lodash";
+import { AfterContentInit, Directive, ElementRef, HostListener, Input } from '@angular/core';
+import { NgControl } from '@angular/forms';
+import { clone, cloneDeep, isNaN, parseInt } from "lodash";
 
 
 @Directive({
@@ -18,10 +18,12 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
     const inputElement = this.el.nativeElement;
     //init
     let initValue = this.control.value;
-    if (initValue && !isNaN(Number(initValue))) {
-      inputElement.value = this.formatNumber(initValue);
-    } else if (isNaN(Number(initValue))) {
-      this.control.control?.setErrors({invalidNumber: true});
+    if (initValue) {
+      if (!isNaN(Number(initValue))) {
+        inputElement.value = this.formatNumber(initValue);
+      } else if (isNaN(Number(initValue))) {
+        this.control.control?.setErrors({ invalidNumber: true });
+      }
     }
 
     //la field tinh toan
@@ -35,12 +37,15 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
       }
       snapValue = value;
       const _value = String(value).replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
-      if (value && !isNaN(Number(_value))) {
-        inputElement.value = this.formatNumber(_value);
-      } else if (isNaN(Number(_value))) {
-        // inputElement.value = '0';
-        this.control.control?.setErrors({invalidNumber: true});
+      if (value) {
+        if (!isNaN(Number(_value))) {
+          inputElement.value = this.formatNumber(_value);
+        } else if (isNaN(Number(_value))) {
+          // inputElement.value = '0';
+          this.control.control?.setErrors({ invalidNumber: true });
+        }
       }
+
     });
   }
 
@@ -50,18 +55,21 @@ export class ThousandsSeparatorDirective implements AfterContentInit {
     const inputElement = this.el.nativeElement;
     const value = inputElement.value.replace(/,/g, ''); // Loại bỏ dấu phẩy cũ
     this.control.control?.setValue(value);
-    if (value && !isNaN(Number(value))) {
-      if (!this.isValidNumberDecimal(value)) {
-        this.control.control?.setErrors({invalidNumberDecimal: true});
-      } else if (!this.control.errors) {
-        this.control.control?.setErrors(null);
-        this.control.control?.setValue(Number(value), {emitEvent: false});
-        inputElement.value = this.formatNumber(value);
+    if (value) {
+      if (!isNaN(Number(value))) {
+        if (!this.isValidNumberDecimal(value)) {
+          this.control.control?.setErrors({ invalidNumberDecimal: true });
+        } else if (!this.control.errors) {
+          this.control.control?.setErrors(null);
+          this.control.control?.setValue(Number(value), { emitEvent: false });
+          inputElement.value = this.formatNumber(value);
+        }
+      } else if (isNaN(Number(value))) {
+        // inputElement.value = '';
+        this.control.control?.setErrors({ invalidNumber: true });
       }
-    } else if (isNaN(Number(value))) {
-      // inputElement.value = '';
-      this.control.control?.setErrors({invalidNumber: true});
     }
+
   }
 
   @HostListener('blur', ['$event'])
