@@ -1,7 +1,7 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup} from '@angular/forms';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
+import {Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
 import {HotelService} from 'src/app/crew-trip/core/services/hotel-service';
 import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
@@ -15,6 +15,7 @@ import {InvoiceDocumentExportType} from "src/app/crew-trip/features/invoice/invo
 import {cloneDeep} from "lodash";
 import moment from "moment";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
+import {Editor, Toolbar} from "ngx-editor";
 
 @Component({
   selector: 'app-invoice-document',
@@ -56,7 +57,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   _displayedColumnsAll: {
     label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string, sticky?: boolean
   }[] = [
-    {label: $localize`Airport Code`, value: 'airportCode', rowspan: "2", sticky:true},
+    {label: $localize`Airport Code`, value: 'airportCode', rowspan: "2", sticky: true},
     {label: $localize`Invoice Number`, value: 'invoiceNumber', rowspan: "2"},
     {label: $localize`Invoice Date`, value: 'invoiceDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
     {label: $localize`InvoiceReceive Date`, value: 'invoiceReceiveDate', type: Constant.DATE, format: Constant.DATE_FORMAT, rowspan: "2"},
@@ -91,6 +92,17 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   selectedRow: any = null;
   showListChild = true;
   dataListChild: any;
+  editor: Editor;
+  toolbar: Toolbar = [
+    ['bold', 'italic'],
+    ['underline', 'strike'],
+    ['code', 'blockquote'],
+    ['ordered_list', 'bullet_list'],
+    [{heading: ['h1', 'h2', 'h3', 'h4', 'h5', 'h6']}],
+    ['link', 'image'],
+    ['text_color', 'background_color'],
+    ['align_left', 'align_center', 'align_right', 'align_justify'],
+  ];
 
   constructor() {
     super();
@@ -107,14 +119,21 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
       version: [],
       isLatest: [true]
     });
+
     this.formGroupDetail = this.fb.group({
-      id: [], emailTo: ['chien12345aabb@gmail.com'], emailCc: ['chien12345aabb@gmail.com'], emailSubject: ['test'], emailContent: ['test1']
+      id: [],
+      emailTo: [, [Validators.pattern(PATTERN.EMAIL)]],
+      emailCc: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
+      emailSubject: [, [Validators.maxLength(250)]],
+      emailContent: [, [Validators.required]],
+      fileAttachs: []
     });
     this.formGroupFile = this.fb.group({
       ctype: ['INTERNATIONAL'], partnerType: [], fileUpload: [], templateName: [], templateNameLabel: []
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
+    this.editor = new Editor();
   }
 
   override async ngOnInit() {
