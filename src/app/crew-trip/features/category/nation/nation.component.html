@@ -73,7 +73,8 @@
     <mat-card-title>
     </mat-card-title>
     <mat-card-subtitle>
-      <button (click)="showDialogDetail()" class="add-btn" i18n mat-button type="button">
+      <button *appHasPermission="['API_NATION_INSERT']" (click)="showDialogDetail()" class="add-btn" i18n mat-button
+        type="button">
         <i class="material-symbols-outlined">
           add
         </i>
@@ -88,43 +89,36 @@
         <!-- Checkbox Column -->
         <ng-container matColumnDef="select">
           <th *matHeaderCellDef mat-header-cell>
-            <mat-checkbox
-              (change)="$event ? toggleAllRows() : null"
-              [aria-label]="checkboxLabel()"
+            <mat-checkbox (change)="$event ? toggleAllRows() : null" [aria-label]="checkboxLabel()"
               [checked]="selection.hasValue() && isAllSelected()"
-              [indeterminate]="selection.hasValue() && !isAllSelected()"
-            >
+              [indeterminate]="selection.hasValue() && !isAllSelected()">
             </mat-checkbox>
           </th>
           <td *matCellDef="let row" mat-cell>
-            <mat-checkbox
-              (change)="$event ? selection.toggle(row) : null"
-              (click)="$event.stopPropagation()"
-              [aria-label]="checkboxLabel(row)"
-              [checked]="selection.isSelected(row)"
-            >
+            <mat-checkbox (change)="$event ? selection.toggle(row) : null" (click)="$event.stopPropagation()"
+              [aria-label]="checkboxLabel(row)" [checked]="selection.isSelected(row)">
             </mat-checkbox>
           </td>
         </ng-container>
         <ng-container matColumnDef="stt">
           <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header>#</th>
-          <td *matCellDef="let element; let i = dataIndex" class="text-center"
-              mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
+          <td *matCellDef="let element; let i = dataIndex" class="text-center" mat-cell>{{ (pageIndex * pageSize) + i +
+            1 }}
           </td>
         </ng-container>
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
-          <ng-container matColumnDef="{{innerColumn.value}}">
-            <th class="text-center" mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label }}</th>
-            <td [ngClass]="{'text-center': innerColumn.value === 'activeLabel',}" mat-cell *matCellDef="let element">
-                <span [ngClass]="{
+        <ng-container matColumnDef="{{innerColumn.value}}">
+          <th class="text-center" mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label }}</th>
+          <td [ngClass]="{'text-center': innerColumn.value === 'activeLabel',}" mat-cell *matCellDef="let element">
+            <span [ngClass]="{
         'badge': innerColumn.value === 'activeLabel',
         'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
         'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
         }">{{
-                    element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-                  }}</span>
-            </td>
-          </ng-container>
+              element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+              }}</span>
+          </td>
+        </ng-container>
         }
         <!-- Action Column -->
         <ng-container matColumnDef="action" stickyEnd>
@@ -136,7 +130,8 @@
               <a mat-button type="button">
 
               </a>
-              <a (click)="showDialogDetail(i,'index')" class="text-warning" mat-button type="button">
+              <a *appHasPermission="['API_NATION_UPDATE']" (click)="showDialogDetail(i,'index')" class="text-warning"
+                mat-button type="button">
                 <i class="material-symbols-outlined" i18n-title title="Edit">
                   edit
                 </i>
@@ -161,23 +156,15 @@
       </table>
     </div>
     <!--<mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons (page)="onPageChange($event)" ></mat-paginator>-->
-    <mat-paginator
-      (page)="onPageChange($event)"
-      [length]="totalElement"
-      [pageIndex]="pageIndex"
-      [pageSizeOptions]="pageSizeOptions"
-      [pageSize]="pageSize"
-      [showFirstLastButtons]="showFirstLastButtons"
+    <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageIndex]="pageIndex"
+      [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [showFirstLastButtons]="showFirstLastButtons"
       aria-label="Select page">
     </mat-paginator>
   </mat-card-content>
 </mat-card>
 
 <!-- Add New Popup -->
-<div
-  [class.active]="showDialogCreate"
-  class="add-new-popup"
->
+<div [class.active]="showDialogCreate" class="add-new-popup">
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
       <mat-card-header>
@@ -188,10 +175,7 @@
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
-          <button
-            (click)="closeDetail()"
-            mat-button
-          >
+          <button (click)="closeDetail()" mat-button>
             <i class="ri-close-fill"></i>
           </button>
         </mat-card-subtitle>
@@ -213,39 +197,38 @@
                     <mat-option i18n value="Antarctica">Antarctica</mat-option>
                   </mat-select>
                   @if (!!formGroupDetail.controls['area'].hasError('required')) {
-                    <mat-error><span i18n>Region</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>Region</span><span i18n> is required</span></mat-error>
                   }
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label i18n>Country code</mat-label>
-                  <input formControlName="code"  trim="blur" i18n-placeholder
-                         matInput required>
+                  <input formControlName="code" trim="blur" i18n-placeholder matInput required>
                   @if (!!formGroupDetail.controls['code'].hasError('required')) {
-                    <mat-error><span i18n>Country code</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>Country code</span><span i18n> is required</span></mat-error>
                   } @else if (!!formGroupDetail.controls['code'].hasError('existCode')) {
-                    <mat-error><span i18n>Country code</span><span i18n> already exist</span></mat-error>
+                  <mat-error><span i18n>Country code</span><span i18n> already exist</span></mat-error>
                   } @else if (!!formGroupDetail.controls['code'].hasError('maxlength')) {
-                    <mat-error><span i18n>Country code must be less than 3 characters</span></mat-error>
+                  <mat-error><span i18n>Country code must be less than 3 characters</span></mat-error>
                   }
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label i18n>Country name (English)</mat-label>
                   <input formControlName="engName" trim="blur" i18n-placeholder matInput required>
                   @if (!!formGroupDetail.controls['engName'].hasError('required')) {
-                    <mat-error><span i18n>Country name (English)</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>Country name (English)</span><span i18n> is required</span></mat-error>
                   }
                   @if (!!formGroupDetail.controls['engName'].hasError('maxlength')) {
-                    <mat-error><span i18n>Country name (English) must be less than 250 characters</span></mat-error>
+                  <mat-error><span i18n>Country name (English) must be less than 250 characters</span></mat-error>
                   }
                 </mat-form-field>
                 <mat-form-field>
                   <mat-label i18n>Country name (Vietnamese)</mat-label>
                   <input formControlName="vniName" trim="blur" i18n-placeholder matInput required>
                   @if (!!formGroupDetail.controls['vniName'].hasError('required')) {
-                    <mat-error><span i18n>Country name (Vietnamese)</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>Country name (Vietnamese)</span><span i18n> is required</span></mat-error>
                   }
                   @if (!!formGroupDetail.controls['vniName'].hasError('maxlength')) {
-                    <mat-error><span i18n>Country name (Vietnamese) must be less than 250 characters</span></mat-error>
+                  <mat-error><span i18n>Country name (Vietnamese) must be less than 250 characters</span></mat-error>
                   }
                 </mat-form-field>
                 <mat-checkbox class="mt-10" formControlName="active" i18n>Active</mat-checkbox>
@@ -260,11 +243,7 @@
             </i>
             Close
           </button>
-          <button
-            (click)="save()"
-            class="add-btn"
-            i18n mat-button
-          >
+          <button (click)="save()" class="add-btn" i18n mat-button>
             <i class="material-symbols-outlined">
               save
             </i>
@@ -281,20 +260,19 @@
     <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
       <mat-card-content>
         <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
+          <span class="material-symbols-outlined font-size-5rem">
+            error
+          </span>
         </div>
         <div class="text-center mb-20">
           <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
         </div>
         <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
-                        You will not be able to recover the deleted data!</span>
+          <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+            You will not be able to recover the deleted data!</span>
         </div>
         <div class="btn-box text-center">
-          <button type="button" mat-button (click)="closeConfirmDelete()"
-                  class="close-btn  min-with-100 mlr-5">
+          <button type="button" mat-button (click)="closeConfirmDelete()" class="close-btn  min-with-100 mlr-5">
             <i class="material-symbols-outlined">
               close
             </i>

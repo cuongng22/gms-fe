@@ -18,7 +18,7 @@ import { InputSizeComponent } from "src/app/crew-trip/shared/input/input-size.co
 import { ServiceType, PlanCategoryEnum } from "../../../budget-procurement/budget-procurement.model";
 import { CategoriesEnum, StatusesSummary, StatusSummaryEnum } from "../../estimated-cost.model";
 import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from "./estimated-cost-summary-list.model";
-import { Constant } from "src/app/crew-trip/shared/utils/constant";
+import { Constant, round } from "src/app/crew-trip/shared/utils/constant";
 
 @Component({
   selector: 'app-estimated-cost-summary-list',
@@ -45,6 +45,7 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
 
   displayedColumnTotals: string[] = [];
   bodySearch: any;
+  round = round;
 
   override baseService = inject(PlanBudgetProcurementService);
   override formGroupDetail = this.formBuilder.group({
@@ -110,9 +111,10 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
     }
   }
 
-  getTotal(control: string, serviceType: string) {
+  getTotal(control: string, serviceType: string, isRound?: boolean) {
     return this.dataSource.data.filter((t: any) => t.serviceType === serviceType)
-      .map((t: any) => Number(t[getControlTotal(control, serviceType)])).reduce((acc, value) => acc + value, 0);
+      .map((t: any) => isRound ? round(Number(t[getControlTotal(control, serviceType)])) :
+        Number(t[getControlTotal(control, serviceType)])).reduce((acc, value) => acc + value, 0);
   }
 
 

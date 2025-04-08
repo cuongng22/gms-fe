@@ -11,8 +11,8 @@
         <mat-card-title>
         </mat-card-title>
         <mat-card-subtitle>
-            <button class="add-btn mr-10" type="button" mat-button
-                (click)="exportFile(null,'estimated-flight-schedule.xlsx')">
+            <button *appHasPermission="['API_DAILY_FLIGHT_SCHEDULE_EXPORT_FLIGHT_CREW_PLAN_LIST']" class="add-btn mr-10"
+                type="button" mat-button (click)="exportFile(null,'estimated-flight-schedule.xlsx')">
                 <i class="material-symbols-outlined">
                     download
                 </i>

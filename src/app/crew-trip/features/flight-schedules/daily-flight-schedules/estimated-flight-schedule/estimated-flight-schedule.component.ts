@@ -19,6 +19,7 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { DailyFlightSchedulesService } from 'src/app/crew-trip/core/services/daily-flight-schedules.service';
 import { DailyFlightSchedulesSearchComponent } from '../daily-flight-schedules-search/daily-flight-schedules-search.component';
 import { DialogMonthlyFlightScheduleDetailComponent } from '../monthly-flight-schedule/dialog-monthly-flight-schedule-detail/dialog-monthly-flight-schedule-detail.component';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-estimated-flight-schedule',
@@ -28,11 +29,11 @@ import { DialogMonthlyFlightScheduleDetailComponent } from '../monthly-flight-sc
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, DataTransformPipe,
-    SelectionSuggestComponent, DailyFlightSchedulesSearchComponent
+    SelectionSuggestComponent, DailyFlightSchedulesSearchComponent, HasPermissionDirective
   ],
   templateUrl: './estimated-flight-schedule.component.html',
   styleUrl: './estimated-flight-schedule.component.scss',
-  providers: [DataTransformPipe]
+  providers: [DataTransformPipe, HasPermissionDirective]
 })
 export class EstimatedFlightScheduleComponent extends CommonComponent {
   dataTransformPipe = inject(DataTransformPipe);
@@ -72,15 +73,15 @@ export class EstimatedFlightScheduleComponent extends CommonComponent {
     super.exportFile(this.dailyFlightSchedulesSearch().formGroupSearch.value, filename, 'export-flight-crew-plan')
   }
 
-    flightCrewDetail(element: any) {
-      this.dialog.open(DialogMonthlyFlightScheduleDetailComponent, {
-        minWidth: 1300,
-        data: {
-          isUpdate: false,
-          ...this.dailyFlightSchedulesSearch().formGroupSearch.value,
-          ...element
-        }
-      })
-    }
+  flightCrewDetail(element: any) {
+    this.dialog.open(DialogMonthlyFlightScheduleDetailComponent, {
+      minWidth: 1300,
+      data: {
+        isUpdate: false,
+        ...this.dailyFlightSchedulesSearch().formGroupSearch.value,
+        ...element
+      }
+    })
+  }
 
 }

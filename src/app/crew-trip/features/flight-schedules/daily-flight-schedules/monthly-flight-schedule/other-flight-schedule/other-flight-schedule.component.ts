@@ -20,6 +20,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { DailyFlightSchedulesSearchComponent } from '../../daily-flight-schedules-search/daily-flight-schedules-search.component';
 import { DialogExtraCrewComponent } from '../dialog-extra-crew/dialog-extra-crew.component';
 import { RouterLink } from '@angular/router';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-other-flight-schedule',
@@ -29,11 +30,11 @@ import { RouterLink } from '@angular/router';
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, DataTransformPipe,
-    SelectionSuggestComponent, DailyFlightSchedulesSearchComponent, RouterLink
+    SelectionSuggestComponent, DailyFlightSchedulesSearchComponent, RouterLink, HasPermissionDirective
   ],
   templateUrl: './other-flight-schedule.component.html',
   styleUrl: './other-flight-schedule.component.scss',
-  providers: [DataTransformPipe]
+  providers: [DataTransformPipe, HasPermissionDirective]
 })
 export class OtherFlightScheduleComponent extends CommonComponent {
   dataTransformPipe = inject(DataTransformPipe);

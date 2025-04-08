@@ -23,14 +23,17 @@
                 <span i18n="@@export">Export</span>
             </button>
             <mat-menu #menu="matMenu">
-                <button mat-menu-item (click)="exportFile(null,'monthly-flight-schedule.xlsx')">
+                <button *appHasPermission="['API_DAILY_FLIGHT_SCHEDULE_EXPORT_FLIGHT_CREW_IN_MONTH_LIST']" mat-menu-item
+                    (click)="exportFile(null,'monthly-flight-schedule.xlsx')">
                     <span>Flight list</span>
                 </button>
-                <button mat-menu-item (click)="exportCrewList('list-of-flight-crew.xlsx')">
+                <button *appHasPermission="['API_DAILY_FLIGHT_SCHEDULE_EXPORT_CREW_LIST_LIST']" mat-menu-item
+                    (click)="exportCrewList('list-of-flight-crew.xlsx')">
                     <span>List of flight crew</span>
                 </button>
             </mat-menu>
-            <button class="add-btn mr-10" type="button" mat-button [routerLink]="['/flight-schedules/daily/other']">
+            <button *appHasPermission="['API_DAILY_FLIGHT_SCHEDULE_LIST_EXTRA_CREWS_LIST']" class="add-btn mr-10"
+                type="button" mat-button [routerLink]="['/flight-schedules/daily/other']">
                 <i class="material-symbols-outlined">
                     person_add
                 </i>

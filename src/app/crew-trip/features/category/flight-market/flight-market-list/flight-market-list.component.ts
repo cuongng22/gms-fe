@@ -30,6 +30,7 @@ import { CustomMatPaginatorIntl } from 'src/app/customizer-settings/paginator-in
 import { CarRentalDetailComponent } from '../car-rental-detail/car-rental-detail.component';
 import { HotelDetailComponent } from '../hotel-detail/hotel-detail.component';
 import { MatListModule } from '@angular/material/list';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
 	selector: 'app-flight-market-list',
@@ -56,13 +57,14 @@ import { MatListModule } from '@angular/material/list';
 		FileUploadModule,
 		NgxTrimDirectiveModule,
 		NgxControlError,
-		MatListModule
+		MatListModule, HasPermissionDirective
 	],
 	providers: [
 		DataTransformPipe,
 		{ provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl },
 		{ provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
 		provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+		HasPermissionDirective
 	],
 	templateUrl: './flight-market-list.component.html',
 	styleUrl: './flight-market-list.component.scss',

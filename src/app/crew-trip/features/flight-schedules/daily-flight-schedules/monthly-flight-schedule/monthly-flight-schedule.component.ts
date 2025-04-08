@@ -26,6 +26,7 @@ import { Constant, removeNullValues } from 'src/app/crew-trip/shared/utils/const
 import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
 import { HttpStatusCode } from '@angular/common/http';
 import { MatMenuModule } from '@angular/material/menu';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-monthly-flight-schedule',
@@ -35,11 +36,12 @@ import { MatMenuModule } from '@angular/material/menu';
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, DataTransformPipe,
-    SelectionSuggestComponent, DailyFlightSchedulesSearchComponent, RouterLink, MatMenuModule
+    SelectionSuggestComponent, DailyFlightSchedulesSearchComponent, RouterLink, MatMenuModule,
+    HasPermissionDirective
   ],
   templateUrl: './monthly-flight-schedule.component.html',
   styleUrl: './monthly-flight-schedule.component.scss',
-  providers: [DataTransformPipe]
+  providers: [DataTransformPipe, HasPermissionDirective]
 })
 export class MonthlyFlightScheduleComponent extends CommonComponent {
   dataTransformPipe = inject(DataTransformPipe);

@@ -1,36 +1,40 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
-import {MatCardModule} from '@angular/material/card';
-import {UsersService} from 'src/app/crew-trip/core/services/users-service';
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
-import {NationService} from 'src/app/crew-trip/core/services/nation-service';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {RouterLink} from '@angular/router';
-import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatInput} from '@angular/material/input';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {NoDataRowOutlet} from '@angular/cdk/table';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
-import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {HttpStatusCode} from '@angular/common/http';
-import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
-import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
+import { CommonModule, NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { UsersService } from 'src/app/crew-trip/core/services/users-service';
+import { MatError, MatFormField, MatLabel, MatPrefix, MatSuffix } from '@angular/material/form-field';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { NationService } from 'src/app/crew-trip/core/services/nation-service';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { RouterLink } from '@angular/router';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInput } from '@angular/material/input';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { NoDataRowOutlet } from '@angular/cdk/table';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { RoleFunctionComponent } from 'src/app/crew-trip/features/roles/role-function/role-function.component';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { HttpStatusCode } from '@angular/common/http';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { InputComponent } from 'src/app/crew-trip/shared/component/input/input.component';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 
 @Component({
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent, NgxTrimDirectiveModule],
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent, NgxTrimDirectiveModule,
+    HasPermissionDirective
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   selector: 'app-nation',
   standalone: true,
   styleUrl: 'nation.component.scss',
-  templateUrl: 'nation.component.html'
+  templateUrl: 'nation.component.html',
+  providers: [HasPermissionDirective]
 })
 
 
@@ -43,13 +47,13 @@ export class NationComponent extends CommonComponent implements OnInit {
   _displayedColumns: {
     label: string; value: string, type?: string, format?: string
   }[] = [
-      {label: $localize`Code`, value: 'code'}, {
+      { label: $localize`Code`, value: 'code' }, {
         label: $localize`English name`,
         value: 'engName'
-      }, {label: $localize`VietNam name`, value: 'vniName'}, {
+      }, { label: $localize`VietNam name`, value: 'vniName' }, {
         label: $localize`Region`,
         value: 'area'
-      }, {label: $localize`Status`, value: 'activeLabel'},];
+      }, { label: $localize`Status`, value: 'activeLabel' },];
 
   constructor() {
     super();
@@ -65,8 +69,8 @@ export class NationComponent extends CommonComponent implements OnInit {
       curCode: [''],
       active: [true,]
     });
-    this.formGroupSearchInit = {...this.formGroupSearch.value};
-    this.formGroupDetailInit = {...this.formGroupDetail.value};
+    this.formGroupSearchInit = { ...this.formGroupSearch.value };
+    this.formGroupDetailInit = { ...this.formGroupDetail.value };
   }
 
   override async ngOnInit() {
@@ -106,7 +110,7 @@ export class NationComponent extends CommonComponent implements OnInit {
   }
 
   existCodeValidator(control: AbstractControl): ValidationErrors | null {
-    return this.existCode ? {existCode: true} : null;
+    return this.existCode ? { existCode: true } : null;
   }
 
 }
