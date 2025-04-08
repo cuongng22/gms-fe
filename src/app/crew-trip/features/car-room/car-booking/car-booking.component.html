@@ -21,50 +21,28 @@
     <form [formGroup]="formGroupSearch" (ngSubmit)="search()" class="form-inline">
       <div class="row">
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection [required]="true"
-                         [options]="optionsFlightScheduleType"
-                         label="Flight Schedule Type"
-                         formControlName="scheduleType"
-          >
+          <app-selection [options]="optionsFlightScheduleType" label="Flight Schedule Type"
+            formControlName="scheduleType">
           </app-selection>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection-suggest
-            i18n-label="@@airportCodes"
-            label="Market code"
-            [options]="markets"
-            formControlName="marketCode"
-            size="sm"
-          ></app-selection-suggest>
+          <app-selection-suggest i18n-label="@@airportCodes" label="Market code" [options]="markets"
+            formControlName="marketCode" size="sm"></app-selection-suggest>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection [options]="optionsServiceApplied" [required]="true" label="FC/CC" formControlName="type">
+          <app-selection [options]="optionsServiceApplied" label="FC/CC" formControlName="type">
           </app-selection>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection [options]="transportType" [required]="true" label="Transport type"
-                         formControlName="transportType">
+          <app-selection [options]="transportType" label="Transport type" formControlName="transportType">
           </app-selection>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection
-            [options]="monthSelection"
-            label="Month"
-            formControlName="month"
-            size="sm" [required]="true"
-            attrDisplay=""
-            attrValue=""
-          ></app-selection>
+          <app-selection [options]="monthSelection" label="Month" formControlName="month" size="sm" attrDisplay=""
+            attrValue=""></app-selection>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2" sizeInput="sm">
-          <app-selection
-            [options]="listYear"
-            label="Year" [required]="true"
-            formControlName="year"
-            size="sm"
-            attrDisplay=""
-            attrValue=""
-          >
+          <app-selection [options]="listYear" label="Year" formControlName="year" size="sm" attrDisplay="" attrValue="">
           </app-selection>
         </div>
         <div class="col-md-2 col-xs-2 col-sm-2 col-lg-2 mt-2" sizeInput="sm">
@@ -87,7 +65,7 @@
     </mat-card-title>
     <mat-card-subtitle>
       <button class="add-btn mr-10" type="button" (click)="exportFileOptions(null,'transportations-booking.xlsx')"
-              mat-button>
+        mat-button>
         <i class="material-symbols-outlined">
           download
         </i>

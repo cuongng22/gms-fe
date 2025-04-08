@@ -22,6 +22,7 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { Constant, DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant';
 import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-vehicle',
@@ -29,12 +30,13 @@ import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
   imports: [MatCardModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, NgxTrimDirectiveModule
+    MatTableModule, MatPaginatorModule, NgxTrimDirectiveModule, HasPermissionDirective
   ],
   providers: [DataTransformPipe,
     { provide: MAT_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
     { provide: MAT_NATIVE_DATE_FORMATS, useValue: DATE_FORMAT_DD_MM_YYYY },
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+    HasPermissionDirective
 
   ],
   templateUrl: './vehicle.component.html',

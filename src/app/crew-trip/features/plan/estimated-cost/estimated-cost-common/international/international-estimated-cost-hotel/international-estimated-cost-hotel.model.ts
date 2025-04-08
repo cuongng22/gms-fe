@@ -235,10 +235,10 @@ export function getRowDef(contractData: any): string[] {
     return columns.filter((column: any) => column.visible).map((column: any) => column.column)
 }
 
-const FlagTypeEnum = {
-    EARLY_CHECKIN: 'earlyCheckinFeeFlag',
-    LATE_CHECKOUT: 'lateCheckoutFeeFlag',
-    CREW_TRANSPORT: 'priceCrewTransportFlag'
+export const FlagTypeEnum = {
+    EARLY_CHECKIN: 'earlyCheckinFlag',
+    LATE_CHECKOUT: 'lateCheckoutFlag',
+    CREW_TRANSPORT: 'crewTransportFeeFlag'
 }
 
 export function checkVisibleColumn(contractData: any, flagType: string): boolean {
@@ -249,14 +249,15 @@ export function checkVisibleColumn(contractData: any, flagType: string): boolean
             return true;
         }
 
-    } else {
-        if (flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFlag) {
-            return true;
-        } else if (flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFlag) {
-            return true
-        }
-
     }
+    // else {
+    //     if (flagType === FlagTypeEnum.EARLY_CHECKIN && !!contractData.earlyCheckinFlag) {
+    //         return true;
+    //     } else if (flagType === FlagTypeEnum.LATE_CHECKOUT && !!contractData.lateCheckoutFlag) {
+    //         return true
+    //     }
+
+    // }
     return false
 }
 

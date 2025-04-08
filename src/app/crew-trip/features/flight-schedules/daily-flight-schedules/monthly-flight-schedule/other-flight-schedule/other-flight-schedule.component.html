@@ -40,7 +40,8 @@
         </mat-card-title>
         @if (visibleAdd()) {
         <mat-card-subtitle>
-            <button class="add-btn " type="button" mat-button (click)="add()">
+            <button *appHasPermission="['API_DAILY_FLIGHT_SCHEDULE_CREATE_EXTRA_CREWS_INSERT']" class="add-btn "
+                type="button" mat-button (click)="add()">
                 <i class="material-symbols-outlined">
                     add
                 </i>
@@ -175,13 +176,15 @@
                     <td mat-cell *matCellDef="let element; let i = dataIndex">
                         @if(element.isShow){
                         <div class="action-buttons d-flex align-items-center justify-content-end">
-                            <button type="button" mat-button class="text-warning" (click)="edit(element)">
+                            <button *appHasPermission="['API_DAILY_FLIGHT_SCHEDULE_UPDATE_CREWS_EXTRA_UPDATE']"
+                                type="button" mat-button class="text-warning" (click)="edit(element)">
                                 <i class="material-symbols-outlined text-warning" i18n-title="@@edit" title="Edit"
                                     i18n-title="@@edit">
                                     edit
                                 </i>
                             </button>
-                            <button type="button" mat-button title="Delete" i18n-title="@@delete" class="text-danger"
+                            <button *appHasPermission="['API_DAILY_FLIGHT_SCHEDULE_DELETE_CREWS_EXTRA_DELETE']"
+                                type="button" mat-button title="Delete" i18n-title="@@delete" class="text-danger"
                                 (click)="showConfirmDelete(element)">
                                 <i class="material-symbols-outlined text-danger">
                                     delete

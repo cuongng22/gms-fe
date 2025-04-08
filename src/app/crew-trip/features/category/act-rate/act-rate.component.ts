@@ -1,10 +1,10 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
+import { Component, inject, OnInit } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import {
   MatAutocompleteModule,
 } from '@angular/material/autocomplete';
-import {MatButton, MatButtonModule} from '@angular/material/button';
+import { MatButton, MatButtonModule } from '@angular/material/button';
 import {
   MatCardModule,
 } from '@angular/material/card';
@@ -14,21 +14,22 @@ import {
 import {
   MatDatepickerModule,
 } from '@angular/material/datepicker';
-import {MatFormField, MatFormFieldModule, MatLabel, MatSuffix} from '@angular/material/form-field';
-import {MatInput, MatInputModule} from '@angular/material/input';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {MatSelect, MatSelectModule} from '@angular/material/select';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {ExchangeRateService} from 'src/app/crew-trip/core/services/exchange-rate.service';
-import {MatNativeDateModule} from '@angular/material/core';
-import {Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
-import {HttpStatusCode} from '@angular/common/http';
-import {CommonModule} from '@angular/common';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {MatCheckbox} from '@angular/material/checkbox';
-import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
+import { MatFormField, MatFormFieldModule, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelect, MatSelectModule } from '@angular/material/select';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { ExchangeRateService } from 'src/app/crew-trip/core/services/exchange-rate.service';
+import { MatNativeDateModule } from '@angular/material/core';
+import { Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE, removeNullValues } from 'src/app/crew-trip/shared/utils/constant';
+import { HttpStatusCode } from '@angular/common/http';
+import { CommonModule } from '@angular/common';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-act-rate',
@@ -37,10 +38,12 @@ import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
     MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatCheckbox, NgxTrimDirectiveModule
+    MatTableModule, MatPaginatorModule, MatCheckbox, NgxTrimDirectiveModule,
+    HasPermissionDirective
   ],
   providers: [DataTransformPipe,
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+    HasPermissionDirective
   ],
   templateUrl: './act-rate.component.html',
   styleUrl: './act-rate.component.scss'
@@ -71,7 +74,7 @@ export class ActRateComponent extends CommonComponent implements OnInit {
   }
 
 
-  override async search(body?: any,isNextPage?: boolean) {
+  override async search(body?: any, isNextPage?: boolean) {
     const startDate = this.formGroupSearch.controls.startDate.value;
     const endDate = this.formGroupSearch.controls.endDate.value;
     const searchValue = {
@@ -140,7 +143,7 @@ export class ActRateComponent extends CommonComponent implements OnInit {
         startDate: startDate ? this.dataTransformPipe.transform(startDate, ['date', 'YYYY-MM-DD']) : null,
         endDate: endDate ? this.dataTransformPipe.transform(endDate, ['date', 'YYYY-MM-DD']) : null,
       };
-      const res = await this.baseService.exportDataOptions({...removeNullValues(body) || removeNullValues(searchValue)}, sourcePath);
+      const res = await this.baseService.exportDataOptions({ ...removeNullValues(body) || removeNullValues(searchValue) }, sourcePath);
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
       this.baseService.showError((e.error?.error?.code) ?? MESSAGE.ERROR);

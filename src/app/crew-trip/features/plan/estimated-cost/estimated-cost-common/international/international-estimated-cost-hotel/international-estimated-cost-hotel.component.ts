@@ -231,13 +231,14 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
    * @param item Giá trị từng dòng của dataSource theo công thức
    */
   private calculateData(item: any, index: number, isSummary?: boolean) {
+
+    const _flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOverNight === item.overnight).map(item => item.flightRate);
+    item.flightOvernightRate = Number(_flightOvernightRate)
+
+    item.noOfFlightOvernight = 1; // tổng số chuyến bay và số đêm nghỉ để nhóm sau đó chia cho số này vs tháng đã thực hiện monthInPerform
+    item.noOfOvernight = this.planFlightByOvernight.length ?? 1
+
     if (isSummary) {
-      const _flightOvernightRate = this.planFlightByOvernight.filter(itemFilter => itemFilter.numberOfOverNight === item.overnight).map(item => item.flightRate);
-      item.flightOvernightRate = Number(_flightOvernightRate)
-
-      item.noOfFlightOvernight = 1; // tổng số chuyến bay và số đêm nghỉ để nhóm sau đó chia cho số này vs tháng đã thực hiện monthInPerform
-      item.noOfOvernight = this.planFlightByOvernight.length ?? 1
-
       //Số chuyến bay theo tàu 
       this.calculate(item, 'numberOfFlights', true);
       // Thu bảo với tháng đã thực hiện thì số tiền sẽ phải chia ( số đêm nghỉ * loại máy bay) ==> loại ngân sách
@@ -419,7 +420,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     // Tạo một bản sao công thức để thay thế giá trị thực tế
     let replacedFormula = formula;
 
-    if (data.period === '02/2025') {
+    if (data.period === '04/2025') {
       // Danh sách các biến cần thay thế
       const variables = formula.match(/ctz\((.*?)\)/g);
       const matchMonthIsPerform = formula.match(/data.monthIsPerform/g);
@@ -448,7 +449,7 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     );
     const result = dynamicFunction(data, this.generalData, this.ctz);
     // Log công thức sau khi thay thế giá trị thực tế
-    if (data.period === '02/2025') {
+    if (data.period === '04/2025') {
       console.log(data.period, control, formula, replacedFormula, result);
     }
     return (result);
@@ -536,18 +537,18 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
       //Số phòng đơn late checkout dự kiến do lẻ nam nữ
       item.singleRoomLateReserved = round(item.singleRoomLateReserved);
       //Tổng số phòng đơn
-      item.totalSingleRoom = round(item.totalSingleRoom);
+      // item.totalSingleRoom = round(item.totalSingleRoom);
       //Tổng số phòng đôi
-      item.totalDoubleRoom = round(item.totalDoubleRoom);
+      // item.totalDoubleRoom = round(item.totalDoubleRoom);
 
       //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
-      item.totalAmountForeign = round(item.totalAmountForeign);
+      // item.totalAmountForeign = round(item.totalAmountForeign);
       //Thành tiền (ngoại tệ) - Bao gồm VAT
-      item.totalAmountForeignVat = round(item.totalAmountForeignVat);
+      // item.totalAmountForeignVat = round(item.totalAmountForeignVat);
       //Thành tiền VND (Chưa bao gồm VAT)
-      item.totalAmount = round(item.totalAmount);
+      // item.totalAmount = round(item.totalAmount);
       //Thành tiền VND (Bao gồm VAT)
-      item.totalAmountVat = round(item.totalAmountVat);
+      // item.totalAmountVat = round(item.totalAmountVat);
     })
     return _jsonData;
   }

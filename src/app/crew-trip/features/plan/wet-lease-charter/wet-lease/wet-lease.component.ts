@@ -113,30 +113,30 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
 		rowSan: number;
 		colSpan: number;
 	}[] = [
-		{ name: 'airportCode', field: 'Airport Code', rowSan: 2, colSpan: 1 },
-		{
-			name: 'startDate',
-			field: 'Start Date',
-			rowSan: 2,
-			colSpan: 1,
-		},
-		{ name: 'endDate', field: 'End Date', rowSan: 2, colSpan: 1 },
-		{ name: 'totalQty', field: 'Total rooms', colSpan: 2, rowSan: 1 },
-		{ name: 'totalNumberOfTrip', field: 'No. of trip', rowSan: 2, colSpan: 1 },
-		{
-			name: 'totalForex',
-			field: 'Total amount <br/> (Foreign exchange)',
-			rowSan: 2,
-			colSpan: 1,
-		},
-		{
-			name: 'totalVnd',
-			field: 'Total amount <br/> (VND)',
-			colSpan: 2,
-			rowSan: 1,
-		},
-		{ name: 'action', field: 'Action', rowSan: 2, colSpan: 1 },
-	];
+			{ name: 'airportCode', field: 'Airport Code', rowSan: 2, colSpan: 1 },
+			{
+				name: 'startDate',
+				field: 'Start Date',
+				rowSan: 2,
+				colSpan: 1,
+			},
+			{ name: 'endDate', field: 'End Date', rowSan: 2, colSpan: 1 },
+			{ name: 'totalQty', field: 'Total rooms', colSpan: 2, rowSan: 1 },
+			{ name: 'totalNumberOfTrip', field: 'No. of trip', rowSan: 2, colSpan: 1 },
+			{
+				name: 'totalForex',
+				field: 'Total amount <br/> (Foreign exchange)',
+				rowSan: 2,
+				colSpan: 1,
+			},
+			{
+				name: 'totalVnd',
+				field: 'Total amount <br/> (VND)',
+				colSpan: 2,
+				rowSan: 1,
+			},
+			{ name: 'action', field: 'Action', rowSan: 2, colSpan: 1 },
+		];
 	displayedSecond: any[] = [
 		{ name: 'totalSingleRoom', field: 'Single Room' }, //tổng số phòng đơn
 		{ name: 'totalTwinRoom', field: 'Twin room' }, //tổng số phòng đôi
@@ -178,8 +178,8 @@ export class WetLeaseComponent extends CommonComponent implements OnInit {
 			'totalTwinRoom',
 			'totalNumberOfTrip',
 			'totalForex',
-			'totalIncVAT',
 			'totalExcVAT',
+			'totalIncVAT',
 			'action',
 		];
 	}
