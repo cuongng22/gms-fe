@@ -4,7 +4,7 @@ import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE, PATTERN} from 'src/app/crew-trip/shared/utils/constant';
 import {NationService} from 'src/app/crew-trip/core/services/nation-service';
-import {transform} from 'lodash';
+import {cloneDeep, transform} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
@@ -18,7 +18,6 @@ import {debounceTime, filter, pairwise} from "rxjs";
 import {afterValidator, beforeValidator} from "src/app/crew-trip/shared/utils/common";
 import {quantity} from "src/app/crew-trip/shared/utils/error-message";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
-import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @Component({
@@ -27,7 +26,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
   imports: [BaseImport],
   templateUrl: './invoice-document-detail.component.html',
   styleUrl: './invoice-document-detail.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: false})
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true})
   ]
 })
 
@@ -208,8 +207,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     }
   }
 
-  get tblInvoiceDocumentDtl(): FormArray {
-    return this.formGroupDetail.get('tblInvoiceDocumentDtl') as FormArray;
+  get tblInvoiceDocumentDtl(): FormArray<FormGroup> {
+    return this.formGroupDetail.get('tblInvoiceDocumentDtl') as FormArray<FormGroup>;
   }
 
   set tblInvoiceDocumentDtl(value: FormArray) {
@@ -239,6 +238,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       console.log(e);
       this.baseService.showError(MESSAGE.ERROR);
     } finally {
+      console.log(this.formGroupDetail, '.formGroupDetail.formGroupDetail.formGroupDetail');
       setTimeout(() => {
         this.firstLoad = false;
       }, 1000);
@@ -276,7 +276,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   async setReadMode(form: FormGroup) {
     const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency',
       'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version',
-      'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status', 'periodOccurrence'];
+      'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status'];
     const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType',
       'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version',
       'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status'];
@@ -388,7 +388,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       //validate
       // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
       if (fileUpload.size > 20 * 1048576) {
-        this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
+        this.baseService.showError("Attachment must not exceed 20MB");
         return;
       }
       formUpload.append('file', fileUpload, fileUpload.name);
@@ -399,7 +399,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         if (res.code == HttpStatusCode.Ok) {
           let lastDotIndex = fileUpload.name.lastIndexOf('.');
           let fileName = fileUpload.name.substring(0, lastDotIndex);
-          let listFile = [...this.formGroupDetail.getRawValue().fileAttachments||[], {
+          let listFile = [...this.formGroupDetail.getRawValue().fileAttachments || [], {
             ctype: 'MANUAL', fileName: fileName, fileSize: fileUpload.size, fileUrl: res.data, fileType: fileUpload.name.split('.').pop(),
           }];
           this.formGroupDetail.patchValue({fileAttachments: listFile});
@@ -603,7 +603,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   bodyBuilder() {
     let body = this.formGroupDetail.getRawValue();
-    body.invoiceDocumentDtl = this.tblInvoiceDocumentDtl.value;
+    body.invoiceDocumentDtl = this.tblInvoiceDocumentDtl.getRawValue();
     return body;
   }
 
@@ -727,11 +727,19 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
           });
         }
       });
+      this.formGroupDetail.controls['periodOccurrence'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
+        if (value && !this.firstLoad) {
+          this.tblInvoiceDocumentDtl.controls.forEach((row: FormGroup) => {
+            row.patchValue({periodOccurrence: value})
+          });
+        }
+      });
+
     }
   }
 
-  async _confirmDelete(element?: any, index?: any) {
-    this.deleteObj = {...element.value, index: index};
+  async _confirmDelete(element?: any, index?: any, type?: any) {
+    this.deleteObj = {...element.value ?? element, index: index, type: type};
     this._showDialogDelete = true;
   }
 
@@ -741,8 +749,14 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   async _doDelete() {
     try {
-      this.tblInvoiceDocumentDtl.removeAt(this.deleteObj.index);
-      this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
+      if (this.deleteObj.type == 'file') {
+        let currentList = cloneDeep(this.formGroupDetail.getRawValue().fileAttachments);
+        currentList.splice(this.deleteObj.index, 1);
+        this.formGroupDetail.patchValue({fileAttachments: currentList});
+      } else {
+        this.tblInvoiceDocumentDtl.removeAt(this.deleteObj.index);
+        this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
+      }
     } catch (e) {
       console.log(e);
     } finally {
