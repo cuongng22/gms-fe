@@ -221,7 +221,7 @@
           <mat-tab-group mat-align-tabs="start" mat-stretch-tabs="false">
             <mat-tab i18n-label label="General reconciliation">
                 <div class="row mb-15">
-                  <div class="col-3" style="height: 50px">
+                  <div class="col-9" style="height: 50px">
                     <span class="text-danger">Reconciliation discrepancies are highlighted in red</span>
                   </div>
                   <div class="col-1" sizeInput='md'>
@@ -322,27 +322,27 @@
                 <table [dataSource]="tblDocumentReviewForm"
                        class="table-light table-responsive"
                        mat-table>
-                  <ng-container matColumnDef="stt">
+                  <ng-container matColumnDef="stt" sticky>
                     <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
                     <td *matCellDef="let element; let i = index" class="text-center"
                         mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
                     </td>
                     <td *matFooterCellDef [colSpan]="totalColSpan" class="text-center" mat-footer-cell>Total</td>
                   </ng-container>
-                  <ng-container matColumnDef="checkin2col">
+                  <ng-container matColumnDef="checkin2col" sticky>
                     <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkin</th>
                   </ng-container>
-                  <ng-container matColumnDef="checkout2col">
+                  <ng-container matColumnDef="checkout2col" sticky>
                     <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkout</th>
                   </ng-container>
-                  <ng-container matColumnDef="checkin3col">
+                  <ng-container matColumnDef="checkin3col" sticky>
                     <th *matHeaderCellDef class="text-center " colspan="3" mat-header-cell mat-sort-header>Checkin</th>
                   </ng-container>
-                  <ng-container matColumnDef="checkout3col">
+                  <ng-container matColumnDef="checkout3col" sticky>
                     <th *matHeaderCellDef class="text-center " colspan="3" mat-header-cell mat-sort-header>Checkout</th>
                   </ng-container>
                   @for (innerColumn of _displayedColumnsAll; track innerColumn.value) {
-                    <ng-container matColumnDef="{{innerColumn.value}}">
+                    <ng-container matColumnDef="{{innerColumn.value}}" [sticky]="innerColumn.sticky">
                       <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center"
                           [rowSpan]="(formType===1 || formType===2)?innerColumn.rowspan:1"
                           [colSpan]=innerColumn.colspan>

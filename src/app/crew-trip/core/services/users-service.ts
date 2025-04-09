@@ -103,7 +103,7 @@ export class UsersService extends BaseService {
     if (!permissionCodes || permissionCodes.length === 0) return true;
     let permissions = this.permissionsSubject.getValue();
     if (permissions.length === 0) {
-      console.log('No permissions found in BehaviorSubject, checking localStorage...');
+      // console.log('No permissions found in BehaviorSubject, checking localStorage...');
       const storedPermissions = localStorage.getItem(STORAGE_KEY.PERMISSION);
       if (storedPermissions) {
         permissions = JSON.parse(storedPermissions);

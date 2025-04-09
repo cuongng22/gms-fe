@@ -140,7 +140,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
 
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
     await Promise.all([this.search(), this.loadListFlightMarket()]).then(() => {
-      this.showDocumentDtl(this.dataSource.data[0]);
+
     });
     this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVat',
       'vat', 'totalAmount', 'reimbursementTotal', 'status', 'statusEmail', 'statusPayment', 'statusPaymentDescription', 'paymentDueDate', 'action'];
@@ -215,6 +215,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
           this.dataSource.data = res.data.content;
           this.totalElement = res.data.totalElements;
         }
+        this.showDocumentDtl(this.dataSource.data[0]);
         return res;
       }
     } catch (e: any) {
