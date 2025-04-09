@@ -35,6 +35,7 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {CommonModule} from '@angular/common';
 import {MatCheckbox} from '@angular/material/checkbox';
 import {HttpStatusCode} from '@angular/common/http';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-rate-uth',
@@ -43,10 +44,11 @@ import {HttpStatusCode} from '@angular/common/http';
     MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatCheckbox, FileUploadComponent
+    MatTableModule, MatPaginatorModule, MatCheckbox, FileUploadComponent, HasPermissionDirective
   ],
   templateUrl: './rate-uth.component.html',
-  styleUrl: './rate-uth.component.scss'
+  styleUrl: './rate-uth.component.scss',
+  providers:[HasPermissionDirective]
 })
 export class RateUthComponent extends CommonComponent implements OnInit {
   override baseService = inject(ExchangeRateService);

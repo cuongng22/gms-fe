@@ -4,15 +4,17 @@ import { MatTabsModule } from '@angular/material/tabs';
 import { ActivatedRoute, Router, RouterLink } from '@angular/router';
 import { WetLeaseComponent } from './wet-lease/wet-lease.component';
 import { CharterComponent } from './charter/charter.component';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-wet-lease-charter',
   standalone: true,
   imports: [
-    RouterLink, MatCardModule, MatTabsModule, WetLeaseComponent, CharterComponent
+    RouterLink, MatCardModule, MatTabsModule, WetLeaseComponent, CharterComponent, HasPermissionDirective
   ],
   templateUrl: './wet-lease-charter.component.html',
-  styleUrl: './wet-lease-charter.component.scss'
+  styleUrl: './wet-lease-charter.component.scss',
+  providers: [HasPermissionDirective]
 })
 export class WetLeaseCharterComponent implements OnInit {
   router = inject(ActivatedRoute);

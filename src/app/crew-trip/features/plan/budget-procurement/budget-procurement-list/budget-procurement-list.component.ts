@@ -31,6 +31,7 @@ import { PlanTypeEnum, Statuses, years } from '../budget-procurement.model';
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import { EstimatedAnnualProductionService } from 'src/app/crew-trip/core/services/estimated-annual-production';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-budget-procurement-list',
@@ -39,9 +40,11 @@ import { EstimatedAnnualProductionService } from 'src/app/crew-trip/core/service
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule,
-    SelectionSuggestComponent, SelectionComponent, NgxControlError, DigitOnlyModule, SelectMultipleComponent],
+    SelectionSuggestComponent, SelectionComponent, NgxControlError, DigitOnlyModule, SelectMultipleComponent,
+    HasPermissionDirective],
   templateUrl: './budget-procurement-list.component.html',
-  styleUrl: './budget-procurement-list.component.scss'
+  styleUrl: './budget-procurement-list.component.scss',
+  providers: [HasPermissionDirective]
 })
 export class BudgetProcurementListComponent extends CommonComponent implements OnInit {
 

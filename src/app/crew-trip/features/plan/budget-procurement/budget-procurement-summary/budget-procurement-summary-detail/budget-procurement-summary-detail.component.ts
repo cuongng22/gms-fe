@@ -35,6 +35,7 @@ import moment from 'moment';
 import { CurrencyService } from 'src/app/crew-trip/core/services/currency.service';
 import { ifValidator } from 'ngxtension/if-validator';
 import { el } from 'node_modules/@fullcalendar/core/internal-common';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-budget-procurement-summary-detail',
@@ -46,8 +47,9 @@ import { el } from 'node_modules/@fullcalendar/core/internal-common';
     InternationalBudgetProcurementFlightRateComponent, BudgetProcurementFlightPeriodComponent, BudgetProcurementFlightOvernightComponent,
     InternationalBudgetProcurementHotelComponent, InternationalBudgetProcurementCarRentalComponent, BudgetProcurementCostAnalysisComponent,
     DomesticBudgetProcurementFlightRateComponent, DomesticBudgetProcurementHotelComponent,
-    DomesticBudgetProcurementCarRentalComponent, DomesticBudgetProcurementWetLeaseComponent],
-  providers: [DatePipe, DataTransformPipe],
+    DomesticBudgetProcurementCarRentalComponent, DomesticBudgetProcurementWetLeaseComponent,
+    HasPermissionDirective],
+  providers: [DatePipe, DataTransformPipe, HasPermissionDirective],
   templateUrl: './budget-procurement-summary-detail.component.html',
   styleUrl: './budget-procurement-summary-detail.component.scss',
 })

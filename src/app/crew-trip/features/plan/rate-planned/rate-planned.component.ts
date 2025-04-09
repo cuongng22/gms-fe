@@ -25,6 +25,7 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { Observable, of, take } from 'rxjs';
 import { ExchangeRateService } from 'src/app/crew-trip/core/services/exchange-rate.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import {
 	Constant,
@@ -53,9 +54,11 @@ import {
 		MatTableModule,
 		MatPaginatorModule,
 		FileUploadComponent,
+		HasPermissionDirective
 	],
 	templateUrl: './rate-planned.component.html',
 	styleUrl: './rate-planned.component.scss',
+	providers: [HasPermissionDirective]
 })
 export class RatePlannedComponent extends CommonComponent implements OnInit {
 	override baseService = inject(ExchangeRateService);

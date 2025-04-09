@@ -61,15 +61,18 @@ import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 import {OtherCrewComponent} from 'src/app/crew-trip/features/category/flight-crew/other-crew/other-crew.component';
 import {SelectionComponent} from 'src/app/crew-trip/shared/component/selection/selection.component';
 import { HttpStatusCode } from '@angular/common/http';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-config-overnight-rate',
   standalone: true,
   imports: [
-    CommonModule, MatCardModule, MatFormFieldModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent, NgxTrimDirectiveModule, OtherCrewComponent, ConfigOvernightRateComponent, MatAutocomplete, MatAutocompleteTrigger, SelectionComponent, InputSizeComponent, SelectMultipleComponent, FileUploadComponent
+    CommonModule, MatCardModule, MatFormFieldModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent, NgxTrimDirectiveModule, OtherCrewComponent, ConfigOvernightRateComponent, MatAutocomplete, MatAutocompleteTrigger, SelectionComponent, InputSizeComponent, SelectMultipleComponent, FileUploadComponent,
+    HasPermissionDirective
   ],
   templateUrl: './config-overnight-rate.component.html',
-  styleUrl: './config-overnight-rate.component.scss'
+  styleUrl: './config-overnight-rate.component.scss',
+  providers:[HasPermissionDirective]
 })
 export class ConfigOvernightRateComponent extends CommonComponent implements OnInit {
   override baseService = inject(ConfigOvernightRateService);

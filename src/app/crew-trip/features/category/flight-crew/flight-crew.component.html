@@ -17,7 +17,7 @@
 </div>
 <!--Search-->
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="onTabChange($event)">
-  <mat-tab label="Flight crew">
+  <mat-tab *appHasPermission="['API_CREW_FLIGHTS_LIST']" label="Flight crew">
     <mat-card class="mb-15 border-radius d-block bg-white border-0 shadow-none">
       <mat-card-content>
         <form [formGroup]="formGroupSearch" autocomplete="off">
@@ -25,9 +25,8 @@
             <div class="col-sm-3" sizeInput='sm'>
               <mat-form-field class="mb-1">
                 <mat-label i18n="@@airportCode">Airport code</mat-label>
-                <input type="text" #marketCode matInput formControlName="marketCode"
-                       [matAutocomplete]="marketComplete"
-                       (input)="filterMarket()" (focus)="onFocusMarket()">
+                <input type="text" #marketCode matInput formControlName="marketCode" [matAutocomplete]="marketComplete"
+                  (input)="filterMarket()" (focus)="onFocusMarket()">
                 <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
                   <mat-option [value]="null">
                     -- All airport code --
@@ -40,8 +39,7 @@
             </div>
             <div class="col-sm-3" sizeInput='sm'>
               <app-select-multiple size="sm" label="AC group" i18n-label="@@actype" [required]="false"
-                                   [options]="listActype"
-                                   attrValue="acgroup" attrDisplay="acgroup" formControlName="acType">
+                [options]="listActype" attrValue="acgroup" attrDisplay="acgroup" formControlName="acType">
               </app-select-multiple>
             </div>
             <div class="col-sm-3" sizeInput='sm'>
@@ -77,13 +75,14 @@
         </mat-card-title>
         <mat-card-subtitle>
           <button class="add-btn  mr-10" type="button" mat-button
-                  (click)="exportFileOptions(null,'FlightCrew.xlsx','')">
+            (click)="exportFileOptions(null,'FlightCrew.xlsx','')">
             <i class="material-symbols-outlined">
               download
             </i>
             <span i18n="@@export">Export</span>
           </button>
-          <button (click)="flightCrewDetail()" class="add-btn" i18n mat-button type="button">
+          <button *appHasPermission="['API_CREW_FLIGHTS_INSERT']" (click)="flightCrewDetail()" class="add-btn" i18n
+            mat-button type="button">
             <i class="material-symbols-outlined">
               add
             </i>
@@ -102,14 +101,14 @@
             </ng-container>
             <ng-container matColumnDef="market">
               <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                  i18n="@@airportCode">
+                i18n="@@airportCode">
                 Airport code
               </th>
               <td mat-cell *matCellDef="let element" class="text-center">{{ element.marketCode }}</td>
             </ng-container>
             <ng-container matColumnDef="acType">
               <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                  i18n="@@acType">
+                i18n="@@acType">
                 AC group
               </th>
               <td mat-cell *matCellDef="let element" class="text-center">
@@ -118,7 +117,7 @@
             </ng-container>
             <ng-container matColumnDef="pilotNumber">
               <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                  i18n="@@pilotNumber">
+                i18n="@@pilotNumber">
                 Pilot number
               </th>
               <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">
@@ -127,7 +126,7 @@
             </ng-container>
             <ng-container matColumnDef="attendantNumber">
               <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                  i18n="@@attendantNumber">
+                i18n="@@attendantNumber">
                 Attendant number
               </th>
               <td mat-cell *matCellDef="let element" class="wrap-text-2 text-right">{{ element.attendantNumber }}
@@ -139,16 +138,16 @@
             </ng-container>
             <ng-container matColumnDef="status">
               <th mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" mat-sort-header
-                  i18n="@@status">
+                i18n="@@status">
                 Status
               </th>
               <td mat-cell *matCellDef="let element;" class="text-center">
-                  <span class="badge" [ngClass]="{
+                <span class="badge" [ngClass]="{
                           'text-bg-label-badge':  element['status'] == true,
                           'text-soft-dark':   element['status'] == false
                           }">{{
-                      element['status'] == true ? 'Active' : 'Inactive'
-                    }}</span>
+                  element['status'] == true ? 'Active' : 'Inactive'
+                  }}</span>
               </td>
             </ng-container>
             <ng-container matColumnDef="action" stickyEnd>
@@ -159,12 +158,14 @@
                 <div class="action-buttons d-flex align-items-center justify-content-end">
                   <a mat-button type="button">
                   </a>
-                  <a (click)="flightCrewDetail(element.id)" class="text-warning" mat-button type="button">
+                  <a *appHasPermission="['API_CREW_FLIGHTS_UPDATE']" (click)="flightCrewDetail(element.id)"
+                    class="text-warning" mat-button type="button">
                     <i class="material-symbols-outlined" i18n-title title="Edit">
                       edit
                     </i>
                   </a>
-                  <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">
+                  <a *appHasPermission="['API_CREW_FLIGHTS_DELETE']" (click)="showConfirmDelete(element.id)" i18n-title
+                    mat-button type="button">
                     <i class="material-symbols-outlined" title="Delete">
                       delete
                     </i>
@@ -180,9 +181,8 @@
           </table>
         </div>
         <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-                       [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
-                       [pageIndex]="pageIndex"
-                       aria-label="Select page" i18n-aria-label="@@selectPage">
+          [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+          aria-label="Select page" i18n-aria-label="@@selectPage">
         </mat-paginator>
       </mat-card-content>
     </mat-card>
@@ -193,20 +193,19 @@
         <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
           <mat-card-content>
             <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
+              <span class="material-symbols-outlined font-size-5rem">
+                error
+              </span>
             </div>
             <div class="text-center mb-20">
               <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
             </div>
             <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
-                        You will not be able to recover the deleted data!</span>
+              <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+                You will not be able to recover the deleted data!</span>
             </div>
             <div class="btn-box text-center">
-              <button type="button" mat-button (click)="closeConfirmDelete()"
-                      class="close-btn  min-with-100 mlr-5">
+              <button type="button" mat-button (click)="closeConfirmDelete()" class="close-btn  min-with-100 mlr-5">
                 <i class="material-symbols-outlined">
                   close
                 </i>
@@ -224,16 +223,14 @@
       </div>
     </div>
   </mat-tab>
-<!--  <mat-tab label="Other Crew">-->
-<!--    <ng-container *ngIf="activeTab === 1">-->
-<!--      <app-other-crew></app-other-crew>-->
-<!--    </ng-container>-->
-<!--  </mat-tab>-->
-  <mat-tab label="Overnight rate configuration">
+  <!--  <mat-tab label="Other Crew">-->
+  <!--    <ng-container *ngIf="activeTab === 1">-->
+  <!--      <app-other-crew></app-other-crew>-->
+  <!--    </ng-container>-->
+  <!--  </mat-tab>-->
+  <mat-tab *appHasPermission="['API_OVERNIGHT_RATE_LIST']" label="Overnight rate configuration">
     <ng-container *ngIf="activeTab === 1">
       <app-config-overnight-rate></app-config-overnight-rate>
     </ng-container>
   </mat-tab>
 </mat-tab-group>
-
-

@@ -22,7 +22,7 @@
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
     <mat-card-content>
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
-            <mat-tab label="Email" i18n="@@email">
+            <mat-tab *appHasPermission="['API_EMAIL_HISTORY_LIST']" label="Email" i18n="@@email">
                 <ng-template matTabContent>
                     <app-email-notification-search #appEmailNotificationSearchEmail type="EMAIL"
                         (searchEvent)="onSearch($event, 'EMAIL')">
@@ -34,7 +34,7 @@
                 </ng-template>
 
             </mat-tab>
-            <mat-tab label="Notification" i18n="@@notification">
+            <mat-tab appHasPermission="['API_NOTIFICATION_LIST']" label="Notification" i18n="@@notification">
                 <ng-template matTabContent>
                     <app-email-notification-search #appEmailNotificationSearchNoti type="NOTIFICATION"
                         (searchEvent)="onSearch($event, 'NOTIFICATION')">

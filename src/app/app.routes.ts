@@ -93,26 +93,66 @@ export const routes: Routes = [
 			{
 				path: 'system/admin',
 				children: [
-					{ path: 'users', component: UsersComponent },
-					{ path: 'roles', component: RolesComponent },
-					{ path: 'functions', component: FunctionsComponent },
+					{
+						path: 'users', component: UsersComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_USER_GET_ALL_LIST'] }
+					},
+					{
+						path: 'roles', component: RolesComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_ROLES_LIST'] }
+					},
+					{
+						path: 'functions', component: FunctionsComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_FUNCTIONS_LIST'] }
+					},
 				],
 			},
 			{
 				path: 'system/config',
 				children: [
-					{ path: 'flight-crew', component: FlightCrewComponent },
-					{ path: 'group-mail', component: GroupMailComponent },
-					{ path: 'information-plane', component: AircraftDataComponent },
-					{ path: 'email-supplier', component: EmailSupplierComponent },
-					{ path: 'noti-warning', component: NotificationComponent },
+					{
+						path: 'flight-crew', component: FlightCrewComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_CREW_FLIGHTS_LIST', 'API_OVERNIGHT_RATE_LIST'] }
+					},
+					{
+						path: 'group-mail', component: GroupMailComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_GROUP_MAIL_LIST', 'API_PAYMENT_MAIL_LIST'] }
+					},
+					{
+						path: 'information-plane', component: AircraftDataComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_PLANE_LIST'] }
+					},
+					{
+						path: 'email-supplier', component: EmailSupplierComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_EMAIL_CONFIG_LIST'] }
+					},
+					{
+						path: 'noti-warning', component: NotificationComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_NOTI_CONFIG_LIST', 'API_NOTI_SETUP_LIST'] }
+					},
 				],
 			},
 			{
 				path: 'system/history',
 				children: [
-					{ path: 'login', component: LoginHistoryComponent },
-					{ path: 'email-noti', component: EmailNotificationHistoryComponent },
+					{
+						path: 'login', component: LoginHistoryComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_AUTHLOG_LIST'] }
+					},
+					{
+						path: 'email-noti', component: EmailNotificationHistoryComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_EMAIL_HISTORY_LIST', 'API_NOTIFICATION_LIST'] }
+					},
 				],
 			},
 			{
@@ -124,20 +164,34 @@ export const routes: Routes = [
 							{
 								path: 'wet-lease-charter',
 								children: [
-									{ path: '', component: WetLeaseCharterComponent },
+									{
+										path: '', component: WetLeaseCharterComponent,
+										canActivate: [AuthGuard],
+										data: { permissionCodes: ['API_WET_LEASE_LIST', 'API_CHARTER_LIST'] }
+									},
 									{
 										path: 'wet-lease-detail/:id',
 										component: WetLeaseDetailComponent,
+										canActivate: [AuthGuard],
+										data: { permissionCodes: ['API_WET_LEASE_UPDATE', 'API_WET_LEASE_DETAILS'] }
 									},
 									{
 										path: 'wet-lease-detail',
 										component: WetLeaseDetailComponent,
+										canActivate: [AuthGuard],
+										data: { permissionCodes: ['API_WET_LEASE_INSERT'] }
 									},
 									{
 										path: 'charter-detail/:id',
 										component: CharterDetailComponent,
+										canActivate: [AuthGuard],
+										data: { permissionCodes: ['API_CHARTER_DETAILS', 'API_CHARTER_UPDATE'] }
 									},
-									{ path: 'charter-detail', component: CharterDetailComponent },
+									{
+										path: 'charter-detail', component: CharterDetailComponent,
+										canActivate: [AuthGuard],
+										data: { permissionCodes: ['API_CHARTER_INSERT'] }
+									},
 								],
 							},
 						],
@@ -145,41 +199,80 @@ export const routes: Routes = [
 					{
 						path: 'est-plan/procurement-tracking',
 						children: [
-							{ path: '', component: ProcurementTrackingComponent },
+							{
+								path: '', component: ProcurementTrackingComponent,
+								canActivate: [AuthGuard],
+								data: { permissionCodes: ['API_PROCUREMENT_LIST'] }
+							},
 							{
 								path: 'detail',
 								component: ProcurementTrackingDetailComponent,
+								canActivate: [AuthGuard],
+								data: { permissionCodes: ['API_PROCUREMENT_INSERT'] }
 							},
 							{
 								path: 'detail/:id',
 								component: ProcurementTrackingDetailComponent,
+								canActivate: [AuthGuard],
+								data: { permissionCodes: ['API_PROCUREMENT_DETAILS', 'API_PROCUREMENT_UPDATE'] }
 							},
 						],
 					},
-					{ path: 'rate/uth', component: RateUthComponent },
-					{ path: 'rate/planned', component: RatePlannedComponent },
+					{
+						path: 'rate/uth', component: RateUthComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_CURRENCY_UTH_LIST'] }
+					},
+					{
+						path: 'rate/planned', component: RatePlannedComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_CURRENCY_LIST'] }
+					},
 					{
 						path: 'production/five-year-plan',
 						component: FiveYearPlanComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_FIVE_YEAR_PLAN_LIST'] }
 					},
 					{
 						path: 'production/est-annual-production',
 						component: EstAnnualProductionComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_PRODUCTIVITY_LIST'] }
 					},
-					{ path: 'production/planned', component: AnnualProductionComponent },
+					{
+						path: 'production/planned', component: AnnualProductionComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_PRODUCTIVITY_LIST'] }
+					},
 					{
 						path: 'est-plan/budget-procurement',
 						component: BudgetProcurementComponent,
 						children: [
-							{ path: '', component: BudgetProcurementListComponent },
+							{
+								path: '', component: BudgetProcurementListComponent,
+								canActivate: [AuthGuard],
+								data: {
+									permissionCodes: ['API_PLAN_BUDGET_PROCUREMENT_LIST']
+								}
+							},
 							{
 								path: ':id/summary',
 								component: BudgetProcurementSummaryComponent,
 								pathMatch: 'full',
+								canActivate: [AuthGuard],
+								data: {
+									permissionCodes: ['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_SEARCH_INSERT']
+								}
 							},
 							{
 								path: ':plan-budget-procurement-id/summary/:id/detail',
 								component: BudgetProcurementSummaryDetailComponent,
+								canActivate: [AuthGuard],
+								data: {
+									permissionCodes: ['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_DETAILS']
+								}
+
 							},
 						],
 					},
@@ -187,15 +280,29 @@ export const routes: Routes = [
 						path: 'est-plan/est-cost',
 						component: EstimatedCostComponent,
 						children: [
-							{ path: '', component: EstimatedCostListComponent },
+							{
+								path: '', component: EstimatedCostListComponent,
+								canActivate: [AuthGuard],
+								data: {
+									permissionCodes: ['API_PLAN_BUDGET_PROCUREMENT_LIST']
+								}
+							},
 							{
 								path: ':id/summary',
 								component: EstimatedCostSummaryComponent,
 								pathMatch: 'full',
+								canActivate: [AuthGuard],
+								data: {
+									permissionCodes: ['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_SEARCH_INSERT']
+								}
 							},
 							{
 								path: ':est-cost-id/summary/:id/detail',
 								component: EstimatedCostSummaryDetailComponent,
+								canActivate: [AuthGuard],
+								data: {
+									permissionCodes: ['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_DETAILS']
+								}
 							},
 						],
 					},
@@ -360,18 +467,34 @@ export const routes: Routes = [
 					{
 						path: 'hotel/cost-tracking',
 						component: HotelCostTrackingContainerComponent,
+						canActivate: [AuthGuard],
+						data: {
+							permissionCodes: ['API_ROOM_COST_LIST']
+						}
 					},
 					{
 						path: 'hotel/room-booking',
 						component: RoomBookingComponent,
+						canActivate: [AuthGuard],
+						data: {
+							permissionCodes: ['API_AVES_ROOM_TRACKING_LIST']
+						}
 					},
 					{
 						path: 'car/cost-tracking',
 						component: CarCostTrackingComponent,
+						canActivate: [AuthGuard],
+						data: {
+							permissionCodes: ['API_CAR_COST_TRACKING_LIST']
+						}
 					},
 					{
 						path: 'car/car-booking',
 						component: CarBookingComponent,
+						canActivate: [AuthGuard],
+						data: {
+							permissionCodes: ['API_AVES_TRANSPORT_TRACKING_LIST']
+						}
 					},
 				],
 			},

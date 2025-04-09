@@ -11,14 +11,16 @@ import { EmailHistoryService } from 'src/app/crew-trip/core/services/email-histo
 import { EmailComponent } from './email/email.component';
 import moment, { Moment } from 'moment';
 import { NotificationComponent } from './notification/notification.component';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-email-notification-history',
   standalone: true,
   imports: [RouterLink, MatCardModule, MatTabsModule,
-    EmailNotificationSearchComponent, EmailComponent, NotificationComponent],
+    EmailNotificationSearchComponent, EmailComponent, NotificationComponent, HasPermissionDirective],
   templateUrl: './email-notification-history.component.html',
-  styleUrl: './email-notification-history.component.scss'
+  styleUrl: './email-notification-history.component.scss',
+  providers: [HasPermissionDirective]
 })
 export class EmailNotificationHistoryComponent extends CommonComponent {
   @ViewChild('appEmail') appEmail: EmailComponent;

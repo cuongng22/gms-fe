@@ -20,13 +20,13 @@
     <mat-card-content>
         <mat-tab-group [selectedIndex]="selectedTab" mat-stretch-tabs="false" mat-align-tabs="start">
 
-            <mat-tab label="Wet Lease" i18n="@@wetLease">
+            <mat-tab *appHasPermission="['API_WET_LEASE_LIST']" label="Wet Lease" i18n="@@wetLease">
                 <ng-template matTabContent>
                     <app-wet-lease></app-wet-lease>
                 </ng-template>
 
             </mat-tab>
-            <mat-tab label="Charter" i18n="@@charter">
+            <mat-tab *appHasPermission="['API_CHARTER_LIST']" label="Charter" i18n="@@charter">
                 <ng-template matTabContent>
                     <app-charter></app-charter>
                 </ng-template>

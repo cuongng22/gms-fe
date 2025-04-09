@@ -34,15 +34,14 @@
               <mat-form-field class="mb-1">
                 <mat-label i18n="@@airport"> Version</mat-label>
                 <input type="text" matInput formControlName="version" [matAutocomplete]="versionComplete">
-                <mat-autocomplete autoActiveFirstOption requireSelection
-                                  #versionComplete="matAutocomplete">
+                <mat-autocomplete autoActiveFirstOption requireSelection #versionComplete="matAutocomplete">
                   <mat-option [value]="null">-- All version --</mat-option>
                   @for (option of listVersion | async; track option) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
+                  <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
                 @if (!!formGroupSearch.controls['version'].hasError('required')) {
-                  <mat-error><span i18n>Version</span><span i18n> is required</span></mat-error>
+                <mat-error><span i18n>Version</span><span i18n> is required</span></mat-error>
                 }
               </mat-form-field>
             </div>
@@ -50,11 +49,10 @@
               <mat-form-field class="mb-1">
                 <mat-label i18n="@@airport"> Datasource</mat-label>
                 <input type="text" matInput formControlName="sourceType" [matAutocomplete]="sourceComplete">
-                <mat-autocomplete autoActiveFirstOption requireSelection
-                                  #sourceComplete="matAutocomplete">
+                <mat-autocomplete autoActiveFirstOption requireSelection #sourceComplete="matAutocomplete">
                   <mat-option [value]="null">-- All Datasource --</mat-option>
                   @for (option of listDatasource | async; track option) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
+                  <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
               </mat-form-field>
@@ -83,19 +81,20 @@
     </mat-card-title>
     <mat-card-subtitle>
       <button class="add-btn  mr-10" type="button" mat-button
-              (click)="exportFileOptions(null,'planned_exchange_rate.xlsx')">
+        (click)="exportFileOptions(null,'planned_exchange_rate.xlsx')">
         <i class="material-symbols-outlined">
           download
         </i>
         <span i18n="@@export">Export</span>
       </button>
-      <button class="add-btn mr-10" type="button" mat-button (click)="toggleDialogUpload()">
+      <button *appHasPermission="['API_CURRENCY_IMPORT_IMPORT','API_CURRENCY_TEMPLATE_LIST']" class="add-btn mr-10"
+        type="button" mat-button (click)="toggleDialogUpload()">
         <i class="material-symbols-outlined">
           upload
         </i>
         <span i18n="@@import">Import</span>
       </button>
-      <button class="add-btn mr-10" type="button" mat-button>
+      <button *appHasPermission="['API_CURRENCY_SYNC_LIST']" class="add-btn mr-10" type="button" mat-button>
         <i class="material-symbols-outlined">
           sync
         </i>
@@ -108,8 +107,8 @@
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
         <ng-container matColumnDef="stt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center">#</th>
-          <td mat-cell *matCellDef="let element; let i = dataIndex"
-              class="text-center">{{ (pageIndex * pageSize) + i + 1 }}
+          <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">{{ (pageIndex * pageSize) + i +
+            1 }}
           </td>
         </ng-container>
         <ng-container matColumnDef="currencyCode">
@@ -119,90 +118,91 @@
         <ng-container matColumnDef="uthLastYear">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">Yearly estimates
           </th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.uthLastYear | number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.uthLastYear | number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="january">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T01</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.january | number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.january | number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="february">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T02</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.february | number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.february | number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="march">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T03</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.march| number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.march| number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="april">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T04</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.april| number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.april| number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="may">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T05</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.may | number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.may | number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="june">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T06</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.june| number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.june| number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="july">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T07</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.july | number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.july | number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="august">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T08</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.august| number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.august| number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="september">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T09</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.september | number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.september | number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="october">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T10</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.october| number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.october| number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="november">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T11</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.november| number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.november| number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="december">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">T12</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.december| number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.december| number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="average">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">Average</th>
-          <td mat-cell *matCellDef="let element"
-              class="text-right">{{ element.average| number : (element.format || '1.0-10') }}
+          <td mat-cell *matCellDef="let element" class="text-right">{{ element.average| number : (element.format ||
+            '1.0-10') }}
           </td>
         </ng-container>
         <ng-container matColumnDef="rateUth">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">Rate <br/>(Plan/Est)
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">Rate
+            <br />(Plan/Est)
           </th>
           <td mat-cell *matCellDef="let element" class="text-right">{{ element.rateUth }}</td>
         </ng-container>
@@ -236,9 +236,8 @@
       </table>
     </div>
     <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-                   [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
-                   [pageIndex]="pageIndex"
-                   aria-label="Select page" i18n-aria-label="@@selectPage">
+      [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+      aria-label="Select page" i18n-aria-label="@@selectPage">
     </mat-paginator>
   </mat-card-content>
 </mat-card>
@@ -260,37 +259,37 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div class="row">
+        <div class="row" *appHasPermission="['API_CURRENCY_TEMPLATE_LIST']">
           <span i18n="@@downloadTemplate" class="text-black">Download template</span>
           <button mat-button type="button" class="search-btn min-with-100 mlr-5" style="width: auto;"
-                  (click)="downloadTemplate()">
+            (click)="downloadTemplate()">
             <i class="material-symbols-outlined">
               download
             </i>
             <span i18n="@@airportCodeTemplate">tygiakehoach-template.xlsx</span>
           </button>
         </div>
-        <div class="row mt-20">
+        <div class="row mt-20" *appHasPermission="['API_CURRENCY_IMPORT_IMPORT']">
           <span i18n="@@selectFile" class="text-black">Select file</span>
           <file-upload [ngClass]="{'invalid':fileUpload.hasError('required') && fileUpload.touched}"
-                       [formControl]="fileUpload" class="file-uploader" [multiple]="false"></file-upload>
+            [formControl]="fileUpload" class="file-uploader" [multiple]="false"></file-upload>
           @if (fileUpload.hasError('required') &&
           fileUpload.touched) {
-            <mat-error i18n="@@fileRequired" style="font-style: italic; font-size: 12px;">File
-              {{ MESSAGE.REQUIRED }}
-            </mat-error>
+          <mat-error i18n="@@fileRequired" style="font-style: italic; font-size: 12px;">File
+            {{ MESSAGE.REQUIRED }}
+          </mat-error>
           }
         </div>
         @if (!!uploadFileError.totalErrors) {
-          <div class="row mt-20">
-            <p class="text-danger" i18n="@@flightMarket.UploadError">
-              Cannot perform excel data import when there are {{ uploadFileError.totalErrors }} error records
-            </p>
-            <span i18n="@@downloadFileError" class="text-black">Download file error:
-                        <button class="pt-0 pb-0" mat-raised-button (click)="downloadFileError()">Download file
-                            excel</button>
-                    </span>
-          </div>
+        <div class="row mt-20">
+          <p class="text-danger" i18n="@@flightMarket.UploadError">
+            Cannot perform excel data import when there are {{ uploadFileError.totalErrors }} error records
+          </p>
+          <span i18n="@@downloadFileError" class="text-black">Download file error:
+            <button class="pt-0 pb-0" mat-raised-button (click)="downloadFileError()">Download file
+              excel</button>
+          </span>
+        </div>
         }
         <div class="row mt-20">
           <p class="text-primary" i18n="@@plannedAnnualProduction.NoteUpload">
@@ -299,15 +298,15 @@
         </div>
       </mat-card-content>
       <mat-card-actions class="p-15 d-flex justify-content-end">
-        <button type="button" mat-button
-                (click)="resetFileUpload() ;toggleDialogUpload()"
-                class="close-btn  min-with-100 mlr-5">
+        <button type="button" mat-button (click)="resetFileUpload() ;toggleDialogUpload()"
+          class="close-btn  min-with-100 mlr-5">
           <i class="material-symbols-outlined">
             close
           </i>
           <span i18n="@@cancel">Close</span>
         </button>
-        <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
+        <button *appHasPermission="['API_CURRENCY_IMPORT_IMPORT']" mat-button type="button"
+          class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
           <i class="material-symbols-outlined">
             upload
           </i>
@@ -317,4 +316,3 @@
     </mat-card>
   </div>
 </div>
-

@@ -42,6 +42,7 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import { DataCalculateTotal } from 'src/app/crew-trip/shared/data-calculate-total';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import {
 	DATE_FORMAT_DD_MM_YYYY,
@@ -91,7 +92,7 @@ import {
 		SelectMultipleComponent,
 		MatPaginator,
 		RouterLink,
-		DataTransformPipe,
+		DataTransformPipe, HasPermissionDirective
 	],
 	templateUrl: './charter.component.html',
 	styleUrl: './charter.component.scss',
@@ -99,6 +100,7 @@ import {
 		provideNativeDateAdapter(),
 		provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
 		DataTransformPipe,
+		HasPermissionDirective
 	],
 })
 export class CharterComponent extends CommonComponent {

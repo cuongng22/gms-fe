@@ -42,6 +42,7 @@ import { CommonModule } from '@angular/common';
 import { ListResponse } from '../../shared/models/common.model';
 import { HttpStatusCode } from '@angular/common/http';
 import { MatPaginatorModule } from '@angular/material/paginator';
+import { HasPermissionDirective } from '../../shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-procurement-tracking',
@@ -75,13 +76,14 @@ import { MatPaginatorModule } from '@angular/material/paginator';
     RouterLink,
     MatTableModule,
     DataTransformPipe,
-    CommonModule, MatPaginatorModule
+    CommonModule, MatPaginatorModule, HasPermissionDirective
   ],
   templateUrl: './procurement-tracking.component.html',
   styleUrl: './procurement-tracking.component.scss',
   providers: [
     provideNativeDateAdapter(),
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+    HasPermissionDirective
   ],
 })
 export class ProcurementTrackingComponent extends CommonComponent implements OnInit {

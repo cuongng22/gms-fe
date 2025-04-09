@@ -31,6 +31,7 @@ import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection
 import { EstimatedAnnualProductionService } from 'src/app/crew-trip/core/services/estimated-annual-production';
 import moment from 'moment';
 import { debounceTime } from 'rxjs';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-estimated-cost-list',
@@ -40,10 +41,12 @@ import { debounceTime } from 'rxjs';
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, AsyncPipe, FileUploadModule,
-    SelectionSuggestComponent, SelectionComponent, NgxControlError, DigitOnlyModule, SelectMultipleComponent
+    SelectionSuggestComponent, SelectionComponent, NgxControlError, DigitOnlyModule, SelectMultipleComponent,
+    HasPermissionDirective
   ],
   templateUrl: './estimated-cost-list.component.html',
-  styleUrl: './estimated-cost-list.component.scss'
+  styleUrl: './estimated-cost-list.component.scss',
+  providers: [HasPermissionDirective]
 })
 export class EstimatedCostListComponent extends CommonComponent implements OnInit {
 

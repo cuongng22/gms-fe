@@ -19,16 +19,18 @@ import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from '
 import { PlanBudgetProcurementService } from 'src/app/crew-trip/core/services/plan-budget-procurement.service';
 import { CAR_RENTAL, CategoryEnum, HOTEL, PlanCategoryEnum, ServiceType, StatusEnum, StatusSummaryEnum } from '../../budget-procurement.model';
 import { Constant, round } from 'src/app/crew-trip/shared/utils/constant';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-budget-procurement-summary-list',
   standalone: true,
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
-    CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule],
+    CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule,
+    HasPermissionDirective],
   templateUrl: './budget-procurement-summary-list.component.html',
   styleUrl: './budget-procurement-summary-list.component.scss',
-  providers: [DataTransformPipe]
+  providers: [DataTransformPipe, HasPermissionDirective],
 })
 export class BudgetProcurementSummaryListComponent extends CommonComponent implements OnInit {
 

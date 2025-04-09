@@ -20,6 +20,7 @@ import { GroupMailDetailComponent } from 'src/app/crew-trip/features/system/conf
 import { PaymentEmailComponent } from 'src/app/crew-trip/features/system/config/payment-mail/payment-mail.component';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 
 @Component({
@@ -45,9 +46,11 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 		MatTabGroup,
 		MatTab,
 		PaymentEmailComponent,
+		HasPermissionDirective
 	],
 	templateUrl: './group-mail.component.html',
 	styleUrl: './group-mail.component.scss',
+	providers: [HasPermissionDirective]
 })
 export class GroupMailComponent extends CommonComponent implements OnInit {
 	override baseService = inject(GroupMailService);
@@ -58,11 +61,11 @@ export class GroupMailComponent extends CommonComponent implements OnInit {
 		type?: string;
 		format?: string;
 	}[] = [
-		{ label: $localize`:@@name:Name`, value: 'groupName' },
-		{ label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
-		{ label: $localize`:@@note:Description`, value: 'notes' },
-		// { label: $localize`:@@status:Status`, value: 'status' }
-	];
+			{ label: $localize`:@@name:Name`, value: 'groupName' },
+			{ label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
+			{ label: $localize`:@@note:Description`, value: 'notes' },
+			// { label: $localize`:@@status:Status`, value: 'status' }
+		];
 
 	constructor() {
 		super();

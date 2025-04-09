@@ -32,11 +32,11 @@
               <mat-form-field>
                 <mat-label>ORI</mat-label>
                 <input type="text" matInput formControlName="ori" #ori [matAutocomplete]="oriComplete"
-                       (input)="filterOri()">
+                  (input)="filterOri()">
                 <mat-autocomplete autoActiveFirstOption requireSelection #oriComplete="matAutocomplete">
                   <mat-option value="">--All ORI--</mat-option>
                   @for (option of filteredOptionsOri(); track option) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
+                  <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
               </mat-form-field>
@@ -45,11 +45,11 @@
               <mat-form-field>
                 <mat-label>DES</mat-label>
                 <input type="text" matInput formControlName="des" #des [matAutocomplete]="desComplete"
-                       (input)="filterDes()">
+                  (input)="filterDes()">
                 <mat-autocomplete autoActiveFirstOption requireSelection #desComplete="matAutocomplete">
                   <mat-option value="">--All DES--</mat-option>
                   @for (option of filteredOptionsDes(); track option) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
+                  <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
               </mat-form-field>
@@ -60,7 +60,7 @@
                 <mat-select formControlName="fltMonth">
                   <mat-option [value]="null">-- All FLT_Month --</mat-option>
                   <mat-option *ngFor="let month of fltMonthList" [value]="month">{{
-                      month
+                    month
                     }}
                   </mat-option>
                 </mat-select>
@@ -71,13 +71,12 @@
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>AC_ID</mat-label>
-                <input type="text" matInput formControlName="acId" #acId
-                       [matAutocomplete]="acIdComplete" (input)="filterAcId()">
-                <mat-autocomplete autoActiveFirstOption requireSelection
-                                  #acIdComplete="matAutocomplete">
+                <input type="text" matInput formControlName="acId" #acId [matAutocomplete]="acIdComplete"
+                  (input)="filterAcId()">
+                <mat-autocomplete autoActiveFirstOption requireSelection #acIdComplete="matAutocomplete">
                   <mat-option value="">--All AC_ID--</mat-option>
                   @for (option of filteredOptionsAcId(); let index = $index; track index) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
+                  <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
               </mat-form-field>
@@ -85,13 +84,12 @@
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>AC_Group</mat-label>
-                <input type="text" matInput formControlName="acGroup" #acGroup
-                       [matAutocomplete]="acGroupComplete" (input)="filterAcGroup()">
-                <mat-autocomplete autoActiveFirstOption requireSelection
-                                  #acGroupComplete="matAutocomplete">
+                <input type="text" matInput formControlName="acGroup" #acGroup [matAutocomplete]="acGroupComplete"
+                  (input)="filterAcGroup()">
+                <mat-autocomplete autoActiveFirstOption requireSelection #acGroupComplete="matAutocomplete">
                   <mat-option value="">--All AC_Group--</mat-option>
                   @for (option of filteredOptionsAcGroup(); let index = $index; track index) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
+                  <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
               </mat-form-field>
@@ -99,17 +97,16 @@
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>VER_ID</mat-label>
-                <input type="text" matInput formControlName="versionId" #version
-                       [matAutocomplete]="versionComplete" (input)="filterVersion()">
-                <mat-autocomplete autoActiveFirstOption requireSelection
-                                  #versionComplete="matAutocomplete">
+                <input type="text" matInput formControlName="versionId" #version [matAutocomplete]="versionComplete"
+                  (input)="filterVersion()">
+                <mat-autocomplete autoActiveFirstOption requireSelection #versionComplete="matAutocomplete">
                   <mat-option value="">--All VER_ID--</mat-option>
                   @for (option of filteredOptionsVersion(); let index = $index; track index) {
-                    <mat-option [value]="option">{{ option }}</mat-option>
+                  <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
                 @if (!!formGroupSearch.controls['versionId'].hasError('required')) {
-                  <mat-error><span i18n>Version</span><span i18n> is required</span></mat-error>
+                <mat-error><span i18n>Version</span><span i18n> is required</span></mat-error>
                 }
               </mat-form-field>
             </div>
@@ -146,13 +143,14 @@
         </i>
         <span i18n="@@export">Export</span>
       </button>
-      <button class="add-btn mr-10" type="button" mat-button (click)="toggleDialogUpload()">
+      <button *appHasPermission="['API_PRODUCTIVITY_TEMPLATE_LIST','API_PRODUCTIVITY_IMPORT_IMPORT']"
+        class="add-btn mr-10" type="button" mat-button (click)="toggleDialogUpload()">
         <i class="material-symbols-outlined">
           upload
         </i>
         <span i18n="@@upload">Import</span>
       </button>
-      <button class="add-btn mr-10" type="button" mat-button>
+      <button *appHasPermission="['API_PRODUCTIVITY_SYNC_LIST']" class="add-btn mr-10" type="button" mat-button>
         <i class="material-symbols-outlined">
           sync
         </i>
@@ -171,21 +169,21 @@
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
         <ng-container matColumnDef="stt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center">#</th>
-          <td mat-cell *matCellDef="let element; let i = dataIndex"
-              class="text-center">{{ (pageIndex * pageSize) + i + 1 }}
+          <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">{{ (pageIndex * pageSize) + i +
+            1 }}
           </td>
         </ng-container>
 
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
-          <ng-container matColumnDef="{{innerColumn.value}}">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">{{
-                innerColumn.label
-              }}
-            </th>
-            <td mat-cell *matCellDef="let element">
-              {{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="{{innerColumn.value}}">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">{{
+            innerColumn.label
+            }}
+          </th>
+          <td mat-cell *matCellDef="let element">
+            {{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+          </td>
+        </ng-container>
         }
 
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
@@ -196,9 +194,8 @@
       </table>
     </div>
     <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-                   [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
-                   [pageIndex]="pageIndex"
-                   aria-label="Select page" i18n-aria-label="@@selectPage">
+      [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+      aria-label="Select page" i18n-aria-label="@@selectPage">
     </mat-paginator>
   </mat-card-content>
 </mat-card>
@@ -212,9 +209,9 @@
     <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
       <mat-card-content>
         <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
+          <span class="material-symbols-outlined font-size-5rem">
+            error
+          </span>
         </div>
         <div class="text-center mb-20">
           <h3 class="mb-0" i18n="@@deleteEstAnnualProductionMessage">Are you sure you want to delete the
@@ -222,8 +219,7 @@
           <p class="fs-5 mt-3" i18n="@@warningDeleteEstAnnualProduction">This action cannot be undone!</p>
         </div>
         <div class="btn-box text-center">
-          <button type="button" mat-button (click)="toggleDialogDelete()"
-                  class="close-btn  min-with-100 mlr-5">
+          <button type="button" mat-button (click)="toggleDialogDelete()" class="close-btn  min-with-100 mlr-5">
             <i class="material-symbols-outlined">
               close
             </i>
@@ -260,38 +256,37 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div class="row">
+        <div class="row" *appHasPermission="['API_PRODUCTIVITY_TEMPLATE_LIST']">
           <span i18n="@@downloadTemplate" class="text-dark">Download template</span>
           <button mat-button type="button" class="search-btn min-with-100 mlr-5" style="width: auto;"
-                  (click)="downloadTemplate('estimated-annual-production-template',{option:0},'template')">
+            (click)="downloadTemplate('estimated-annual-production-template',{option:0},'template')">
             <i class="material-symbols-outlined">
               download
             </i>
-            <span
-              i18n="@@estimatedAnnualProductionTemplate">estimated-annual-production-template.xlsx</span>
+            <span i18n="@@estimatedAnnualProductionTemplate">estimated-annual-production-template.xlsx</span>
           </button>
         </div>
-        <div class="row mt-20">
+        <div class="row mt-20" *appHasPermission="['API_PRODUCTIVITY_IMPORT_IMPORT']">
           <span i18n="@@selectFile" class="text-dark">Select file</span>
           <file-upload [ngClass]="{'invalid':fileUpload.hasError('required') && fileUpload.touched}"
-                       [formControl]="fileUpload" class="file-uploader" [multiple]="false"></file-upload>
+            [formControl]="fileUpload" class="file-uploader" [multiple]="false"></file-upload>
           @if (fileUpload.hasError('required') &&
           fileUpload.touched) {
-            <mat-error i18n="@@fileRequired" style="font-style: italic; font-size: 12px;">File
-              {{ MESSAGE.REQUIRED }}
-            </mat-error>
+          <mat-error i18n="@@fileRequired" style="font-style: italic; font-size: 12px;">File
+            {{ MESSAGE.REQUIRED }}
+          </mat-error>
           }
         </div>
         @if (!!uploadFileError.totalErrors) {
-          <div class="row mt-20">
-            <p class="text-danger" i18n="@@flightMarket.UploadError">
-              Cannot perform excel data import when there are {{ uploadFileError.totalErrors }} error records
-            </p>
-            <span i18n="@@downloadFileError" class="text-dark">Download file error:
-                        <button class="pt-0 pb-0" mat-raised-button (click)="downloadFileError()">Download file
-                            excel</button>
-                    </span>
-          </div>
+        <div class="row mt-20">
+          <p class="text-danger" i18n="@@flightMarket.UploadError">
+            Cannot perform excel data import when there are {{ uploadFileError.totalErrors }} error records
+          </p>
+          <span i18n="@@downloadFileError" class="text-dark">Download file error:
+            <button class="pt-0 pb-0" mat-raised-button (click)="downloadFileError()">Download file
+              excel</button>
+          </span>
+        </div>
         }
 
         <div class="row mt-20">
@@ -301,15 +296,15 @@
         </div>
       </mat-card-content>
       <mat-card-actions class="p-15" style="display: flex; justify-content: end;">
-        <button type="button" mat-button
-                (click)="resetFileUpload() ;toggleDialogUpload()"
-                class="close-btn  min-with-100 mlr-5">
+        <button type="button" mat-button (click)="resetFileUpload() ;toggleDialogUpload()"
+          class="close-btn  min-with-100 mlr-5">
           <i class="material-symbols-outlined">
             close
           </i>
           <span i18n="@@cancel">Close</span>
         </button>
-        <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
+        <button *appHasPermission="['API_PRODUCTIVITY_IMPORT_IMPORT']" mat-button type="button"
+          class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
           <i class="material-symbols-outlined">
             upload
           </i>

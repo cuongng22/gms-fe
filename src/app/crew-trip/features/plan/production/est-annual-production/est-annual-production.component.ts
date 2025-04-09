@@ -24,6 +24,7 @@ import { EstAnnualProduction } from './est-annual-production.model';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { FileUploadModule, FileUploadValidators } from '@iplab/ngx-file-upload';
 import { error } from 'console';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-est-annual-production',
@@ -31,7 +32,9 @@ import { error } from 'console';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterModule, FileUploadModule],
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterModule, FileUploadModule,
+    HasPermissionDirective],
+  providers: [HasPermissionDirective],
   templateUrl: './est-annual-production.component.html',
   styleUrl: './est-annual-production.component.scss'
 })

@@ -1,32 +1,35 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {MatButtonModule} from '@angular/material/button';
-import {MatCardModule,} from '@angular/material/card';
-import {MatTableModule} from '@angular/material/table';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatError, MatFormField, MatHint, MatLabel, MatSuffix} from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
-import {MatOption} from '@angular/material/core';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatSelect} from '@angular/material/select';
-import {CommonModule, NgClass, NgIf} from '@angular/common';
-import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {UsersService} from 'src/app/crew-trip/core/services/users-service';
-import {InfoPlaneService} from 'src/app/crew-trip/core/services/InfoPlaneService.service';
-import {MatMenuModule} from '@angular/material/menu';
-import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
-import {HttpStatusCode} from '@angular/common/http';
+import { Component, inject, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule, } from '@angular/material/card';
+import { MatTableModule } from '@angular/material/table';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatError, MatFormField, MatHint, MatLabel, MatSuffix } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatOption } from '@angular/material/core';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelect } from '@angular/material/select';
+import { CommonModule, NgClass, NgIf } from '@angular/common';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { UsersService } from 'src/app/crew-trip/core/services/users-service';
+import { InfoPlaneService } from 'src/app/crew-trip/core/services/InfoPlaneService.service';
+import { MatMenuModule } from '@angular/material/menu';
+import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
+import { HttpStatusCode } from '@angular/common/http';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-aircraft-data',
   standalone: true,
   imports: [
-    CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatSuffix, NgxTrimDirectiveModule, MatHint
+    CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatSuffix, NgxTrimDirectiveModule, MatHint,
+    HasPermissionDirective
   ],
   templateUrl: './aircraft-data.component.html',
-  styleUrl: './aircraft-data.component.scss'
+  styleUrl: './aircraft-data.component.scss',
+  providers: [HasPermissionDirective]
 })
 export class AircraftDataComponent extends CommonComponent implements OnInit {
   override baseService = inject(InfoPlaneService);
@@ -47,8 +50,8 @@ export class AircraftDataComponent extends CommonComponent implements OnInit {
       note: ['', [Validators.maxLength(500)]],
       active: [true,]
     });
-    this.formGroupSearchInit = {...this.formGroupSearch.value};
-    this.formGroupDetailInit = {...this.formGroupDetail.value};
+    this.formGroupSearchInit = { ...this.formGroupSearch.value };
+    this.formGroupDetailInit = { ...this.formGroupDetail.value };
   }
 
   override async ngOnInit() {
@@ -102,6 +105,6 @@ export class AircraftDataComponent extends CommonComponent implements OnInit {
   }
 
   existValidator(control: AbstractControl): ValidationErrors | null {
-    return this.existCheck ? {existCheck: true} : null;
+    return this.existCheck ? { existCheck: true } : null;
   }
 }

@@ -31,6 +31,7 @@ import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-mark
 import { NotificationSetupService } from 'src/app/crew-trip/core/services/notification-setup.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { SelectOptions } from 'src/app/crew-trip/shared/select-option';
 
@@ -56,15 +57,15 @@ import { SelectOptions } from 'src/app/crew-trip/shared/select-option';
 		RouterModule,
 		MatCheckbox,
 		NgxEditorModule,
-		NgxTrimDirectiveModule,
+		NgxTrimDirectiveModule, HasPermissionDirective
 	],
 	templateUrl: './notification-setup.component.html',
 	styleUrl: './notification-setup.component.scss',
+	providers: [HasPermissionDirective]
 })
 export class NotificationSetupComponent
 	extends CommonComponent
-	implements OnInit
-{
+	implements OnInit {
 	override baseService = inject(NotificationSetupService);
 	flightMarketService = inject(FlightMarketService);
 
@@ -83,16 +84,16 @@ export class NotificationSetupComponent
 		type?: string;
 		format?: string;
 	}[] = [
-		{ label: $localize`:@@name:Type`, value: 'type' },
-		{
-			label: $localize`:@@airportCode:Notification settings`,
-			value: 'notiSetting',
-		},
-		{ label: $localize`:@@note:Regular notification`, value: 'regularNoti' },
-		{ label: $localize`:@@note:Airport Code`, value: 'airportCode' },
-		{ label: $localize`:@@note:Remark`, value: 'note' },
-		{ label: $localize`:@@status:Status`, value: 'active' },
-	];
+			{ label: $localize`:@@name:Type`, value: 'type' },
+			{
+				label: $localize`:@@airportCode:Notification settings`,
+				value: 'notiSetting',
+			},
+			{ label: $localize`:@@note:Regular notification`, value: 'regularNoti' },
+			{ label: $localize`:@@note:Airport Code`, value: 'airportCode' },
+			{ label: $localize`:@@note:Remark`, value: 'note' },
+			{ label: $localize`:@@status:Status`, value: 'active' },
+		];
 
 	constructor(public override dialog: MatDialog) {
 		super();
@@ -123,7 +124,7 @@ export class NotificationSetupComponent
 			'action',
 		];
 		await Promise.all([this.search(), this.getListAirportCode()]).then(
-			() => {},
+			() => { },
 		);
 	}
 
