@@ -204,35 +204,79 @@ export const routes: Routes = [
 			{
 				path: 'category',
 				children: [
-					{ path: 'vehicle', component: VehicleComponent },
-					{ path: 'contract', component: ContractComponent },
+					{
+						path: 'vehicle', component: VehicleComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_VEHICLES_LIST'] }
+					},
+					{
+						path: 'contract', component: ContractComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_CONTRACT_LIST'] }
+					},
 					{ path: 'contract/annex', component: ContractComponent },
 					{ path: 'contract/detail', component: ContractDetailComponent },
-					{ path: 'act-rate', component: ActRateComponent },
-					{ path: 'hotel', component: HotelComponent },
-					{ path: 'nation', component: NationComponent },
-					{ path: 'cost', component: ServiceFeeComponent },
-					{ path: 'crews', component: CrewsComponent },
-					{ path: 'other-crew', component: OtherCrewComponent },
-					{ path: 'vehicle', component: VehicleComponent },
+					{
+						path: 'act-rate', component: ActRateComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_CURRENCY_LIST'] }
+					},
 					{ path: 'hotel', component: HotelComponent },
 					{ path: 'nation', component: NationComponent },
 					{
-						path: 'crews',
-						component: CrewsComponent,
-						children: [
-							{ path: '', component: CrewsComponent },
-							{ path: 'detail', component: CrewsDetailComponent },
-						],
+						path: 'cost', component: ServiceFeeComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_SERVICE_FEE_LIST'] }
 					},
-					{ path: 'autocomplete', component: AutocompleteComponent },
+					{
+						path: 'crews', component: CrewsComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_CREWS_LIST'] }
+					},
+					{
+						path: 'other-crew', component: OtherCrewComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_CREW_FLIGHTS_OTHERS_LIST'] }
+					},
+					{ path: 'vehicle', component: VehicleComponent },
+					{
+						path: 'hotel', component: HotelComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_HOTEL_LIST'] }
+					},
+					{
+						path: 'nation', component: NationComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_NATION_LIST'] }
+					},
+					// {
+					// 	path: 'crews',
+					// 	component: CrewsComponent,
+					// 	children: [
+					// 		{ path: '', component: CrewsComponent },
+					// 		{ path: 'detail', component: CrewsDetailComponent },
+					// 	],
+					// },
+					// { path: 'autocomplete', component: AutocompleteComponent },
 					{
 						path: 'flight-market',
 						component: FlightMarketComponent,
 						children: [
-							{ path: '', component: FlightMarketListComponent },
-							{ path: 'detail', component: FlightMarketDetailComponent },
-							{ path: 'detail/:id', component: FlightMarketDetailComponent },
+							{
+								path: '', component: FlightMarketListComponent,
+								canActivate: [AuthGuard],
+								data: { permissionCodes: ['API_MARKET_FLIGHT_LIST'] }
+							},
+							{
+								path: 'detail', component: FlightMarketDetailComponent,
+								canActivate: [AuthGuard],
+								data: { permissionCodes: ['API_MARKET_FLIGHT_INSERT'] }
+							},
+							{
+								path: 'detail/:id', component: FlightMarketDetailComponent,
+								canActivate: [AuthGuard],
+								data: { permissionCodes: ['API_MARKET_FLIGHT_DETAILS', 'API_MARKET_FLIGHT_UPDATE'] }
+							},
 						],
 					},
 				],
@@ -240,22 +284,42 @@ export const routes: Routes = [
 			{
 				path: 'flight-schedules',
 				children: [
-					{ path: 'seasonal', component: SeasonalSchedulesComponent },
+					{
+						path: 'seasonal', component: SeasonalSchedulesComponent,
+						canActivate: [AuthGuard],
+						data: { permissionCodes: ['API_SEASON_FLIGHT_LIST'] }
+					},
 					{
 						path: 'daily',
 						children: [
 							{
 								path: '',
 								component: DailyFlightSchedulesComponent,
+								data: {
+									permissionCodes: [
+										'API_DAILY_FLIGHT_SCHEDULE_PLAN_LIST',
+										'API_DAILY_FLIGHT_SCHEDULE_IN_MONTH_LIST'
+									]
+								},
 							},
 							{
 								path: 'other',
 								component: OtherFlightScheduleComponent,
+								data: {
+									permissionCodes: [
+										'API_DAILY_FLIGHT_SCHEDULE_LIST_EXTRA_CREWS_LIST'
+									]
+								}
 							},
 						],
 					},
-
-					{ path: 'email-tracking', component: EmailTrackingComponent },
+					{
+						path: 'email-tracking', component: EmailTrackingComponent,
+						canActivate: [AuthGuard],
+						data: {
+							permissionCodes: ['API_EMAIL_LIST']
+						}
+					},
 				],
 			},
 			{

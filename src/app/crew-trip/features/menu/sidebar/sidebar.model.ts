@@ -28,7 +28,17 @@ export const menu: Menu[] = [
 	{
 		title: $localize`:@@category:CATEGORY`,
 		rootPath: 'category',
-		permissionCode: ['API_MARKET_FLIGHT_LIST'],
+		permissionCode: [
+			'API_MARKET_FLIGHT_LIST',
+			'API_HOTEL_LIST',
+			'API_VEHICLES_LIST',
+			'API_SERVICE_FEE_LIST',
+			'API_CONTRACT_LIST',
+			'API_CURRENCY_LIST',
+			'API_CREW_FLIGHTS_OTHERS_LIST',
+			'API_CREWS_LIST',
+			'API_NATION_LIST'
+		],
 		subMenu: [
 			{
 				path: 'category/flight-market',
@@ -89,19 +99,28 @@ export const menu: Menu[] = [
 	{
 		title: $localize`:@@flightSchedules:FLIGHT SCHEDULES`,
 		rootPath: 'flight-schedules',
-		permissionCode: ['API_DAILY_FLIGHT_SCHEDULE_FLIGHTS_LIST_LIST'],
+		permissionCode: [
+			'API_SEASON_FLIGHT_LIST',
+			'API_DAILY_FLIGHT_SCHEDULE_PLAN_LIST',
+			'API_DAILY_FLIGHT_SCHEDULE_IN_MONTH_LIST',
+			'API_EMAIL_LIST'
+		],
 		subMenu: [
 			{
 				path: 'flight-schedules/seasonal',
 				title: $localize`:@@seasonalSchedules:Seasonal Schedules`,
 				icon: 'ri-calendar-schedule-line',
-				permissionCode: []
+				permissionCode: ['API_SEASON_FLIGHT_LIST']
 			},
 			{
 				path: '',
-				title: $localize`:@@dailyFlightSchedule:Daily Flight Schedule`,
+				title: $localize`:@@dailyFlightSchedule:Daily Flight Schedule1`,
 				icon: 'ri-calendar-schedule-line',
-				permissionCode: ['API_DAILY_FLIGHT_SCHEDULE_FLIGHTS_LIST_LIST'],
+				permissionCode: [
+					'API_DAILY_FLIGHT_SCHEDULE_PLAN_LIST',
+					'API_DAILY_FLIGHT_SCHEDULE_IN_MONTH_LIST',
+					'API_EMAIL_LIST'
+				],
 				menu: [
 					{
 						title: $localize`:@@dailyFlightSchedule:Daily Flight Schedule`,
@@ -112,13 +131,16 @@ export const menu: Menu[] = [
 								path: 'flight-schedules/daily',
 								title: $localize`:@@flightList:Flight List`,
 								icon: 'ri-calendar-schedule-line',
-								permissionCode: []
+								permissionCode: [
+									'API_DAILY_FLIGHT_SCHEDULE_PLAN_LIST',
+									'API_DAILY_FLIGHT_SCHEDULE_IN_MONTH_LIST'
+								]
 							},
 							{
 								path: 'flight-schedules/email-tracking',
 								title: $localize`:@@emailTracking:Email Tracking`,
 								icon: 'ri-calendar-schedule-line',
-								permissionCode: []
+								permissionCode: ['API_EMAIL_LIST']
 							},
 						],
 					},

@@ -27,8 +27,7 @@ import { MAT_DATE_LOCALE } from '@angular/material/core';
   imports: [BaseImport],
   templateUrl: './invoice-document-detail.component.html',
   styleUrl: './invoice-document-detail.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: false}),
-    { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: false})
   ]
 })
 
@@ -532,7 +531,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   override async detail(id: any) {
-    if (!!!id) {
+    if (!!!id && !this.dataObject) {
       return;
     }
     await super.detail(this.isDataClone() ? this.dataObject.id : id);

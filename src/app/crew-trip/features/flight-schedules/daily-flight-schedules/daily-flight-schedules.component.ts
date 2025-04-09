@@ -19,6 +19,7 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { MonthlyFlightScheduleComponent } from './monthly-flight-schedule/monthly-flight-schedule.component';
 import { EstimatedFlightScheduleComponent } from './estimated-flight-schedule/estimated-flight-schedule.component';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-daily-flight-schedules',
@@ -29,15 +30,17 @@ import { EstimatedFlightScheduleComponent } from './estimated-flight-schedule/es
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, DataTransformPipe,
     RouterLink, MatTabsModule,
-    EstimatedFlightScheduleComponent, MonthlyFlightScheduleComponent
+    EstimatedFlightScheduleComponent, MonthlyFlightScheduleComponent,
+    HasPermissionDirective
   ],
   templateUrl: './daily-flight-schedules.component.html',
   styleUrl: './daily-flight-schedules.component.scss',
-  providers: [DataTransformPipe]
+  providers: [DataTransformPipe, HasPermissionDirective]
 })
 export class DailyFlightSchedulesComponent extends CommonComponent {
   router = inject(ActivatedRoute);
   selectedTab: number; // dùng để active tab
+
 
   override ngOnInit(): void {
     this.router.fragment.subscribe(res => {

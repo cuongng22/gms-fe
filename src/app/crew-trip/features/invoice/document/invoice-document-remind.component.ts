@@ -1,46 +1,16 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {RouterLink} from '@angular/router';
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
-import {MatCardModule} from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
-import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
-import {NoDataRowOutlet} from '@angular/cdk/table';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {ContractDetailComponent} from 'src/app/crew-trip/features/contract/contract-detail/contract-detail.component';
 import {Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
-import {HotelService} from 'src/app/crew-trip/core/services/hotel-service';
-import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {ListResponse} from 'src/app/crew-trip/shared/models/common.model';
 import {HttpStatusCode} from '@angular/common/http';
-import {InvoiceFormService} from 'src/app/crew-trip/core/services/invoice-form-service';
-import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
-import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
-import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
-import {ConfirmDeleteDialog} from "src/app/crew-trip/shared/dialog/confirm-delete-dialog";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import moment from "moment";
-import {MatGridList, MatGridTile} from "@angular/material/grid-list";
-import {CdkTextareaAutosize} from "@angular/cdk/text-field";
 import {PaymentMailService} from "src/app/crew-trip/core/services/payment-mail.service";
 import {EmailSupplierService} from "src/app/crew-trip/core/services/email-supplier-service";
-import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
-import {NgxControlError} from "ngxtension/control-error";
-import {Editor, NgxEditorModule, Toolbar} from "ngx-editor";
+import {Editor, Toolbar} from "ngx-editor";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
 
 
@@ -50,7 +20,7 @@ import {BaseImport} from "src/app/crew-trip/shared/base-import";
   imports: [BaseImport],
   templateUrl: './invoice-document-remind.component.html',
   styleUrl: './invoice-document-remind.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY,{useUtc: true}),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
   ]
 })
 
@@ -119,7 +89,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
       emailTo: [, [Validators.pattern(PATTERN.EMAIL)]],
       emailCc: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailSubject: [, [Validators.maxLength(250)]],
-      emailContent: [,[Validators.required]],
+      emailContent: [, [Validators.required]],
       fileAttachs: []
     });
 
@@ -163,7 +133,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
   }
 
   sendEmail() {
-    if(this.formGroupDetail.getRawValue().emailContent ==='<p></p>'){
+    if (this.formGroupDetail.getRawValue().emailContent === '<p></p>') {
       this.formGroupDetail.patchValue({emailContent: ''});
     }
     this.formGroupDetail.markAllAsTouched();

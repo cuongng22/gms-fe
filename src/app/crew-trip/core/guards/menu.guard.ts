@@ -9,7 +9,7 @@ import { UsersService } from "src/app/crew-trip/core/services/users-service";
 })
 export class AuthGuard implements CanActivate {
 
-  constructor(private usersService: UsersService, private router: Router) {
+  constructor(private readonly usersService: UsersService, private readonly router: Router) {
   }
 
   canActivate(activatedRoute: ActivatedRouteSnapshot): boolean {
@@ -23,7 +23,7 @@ export class AuthGuard implements CanActivate {
 
     const permissionCodes = activatedRoute.data['permissionCodes'];
     console.log('>>>>> vao AuthGuard.canActivate: ', permissionCodes);
-    if (!permissionCodes && permissionCodes.length === 0) {
+    if (!permissionCodes || permissionCodes.length === 0) {
       if (this.usersService.isLoggedIn()) {
         return true;
       }

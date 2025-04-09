@@ -98,7 +98,7 @@
                         Cost
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{(element.serviceType === serviceType.HOTEL ? element.costHotel : element.costCar) | number}}
+                        {{(element.serviceType === serviceType.HOTEL ? round(element.costHotel) : round(element.costCar)) | number}}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="budget">
@@ -107,7 +107,7 @@
                         Budget (Including VAT)
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{(element.serviceType === serviceType.HOTEL ? element.budgetVatHotel : element.budgetVatCar) | number}}
+                        {{(element.serviceType === serviceType.HOTEL ? round(element.budgetVatHotel) : round(element.budgetVatCar)) | number}}
                     </td>
                 </ng-container>
                 <ng-container matColumnDef="vat">
@@ -231,7 +231,7 @@
                     <ng-container *matCellDef="let element">
                         @if(element?.isLast){
                         <td class="" mat-cell>
-                            <span class="fw-bold">{{getTotal('cost',element.serviceType) | number}}</span>
+                            <span class="fw-bold">{{getTotal('cost',element.serviceType, true) | number}}</span>
                         </td>
                         }
                     </ng-container>
@@ -240,7 +240,7 @@
                     <ng-container *matCellDef="let element">
                         @if(element?.isLast){
                         <td class="" mat-cell>
-                            <span class="fw-bold">{{getTotal('budget',element.serviceType) | number}}</span>
+                            <span class="fw-bold">{{getTotal('budget',element.serviceType, true) | number}}</span>
                         </td>
                         }
                     </ng-container>

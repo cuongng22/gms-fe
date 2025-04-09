@@ -24,6 +24,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { CrewsDetailComponent } from './crews-detail/crews-detail.component';
 import { Validators } from 'ngx-editor';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-crews',
@@ -31,9 +32,11 @@ import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
   imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, NgxTrimDirectiveModule],
+    MatTableModule, MatPaginatorModule, DataTransformPipe, RouterLink, RouterModule, NgxTrimDirectiveModule,
+    HasPermissionDirective],
   templateUrl: './crews.component.html',
-  styleUrl: './crews.component.scss'
+  styleUrl: './crews.component.scss',
+  providers: [HasPermissionDirective]
 })
 export class CrewsComponent extends CommonComponent implements OnInit {
   override baseService = inject(CrewsService);
