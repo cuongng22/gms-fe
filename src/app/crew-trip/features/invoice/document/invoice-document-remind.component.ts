@@ -10,7 +10,7 @@ import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-do
 import moment from "moment";
 import {PaymentMailService} from "src/app/crew-trip/core/services/payment-mail.service";
 import {EmailSupplierService} from "src/app/crew-trip/core/services/email-supplier-service";
-import {Editor, Toolbar} from "ngx-editor";
+import {Editor, toHTML, Toolbar} from "ngx-editor";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
 
 
@@ -145,6 +145,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     let formUpload = new FormData();
     let reqBody = this.formGroupDetail.getRawValue();
     delete reqBody.fileAttachs;
+    reqBody.emailContent =toHTML(this.formGroupDetail.getRawValue().emailContent, this.editor.schema);
     formUpload.append('request', JSON.stringify(reqBody));
 
     let reqFile = this.formGroupDetail.getRawValue().fileAttachs;
