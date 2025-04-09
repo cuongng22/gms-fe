@@ -93,7 +93,7 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
     this.formGroupDetail = this.fb.group({
       id: ['',],
       marketCode: ['', [Validators.required, this.existCodeValidator.bind(this)]],
-      nightCount: ['',[Validators.min(1),Validators.max(2)]],
+      nightCount: ['',[Validators.min(1),Validators.max(7)]],
       rate: ['', [Validators.min(1)]],
       notes: ['',[Validators.maxLength(500)]]
     });

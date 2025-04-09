@@ -17,6 +17,8 @@ import {BaseImport} from "src/app/crew-trip/shared/base-import";
 import {debounceTime, filter, pairwise} from "rxjs";
 import {afterValidator, beforeValidator} from "src/app/crew-trip/shared/utils/common";
 import {quantity} from "src/app/crew-trip/shared/utils/error-message";
+import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
+import { MAT_DATE_LOCALE } from '@angular/material/core';
 
 
 @Component({
@@ -25,7 +27,8 @@ import {quantity} from "src/app/crew-trip/shared/utils/error-message";
   imports: [BaseImport],
   templateUrl: './invoice-document-detail.component.html',
   styleUrl: './invoice-document-detail.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: false}),
+    { provide: MAT_DATE_LOCALE, useValue: 'vi-VN' },
   ]
 })
 
@@ -152,7 +155,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       idInvoiceForm: [],
       version: [1],
       ctype: [InvoiceDocumentTypeEnum.STANDARD],
-      invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(PATTERN.STRING_NUMBER1)]],
+      invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(PATTERN.STRING_NUMBER2)]],
       invoiceDate: [],
       invoiceReceiveDate: [],
       periodFrom: [],
@@ -161,7 +164,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       paymentDueDay: [],
       paymentDueDate: [],
       bizDocId: [],
-      airportCode: [],
+      airportCode: [, [Validators.required]],
       airportName: [],
       partnerCode: [],
       partnerName: [],
@@ -219,7 +222,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     try {
       await this.spinner.show();
       await this.loadListDocumentParent();
-      await Promise.all([this.detail(this.id), this.loadListFlightMarket(), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
+      await Promise.all([this.detail(this.id), this.loadListFlightMarket(this.id ? {status: FlightMarketStatusEnum.OPERATIONAL} : {}), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
         this.formGroupDetail.patchValue({idParent: this.formGroupDetail.getRawValue().idParent});
         this.calTotal();
         this.listFeeService = this.listFeeService.filter((s: any) => s.active);
@@ -277,7 +280,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status', 'periodOccurrence'];
     const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType',
       'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version',
-      'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status', 'periodOccurrence'];
+      'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status'];
 
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
@@ -397,7 +400,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         if (res.code == HttpStatusCode.Ok) {
           let lastDotIndex = fileUpload.name.lastIndexOf('.');
           let fileName = fileUpload.name.substring(0, lastDotIndex);
-          let listFile = [...this.formGroupDetail.getRawValue().fileAttachments, {
+          let listFile = [...this.formGroupDetail.getRawValue().fileAttachments||[], {
             ctype: 'MANUAL', fileName: fileName, fileSize: fileUpload.size, fileUrl: res.data, fileType: fileUpload.name.split('.').pop(),
           }];
           this.formGroupDetail.patchValue({fileAttachments: listFile});
@@ -497,7 +500,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       serviceCode: ['', [Validators.required]],
       serviceName: ['',],
       unit: ['',],
-      periodOccurrence: [this.formGroupDetail.getRawValue().periodOccurrence, [Validators.required]],
+      periodOccurrence: [{value: this.formGroupDetail.getRawValue().periodOccurrence, disabled: true}, [Validators.required]],
       nsCode: ['D2',],
       quantity: ['', [Validators.min(0), Validators.max(999), Validators.pattern(PATTERN.NUMBER2)]],
       unitPrice: ['', [Validators.min(0), Validators.max(999999999), Validators.pattern(PATTERN.NUMBER2)]],
@@ -517,7 +520,10 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   async loadListDocumentParent() {
     if (!this.readMode) {
-      await this.baseService.getListDocumentParent({airportCode: this.dataObject?.airportCode}).then((res) => {
+      await this.baseService.getListDocumentParent({
+        airportCode: this.isDataClone() ?
+          this.dataObject?.airportCode : this.formGroupDetail.getRawValue().airportCode
+      }).then((res) => {
         if (res.data) {
           this.listDocumentParent = res.data;
         }
@@ -526,16 +532,20 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   override async detail(id: any) {
+    if (!!!id) {
+      return;
+    }
     await super.detail(this.isDataClone() ? this.dataObject.id : id);
     this.formGroupDetail.getRawValue().invoiceDocumentDtl?.forEach((s: any) => {
       if (this.isDataClone()) {
         s.id = null;
+        this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.UNMATCHED});
       }
       this.addRow(s);
     });
-    if (!!!id) {
-      this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.UNMATCHED});
-    }
+    // if (!!!id) {
+    //   this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.UNMATCHED});
+    // }
     this.listDocumentParent = [...this.listDocumentParent, {
       id: this.formGroupDetail.getRawValue()._id,
       invoiceNumber: this.formGroupDetail.getRawValue()._invoiceNumber,
@@ -579,7 +589,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
           res.data?.priceUnitInfo.forEach((s: any) => {
             let item = {
               serviceCode: s.serviceCode,
-              vat: s.taxRate
+              vat: s.taxRate,
+              vatType: s.taxCode
             }
             let row = this.addRow(item);
             this.changeServiceFee(row);
@@ -634,7 +645,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         }
       });
     } else {
-      this.formGroupDetail.controls['airportCode'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe(async (value) => {
+      this.formGroupDetail.controls['airportCode'].valueChanges.pipe(debounceTime(300), filter(() => this.runSubscribe)).subscribe(async (value) => {
         if (value && !this.firstLoad) {
           try {
             await this.spinner.show();

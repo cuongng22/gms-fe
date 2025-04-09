@@ -81,7 +81,7 @@ export class EstimatedCostSummaryDetailComponent extends CommonComponent impleme
   @ViewChild('internationalEstimatedCostHotel', { static: false }) internationalEstimatedCostHotel: InternationalEstimatedCostHotelComponent;// III 3.1
   @ViewChild('internationalEstimatedCostCarRental', { static: false }) internationalEstimatedCostCarRental: InternationalEstimatedCostCarRentalComponent;  //3.2
   @ViewChild('domesticEstimatedCostHotel', { static: false }) domesticEstimatedCostHotel: DomesticEstimatedCostHotelComponent; //3.1
-  @ViewChild('domesticEstimatedCostCarRental', { static: true }) domesticEstimatedCostCarRental: DomesticEstimatedCostCarRentalComponent; //3.2
+  @ViewChild('domesticEstimatedCostCarRental', { static: false }) domesticEstimatedCostCarRental: DomesticEstimatedCostCarRentalComponent; //3.2
 
   private _planFlightRatesData: any[] = [];
   private _internationalFlightOvernightData: any[] = [];
