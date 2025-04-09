@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
@@ -15,7 +15,8 @@ import {InvoiceDocumentExportType} from "src/app/crew-trip/features/invoice/invo
 import {cloneDeep} from "lodash";
 import moment from "moment";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
-import {Editor, Toolbar} from "ngx-editor";
+import {Editor, toHTML, Toolbar} from 'ngx-editor';
+
 
 @Component({
   selector: 'app-invoice-document',
@@ -28,13 +29,12 @@ import {Editor, Toolbar} from "ngx-editor";
 })
 
 
-export class InvoiceDocumentComponent extends CommonComponent implements OnInit {
+export class InvoiceDocumentComponent extends CommonComponent implements OnInit, OnDestroy {
   override baseService = inject(InvoiceDocumentService);
   flightMarketService = inject(FlightMarketService);
   hotelService = inject(HotelService);
   vehicleService = inject(VehicleService);
   fb = inject(FormBuilder);
-
   //variable
   @Input() tabType: any;
   @Output() nextStepEmit = new EventEmitter<any>();
@@ -47,7 +47,6 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
   startOfMonth = moment().startOf('year').format('YYYY-MM-DD');
   endOfMonth = moment().format('YYYY-MM-DD');
-
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
   _displayedColumnsHeader1: string[] = [];
@@ -133,11 +132,14 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
-    this.editor = new Editor();
+  }
+
+  ngOnDestroy(): void {
+    this.editor.destroy();
   }
 
   override async ngOnInit() {
-
+    this.editor = new Editor();
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
     await Promise.all([this.search(), this.loadListFlightMarket()]).then(() => {
 
@@ -345,15 +347,55 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit 
     this.tblDetail = currentHdr?.invoiceDocumentDtl ?? [];
 
   }
-
+/*
   sendEmail() {
-    this.baseService.sendEmail(this.formGroupDetail.getRawValue()).then(res => {
+    let formUpload = new FormData();
+    let fileUpload = this.formGroupDetail.value.fileAttachs;
+    if (fileUpload.size > 50 * 1048576) {
+      this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
+      return;
+    }
+    formUpload.append('files', fileUpload);
+    formUpload.append('request', JSON.stringify(this.formGroupDetail.getRawValue()));
+
+    this.baseService.sendEmail(formUpload).then(res => {
       this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
       let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
       current.statusEmail = 'SEND';
       this.closeDetail();
     });
 
+  }*/
+
+  sendEmail() {
+    if (this.formGroupDetail.getRawValue().emailContent === '<p></p>') {
+      this.formGroupDetail.patchValue({emailContent: ''});
+    }
+    this.formGroupDetail.markAllAsTouched();
+    if (this.formGroupDetail.invalid) {
+      this.findInvalidControls(this.formGroupDetail);
+      return;
+    }
+
+    let formUpload = new FormData();
+    let reqBody = this.formGroupDetail.getRawValue();
+    delete reqBody.fileAttachs;
+    reqBody.emailContent = toHTML(this.formGroupDetail.getRawValue().emailContent, this.editor.schema);
+    formUpload.append('request', JSON.stringify(reqBody));
+
+    let reqFile = this.formGroupDetail.getRawValue().fileAttachs;
+    if (reqFile && reqFile.length) {
+      for (let i = 0; i < reqFile.length; i++) {
+        formUpload.append('files', reqFile[i]);
+      }
+    }
+
+    this.baseService.sendEmail(formUpload).then(res => {
+      this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
+      let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
+      current.statusEmail = 'SEND';
+      this.closeDetail();
+    });
   }
 
   showDialogSendEmail(data: any) {

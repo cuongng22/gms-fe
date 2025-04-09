@@ -174,7 +174,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       exchangeRateType: [],
       description: [, [Validators.maxLength(500)]],
       note: [, [Validators.maxLength(500)]],
-      status: [],
+      status: [InvoiceDocumentStatusEnum.UNMATCHED],
       statusEmail: [],
       amountFcBeforeVat: [],
       vatFc: [],
@@ -220,7 +220,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     try {
       await this.spinner.show();
       await this.loadListDocumentParent();
-      await Promise.all([this.detail(this.id), this.loadListFlightMarket(this.id ? {status: FlightMarketStatusEnum.OPERATIONAL} : {}), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
+      await Promise.all([this.detail(this.id), this.loadListFlightMarket(this.id ? {} : {status: FlightMarketStatusEnum.OPERATIONAL}), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
         this.formGroupDetail.patchValue({idParent: this.formGroupDetail.getRawValue().idParent});
         this.calTotal();
         this.listFeeService = this.listFeeService.filter((s: any) => s.active);
@@ -238,7 +238,6 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       console.log(e);
       this.baseService.showError(MESSAGE.ERROR);
     } finally {
-      console.log(this.formGroupDetail, '.formGroupDetail.formGroupDetail.formGroupDetail');
       setTimeout(() => {
         this.firstLoad = false;
       }, 1000);
@@ -258,9 +257,9 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     });
   }
 
-  saveAndFinish() {
+  async saveAndFinish() {
     this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.FINISHED})
-    this.save();
+    await this.save();
     this.goBack();
   }
 
@@ -326,9 +325,9 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   calRow(row: any) {
     let rate = this.formGroupDetail.getRawValue().exchangeRate ?? 0;
     row.patchValue({
-      amountFcBeforeVat: (row.getRawValue().quantity * row.getRawValue().unitPrice)?.toFixed(4),
+      amountFcBeforeVat: this.isInternational() ? (row.getRawValue().quantity * row.getRawValue().unitPrice)?.toFixed(4) : null,
       amountVndBeforeVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100)?.toFixed(4),
-      amountFcVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat / 100)?.toFixed(4),
+      amountFcVat: this.isInternational() ? (row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat / 100)?.toFixed(4) : null,
       amountVndVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100 * row.getRawValue().vat)?.toFixed(4), // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
     });
   }
