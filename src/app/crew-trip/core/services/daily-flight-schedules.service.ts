@@ -20,11 +20,34 @@ export class DailyFlightSchedulesService extends BaseService {
     return firstValueFrom(this.http.get<ListResponse<T>>(url, { params }));
   }
 
+  async exportInMonth(body: any): Promise<{ blob: Blob, fileName: string }> {
+    const url = `${this.api}/${this.path}/in-month/export`;
+    const httpOptionsExport = {
+      headers: new HttpHeaders({
+        'Content-Type': 'application/json',
+        'Accept': 'application/octet-stream'
+      }),
+      responseType: 'blob' as 'json',
+      params: new HttpParams({ fromObject: body })
+    };
+    const response = await firstValueFrom(this.http.get(url, { ...httpOptionsExport, observe: 'response' }));
+    const contentDisposition = response.headers.get('Content-Disposition');
+    let fileName = 'downloaded-file.xlsx';
+    if (contentDisposition) {
+      const matches = /filename=([^"]*)/.exec(contentDisposition);
+      if (matches != null && matches[1]) {
+        fileName = matches[1];
+      }
+    }
+    return { blob: response.body as Blob, fileName };
+  }
+
   searchInMonth<T = any>(body: any): Promise<ListResponse<T> | any> {
     const url = `${this.api}/${this.path}/in-month`;
     const params = new HttpParams({ fromObject: body });
     return firstValueFrom(this.http.get<ListResponse<T>>(url, { params }));
   }
+
 
   searchExtraCrews<T = any>(body: any): Promise<ListResponse<T> | any> {
     const url = `${this.api}/${this.path}/list-extra-crews`;

@@ -225,4 +225,17 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 		this.fileUpload.setValue([]);
 		this.fileUpload.reset();
 	}
+
+
+	async sync() {
+		try {
+			await this.spinner.show();
+			await this.baseService.sync();
+			this.showSuccess(MESSAGE.SYNC_SUCCESS)
+		} catch (e: any) {
+			this.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR)
+		} finally {
+			this.spinner.hide()
+		}
+	}
 }

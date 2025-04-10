@@ -326,4 +326,17 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
     this.fileUpload.setValue([]);
     this.fileUpload.reset();
   }
+
+
+  async sync() {
+    try {
+      await this.spinner.show();
+      await this.baseService.sync();
+      this.showSuccess(this.MESSAGE.SYNC_SUCCESS)
+    } catch (e: any) {
+      this.showError(e.error?.data ?? e.error?.error ?? e.error ?? this.MESSAGE.ERROR)
+    } finally {
+      this.spinner.hide()
+    }
+  }
 }

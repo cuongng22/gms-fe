@@ -94,7 +94,8 @@
         </i>
         <span i18n="@@import">Import</span>
       </button>
-      <button *appHasPermission="['API_CURRENCY_SYNC_LIST']" class="add-btn mr-10" type="button" mat-button>
+      <button *appHasPermission="['API_CURRENCY_SYNC_LIST']" class="add-btn mr-10" type="button" mat-button
+      (click)="sync()">
         <i class="material-symbols-outlined">
           sync
         </i>
