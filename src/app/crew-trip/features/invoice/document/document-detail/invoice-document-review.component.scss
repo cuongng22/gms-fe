@@ -24,8 +24,9 @@
   width: 70px !important;
 }
 
-.mat-column-aves, .mat-column-form, .mat-column-diff {
-  width: 200px !important;
+.mat-column-aves, .mat-column-form, .mat-column-diff, .mat-column-diff1 {
+  max-width: 150px !important;
+  min-width: 150px !important;
 }
 
 .mat-column-fromDate, .mat-column-toDate {

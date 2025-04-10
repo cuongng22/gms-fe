@@ -399,7 +399,11 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   }
 
   reviewMatch() {
-    return !this.formGroupDetail.getRawValue().invoiceDocumentReviewProjection.some((item: any) => item.diff !== null && item.diff !== 0);
+    if (this.formGroupDetail.getRawValue().idInvoiceForm) {
+      return !this.formGroupDetail.getRawValue().invoiceDocumentReviewProjection.some((item: any) => item.diff !== null && item.diff !== 0);
+    } else {
+      return !this.formGroupDetail.getRawValue().invoiceDocumentReviewProjection.some((item: any) => item.diff1 !== null && item.diff1 !== 0);
+    }
   }
 
   filterDetailTable() {
