@@ -252,8 +252,10 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   saveAndNext() {
     this.save().then(res => {
-      this.nextStepEmit.emit([this.id, this.readMode, 3, this.dataObject]);
-      window.scrollTo({top: 0, behavior: 'instant'});
+      if (res.status == HttpStatusCode.Ok) {
+        this.nextStepEmit.emit([this.id, this.readMode, 3, this.dataObject]);
+        window.scrollTo({top: 0, behavior: 'instant'});
+      }
     });
   }
 
