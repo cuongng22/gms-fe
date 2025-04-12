@@ -8,10 +8,17 @@ import { firstValueFrom } from 'rxjs';
   providedIn: 'root'
 })
 export class DailyFlightSchedulesService extends BaseService {
-
+  // api/daily-flight-schedule/flight-crew-detail?flightId=1305095&timeZone=Asia/Ho_Chi_Minh
   constructor() {
     super();
     this.path = 'daily-flight-schedule';
+  }
+
+
+  flightCrewDetail<T = any>(body: any): Promise<ListResponse<T> | any> {
+    const url = `${this.api}/${this.path}/flight-crew-detail`;
+    const params = new HttpParams({ fromObject: body });
+    return firstValueFrom(this.http.get<ListResponse<T>>(url, { params }));
   }
 
   override search<T = any>(body: any): Promise<ListResponse<T> | any> {
