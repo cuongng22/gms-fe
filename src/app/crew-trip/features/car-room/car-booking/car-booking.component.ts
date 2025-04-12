@@ -82,13 +82,13 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
       this.listYear.push(year);
     }
     this.formGroupSearch = this.fb.group({
-      scheduleType: [null, [Validators.required]],
+      scheduleType: ['2', [Validators.required]],
       marketCode: [null, [Validators.required]],
       month: [currentMonth, [Validators.required]],
       year: [currentYear, [Validators.required]],
-      type: [null, [Validators.required]],
-      timezone: ['CC', [Validators.required]],
-      transportType: [null, [Validators.required]],
+      type: ['FC', [Validators.required]],
+      timezone: ['FC', [Validators.required]],
+      transportType: ['TO_HOTEL', [Validators.required]],
       export: [false]
     });
   }
@@ -101,10 +101,13 @@ export class CarBookingComponent extends CommonComponent implements OnInit {
         status: 'Operational',
       });
       this.markets = marketCodes.data;
+      this.formGroupSearch.patchValue({
+        marketCode:this.markets[0]
+      })
     } catch (error: any) {
       this.showError(error);
     }
-    // this.search();
+    this.search();
     await this.spinner.hide();
   }
 
