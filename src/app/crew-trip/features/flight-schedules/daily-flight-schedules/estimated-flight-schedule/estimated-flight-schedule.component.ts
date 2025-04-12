@@ -57,7 +57,7 @@ export class EstimatedFlightScheduleComponent extends CommonComponent {
   override async ngOnInit() {
     super.ngOnInit();
 
-    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'numberOfCrew'];
+    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'numberOfCrew','action'];
   }
   onSearch(event: any) {
     super.search(event);

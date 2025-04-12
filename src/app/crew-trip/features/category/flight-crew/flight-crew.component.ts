@@ -204,7 +204,7 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
 		const markets = this.markets;
 		const acTypes = this.listActype;
 		const dialogRef = this.dialog.open(FlightCrewDetailComponent, {
-			data: { item, markets, acTypes },
+			data: { id: id, item, markets, acTypes },
 			disableClose: true,
 			autoFocus: false,
 		});

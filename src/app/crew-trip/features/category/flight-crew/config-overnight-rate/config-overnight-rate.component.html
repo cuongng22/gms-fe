@@ -75,7 +75,7 @@
         </ng-container>
         <ng-container matColumnDef="rate">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@rate">
-            Rate
+            Rate (%)
           </th>
           <td mat-cell *matCellDef="let element" class="text-right">
             {{ element.rate }}
@@ -117,6 +117,10 @@
     </div>
 
   </mat-card-content>
+  <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+    [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+    aria-label="Select page" i18n-aria-label="@@selectPage">
+  </mat-paginator>
 </mat-card>
 
 

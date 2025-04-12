@@ -28,7 +28,7 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <div class="table-responsive">
+        <div class="table-responsive" style="max-height: 600px;">
             <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
                 <ng-container matColumnDef="stt">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center ">#</th>
@@ -54,22 +54,43 @@
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@fc">
                                 FC
                             </span>:
-                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element)">
+                            <!-- (click)="flightCrewDetail(element)" -->
+                            <span class=" ">
                                 {{element.pilotCount}}
-                            </a>
+                            </span>
                         </span>
                         <br>
                         <span>
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@cc">
                                 CC
                             </span>:
-                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element)">
+                            <!-- (click)="flightCrewDetail(element)" -->
+                            <a class=" ">
                                 {{element.cabinCrewCount}}
                             </a>
                         </span>
                     </td>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <ng-container matColumnDef="action" stickyEnd>
+                    <th *matHeaderCellDef class="text-end" i18n mat-header-cell rowspan="2">
+                        Actions
+                    </th>
+                    <td *matCellDef="let element;let i = dataIndex" mat-cell>
+                        <div class="action-buttons d-flex align-items-center justify-content-end">
+                            <a mat-button type="button" (click)="flightCrewDetail(element)">
+                                <i class="material-symbols-outlined" i18n-title title="View">
+                                    visibility
+                                </i>
+                            </a>
+                            <!-- <a (click)="addOther(element)" class="text-danger" mat-button type="button">
+                                <i class="material-symbols-outlined" i18n-title title="Edit">
+                                    person_edit
+                                </i>
+                            </a> -->
+                        </div>
+                    </td>
+                </ng-container>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
                 <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell text-center" colspan="99">No data!</td>
