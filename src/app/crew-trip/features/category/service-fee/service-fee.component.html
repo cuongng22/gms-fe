@@ -69,7 +69,7 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div class="table-responsive">
+    <div class="table-responsive max-height-table">
       <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true">
 
         <!-- Checkbox Column -->
@@ -132,7 +132,7 @@
             </div>
           </td>
         </ng-container>
-        <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
+        <tr *matHeaderRowDef="displayedColumns;sticky:true" mat-header-row></tr>
         <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
         <tr *matNoDataRow class="mat-row">
           <td [attr.colspan]="displayedColumns.length" class="mat-cell text-center"><span i18n>No data!</span>
@@ -195,9 +195,7 @@
                   </mat-error>
                   }
                 </mat-form-field>
-                <app-selection label="Type" i18n="@@18n" [options]="feeOptions" attrDisplay="label"
-                  [isFirstBlank]="true" labelFirst="---All Type---" i18n-labelFirst="@@allType"
-                  formControlName="type"></app-selection>
+
                 <mat-form-field>
                   <mat-label i18n>Unit</mat-label>
                   <mat-select formControlName="unit" required>
@@ -216,6 +214,12 @@
                   <mat-error><span i18n>Unit</span><span i18n> is required</span></mat-error>
                   }
                 </mat-form-field>
+                <div class="mt-1 mb-1">
+                  <app-selection size="lg" label="Type" i18n="@@18n" [options]="feeOptions" attrDisplay="label"
+                    [isFirstBlank]="true" labelFirst="---All Type---" i18n-labelFirst="@@allType"
+                    formControlName="groupCode"></app-selection>
+                </div>
+
                 <mat-form-field>
                   <mat-label i18n>Note</mat-label>
                   <textarea formControlName="description" i18n-placeholder matInput></textarea>

@@ -62,7 +62,7 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
       unit: ['', [Validators.required]],
       description: ['', [Validators.maxLength(500)]],
       active: [true,],
-      type:['']
+      groupCode:['']
     });
     this.formGroupSearchInit = { ...this.formGroupSearch.value };
     this.formGroupDetailInit = { ...this.formGroupDetail.value };
