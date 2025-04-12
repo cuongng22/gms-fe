@@ -381,6 +381,12 @@
                       </td>
                       <td *matFooterCellDef [colSpan]="totalColSpan" class="text-center" mat-footer-cell>Total</td>
                     </ng-container>
+                    <ng-container matColumnDef="stt2">
+                      <td *matFooterCellDef [colSpan]="totalColSpan" class="text-center" mat-footer-cell>VAT</td>
+                    </ng-container>
+                    <ng-container matColumnDef="stt3">
+                      <td *matFooterCellDef [colSpan]="totalColSpan" class="text-center" mat-footer-cell>Total (Before VAT)</td>
+                    </ng-container>
                     <ng-container matColumnDef="checkin2col">
                       <th *matHeaderCellDef class="text-center " colspan="2" mat-header-cell mat-sort-header>Checkin</th>
                     </ng-container>
@@ -426,8 +432,38 @@
                       </span>
                           }
                         </td>
-
                       </ng-container>
+                    }
+                    @for (rowFooter2 of _displayedColumnsFooter2; track rowFooter2) {
+                      @if (rowFooter2 !== 'stt2') {
+                        <ng-container matColumnDef="{{rowFooter2}}">
+                          <td mat-footer-cell *matFooterCellDef class="text-right">
+                            <span>
+                                @if (isInternational()) {
+                                  {{ mapRowFooter(rowFooter2)?.amountFcVat | dataTransformPipe: [Constant.NUMBER] }}
+                                } @else {
+                                  {{ mapRowFooter(rowFooter2)?.amountVndVat | dataTransformPipe: [Constant.NUMBER] }}
+                                }
+                            </span>
+                          </td>
+                        </ng-container>
+                      }
+                    }
+                    @for (rowFooter3 of _displayedColumnsFooter3; track rowFooter3) {
+                      @if (rowFooter3 !== 'stt3') {
+                        <ng-container matColumnDef="{{rowFooter3}}">
+                          <td mat-footer-cell *matFooterCellDef class="text-right">
+                            <span>
+                              @if (isInternational()) {
+                                {{ mapRowFooter(rowFooter3)?.amountFcBeforeVat | dataTransformPipe: [Constant.NUMBER] }}
+                              } @else {
+                                {{ mapRowFooter(rowFooter3)?.amountVndBeforeVat | dataTransformPipe: [Constant.NUMBER] }}
+                              }
+                            </span>
+                          </td>
+                        </ng-container>
+                      }
+
                     }
                     <tr *matHeaderRowDef="_displayedColumnsHeader1" mat-header-row></tr>
                     <tr *matHeaderRowDef="_displayedColumnsHeader2" mat-header-row></tr>
@@ -437,6 +473,8 @@
                         class="input-row"
                         mat-row></tr>
                     <tr *matFooterRowDef="_displayedColumnsFooter" class="fw-bold" mat-footer-row></tr>
+                    <tr *matFooterRowDef="_displayedColumnsFooter2" class="fw-bold" mat-footer-row></tr>
+                    <tr *matFooterRowDef="_displayedColumnsFooter3" class="fw-bold" mat-footer-row></tr>
                     <tr *matNoDataRow class="mat-row">
                       <td [attr.colspan]="_displayedColumnsRow.length" class="mat-cell border-none text-center"><span
                           i18n>No data!</span></td>

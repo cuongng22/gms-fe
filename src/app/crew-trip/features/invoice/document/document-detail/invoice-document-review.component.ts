@@ -28,7 +28,7 @@ import {MatAutocomplete, MatAutocompleteTrigger} from '@angular/material/autocom
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {NgxMatTimepickerFieldComponent} from 'ngx-mat-timepicker';
-import {transform} from 'lodash';
+import {chain, sumBy, transform} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 import {DigitOnlyModule} from "@uiowa/digit-only";
@@ -87,20 +87,16 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   listDocumentType = InvoiceLookup.InvoiceDocumentType;
   listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
+  reviewFooter: any;
   totalColSpan: any;
   _displayedColumnsHeader1: string[] = [];
   _displayedColumnsHeader2: string[] = [];
   _displayedColumnsRow: string[] = [];
   _displayedColumnsFooter: string[] = [];
+  _displayedColumnsFooter2: string[] = [];
+  _displayedColumnsFooter3: string[] = [];
   _displayedColumnsAll: {
-    label: string;
-    value: string,
-    type?: string,
-    format?: string,
-    rowspan?: string,
-    colspan?: string,
-    displayTotal?: boolean,
-    sticky?: boolean
+    label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string, displayTotal?: boolean, sticky?: boolean
   }[] = [
     {label: $localize`Access Bridge`, value: "accessBridge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Accommodation Tax Cc Charge`, value: "accommodationTaxCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -220,10 +216,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
       invoiceDocumentReviewForm: []
     });
     this.formGroupSearch = this.fb.group({
-      fltNo: [],
-      fltDate: [],
-      dateFrom: [],
-      dateTo: [],
+      fltNo: [], fltDate: [], dateFrom: [], dateTo: [],
     });
   }
 
@@ -258,6 +251,8 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
           this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
         }
+        this._displayedColumnsFooter2 = this._displayedColumnsFooter.map((s: any) => s === 'stt' ? 'stt2' : 'f2_' + s);
+        this._displayedColumnsFooter3 = this._displayedColumnsFooter.map((s: any) => s === 'stt' ? 'stt3' : 'f3_' + s);
 
         let reviewStatus = this.reviewMatch() ? InvoiceDocumentStatusEnum.VERIFIED : InvoiceDocumentStatusEnum.UNVERIFIED
         let filterForm = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((s: any) => s.sourceData == 'FORM');
@@ -266,16 +261,12 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
           const searchTerms = JSON.parse(filter);
           console.log(data.ciDate, moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT), data)
           console.log(data.ciDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT))
-          let fltNoSearch = searchTerms.fltNo ? (data.ciFltno?.toUpperCase().includes(searchTerms.fltNo) ||
-            data.coFltno?.toUpperCase().includes(searchTerms.fltNo) ||
-            data.fltno?.toUpperCase().includes(searchTerms.fltNo)) : true;
-          let fltDateSearch = searchTerms.fltDate ? (data.ciDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT) ||
-            data.cDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT) ||
-            data.cdate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT)
-          ) : true
+          let fltNoSearch = searchTerms.fltNo ? (data.ciFltno?.toUpperCase().includes(searchTerms.fltNo) || data.coFltno?.toUpperCase().includes(searchTerms.fltNo) || data.fltno?.toUpperCase().includes(searchTerms.fltNo)) : true;
+          let fltDateSearch = searchTerms.fltDate ? (data.ciDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT) || data.cDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT) || data.cdate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT)) : true
           return (fltNoSearch && fltDateSearch);
         };
         this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm, status: reviewStatus});
+        this.reviewFooter = this.calFooter();
       });
 
     } catch (e) {
@@ -352,6 +343,49 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     }
   }
 
+  calFooter() {
+    let data = chain(this.formGroupDetail.getRawValue().invoiceDocumentDtl)
+      .groupBy('serviceCode')
+      .mapValues((items, serviceCode) => ({
+        serviceCode,
+        serviceName: items[0].serviceName,
+        quantity: sumBy(items, 'quantity'),
+        amountFcBeforeVat: sumBy(items, 'amountFcBeforeVat'),
+        amountVndBeforeVat: sumBy(items, 'amountVndBeforeVat'),
+        amountFcVat: sumBy(items, 'amountFcVat'),
+        amountVndVat: sumBy(items, 'amountVndVat'),
+        unit: items[0].unit,
+        vat: items[0].vat
+      }))
+      .value();
+    Object.assign(data, {
+      'totalCharge': {
+        serviceCode: 'totalCharge',
+        serviceName: 'totalCharge',
+        quantity: 0,
+        amountFcBeforeVat: this.formGroupDetail.getRawValue().amountFcBeforeVat,
+        amountVndBeforeVat: this.formGroupDetail.getRawValue().amountVndBeforeVat,
+        amountFcVat: this.formGroupDetail.getRawValue().vatFc,
+        amountVndVat: this.formGroupDetail.getRawValue().vatVnd,
+        unit: 0,
+        vat: 0
+      }
+    }, {
+      'totalCharges': {
+        serviceCode: 'totalCharges',
+        serviceName: 'totalCharges',
+        quantity: 0,
+        amountFcBeforeVat: this.formGroupDetail.getRawValue().amountFcBeforeVat,
+        amountVndBeforeVat: this.formGroupDetail.getRawValue().amountVndBeforeVat,
+        amountFcVat: this.formGroupDetail.getRawValue().vatFc,
+        amountVndVat: this.formGroupDetail.getRawValue().vatVnd,
+        unit: 0,
+        vat: 0
+      }
+    });
+    return data;
+  }
+
   saveAndNext() {
     this.formGroupDetail.patchValue({invoiceDocumentReviewProjection: null});
     this.save().then(res => {
@@ -409,11 +443,33 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   filterDetailTable() {
     if (this.formGroupSearch.getRawValue().fltNo || this.formGroupSearch.getRawValue().fltDate) {
       this.tblDocumentReviewForm.filter = JSON.stringify({
-        fltNo: this.formGroupSearch.getRawValue().fltNo,
-        fltDate: this.formGroupSearch.getRawValue().fltDate
+        fltNo: this.formGroupSearch.getRawValue().fltNo, fltDate: this.formGroupSearch.getRawValue().fltDate
       });
     } else {
       this.tblDocumentReviewForm.filter = '';
     }
+  }
+
+  mapRowFooter(column: any) {
+    let key = column.split('_')[1];
+    if (InvoiceLookup.ServiceCodeColumnToData[key]) {
+      return this.reviewFooter[InvoiceLookup.ServiceCodeColumnToData[key]]
+    } else return null;
+  }
+
+  isHotel() {
+    return this.formGroupDetail.getRawValue().partnerType === 'HOTEL';
+  }
+
+  isTransportation() {
+    return this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION';
+  }
+
+  isInternational() {
+    return this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL';
+  }
+
+  isDomestic() {
+    return this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC';
   }
 }
