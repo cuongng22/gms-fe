@@ -1,5 +1,9 @@
 import {environment} from 'src/environments/environment';
 
+interface Role {
+  id: number;
+  name : string;
+}
 export class UserLogin {
   email: string;
   id: number;
@@ -9,6 +13,7 @@ export class UserLogin {
   phone: string;
   gender: number;
   description: string;
+  roles: number[];
 
   constructor(
     email: string,
@@ -18,7 +23,8 @@ export class UserLogin {
     avartarUrl: string,
     phone: string,
     gender: number,
-    description: string
+    description: string,
+    roles: Role[] = []
   ) {
     this.email = email;
     this.id = id;
@@ -28,6 +34,7 @@ export class UserLogin {
     this.phone = phone;
     this.gender = !gender ? 0 : 1;
     this.description = description;
+    this.roles = roles.map(item => item.id);
   }
 
   static fromObject(obj: any): UserLogin {
@@ -40,6 +47,7 @@ export class UserLogin {
       obj.phone || '',
       obj.gender || null,
       obj.description || '',
+      obj.roles || [],
     );
   }
 }
