@@ -88,12 +88,12 @@ export class DialogSendMailComponent implements OnInit {
         this.formGroupDetail.controls.email.setValue(res.data);
         this.formGroupDetail.controls.email.disable();
       }),
-      this.emailSupplierService.content({ emailClass: 'PARTNER_INVOICE_NOT_SENT', marketCode: this.data.marketCode }).then((res: DetailResponse<any>) => {
+      this.emailSupplierService.content({ emailClass: 'INVOICE_REMINDER', marketCode: this.data.marketCode }).then((res: DetailResponse<any>) => {
         this.formGroupDetail.controls.title.setValue(res.data.title);
         this.formGroupDetail.controls.content.setValue(res.data.content);
         this.formGroupDetail.controls.attachment.setValue(this.data.attachment);
       })
-    ]).then(() => {
+    ]).finally(() => {
       this.spinner.hide()
     })
   }

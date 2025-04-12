@@ -91,7 +91,7 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div class="table-responsive">
+        <div class="table-responsive max-height-table">
           <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
             <ng-container matColumnDef="stt">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center ">#</th>
@@ -173,7 +173,7 @@
                 </div>
               </td>
             </ng-container>
-            <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+            <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
             <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
             <tr class="mat-row" *matNoDataRow>
               <td class="mat-cell text-center" colspan="7">No data!</td>
