@@ -17,12 +17,13 @@ import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-s
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { HttpStatusCode } from '@angular/common/http';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
+import { feeOptions } from './service-fee.model';
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 
 
 @Component({
   imports: [CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatSuffix,
-    HasPermissionDirective
-  ],
+    HasPermissionDirective, SelectionComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   selector: 'app-service-fee',
   standalone: true,
@@ -47,6 +48,8 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
   }, { label: $localize`DataSource`, value: 'dataSource' },];
   existCode = false;
 
+  feeOptions = feeOptions
+
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
@@ -58,7 +61,8 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
       name: ['', [Validators.required, Validators.maxLength(250)]],
       unit: ['', [Validators.required]],
       description: ['', [Validators.maxLength(500)]],
-      active: [true,]
+      active: [true,],
+      type:['']
     });
     this.formGroupSearchInit = { ...this.formGroupSearch.value };
     this.formGroupDetailInit = { ...this.formGroupDetail.value };

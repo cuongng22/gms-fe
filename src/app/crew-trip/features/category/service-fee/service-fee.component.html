@@ -155,7 +155,7 @@
 <div [class.active]="showDialogCreate" class="add-new-popup">
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
-      <mat-card-header>
+      <mat-card-header class="p-15">
         <mat-card-title>
           <h5 class="mb-0">
             <span *ngIf="!formGroupDetail.value.id" i18n>Add new</span>
@@ -195,6 +195,9 @@
                   </mat-error>
                   }
                 </mat-form-field>
+                <app-selection label="Type" i18n="@@18n" [options]="feeOptions" attrDisplay="label"
+                  [isFirstBlank]="true" labelFirst="---All Type---" i18n-labelFirst="@@allType"
+                  formControlName="type"></app-selection>
                 <mat-form-field>
                   <mat-label i18n>Unit</mat-label>
                   <mat-select formControlName="unit" required>
