@@ -1,4 +1,4 @@
-import {Component, ElementRef, inject, OnInit, ViewChild} from '@angular/core';
+import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
 import {
   AbstractControl,
   FormBuilder,
@@ -7,9 +7,9 @@ import {
   ReactiveFormsModule, ValidationErrors,
   Validators
 } from '@angular/forms';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {MatAutocomplete, MatAutocompleteTrigger, MatOption} from '@angular/material/autocomplete';
-import {MatAnchor, MatButton, MatButtonModule} from '@angular/material/button';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { MatAutocomplete, MatAutocompleteTrigger, MatOption } from '@angular/material/autocomplete';
+import { MatAnchor, MatButton, MatButtonModule } from '@angular/material/button';
 import {
   MatCard,
   MatCardActions,
@@ -27,17 +27,17 @@ import {
   MatPrefix,
   MatSuffix
 } from '@angular/material/form-field';
-import {MatInput} from '@angular/material/input';
-import {MatSelect} from '@angular/material/select';
-import {CommonModule, DecimalPipe, NgClass, NgForOf, NgIf, TitleCasePipe} from '@angular/common';
-import {SelectMultipleComponent} from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {FlightCrewService} from 'src/app/crew-trip/core/services/flight-crew-service';
-import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
-import {InfoPlaneService} from 'src/app/crew-trip/core/services/InfoPlaneService.service';
-import {UsersService} from 'src/app/crew-trip/core/services/users-service';
-import {ConfigOvernightRateService} from 'src/app/crew-trip/core/services/config-overnight-rate-service';
-import {MatDialog} from '@angular/material/dialog';
+import { MatInput } from '@angular/material/input';
+import { MatSelect } from '@angular/material/select';
+import { CommonModule, DecimalPipe, NgClass, NgForOf, NgIf, TitleCasePipe } from '@angular/common';
+import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { FlightCrewService } from 'src/app/crew-trip/core/services/flight-crew-service';
+import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
+import { InfoPlaneService } from 'src/app/crew-trip/core/services/InfoPlaneService.service';
+import { UsersService } from 'src/app/crew-trip/core/services/users-service';
+import { ConfigOvernightRateService } from 'src/app/crew-trip/core/services/config-overnight-rate-service';
+import { MatDialog } from '@angular/material/dialog';
 import {
   MatCell,
   MatCellDef,
@@ -47,32 +47,33 @@ import {
   MatHeaderRowDef,
   MatRow, MatRowDef, MatTable, MatTableModule
 } from '@angular/material/table';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {FileUploadComponent, FileUploadValidators} from '@iplab/ngx-file-upload';
-import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
-import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
-import {NoDataRowOutlet} from '@angular/cdk/table';
-import {InputComponent} from 'src/app/ui-elements/input/input.component';
-import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
-import {OtherCrewComponent} from 'src/app/crew-trip/features/category/flight-crew/other-crew/other-crew.component';
-import {SelectionComponent} from 'src/app/crew-trip/shared/component/selection/selection.component';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { FileUploadComponent, FileUploadValidators } from '@iplab/ngx-file-upload';
+import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { RoleFunctionComponent } from 'src/app/crew-trip/features/roles/role-function/role-function.component';
+import { NoDataRowOutlet } from '@angular/cdk/table';
+import { InputComponent } from 'src/app/ui-elements/input/input.component';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { OtherCrewComponent } from 'src/app/crew-trip/features/category/flight-crew/other-crew/other-crew.component';
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 import { HttpStatusCode } from '@angular/common/http';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
+import { DigitOnlyModule } from '@uiowa/digit-only';
 
 @Component({
   selector: 'app-config-overnight-rate',
   standalone: true,
   imports: [
     CommonModule, MatCardModule, MatFormFieldModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, InputComponent, NgxTrimDirectiveModule, OtherCrewComponent, ConfigOvernightRateComponent, MatAutocomplete, MatAutocompleteTrigger, SelectionComponent, InputSizeComponent, SelectMultipleComponent, FileUploadComponent,
-    HasPermissionDirective
+    HasPermissionDirective, DigitOnlyModule
   ],
   templateUrl: './config-overnight-rate.component.html',
   styleUrl: './config-overnight-rate.component.scss',
-  providers:[HasPermissionDirective]
+  providers: [HasPermissionDirective]
 })
 export class ConfigOvernightRateComponent extends CommonComponent implements OnInit {
   override baseService = inject(ConfigOvernightRateService);
@@ -96,12 +97,12 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
     this.formGroupDetail = this.fb.group({
       id: ['',],
       marketCode: ['', [Validators.required, this.existCodeValidator.bind(this)]],
-      nightCount: ['',[Validators.min(1),Validators.max(7)]],
-      rate: ['', [Validators.min(1)]],
-      notes: ['',[Validators.maxLength(500)]]
+      nightCount: ['', [Validators.min(1), Validators.max(7)]],
+      rate: ['', [Validators.min(0), Validators.max(100), Validators.maxLength(6)]],
+      notes: ['', [Validators.maxLength(500)]]
     });
-    this.formGroupSearchInit = {...this.formGroupSearch.value};
-    this.formGroupDetailInit = {...this.formGroupDetail.value};
+    this.formGroupSearchInit = { ...this.formGroupSearch.value };
+    this.formGroupDetailInit = { ...this.formGroupDetail.value };
   }
 
   override async ngOnInit() {
@@ -116,7 +117,7 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
 
 
   getListAirport() {
-    this.flightMarketService.search({page: 0, limit: 99999, option: 0}).then(res => {
+    this.flightMarketService.search({ page: 0, limit: 99999, option: 0 }).then(res => {
       this.markets = res.data.content.map((item: any) => item.marketCode);
     });
   }
@@ -141,11 +142,12 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
       if (this.fileUpload.valid && this.fileUpload.value) {
         const form = new FormData();
         const file: File = this.fileUpload.value[0];
-        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], {type: file.type}));
+        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
         await this.spinner.show();
         const res = await this.baseService.uploadFile(form);
         this.uploadFileError = res;
         if (!res.totalErrors) {
+          this.resetFileUpload()
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
           this.toggleDialogUpload();
         }
@@ -160,7 +162,14 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
 
 
   toggleDialogUpload() {
+    this.resetFileUpload()
     this.showDialogUpload = !this.showDialogUpload;
+  }
+
+  resetFileUpload() {
+    this.uploadFileError = {};
+    this.fileUpload.setValue([]);
+    this.fileUpload.reset();
   }
 
   async downloadFileError() {
@@ -171,6 +180,10 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
 
   override async save() {
     try {
+      this.formGroupDetail.markAllAsTouched();
+      if (this.formGroupDetail.invalid) {
+        return;
+      }
       this.messageErrorMarketcode = '';
       const value = await super.save();
       this.showDialogCreate = false;
@@ -187,7 +200,7 @@ export class ConfigOvernightRateComponent extends CommonComponent implements OnI
   }
 
   existCodeValidator(control: AbstractControl): ValidationErrors | null {
-    return this.existCode ? {existCode: true} : null;
+    return this.existCode ? { existCode: true } : null;
   }
 
 

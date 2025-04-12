@@ -78,8 +78,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 })
 export class FlightCrewDetailComponent
 	extends CommonComponent
-	implements OnInit
-{
+	implements OnInit {
 	override baseService = inject(FlightCrewService);
 	flightMarketService = inject(FlightMarketService);
 	filteredOptionsMarket: any[];
@@ -123,6 +122,11 @@ export class FlightCrewDetailComponent
 				numberAttendant: this.data.item.attendantNumber,
 			});
 		}
+		if (this.data.id) {
+			this.formGroupDetail.controls.acType.disable();
+			this.formGroupDetail.controls.marketCode.disable();
+
+		}
 	}
 
 	filterMarket(): void {
@@ -142,6 +146,10 @@ export class FlightCrewDetailComponent
 
 	override async save() {
 		try {
+			this.formGroupDetail.markAllAsTouched();
+			if (this.formGroupDetail.invalid) {
+				return;
+			}
 			this.messageErrorActype = '';
 			const value = await super.save();
 			this.dialogRef.close('Update Success');

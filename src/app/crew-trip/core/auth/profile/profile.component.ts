@@ -23,7 +23,10 @@ import {SelectOptions} from 'src/app/crew-trip/shared/select-option';
 import {environment} from 'src/environments/environment';
 import {HttpStatusCode} from '@angular/common/http';
 import {decodeToken} from 'src/app/crew-trip/shared/utils/constant';
-
+interface Role {
+  id: number;
+  name: string;
+}
 @Component({
   selector: 'app-profile',
   standalone: true,
@@ -46,6 +49,7 @@ export class ProfileComponent implements OnInit {
   genderOptions = SelectOptions.GENDER;
   @Output() fileUploaded = new EventEmitter<string>();
 
+
   constructor(private storageService: StorageService) {
     this.formGroup = this.fb.group({
       id: [this.userCurrent?.id, Validators.required],
@@ -56,7 +60,7 @@ export class ProfileComponent implements OnInit {
       description: [this.userCurrent?.description, [Validators.maxLength(500)]],
       gender: [this.userCurrent?.gender ? 1 : 0],
       avartarUrl: [this.userCurrent?.avartarUrl],
-      testF: ['']
+      roles: [this.userCurrent?.roles ?? []]
     });
   }
 
@@ -69,12 +73,30 @@ export class ProfileComponent implements OnInit {
         skipLocationChange: true
       });
     }
-    await this.userService.getUserById(this.userService.getUserLogin()?.id).then(data => {
-      this.userCurrent = data.data;
-    });
+    try {
+    const response = await this.userService.getUserById(this.userService.getUserLogin()?.id).then(data => data);
+    this.userCurrent = {
+      ...response.data,
+      roles: response.data.roles ? response.data.roles.map((item: Role) => item.id) : []
+    };
+      // Cập nhật FormGroup với dữ liệu mới
+      this.formGroup.patchValue({
+        id: this.userCurrent?.id,
+        fullName: this.userCurrent?.fullName,
+        department: this.userCurrent?.department,
+        email: this.userCurrent?.email,
+        phone: this.userCurrent?.phone,
+        description: this.userCurrent?.description,
+        gender: this.userCurrent?.gender ? 1 : 0,
+        avartarUrl: this.userCurrent?.avartarUrl,
+        roles: response.data.roles ? response.data.roles.map((item: Role) => item.id) : []
+      });
     this.avatarUrl = this.userCurrent?.avartarUrl ? `${environment.baseUrl}/` + this.userCurrent?.avartarUrl : null;
     this.formGroup.disable();
-
+    } catch (error) {
+      console.error('Lỗi khi lấy user:', error);
+      this.baseService.showError('Không thể tải thông tin người dùng');
+    }
   }
 
 
@@ -87,6 +109,7 @@ export class ProfileComponent implements OnInit {
   onCancel(): void {
     this.formGroup.reset(this.userCurrent);
     if (this.selectedFile) {
+      console.log("this.userCurrent?.avartarUrl:",this.userCurrent?.avartarUrl);
       this.avatarUrl = this.userCurrent?.avartarUrl ?? null;
       this.selectedFile = null;
     }
@@ -98,7 +121,7 @@ export class ProfileComponent implements OnInit {
     if (this.formGroup.valid) {
       try {
         await this.spinner.show();
-        await this.userService.update(this.formGroup.value, 'update');
+        await this.userService.update(this.formGroup.getRawValue(), 'update');
         const userInfo = JSON.parse(this.storageService.get(STORAGE_KEY.USER_INFO));
         if (this.selectedFile) {
           const resp = await this.uploadFile(this.selectedFile);

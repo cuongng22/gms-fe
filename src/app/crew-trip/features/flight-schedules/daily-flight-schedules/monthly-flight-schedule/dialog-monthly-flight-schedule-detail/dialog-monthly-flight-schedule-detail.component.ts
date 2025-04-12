@@ -67,7 +67,7 @@ export class DialogMonthlyFlightScheduleDetailComponent extends CommonComponent 
   }
 
   async onSearch() {
-    const response = await super.search({ flightId: this.data.flightId, timeZone: this.data.timeZone }, false, this.baseService.searchFlightNonOvernight.bind(this.baseService))
+    const response = await super.search({ flightId: this.data.flightId, timeZone: this.data.timeZone }, false, this.baseService.flightCrewDetail.bind(this.baseService))
     this.dataSource.data = response.data.crewMembers;
     this.flightInfo = response.data.flightInfo;
   }
