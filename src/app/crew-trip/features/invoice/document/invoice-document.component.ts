@@ -16,6 +16,9 @@ import {cloneDeep} from "lodash";
 import moment from "moment";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
 import {Editor, toHTML, Toolbar} from 'ngx-editor';
+import {debounceTime} from "rxjs";
+import {EmailSupplierService} from "src/app/crew-trip/core/services/email-supplier-service";
+import { PaymentMailService } from 'src/app/crew-trip/core/services/payment-mail.service';
 
 
 @Component({
@@ -32,8 +35,8 @@ import {Editor, toHTML, Toolbar} from 'ngx-editor';
 export class InvoiceDocumentComponent extends CommonComponent implements OnInit, OnDestroy {
   override baseService = inject(InvoiceDocumentService);
   flightMarketService = inject(FlightMarketService);
-  hotelService = inject(HotelService);
-  vehicleService = inject(VehicleService);
+  emailSupplierService = inject(EmailSupplierService);
+  paymentMailService = inject(PaymentMailService);
   fb = inject(FormBuilder);
   //variable
   @Input() tabType: any;
@@ -102,6 +105,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
+  firstLoad: boolean = true;
 
   constructor() {
     super();
@@ -121,7 +125,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
 
     this.formGroupDetail = this.fb.group({
       id: [],
-      emailTo: [, [Validators.pattern(PATTERN.EMAIL)]],
+      emailTo: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailCc: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailSubject: [, [Validators.maxLength(250)]],
       emailContent: [, [Validators.required]],
@@ -132,6 +136,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
     });
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
+    this.subscribeMain();
   }
 
   ngOnDestroy(): void {
@@ -139,18 +144,27 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
   }
 
   override async ngOnInit() {
-    this.editor = new Editor();
-    // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
-    await Promise.all([this.search(), this.loadListFlightMarket()]).then(() => {
+    try {
+      this.editor = new Editor();
+      // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
+      await Promise.all([this.search(), this.loadListFlightMarket()]).then(() => {
 
-    });
-    this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVat',
-      'vat', 'totalAmount', 'reimbursementTotal', 'status', 'statusEmail', 'statusPayment', 'statusPaymentDescription', 'paymentDueDate', 'action'];
-    this._displayedColumnsHeader2 = ['amountFcBeforeVat', 'amountVndBeforeVat', 'vatFc', 'vatVnd', 'totalAmountFc',
-      'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd'];
-    this._displayedColumnsRow = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountFcBeforeVat', 'amountVndBeforeVat', 'vatFc', 'vatVnd', 'totalAmountFc',
-      'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd', 'status', 'statusEmail', 'statusPayment', 'statusPaymentDescription', 'paymentDueDate', 'action'];
-    this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
+      });
+      this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVat',
+        'vat', 'totalAmount', 'reimbursementTotal', 'status', 'statusEmail', 'statusPayment', 'statusPaymentDescription', 'paymentDueDate', 'action'];
+      this._displayedColumnsHeader2 = ['amountFcBeforeVat', 'amountVndBeforeVat', 'vatFc', 'vatVnd', 'totalAmountFc',
+        'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd'];
+      this._displayedColumnsRow = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountFcBeforeVat', 'amountVndBeforeVat', 'vatFc', 'vatVnd', 'totalAmountFc',
+        'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd', 'status', 'statusEmail', 'statusPayment', 'statusPaymentDescription', 'paymentDueDate', 'action'];
+      this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
+    } catch (e) {
+      console.log(e);
+      this.baseService.showError(MESSAGE.ERROR);
+    } finally {
+      setTimeout(() => {
+        this.firstLoad = false;
+      }, 1000);
+    }
   }
 
   async nextStep(id?: any, readMode?: any, step?: any, dataObject?: any) {
@@ -340,6 +354,26 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
     }
   }
 
+  /*
+    sendEmail() {
+      let formUpload = new FormData();
+      let fileUpload = this.formGroupDetail.value.fileAttachs;
+      if (fileUpload.size > 50 * 1048576) {
+        this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
+        return;
+      }
+      formUpload.append('files', fileUpload);
+      formUpload.append('request', JSON.stringify(this.formGroupDetail.getRawValue()));
+
+      this.baseService.sendEmail(formUpload).then(res => {
+        this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
+        let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
+        current.statusEmail = 'SEND';
+        this.closeDetail();
+      });
+
+    }*/
+
   showDocumentDtl($event: any) {
     this.selectedRow = $event.id;
     let listHdr = cloneDeep(this.dataSource.data);
@@ -347,25 +381,6 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
     this.tblDetail = currentHdr?.invoiceDocumentDtl ?? [];
 
   }
-/*
-  sendEmail() {
-    let formUpload = new FormData();
-    let fileUpload = this.formGroupDetail.value.fileAttachs;
-    if (fileUpload.size > 50 * 1048576) {
-      this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
-      return;
-    }
-    formUpload.append('files', fileUpload);
-    formUpload.append('request', JSON.stringify(this.formGroupDetail.getRawValue()));
-
-    this.baseService.sendEmail(formUpload).then(res => {
-      this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
-      let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
-      current.statusEmail = 'SEND';
-      this.closeDetail();
-    });
-
-  }*/
 
   sendEmail() {
     if (this.formGroupDetail.getRawValue().emailContent === '<p></p>') {
@@ -390,19 +405,26 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
       }
     }
 
-    this.baseService.sendEmail(formUpload).then(res => {
+    /*this.baseService.sendEmail(formUpload).then(res => {
       this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
       let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
       current.statusEmail = 'SEND';
       this.closeDetail();
-    });
+    });*/
   }
 
-  showDialogSendEmail(data: any) {
-    this.formGroupDetail.patchValue({
-      id: data.id
-    })
+  async showDialogSendEmail(data: any) {
     this.toggleDialogCreate();
+    let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
+    let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_CONFIRMATION', marketClass: data.contractServiceType});
+    let emailTitle = res1.data?.content[0]?.title;
+    let emailContent = res1.data?.content[0]?.content;
+    this.formGroupDetail.patchValue({
+      id: data.id,
+      emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
+      emailSubject: emailTitle ?? '',
+      emailContent: emailContent ?? ''
+    })
   }
 
   isSelected(row: any): boolean {
@@ -416,4 +438,13 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
     }, 300);
   }
 
+  async subscribeMain() {
+    this.formGroupDetail.controls['emailContent'].valueChanges.pipe(debounceTime(300)).subscribe(async (value) => {
+      if (value && !this.firstLoad) {
+        if (!value?.content[0]?.content) {
+          this.formGroupDetail.patchValue({emailContent: null},);
+        }
+      }
+    })
+  }
 }
