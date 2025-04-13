@@ -522,7 +522,9 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     if (!this.readMode) {
       await this.baseService.getListDocumentParent({
         airportCode: this.isDataClone() ?
-          this.dataObject?.airportCode : this.formGroupDetail.getRawValue().airportCode
+          this.dataObject?.airportCode : this.formGroupDetail.getRawValue().airportCode,
+        partnerType: this.isDataClone() ?
+          this.dataObject?.partnerType : this.formGroupDetail.getRawValue().partnerType
       }).then((res) => {
         if (res.data) {
           this.listDocumentParent = res.data;

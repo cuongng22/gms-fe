@@ -117,7 +117,7 @@ Save
                 <app-control-error controlName="periodFrom"></app-control-error>
               </mat-error>
               @if (!!formGroupDetail.controls['periodFrom'].hasError('invoiceDate')) {
-              <mat-error><span i18n>Period from</span><span i18n> must before invoice date</span></mat-error>
+              <mat-error><span i18n>Period from</span><span i18n> must be before invoice date</span></mat-error>
               }
             </mat-form-field>
           </div>
@@ -132,7 +132,7 @@ Save
                 <app-control-error controlName="periodTo"></app-control-error>
               </mat-error>
               @if (!!formGroupDetail.controls['periodTo'].hasError('invoiceDate')) {
-              <mat-error><span i18n>Period to</span><span i18n> must before invoice date</span></mat-error>
+              <mat-error><span i18n>Period to</span><span i18n> must be before invoice date</span></mat-error>
               }
             </mat-form-field>
           </div>
