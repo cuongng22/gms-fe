@@ -396,7 +396,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       formUpload.append('body', JSON.stringify({
         fileFolder: '/document',
       }));
-      await this.baseService.uploadFileCommon(formUpload).then(res => {
+      this.baseService.uploadFileCommon(formUpload).then(res => {
         if (res.code == HttpStatusCode.Ok) {
           let lastDotIndex = fileUpload.name.lastIndexOf('.');
           let fileName = fileUpload.name.substring(0, lastDotIndex);
@@ -446,7 +446,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       return res;
     } catch (e: any) {
       console.log(e)
-      this.baseService.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,);
+      this.baseService.showError(e.error?.message ?? this.MESSAGE.ERROR);
     } finally {
       await this.spinner.hide();
     }
