@@ -405,12 +405,12 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
       }
     }
 
-    /*this.baseService.sendEmail(formUpload).then(res => {
+    this.baseService.sendEmail(formUpload).then(res => {
       this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
       let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
       current.statusEmail = 'SEND';
       this.closeDetail();
-    });*/
+    });
   }
 
   async showDialogSendEmail(data: any) {
