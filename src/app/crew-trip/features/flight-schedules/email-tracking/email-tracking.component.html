@@ -133,12 +133,12 @@
                     </th>
                     <td mat-cell *matCellDef="let element">
                         @for (item of (element.files); track $index) {
-                        <!-- <a (click)="true" [href]="environment.baseUrl+'/'+item" class="text-secondary">
+                        <a (click)="true" [href]="environment.baseUrl+'/'+item" class="text-secondary">
+                            - {{ getFileName(item) }}
+                        </a>
+                        <!-- <span class="">
                             - {{ item }}
-                        </a> -->
-                        <span class="">
-                            - {{ item }}
-                        </span>
+                        </span> -->
                         <br />
                         }
                     </td>

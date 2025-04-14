@@ -143,4 +143,11 @@ export class EmailTrackingComponent extends CommonComponent {
     const _exportTime = this.formGroupSearch.controls.exportTime.value ? moment(this.formGroupSearch.controls.exportTime.value).format('YYYY-MM-DD') : null
     super.search({ ...this.formGroupSearch.getRawValue(), exportTime: _exportTime }, isNextPage, fnSearch)
   }
+
+  getFileName(filePath: string) {
+    if (filePath) {
+      return filePath.split('/').pop();
+    }
+    return null
+  }
 }
