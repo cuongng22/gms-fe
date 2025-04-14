@@ -159,12 +159,14 @@
             </th>
             <td *matCellDef="let element;let i = index" mat-cell>
               <div class="action-buttons d-flex align-items-center justify-content-end">
+                @if (element.statusEmail !=='SEND') {
                 <a class="text-secondary"
                    mat-button type="button">
                   <i (click)="showDialogSendEmail(element)" class="material-symbols-outlined" i18n-title title="Email">
                     email
                   </i>
                 </a>
+                }
               </div>
             </td>
           </ng-container>
@@ -196,7 +198,7 @@
       <mat-card-header>
         <mat-card-title>
           <h5 class="mb-0">
-            <span i18n>Send Invoice Confirmation Email to Partner</span>
+            <span i18n>Send Email to Partner for Unsent Invoice</span>
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
@@ -263,7 +265,7 @@
             </i>
             Close
           </button>
-          <button (click)="sendEmail()"
+          <button (click)="sendEmail(invoiceDocumentEmailTypeEnum.REMIND)"
                   class="add-btn"
                   i18n mat-button>
             <i class="material-symbols-outlined">
