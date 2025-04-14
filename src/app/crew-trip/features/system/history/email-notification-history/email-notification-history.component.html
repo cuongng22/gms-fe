@@ -34,7 +34,7 @@
                 </ng-template>
 
             </mat-tab>
-            <mat-tab appHasPermission="['API_NOTIFICATION_LIST']" label="Notification" i18n="@@notification">
+            <mat-tab *appHasPermission="['API_NOTIFICATION_LIST']" label="Notification" i18n="@@notification">
                 <ng-template matTabContent>
                     <app-email-notification-search #appEmailNotificationSearchNoti type="NOTIFICATION"
                         (searchEvent)="onSearch($event, 'NOTIFICATION')">
