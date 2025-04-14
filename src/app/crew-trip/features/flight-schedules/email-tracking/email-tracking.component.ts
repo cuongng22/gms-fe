@@ -198,4 +198,11 @@ export class EmailTrackingComponent extends CommonComponent {
 			fnSearch,
 		);
 	}
+
+  getFileName(filePath: string) {
+    if (filePath) {
+      return filePath.split('/').pop();
+    }
+    return null
+  }
 }
