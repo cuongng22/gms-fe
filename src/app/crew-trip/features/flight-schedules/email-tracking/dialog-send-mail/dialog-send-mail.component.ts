@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule, MatIconButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -42,7 +42,7 @@ import { DialogOverviewExampleDialog } from 'src/app/ui-elements/dialog/basic-di
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, FileUploadModule, NgxTrimDirectiveModule,
     SelectionComponent, SelectionSuggestComponent, DataTransformPipe, NgxEditorModule, MatMenuModule, NgxControlError,
-    MatIconModule,
+    MatIconModule, SelectionSuggestComponent
   ],
   templateUrl: './dialog-send-mail.component.html',
   styleUrl: './dialog-send-mail.component.scss'
@@ -59,13 +59,31 @@ export class DialogSendMailComponent implements OnInit {
 
   MESSAGE = MESSAGE;
   Constant = Constant;
+  groupMails = [];
+
+  // {
+  //   "scheType": "ESTIMATED_FLIGHT",
+  //   "marketCode": "string",
+  //   "marketType": "DOMESTIC",
+  //   "emails": "string",
+  //   "title": "string",
+  //   "content": "string",
+  //   "attachment": [
+  //     "string"
+  //   ]
+  // }
+
 
   formGroupDetail = this.formBuilder.group({
     id: [''],
-    email: ['', [Validators.required, Validators.maxLength(250)]],
+    groupMailId: ['', [Validators.required, Validators.maxLength(250)]],
     title: ['', [Validators.required, Validators.maxLength(500)]],
     content: ['', [Validators.required]],
-    attachment: ['', [Validators.required]],
+    attachment: new FormControl<string[]>([], Validators.required),
+    scheType: [],
+    marketCode: [],
+    marketType: [],
+
   });
 
   editor: Editor;
@@ -81,17 +99,17 @@ export class DialogSendMailComponent implements OnInit {
   ];
   async ngOnInit() {
     this.editor = new Editor();
-    this.formGroupDetail.controls.id.setValue(this.data.id);
+    this.formGroupDetail.patchValue(this.data);
     await this.spinner.show();
     Promise.all([
-      this.groupMailService.getEmails(this.data.marketCode).then((res: DetailResponse<string>) => {
-        this.formGroupDetail.controls.email.setValue(res.data);
-        this.formGroupDetail.controls.email.disable();
+      this.groupMailService.getEmails(this.data.marketCode).then((res: DetailResponse<any>) => {
+        this.groupMails = res.data;
+        // this.formGroupDetail.controls.email.setValue(res.data);
+        // this.formGroupDetail.controls.email.disable();
       }),
       this.emailSupplierService.content({ emailClass: 'INVOICE_REMINDER', marketCode: this.data.marketCode }).then((res: DetailResponse<any>) => {
         this.formGroupDetail.controls.title.setValue(res.data.title);
         this.formGroupDetail.controls.content.setValue(res.data.content);
-        this.formGroupDetail.controls.attachment.setValue(this.data.attachment);
       })
     ]).finally(() => {
       this.spinner.hide()
@@ -112,7 +130,7 @@ export class DialogSendMailComponent implements OnInit {
           ...this.formGroupDetail.getRawValue(),
           attachment: this.fileAttachment
         }
-        this.emailTrackingService.update(body).then(res => {
+        this.emailTrackingService.create(body).then(res => {
           this.close()
         });
       } catch (error) {
@@ -128,17 +146,17 @@ export class DialogSendMailComponent implements OnInit {
   removeAttachment(file: string) {
     const array = this.fileAttachment;
     const index = array.findIndex((item: any) => item === file);
-    const attachment = array && array.length > 1 ? array.slice(index, 1) as any[] : [];
-    this.formGroupDetail.controls.attachment.setValue(attachment && attachment.length > 0 ? attachment.join(';') : null);
+    array.splice(index, 1);
+    this.formGroupDetail.controls.attachment.setValue(array);
     this.formGroupDetail.controls.attachment.updateValueAndValidity();
     this.formGroupDetail.controls.attachment.markAsTouched()
   }
 
   get fileAttachment() {
-    const value = this.formGroupDetail.controls.attachment.value;
-    if (value) {
-      return value.split(';')
-    }
-    return [];
+    return this.formGroupDetail.controls.attachment.value ?? [];
+    // if (value) {
+    //   return value.split(';')
+    // }
+    // return [];
   }
 }

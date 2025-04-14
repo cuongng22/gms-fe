@@ -62,7 +62,7 @@ export const formula: any = {
     },
     //Thành tiền (ngoại tệ) - Chưa bao gồm VAT	"= (Số lượt xe + extra transfer) * đơn giá trước VAT
     totalAmountForeign: {
-        formula: '(ctz(data.totalAmountForeignVat) / (1 + (ctz(data.taxRate)/100))',
+        formula: '(ctz(data.totalAmountForeignVat) / (1 + (ctz(data.taxRate)/100)))',
     },
     //Thành tiền VND (Chưa bao gồm VAT) = Thành tiền ngoại tệ chưa bao gồm VAT * tỷ giá theo từng tháng
     totalAmount: {

@@ -159,6 +159,7 @@ export class DialogExtraCrewComponent extends CommonComponent {
         res = await this.baseService.createExtraCrews(this.formGroupDetail.getRawValue());
       }
       this.baseService.showSuccess(this.updateFlag ? this.MESSAGE.UPDATE_SUCCESS : this.MESSAGE.CREATE_SUCCESS);
+      this.close()
       return res;
     } catch (e: any) {
       if ((e.status != HttpStatusCode.Conflict) && !(e.status == HttpStatusCode.InternalServerError && e.error?.error.includes('UNIQUE'))) {
@@ -167,7 +168,6 @@ export class DialogExtraCrewComponent extends CommonComponent {
       return e;
     } finally {
       await this.spinner.hide();
-      this.close()
     }
   }
 
