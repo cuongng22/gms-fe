@@ -67,7 +67,7 @@ export class OtherFlightScheduleComponent extends CommonComponent {
   }
   async onSearch(event: any) {
     const response = await this.search(event, false, this.baseService.searchExtraCrews.bind(this.baseService));
-    if (response.data && response.data.length > 0) {
+    if (response.data.content && response.data.content.length > 0) {
       const result = response.data.map((item: any) => {
         const _checkinDate = moment(item.FLIGHT_DATE_IN.split(" ")[0], 'DD/MM/YYYY')
         // const _checkoutDate = new Date(item.FLIGHT_DATE_OUT.split(" ")[0])
