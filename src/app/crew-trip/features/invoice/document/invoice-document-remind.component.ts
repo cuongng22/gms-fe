@@ -13,6 +13,7 @@ import {EmailSupplierService} from "src/app/crew-trip/core/services/email-suppli
 import {Editor, toHTML, Toolbar} from "ngx-editor";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
 import {debounceTime} from "rxjs";
+import {InvoiceDocumentEmailTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 
 
 @Component({
@@ -72,6 +73,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
   firstLoad: boolean = true;
+  invoiceDocumentEmailTypeEnum = InvoiceDocumentEmailTypeEnum;
 
   constructor() {
     super();
@@ -88,7 +90,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     });
     this.formGroupDetail = this.fb.group({
       id: [],
-      emailTo: [, [Validators.pattern(PATTERN.EMAIL)]],
+      emailTo: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailCc: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailSubject: [, [Validators.maxLength(250)]],
       emailContent: [, [Validators.required]],
@@ -144,7 +146,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     }
   }
 
-  sendEmail() {
+  sendEmail(emailSendType: any) {
     if (this.formGroupDetail.getRawValue().emailContent === '<p></p>') {
       this.formGroupDetail.patchValue({emailContent: ''});
     }
@@ -156,6 +158,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
 
     let formUpload = new FormData();
     let reqBody = this.formGroupDetail.getRawValue();
+    reqBody.emailSendType = emailSendType;
     delete reqBody.fileAttachs;
     reqBody.emailContent = toHTML(this.formGroupDetail.getRawValue().emailContent, this.editor.schema);
     formUpload.append('request', JSON.stringify(reqBody));
@@ -178,16 +181,21 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
 
   async showDialogSendEmail(data: any) {
     this.toggleDialogCreate();
-    let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
-    let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_REMINDER', marketClass: data.contractServiceType});
-    let emailTitle = res1.data?.content[0]?.title;
-    let emailContent = res1.data?.content[0]?.content;
-    this.formGroupDetail.patchValue({
-      id: data.id,
-      emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
-      emailSubject: emailTitle ?? '',
-      emailContent: emailContent ?? ''
-    })
+    try {
+      let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
+      let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_REMINDER', marketClass: data.contractServiceType});
+      let emailTitle = res1.data?.content[0]?.title;
+      let emailContent = res1.data?.content[0]?.content;
+      this.formGroupDetail.patchValue({
+        emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
+        emailSubject: emailTitle ?? '',
+        emailContent: emailContent ?? ''
+      })
+    } finally {
+      this.formGroupDetail.patchValue({
+        id: data.id,
+      })
+    }
   }
 
   async subscribeMain(row?: any) {

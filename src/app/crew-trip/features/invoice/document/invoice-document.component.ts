@@ -11,14 +11,14 @@ import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/for
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {InvoiceDocumentExportType} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentEmailTypeEnum, InvoiceDocumentExportType} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {cloneDeep} from "lodash";
 import moment from "moment";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
 import {Editor, toHTML, Toolbar} from 'ngx-editor';
 import {debounceTime} from "rxjs";
 import {EmailSupplierService} from "src/app/crew-trip/core/services/email-supplier-service";
-import { PaymentMailService } from 'src/app/crew-trip/core/services/payment-mail.service';
+import {PaymentMailService} from 'src/app/crew-trip/core/services/payment-mail.service';
 
 
 @Component({
@@ -106,6 +106,28 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
   firstLoad: boolean = true;
+  invoiceDocumentEmailTypeEnum = InvoiceDocumentEmailTypeEnum;
+
+  /*
+    sendEmail() {
+      let formUpload = new FormData();
+      let fileUpload = this.formGroupDetail.value.fileAttachs;
+      if (fileUpload.size > 50 * 1048576) {
+        this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
+        return;
+      }
+      formUpload.append('files', fileUpload);
+      formUpload.append('request', JSON.stringify(this.formGroupDetail.getRawValue()));
+
+      this.baseService.sendEmail(formUpload).then(res => {
+        this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
+        let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
+        current.statusEmail = 'SEND';
+        this.closeDetail();
+      });
+
+    }*/
+
 
   constructor() {
     super();
@@ -354,26 +376,6 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
     }
   }
 
-  /*
-    sendEmail() {
-      let formUpload = new FormData();
-      let fileUpload = this.formGroupDetail.value.fileAttachs;
-      if (fileUpload.size > 50 * 1048576) {
-        this.baseService.showError(MESSAGE.MAX_FILE_SIZE);
-        return;
-      }
-      formUpload.append('files', fileUpload);
-      formUpload.append('request', JSON.stringify(this.formGroupDetail.getRawValue()));
-
-      this.baseService.sendEmail(formUpload).then(res => {
-        this.baseService.showSuccess(this.MESSAGE.SEND_EMAIL);
-        let current = this.dataSource.data.find(s => s.id === this.formGroupDetail.getRawValue().id);
-        current.statusEmail = 'SEND';
-        this.closeDetail();
-      });
-
-    }*/
-
   showDocumentDtl($event: any) {
     this.selectedRow = $event.id;
     let listHdr = cloneDeep(this.dataSource.data);
@@ -382,7 +384,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
 
   }
 
-  sendEmail() {
+  sendEmail(emailSendType: any) {
     if (this.formGroupDetail.getRawValue().emailContent === '<p></p>') {
       this.formGroupDetail.patchValue({emailContent: ''});
     }
@@ -394,6 +396,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
 
     let formUpload = new FormData();
     let reqBody = this.formGroupDetail.getRawValue();
+    reqBody.emailSendType = emailSendType;
     delete reqBody.fileAttachs;
     reqBody.emailContent = toHTML(this.formGroupDetail.getRawValue().emailContent, this.editor.schema);
     formUpload.append('request', JSON.stringify(reqBody));
@@ -415,16 +418,21 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
 
   async showDialogSendEmail(data: any) {
     this.toggleDialogCreate();
-    let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
-    let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_CONFIRMATION', marketClass: data.contractServiceType});
-    let emailTitle = res1.data?.content[0]?.title;
-    let emailContent = res1.data?.content[0]?.content;
-    this.formGroupDetail.patchValue({
-      id: data.id,
-      emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
-      emailSubject: emailTitle ?? '',
-      emailContent: emailContent ?? ''
-    })
+    try {
+      let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
+      let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_REMINDER', marketClass: data.contractServiceType});
+      let emailTitle = res1.data?.content[0]?.title;
+      let emailContent = res1.data?.content[0]?.content;
+      this.formGroupDetail.patchValue({
+        emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
+        emailSubject: emailTitle ?? '',
+        emailContent: emailContent ?? ''
+      })
+    } finally {
+      this.formGroupDetail.patchValue({
+        id: data.id,
+      })
+    }
   }
 
   isSelected(row: any): boolean {

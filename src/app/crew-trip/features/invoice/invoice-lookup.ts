@@ -36,6 +36,12 @@ export const InvoiceDocumentStatusEmail = [
   {key: 'SEND', value: $localize`SEND`},
   {key: 'UNSEND', value: $localize`UNSEND`},
 ];
+
+export enum InvoiceDocumentEmailTypeEnum {
+  CONFIRM = 'CONFIRM',
+  REMIND = 'REMIND',
+}
+
 export const InvoiceDocumentStatusPayment = [
   {key: 'NEGOTIABLE', value: $localize`NEGOTIABLE`},
   {key: 'CLEARED', value: $localize`CLEARED`},
