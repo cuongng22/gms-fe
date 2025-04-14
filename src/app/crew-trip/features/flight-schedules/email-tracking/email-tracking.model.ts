@@ -7,6 +7,16 @@ export function getCategoryName(categoryCode: string) {
     return '';
 }
 
+export function getCategoryCode(categoryCode: string) {
+    if (categoryCode === 'Domestic') {
+        return 'DOMESTIC';
+    } else if (categoryCode === 'International') {
+        return 'INTERNATIONAL';
+    }
+    return '';
+}
+
+
 export function getSendMailName(isEmailSent: boolean) {
     if (isEmailSent) {
         return $localize`:@@sent:Sent`;
