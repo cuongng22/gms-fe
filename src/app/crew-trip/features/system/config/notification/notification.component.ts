@@ -25,6 +25,7 @@ import { NotificationSetupComponent } from 'src/app/crew-trip/features/system/co
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { SelectOptions } from 'src/app/crew-trip/shared/select-option';
 import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
@@ -55,10 +56,11 @@ import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
 		MatCheckbox,
 		NgxEditorModule,
 		NgxTrimDirectiveModule,
-		SelectMultipleComponent,
+		SelectMultipleComponent, HasPermissionDirective
 	],
 	templateUrl: './notification.component.html',
 	styleUrl: './notification.component.scss',
+	providers: [HasPermissionDirective]
 })
 export class NotificationComponent extends CommonComponent implements OnInit {
 	override baseService = inject(NotificationConfigService);
@@ -74,15 +76,15 @@ export class NotificationComponent extends CommonComponent implements OnInit {
 		type?: string;
 		format?: string;
 	}[] = [
-		{ label: $localize`:@@name:Type`, value: 'type' },
-		{
-			label: $localize`:@@airportCode:Notification channel`,
-			value: 'notiChannel',
-		},
-		{ label: $localize`:@@note:Remark`, value: 'note' },
-		{ label: $localize`:@@note:User`, value: 'users' },
-		{ label: $localize`:@@status:Status`, value: 'active' },
-	];
+			{ label: $localize`:@@name:Type`, value: 'type' },
+			{
+				label: $localize`:@@airportCode:Notification channel`,
+				value: 'notiChannel',
+			},
+			{ label: $localize`:@@note:Remark`, value: 'note' },
+			{ label: $localize`:@@note:User`, value: 'users' },
+			{ label: $localize`:@@status:Status`, value: 'active' },
+		];
 
 	constructor(public override dialog: MatDialog) {
 		super();
@@ -109,7 +111,7 @@ export class NotificationComponent extends CommonComponent implements OnInit {
 			...this._displayedColumns.map((s) => s.value),
 			'action',
 		];
-		await Promise.all([this.getListUser(), this.search()]).then(() => {});
+		await Promise.all([this.getListUser(), this.search()]).then(() => { });
 	}
 
 	onTabChange(event: MatTabChangeEvent): void {

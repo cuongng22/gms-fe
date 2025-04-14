@@ -7,6 +7,10 @@
 }
 
 ::ng-deep {
+  .NgxEditor__Content{
+    max-height: 250px;
+    overflow-y: auto;
+  }
   .table-responsive {
     .mat-mdc-card-content {
       .mat-mdc-table {

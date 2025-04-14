@@ -21,6 +21,9 @@ import { DailyFlightSchedulesSearchComponent } from '../../daily-flight-schedule
 import { DialogExtraCrewComponent } from '../dialog-extra-crew/dialog-extra-crew.component';
 import { RouterLink } from '@angular/router';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
+import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
+import moment from 'moment';
+import { I } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-other-flight-schedule',
@@ -64,23 +67,24 @@ export class OtherFlightScheduleComponent extends CommonComponent {
   }
   async onSearch(event: any) {
     const response = await this.search(event, false, this.baseService.searchExtraCrews.bind(this.baseService));
-    if (response.data && response.data.length > 0) {
-      const _data = response.data.map((item: any) => {
-        const _checkinDate = new Date(item.FLIGHT_DATE_IN.split(" ")[0])
-        const _checkoutDate = new Date(item.FLIGHT_DATE_OUT.split(" ")[0])
-        const _currDate = new Date
-        const _isShow = _checkinDate < _currDate && _checkoutDate < _currDate
+    if (response.data.content && response.data.content.length > 0) {
+      const result = response.data.map((item: any) => {
+        const _checkinDate = moment(item.FLIGHT_DATE_IN.split(" ")[0], 'DD/MM/YYYY')
+        // const _checkoutDate = new Date(item.FLIGHT_DATE_OUT.split(" ")[0])
+        const _currDate = moment()
+        // const _isShow = _checkinDate < _currDate && _checkoutDate < _currDate
+        // Chị Hường (13-04-2025)  theo dõi lịch bay của đối tương khác  cho hiện nút Sửa; xóa với  STD của cột Checkin  > ngày hiện tại thì hiển thị nút sửa/xóa nhé
+        const _isShow = _checkinDate.isAfter(_currDate, 'day')
         return { ...item, isShow: _isShow }
-      })
+      });
+      this.dataSource.data = result;
     }
-    this.dataSource.data = response.data;
   }
 
   override async onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    const response = await this.search(this.dailyFlightSchedulesSearch().formGroupSearch.value, true, this.baseService.searchExtraCrews.bind(this.baseService));
-    this.dataSource.data = response.data;
+    this.onSearch(this.dailyFlightSchedulesSearch().formGroupSearch.value);
   }
 
   add() {
@@ -142,5 +146,14 @@ export class OtherFlightScheduleComponent extends CommonComponent {
       await this.spinner.hide();
       await this.closeConfirmDelete();
     }
+  }
+
+  getFuncType(func: string) {
+    if (func === 'X') {
+      return 'Theo tiêu chuẩn tiếp viên'
+    } else if (func === 'CPT') {
+      return "Theo tiêu chuẩn phi công"
+    }
+    return null;
   }
 }

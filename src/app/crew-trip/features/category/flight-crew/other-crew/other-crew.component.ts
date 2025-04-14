@@ -64,21 +64,26 @@ import {
 import { FlightMarketService } from "src/app/crew-trip/core/services/flight-market.service";
 import { AirplaneService } from "src/app/crew-trip/core/services/airplane-service";
 import { InfoPlaneService } from "src/app/crew-trip/core/services/InfoPlaneService.service";
-import { MatMomentDateModule } from "@angular/material-moment-adapter";
+import { MatMomentDateModule, provideMomentDateAdapter } from "@angular/material-moment-adapter";
 import { HttpStatusCode } from "@angular/common/http";
-import { MESSAGE } from "src/app/crew-trip/shared/utils/constant";
+import { DATE_FORMAT_DD_MM_YYYY, MESSAGE } from "src/app/crew-trip/shared/utils/constant";
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
+import { ifValidator } from 'ngxtension/if-validator';
+import { NgxControlError } from 'ngxtension/control-error';
+import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
 
 @Component({
   selector: 'app-other-crew',
   standalone: true,
   imports: [
     CommonModule, MatCardModule, MatFormFieldModule, MatDatepickerModule, MatMomentDateModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, MatFormField, NgxTrimDirectiveModule, ReactiveFormsModule, InputSizeComponent, SelectionComponent, InputSizeComponent, SelectMultipleComponent, SelectionSuggestComponent, MatDatepicker, MatDatepickerInput, MatDatepickerToggle,
-    HasPermissionDirective
+    HasPermissionDirective, NgxControlError
   ],
   templateUrl: './other-crew.component.html',
   styleUrl: './other-crew.component.scss',
-  providers: [HasPermissionDirective]
+  providers: [HasPermissionDirective,
+    provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY)
+  ]
 })
 export class OtherCrewComponent extends CommonComponent implements OnInit {
   override baseService = inject(FlightCrewOtherService);
@@ -96,37 +101,41 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
   acGroupList: any[] = [];
   acTypeList: any[] = [];
   acTypeListAll: any[] = [];
-  targetPersonals: any[] = [{ label: 'Pilot', code: 'CC' }, { label: 'Attendant', code: 'FC' }]
+  targetPersonals: any[] = [{ label: 'Pilot', code: 'FC' }, { label: 'Attendant', code: 'CC' }]
   filteredOptionsMarket: any[];
   fb = inject(FormBuilder);
   listType: any[] = SelectOptions.OTHER_CREW_TYPE;
+  sysdate = truncateDate(new Date(new Date().setDate(new Date().getDate() + 1)));
 
-
+  override formGroupDetail = this.fb.group({
+    id: ['',],
+    type: ['', [Validators.required]],
+    name: ['', [Validators.required, Validators.maxLength(250)]],
+    nationId: ['', [Validators.required]],
+    airportCodes: [''],
+    desCode: ['', ifValidator(() => this.validateDesCode, [Validators.required])],
+    arrCode: [''],
+    flightNo: [''],
+    acGroup: [''],
+    acType: [''],
+    applyFor: ['', [Validators.required]],
+    fromDate: ['', [Validators.required]],
+    toDate: ['', [Validators.required]],
+    notes: ['', [Validators.maxLength(500)]],
+    status: [true,]
+  });
   constructor() {
     super();
     this.formGroupSearch = this.fb.group({
       s: ['',], type: ['',], export: [false],
     });
-    this.formGroupDetail = this.fb.group({
-      id: ['',],
-      type: ['', [Validators.required]],
-      name: ['', [Validators.required, Validators.maxLength(250)]],
-      nationId: ['', [Validators.required]],
-      airportCodes: [''],
-      desCode: [''],
-      arrCode: [''],
-      flightNo: [''],
-      acGroup: [''],
-      acType: [''],
-      applyFor: ['', [Validators.required]],
-      fromDate: ['', [Validators.required]],
-      toDate: ['', [Validators.required]],
-      notes: ['', [Validators.maxLength(500)]],
-      status: [true,]
-    });
+
     this.formGroupSearchInit = { ...this.formGroupSearch.value };
     this.formGroupDetailInit = { ...this.formGroupDetail.value };
   }
+
+  @ViewChild('suggestDesCode') suggestDesCode: SelectionSuggestComponent
+
 
   override async ngOnInit() {
     super.ngOnInit();
@@ -140,19 +149,30 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
       this.getListAirplanAcType()
     ]).then(() => {
     });
-    this.formGroupDetail.get('desCode')?.valueChanges.subscribe((value: string) => {
-      const arrCodeControl = this.formGroupDetail.get('arrCode');
-      if (value && (!arrCodeControl?.value || arrCodeControl.value.trim() === '')) {
-        arrCodeControl?.setErrors({ required: true });
+    // this.formGroupDetail.controls.desCode.valueChanges.subscribe((value: any) => {
+    //   const arrCodeControl = this.formGroupDetail.get('arrCode');
+    //   if (value && (!arrCodeControl?.value || arrCodeControl.value.trim() === '')) {
+    //     arrCodeControl?.setErrors({ required: true });
+    //   } else {
+    //     arrCodeControl?.setErrors(null);
+    //   }
+    // });
+    this.formGroupDetail.controls.airportCodes.valueChanges.subscribe(value => {
+      if (value) {
+        this.formGroupDetail.controls.desCode.setValue(value);
+        this.formGroupDetail.controls.desCode.disable()
       } else {
-        arrCodeControl?.setErrors(null);
+        this.formGroupDetail.controls.desCode.reset();
+        this.formGroupDetail.controls.desCode.enable()
       }
-    });
+    })
   }
 
   async getListNation() {
     this.nationService.search({ page: 0, limit: 99999, active: true }).then(res => {
-      this.countries = res.data.content;
+      this.countries = res.data.content.map((item: any) => {
+        return { ...item, display: item.code + ' - ' + item.engName }
+      });
     });
   }
 
@@ -163,9 +183,8 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
   }
 
   async getListAirportCodeByNation(idNation: any) {
-    this.nationService.getAirportByNation({ id: idNation, option: 0 }).then(res => {
-      this.markets = res.data;
-    });
+    const res = await this.nationService.getAirportByNation({ id: idNation, option: 0 });
+    this.markets = res.data
   }
 
   async getListAirplanAcGroup() {
@@ -228,8 +247,23 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
     try {
       this.formGroupDetail.markAllAsTouched();
       this.formGroupDetail.updateValueAndValidity();
+      this.formGroupDetail.controls.desCode.updateValueAndValidity()
+      if (this.formGroupDetail.controls.desCode.hasError('required')) {
+        this.suggestDesCode.setRequired(true)
+      }
+      this.formGroupDetail.controls.desCode.updateValueAndValidity()
       if (this.formGroupDetail.invalid) {
+        console.log(this.formGroupDetail.controls)
         this.findInvalidControls(this.formGroupDetail);
+        return;
+      }
+      debugger
+      if (this.formGroupDetail.controls.arrCode.value === this.formGroupDetail.controls.desCode.value) {
+        this.showError($localize`:@@ORGMustBeDifferentFromDST:ORG must be different from DST`)
+        return;
+      }
+      else if (!this.markets.some(value => value === this.formGroupDetail.controls.arrCode.value || value === this.formGroupDetail.controls.desCode.value)) {
+        this.showError($localize`:@@ORGMustBeDifferentFromDST:ORG must be different from DST`)
         return;
       }
       const update = !!this.formGroupDetail.getRawValue().id;
@@ -253,11 +287,17 @@ export class OtherCrewComponent extends CommonComponent implements OnInit {
   }
 
   override async showDialogDetail(id?: any, type?: string) {
+    this.formGroupDetail.reset()
     if (id != null && type === 'index') {
-      this.formGroupDetail.patchValue(this.dataSource.data[id] as JSON);
+      this.formGroupDetail.patchValue(this.dataSource.data[id]);
     } else if (id != null) {
       await this.detail(id);
+      this.getListAirportCodeByNation(this.formGroupDetail.controls.nationId.value)
     }
     this.toggleDialogCreate();
+  }
+
+  get validateDesCode(): boolean {
+    return !!this.formGroupDetail?.controls?.arrCode?.value;
   }
 }

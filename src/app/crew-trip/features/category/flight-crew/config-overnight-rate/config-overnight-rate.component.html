@@ -5,9 +5,8 @@
         <div class="col-sm-3" sizeInput='sm'>
           <mat-form-field class="mb-1">
             <mat-label i18n="@@airportCode">Airport code</mat-label>
-            <input type="text" #marketCode matInput formControlName="marketCode"
-                   [matAutocomplete]="marketComplete"
-                   (input)="filterMarket()" (focus)="onFocusMarket()">
+            <input type="text" #marketCode matInput formControlName="marketCode" [matAutocomplete]="marketComplete"
+              (input)="filterMarket()" (focus)="onFocusMarket()">
             <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
               <mat-option [value]="null">
                 -- All airport code --
@@ -40,7 +39,8 @@
     <mat-card-title>
     </mat-card-title>
     <mat-card-subtitle>
-      <button class="add-btn mr-10" type="button" mat-button (click)="toggleDialogUpload()">
+      <button *appHasPermission="['API_OVERNIGHT_RATE_IMPORT_IMPORT','API_OVERNIGHT_RATE_TEMPLATE_LIST']"
+        class="add-btn mr-10" type="button" mat-button (click)="toggleDialogUpload()">
         <i class="material-symbols-outlined">
           upload
         </i>
@@ -49,7 +49,7 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div class="table-responsive">
+    <div class="table-responsive max-height-table">
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
         <ng-container matColumnDef="stt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center ">#</th>
@@ -59,14 +59,14 @@
         </ng-container>
         <ng-container matColumnDef="marketCode">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-              i18n="@@airportCode">
+            i18n="@@airportCode">
             Airport code
           </th>
           <td mat-cell *matCellDef="let element" class="text-center">{{ element.marketCode }}</td>
         </ng-container>
         <ng-container matColumnDef="nightCount">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-              i18n="@@numberOfOvernightStays">
+            i18n="@@numberOfOvernightStays">
             Number of Overnight Stays
           </th>
           <td mat-cell *matCellDef="let element" class="text-right">
@@ -74,9 +74,8 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="rate">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-              i18n="@@rate">
-            Rate
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@rate">
+            Rate (%)
           </th>
           <td mat-cell *matCellDef="let element" class="text-right">
             {{ element.rate }}
@@ -94,12 +93,14 @@
             <div class="action-buttons d-flex align-items-center justify-content-end">
               <a mat-button type="button">
               </a>
-              <a class="text-warning" (click)="showDialogDetail(element.id)" mat-button type="button">
+              <a *appHasPermission="['API_OVERNIGHT_RATE_UPDATE']" class="text-warning"
+                (click)="showDialogDetail(element.id)" mat-button type="button">
                 <i class="material-symbols-outlined" i18n-title title="Edit">
                   edit
                 </i>
               </a>
-              <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">
+              <a *appHasPermission="['API_OVERNIGHT_RATE_DELETE']" (click)="showConfirmDelete(element.id)" i18n-title
+                mat-button type="button">
                 <i class="material-symbols-outlined" title="Delete">
                   delete
                 </i>
@@ -107,7 +108,7 @@
             </div>
           </td>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns; sticky:true"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center" colspan="7">No data!</td>
@@ -116,6 +117,10 @@
     </div>
 
   </mat-card-content>
+  <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+    [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+    aria-label="Select page" i18n-aria-label="@@selectPage">
+  </mat-paginator>
 </mat-card>
 
 
@@ -136,50 +141,51 @@
         </mat-card-subtitle>
       </mat-card-header>
       <mat-card-content>
-        <div class="row">
+        <div class="row" *appHasPermission="['API_OVERNIGHT_RATE_TEMPLATE_LIST']">
           <span i18n="@@downloadTemplate" class="text-black">Download template</span>
           <button mat-button type="button" class="search-btn min-with-100 mlr-5" style="width: 250px;"
-                  (click)="downloadTemplate('tylengudem-template',null,'template')">
+            (click)="downloadTemplate('tylengudem-template',null,'template')">
             <i class="material-symbols-outlined">
               download
             </i>
             <span i18n="@@airportCodeTemplate">tylengudem-template.xlsx</span>
           </button>
         </div>
-        <div class="row mt-20">
+        <div class="row mt-20" *appHasPermission="['API_OVERNIGHT_RATE_IMPORT_IMPORT']">
           <span i18n="@@selectFile" class="text-black">Select file</span>
           <file-upload [ngClass]="{'invalid':fileUpload.hasError('required') && fileUpload.touched}"
-                       [formControl]="fileUpload" class="file-uploader" [multiple]="false"></file-upload>
+            [formControl]="fileUpload" class="file-uploader" [multiple]="false"></file-upload>
           @if (fileUpload.hasError('required') &&
           fileUpload.touched) {
-            <mat-error i18n="@@fileRequired" style="font-style: italic; font-size: 12px;">File
-              {{ MESSAGE.REQUIRED }}
-            </mat-error>
+          <mat-error i18n="@@fileRequired" style="font-style: italic; font-size: 12px;">File
+            {{ MESSAGE.REQUIRED }}
+          </mat-error>
           }
           <mat-hint>Note:Please check the overnight rate on the system before importing new data</mat-hint>
         </div>
         @if (!!uploadFileError.totalErrors) {
-          <div class="row mt-20">
-            <p class="text-danger" i18n="@@flightMarket.UploadError">
-              Cannot perform excel data import when there are {{ uploadFileError.totalErrors }} error records
-            </p>
-            <span i18n="@@downloadFileError">Download file error:
-                        <button class="pt-0 pb-0" mat-raised-button (click)="downloadFileError()">Download file
-                            excel</button>
-                    </span>
-          </div>
+        <div class="row mt-20">
+          <p class="text-danger" i18n="@@flightMarket.UploadError">
+            Cannot perform excel data import when there are {{ uploadFileError.totalErrors }} error records
+          </p>
+          <span i18n="@@downloadFileError">Download file error:
+            <button class="pt-0 pb-0" mat-raised-button (click)="downloadFileError()">Download file
+              excel</button>
+          </span>
+        </div>
         }
       </mat-card-content>
       <mat-card-actions class="p-15" style="display: flex; justify-content: end;">
         <button type="button" mat-button
-                (click)="uploadFileError={};fileUpload.setValue([]) ;fileUpload.reset() ;toggleDialogUpload()"
-                class="close-btn  min-with-100 mlr-5">
+          (click)="uploadFileError={};fileUpload.setValue([]) ;fileUpload.reset() ;toggleDialogUpload()"
+          class="close-btn  min-with-100 mlr-5">
           <i class="material-symbols-outlined">
             close
           </i>
           <span i18n="@@cancel">Close</span>
         </button>
-        <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
+        <button *appHasPermission="['API_OVERNIGHT_RATE_IMPORT_IMPORT']" mat-button type="button"
+          class="add-btn min-with-100 mlr-5" (click)="uploadFile()">
           <i class="material-symbols-outlined">
             upload
           </i>
@@ -196,20 +202,19 @@
     <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
       <mat-card-content>
         <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
+          <span class="material-symbols-outlined font-size-5rem">
+            error
+          </span>
         </div>
         <div class="text-center mb-20">
           <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
         </div>
         <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
-                        You will not be able to recover the deleted data!</span>
+          <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+            You will not be able to recover the deleted data!</span>
         </div>
         <div class="btn-box text-center">
-          <button type="button" mat-button (click)="closeConfirmDelete()"
-                  class="close-btn  min-with-100 mlr-5">
+          <button type="button" mat-button (click)="closeConfirmDelete()" class="close-btn  min-with-100 mlr-5">
             <i class="material-symbols-outlined">
               close
             </i>
@@ -227,23 +232,17 @@
   </div>
 </div>
 
-<div
-  [class.active]="showDialogCreate"
-  class="add-new-popup"
->
+<div [class.active]="showDialogCreate" class="add-new-popup">
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
-      <mat-card-header>
+      <mat-card-header class="p-15">
         <mat-card-title>
           <h5 class="mb-0">
             <span *ngIf="formGroupDetail.value.id" i18n>Edit</span>
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
-          <button
-            (click)="closeDetail()"
-            mat-button
-          >
+          <button (click)="closeDetail()" mat-button>
             <i class="ri-close-fill"></i>
           </button>
         </mat-card-subtitle>
@@ -256,8 +255,7 @@
                 <mat-form-field class="mb-1">
                   <mat-label i18n="@@airportCode">Airport code</mat-label>
                   <input type="text" #marketCode matInput formControlName="marketCode"
-                         [matAutocomplete]="marketComplete"
-                         (input)="filterMarket()" (focus)="onFocusMarket()">
+                    [matAutocomplete]="marketComplete" (input)="filterMarket()" (focus)="onFocusMarket()">
                   <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
                     <mat-option [value]="null">
                       -- Choose airport code --
@@ -267,7 +265,7 @@
                     </mat-option>
                   </mat-autocomplete>
                   @if (!!formGroupDetail.controls['marketCode'].hasError('existCode')) {
-                    <mat-error><span i18n>Airport Code/Number of overnight stays already exist</span></mat-error>
+                  <mat-error><span i18n>Airport Code/Number of overnight stays already exist</span></mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -276,14 +274,13 @@
               <div class="form-group mb-20" sizeInput="md">
                 <mat-form-field>
                   <mat-label i18n>Number of overnight stays</mat-label>
-                  <input formControlName="nightCount" matInput
-                         min="1" max="2" required type="number">
+                  <input formControlName="nightCount" matInput required type="text" digitOnly [decimal]="false">
                   @if (!!formGroupDetail.controls['nightCount'].hasError('required')) {
-                    <mat-error><span i18n>Night count</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>Night count</span><span i18n> is required</span></mat-error>
                   } @else if (!!formGroupDetail.controls['nightCount'].hasError('min')) {
-                    <mat-error><span i18n>Night count</span><span i18n> must be greater than 1</span></mat-error>
+                  <mat-error><span i18n>Night count</span><span i18n> must be greater than 1</span></mat-error>
                   }@else if (!!formGroupDetail.controls['nightCount'].hasError('max')) {
-                    <mat-error><span i18n>Night count</span><span i18n> must be greater than 8</span></mat-error>
+                  <mat-error><span i18n>Night count</span><span i18n> must be less than 8</span></mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -291,13 +288,18 @@
             <div class="col-sm-6 col-md-6">
               <div class="form-group mb-20" sizeInput="md">
                 <mat-form-field>
-                  <mat-label i18n>Rate</mat-label>
-                  <input formControlName="rate" matInput
-                         min="1" max="10000" required type="number">
+                  <mat-label i18n>Rate(%)</mat-label>
+                  <input formControlName="rate" [maxlength]="5" matInput required type="text" digitOnly [decimal]="true"
+                    decimalSeparator=".">
+                  <i class="material-symbols-outlined fs-18" matSuffix>
+                    percent
+                  </i>
                   @if (!!formGroupDetail.controls['rate'].hasError('required')) {
-                    <mat-error><span i18n>Rater</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>Rater</span><span i18n> is required</span></mat-error>
                   } @else if (!!formGroupDetail.controls['rate'].hasError('min')) {
-                    <mat-error><span i18n>Rate</span><span i18n> must be greater than 1</span></mat-error>
+                  <mat-error><span i18n>Rate</span><span i18n> must be greater than 0</span></mat-error>
+                  } @else if (!!formGroupDetail.controls['rate'].hasError('max')) {
+                  <mat-error><span i18n>Rate</span><span i18n> must be less than 100</span></mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -308,7 +310,7 @@
                 <textarea formControlName="notes" matInput></textarea>
                 <mat-hint align="end">{{ formGroupDetail.value.notes?.length }} / 500</mat-hint>
                 @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
-                  <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
+                <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
                 }
               </mat-form-field>
             </div>
@@ -320,11 +322,7 @@
               </i>
               Close
             </button>
-            <button
-              (click)="save()"
-              class="add-btn"
-              i18n mat-button
-            >
+            <button (click)="save()" class="add-btn" i18n mat-button>
               <i class="material-symbols-outlined">
                 save
               </i>
@@ -336,4 +334,3 @@
     </mat-card>
   </div>
 </div>
-

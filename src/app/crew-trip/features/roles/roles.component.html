@@ -63,7 +63,8 @@
       <mat-card-title>
       </mat-card-title>
       <mat-card-subtitle>
-        <button (click)="showDialogDetail()" class="add-btn" i18n mat-button type="button">
+        <button *appHasPermission="['API_ROLES_INSERT']" (click)="showDialogDetail()" class="add-btn" i18n mat-button
+          type="button">
           <i class="material-symbols-outlined">
             add
           </i>
@@ -78,41 +79,35 @@
           <!-- Checkbox Column -->
           <ng-container matColumnDef="select">
             <th *matHeaderCellDef mat-header-cell>
-              <mat-checkbox
-                (change)="$event ? toggleAllRows() : null"
-                [aria-label]="checkboxLabel()"
+              <mat-checkbox (change)="$event ? toggleAllRows() : null" [aria-label]="checkboxLabel()"
                 [checked]="selection.hasValue() && isAllSelected()"
-                [indeterminate]="selection.hasValue() && !isAllSelected()"
-              >
+                [indeterminate]="selection.hasValue() && !isAllSelected()">
               </mat-checkbox>
             </th>
             <td *matCellDef="let row" mat-cell>
-              <mat-checkbox
-                (change)="$event ? selection.toggle(row) : null"
-                (click)="$event.stopPropagation()"
-                [aria-label]="checkboxLabel(row)"
-                [checked]="selection.isSelected(row)"
-              >
+              <mat-checkbox (change)="$event ? selection.toggle(row) : null" (click)="$event.stopPropagation()"
+                [aria-label]="checkboxLabel(row)" [checked]="selection.isSelected(row)">
               </mat-checkbox>
             </td>
           </ng-container>
           <ng-container matColumnDef="stt">
             <th *matHeaderCellDef mat-header-cell mat-sort-header class="text-center">#</th>
-            <td *matCellDef="let element; let i = dataIndex" mat-cell class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
+            <td *matCellDef="let element; let i = dataIndex" mat-cell class="text-center">{{ (pageIndex * pageSize) + i
+              + 1 }}</td>
           </ng-container>
           @for (innerColumn of _displayedColumns; track innerColumn.value) {
           <ng-container matColumnDef="{{innerColumn.value}}">
-              <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
-              <td mat-cell *matCellDef="let element">
-                <span [ngClass]="{
+            <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
+            <td mat-cell *matCellDef="let element">
+              <span [ngClass]="{
           'badge rounded-pill': innerColumn.value === 'isActiveLabel',
           'text-bg-vna': innerColumn.value === 'isActiveLabel' && element['isActive'] == 1,
           'text-bg-vna-danger': innerColumn.value === 'isActiveLabel' && element['isActive'] == 0
           }">{{
-          element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
-          }}</span>
-              </td>
-            </ng-container>
+                element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
+                }}</span>
+            </td>
+          </ng-container>
           }
           <!-- Action Column -->
           <ng-container matColumnDef="action" stickyEnd>
@@ -121,17 +116,20 @@
             </th>
             <td *matCellDef="let element;let i = dataIndex" mat-cell>
               <div class="action-buttons d-flex align-items-center justify-content-end">
-                <a (click)="nextStep(i)" mat-button type="button">
+                <a *appHasPermission="['API_ROLES_ROLES_FUNCTION_VIEW_DETAILS','API_ROLES_ROLES_FUNCTION_ADD_{ROLEID}_INSERT']"
+                  (click)="nextStep(i)" mat-button type="button">
                   <i class="material-symbols-outlined" i18n-title title="Detail">
                     link
                   </i>
                 </a>
-                <a (click)="showDialogDetail(i,'index')" mat-button type="button">
+                <a *appHasPermission="['API_ROLES_UPDATE']" (click)="showDialogDetail(i,'index')" mat-button
+                  type="button">
                   <i class="material-symbols-outlined" i18n-title title="Edit">
                     edit
                   </i>
                 </a>
-                <a (click)="showConfirmDelete(element.id)" mat-button type="button">
+                <a *appHasPermission="['API_ROLES_DELETE']" (click)="showConfirmDelete(element.id)" mat-button
+                  type="button">
                   <i class="material-symbols-outlined" i18n-title title="Delete">
                     delete
                   </i>
@@ -149,25 +147,16 @@
         </table>
       </div>
       <!--<mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons (page)="onPageChange($event)" ></mat-paginator>-->
-      <mat-paginator
-        (page)="onPageChange($event)"
-        [length]="totalElement"
-        [pageIndex]="pageIndex"
-        [pageSizeOptions]="pageSizeOptions"
-        [pageSize]="pageSize"
-        [showFirstLastButtons]="showFirstLastButtons"
+      <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageIndex]="pageIndex"
+        [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [showFirstLastButtons]="showFirstLastButtons"
         aria-label="Select page">
       </mat-paginator>
     </mat-card-content>
   </mat-card>
 
   <!-- Add New Popup -->
-  <div
-    (keydown.enter)="save()"
-    (keydown.escape)="closeDetail()"
-    [class.active]="showDialogCreate"
-    class="add-new-popup"
-  >
+  <div (keydown.enter)="save()" (keydown.escape)="closeDetail()" [class.active]="showDialogCreate"
+    class="add-new-popup">
     <div class="popup-dialog">
       <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
         <mat-card-header>
@@ -178,10 +167,7 @@
             </h5>
           </mat-card-title>
           <mat-card-subtitle>
-            <button
-              (click)="toggleDialogCreate()"
-              mat-button
-            >
+            <button (click)="toggleDialogCreate()" mat-button>
               <i class="ri-close-fill"></i>
             </button>
           </mat-card-subtitle>
@@ -193,8 +179,8 @@
                 <div class="form-group">
                   <mat-form-field>
                     <mat-label i18n>Role Name</mat-label>
-                    <input formControlName="roleName" i18n-placeholder matInput maxlength="250" placeholder="Input role name"
-                           required>
+                    <input formControlName="roleName" i18n-placeholder matInput maxlength="250"
+                      placeholder="Input role name" required>
                     @if (!!formGroupDetail.controls['roleName'].hasError('required')) {
                     <mat-error><span i18n>Role name</span><span i18n> cannot be empty</span></mat-error>
                     }
@@ -211,11 +197,7 @@
               </i>
               Cancel
             </button>
-            <button
-              (click)="save()"
-              color="primary"
-              i18n mat-button
-            >
+            <button (click)="save()" color="primary" i18n mat-button>
               <i class="material-symbols-outlined">
                 save
               </i>
@@ -228,10 +210,7 @@
   </div>
 
   <!-- Delete confirm Popup -->
-  <div
-    [class.active]="showDialogDelete"
-    class="add-new-popup"
-  >
+  <div [class.active]="showDialogDelete" class="add-new-popup">
     <div class="popup-dialog">
       <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
         <mat-card-header>
@@ -241,10 +220,7 @@
             </h5>
           </mat-card-title>
           <mat-card-subtitle>
-            <button
-              (click)="closeConfirmDelete()"
-              mat-button
-            >
+            <button (click)="closeConfirmDelete()" mat-button>
               <i class="ri-close-fill"></i>
             </button>
           </mat-card-subtitle>
@@ -257,11 +233,7 @@
               </i>
               Cancel
             </button>
-            <button
-              (click)="delete()"
-              color="primary"
-              i18n mat-button
-            >
+            <button (click)="delete()" color="primary" i18n mat-button>
               <i class="material-symbols-outlined">
                 save
               </i>
@@ -277,5 +249,5 @@
 <!-- Detail page -->
 <ng-container *ngIf="step==2">
   <app-role-function (backStep)="backStep()" [dataSelected]="formGroupDetail.value"
-                       [id]="formGroupDetail.value.id"></app-role-function>
+    [id]="formGroupDetail.value.id"></app-role-function>
 </ng-container>

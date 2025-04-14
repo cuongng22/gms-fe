@@ -46,7 +46,8 @@
                     <span i18n="@@close">Close</span>
                 </button>
                 @if(!checkStatusCompelted()){
-                <button class="add-btn" type="button" mat-button (click)="completed()">
+                <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_UPDATE_STATUS_INSERT']" class="add-btn"
+                    type="button" mat-button (click)="completed()">
                     <i class="material-symbols-outlined">
                         check_circle
                     </i>
@@ -54,7 +55,8 @@
                 </button>
                 }
                 @if(!checkStatusCompelted()){
-                <button mat-button color="primary" type="button" class="add-btn min-with-100 mlr-5" (click)="save()">
+                <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_CREATE_INSERT']" mat-button
+                    color="primary" type="button" class="add-btn min-with-100 mlr-5" (click)="save()">
                     <i class="material-symbols-outlined">
                         save
                     </i>
@@ -69,10 +71,9 @@
         <app-budget-procurement-general #budgetProcurementGeneral [category]="category()"
             [disabled]="checkStatusCompelted()" (formValueChanges)="formGeneralValueChanges($event)"
             (exchangeRateChange)="exchangeRateChange($event)" (priceChange)="priceChange($event)" />
-        <div class="d-flex justify-content-end">
+        <div *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_INSERT']" class="d-flex justify-content-end">
             @if(!checkStatusCompelted()){
-            <button  mat-button color="primary" type="button" class="add-btn"
-                (click)="summaryData()">
+            <button mat-button color="primary" type="button" class="add-btn" (click)="summaryData()">
                 <i class="material-symbols-outlined">
                     directory_sync
                 </i>

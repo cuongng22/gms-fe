@@ -151,7 +151,12 @@ export const menu: Menu[] = [
 	{
 		title: $localize`:@@hotelCarService:HOTEL & TRANSPORTATION SERVICE`,
 		rootPath: 'service',
-		permissionCode: [],
+		permissionCode: [
+			'API_AVES_ROOM_TRACKING_LIST',
+			'API_ROOM_COST_LIST',
+			'API_AVES_TRANSPORT_TRACKING_LIST',
+			'API_CAR_COST_TRACKING_LIST'
+		],
 		subMenu: [
 			{
 				path: '',
@@ -162,38 +167,44 @@ export const menu: Menu[] = [
 					{
 						title: $localize`:@@hotelRoom:Hotel room`,
 						rootPath: 'service/hotel',
-						permissionCode: [],
+						permissionCode: [
+							'API_AVES_ROOM_TRACKING_LIST',
+							'API_ROOM_COST_LIST'
+						],
 						subMenu: [
 							{
 								path: 'service/hotel/room-booking',
 								title: $localize`:@@roomBooking:Room booking`,
 								icon: 'ri-exchange-cny-line',
-								permissionCode: []
+								permissionCode: ['API_AVES_ROOM_TRACKING_LIST']
 							},
 							{
 								path: 'service/hotel/cost-tracking',
 								title: $localize`:@@plannedExchangeRate:Hotel cost tracking (AVES)`,
 								icon: 'ri-exchange-cny-line',
-								permissionCode: []
+								permissionCode: ['API_ROOM_COST_LIST']
 							},
 						],
 					},
 					{
 						title: $localize`:@@carRental:Transportations`,
 						rootPath: 'service/car',
-						permissionCode: [],
+						permissionCode: [
+							'API_AVES_TRANSPORT_TRACKING_LIST',
+							'API_CAR_COST_TRACKING_LIST'
+						],
 						subMenu: [
 							{
 								path: 'service/car/car-booking',
 								title: $localize`:@@carBooking:Transportations booking`,
 								icon: 'ri-folder-chart-line',
-								permissionCode: []
+								permissionCode: ['API_AVES_TRANSPORT_TRACKING_LIST']
 							},
 							{
 								path: 'service/car/cost-tracking',
 								title: $localize`:@@carCostTracking:Transportations cost tracking (AVES)`,
 								icon: 'ri-folder-chart-line',
-								permissionCode: []
+								permissionCode: ['API_CAR_COST_TRACKING_LIST']
 							},
 						],
 					},
@@ -229,7 +240,16 @@ export const menu: Menu[] = [
 	{
 		title: $localize`:@@plan:Plan`,
 		rootPath: 'plan',
-		permissionCode: [],
+		permissionCode: [
+			'API_CURRENCY_UTH_LIST',
+			'API_CURRENCY_LIST',
+			'API_PRODUCTIVITY_LIST',
+			'API_FIVE_YEAR_PLAN_LIST',
+			'API_PLAN_BUDGET_PROCUREMENT_LIST',
+			'API_WET_LEASE_LIST',
+			'API_CHARTER_LIST',
+			'API_PROCUREMENT_LIST'
+		],
 		subMenu: [
 			{
 				path: '',
@@ -240,75 +260,87 @@ export const menu: Menu[] = [
 					{
 						title: $localize`:@@rates:Exchange rate`,
 						rootPath: 'plan/rate',
-						permissionCode: [],
+						permissionCode: [
+							'API_CURRENCY_UTH_LIST',
+							'API_CURRENCY_LIST'
+						],
 						subMenu: [
 							{
 								path: 'plan/rate/uth',
 								title: $localize`:@@estimatedExchangeRate:Estimated exchange rate`,
 								icon: 'ri-exchange-cny-line',
-								permissionCode: [],
+								permissionCode: ['API_CURRENCY_UTH_LIST'],
 							},
 							{
 								path: 'plan/rate/planned',
 								title: $localize`:@@plannedExchangeRate:Planned exchange rate`,
 								icon: 'ri-exchange-cny-line',
-								permissionCode: []
+								permissionCode: ['API_CURRENCY_LIST']
 							},
 						],
 					},
 					{
 						title: $localize`:@@production:Production`,
 						rootPath: 'plan/production',
-						permissionCode: [],
+						permissionCode: [
+							'API_PRODUCTIVITY_LIST',
+							'API_PRODUCTIVITY_LIST',
+							'API_FIVE_YEAR_PLAN_LIST'
+						],
 						subMenu: [
 							{
 								path: 'plan/production/est-annual-production',
 								title: $localize`:@@estAnnualProduction:Estimated annual production`,
 								icon: 'ri-folder-chart-line',
-								permissionCode: []
+								permissionCode: ['API_PRODUCTIVITY_LIST']
 							},
 							{
 								path: 'plan/production/planned',
 								title: $localize`:@@planedAnnualProduction:Planned annual production`,
 								icon: 'ri-folder-chart-line',
-								permissionCode: []
+								permissionCode: ['API_PRODUCTIVITY_LIST']
 							},
 							{
 								path: 'plan/production/five-year-plan',
 								title: $localize`:@@fiveYearPlan:5-Year plans`,
 								icon: 'ri-folder-chart-line',
-								permissionCode: []
+								permissionCode: ['API_FIVE_YEAR_PLAN_LIST']
 							},
 						],
 					},
 					{
 						title: $localize`:@@estimatePlan:Estimate/Plan`,
 						rootPath: 'plan/est-plan',
-						permissionCode: [],
+						permissionCode: [
+							'API_PLAN_BUDGET_PROCUREMENT_LIST',
+							'API_WET_LEASE_LIST',
+							'API_CHARTER_LIST',
+							'API_PROCUREMENT_LIST'
+						],
 						subMenu: [
 							{
 								path: 'plan/est-plan/est-cost',
 								title: $localize`:@@estimateCost:Estimated cost`,
 								icon: 'ri-folder-chart-line',
-								permissionCode: []
+								permissionCode: ['API_PLAN_BUDGET_PROCUREMENT_LIST']
 							},
 							{
 								path: 'plan/est-plan/budget-procurement',
 								title: $localize`:@@budgetProcurementPlan:Budget & Procurement plan`,
 								icon: 'ri-folder-chart-line',
-								permissionCode: []
+								permissionCode: ['API_PLAN_BUDGET_PROCUREMENT_LIST']
 							},
 							{
 								path: 'plan/est-plan/wet-lease-charter',
 								title: $localize`:@@wetLeaseCharter plan:Wet lease & Charter plan`,
 								icon: 'ri-folder-chart-line',
-								permissionCode: []
+								permissionCode: ['API_WET_LEASE_LIST', 'API_CHARTER_LIST']
 							},
 							{
 								path: 'plan/est-plan/procurement-tracking',
 								title: $localize`:@@fiveYearPlan:Procurement tracking`,
 								icon: 'ri-folder-chart-line',
-								permissionCode: []
+								permissionCode: ['API_PROCUREMENT_LIST']
 							},
 						],
 					},
@@ -415,81 +447,98 @@ export const menu: Menu[] = [
 					{
 						title: $localize`:@@rolesAccounts:Roles & Accounts`,
 						rootPath: '',
-						permissionCode: [],
+						permissionCode: [
+							'API_USER_GET_ALL_LIST',
+							'API_ROLES_LIST',
+							'API_FUNCTIONS_LIST'
+						],
 						subMenu: [
 							{
 								path: 'system/admin/users',
 								title: $localize`:@@accounts:Accounts`,
 								icon: 'ri-calendar-schedule-line',
-								permissionCode: []
+								permissionCode: ['API_USER_GET_ALL_LIST']
 							},
 							{
 								path: 'system/admin/roles',
 								title: $localize`:@@role:Role`,
 								icon: 'ri-calendar-schedule-line',
-								permissionCode: []
+								permissionCode: ['API_ROLES_LIST']
 							},
 							{
 								path: 'system/admin/functions',
 								title: $localize`:@@function:Function`,
 								icon: 'ri-calendar-schedule-line',
-								permissionCode: []
+								permissionCode: ['API_FUNCTIONS_LIST']
 							},
 						],
 					},
 					{
 						title: $localize`:@@config:Config`,
 						rootPath: '',
-						permissionCode: [],
+						permissionCode: [
+							'API_CREW_FLIGHTS_LIST',
+							'API_OVERNIGHT_RATE_LIST',
+							'API_GROUP_MAIL_LIST',
+							'API_PAYMENT_MAIL_LIST',
+							'API_EMAIL_CONFIG_LIST',
+							'API_NOTI_CONFIG_LIST',
+							'API_NOTI_SETUP_LIST',
+							'API_PLANE_LIST'
+						],
 						subMenu: [
 							{
 								path: 'system/config/flight-crew',
 								title: $localize`:@@flightCrew:Flight crew`,
 								icon: 'ri-id-card-line',
-								permissionCode: []
+								permissionCode: ['API_CREW_FLIGHTS_LIST', 'API_OVERNIGHT_RATE_LIST']
 							},
 							{
 								path: 'system/config/group-mail',
 								title: $localize`:@@groupsMail:Groups mail`,
 								icon: 'ri-mail-add-line',
-								permissionCode: []
+								permissionCode: ['API_GROUP_MAIL_LIST', 'API_PAYMENT_MAIL_LIST']
 							},
 							{
 								path: 'system/config/email-supplier',
 								title: $localize`:@@emailSupplier:Email to supplier`,
 								icon: 'ri-mail-add-line',
-								permissionCode: []
+								permissionCode: ['API_EMAIL_CONFIG_LIST']
 							},
 							{
 								path: 'system/config/noti-warning',
 								title: $localize`:@@noti:Notification/Warning`,
 								icon: 'ri-mail-add-line',
-								permissionCode: []
+								permissionCode: ['API_NOTI_CONFIG_LIST', 'API_NOTI_SETUP_LIST']
 							},
 							{
 								path: 'system/config/information-plane',
 								title: $localize`:@@aircaft:Aircraft data`,
 								icon: 'ri-mail-add-line',
-								permissionCode: []
+								permissionCode: ['API_PLANE_LIST']
 							},
 						],
 					},
 					{
 						title: $localize`:@@historyLog:History Log`,
 						rootPath: '',
-						permissionCode: [],
+						permissionCode: [
+							'API_AUTHLOG_LIST',
+							'API_EMAIL_HISTORY_LIST',
+							'API_NOTIFICATION_LIST'
+						],
 						subMenu: [
 							{
 								path: 'system/history/login',
 								title: $localize`:@@loginHistory:Login History`,
 								icon: 'ri-mail-add-line',
-								permissionCode: []
+								permissionCode: ['API_AUTHLOG_LIST']
 							},
 							{
 								path: 'system/history/email-noti',
 								title: $localize`:@@emailNoti:Email & Notification History`,
 								icon: 'ri-mail-add-line',
-								permissionCode: []
+								permissionCode: ['API_EMAIL_HISTORY_LIST', 'API_NOTIFICATION_LIST']
 							},
 							// {
 							// 	path: 'system/history/data-sync',

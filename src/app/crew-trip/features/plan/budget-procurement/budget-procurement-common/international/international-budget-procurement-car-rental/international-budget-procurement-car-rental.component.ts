@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, planFlightByOvernight, planFlightPeriodList } from './international-budget-procurement-car-rental.model';
+import {  formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './international-budget-procurement-car-rental.model';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { Constant, round } from 'src/app/crew-trip/shared/utils/constant';
 import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
@@ -136,10 +136,10 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
         //Số lượt xe
         this.calculate(item, 'numberVehicles');
       }
-      //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
-      this.calculate(item, 'totalAmountForeign');
       //Thành tiền (ngoại tệ) - Bao gồm VAT
       this.calculate(item, 'totalAmountForeignVat');
+      //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
+      this.calculate(item, 'totalAmountForeign');
       //Thành tiền VND (Chưa bao gồm VAT)
       this.calculate(item, 'totalAmount');
       //Thành tiền VND (Bao gồm VAT)
@@ -267,9 +267,9 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
-    if (control === 'unitPriceVatEditing') {
-      data.unitPrice = Number(data.unitPriceVat) / (1 + (Number(data.taxRate) / 100))
-    }
+    // if (control === 'unitPriceVatEditing') {
+    //   data.unitPrice = Number(data.unitPriceVat) / (1 + (Number(data.taxRate) / 100))
+    // }
     this.calculateData(data, undefined, true);
     this.calculateTotal()
   }

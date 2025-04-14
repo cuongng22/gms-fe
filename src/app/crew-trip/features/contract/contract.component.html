@@ -121,7 +121,7 @@
         </button>
         <mat-menu #planMenu="matMenu" class="card-header-menu" yPosition="below">
           <ul class="p-0 mt-0 mb-0 list-unstyled">
-            <li *appHasPermission="['']">
+            <li *appHasPermission="[]">
               <button (click)="exportFile({ export: true, exportType: 'ALL' }, 'Contract-list.xlsx')" i18n mat-menu-item
                 type="button">
                 Contract list

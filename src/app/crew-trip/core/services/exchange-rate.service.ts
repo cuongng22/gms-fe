@@ -1,7 +1,7 @@
-import {Injectable} from '@angular/core';
-import {BaseService} from 'src/app/crew-trip/core/services/base-service';
-import {HttpHeaders, HttpParams} from '@angular/common/http';
-import {firstValueFrom} from 'rxjs';
+import { Injectable } from '@angular/core';
+import { BaseService } from 'src/app/crew-trip/core/services/base-service';
+import { HttpHeaders, HttpParams } from '@angular/common/http';
+import { firstValueFrom } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +10,18 @@ export class ExchangeRateService extends BaseService {
   constructor() {
     super();
     this.path = 'currency';
+  }
+
+  uthSync(): Promise<any> {
+    const url = `${this.api}/${this.path}/uth/sync`;
+    // const params = new HttpParams({ fromObject: body });
+    return firstValueFrom(this.http.get<any>(url));
+  }
+
+  sync(): Promise<any> {
+    const url = `${this.api}/${this.path}/sync`;
+    // const params = new HttpParams({ fromObject: body });
+    return firstValueFrom(this.http.get<any>(url));
   }
 
   actSearch(body: any): Promise<any> {

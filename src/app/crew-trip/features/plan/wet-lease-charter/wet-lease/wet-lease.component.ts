@@ -47,6 +47,7 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataCalculateTotal } from 'src/app/crew-trip/shared/data-calculate-total';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant';
 
@@ -94,11 +95,12 @@ import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant'
 		SelectMultipleComponent,
 		MatPaginator,
 		RouterLink,
-		MatNoDataRow,
+		MatNoDataRow, HasPermissionDirective
 	],
 	providers: [
 		provideNativeDateAdapter(),
 		provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+		HasPermissionDirective
 	],
 	templateUrl: './wet-lease.component.html',
 	styleUrl: './wet-lease.component.scss',

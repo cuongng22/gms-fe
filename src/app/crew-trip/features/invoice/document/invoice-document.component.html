@@ -519,7 +519,7 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-12 mt-15" sizeInput='sm'>
+            <div class="col-md-12 mt-15" style sizeInput='sm'>
               <div class="NgxEditor__Wrapper">
                 <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
                 <ngx-editor [editor]="editor" formControlName="emailContent" required></ngx-editor>
@@ -542,7 +542,7 @@
             </i>
             Close
           </button>
-          <button (click)="sendEmail()"
+          <button (click)="sendEmail(invoiceDocumentEmailTypeEnum.CONFIRM)"
                   class="add-btn"
                   i18n mat-button>
             <i class="material-symbols-outlined">
@@ -555,8 +555,3 @@
     </mat-card>
   </div>
 </div>
-<app-confirm-delete-dialog
-    (closeDialog)="closeConfirmDelete()"
-    (confirmDelete)="delete()"
-    [showDialogDelete]="showDialogDelete">
-</app-confirm-delete-dialog>

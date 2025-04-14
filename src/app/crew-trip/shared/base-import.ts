@@ -42,6 +42,7 @@ import {ConfirmDeleteDialog} from "src/app/crew-trip/shared/dialog/confirm-delet
 import {NgxUpperCaseDirectiveModule} from "ngx-upper-case-directive";
 import {SelectMultipleComponent} from "src/app/crew-trip/shared/component/select-multiple/select-multiple.component";
 import {MatListModule} from "@angular/material/list";
+import {HasPermissionDirective} from "src/app/crew-trip/shared/directive/has-permission.directive";
 
 export const BaseImport = [
   FormsModule,
@@ -111,5 +112,6 @@ export const BaseImport = [
   ConfirmDeleteDialog,
   NgxUpperCaseDirectiveModule,
   SelectMultipleComponent,
-  MatListModule
+  MatListModule,
+  HasPermissionDirective
 ];

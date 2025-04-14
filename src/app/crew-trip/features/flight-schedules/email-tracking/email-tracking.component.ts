@@ -24,12 +24,13 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { categories } from '../../plan/budget-procurement/budget-procurement.model';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
-import { getCategoryName, getEmailDeliveryStatus, getSendMailName } from './email-tracking.model';
+import { getCategoryCode, getCategoryName, getEmailDeliveryStatus, getSendMailName } from './email-tracking.model';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { BaseService } from 'src/app/crew-trip/core/services/base-service';
 import { EmailTrackingService } from 'src/app/crew-trip/core/services/email-tracking.service';
 import { DialogSendMailComponent } from './dialog-send-mail/dialog-send-mail.component';
 import { DialogUploadFileComponent } from './dialog-upload-file/dialog-upload-file.component';
+import moment from 'moment';
 
 @Component({
   selector: 'app-email-tracking',
@@ -68,12 +69,17 @@ export class EmailTrackingComponent extends CommonComponent {
   getEmailDeliveryStatus = getEmailDeliveryStatus;
 
   override displayedColumns: string[] = [
-    'stt', 'marketCode', 'category', 'fcFile', 'ccFile', 'totalFile', 'exportTime', 'emailTime', 'isEmailSent', 'isSendSuccess', 'action'
+    'stt', 'marketCode', 'category', 'dataFile',//'fcFile', 'ccFile',
+    'totalFile', 'exportTime', 'emailTime', 'isEmailSent', 'isSendSuccess', 'action'
   ];
 
   override formGroupSearch = this.formBuilder.group({
-    airport: [],
-    date: []
+    scheType: ['MONTHLY_FLIGHT'],
+    marketType: [''],
+    marketCode: [],
+    isEmailSent: [],
+    isSendSuccess: [],
+    exportTime: []
   })
 
   override ngOnInit(): void {
@@ -92,20 +98,19 @@ export class EmailTrackingComponent extends CommonComponent {
 
   }
 
-  showPopSendMail(data: any) {
-    const attachment = [];
-    if (data.fcFile) attachment.push(data.fcFile);
-    if (data.ccFile) attachment.push(data.ccFile);
 
-    console.log(attachment)
+
+  showPopSendMail(data: any) {
     this.dialog.open(DialogSendMailComponent, {
       minWidth: 900,
       autoFocus: false,
       disableClose: true,
       data: {
+        scheType: this.formGroupSearch.controls.scheType.value,
+        marketType: getCategoryCode(data.marketType),
         marketCode: data.marketCode,
         id: data.id,
-        attachment: attachment.join(';')
+        attachment: data.files
       }
     }).afterClosed().subscribe(res => {
       this.search()
@@ -132,5 +137,10 @@ export class EmailTrackingComponent extends CommonComponent {
     }).afterClosed().subscribe(res => {
       this.search()
     })
+  }
+
+  override async search<T>(body?: any, isNextPage?: boolean, fnSearch?: ((bodySearch: any) => ListResponse<T> | any) | undefined): Promise<any> {
+    const _exportTime = this.formGroupSearch.controls.exportTime.value ? moment(this.formGroupSearch.controls.exportTime.value).format('YYYY-MM-DD') : null
+    super.search({ ...this.formGroupSearch.getRawValue(), exportTime: _exportTime }, isNextPage, fnSearch)
   }
 }

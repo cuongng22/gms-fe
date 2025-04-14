@@ -10,8 +10,10 @@ import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-do
 import moment from "moment";
 import {PaymentMailService} from "src/app/crew-trip/core/services/payment-mail.service";
 import {EmailSupplierService} from "src/app/crew-trip/core/services/email-supplier-service";
-import {Editor, Toolbar} from "ngx-editor";
+import {Editor, toHTML, Toolbar} from "ngx-editor";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
+import {debounceTime} from "rxjs";
+import {InvoiceDocumentEmailTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 
 
 @Component({
@@ -70,6 +72,8 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
+  firstLoad: boolean = true;
+  invoiceDocumentEmailTypeEnum = InvoiceDocumentEmailTypeEnum;
 
   constructor() {
     super();
@@ -86,7 +90,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     });
     this.formGroupDetail = this.fb.group({
       id: [],
-      emailTo: [, [Validators.pattern(PATTERN.EMAIL)]],
+      emailTo: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailCc: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailSubject: [, [Validators.maxLength(250)]],
       emailContent: [, [Validators.required]],
@@ -96,13 +100,23 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
     this.editor = new Editor();
+    this.subscribeMain();
   }
 
   override async ngOnInit() {
-    await Promise.all([this.getDocumentNotSent(this.formGroupSearch.getRawValue()),]).then(() => {
+    try {
+      await Promise.all([this.getDocumentNotSent(this.formGroupSearch.getRawValue()),]).then(() => {
 
-    });
-    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
+      });
+      this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
+    } catch (e) {
+      console.log(e);
+      this.baseService.showError(MESSAGE.ERROR);
+    } finally {
+      setTimeout(() => {
+        this.firstLoad = false;
+      }, 1000);
+    }
   }
 
   async getDocumentNotSent<T>(body?: any, isNextPage?: boolean) {
@@ -132,7 +146,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     }
   }
 
-  sendEmail() {
+  sendEmail(emailSendType: any) {
     if (this.formGroupDetail.getRawValue().emailContent === '<p></p>') {
       this.formGroupDetail.patchValue({emailContent: ''});
     }
@@ -144,7 +158,9 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
 
     let formUpload = new FormData();
     let reqBody = this.formGroupDetail.getRawValue();
+    reqBody.emailSendType = emailSendType;
     delete reqBody.fileAttachs;
+    reqBody.emailContent = toHTML(this.formGroupDetail.getRawValue().emailContent, this.editor.schema);
     formUpload.append('request', JSON.stringify(reqBody));
 
     let reqFile = this.formGroupDetail.getRawValue().fileAttachs;
@@ -165,15 +181,30 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
 
   async showDialogSendEmail(data: any) {
     this.toggleDialogCreate();
-    let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
-    let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_REMINDER', marketClass: data.contractServiceType});
-    let emailTitle = res1.data?.content[0]?.title;
-    let emailContent = res1.data?.content[0]?.content;
-    this.formGroupDetail.patchValue({
-      id: data.id,
-      emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
-      emailSubject: emailTitle ?? '',
-      emailContent: emailContent ?? ''
+    try {
+      let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
+      let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_REMINDER', marketClass: data.contractServiceType});
+      let emailTitle = res1.data?.content[0]?.title;
+      let emailContent = res1.data?.content[0]?.content;
+      this.formGroupDetail.patchValue({
+        emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
+        emailSubject: emailTitle ?? '',
+        emailContent: emailContent ?? ''
+      })
+    } finally {
+      this.formGroupDetail.patchValue({
+        id: data.id,
+      })
+    }
+  }
+
+  async subscribeMain(row?: any) {
+    this.formGroupDetail.controls['emailContent'].valueChanges.pipe(debounceTime(300)).subscribe(async (value) => {
+      if (value && !this.firstLoad) {
+        if (!value?.content[0]?.content) {
+          this.formGroupDetail.patchValue({emailContent: null},);
+        }
+      }
     })
   }
 }

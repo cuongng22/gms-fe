@@ -58,7 +58,8 @@
         </i>
         <span i18n="@@export">Export</span>
       </button>
-      <a class="add-btn" type="button" mat-button [routerLink]="['/plan/est-plan/wet-lease-charter/charter-detail']">
+      <a *appHasPermission="['API_CHARTER_INSERT']" class="add-btn" type="button" mat-button
+        [routerLink]="['/plan/est-plan/wet-lease-charter/charter-detail']">
         <i class="material-symbols-outlined">
           add
         </i>
@@ -226,7 +227,7 @@
             Including VAT
           </th>
           <td mat-cell *matCellDef="let element;" class="text-right">
-            {{ Math.round(element.totalIncVAT)  | number}}
+            {{ Math.round(element.totalIncVAT) | number}}
           </td>
           <td mat-footer-cell *matFooterCellDef class="text-right fw-bold">
             {{ Math.round(dataSource.data | dataCalculateTotal: 'totalIncVAT') | number }}
@@ -238,15 +239,15 @@
           </th>
           <td mat-cell *matCellDef="let element;" class="text-center">
             <div class="action-buttons d-flex justify-content-start">
-              <a mat-button title="View" i18n-title="@@view" class="text-vna"
-                [routerLink]="['/plan/est-plan/wet-lease-charter/charter-detail', element.id]"
+              <a *appHasPermission="['API_CHARTER_DETAILS']" mat-button title="View" i18n-title="@@view"
+                class="text-vna" [routerLink]="['/plan/est-plan/wet-lease-charter/charter-detail', element.id]"
                 [queryParams]="{'view-detail':true}">
                 <i class="material-symbols-outlined " text-primary>
                   visibility
                 </i>
               </a>
               @if (!element.completed) {
-              <a type="button" class="text-warning" mat-button
+              <a *appHasPermission="['API_CHARTER_UPDATE']" type="button" class="text-warning" mat-button
                 [routerLink]="['/plan/est-plan/wet-lease-charter/charter-detail', element.id]"
                 [queryParams]="{'view-detail':false}">
                 <i class="material-symbols-outlined " text-warning title="Edit" i18n-title="@@edit">
@@ -254,8 +255,8 @@
                 </i>
               </a>
 
-              <button type="button" mat-button title="Delete" i18n-title="@@delete"
-                (click)="showConfirmDelete(element.id)">
+              <button *appHasPermission="['API_CHARTER_DELETE']" type="button" mat-button title="Delete"
+                i18n-title="@@delete" (click)="showConfirmDelete(element.id)">
                 <i class="material-symbols-outlined " text-danger>
                   delete
                 </i>

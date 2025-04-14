@@ -17,10 +17,11 @@
             <div class="row">
                 <div class="col">
                     <div class="form-group mb-20" sizeInput="sm">
-                        <mat-label i18n="@@recipient">Recipient</mat-label>
-                        <mat-form-field>
-                            <input trim="blur" type="email" matInput formControlName="email" required>
-                            <mat-error *ngxControlError="formGroupDetail.controls.email; track: 'required'"
+                            <app-selection-suggest [options]="groupMails" label="Recipient" i18n-label="@@Recipient"
+                                attrValue="groupId" attrDisplay="groupName"
+                                formControlName="groupMailId"></app-selection-suggest>
+                            <!-- <input trim="blur" type="email" matInput formControlName="email" required> -->
+                            <!-- <mat-error *ngxControlError="formGroupDetail.controls.email; track: 'required'"
                                 i18n="@@recipientRequired">
                                 Recipient {{MESSAGE.REQUIRED}}
                             </mat-error>
@@ -32,8 +33,7 @@
                                 i18n="@@recipientMaxlength">
                                 Recipient {{ MESSAGE.MAX_LENGTH_INVALID | dataTransformPipe:[Constant.STRING_FORMAT,
                                 250]}}
-                            </mat-error>
-                        </mat-form-field>
+                            </mat-error> -->
                     </div>
                 </div>
             </div>

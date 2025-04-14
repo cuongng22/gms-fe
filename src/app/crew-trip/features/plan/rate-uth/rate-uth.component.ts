@@ -1,8 +1,8 @@
-import {Component, inject, OnInit} from '@angular/core';
-import {FileUploadComponent, FileUploadValidators} from '@iplab/ngx-file-upload';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {MatAnchor, MatButton, MatButtonModule} from '@angular/material/button';
-import {MatAutocomplete, MatAutocompleteModule, MatAutocompleteTrigger} from '@angular/material/autocomplete';
+import { Component, inject, OnInit } from '@angular/core';
+import { FileUploadComponent, FileUploadValidators } from '@iplab/ngx-file-upload';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { MatAnchor, MatButton, MatButtonModule } from '@angular/material/button';
+import { MatAutocomplete, MatAutocompleteModule, MatAutocompleteTrigger } from '@angular/material/autocomplete';
 import {
   MatCard,
   MatCardActions,
@@ -20,21 +20,22 @@ import {
   MatHeaderRowDef,
   MatRow, MatRowDef, MatTable, MatTableModule
 } from '@angular/material/table';
-import {MatFormField, MatFormFieldModule, MatLabel} from '@angular/material/form-field';
-import {MatInput, MatInputModule} from '@angular/material/input';
-import {MatPaginator, MatPaginatorModule} from '@angular/material/paginator';
-import {FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {ExchangeRateService} from 'src/app/crew-trip/core/services/exchange-rate.service';
-import {Observable, of, take} from 'rxjs';
-import {Constant, MESSAGE, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
-import {MatSelectModule} from '@angular/material/select';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {MatNativeDateModule} from '@angular/material/core';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {CommonModule} from '@angular/common';
-import {MatCheckbox} from '@angular/material/checkbox';
-import {HttpStatusCode} from '@angular/common/http';
+import { MatFormField, MatFormFieldModule, MatLabel } from '@angular/material/form-field';
+import { MatInput, MatInputModule } from '@angular/material/input';
+import { MatPaginator, MatPaginatorModule } from '@angular/material/paginator';
+import { FormBuilder, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { ExchangeRateService } from 'src/app/crew-trip/core/services/exchange-rate.service';
+import { Observable, of, take } from 'rxjs';
+import { Constant, MESSAGE, removeNullValues } from 'src/app/crew-trip/shared/utils/constant';
+import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { CommonModule } from '@angular/common';
+import { MatCheckbox } from '@angular/material/checkbox';
+import { HttpStatusCode } from '@angular/common/http';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-rate-uth',
@@ -43,10 +44,11 @@ import {HttpStatusCode} from '@angular/common/http';
     MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatCheckbox, FileUploadComponent
+    MatTableModule, MatPaginatorModule, MatCheckbox, FileUploadComponent, HasPermissionDirective
   ],
   templateUrl: './rate-uth.component.html',
-  styleUrl: './rate-uth.component.scss'
+  styleUrl: './rate-uth.component.scss',
+  providers: [HasPermissionDirective]
 })
 export class RateUthComponent extends CommonComponent implements OnInit {
   override baseService = inject(ExchangeRateService);
@@ -77,12 +79,12 @@ export class RateUthComponent extends CommonComponent implements OnInit {
   }
 
   async initSearchVersion() {
-    await this.baseService.getListVersion({option: 0}).then(res => {
+    await this.baseService.getListVersion({ option: 0 }).then(res => {
       this.listVersion = of(res.data.map((it: any) => it.version));
       if (this.listVersion) {
         this.listVersion.pipe(take(1)).subscribe(versions => {
           const firstVersion = versions[0];
-          this.formGroupSearch.patchValue({version: firstVersion});
+          this.formGroupSearch.patchValue({ version: firstVersion });
         });
       }
     });
@@ -94,7 +96,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
-      this.formGroupSearch.patchValue({export: false});
+      this.formGroupSearch.patchValue({ export: false });
       const res = await this.baseService.uthSearch({
         page: this.pageIndex,
         size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
@@ -127,7 +129,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
       if (this.fileUpload.valid && this.fileUpload.value) {
         const form = new FormData();
         const file: File = this.fileUpload.value[0];
-        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], {type: file.type}));
+        form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
         await this.spinner.show();
         const res = await this.baseService.uploadFileUTH(form);
         this.uploadFileError = res;
@@ -172,5 +174,17 @@ export class RateUthComponent extends CommonComponent implements OnInit {
     this.uploadFileError = {};
     this.fileUpload.setValue([]);
     this.fileUpload.reset();
+  }
+  
+  async sync() {
+    try {
+      await this.spinner.show();
+      await this.baseService.uthSync();
+      this.showSuccess(MESSAGE.SYNC_SUCCESS)
+    } catch (e: any) {
+      this.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR)
+    } finally {
+      this.spinner.hide()
+    }
   }
 }

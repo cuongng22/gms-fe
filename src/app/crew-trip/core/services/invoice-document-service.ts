@@ -120,7 +120,7 @@ export class InvoiceDocumentService extends BaseService {
     return firstValueFrom(this.http.get<any>(url, {params}));
   }
 
-  async sendEmail(body: any): Promise<any> {
+  async sendEmail(body: FormData): Promise<any> {
     const url = `${this.api}/invoice/common/send-email`;
     const headers = {
       headers: new HttpHeaders()
