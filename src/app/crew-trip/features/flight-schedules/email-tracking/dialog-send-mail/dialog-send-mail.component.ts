@@ -33,6 +33,8 @@ import { DetailResponse } from 'src/app/crew-trip/shared/models/common.model';
 import { Constant, MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
 import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.component';
 import { DialogOverviewExampleDialog } from 'src/app/ui-elements/dialog/basic-dialog/basic-dialog.component';
+import { getFileName } from '../email-tracking.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-dialog-send-mail',
@@ -97,9 +99,13 @@ export class DialogSendMailComponent implements OnInit {
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
+
+  getFileName = getFileName;
+  environment = environment;
   async ngOnInit() {
     this.editor = new Editor();
-    this.formGroupDetail.patchValue(this.data);
+    
+    this.formGroupDetail.patchValue({ ...this.data });
     await this.spinner.show();
     Promise.all([
       this.groupMailService.getEmails(this.data.marketCode).then((res: DetailResponse<any>) => {
