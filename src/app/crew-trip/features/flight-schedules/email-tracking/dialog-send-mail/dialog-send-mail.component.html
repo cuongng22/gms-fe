@@ -87,7 +87,7 @@
                         <mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Cutest dog breeds">
                             @for (item of fileAttachment; track $index) {
                             <mat-chip-row (removed)="removeAttachment(item)">
-                                <span class="attach-file">{{item}}</span>
+                                <span class="attach-file">{{getFileName(item)}}</span>
                                 <button matChipRemove>
                                     <i class="material-symbols-outlined">
                                         close
