@@ -24,130 +24,132 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { categories } from '../../plan/budget-procurement/budget-procurement.model';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
-import { getCategoryCode, getCategoryName, getEmailDeliveryStatus, getSendMailName } from './email-tracking.model';
+import { getCategoryCode, getCategoryName, getEmailDeliveryStatus, getFileName, getSendMailName } from './email-tracking.model';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { BaseService } from 'src/app/crew-trip/core/services/base-service';
 import { EmailTrackingService } from 'src/app/crew-trip/core/services/email-tracking.service';
 import { DialogSendMailComponent } from './dialog-send-mail/dialog-send-mail.component';
 import { DialogUploadFileComponent } from './dialog-upload-file/dialog-upload-file.component';
 import moment from 'moment';
+import { environment } from 'src/environments/environment';
 
 @Component({
-  selector: 'app-email-tracking',
-  standalone: true,
-  imports: [
-    MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
-    MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, FileUploadModule, NgxTrimDirectiveModule,
-    SelectionComponent, SelectionSuggestComponent, DatepickerComponent, DataTransformPipe
-  ],
-  templateUrl: './email-tracking.component.html',
-  styleUrl: './email-tracking.component.scss',
-  providers: [DataTransformPipe]
+	selector: 'app-email-tracking',
+	standalone: true,
+	imports: [
+		MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+		MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
+		MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
+		MatTableModule, MatPaginatorModule, MatChipsModule, RouterLink, RouterModule, FileUploadModule, NgxTrimDirectiveModule,
+		SelectionComponent, SelectionSuggestComponent, DatepickerComponent, DataTransformPipe
+	],
+	templateUrl: './email-tracking.component.html',
+	styleUrl: './email-tracking.component.scss',
+	providers: [DataTransformPipe]
 })
 export class EmailTrackingComponent extends CommonComponent {
-  override baseService: BaseService = inject(EmailTrackingService);
-  flightMarketService = inject(FlightMarketService)
-  dataTransformPipe = inject(DataTransformPipe);
-  flightScheduleTypes = [
-    { code: 'ESTIMATED_FLIGHT', value: $localize`:@@estimatedFlightSchedule:Estimated Flight Schedule` },
-    { code: 'MONTHLY_FLIGHT', value: $localize`:@@monthlyFlightSchedule:Monthly Flight Schedule` }
-  ];
-  categorys = categories;
-  airports: any[] = [];
-  emailSendingStatus = [
-    { code: false, value: $localize`:@@notSent:Not sent` },
-    { code: true, value: $localize`:@@sent:Sent` }
-  ];
-  emailDeliveryStatus = [
-    { code: true, value: $localize`:@@successful:Successful` },
-    { code: false, value: $localize`:@@failed:Failed` }
-  ]
-  getCategoryName = getCategoryName;
-  getSendMailName = getSendMailName;
-  getEmailDeliveryStatus = getEmailDeliveryStatus;
+	override baseService: BaseService = inject(EmailTrackingService);
+	flightMarketService = inject(FlightMarketService)
+	dataTransformPipe = inject(DataTransformPipe);
+	flightScheduleTypes = [
+		{ code: 'ESTIMATED_FLIGHT', value: $localize`:@@estimatedFlightSchedule:Estimated Flight Schedule` },
+		{ code: 'MONTHLY_FLIGHT', value: $localize`:@@monthlyFlightSchedule:Monthly Flight Schedule` }
+	];
+	categorys = categories;
+	airports: any[] = [];
+	emailSendingStatus = [
+		{ code: false, value: $localize`:@@notSent:Not sent` },
+		{ code: true, value: $localize`:@@sent:Sent` }
+	];
+	emailDeliveryStatus = [
+		{ code: true, value: $localize`:@@successful:Successful` },
+		{ code: false, value: $localize`:@@failed:Failed` }
+	]
+	getCategoryName = getCategoryName;
+	getSendMailName = getSendMailName;
+	getEmailDeliveryStatus = getEmailDeliveryStatus;
 
-  override displayedColumns: string[] = [
-    'stt', 'marketCode', 'category', 'dataFile',//'fcFile', 'ccFile',
-    'totalFile', 'exportTime', 'emailTime', 'isEmailSent', 'isSendSuccess', 'action'
-  ];
+	override displayedColumns: string[] = [
+		'stt', 'marketCode', 'category', 'dataFile',//'fcFile', 'ccFile',
+		'totalFile', 'exportTime', 'emailTime', 'isEmailSent', 'isSendSuccess', 'action'
+	];
 
-  override formGroupSearch = this.formBuilder.group({
-    scheType: ['MONTHLY_FLIGHT'],
-    marketType: [''],
-    marketCode: [],
-    isEmailSent: [],
-    isSendSuccess: [],
-    exportTime: []
-  })
+	override formGroupSearch = this.formBuilder.group({
+		scheType: ['MONTHLY_FLIGHT'],
+		marketType: [''],
+		marketCode: [],
+		isEmailSent: [],
+		isSendSuccess: [],
+		exportTime: []
+	})
 
-  override ngOnInit(): void {
-    Promise.all([
-      this.flightMarketService.search<any>({ option: 0, page: 0, size: 999999 }).then((res: ListResponse<any>) => {
-        this.airports = res.data.content.map((item: any) => {
-          return {
-            marketCode: item.marketCode,
-            marketName: item.marketName
-          }
-        });
-      }),
-      this.search(),
-    ]).then(() => {
-    });
+	getFileName = getFileName;
 
-  }
+	override ngOnInit(): void {
+		Promise.all([
+			this.flightMarketService.search<any>({ option: 0, page: 0, size: 999999 }).then((res: ListResponse<any>) => {
+				this.airports = res.data.content.map((item: any) => {
+					return {
+						marketCode: item.marketCode,
+						marketName: item.marketName
+					}
+				});
+			}),
+			this.search(),
+		]).then(() => {
+		});
+
+	}
 
 
 
-  showPopSendMail(data: any) {
-    this.dialog.open(DialogSendMailComponent, {
-      minWidth: 900,
-      autoFocus: false,
-      disableClose: true,
-      data: {
-        scheType: this.formGroupSearch.controls.scheType.value,
-        marketType: getCategoryCode(data.marketType),
-        marketCode: data.marketCode,
-        id: data.id,
-        attachment: data.files
-      }
-    }).afterClosed().subscribe(res => {
-      this.search()
-    })
-  }
+	showPopSendMail(data: any) {
+		if (data.files && data.files.length > 0) {
+			data.files = data.files.map((element: string) => environment.baseUrl + '/' + element);
+		}
 
-  getArrayFile(file: string) {
-    if (file) {
-      const arrFile = file?.split(';')
-      return arrFile;
-    }
-    return [];
-  }
+		this.dialog.open(DialogSendMailComponent, {
+			minWidth: 900,
+			autoFocus: false,
+			disableClose: true,
+			data: {
+				scheType: this.formGroupSearch.controls.scheType.value,
+				marketType: getCategoryCode(data.marketType),
+				marketCode: data.marketCode,
+				id: data.id,
+				attachment: data.files
+			}
+		}).afterClosed().subscribe(res => {
+			this.search()
+		})
+	}
 
-  showPopUpload(data: any) {
-    this.dialog.open(DialogUploadFileComponent, {
-      minWidth: 900,
-      autoFocus: false,
-      disableClose: true,
-      data: {
-        marketCode: data.marketCode,
-        id: data.id,
-      }
-    }).afterClosed().subscribe(res => {
-      this.search()
-    })
-  }
+	getArrayFile(file: string) {
+		if (file) {
+			const arrFile = file?.split(';')
+			return arrFile;
+		}
+		return [];
+	}
 
-  override async search<T>(body?: any, isNextPage?: boolean, fnSearch?: ((bodySearch: any) => ListResponse<T> | any) | undefined): Promise<any> {
-    const _exportTime = this.formGroupSearch.controls.exportTime.value ? moment(this.formGroupSearch.controls.exportTime.value).format('YYYY-MM-DD') : null
-    super.search({ ...this.formGroupSearch.getRawValue(), exportTime: _exportTime }, isNextPage, fnSearch)
-  }
+	showPopUpload(data: any) {
+		this.dialog.open(DialogUploadFileComponent, {
+			minWidth: 900,
+			autoFocus: false,
+			disableClose: true,
+			data: {
+				marketCode: data.marketCode,
+				id: data.id,
+			}
+		}).afterClosed().subscribe(res => {
+			this.search()
+		})
+	}
 
-  getFileName(filePath: string) {
-    if (filePath) {
-      return filePath.split('/').pop();
-    }
-    return null
-  }
+	override async search<T>(body?: any, isNextPage?: boolean, fnSearch?: ((bodySearch: any) => ListResponse<T> | any) | undefined): Promise<any> {
+		const _exportTime = this.formGroupSearch.controls.exportTime.value ? moment(this.formGroupSearch.controls.exportTime.value).format('YYYY-MM-DD') : null
+		super.search({ ...this.formGroupSearch.getRawValue(), exportTime: _exportTime }, isNextPage, fnSearch)
+	}
+
+
 }

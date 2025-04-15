@@ -32,3 +32,10 @@ export function getEmailDeliveryStatus(isSendSuccess: boolean) {
         return $localize`:@@failed:Failed`;
     }
 }
+
+export function getFileName(filePath: string) {
+    if (filePath) {
+        return filePath.split('/').pop();
+    }
+    return null
+}
