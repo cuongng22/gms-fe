@@ -555,3 +555,13 @@
     </mat-card>
   </div>
 </div>
+<app-confirm-dialog
+    (closeDialog)="closeConfirmDelete()"
+    (confirm)="delete()"
+    [icon]="'error'"
+    [mainText]="'Are you sure you want to delete?'"
+    [showDialog]="showDialogDelete"
+    [subText]="'You will not be able to recover the deleted data!'"
+    i18n-mainText
+    i18n-subText>
+</app-confirm-dialog>
