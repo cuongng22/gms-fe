@@ -57,7 +57,7 @@ export class EstimatedFlightScheduleComponent extends CommonComponent {
   override async ngOnInit() {
     super.ngOnInit();
 
-    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'numberOfCrew','action'];
+    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'numberOfCrew', 'action'];
   }
   onSearch(event: any) {
     super.search(event);
@@ -82,6 +82,19 @@ export class EstimatedFlightScheduleComponent extends CommonComponent {
         ...element
       }
     })
+  }
+
+  async syncEstimate() {
+    try {
+      await this.spinner.show();
+      this.baseService.syncEstimate();
+    } catch (e: any) {
+      this.showError(
+        e.error?.data ?? e.error?.error ?? e.error ?? this.MESSAGE.ERROR,
+      );
+    } finally {
+      this.spinner.hide()
+    }
   }
 
 }

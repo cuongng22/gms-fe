@@ -94,4 +94,13 @@ export class DailyFlightSchedulesService extends BaseService {
     const url = `${this.api}/${this.path}/update-non-overnight`;
     return firstValueFrom(this.http.put<T>(url, body, this.httpOptions));
   }
+  syncEstimate(): Promise<any> {
+    const url = `${this.api}/${this.path}/sync-estimate`;
+    return firstValueFrom(this.http.get<any>(url));
+  }
+
+  syncMonthly(): Promise<any> {
+    const url = `${this.api}/${this.path}/sync-monthly`;
+    return firstValueFrom(this.http.get<any>(url));
+  }
 }

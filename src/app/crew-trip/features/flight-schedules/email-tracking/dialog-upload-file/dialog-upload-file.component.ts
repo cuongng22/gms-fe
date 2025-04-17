@@ -58,6 +58,7 @@ export class DialogUploadFileComponent extends CommonComponent implements OnInit
     marketCode: ['', [Validators.required, Validators.maxLength(250)]],
     fileType: ['', [Validators.required, Validators.maxLength(500)]],
     file: new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]),
+    scheType: ['']
   });
 
   override ngOnInit(): void {
@@ -79,7 +80,7 @@ export class DialogUploadFileComponent extends CommonComponent implements OnInit
           const file: File = filesControl[0];
           form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
           form.append('fileType', this.formGroupDetail.controls.fileType.value ?? '');
-          form.append('id', this.formGroupDetail.controls.id.value ?? '')
+          form.append('scheType', this.formGroupDetail.controls.scheType.value ?? '')
           await this.spinner.show();
           const res = await this.baseService.uploadFile(form);
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
