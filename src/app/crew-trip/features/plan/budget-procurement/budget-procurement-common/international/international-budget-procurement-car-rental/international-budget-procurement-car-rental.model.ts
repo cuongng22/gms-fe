@@ -60,12 +60,13 @@ export const formula: any = {
     // },
     //Thành tiền (ngoại tệ) - Bao gồm VAT	"= (Số lượt xe * đơn giá có vat + extra transfer * đơn giá Extra) 
     totalAmountForeignVat: {
-        formula: '(ctz(data.numberVehicles) * ctz(data.unitPriceVat) + ctz(data.extraTransfer) * ctz(data.unitPriceExtra)) ',
+        formula: '(ctz(data.numberVehicles) + ctz(data.extraTransfer)) * ctz(data.unitPriceVat)',
+        formulaProcurement: '(ctz(data.numberVehicles) * ctz(data.unitPriceVat) + ctz(data.extraTransfer) * ctz(data.unitPriceExtra)) ',
     },
     //Thành tiền (ngoại tệ) - Chưa bao gồm VAT	"= (Số lượt xe + extra transfer) * đơn giá trước VAT
     totalAmountForeign: {
-        // formula: '(ctz(data.totalAmountForeignVat) / (1 + (ctz(data.taxRate)/100)))',
-        formula: '(ctz(data.numberVehicles) * ctz(data.unitPrice) + ctz(data.extraTransfer) * ctz(data.unitPriceExtraNoVat)) ',
+        formula: '(ctz(data.numberVehicles) + ctz(data.extraTransfer)) * ctz(data.unitPrice)',
+        formulaProcurement: '(ctz(data.numberVehicles) * ctz(data.unitPrice) + ctz(data.extraTransfer) * ctz(data.unitPriceExtraNoVat)) ',
     },
     //Thành tiền VND (Chưa bao gồm VAT) = Thành tiền ngoại tệ chưa bao gồm VAT * tỷ giá theo từng tháng
     totalAmount: {

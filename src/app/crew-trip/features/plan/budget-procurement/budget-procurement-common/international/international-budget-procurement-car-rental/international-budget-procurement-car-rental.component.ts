@@ -270,7 +270,7 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
-    if(this.type() === PlanCategoryEnum.PROCUREMENT){
+    if (this.type() === PlanCategoryEnum.PROCUREMENT) {
       data.unitPrice = Number(data.unitPriceVat) / (1 + (Number(this.ctz(data.taxRate)) / 100))
       data.unitPriceExtraNoVat = Number(data.unitPriceExtra) / (1 + (Number(this.ctz(data.taxRate)) / 100))
     }

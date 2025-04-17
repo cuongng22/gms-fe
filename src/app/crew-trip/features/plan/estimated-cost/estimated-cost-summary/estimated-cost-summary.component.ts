@@ -23,9 +23,9 @@ export class EstimatedCostSummaryComponent extends CommonComponent implements On
   // id của kế hoạch
   id = input<number>();
 
-  @ViewChild('budgetProcurementSummaryListAll') summaryAll: BudgetProcurementSummaryListComponent;
-  @ViewChild('budgetProcurementSummaryListInternational') summaryInternational: BudgetProcurementSummaryListComponent;
-  @ViewChild('budgetProcurementSummaryListDomestic') summaryDomestic: BudgetProcurementSummaryListComponent;
+  @ViewChild('estimatedCostSummaryListAll') summaryAll: EstimatedCostSummaryListComponent;
+  @ViewChild('estimatedCostSummaryListInternational') summaryInternational: EstimatedCostSummaryListComponent;
+  @ViewChild('estimatedCostSummaryListDomestic') summaryDomestic: EstimatedCostSummaryListComponent;
 
   CategoriesEnum = CategoriesEnum;
   searchSummary(data: any, type: string) {
