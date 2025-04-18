@@ -1,19 +1,19 @@
 // select-options.ts
 export const SelectOptions = {
   GENDER: [
-    {value: null, display: 'Choose gender'},
-    {value: 0, display: 'Female'},
-    {value: 1, display: 'Male'},
+    { value: null, display: 'Choose gender' },
+    { value: 0, display: 'Female' },
+    { value: 1, display: 'Male' },
   ],
   STATUS: [
-    {value: null, display: 'Choose status'},
-    {value: 'active', display: 'Active'},
-    {value: 'inactive', display: 'Inactive'},
+    { value: null, display: 'Choose status' },
+    { value: 'active', display: 'Active' },
+    { value: 'inactive', display: 'Inactive' },
   ],
   EMAIL_TYPE: [
-    {value: null, display: '-- All email type --'},
-    {value: 'active', display: 'Estimated schedule email'},
-    {value: 'inactive', display: 'Changed schedule email'},
+    { value: null, display: '-- All email type --' },
+    { value: 'active', display: 'Estimated schedule email' },
+    { value: 'inactive', display: 'Changed schedule email' },
   ],
   OTHER_CREW_TYPE: [
     {
@@ -25,12 +25,12 @@ export const SelectOptions = {
     }
   ],
   FLIGHT_SCHEDULE_TYPE: [
-    {value: '1', display: 'Scheduled Flights'},
-    {value: '2', display: 'Monthly Flight Schedule'},
+    { value: '1', display: 'Scheduled Flights' },
+    { value: '2', display: 'Monthly Flight Schedule' },
   ],
   SERVICE_APPLIED: [
-    {value: 'FC', display: 'Pilot'},
-    {value: 'CC', display: 'Attendant'},
+    { value: 'FC', display: 'Pilot' },
+    { value: 'CC', display: 'Attendant' },
   ],
   NOTI_CONFIG_TYPE: [
     {
@@ -57,6 +57,8 @@ export const SelectOptions = {
       label: 'Warning: Supplier has not yet submitted the invoice', code: 'SUPPLIER_NOT_SUBMITTED_INVOICE'
     }, {
       label: 'Notification: Cost status compared to the planned budget', code: 'COST_PLAN_STATUS'
+    }, {
+      label: 'Notification: Estimated cost completed', code: 'ESTIMATED_COMPLETE'
     }
   ],
   NOTI_SETTING_VALUE_TYPE: [
@@ -95,7 +97,12 @@ export const SelectOptions = {
     }
   ],
   TRANSPORT_TYPE: [
-    {value: 'TO_HOTEL', display: 'To hotel'},
-    {value: 'TO_AIRPORT', display: 'To airport'},
+    { value: 'TO_HOTEL', display: 'To hotel' },
+    { value: 'TO_AIRPORT', display: 'To airport' },
   ],
+
+  NOTI_CHANNEL: [
+    { value: 'EMAIL', display: $localize`:@@email:Email` },
+    { value: 'NOTIFICATION', display: $localize`:@@notification:Notification` },
+  ]
 };

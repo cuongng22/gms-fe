@@ -91,9 +91,9 @@ export class DialogExportSchedulingDataComponent extends CommonComponent {
           endDate: this.dataTransformPipe.transform(this.formGroupDetail.controls.exportEndDate.value, [this.Constant.DATE, this.Constant.LOCAL_DATE_FORMAT]),
           airportCode: this.formGroupDetail.controls.airport.value
         });
-        this.downloadFile(res.blob, res.fileName ?? 'export_scheduling_hotel_transportation.jxls');
+        // this.downloadFile(res.blob, res.fileName ?? 'export_scheduling_hotel_transportation.jxls');
       }
-
+      this.showSuccess(this.MESSAGE.EXPORT_SUCCESS)
     } catch (e: any) {
       this.baseService.showError((e.error?.error?.code) ?? this.MESSAGE.ERROR);
     } finally {

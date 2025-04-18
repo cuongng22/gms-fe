@@ -255,19 +255,20 @@ export class CommonComponent
     }
   }
 
-  async delete() {
+  async delete(messageSuccess?: string) {
     try {
       await this.spinner.show();
       const res = await this.baseService.delete(
         this.formGroupDetail.getRawValue().id,
       );
-      this.baseService.showSuccess(MESSAGE.DELETE_SUCCESS);
+      this.baseService.showSuccess(messageSuccess ?? MESSAGE.DELETE_SUCCESS);
       await this.search();
       return res;
     } catch (e: any) {
       this.baseService.showError(
         e.error?.error ?? e.error?.error?.code ?? MESSAGE.ERROR,
       );
+      throw e;
     } finally {
       await this.spinner.hide();
       await this.closeConfirmDelete();

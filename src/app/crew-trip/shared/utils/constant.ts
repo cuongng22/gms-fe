@@ -67,6 +67,7 @@ export class MESSAGE {
   static CAR_COMPANY_CANNOT_BE_DELETED = $localize`:@@carCompanyCannotBeDeleted:Car company cannot be deleted. It is being used in a contract.`;
 
   static SYNC_SUCCESS = $localize`:@@synchronizeSuccessfully:Synchronize successfully`;
+  static EXPORT_SUCCESS = $localize`:@@exportSuccessfully:Export successfully`;
 }
 
 export class LOCALE {
