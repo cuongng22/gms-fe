@@ -24,8 +24,7 @@
                 <div class="col mb-2">
                     <app-selection [options]="flightScheduleTypes" label="Flight Schedule Type"
                         formControlName="scheType" i18n-label="@@flightScheduleType" attrValue="code"
-                        attrDisplay="value"
-                        i18n-labelFirst="@@flightScheduleType" />
+                        attrDisplay="value" i18n-labelFirst="@@flightScheduleType" />
                 </div>
 
                 <div class="col mb-2">
@@ -49,7 +48,8 @@
                         attrDisplay="value" [isFirstBlank]="true" />
                 </div>
                 <div class="col mb-2">
-                    <app-datepicker label="File export time" i18n-label="@@fileExportTime" formControlName="exportTime" />
+                    <app-datepicker label="File export time" i18n-label="@@fileExportTime"
+                        formControlName="exportTime" />
                 </div>
                 <div class="col d-flex  justify-content-xl-center justify-content-lg-start">
                     <mat-card-header class="mb-0 search">
@@ -193,12 +193,15 @@
                     </th>
                     <td mat-cell *matCellDef="let element;let i = dataIndex">
                         <div class="action-buttons d-flex justify-content-end">
+                            @if(element.isEmailSent){
                             <button mat-button title="View" i18n-title="@@view" class="text-vna"
                                 (click)="showPopSendMail(element)">
                                 <i class="material-symbols-outlined " text-primary>
                                     mail
                                 </i>
                             </button>
+                            }
+
                             @if(!element.isSendSuccess){
                             <button mat-button title="View" i18n-title="@@view" class="text-vna"
                                 (click)="showPopUpload(element)">

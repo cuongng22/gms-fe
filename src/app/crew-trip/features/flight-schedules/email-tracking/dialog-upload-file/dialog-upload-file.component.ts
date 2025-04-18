@@ -80,7 +80,8 @@ export class DialogUploadFileComponent extends CommonComponent implements OnInit
           const file: File = filesControl[0];
           form.append('file', new Blob([new Uint8Array(await file.arrayBuffer())], { type: file.type }));
           form.append('fileType', this.formGroupDetail.controls.fileType.value ?? '');
-          form.append('scheType', this.formGroupDetail.controls.scheType.value ?? '')
+          form.append('scheType', this.formGroupDetail.controls.scheType.value ?? '');
+          form.append('marketCode', this.formGroupDetail.controls.marketCode.value ?? '');
           await this.spinner.show();
           const res = await this.baseService.uploadFile(form);
           this.baseService.showSuccess(this.MESSAGE.UPLOAD_SUCCESS);
