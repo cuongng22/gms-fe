@@ -3,8 +3,6 @@ import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
-import {HotelService} from 'src/app/crew-trip/core/services/hotel-service';
-import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
 import {ListResponse} from 'src/app/crew-trip/shared/models/common.model';
 import {HttpStatusCode} from '@angular/common/http';
 import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
@@ -398,7 +396,9 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
     let reqBody = this.formGroupDetail.getRawValue();
     reqBody.emailSendType = emailSendType;
     delete reqBody.fileAttachs;
-    reqBody.emailContent = toHTML(this.formGroupDetail.getRawValue().emailContent, this.editor.schema);
+    if (typeof reqBody.emailContent === 'object') {
+      reqBody.emailContent = toHTML(this.formGroupDetail.getRawValue().emailContent, this.editor.schema);
+    }
     formUpload.append('request', JSON.stringify(reqBody));
 
     let reqFile = this.formGroupDetail.getRawValue().fileAttachs;
@@ -449,7 +449,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
   async subscribeMain() {
     this.formGroupDetail.controls['emailContent'].valueChanges.pipe(debounceTime(300)).subscribe(async (value) => {
       if (value && !this.firstLoad) {
-        if (!value?.content[0]?.content) {
+        if (value?.content && !value?.content[0]?.content) {
           this.formGroupDetail.patchValue({emailContent: null},);
         }
       }

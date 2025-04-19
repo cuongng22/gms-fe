@@ -6,6 +6,7 @@ import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market
 import {HttpStatusCode} from '@angular/common/http';
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentEmailTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import moment from "moment";
 import {PaymentMailService} from "src/app/crew-trip/core/services/payment-mail.service";
@@ -13,7 +14,6 @@ import {EmailSupplierService} from "src/app/crew-trip/core/services/email-suppli
 import {Editor, toHTML, Toolbar} from "ngx-editor";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
 import {debounceTime} from "rxjs";
-import {InvoiceDocumentEmailTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 
 
 @Component({
@@ -160,7 +160,9 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     let reqBody = this.formGroupDetail.getRawValue();
     reqBody.emailSendType = emailSendType;
     delete reqBody.fileAttachs;
-    reqBody.emailContent = toHTML(this.formGroupDetail.getRawValue().emailContent, this.editor.schema);
+    if (typeof reqBody.emailContent === 'object') {
+      reqBody.emailContent = toHTML(this.formGroupDetail.getRawValue().emailContent, this.editor.schema);
+    }
     formUpload.append('request', JSON.stringify(reqBody));
 
     let reqFile = this.formGroupDetail.getRawValue().fileAttachs;
@@ -201,7 +203,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
   async subscribeMain(row?: any) {
     this.formGroupDetail.controls['emailContent'].valueChanges.pipe(debounceTime(300)).subscribe(async (value) => {
       if (value && !this.firstLoad) {
-        if (!value?.content[0]?.content) {
+        if (value?.content && !value?.content[0]?.content) {
           this.formGroupDetail.patchValue({emailContent: null},);
         }
       }
