@@ -250,8 +250,10 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
         if (res.code === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;
           this.totalElement = res.data.totalElements;
+          if(this.dataSource.data[0]) {
+            this.showDocumentDtl(this.dataSource.data[0]);
+          }
         }
-        this.showDocumentDtl(this.dataSource.data[0]);
         return res;
       }
     } catch (e: any) {
