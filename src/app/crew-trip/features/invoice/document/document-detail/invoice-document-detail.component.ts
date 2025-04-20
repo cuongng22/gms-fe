@@ -265,6 +265,11 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     this.goBack();
   }
 
+  async doSave() {
+    await this.save();
+    this.goBack();
+  }
+
   toggleDialogFinish() {
     this.formGroupDetail.markAllAsTouched();
     if (this.formGroupDetail.invalid) {
