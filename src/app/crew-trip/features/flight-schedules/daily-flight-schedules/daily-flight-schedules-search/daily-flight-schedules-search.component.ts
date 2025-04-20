@@ -46,7 +46,7 @@ export class DailyFlightSchedulesSearchComponent implements OnInit {
   });
 
   async ngOnInit() {
-    const airportResponse = await this.flightMarketService.search<any>({ option: 0, page: 0, size: 999999, status: FlightMarketStatusEnum.OPERATIONAL });
+    const airportResponse = await this.flightMarketService.search<any>({ option: 0, page: 0, size: 999999, limit: 999999, status: FlightMarketStatusEnum.OPERATIONAL });
     this.airports = [...airportResponse.data.content.map((item: any) => {
       return {
         marketCode: item.marketCode,

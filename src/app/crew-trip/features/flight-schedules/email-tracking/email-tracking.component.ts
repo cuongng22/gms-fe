@@ -137,6 +137,7 @@ export class EmailTrackingComponent extends CommonComponent {
 			disableClose: true,
 			data: {
 				marketCode: data.marketCode,
+				scheType: this.formGroupSearch.controls.scheType.value,
 				id: data.id,
 			}
 		}).afterClosed().subscribe(res => {

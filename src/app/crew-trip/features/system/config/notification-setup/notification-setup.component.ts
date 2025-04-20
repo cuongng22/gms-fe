@@ -3,11 +3,12 @@ import { HttpStatusCode } from '@angular/common/http';
 import {
 	Component,
 	ElementRef,
+	Inject,
 	inject,
 	OnInit,
 	ViewChild,
 } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
 	MatAutocompleteModule,
 	MatAutocompleteTrigger,
@@ -17,14 +18,15 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatDialog } from '@angular/material/dialog';
-import { MatFormFieldModule } from '@angular/material/form-field';
+import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
-import { NgxEditorModule, Validators } from 'ngx-editor';
+import { DigitOnlyDirective, DigitOnlyModule } from '@uiowa/digit-only';
+import { NgxEditorModule } from 'ngx-editor';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
@@ -34,6 +36,10 @@ import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe'
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { SelectOptions } from 'src/app/crew-trip/shared/select-option';
+import { FlightMarketStatusEnum } from '../../../category/flight-market/flight-market.model';
+import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
+import { NgxControlError } from 'ngxtension/control-error';
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 
 @Component({
 	selector: 'app-notification-setup',
@@ -57,7 +63,8 @@ import { SelectOptions } from 'src/app/crew-trip/shared/select-option';
 		RouterModule,
 		MatCheckbox,
 		NgxEditorModule,
-		NgxTrimDirectiveModule, HasPermissionDirective
+		NgxTrimDirectiveModule, HasPermissionDirective, DigitOnlyModule, SelectionSuggestComponent, NgxControlError,
+		SelectionComponent
 	],
 	templateUrl: './notification-setup.component.html',
 	styleUrl: './notification-setup.component.scss',
@@ -68,15 +75,12 @@ export class NotificationSetupComponent
 	implements OnInit {
 	override baseService = inject(NotificationSetupService);
 	flightMarketService = inject(FlightMarketService);
-
 	notiSetupType = SelectOptions.NOTI_SETUP_TYPE;
-	notiSettingValueType = SelectOptions.NOTI_SETTING_VALUE_TYPE;
-	notiRegularType = SelectOptions.NOTI_REGULAR_TYPE;
+
 	listAirrportCode = [];
 	filteredOptionsMarket: any[];
-	@ViewChild('airportCode') airportCode: ElementRef<HTMLInputElement>;
-	@ViewChild(MatAutocompleteTrigger)
-	autocompleteTrigger!: MatAutocompleteTrigger;
+	// @ViewChild('airportCode') airportCode: ElementRef<HTMLInputElement>;
+	@ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
 
 	_displayedColumns: {
 		label: string;
@@ -95,20 +99,12 @@ export class NotificationSetupComponent
 			{ label: $localize`:@@status:Status`, value: 'active' },
 		];
 
-	constructor(public override dialog: MatDialog) {
+	override formGroupDetail = this.formBuilder.group({
+		id: []
+	})
+
+	constructor() {
 		super();
-		this.formGroupDetail = this.formBuilder.group({
-			id: [],
-			type: ['', Validators.required],
-			notiSettingValueType: [''],
-			notiSetting: [''],
-			regularType: [''],
-			regularNoti: [''],
-			airportCode: [''],
-			note: [''],
-			active: [true],
-		});
-		this.formGroupDetailInit = { ...this.formGroupDetail.value };
 	}
 
 	override formGroupSearch = this.formBuilder.group({
@@ -123,43 +119,139 @@ export class NotificationSetupComponent
 			...this._displayedColumns.map((s) => s.value),
 			'action',
 		];
-		await Promise.all([this.search(), this.getListAirportCode()]).then(
+		await Promise.all([this.search()]).then(
 			() => { },
 		);
 	}
 
-	async getListAirportCode() {
-		const res = await this.flightMarketService.search({
-			page: 0,
-			limit: 99999,
-			option: 0,
+
+
+	override async showDialogDetail(id?: any, type?: string) {
+		const dialogDetailRef = this.dialog.open(DialogNotificationSetupDetail, {
+			data: { id: id },
+			minWidth: 700
 		});
-		this.listAirrportCode = res.data.content.map(
-			(item: any) => item.marketCode,
-		);
+		dialogDetailRef.afterClosed().subscribe(async (res) => {
+			await this.search();
+		});
 	}
 
-	filterMarket(): void {
-		const filterValue = this.airportCode.nativeElement.value.toLowerCase();
-		if (!filterValue) {
-			this.filteredOptionsMarket = this.listAirrportCode;
+	override async delete() {
+		try {
+			await super.delete(this.MESSAGE.UPDATE_SUCCESS);
+		} catch (error) {
+			console.error(error);
 		}
-		this.filteredOptionsMarket = this.listAirrportCode.filter((market: any) => {
-			return market.toLowerCase().includes(filterValue);
-		});
 	}
 
-	onFocusMarket(): void {
-		this.filteredOptionsMarket = this.listAirrportCode;
-		this.autocompleteTrigger.openPanel();
+	// {
+	// 	label: 'No. of day', code: 'NUMBER_OF_DAY'
+	//   }, {
+	// 	label: 'No. of year', code: 'NUMBER_OF_YEAR'
+	//   }, {
+	// 	label: 'Per.(%)', code: 'PERCENT'
+	//   }
+	getNotiSettingUnit(value: any) {
+		if (value === 'No. of day') {
+			return 'Ngày';
+		} else if (value === 'No. of year') {
+			return 'Năm';
+		} else if (value === 'Per.(%)') {
+			return '%'
+		}
+		return ''
 	}
 
+	// NOTI_REGULAR_TYPE: [
+	// 	{
+	// 	  label: 'Day in month', code: 'DAY_IN_MONTH'
+	// 	}, {
+	// 	  label: 'Month', code: 'MONTH'
+	// 	}
+	//   ],
+	getRegularNotiUnit(value: any, notiRegularType: any) {
+		if (notiRegularType && notiRegularType.toUpperCase() === 'Day in month'.toUpperCase()) {
+			return value + ' hàng tháng ';
+		} else if (notiRegularType && notiRegularType.toUpperCase() === 'Month'.toUpperCase()) {
+			return 'Tháng ' + value;
+		}
+		return ''; // Default return value
+	}
+}
+
+
+@Component({
+	selector: 'dialog-notification-setup-detail',
+	templateUrl: 'dialog-notification-setup-detail.component.html',
+	standalone: true,
+	imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose,
+		MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
+		MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
+		MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
+		MatTableModule, MatPaginatorModule, DataTransformPipe, RouterModule, DigitOnlyModule,
+		NgxControlError, SelectionSuggestComponent, MatCheckbox,
+	],
+})
+export class DialogNotificationSetupDetail extends CommonComponent {
+	notiSetupType = SelectOptions.NOTI_SETUP_TYPE;
+	notiSettingValueType = SelectOptions.NOTI_SETTING_VALUE_TYPE;
+	notiRegularType = SelectOptions.NOTI_REGULAR_TYPE;
+	override baseService = inject(NotificationSetupService);
+	override formGroupDetail = this.formBuilder.group({
+		id: [],
+		type: ['', Validators.required],
+		notiSettingValueType: [''],
+		notiSetting: [''],
+		regularType: [''],
+		regularNoti: [''],
+		airportCode: [''],
+		note: ['', Validators.maxLength(500)],
+		active: [true],
+	});
+	isShowAirportCode = false;
+	regularNotiMax = 0;
+
+	constructor(
+		public dialogRef: MatDialogRef<DialogNotificationSetupDetail>,
+		@Inject(MAT_DIALOG_DATA) public data: any,
+	) {
+		super();
+	}
+
+	override async ngOnInit() {
+		super.ngOnInit();
+		this.loadListFlightMarket({
+			status: FlightMarketStatusEnum.OPERATIONAL,
+		})
+		if (this.data?.id) {
+			await this.detail(this.data?.id);
+			this.formGroupDetail.controls.type.disable();
+		}
+		this.typeValueChanges({ value: this.formGroupDetail.controls.type.value });
+		this.setRegularNotiMax(this.formGroupDetail.controls.regularType.value);
+		this.formGroupDetail.controls.regularType.valueChanges.subscribe((value) => {
+			this.setRegularNotiMax(value)
+		})
+	}
+
+	setRegularNotiMax(value: any) {
+		if (value && value === 'DAY_IN_MONTH') {
+			this.regularNotiMax = 31;
+		} else {
+			this.regularNotiMax = 12;
+		}
+		if (Number(this.formGroupDetail.controls.regularNoti.value) >= this.regularNotiMax) {
+			this.formGroupDetail.controls.regularNoti.setValue(null);
+		}
+	}
 	override async save() {
 		try {
+			console.log(this.formGroupDetail.value);
 			await super.save();
+			this.close()
 		} catch (e: any) {
 			if (e.status === HttpStatusCode.Conflict) {
-				this.formGroupDetail.controls['type'].setErrors({
+				this.formGroupDetail.controls.type.setErrors({
 					conflict: true,
 					message:
 						e.error?.data?.message ??
@@ -169,5 +261,19 @@ export class NotificationSetupComponent
 				});
 			}
 		}
+	}
+
+	typeValueChanges(event: any) {
+		if (event?.value != 'SEND_ESTIMATED_SCHEDULE') {
+			this.formGroupDetail.controls.airportCode.setValue(null);
+			this.formGroupDetail.controls.airportCode.updateValueAndValidity();
+			this.isShowAirportCode = false;
+		} else {
+			this.isShowAirportCode = true;
+		}
+	}
+
+	close() {
+		this.dialogRef.close()
 	}
 }

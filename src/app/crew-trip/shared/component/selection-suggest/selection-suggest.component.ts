@@ -61,11 +61,17 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
       this.viewControl.updateValueAndValidity()
     }
     this.setViewValueInit(this.formControl.value);
-
+    
+    if (this.selectionControl.ngControl?.disabled) {
+      this.viewControl.disable();
+    }
+    else {
+      this.viewControl.enable();
+    }
   }
 
   setRequired(isFormControl?: boolean) {
-    if(isFormControl){
+    if (isFormControl) {
       debugger
     }
     if (isFormControl) {
@@ -147,13 +153,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
       }
     };
 
-    this.formControl.statusChanges.subscribe((res) => {
-      if ('DISABLED' === res) {
-        this.viewControl.disable();
-      } else {
-        this.viewControl.enable();
-      }
-    });
+
   }
 
 

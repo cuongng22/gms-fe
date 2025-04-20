@@ -13,7 +13,7 @@ export class EmailTrackingService extends BaseService {
     }
 
     override  async uploadFile(form: FormData): Promise<any> {
-        const url = `${this.api}/${this.path}/upload/${form.get('id')}`;
+        const url = `${this.api}/${this.path}/upload`;
         const httpOptionsExport = {
             headers: new HttpHeaders({
                 'Content-Type': 'application/json',

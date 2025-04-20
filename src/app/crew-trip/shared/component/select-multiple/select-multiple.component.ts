@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
 import {
+	AfterViewChecked,
+	AfterViewInit,
+	ChangeDetectionStrategy,
 	Component,
 	DestroyRef,
 	inject,
@@ -17,6 +20,7 @@ import {
 	FormsModule,
 	NgControl,
 	ReactiveFormsModule,
+	Validators,
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOption } from '@angular/material/core';
@@ -34,6 +38,7 @@ import { debounceTime, tap } from 'rxjs';
 import { InputSizeComponent } from '../../input/input-size.component';
 import { MESSAGE } from '../../utils/constant';
 import { ClickOutside } from 'ngxtension/click-outside';
+import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
 
 @Component({
 	selector: 'app-select-multiple',
@@ -58,9 +63,12 @@ import { ClickOutside } from 'ngxtension/click-outside';
 	],
 	templateUrl: './select-multiple.component.html',
 	styleUrl: './select-multiple.component.scss',
+	hostDirectives: [NgxControlValueAccessor],
+	changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class SelectMultipleComponent
-	implements ControlValueAccessor, OnInit, OnChanges {
+	implements OnInit, OnChanges, AfterViewInit, AfterViewChecked {
+
 	@Input() placeholder = '';
 	@Input() size = 'sm';
 	@Input() label = '';
@@ -77,12 +85,15 @@ export class SelectMultipleComponent
 	destroyRef: DestroyRef = inject(DestroyRef);
 
 	search = new FormControl('');
+	protected ngControl = inject<NgxControlValueAccessor<any>>(
+		NgxControlValueAccessor,
+	);
 
-	constructor(@Optional() @Self() public ngControl: NgControl) {
-		if (this.ngControl) {
-			this.ngControl.valueAccessor = this;
-		}
-	}
+	// constructor(@Optional() @Self() public ngControl: NgControl) {
+	// 	if (this.ngControl) {
+	// 		this.ngControl.valueAccessor = this;
+	// 	}
+	// }
 
 	@Input() set options(options: any[]) {
 		this._options = options;
@@ -95,13 +106,13 @@ export class SelectMultipleComponent
 
 	ngOnInit(): void {
 		this.selectOptionsRaw = [...this.options];
-		this.formControl.valueChanges
-			.pipe(
-				debounceTime(200),
-				tap((value) => this.onChange(value)),
-				takeUntilDestroyed(this.destroyRef),
-			)
-			.subscribe();
+		// this.formControl.valueChanges
+		// 	.pipe(
+		// 		debounceTime(200),
+		// 		tap((value) => this.onChange(value)),
+		// 		takeUntilDestroyed(this.destroyRef),
+		// 	)
+		// 	.subscribe();
 
 		this.search.valueChanges.pipe(debounceTime(200)).subscribe((keySearch) => {
 			if (!keySearch) {
@@ -116,6 +127,10 @@ export class SelectMultipleComponent
 
 			}
 		});
+	}
+	ngAfterViewChecked(): void {
+	}
+	ngAfterViewInit(): void {
 	}
 
 	ngOnChanges(changes: SimpleChanges) {
@@ -134,14 +149,17 @@ export class SelectMultipleComponent
 	}
 
 	get formControl(): FormControl {
-		return (this.ngControl?.control as FormControl) ?? new FormControl();
+		return (this.ngControl?.ngControl?.control as FormControl) ?? new FormControl();
+	}
+	get requiredControl(): boolean {
+		return this.formControl.hasValidator(Validators.required);
 	}
 
-	@Input() set disabled(value: boolean) {
-		if (this.setDisabledState) {
-			this.setDisabledState(value);
-		}
-	}
+	// @Input() set disabled(value: boolean) {
+	// 	if (this.setDisabledState) {
+	// 		this.setDisabledState(value);
+	// 	}
+	// }
 
 	writeValue(obj: any): void {
 		if (this.formControl?.value !== obj) {
@@ -149,24 +167,24 @@ export class SelectMultipleComponent
 		}
 	}
 
-	registerOnChange(fn: any): void {
-		this.onChange = fn;
-	}
+	// registerOnChange(fn: any): void {
+	// 	this.onChange = fn;
+	// }
 
-	registerOnTouched(fn: any): void {
-		this.onTouched = fn;
-	}
+	// registerOnTouched(fn: any): void {
+	// 	this.onTouched = fn;
+	// }
 
-	setDisabledState?(isDisabled: boolean): void {
-		if (isDisabled) {
-			this.readonly = true;
-		} else {
-			this.readonly = false;
-		}
-	}
+	// setDisabledState?(isDisabled: boolean): void {
+	// 	if (isDisabled) {
+	// 		this.readonly = true;
+	// 	} else {
+	// 		this.readonly = false;
+	// 	}
+	// }
 
-	onChange = (value: any) => { };
-	onTouched = () => { };
+	// onChange = (value: any) => { };
+	// onTouched = () => { };
 
 	getSelectTrigger(): string {
 		const selected = this.formControl?.value || [];

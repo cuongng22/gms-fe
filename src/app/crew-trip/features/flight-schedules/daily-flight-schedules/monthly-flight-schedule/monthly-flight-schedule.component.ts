@@ -27,6 +27,7 @@ import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
 import { HttpStatusCode } from '@angular/common/http';
 import { MatMenuModule } from '@angular/material/menu';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
+import moment from 'moment';
 
 @Component({
   selector: 'app-monthly-flight-schedule',
@@ -69,14 +70,26 @@ export class MonthlyFlightScheduleComponent extends CommonComponent {
     this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'numberOfCrew', 'remark', 'action'];
   }
 
-  onSearch(event: any) {
-    this.search(event, false, this.baseService.searchInMonth.bind(this.baseService));
+  async onSearch(event: any, isNextPage?: boolean) {
+    const response = await this.search(event, !!isNextPage, this.baseService.searchInMonth.bind(this.baseService));
+    if (response.data.content && response.data.content.length > 0) {
+      const result = response.data.content.map((item: any) => {
+        const _checkinDate = moment(item.std)
+        // const _checkoutDate = new Date(item.FLIGHT_DATE_OUT.split(" ")[0])
+        const _currDate = moment()
+        // const _isShow = _checkinDate < _currDate && _checkoutDate < _currDate
+        // Chị Hường (13-04-2025)  theo dõi lịch bay của đối tương khác  cho hiện nút Sửa; xóa với  STD của cột Checkin  > ngày hiện tại thì hiển thị nút sửa/xóa nhé
+        const _isShow = _checkinDate.isAfter(_currDate, 'day')
+        return { ...item, isShow: _isShow }
+      });
+      this.dataSource.data = result;
+    }
   }
 
   override onPageChange(event: PageEvent) {
     this.pageSize = event.pageSize;
     this.pageIndex = event.pageIndex;
-    this.search(this.dailyFlightSchedulesSearch().formGroupSearch.value, true, this.baseService.searchInMonth.bind(this.baseService));
+    this.onSearch(this.dailyFlightSchedulesSearch().formGroupSearch.value, true);
   }
 
   override async exportFile(body?: any, filename?: string) {
@@ -139,4 +152,18 @@ export class MonthlyFlightScheduleComponent extends CommonComponent {
       }
     })
   }
+
+  async syncMonthly() {
+    try {
+      await this.spinner.show();
+      this.baseService.syncMonthly();
+    } catch (e: any) {
+      this.showError(
+        e.error?.data ?? e.error?.error ?? e.error ?? this.MESSAGE.ERROR,
+      );
+    } finally {
+      this.spinner.hide()
+    }
+  }
+
 }
