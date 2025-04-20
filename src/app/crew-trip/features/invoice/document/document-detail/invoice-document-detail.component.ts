@@ -252,7 +252,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   saveAndNext() {
     this.save().then(res => {
-      if (res.status == HttpStatusCode.Ok) {
+      if (res.code == HttpStatusCode.Ok) {
         this.nextStepEmit.emit([this.id, this.readMode, 3, this.dataObject]);
         window.scrollTo({top: 0, behavior: 'instant'});
       }
@@ -419,7 +419,6 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   override async save(): Promise<any> {
     try {
-      console.log(this.formGroupDetail.controls)
       if (!this.formGroupDetail.getRawValue().bizDocId) {
         this.showError($localize`Can not find any contract.`);
         return;
@@ -442,7 +441,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         res = await this.baseService.create(req);
       }
       this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,);
-      this.goBack();
+      // this.goBack();
       return res;
     } catch (e: any) {
       console.log(e)
