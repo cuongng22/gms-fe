@@ -6,7 +6,7 @@ table {
 .required {
   font-style: italic;
   font-size: 13px;
-  color: red;
+  color: #ca4d49;
 }
 
 .display-none {
@@ -73,6 +73,9 @@ table {
   // }
 }
 
+.max-height-table{
+  max-height: 600px !important;
+}
 
 button.btn {
   display: flex;

@@ -26,6 +26,7 @@ import { InternationalEstimatedCostCarRentalComponent } from '../../estimated-co
 import { DataSummayRequest } from '../../../budget-procurement/budget-procurement-summary/budget-procurement-summary-detail/budget-procurement-summary-detail.model';
 import { DomesticEstimatedCostHotelComponent } from '../../estimated-cost-common/domestic/domestic-estimated-cost-hotel/domestic-estimated-cost-hotel.component';
 import { DomesticEstimatedCostCarRentalComponent } from '../../estimated-cost-common/domestic/domestic-estimated-cost-car-rental/domestic-estimated-cost-car-rental.component';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-estimated-cost-summary-detail',
@@ -37,11 +38,11 @@ import { DomesticEstimatedCostCarRentalComponent } from '../../estimated-cost-co
     MatExpansionModule, MatExpansionPanelContent,
     EstimatedCostGeneralComponent, InternationalEstimatedCostOvernightComponent, DomesticEstimatedCostFlightRateComponent,
     InternationalEstimatedCostHotelComponent, InternationalEstimatedCostCarRentalComponent,
-    DomesticEstimatedCostHotelComponent, DomesticEstimatedCostCarRentalComponent
+    DomesticEstimatedCostHotelComponent, DomesticEstimatedCostCarRentalComponent, HasPermissionDirective
   ],
   templateUrl: './estimated-cost-summary-detail.component.html',
   styleUrl: './estimated-cost-summary-detail.component.scss',
-  providers: [DataTransformPipe, DatePipe]
+  providers: [DataTransformPipe, DatePipe, HasPermissionDirective]
 })
 export class EstimatedCostSummaryDetailComponent extends CommonComponent implements OnInit, AfterViewChecked, AfterViewInit {
 

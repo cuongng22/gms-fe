@@ -26,6 +26,7 @@ import { NgxControlError } from 'ngxtension/control-error';
 import { Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatTooltipModule } from "@angular/material/tooltip";
+import { ValidatorFn } from '@iplab/ngx-file-upload';
 
 @Component({
   selector: 'app-selection-suggest',
@@ -50,9 +51,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
         findResult?.select(false);
       }
     });
-    if (this.requiredControl) {
-      this.viewControl.addValidators(Validators.required);
-    }
+    this.setRequired()
 
 
   }
@@ -62,7 +61,26 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
       this.viewControl.updateValueAndValidity()
     }
     this.setViewValueInit(this.formControl.value);
+    
+    if (this.selectionControl.ngControl?.disabled) {
+      this.viewControl.disable();
+    }
+    else {
+      this.viewControl.enable();
+    }
+  }
 
+  setRequired(isFormControl?: boolean) {
+    if (isFormControl) {
+      debugger
+    }
+    if (isFormControl) {
+      this.formControl.addValidators(Validators.required);
+      this.formControl.updateValueAndValidity();
+    }
+    if (this.requiredControl) {
+      this.viewControl.addValidators(Validators.required);
+    }
   }
 
   @Input() size = 'sm';
@@ -135,13 +153,7 @@ export class SelectionSuggestComponent implements OnInit, AfterViewInit, AfterVi
       }
     };
 
-    this.formControl.statusChanges.subscribe((res) => {
-      if ('DISABLED' === res) {
-        this.viewControl.disable();
-      } else {
-        this.viewControl.enable();
-      }
-    });
+
   }
 
 

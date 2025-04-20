@@ -19,6 +19,7 @@ import { ServiceType, PlanCategoryEnum } from "../../../budget-procurement/budge
 import { CategoriesEnum, StatusesSummary, StatusSummaryEnum } from "../../estimated-cost.model";
 import { getControlTotal, getDisplayedColumns, getDisplayedColumnTotals } from "./estimated-cost-summary-list.model";
 import { Constant, round } from "src/app/crew-trip/shared/utils/constant";
+import { HasPermissionDirective } from "src/app/crew-trip/shared/directive/has-permission.directive";
 
 @Component({
   selector: 'app-estimated-cost-summary-list',
@@ -26,11 +27,12 @@ import { Constant, round } from "src/app/crew-trip/shared/utils/constant";
   imports: [
     MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule, MatCheckboxModule,
-    CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule
+    CommonModule, MatTableModule, DataTransformPipe, RouterLink, RouterModule, MatMenuModule,
+    HasPermissionDirective
   ],
   templateUrl: './estimated-cost-summary-list.component.html',
   styleUrl: './estimated-cost-summary-list.component.scss',
-  providers: [DataTransformPipe]
+  providers: [DataTransformPipe, HasPermissionDirective]
 })
 export class EstimatedCostSummaryListComponent extends CommonComponent implements OnInit {
   dataTransformPipe = inject(DataTransformPipe)

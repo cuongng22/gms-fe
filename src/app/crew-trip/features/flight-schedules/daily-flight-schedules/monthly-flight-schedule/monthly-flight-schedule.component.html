@@ -25,7 +25,7 @@
             <mat-menu #menu="matMenu">
                 <button *appHasPermission="['API_DAILY_FLIGHT_SCHEDULE_EXPORT_FLIGHT_CREW_IN_MONTH_LIST']" mat-menu-item
                     (click)="exportFile(null,'monthly-flight-schedule.xlsx')">
-                    <span>Flight list</span>
+                    <span i18n="@@trackingFlightSchedulesForExtraCrew">Tracking Flight Schedules for Extra Crew</span>
                 </button>
                 <button *appHasPermission="['API_DAILY_FLIGHT_SCHEDULE_EXPORT_CREW_LIST_LIST']" mat-menu-item
                     (click)="exportCrewList('list-of-flight-crew.xlsx')">
@@ -40,7 +40,7 @@
                 <span i18n="@@export">Extra Crew</span>
             </button>
             <button class="add-btn " type="button" mat-button>
-                <i class="material-symbols-outlined">
+                <i class="material-symbols-outlined" (click)="syncMonthly()">
                     sync
                 </i>
                 <span i18n="@@sync">Sync</span>
@@ -49,7 +49,7 @@
         </mat-card-subtitle>
     </mat-card-header>
     <mat-card-content>
-        <div class="table-responsive">
+        <div class="table-responsive" style="max-height: 600px;">
             <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
                 <ng-container matColumnDef="stt">
                     <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center ">#</th>
@@ -75,27 +75,30 @@
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@fc">
                                 FC
                             </span>:
-                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element,'FC')">
+                            <!-- (click)="flightCrewDetail(element,'FC')" -->
+                            <span class=" ">
                                 {{element.pilotCount}}
-                            </a>
+                            </span>
                         </span>
                         <br>
                         <span>
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@cc">
                                 CC
                             </span>:
-                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element,'CC')">
+                            <!-- (click)="flightCrewDetail(element,'CC')" -->
+                            <span class=" ">
                                 {{element.cabinCrewCount}}
-                            </a>
+                            </span>
                         </span>
                         <br>
                         <span>
                             <span class="text-secondary-bootstrap font-size-14" i18n="@@extraCrew">
                                 Extra Crew
                             </span>:
-                            <a class="text-secondary cursor-pointer" (click)="flightCrewDetail(element,'Extra Crew')">
+                            <!-- (click)="flightCrewDetail(element,'Extra Crew')" -->
+                            <span class=" ">
                                 {{element.extra}}
-                            </a>
+                            </span>
                         </span>
                     </td>
                 </ng-container>
@@ -118,15 +121,18 @@
                                     visibility
                                 </i>
                             </a>
+                            @if(element.isShow){
                             <a (click)="addOther(element)" class="text-danger" mat-button type="button">
                                 <i class="material-symbols-outlined" i18n-title title="Edit">
                                     person_edit
                                 </i>
                             </a>
+                            }
+
                         </div>
                     </td>
                 </ng-container>
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+                <tr mat-header-row *matHeaderRowDef="displayedColumns;sticky:true"></tr>
                 <tr mat-row *matRowDef="let row; columns: displayedColumns;" [ngClass]="getColorByRemark(row)"></tr>
                 <tr class="mat-row" *matNoDataRow>
                     <td class="mat-cell text-center" colspan="99">No data!</td>

@@ -1,47 +1,19 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
-import {RouterLink} from '@angular/router';
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
-import {MatCardModule} from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {MatError, MatFormField, MatHint, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
-import {RoleFunctionComponent} from 'src/app/crew-trip/features/roles/role-function/role-function.component';
-import {NoDataRowOutlet} from '@angular/cdk/table';
+import {FormBuilder, FormGroup, Validators} from '@angular/forms';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {ContractDetailComponent} from 'src/app/crew-trip/features/contract/contract-detail/contract-detail.component';
 import {Constant, DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN, removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
 import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
-import {HotelService} from 'src/app/crew-trip/core/services/hotel-service';
-import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {ListResponse} from 'src/app/crew-trip/shared/models/common.model';
 import {HttpStatusCode} from '@angular/common/http';
-import {InvoiceFormService} from 'src/app/crew-trip/core/services/invoice-form-service';
-import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/form/form-detail/invoice-form-detail.component";
-import {MatRadioButton, MatRadioGroup} from "@angular/material/radio";
-import {FileUploadModule} from "@iplab/ngx-file-upload";
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
-import {ConfirmDeleteDialog} from "src/app/crew-trip/shared/dialog/confirm-delete-dialog";
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentEmailTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import moment from "moment";
-import {MatGridList, MatGridTile} from "@angular/material/grid-list";
-import {CdkTextareaAutosize} from "@angular/cdk/text-field";
 import {PaymentMailService} from "src/app/crew-trip/core/services/payment-mail.service";
 import {EmailSupplierService} from "src/app/crew-trip/core/services/email-supplier-service";
-import {ControlErrorComponent} from "src/app/crew-trip/shared/component/control-error/control-error.component";
-import {NgxControlError} from "ngxtension/control-error";
-import {Editor, NgxEditorModule, Toolbar} from "ngx-editor";
+import {Editor, toHTML, Toolbar} from "ngx-editor";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
+import {debounceTime} from "rxjs";
 
 
 @Component({
@@ -50,7 +22,7 @@ import {BaseImport} from "src/app/crew-trip/shared/base-import";
   imports: [BaseImport],
   templateUrl: './invoice-document-remind.component.html',
   styleUrl: './invoice-document-remind.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY,{useUtc: true}),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
   ]
 })
 
@@ -100,6 +72,8 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     ['text_color', 'background_color'],
     ['align_left', 'align_center', 'align_right', 'align_justify'],
   ];
+  firstLoad: boolean = true;
+  invoiceDocumentEmailTypeEnum = InvoiceDocumentEmailTypeEnum;
 
   constructor() {
     super();
@@ -116,23 +90,33 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     });
     this.formGroupDetail = this.fb.group({
       id: [],
-      emailTo: [, [Validators.pattern(PATTERN.EMAIL)]],
+      emailTo: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailCc: [, [Validators.pattern(PATTERN.EMAIL_MULTI)]],
       emailSubject: [, [Validators.maxLength(250)]],
-      emailContent: [,[Validators.required]],
+      emailContent: [, [Validators.required]],
       fileAttachs: []
     });
 
     this.formGroupSearchInit = {...this.formGroupSearch.value};
     this.formGroupDetailInit = {...this.formGroupDetail.value};
     this.editor = new Editor();
+    this.subscribeMain();
   }
 
   override async ngOnInit() {
-    await Promise.all([this.getDocumentNotSent(this.formGroupSearch.getRawValue()),]).then(() => {
+    try {
+      await Promise.all([this.getDocumentNotSent(this.formGroupSearch.getRawValue()),]).then(() => {
 
-    });
-    this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
+      });
+      this.displayedColumns = ['stt', ...this._displayedColumns.map(s => s.value), 'action'];
+    } catch (e) {
+      console.log(e);
+      this.baseService.showError(MESSAGE.ERROR);
+    } finally {
+      setTimeout(() => {
+        this.firstLoad = false;
+      }, 1000);
+    }
   }
 
   async getDocumentNotSent<T>(body?: any, isNextPage?: boolean) {
@@ -162,8 +146,8 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     }
   }
 
-  sendEmail() {
-    if(this.formGroupDetail.getRawValue().emailContent ==='<p></p>'){
+  sendEmail(emailSendType: any) {
+    if (this.formGroupDetail.getRawValue().emailContent === '<p></p>') {
       this.formGroupDetail.patchValue({emailContent: ''});
     }
     this.formGroupDetail.markAllAsTouched();
@@ -174,7 +158,11 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
 
     let formUpload = new FormData();
     let reqBody = this.formGroupDetail.getRawValue();
+    reqBody.emailSendType = emailSendType;
     delete reqBody.fileAttachs;
+    if (typeof reqBody.emailContent === 'object') {
+      reqBody.emailContent = toHTML(this.formGroupDetail.getRawValue().emailContent, this.editor.schema);
+    }
     formUpload.append('request', JSON.stringify(reqBody));
 
     let reqFile = this.formGroupDetail.getRawValue().fileAttachs;
@@ -195,15 +183,30 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
 
   async showDialogSendEmail(data: any) {
     this.toggleDialogCreate();
-    let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
-    let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_REMINDER', marketClass: data.contractServiceType});
-    let emailTitle = res1.data?.content[0]?.title;
-    let emailContent = res1.data?.content[0]?.content;
-    this.formGroupDetail.patchValue({
-      id: data.id,
-      emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
-      emailSubject: emailTitle ?? '',
-      emailContent: emailContent ?? ''
+    try {
+      let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
+      let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_REMINDER', marketClass: data.contractServiceType});
+      let emailTitle = res1.data?.content[0]?.title;
+      let emailContent = res1.data?.content[0]?.content;
+      this.formGroupDetail.patchValue({
+        emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
+        emailSubject: emailTitle ?? '',
+        emailContent: emailContent ?? ''
+      })
+    } finally {
+      this.formGroupDetail.patchValue({
+        id: data.id,
+      })
+    }
+  }
+
+  async subscribeMain(row?: any) {
+    this.formGroupDetail.controls['emailContent'].valueChanges.pipe(debounceTime(300)).subscribe(async (value) => {
+      if (value && !this.firstLoad) {
+        if (value?.content && !value?.content[0]?.content) {
+          this.formGroupDetail.patchValue({emailContent: null},);
+        }
+      }
     })
   }
 }

@@ -6,13 +6,15 @@
   </h5>
   }
   <div>
-    <button (click)="addFunction()" class="step-2-menu-button btn-slot-1" extended mat-fab>
+    <button *appHasPermission="['API_ROLES_ROLES_FUNCTION_ADD_{ROLEID}_INSERT']" (click)="addFunction()"
+      class="step-2-menu-button btn-slot-1" extended mat-fab>
       <i class="material-symbols-outlined">
         save
       </i>
       Grant Permission
     </button>
-    <button (click)="goBack()" class="step-2-menu-button btn-slot-2" extended i18n mat-fab style="background-color: #ffc107 !important;">
+    <button (click)="goBack()" class="step-2-menu-button btn-slot-2" extended i18n mat-fab
+      style="background-color: #ffc107 !important;">
       <i class="material-symbols-outlined">
         undo
       </i>
@@ -38,7 +40,8 @@
           <table [dataSource]="listUser" mat-table class="table-light">
             <ng-container matColumnDef="stt">
               <th *matHeaderCellDef mat-header-cell mat-sort-header class="text-center">#</th>
-              <td *matCellDef="let element; let i = dataIndex" mat-cell class="text-center">{{ (pageIndex * pageSize) + i + 1 }}</td>
+              <td *matCellDef="let element; let i = dataIndex" mat-cell class="text-center">{{ (pageIndex * pageSize) +
+                i + 1 }}</td>
             </ng-container>
             @for (innerColumn of _displayedColumnsUser; track innerColumn.value) {
             <ng-container matColumnDef="{{innerColumn.value}}">

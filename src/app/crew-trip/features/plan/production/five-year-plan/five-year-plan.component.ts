@@ -1,30 +1,34 @@
-import {Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit} from '@angular/core';
-import {CommonModule, NgClass, NgIf} from '@angular/common';
-import {MatCardModule} from '@angular/material/card';
-import {MatError, MatFormField, MatLabel} from '@angular/material/form-field';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators} from '@angular/forms';
-import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {MatInput} from '@angular/material/input';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {Constant, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
-import {FiveYearPlanService} from 'src/app/crew-trip/core/services/five-year-plan.service';
-import {HttpStatusCode} from '@angular/common/http';
-import {InputComponent} from 'src/app/crew-trip/shared/component/input/input.component';
+import { Component, CUSTOM_ELEMENTS_SCHEMA, inject, NO_ERRORS_SCHEMA, OnInit } from '@angular/core';
+import { CommonModule, NgClass, NgIf } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { AbstractControl, FormBuilder, ReactiveFormsModule, ValidationErrors, Validators } from '@angular/forms';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatInput } from '@angular/material/input';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { Constant, MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
+import { FiveYearPlanService } from 'src/app/crew-trip/core/services/five-year-plan.service';
+import { HttpStatusCode } from '@angular/common/http';
+import { InputComponent } from 'src/app/crew-trip/shared/component/input/input.component';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 
 @Component({
-  imports: [CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, InputSizeComponent, InputComponent],
+  imports: [CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, MatError, InputSizeComponent, InputComponent,
+    HasPermissionDirective
+  ],
   schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA],
   selector: 'app-five-year-plan',
   standalone: true,
   styleUrl: 'five-year-plan.component.scss',
-  templateUrl: 'five-year-plan.component.html'
+  templateUrl: 'five-year-plan.component.html',
+  providers: [HasPermissionDirective]
 })
 
 
@@ -43,15 +47,15 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
     rowspan?: string,
     colspan?: string
   }[] = [// {label: 'Ngày tạo', value: 'ngayTao', type: Constant.DATE, format: Constant.DATE_FORMAT},
-      {label: $localize`Year`, value: 'year', rowspan: '2'},
-      {label: $localize`Production`, value: 'totalInternational', type: Constant.NUMBER},
-      {label: $localize`Compared to last year`, value: 'rateInternationalLast', type: Constant.NUMBER},
-      {label: $localize`Production`, value: 'totalDomestic', type: Constant.NUMBER},
-      {label: $localize`Compared to last year`, value: 'rateDomesticLast', type: Constant.NUMBER},
-      {label: $localize`Production`, value: 'total', type: Constant.NUMBER},
-      {label: $localize`Compared to last year`, value: 'rateTotalLast', type: Constant.NUMBER},
-      {label: $localize`Remark`, value: 'notes', rowspan: '2'},
-      {label: $localize`Status`, value: 'activeLabel', rowspan: '2'},
+      { label: $localize`Year`, value: 'year', rowspan: '2' },
+      { label: $localize`Production`, value: 'totalInternational', type: Constant.NUMBER },
+      { label: $localize`Compared to last year`, value: 'rateInternationalLast', type: Constant.NUMBER },
+      { label: $localize`Production`, value: 'totalDomestic', type: Constant.NUMBER },
+      { label: $localize`Compared to last year`, value: 'rateDomesticLast', type: Constant.NUMBER },
+      { label: $localize`Production`, value: 'total', type: Constant.NUMBER },
+      { label: $localize`Compared to last year`, value: 'rateTotalLast', type: Constant.NUMBER },
+      { label: $localize`Remark`, value: 'notes', rowspan: '2' },
+      { label: $localize`Status`, value: 'activeLabel', rowspan: '2' },
     ];
   listYear: any = [];
   currentYear = new Date().getFullYear();
@@ -67,17 +71,17 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
       year: ['', [Validators.required, this.existYearValidator.bind(this)]],
       totalInternational: ['', [Validators.required, Validators.min(1)]],
       totalDomestic: ['', [Validators.required, Validators.min(1)]],
-      total: [{value: '', disabled: true}],
+      total: [{ value: '', disabled: true }],
       notes: ['', Validators.maxLength(500)],
       active: [true,]
     });
-    this.formGroupSearchInit = {...this.formGroupSearch.value};
-    this.formGroupDetailInit = {...this.formGroupDetail.value};
+    this.formGroupSearchInit = { ...this.formGroupSearch.value };
+    this.formGroupDetailInit = { ...this.formGroupDetail.value };
   }
 
   override async ngOnInit() {
     this.currentYear = new Date().getFullYear();
-    this.listYear = Array.from({length: this.currentYear - 2020 + 11}, (_, i) => (2020 + i).toString());
+    this.listYear = Array.from({ length: this.currentYear - 2020 + 11 }, (_, i) => (2020 + i).toString());
     await Promise.all([this.search(),]).then(() => {
       console.log(this.dataSource);
     });
@@ -100,7 +104,7 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
   override async exportFile(body?: any, filename?: string) {
     try {
       await this.spinner.show();
-      this.baseService.export({...this.formGroupSearch.value, export: true}).then(res => {
+      this.baseService.export({ ...this.formGroupSearch.value, export: true }).then(res => {
         this.downloadFile(res, filename ?? res.fileName);
       });
     } catch (e: any) {
@@ -137,6 +141,6 @@ export class FiveYearPlanComponent extends CommonComponent implements OnInit {
   }
 
   existYearValidator(control: AbstractControl): ValidationErrors | null {
-    return this.existYear ? {existYear: true} : null;
+    return this.existYear ? { existYear: true } : null;
   }
 }

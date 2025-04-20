@@ -38,6 +38,7 @@ import {SelectMultipleComponent} from 'src/app/crew-trip/shared/component/select
 import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
 import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 import {SanitizeService} from "src/app/crew-trip/core/services/sanitize.service";
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 @Component({
   selector: 'app-email-supplier',
@@ -69,10 +70,11 @@ import {SanitizeService} from "src/app/crew-trip/core/services/sanitize.service"
     MatPaginator,
     MatAnchor,
     MatSelectionList,
-    MatListOption,
+    MatListOption, HasPermissionDirective
   ],
   templateUrl: './email-supplier.component.html',
   styleUrl: './email-supplier.component.scss',
+  providers:[HasPermissionDirective]
 })
 export class EmailSupplierComponent
   extends CommonComponent

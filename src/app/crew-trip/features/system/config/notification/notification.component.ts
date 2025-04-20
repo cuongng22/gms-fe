@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { HttpStatusCode } from '@angular/common/http';
 import { Component, inject, OnInit } from '@angular/core';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormControl, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -16,7 +16,7 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { MatTab, MatTabChangeEvent, MatTabGroup } from '@angular/material/tabs';
 import { RouterModule } from '@angular/router';
-import { NgxEditorModule, Validators } from 'ngx-editor';
+import { NgxEditorModule } from 'ngx-editor';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { NotificationConfigService } from 'src/app/crew-trip/core/services/notification-config.service';
@@ -24,7 +24,9 @@ import { UsersService } from 'src/app/crew-trip/core/services/users-service';
 import { NotificationSetupComponent } from 'src/app/crew-trip/features/system/config/notification-setup/notification-setup.component';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
+import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { SelectOptions } from 'src/app/crew-trip/shared/select-option';
 import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
@@ -55,10 +57,11 @@ import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
 		MatCheckbox,
 		NgxEditorModule,
 		NgxTrimDirectiveModule,
-		SelectMultipleComponent,
+		SelectMultipleComponent, HasPermissionDirective, SelectionSuggestComponent
 	],
 	templateUrl: './notification.component.html',
 	styleUrl: './notification.component.scss',
+	providers: [HasPermissionDirective]
 })
 export class NotificationComponent extends CommonComponent implements OnInit {
 	override baseService = inject(NotificationConfigService);
@@ -66,6 +69,7 @@ export class NotificationComponent extends CommonComponent implements OnInit {
 	activeTab = 0;
 	isView = false;
 	notiConfigType = SelectOptions.NOTI_CONFIG_TYPE;
+	notiChannelOption = SelectOptions.NOTI_CHANNEL
 
 	users = [];
 	_displayedColumns: {
@@ -74,26 +78,26 @@ export class NotificationComponent extends CommonComponent implements OnInit {
 		type?: string;
 		format?: string;
 	}[] = [
-		{ label: $localize`:@@name:Type`, value: 'type' },
-		{
-			label: $localize`:@@airportCode:Notification channel`,
-			value: 'notiChannel',
-		},
-		{ label: $localize`:@@note:Remark`, value: 'note' },
-		{ label: $localize`:@@note:User`, value: 'users' },
-		{ label: $localize`:@@status:Status`, value: 'active' },
-	];
-
+			{ label: $localize`:@@name:Type`, value: 'type' },
+			{
+				label: $localize`:@@airportCode:Notification channel`,
+				value: 'notiChannel',
+			},
+			{ label: $localize`:@@note:User`, value: 'users' },
+			{ label: $localize`:@@note:Remark`, value: 'note' },
+			{ label: $localize`:@@status:Status`, value: 'active' },
+		];
+	override formGroupDetail = this.formBuilder.group({
+		id: [],
+		type: ['', Validators.required],
+		notiChannel: new FormControl<string | string[]>('', Validators.required),
+		users: ['', Validators.required],
+		note: ['', Validators.maxLength(500)],
+		active: [true],
+	});
 	constructor(public override dialog: MatDialog) {
 		super();
-		this.formGroupDetail = this.formBuilder.group({
-			id: [],
-			type: ['', Validators.required],
-			notiChannel: ['', Validators.required],
-			users: ['', Validators.required],
-			note: [''],
-			active: [true],
-		});
+
 		this.formGroupDetailInit = { ...this.formGroupDetail.value };
 	}
 
@@ -109,7 +113,7 @@ export class NotificationComponent extends CommonComponent implements OnInit {
 			...this._displayedColumns.map((s) => s.value),
 			'action',
 		];
-		await Promise.all([this.getListUser(), this.search()]).then(() => {});
+		await Promise.all([this.getListUser(), this.search()]).then(() => { });
 	}
 
 	onTabChange(event: MatTabChangeEvent): void {
@@ -130,6 +134,7 @@ export class NotificationComponent extends CommonComponent implements OnInit {
 		if (id != null && type === 'index') {
 		} else if (id != null) {
 			await this.detail(id);
+
 		}
 		this.toggleDialogCreate();
 	}
@@ -166,10 +171,21 @@ export class NotificationComponent extends CommonComponent implements OnInit {
 						res.data.users = [];
 					}
 				}
-				// console.log('res?.data:', res?.data);
+
+				if (typeof res.data.notiChannel === 'string') {
+					try {
+						res.data.notiChannel = res.data.notiChannel.includes(',')
+							? res.data.notiChannel.split(',').map((item: string) => item.trim())
+							: [res.data.notiChannel.trim()];
+					} catch (error) {
+						// console.error('Failed to parse items field:', error);
+						res.data.notiChannel = [];
+					}
+				}
 				this.formGroupDetail.patchValue(res?.data || res);
 			}
 		} catch (e: any) {
+			console.error(e);
 			this.baseService.showError(
 				e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
 			);

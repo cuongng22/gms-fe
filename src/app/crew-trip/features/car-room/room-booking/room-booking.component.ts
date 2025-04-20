@@ -83,12 +83,12 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
       this.listYear.push(year);
     }
     this.formGroupSearch = this.fb.group({
-      scheduleType: ['', [Validators.required]],
+      scheduleType: ['2', [Validators.required]],
       marketCode: ['', [Validators.required]],
       month: [currentMonth, [Validators.required]],
       year: [currentYear, [Validators.required]],
-      type: ['', [Validators.required]],
-      timezone: ['CC'],
+      type: ['FC', [Validators.required]],
+      timezone: ['FC'],
       export: [false]
     });
   }
@@ -101,10 +101,13 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
         status: 'Operational',
       });
       this.markets = marketCodes.data;
+      this.formGroupSearch.patchValue({
+        marketCode : this.markets[0]
+      });
     } catch (error: any) {
       this.showError(error);
     }
-    // this.search();
+    this.search();
     await this.spinner.hide();
   }
 

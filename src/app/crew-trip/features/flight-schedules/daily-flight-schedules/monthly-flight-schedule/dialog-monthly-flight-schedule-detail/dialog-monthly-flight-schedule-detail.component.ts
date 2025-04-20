@@ -45,9 +45,9 @@ export class DialogMonthlyFlightScheduleDetailComponent extends CommonComponent 
   readonly data = inject<any>(MAT_DIALOG_DATA);
   override baseService = inject(DailyFlightSchedulesService);
 
-  _displayedColumns: { label: string; value: string, type?: string, format?: string, class?: string }[] = [
+  _displayedColumns: { label: string; value: string, type?: string, format?: string, class?: string, sticky?:boolean }[] = [
     { label: $localize`:@@code:Code`, value: 'persCode', class: 'text-left' },
-    { label: $localize`:@@fullName:Full Name`, value: 'fullName', class: 'text-left' },
+    { label: $localize`:@@fullName:Full Name`, value: 'fullName', class: 'text-left' , sticky: true},
     { label: $localize`:@@cmsName:CMS Name`, value: 'cmsname', class: 'text-left' },
     { label: $localize`:@@gender:Gender`, value: 'gender', class: 'text-left' },
     { label: $localize`:@@phone:Phone`, value: 'phone', class: 'text-center' },
@@ -67,7 +67,7 @@ export class DialogMonthlyFlightScheduleDetailComponent extends CommonComponent 
   }
 
   async onSearch() {
-    const response = await super.search({ flightId: this.data.flightId, timeZone: this.data.timeZone }, false, this.baseService.searchFlightNonOvernight.bind(this.baseService))
+    const response = await super.search({ flightId: this.data.flightId, timeZone: this.data.timeZone }, false, this.baseService.flightCrewDetail.bind(this.baseService))
     this.dataSource.data = response.data.crewMembers;
     this.flightInfo = response.data.flightInfo;
   }
@@ -101,6 +101,7 @@ export class DialogMonthlyFlightScheduleDetailComponent extends CommonComponent 
 
         await this.onSearch();
         this.baseService.showSuccess(this.MESSAGE.UPDATE_SUCCESS);
+        this.selection.clear()
         return res;
       } catch (e: any) {
         console.error(e)

@@ -75,13 +75,15 @@
                 </i>
                 <span i18n="@@export">Export</span>
             </button>
-            <button class="add-btn mr-10" type="button" mat-button>
+            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SYNC_LIST']" class="add-btn mr-10" type="button"
+                mat-button>
                 <i class="material-symbols-outlined">
                     sync
                 </i>
                 <span i18n="@@sync">Sync</span>
             </button>
-            <button class="add-btn" type="button" mat-button (click)="showDialogDetail(true)">
+            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_INSERT']" class="add-btn" type="button" mat-button
+                (click)="showDialogDetail(true)">
                 <i class="material-symbols-outlined">
                     add
                 </i>
@@ -223,7 +225,8 @@
                             element.status === 'rejected' ||
                             element.status === 'approved' ||
                             element.status === 'domestic_completed'){
-                            <button type="button" mat-button class="text-vna" [routerLink]="[element.id,'summary']"
+                            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_SEARCH_INSERT']" type="button"
+                                mat-button class="text-vna" [routerLink]="[element.id,'summary']"
                                 routerLinkActive="router-link-active">
                                 <i class="material-symbols-outlined " title="Detail" i18n-title="@@detail">
                                     zoom_in
@@ -231,15 +234,16 @@
                             </button>
                             }
                             @if(element.status === 'confirmed'){
-                            <button type="button" mat-button class="text-vna"
-                                (click)="changeStatus(element.id,'approved')">
+                            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_UPDATE_STATUS_INSERT']"
+                                type="button" mat-button class="text-vna" (click)="changeStatus(element.id,'approved')">
                                 <i class="material-symbols-outlined " title="Approved" i18n-title="@@approved">
                                     check
                                 </i>
                             </button>
                             }
                             @if(element.status === 'dom_int_completed'){
-                            <button type="button" mat-button class="text-vna"
+                            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_UPDATE_STATUS_INSERT']"
+                                type="button" mat-button class="text-vna"
                                 (click)="changeStatus(element.id,'confirmed')">
                                 <i class="material-symbols-outlined " title="Confirm" i18n-title="@@confirm">
                                     select_check_box
@@ -247,16 +251,16 @@
                             </button>
                             }
                             @if(element.status === 'dom_int_completed'){
-                            <button type="button" mat-button class="text-danger"
-                                (click)="showConfirmReject(element.id)">
+                            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_UPDATE_STATUS_INSERT']"
+                                type="button" mat-button class="text-danger" (click)="showConfirmReject(element.id)">
                                 <i class="material-symbols-outlined " title="Reject" i18n-title="@@reject">
                                     cancel
                                 </i>
                             </button>
                             }
                             @if(element.status === 'draft' || element.status === 'rejected'){
-                            <button type="button" mat-button class="text-warning"
-                                (click)="showDialogDetail(false,element.id)">
+                            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_UPDATE']" type="button" mat-button
+                                class="text-warning" (click)="showDialogDetail(false,element.id)">
                                 <i class="material-symbols-outlined text-warning" i18n-title="@@edit" title="Edit"
                                     i18n-title="@@edit">
                                     edit
@@ -265,7 +269,8 @@
                             }
                             @if(element.status === 'draft' ||
                             element.status === 'rejected'){
-                            <button type="button" mat-button title="Delete" i18n-title="@@delete" class="text-danger"
+                            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_DELETE']" type="button" mat-button
+                                title="Delete" i18n-title="@@delete" class="text-danger"
                                 (click)="showConfirmDelete(element.id)">
                                 <i class="material-symbols-outlined text-danger">
                                     delete

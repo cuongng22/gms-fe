@@ -39,6 +39,10 @@
 }
 
 ::ng-deep {
+  .NgxEditor__Content{
+    max-height: 250px;
+    overflow-y: auto;
+  }
   .mat-mdc-list-item:hover{
     background-color: var(--gray-300) !important;
     cursor: pointer !important;

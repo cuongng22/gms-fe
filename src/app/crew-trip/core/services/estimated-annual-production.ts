@@ -26,8 +26,14 @@ export class EstimatedAnnualProductionService extends BaseService {
    * @param type P: kế hoạch ngân sách, E: ước thực hiện
    * @returns 
    */
-  getNewsVersion(type:string) {
+  getNewsVersion(type: string) {
     const url = `${this.api}/${this.path}/versions-and-year?type=${type}`;
+    return firstValueFrom(this.http.get<any>(url));
+  }
+
+  sync(): Promise<any> {
+    const url = `${this.api}/${this.path}/sync`;
+    // const params = new HttpParams({ fromObject: body });
     return firstValueFrom(this.http.get<any>(url));
   }
 }

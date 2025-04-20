@@ -36,6 +36,7 @@ import { ifValidator } from 'ngxtension/if-validator';
 import { HttpStatusCode } from '@angular/common/http';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 export interface PeriodicElement {
   projectName: string;
@@ -50,11 +51,12 @@ export interface PeriodicElement {
     MatCheckboxModule, DataTransformPipe, NgClass, MatSelect, MatOption,
     MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatInputModule, MatSelectModule, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, FormsModule, MatFormFieldModule, CommonModule, MatTooltipModule,
-    NgxTrimDirectiveModule, NgxControlError, SelectMultipleComponent],
+    NgxTrimDirectiveModule, NgxControlError, SelectMultipleComponent, HasPermissionDirective],
   templateUrl: './users.component.html',
   styleUrl: './users.component.scss',
   providers: [
-    { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl }
+    { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl, },
+    HasPermissionDirective
   ]
 })
 
@@ -97,7 +99,7 @@ export class UsersComponent extends CommonComponent implements OnInit {
       ifValidator(
         () => this.isValidatePassword,
         [Validators.required, Validators.minLength(8),
-          Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')
+        Validators.pattern('^(?=.*[A-Za-z])(?=.*\\d)(?=.*[@$!%*#?&])[A-Za-z\\d@$!%*#?&]{8,}$')
         ]))],
     description: ['', Validators.maxLength(500)]
   });

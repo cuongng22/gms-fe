@@ -18,6 +18,7 @@ import { MatTableModule } from '@angular/material/table';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { NgxControlError } from 'ngxtension/control-error';
+import { DailyFlightSchedulesService } from 'src/app/crew-trip/core/services/daily-flight-schedules.service';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { FlightMarketStatusEnum } from 'src/app/crew-trip/features/category/flight-market/flight-market.model';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
@@ -50,9 +51,12 @@ import { DialogData } from 'src/app/ui-elements/dialog/basic-dialog/basic-dialog
 export class DialogExportSchedulingDataComponent extends CommonComponent {
   readonly dialogRef = inject(MatDialogRef<DialogExportSchedulingDataComponent>);
   readonly data = inject(MAT_DIALOG_DATA);
-  flightMarketService = inject(FlightMarketService)
+  flightMarketService = inject(FlightMarketService);
+  override baseService = inject(DailyFlightSchedulesService);
+  dataTransformPipe = inject(DataTransformPipe)
 
   override formGroupDetail = this.formBuilder.group({
+    func: ['', Validators.required],
     airport: ['', [Validators.required]],
     exportStartDate: ['', [Validators.required]],
     exportEndDate: ['', [Validators.required]]
@@ -76,8 +80,25 @@ export class DialogExportSchedulingDataComponent extends CommonComponent {
     this.dialogRef.close()
   }
 
-  export() {
-    console.log(this, this.formGroupDetail)
+  async export() {
+    try {
+      this.formGroupDetail.markAllAsTouched();
+      if (this.formGroupDetail.valid) {
+        await this.spinner.show();
+        const res = await this.baseService.exportInMonth({
+          func: this.formGroupDetail.controls.func.value,
+          startDate: this.dataTransformPipe.transform(this.formGroupDetail.controls.exportStartDate.value, [this.Constant.DATE, this.Constant.LOCAL_DATE_FORMAT]),
+          endDate: this.dataTransformPipe.transform(this.formGroupDetail.controls.exportEndDate.value, [this.Constant.DATE, this.Constant.LOCAL_DATE_FORMAT]),
+          airportCode: this.formGroupDetail.controls.airport.value
+        });
+        // this.downloadFile(res.blob, res.fileName ?? 'export_scheduling_hotel_transportation.jxls');
+      }
+      this.showSuccess(this.MESSAGE.EXPORT_SUCCESS)
+    } catch (e: any) {
+      this.baseService.showError((e.error?.error?.code) ?? this.MESSAGE.ERROR);
+    } finally {
+      await this.spinner.hide();
+    }
   }
 
 }

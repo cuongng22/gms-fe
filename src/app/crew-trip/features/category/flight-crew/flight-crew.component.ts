@@ -43,6 +43,7 @@ import { RoleFunctionComponent } from 'src/app/crew-trip/features/roles/role-fun
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { SelectOptions } from 'src/app/crew-trip/shared/select-option';
 import { InputComponent } from 'src/app/ui-elements/input/input.component';
@@ -83,11 +84,12 @@ import { InputComponent } from 'src/app/ui-elements/input/input.component';
 		SelectionComponent,
 		InputSizeComponent,
 		SelectMultipleComponent,
-		MatIconModule,
+		MatIconModule, HasPermissionDirective
 	],
 
 	templateUrl: './flight-crew.component.html',
 	styleUrl: './flight-crew.component.scss',
+	providers: [HasPermissionDirective]
 })
 export class FlightCrewComponent extends CommonComponent implements OnInit {
 	override baseService = inject(FlightCrewService);
@@ -102,7 +104,7 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
 	markets: string[] = [];
 	filteredOptionsMarket: any[];
 	listActype: any[] = [];
-  activeTab = 0;
+	activeTab = 0;
 
 	override formGroupDetail = this.fb.group({
 		id: [''],
@@ -202,7 +204,7 @@ export class FlightCrewComponent extends CommonComponent implements OnInit {
 		const markets = this.markets;
 		const acTypes = this.listActype;
 		const dialogRef = this.dialog.open(FlightCrewDetailComponent, {
-			data: { item, markets, acTypes },
+			data: { id: id, item, markets, acTypes },
 			disableClose: true,
 			autoFocus: false,
 		});

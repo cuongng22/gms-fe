@@ -62,7 +62,8 @@
     <mat-card-title>
     </mat-card-title>
     <mat-card-subtitle>
-      <button (click)="showDialogDetail()" class="add-btn" i18n mat-button type="button">
+      <button *appHasPermission="['API_PLANE_INSERT']" (click)="showDialogDetail()" class="add-btn" i18n mat-button
+        type="button">
         <i class="material-symbols-outlined">
           add
         </i>
@@ -80,15 +81,13 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="acgroup">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-          >
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center">
             AC group
           </th>
           <td mat-cell *matCellDef="let element" class="text-center">{{ element.acgroup }}</td>
         </ng-container>
         <ng-container matColumnDef="actype">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-              i18n="@@acType">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@acType">
             AC type
           </th>
           <td mat-cell *matCellDef="let element" class="text-center">
@@ -96,8 +95,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="note">
-          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-              i18n="@@note">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@note">
             Remark
           </th>
           <td mat-cell *matCellDef="let element" class="wrap-text-2 text-left">
@@ -105,17 +103,16 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="active">
-          <th mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" mat-sort-header
-              i18n="@@active">
+          <th mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" mat-sort-header i18n="@@active">
             Status
           </th>
           <td mat-cell *matCellDef="let element;" class="text-center">
-                  <span class="badge" [ngClass]="{
+            <span class="badge" [ngClass]="{
                           'text-bg-label-badge':  element['active'] == true,
                           'text-soft-dark':   element['active'] == false
                           }">{{
-                      element['active'] == true ? 'Active' : 'Inactive'
-                    }}</span>
+              element['active'] == true ? 'Active' : 'Inactive'
+              }}</span>
           </td>
         </ng-container>
         <ng-container matColumnDef="action" stickyEnd>
@@ -126,12 +123,14 @@
             <div class="action-buttons d-flex align-items-center justify-content-end">
               <a mat-button type="button">
               </a>
-              <a (click)="showDialogDetail(element.id)" class="text-warning" mat-button type="button">
+              <a *appHasPermission="['API_PLANE_UPDATE']" (click)="showDialogDetail(element.id)" class="text-warning"
+                mat-button type="button">
                 <i class="material-symbols-outlined" i18n-title title="Edit">
                   edit
                 </i>
               </a>
-              <a (click)="showConfirmDelete(element.id,element.actype)" i18n-title mat-button type="button">
+              <a *appHasPermission="['API_PLANE_DELETE']" (click)="showConfirmDelete(element.id,element.actype)"
+                i18n-title mat-button type="button">
                 <i class="material-symbols-outlined" title="Delete">
                   delete
                 </i>
@@ -147,18 +146,14 @@
       </table>
     </div>
     <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-                   [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
-                   [pageIndex]="pageIndex"
-                   aria-label="Select page" i18n-aria-label="@@selectPage">
+      [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+      aria-label="Select page" i18n-aria-label="@@selectPage">
     </mat-paginator>
   </mat-card-content>
 </mat-card>
 
 <!-- Add New Popup -->
-<div
-  [class.active]="showDialogCreate"
-  class="add-new-popup"
->
+<div [class.active]="showDialogCreate" class="add-new-popup">
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
       <mat-card-header>
@@ -169,10 +164,7 @@
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
-          <button
-            (click)="closeDetail()"
-            mat-button
-          >
+          <button (click)="closeDetail()" mat-button>
             <i class="ri-close-fill"></i>
           </button>
         </mat-card-subtitle>
@@ -184,14 +176,13 @@
               <div class="form-group mb-20" sizeInput="md">
                 <mat-form-field>
                   <mat-label i18n>AC group</mat-label>
-                  <input formControlName="acGroup" trim="blur" matInput
-                         required type="text">
+                  <input formControlName="acGroup" trim="blur" matInput required type="text">
                   @if (!!formGroupDetail.controls['acGroup'].hasError('required')) {
-                    <mat-error><span i18n>AC group</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>AC group</span><span i18n> is required</span></mat-error>
                   } @else if (!!formGroupDetail.controls['acGroup'].hasError('existCheck')) {
-                    <mat-error><span i18n>AC group and AC type already exists</span></mat-error>
+                  <mat-error><span i18n>AC group and AC type already exists</span></mat-error>
                   } @else if (!!formGroupDetail.controls['acGroup'].hasError('maxlength')) {
-                    <mat-error><span i18n>AC group must be less than {{maxLengthAc}} characters</span></mat-error>
+                  <mat-error><span i18n>AC group must be less than {{maxLengthAc}} characters</span></mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -200,14 +191,13 @@
               <div class="form-group mb-20" sizeInput="md">
                 <mat-form-field>
                   <mat-label i18n>AC type</mat-label>
-                  <input formControlName="acType" matInput trim="blur"
-                         required type="text">
+                  <input formControlName="acType" matInput trim="blur" required type="text">
                   @if (!!formGroupDetail.controls['acType'].hasError('required')) {
-                    <mat-error><span i18n>AC type</span><span i18n> is required</span></mat-error>
+                  <mat-error><span i18n>AC type</span><span i18n> is required</span></mat-error>
                   } @else if (!!formGroupDetail.controls['acType'].hasError('existCheck')) {
-                    <mat-error><span i18n>AC group and AC type already exists</span></mat-error>
+                  <mat-error><span i18n>AC group and AC type already exists</span></mat-error>
                   } @else if (!!formGroupDetail.controls['acType'].hasError('maxlength')) {
-                    <mat-error><span i18n>AC type must be less than {{maxLengthAc}} characters</span></mat-error>
+                  <mat-error><span i18n>AC type must be less than {{maxLengthAc}} characters</span></mat-error>
                   }
                 </mat-form-field>
               </div>
@@ -218,7 +208,7 @@
                 <textarea formControlName="note" matInput></textarea>
                 <mat-hint align="end">{{ formGroupDetail.value.note?.length }} / 500</mat-hint>
                 @if (!!formGroupDetail.controls['note'].hasError('maxlength')) {
-                  <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
+                <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
                 }
               </mat-form-field>
             </div>
@@ -232,11 +222,7 @@
             </i>
             Close
           </button>
-          <button
-            (click)="save()"
-            class="add-btn"
-            i18n mat-button
-          >
+          <button (click)="save()" class="add-btn" i18n mat-button>
             <i class="material-symbols-outlined">
               save
             </i>
@@ -253,21 +239,21 @@
     <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
       <mat-card-content>
         <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
+          <span class="material-symbols-outlined font-size-5rem">
+            error
+          </span>
         </div>
         <div class="text-center mb-20">
-          <span class="font-weight-normal color-black font-size-19" i18n="@@deleteMessage">Aircraft {{ formGroupDetail.value?.acType }} data
+          <span class="font-weight-normal color-black font-size-19" i18n="@@deleteMessage">Aircraft {{
+            formGroupDetail.value?.acType }} data
             cannot be deleted.</span>
         </div>
         <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
-                        The system will automatically change the aircraft status to 'Inactive'!</span>
+          <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+            The system will automatically change the aircraft status to 'Inactive'!</span>
         </div>
         <div class="btn-box text-center">
-          <button type="button" mat-button (click)="closeConfirmDelete()"
-                  class="close-btn  min-with-100 mlr-5">
+          <button type="button" mat-button (click)="closeConfirmDelete()" class="close-btn  min-with-100 mlr-5">
             <i class="material-symbols-outlined">
               close
             </i>

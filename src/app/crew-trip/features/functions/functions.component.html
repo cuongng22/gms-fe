@@ -64,7 +64,8 @@
                 </th>
                 <td *matCellDef="let element;let i = dataIndex" mat-cell>
                   <div class="action-buttons d-flex align-items-center justify-content-center">
-                    <a (click)="_showDialogDetail(element)" mat-button type="button">
+                    <a *appHasPermission="['API_FUNCTIONS_UPDATE']" (click)="_showDialogDetail(element)" mat-button
+                      type="button">
                       <i class="material-symbols-outlined" i18n-title style="font-size: 30px" title="Save">
                         save
                       </i>
@@ -87,10 +88,7 @@
 </mat-card>
 
 <!-- Save confirm Popup -->
-<div
-  [class.active]="showDialogCreate"
-  class="add-new-popup"
->
+<div [class.active]="showDialogCreate" class="add-new-popup">
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
       <mat-card-header>
@@ -100,10 +98,7 @@
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
-          <button
-            (click)="closeDetail()"
-            mat-button
-          >
+          <button (click)="closeDetail()" mat-button>
             <i class="ri-close-fill"></i>
           </button>
         </mat-card-subtitle>
@@ -116,11 +111,7 @@
             </i>
             Close
           </button>
-          <button
-            (click)="save()"
-            class="add-btn"
-            i18n mat-button
-          >
+          <button (click)="save()" class="add-btn" i18n mat-button>
             <i class="material-symbols-outlined">
               save
             </i>

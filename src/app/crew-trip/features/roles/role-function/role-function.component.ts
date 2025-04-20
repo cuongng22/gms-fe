@@ -1,39 +1,43 @@
-import {Component, EventEmitter, HostListener, inject, Input, OnInit, Output} from '@angular/core';
-import {RouterLink} from '@angular/router';
-import {NgClass, NgIf, TitleCasePipe} from '@angular/common';
-import {MatCardModule} from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {UsersService} from 'src/app/crew-trip/core/services/users-service';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {MatError, MatFormField, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {MatInput} from '@angular/material/input';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
-import {RolesService} from 'src/app/crew-trip/core/services/roles-service';
-import {MatTab, MatTabGroup} from '@angular/material/tabs';
-import {NgxEditorModule} from 'ngx-editor';
+import { Component, EventEmitter, HostListener, inject, Input, OnInit, Output } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { NgClass, NgIf, TitleCasePipe } from '@angular/common';
+import { MatCardModule } from '@angular/material/card';
+import { MatButtonModule } from '@angular/material/button';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { UsersService } from 'src/app/crew-trip/core/services/users-service';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { MatError, MatFormField, MatLabel, MatPrefix, MatSuffix } from '@angular/material/form-field';
+import { MatOption, MatSelect } from '@angular/material/select';
+import { MatInput } from '@angular/material/input';
+import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
+import { RolesService } from 'src/app/crew-trip/core/services/roles-service';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { NgxEditorModule } from 'ngx-editor';
 import {
   MatAccordion,
   MatExpansionPanel,
   MatExpansionPanelHeader,
   MatExpansionPanelTitle
 } from '@angular/material/expansion';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {FunctionsService} from 'src/app/crew-trip/core/services/functions-service';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { FunctionsService } from 'src/app/crew-trip/core/services/functions-service';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 
 @Component({
   selector: 'app-role-function',
   standalone: true,
-  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, NgxEditorModule, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, FormsModule],
+  imports: [RouterLink, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, NgxEditorModule, MatAccordion, MatExpansionPanel, MatExpansionPanelHeader, MatExpansionPanelTitle, FormsModule,
+    HasPermissionDirective
+  ],
   templateUrl: './role-function.component.html',
   styleUrl: './role-function.component.scss',
+  providers: [HasPermissionDirective]
 })
 
 
@@ -55,10 +59,10 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   displayedColumnsFunction: string[] = [];
   _displayedColumnsUser: { label: string; value: string, type?: string, format?: string }[] = [{
     label: 'Full Name', value: 'full-name'
-  }, {label: 'Active', value: 'isActiveLabel'},];
+  }, { label: 'Active', value: 'isActiveLabel' },];
   _displayedColumnsFunction: { label: string; value: string, type?: string, format?: string }[] = [{
     label: 'Active', value: 'active'
-  }, {label: 'ID', value: 'id'}, {label: 'Name', value: 'name'},];
+  }, { label: 'ID', value: 'id' }, { label: 'Name', value: 'name' },];
   selectAllChecked = false;
   selectAllIndeterminate = false;
 
@@ -72,7 +76,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
       await this.spinner.show();
       await Promise.all([
         this._detail(),]).then(() => {
-      });
+        });
       this.displayedColumnsUser = [...this._displayedColumnsUser.map(s => s.value)];
       this.displayedColumnsFunction = ['select', ...this._displayedColumnsFunction.map(s => s.value)];
     } catch (e) {
@@ -195,7 +199,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
 
   addFunction() {
     this.spinner.show();
-    this.baseService.addRoleFunction(this.id, {data: this.listRoleFunction}).then((res) => {
+    this.baseService.addRoleFunction(this.id, { data: this.listRoleFunction }).then((res) => {
       this.baseService.showSuccess(MESSAGE.UPDATE_SUCCESS);
       this.goBack();
     }).catch(e => {

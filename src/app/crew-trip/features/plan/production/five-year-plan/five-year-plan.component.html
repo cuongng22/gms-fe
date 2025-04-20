@@ -54,13 +54,14 @@
     </mat-card-title>
     <mat-card-subtitle>
       <button (click)="exportFile({export:true},'five-year-plan.xlsx')" class="add-btn mr-10" i18n mat-button
-              type="button">
+        type="button">
         <i class="material-symbols-outlined">
           download
         </i>
         Export
       </button>
-      <button (click)="showDialogDetail()" class="add-btn" i18n mat-button type="button">
+      <button *appHasPermission="['API_FIVE_YEAR_PLAN_INSERT']" (click)="showDialogDetail()" class="add-btn" i18n
+        mat-button type="button">
         <i class="material-symbols-outlined">
           add
         </i>
@@ -73,8 +74,8 @@
       <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true">
         <ng-container matColumnDef="stt">
           <th *matHeaderCellDef class="text-center" mat-header-cell mat-sort-header rowspan="2">#</th>
-          <td *matCellDef="let element; let i = dataIndex" mat-cell
-              class="text-center">{{ (pageIndex * pageSize) + i + 1 }}
+          <td *matCellDef="let element; let i = dataIndex" mat-cell class="text-center">{{ (pageIndex * pageSize) + i +
+            1 }}
           </td>
         </ng-container>
         <ng-container matColumnDef="international">
@@ -87,25 +88,25 @@
           <th *matHeaderCellDef class="text-center" colspan="2" mat-header-cell mat-sort-header>Total output</th>
         </ng-container>
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
-          <ng-container matColumnDef="{{innerColumn.value}}">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center" [rowSpan]=innerColumn.rowspan
-                [colSpan]=innerColumn.colspan>
-              {{ innerColumn.label }}
-            </th>
-            <td
-              [ngClass]="{'text-center': innerColumn.value === 'activeLabel' || innerColumn.value === 'year' ,'text-right': innerColumn.value === 'totalInternational' || innerColumn.value === 'rateInternationalLast' || innerColumn.value === 'totalDomestic' || innerColumn.value === 'rateDomesticLast' || innerColumn.value === 'total'  || innerColumn.value === 'rateTotalLast'}"
-              mat-cell *matCellDef="let element">
-                <span [ngClass]="{
+        <ng-container matColumnDef="{{innerColumn.value}}">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="text-center" [rowSpan]=innerColumn.rowspan
+            [colSpan]=innerColumn.colspan>
+            {{ innerColumn.label }}
+          </th>
+          <td
+            [ngClass]="{'text-center': innerColumn.value === 'activeLabel' || innerColumn.value === 'year' ,'text-right': innerColumn.value === 'totalInternational' || innerColumn.value === 'rateInternationalLast' || innerColumn.value === 'totalDomestic' || innerColumn.value === 'rateDomesticLast' || innerColumn.value === 'total'  || innerColumn.value === 'rateTotalLast'}"
+            mat-cell *matCellDef="let element">
+            <span [ngClass]="{
         'badge': innerColumn.value === 'activeLabel',
         'text-bg-label-badge': innerColumn.value === 'activeLabel' && element['active'] == 1,
         'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
         }">{{
-                    innerColumn.type === 'number'
-                      ? (element[innerColumn.value] | number : (innerColumn.format || '1.0-10'))
-                      : element[innerColumn.value]
-                  }}</span>
-            </td>
-          </ng-container>
+              innerColumn.type === 'number'
+              ? (element[innerColumn.value] | number : (innerColumn.format || '1.0-10'))
+              : element[innerColumn.value]
+              }}</span>
+          </td>
+        </ng-container>
         }
         <!-- Action Column -->
         <ng-container matColumnDef="action" stickyEnd>
@@ -114,16 +115,18 @@
           </th>
           <td *matCellDef="let element;let i = dataIndex" mat-cell>
             <div class="action-buttons d-flex align-items-center justify-content-end"
-                 *ngIf="element.year > currentYear">
+              *ngIf="element.year > currentYear">
               <a mat-button type="button">
 
               </a>
-              <a (click)="showDialogDetail(i,'index')" class="text-warning" mat-button type="button">
+              <a *appHasPermission="['API_FIVE_YEAR_PLAN_UPDATE']" (click)="showDialogDetail(i,'index')"
+                class="text-warning" mat-button type="button">
                 <i class="material-symbols-outlined" i18n-title title="Edit">
                   edit
                 </i>
               </a>
-              <a (click)="showConfirmDelete(element.id)" i18n-title mat-button type="button">
+              <a *appHasPermission="['API_FIVE_YEAR_PLAN_DELETE']" (click)="showConfirmDelete(element.id)" i18n-title
+                mat-button type="button">
                 <i class="material-symbols-outlined" title="Delete">
                   delete
                 </i>
@@ -141,23 +144,15 @@
       </table>
     </div>
     <!--<mat-paginator [pageSizeOptions]="[5]" showFirstLastButtons (page)="onPageChange($event)" ></mat-paginator>-->
-    <mat-paginator
-      (page)="onPageChange($event)"
-      [length]="totalElement"
-      [pageIndex]="pageIndex"
-      [pageSizeOptions]="pageSizeOptions"
-      [pageSize]="pageSize"
-      [showFirstLastButtons]="showFirstLastButtons"
+    <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageIndex]="pageIndex"
+      [pageSizeOptions]="pageSizeOptions" [pageSize]="pageSize" [showFirstLastButtons]="showFirstLastButtons"
       aria-label="Select page">
     </mat-paginator>
   </mat-card-content>
 </mat-card>
 
 <!-- Add New Popup -->
-<div
-  [class.active]="showDialogCreate"
-  class="add-new-popup"
->
+<div [class.active]="showDialogCreate" class="add-new-popup">
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
       <mat-card-header>
@@ -168,10 +163,7 @@
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
-          <button
-            (click)="closeDetail()"
-            mat-button
-          >
+          <button (click)="closeDetail()" mat-button>
             <i class="ri-close-fill"></i>
           </button>
         </mat-card-subtitle>
@@ -188,13 +180,13 @@
                       <mat-select formControlName="year" required>
                         <mat-option i18n [value]="null">-- Select year --</mat-option>
                         @for (year of listYear; track year) {
-                          <mat-option [value]="year">{{ year }}</mat-option>
+                        <mat-option [value]="year">{{ year }}</mat-option>
                         }
                       </mat-select>
                       @if (!!formGroupDetail.controls['year'].hasError('required')) {
-                        <mat-error><span i18n>Year</span><span i18n> is required</span></mat-error>
+                      <mat-error><span i18n>Year</span><span i18n> is required</span></mat-error>
                       } @else if (!!formGroupDetail.controls['year'].hasError('existYear')) {
-                        <mat-error><span i18n>Year</span><span i18n> already exist</span></mat-error>
+                      <mat-error><span i18n>Year</span><span i18n> already exist</span></mat-error>
                       }
                     </mat-form-field>
                   </div>
@@ -203,14 +195,12 @@
                     <mat-form-field>
                       <mat-label i18n>International production</mat-label>
                       <input (ngModelChange)="calculator()" formControlName="totalInternational" i18n-placeholder
-                             matInput
-                             min="0"
-                             required type="number">
+                        matInput min="0" required type="number">
                       @if (!!formGroupDetail.controls['totalInternational'].hasError('required')) {
-                        <mat-error><span i18n>International production</span><span i18n> is required</span></mat-error>
+                      <mat-error><span i18n>International production</span><span i18n> is required</span></mat-error>
                       } @else if (!!formGroupDetail.controls['totalInternational'].hasError('min')) {
-                        <mat-error><span i18n>International production</span><span i18n> must be greater than 0</span>
-                        </mat-error>
+                      <mat-error><span i18n>International production</span><span i18n> must be greater than 0</span>
+                      </mat-error>
                       }
                     </mat-form-field>
                   </div>
@@ -218,13 +208,12 @@
                     <mat-form-field>
                       <mat-label i18n>Domestic production</mat-label>
                       <input (ngModelChange)="calculator()" formControlName="totalDomestic" i18n-placeholder matInput
-                             min="0"
-                             required type="number">
+                        min="0" required type="number">
                       @if (!!formGroupDetail.controls['totalDomestic'].hasError('required')) {
-                        <mat-error><span i18n>Domestic production</span><span i18n> is required</span></mat-error>
+                      <mat-error><span i18n>Domestic production</span><span i18n> is required</span></mat-error>
                       } @else if (!!formGroupDetail.controls['totalInternational'].hasError('min')) {
-                        <mat-error><span i18n>Domestic production</span><span i18n> must be greater than 0</span>
-                        </mat-error>
+                      <mat-error><span i18n>Domestic production</span><span i18n> must be greater than 0</span>
+                      </mat-error>
                       }
                     </mat-form-field>
                   </div>
@@ -237,11 +226,10 @@
                 </div>
                 <mat-form-field>
                   <mat-label i18n>Remark</mat-label>
-                  <textarea formControlName="notes" i18n-placeholder matInput
-                  ></textarea>
+                  <textarea formControlName="notes" i18n-placeholder matInput></textarea>
                   <mat-hint align="end">{{ formGroupDetail.value.notes?.length }} / 500</mat-hint>
                   @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
-                    <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
+                  <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
                   }
                 </mat-form-field>
                 <mat-checkbox formControlName="active" i18n>Active</mat-checkbox>
@@ -256,11 +244,7 @@
             </i>
             Close
           </button>
-          <button
-            (click)="save()"
-            class="add-btn"
-            i18n mat-button
-          >
+          <button (click)="save()" class="add-btn" i18n mat-button>
             <i class="material-symbols-outlined">
               save
             </i>
@@ -278,20 +262,19 @@
     <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
       <mat-card-content>
         <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
+          <span class="material-symbols-outlined font-size-5rem">
+            error
+          </span>
         </div>
         <div class="text-center mb-20">
           <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
         </div>
         <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
-                        You will not be able to recover the deleted data!</span>
+          <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+            You will not be able to recover the deleted data!</span>
         </div>
         <div class="btn-box text-center">
-          <button type="button" mat-button (click)="closeConfirmDelete()"
-                  class="close-btn  min-with-100 mlr-5">
+          <button type="button" mat-button (click)="closeConfirmDelete()" class="close-btn  min-with-100 mlr-5">
             <i class="material-symbols-outlined">
               close
             </i>

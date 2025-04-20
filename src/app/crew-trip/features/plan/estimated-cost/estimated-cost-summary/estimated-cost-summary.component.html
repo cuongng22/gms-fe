@@ -47,7 +47,7 @@
                         (searchEvent)="searchSummary($event,CategoriesEnum.INTERNATIONAL)">
                     </app-estimated-cost-summary-search>
                     <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.INTERNATIONAL"
-                        [planBudgetProcurementId]="id()" #budgetProcurementSummaryListInternational>
+                        [planBudgetProcurementId]="id()" #estimatedCostSummaryListInternational>
                     </app-estimated-cost-summary-list>
                 </ng-template>
 
@@ -58,7 +58,7 @@
                         (searchEvent)="searchSummary($event,CategoriesEnum.DOMESTIC)">
                     </app-estimated-cost-summary-search>
                     <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.DOMESTIC"
-                        [planBudgetProcurementId]="id()" #budgetProcurementSummaryListDomestic>
+                        [planBudgetProcurementId]="id()" #estimatedCostSummaryListDomestic>
                     </app-estimated-cost-summary-list>
                 </ng-template>
 

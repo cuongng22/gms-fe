@@ -69,7 +69,7 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div class="table-responsive">
+    <div class="table-responsive max-height-table">
       <table [dataSource]="dataSource" class="table-light" mat-table multiTemplateDataRows="true">
 
         <!-- Checkbox Column -->
@@ -132,7 +132,7 @@
             </div>
           </td>
         </ng-container>
-        <tr *matHeaderRowDef="displayedColumns;" mat-header-row></tr>
+        <tr *matHeaderRowDef="displayedColumns;sticky:true" mat-header-row></tr>
         <tr *matRowDef="let row; columns: displayedColumns;" mat-row></tr>
         <tr *matNoDataRow class="mat-row">
           <td [attr.colspan]="displayedColumns.length" class="mat-cell text-center"><span i18n>No data!</span>
@@ -155,7 +155,7 @@
 <div [class.active]="showDialogCreate" class="add-new-popup">
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
-      <mat-card-header>
+      <mat-card-header class="p-15">
         <mat-card-title>
           <h5 class="mb-0">
             <span *ngIf="!formGroupDetail.value.id" i18n>Add new</span>
@@ -195,24 +195,40 @@
                   </mat-error>
                   }
                 </mat-form-field>
+
                 <mat-form-field>
                   <mat-label i18n>Unit</mat-label>
                   <mat-select formControlName="unit" required>
                     <mat-option i18n value="AC">AC</mat-option>
-                    <mat-option i18n value="Session">Session</mat-option>
-                    <mat-option i18n value="Trip">Trip</mat-option>
-                    <mat-option i18n value="Night">Night</mat-option>
-                    <mat-option i18n value="Package">Package</mat-option>
-                    <mat-option i18n value="Time">Time</mat-option>
-                    <mat-option i18n value="Count">Count</mat-option>
-                    <mat-option i18n value="Person">Person</mat-option>
-                    <mat-option i18n value="Room">Room</mat-option>
-                    <mat-option i18n value="Month">Month</mat-option>
+                    <mat-option i18n value="Buổi">Buổi</mat-option>
+                    <mat-option i18n value="Chuyến">Chuyến</mat-option>
+                    <mat-option i18n value="Đêm">Đêm</mat-option>
+                    <mat-option i18n value="Gói">Gói</mat-option>
+                    <mat-option i18n value="Lần">Lần</mat-option>
+                    <mat-option i18n value="Lượt">Lượt</mat-option>
+                    <mat-option i18n value="Người">Người</mat-option>
+                    <mat-option i18n value="Phòng">Phòng</mat-option>
+                    <mat-option i18n value="Tháng">Tháng</mat-option>
+<!--                    <mat-option i18n value="Session">Session</mat-option>-->
+<!--                    <mat-option i18n value="Trip">Trip</mat-option>-->
+<!--                    <mat-option i18n value="Night">Night</mat-option>-->
+<!--                    <mat-option i18n value="Package">Package</mat-option>-->
+<!--                    <mat-option i18n value="Time">Time</mat-option>-->
+<!--                    <mat-option i18n value="Count">Count</mat-option>-->
+<!--                    <mat-option i18n value="Person">Person</mat-option>-->
+<!--                    <mat-option i18n value="Room">Room</mat-option>-->
+<!--                    <mat-option i18n value="Month">Month</mat-option>-->
                   </mat-select>
                   @if (!!formGroupDetail.controls['unit'].hasError('required')) {
                   <mat-error><span i18n>Unit</span><span i18n> is required</span></mat-error>
                   }
                 </mat-form-field>
+                <div class="mt-1 mb-1">
+                  <app-selection size="lg" label="Group code" i18n="@@groupCode" [options]="feeOptions" attrDisplay="label"
+                    [isFirstBlank]="true" labelFirst="---All Type---" i18n-labelFirst="@@allType"
+                    formControlName="groupCode"></app-selection>
+                </div>
+
                 <mat-form-field>
                   <mat-label i18n>Note</mat-label>
                   <textarea formControlName="description" i18n-placeholder matInput></textarea>

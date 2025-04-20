@@ -1,0 +1,151 @@
+<mat-card class="border-radius d-block bg-white border-0 shadow-none">
+    <mat-card-header class="p-15">
+      <mat-card-title>
+        <h5 class="mb-0">
+          <span *ngIf="!formGroupDetail.value.id" i18n>Add new</span>
+          <span *ngIf="formGroupDetail.value.id" i18n>
+            Edit
+          </span>
+
+        </h5>
+      </mat-card-title>
+      <mat-card-subtitle>
+        <button (click)="close()" mat-button>
+          <i class="ri-close-fill"></i>
+        </button>
+      </mat-card-subtitle>
+    </mat-card-header>
+    <mat-card-content>
+      <form [formGroup]="formGroupDetail" autocomplete="off">
+        <div class="row">
+          <div class="col-sm-12 col-md-12">
+            <div class="form-group mb-20" sizeInput="sm">
+              <app-selection-suggest i18n-label="@@type" label="Type" [options]="notiSetupType"
+                formControlName="type" size="sm" attrDisplay="label" attrValue="code"
+                (selectionChange)="typeValueChanges($event)" />
+              @if(formGroupDetail.controls.type.errors?.['conflict']) {
+              <i class="required" i18n="@@configurationAlreadyExists">
+                Configuration already exists
+              </i>
+              }
+
+
+              <!-- <mat-form-field>
+                  <mat-label>Type</mat-label>
+                  <mat-select formControlName="type" required>
+                    <mat-option [value]="null">Choose type</mat-option>
+                    <mat-option *ngFor="let type of notiSetupType" [value]="type.code">
+                      {{ type.label }}
+                    </mat-option>
+                  </mat-select>
+                  @if (!!formGroupDetail.controls['type'].hasError('required')) {
+                  <mat-error><span i18n>Type</span><span i18n> is required</span></mat-error>
+                  } @else if (formGroupDetail.controls['type'].hasError('conflict')) {
+                  <mat-error><span i18n>Configuration already exists</span></mat-error>
+                  }
+                </mat-form-field> -->
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12 mb-2 text-dark">
+            <mat-label i18n>Notification settings</mat-label>
+          </div>
+          <div class="col-sm-6 col-md-6">
+            <div class="form-group mb-20" sizeInput="sm">
+              <mat-form-field>
+                <mat-label>By type</mat-label>
+                <mat-select formControlName="notiSettingValueType">
+                  <mat-option [value]="null">Choose type</mat-option>
+                  <mat-option *ngFor="let type of notiSettingValueType" [value]="type.code">
+                    {{ type.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6">
+            <div class="form-group mb-20" sizeInput="sm">
+              <mat-form-field>
+                <mat-label i18n="@@value">Value</mat-label>
+                <input formControlName="notiSetting" matInput digitOnly [decimal]="false" [allowNegatives]="false"
+                  [min]="1" [max]="999" type="text">
+                <!--                  @if (!!formGroupDetail.controls['notiSettingValueType'].hasError('required')) {-->
+                <!--                    <mat-error><span i18n>By type</span><span i18n> is required</span></mat-error>-->
+                <!--                  }-->
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-12 col-md-12 mb-2 text-dark">
+            <mat-label i18n>Regular notification</mat-label>
+          </div>
+          <div class="col-sm-6 col-md-6">
+            <div class="form-group mb-20" sizeInput="sm">
+              <mat-form-field>
+                <mat-label>By type</mat-label>
+                <mat-select formControlName="regularType">
+                  <mat-option [value]="null">Choose type</mat-option>
+                  <mat-option *ngFor="let type of notiRegularType" [value]="type.code">
+                    {{ type.label }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
+          </div>
+          <div class="col-sm-6 col-md-6">
+            <div class="form-group mb-20" sizeInput="sm">
+              <mat-form-field>
+                <mat-label i18n="@@value">Value</mat-label>
+                <input formControlName="regularNoti" matInput digitOnly [decimal]="false" [allowNegatives]="false"
+                  [min]="1" [max]="regularNotiMax" type="text">
+              </mat-form-field>
+            </div>
+          </div>
+          @if(isShowAirportCode){
+          <div class="col-sm-12 col-md-12">
+            <div class="form-group mb-20" sizeInput="sm">
+              <app-selection-suggest i18n-label="@@airportCode" label="Airport code" required
+                [options]="listFlightMarket" formControlName="airportCode" size="sm" />
+              <!-- <mat-form-field class="mb-1">
+                  <mat-label i18n="@@airportCode">Airport code</mat-label>
+                  <input type="text" #airportCode matInput formControlName="airportCode"
+                    [matAutocomplete]="marketComplete" (input)="filterMarket()" (focus)="onFocusMarket()">
+                  <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
+                    <mat-option [value]="null">
+                      -- Choose airport code --
+                    </mat-option>
+                    <mat-option *ngFor="let option of filteredOptionsMarket" [value]="option">
+                      {{ option }}
+                    </mat-option>
+                  </mat-autocomplete>
+                </mat-form-field> -->
+            </div>
+          </div>
+          }
+
+          <mat-form-field>
+            <mat-label i18n>Remark</mat-label>
+            <textarea formControlName="note" matInput></textarea>
+            <mat-hint align="end">{{ formGroupDetail.value.note?.length }} / 500</mat-hint>
+            @if (!!formGroupDetail.controls['note'].hasError('maxlength')) {
+            <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
+            }
+          </mat-form-field>
+          <mat-checkbox class="mt-10" formControlName="active" i18n>Active</mat-checkbox>
+        </div>
+      </form>
+
+      <div class="btn-box d-flex justify-content-end">
+        <button (click)="close()" class="close-btn mlr-5" i18n mat-button type="button">
+          <i class="material-symbols-outlined">
+            close
+          </i>
+          Close
+        </button>
+        <button (click)="save()" class="add-btn mlr-5" i18n mat-button>
+          <i class="material-symbols-outlined">
+            save
+          </i>
+          Save
+        </button>
+      </div>
+    </mat-card-content>
+  </mat-card>

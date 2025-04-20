@@ -18,7 +18,7 @@
 
 <!--<mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">-->
 <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start" (selectedTabChange)="onTabChange($event)">
-  <mat-tab label="Booking email">
+  <mat-tab *appHasPermission="['API_GROUP_MAIL_LIST']" label="Booking email">
     <!--Search-->
     <mat-card class="mb-10 pt-15 pl-15 pr-15 pb-0 border-radius d-block bg-white border-0 shadow-none">
       <mat-card-content>
@@ -56,7 +56,8 @@
         <mat-card-title>
         </mat-card-title>
         <mat-card-subtitle>
-          <button class="add-btn" type="button" mat-button (click)="grMailDetail()">
+          <button *appHasPermission="['API_GROUP_MAIL_INSERT']" class="add-btn" type="button" mat-button
+            (click)="grMailDetail()">
             <i class="material-symbols-outlined">
               add
             </i>
@@ -69,19 +70,18 @@
           <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
             <ng-container matColumnDef="stt">
               <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
-              <td mat-cell *matCellDef="let element; let i = dataIndex"
-                  class="text-center">{{ (pageIndex * pageSize) + i + 1 }}
+              <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">{{ (pageIndex * pageSize) +
+                i + 1 }}
               </td>
             </ng-container>
             @for (innerColumn of _displayedColumns; track innerColumn.value) {
-              <ng-container matColumnDef="{{innerColumn.value}}">
-                <th mat-sort-header mat-header-cell *matHeaderCellDef
-                    class="font-weight-bold">{{ innerColumn.label }}
-                </th>
-                <td mat-cell *matCellDef="let element">
-                  {{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}
-                </td>
-              </ng-container>
+            <ng-container matColumnDef="{{innerColumn.value}}">
+              <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">{{ innerColumn.label }}
+              </th>
+              <td mat-cell *matCellDef="let element">
+                {{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+              </td>
+            </ng-container>
             }
             <ng-container matColumnDef="action" stickyEnd>
               <th mat-header-cell *matHeaderCellDef i18n="@@action">
@@ -94,13 +94,14 @@
                   <!--                      visibility-->
                   <!--                    </i>-->
                   <!--                  </a>-->
-                  <a type="button" mat-button (click)="grMailDetail(element.id,'edit')">
+                  <a *appHasPermission="['API_GROUP_MAIL_UPDATE']" type="button" mat-button
+                    (click)="grMailDetail(element.id,'edit')">
                     <i class="material-symbols-outlined text-warning" title="Edit" i18n-title="@@edit">
                       edit
                     </i>
                   </a>
-                  <a type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
-                     (click)="showConfirmDelete(element.id)">
+                  <a *appHasPermission="['API_GROUP_MAIL_DELETE']" type="button" mat-button title="Delete"
+                    i18n-title="@@deleteGroupEmail" (click)="showConfirmDelete(element.id)">
                     <i class="material-symbols-outlined text-danger">
                       delete
                     </i>
@@ -116,9 +117,8 @@
           </table>
         </div>
         <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-                       [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
-                       [pageIndex]="pageIndex"
-                       aria-label="Select page" i18n-aria-label="@@selectPage">
+          [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+          aria-label="Select page" i18n-aria-label="@@selectPage">
         </mat-paginator>
       </mat-card-content>
     </mat-card>
@@ -128,20 +128,19 @@
         <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
           <mat-card-content>
             <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
+              <span class="material-symbols-outlined font-size-5rem">
+                error
+              </span>
             </div>
             <div class="text-center mb-20">
               <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
             </div>
             <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
-                        You will not be able to recover the deleted data!</span>
+              <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+                You will not be able to recover the deleted data!</span>
             </div>
             <div class="btn-box text-center">
-              <button type="button" mat-button (click)="closeConfirmDelete()"
-                      class="close-btn  min-with-100 mlr-5">
+              <button type="button" mat-button (click)="closeConfirmDelete()" class="close-btn  min-with-100 mlr-5">
                 <i class="material-symbols-outlined">
                   close
                 </i>
@@ -160,7 +159,7 @@
       </div>
     </div>
   </mat-tab>
-  <mat-tab label="Payment Email">
+  <mat-tab *appHasPermission="['API_PAYMENT_MAIL_LIST']" label="Payment Email">
     <ng-container *ngIf="activeTab === 1">
       <app-payment-mail></app-payment-mail>
     </ng-container>

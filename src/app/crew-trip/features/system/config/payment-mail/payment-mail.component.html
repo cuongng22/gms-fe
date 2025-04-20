@@ -37,7 +37,8 @@
       <!--      <h5 i18n="@@groupMailList">Group mail List</h5>-->
     </mat-card-title>
     <mat-card-subtitle>
-      <button class="add-btn" type="button" mat-button (click)="showDialogDetail()">
+      <button *appHasPermission="['API_PAYMENT_MAIL_INSERT']" class="add-btn" type="button" mat-button
+        (click)="showDialogDetail()">
         <i class="material-symbols-outlined">
           add
         </i>
@@ -50,17 +51,17 @@
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
         <ng-container matColumnDef="stt">
           <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold">#</th>
-          <td mat-cell *matCellDef="let element; let i = dataIndex"
-              class="text-center">{{ (pageIndex * pageSize) + i + 1 }}
+          <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">{{ (pageIndex * pageSize) + i +
+            1 }}
           </td>
         </ng-container>
         @for (innerColumn of _displayedColumns; track innerColumn.value) {
-          <ng-container matColumnDef="{{innerColumn.value}}">
-            <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">{{ innerColumn.label }}</th>
-            <td mat-cell *matCellDef="let element">
-              {{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}
-            </td>
-          </ng-container>
+        <ng-container matColumnDef="{{innerColumn.value}}">
+          <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold">{{ innerColumn.label }}</th>
+          <td mat-cell *matCellDef="let element">
+            {{ element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+          </td>
+        </ng-container>
         }
         <ng-container matColumnDef="action" stickyEnd>
           <th mat-header-cell *matHeaderCellDef i18n="@@action">
@@ -68,15 +69,16 @@
           </th>
           <td *matCellDef="let element;let i = dataIndex" mat-cell>
             <div class="action-buttons d-flex align-items-center justify-content-end">
-              <a type="button" mat-button (click)="showDialogDetail(i,'index')">
+              <a *appHasPermission="['API_PAYMENT_MAIL_UPDATE']" type="button" mat-button
+                (click)="showDialogDetail(i,'index')">
                 <i class="material-symbols-outlined text-warning" title="Edit" i18n-title="@@edit">
                   edit
                 </i>
               </a>
               <a>
               </a>
-              <a type="button" mat-button title="Delete" i18n-title="@@deleteGroupEmail"
-                 (click)="showConfirmDelete(element.id)">
+              <a *appHasPermission="['API_PAYMENT_MAIL_DELETE']" type="button" mat-button title="Delete"
+                i18n-title="@@deleteGroupEmail" (click)="showConfirmDelete(element.id)">
                 <i class="material-symbols-outlined">
                   delete
                 </i>
@@ -92,19 +94,15 @@
       </table>
     </div>
     <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-                   [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
-                   [pageIndex]="pageIndex"
-                   aria-label="Select page" i18n-aria-label="@@selectPage">
+      [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions" [pageIndex]="pageIndex"
+      aria-label="Select page" i18n-aria-label="@@selectPage">
     </mat-paginator>
   </mat-card-content>
 </mat-card>
 
 
 <!-- Add New Popup -->
-<div
-  [class.active]="showDialogCreate"
-  class="add-new-popup"
->
+<div [class.active]="showDialogCreate" class="add-new-popup">
   <div class="popup-dialog">
     <mat-card class="border-radius d-block bg-white border-0 shadow-none container">
       <mat-card-header>
@@ -115,10 +113,7 @@
           </h5>
         </mat-card-title>
         <mat-card-subtitle>
-          <button
-            (click)="closeDetail()"
-            mat-button
-          >
+          <button (click)="closeDetail()" mat-button>
             <i class="ri-close-fill"></i>
           </button>
         </mat-card-subtitle>
@@ -129,9 +124,8 @@
             <div class="col-sm-12 col-md-12">
               <mat-form-field class="mb-1">
                 <mat-label i18n="@@airportCode">Airport code</mat-label>
-                <input type="text" #marketCode matInput formControlName="marketCode"
-                       [matAutocomplete]="marketComplete" [required]="true"
-                       (input)="filterMarket()" (focus)="onFocusMarket()">
+                <input type="text" #marketCode matInput formControlName="marketCode" [matAutocomplete]="marketComplete"
+                  [required]="true" (input)="filterMarket()" (focus)="onFocusMarket()">
                 <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
                   <mat-option [value]="null">
                     -- Choose airport code --
@@ -141,12 +135,12 @@
                   </mat-option>
                 </mat-autocomplete>
                 @if (formGroupDetail.controls['marketCode'].hasError('required')) {
-                  <mat-error><span i18n>Airport code</span><span i18n> is required</span></mat-error>
+                <mat-error><span i18n>Airport code</span><span i18n> is required</span></mat-error>
                 } @else if (formGroupDetail.controls['marketCode'].hasError('conflict')) {
-                  <mat-error>
-                    <!--                    {{ formGroupDetail.controls['marketCode'].getError('message') }}-->
-                    Airport code has already existed in payment email config.
-                  </mat-error>
+                <mat-error>
+                  <!--                    {{ formGroupDetail.controls['marketCode'].getError('message') }}-->
+                  Airport code has already existed in payment email config.
+                </mat-error>
                 }
               </mat-form-field>
               <div class="mb-2"></div>
@@ -155,12 +149,12 @@
                 <input formControlName="emailsInput" [required]="true" matInput>
                 <mat-hint align="start" i18n>Input multiple email addresses, separated by ;.</mat-hint>
                 @if (formGroupDetail.controls['emailsInput'].hasError('required')) {
-                  <mat-error><span i18n>Supplier payment email</span><span i18n> is required</span></mat-error>
+                <mat-error><span i18n>Supplier payment email</span><span i18n> is required</span></mat-error>
                 } @else if (formGroupDetail.controls['emailsInput'].hasError('invalid')) {
-                  <mat-error><span i18n>Supplier payment email</span><span i18n> is invalid</span></mat-error>
+                <mat-error><span i18n>Supplier payment email</span><span i18n> is invalid</span></mat-error>
                 } @else if (formGroupDetail.controls['emailsInput'].hasError('maxlength')) {
-                  <mat-error><span i18n>Supplier payment email</span><span i18n> must be less than 500 characters</span>
-                  </mat-error>
+                <mat-error><span i18n>Supplier payment email</span><span i18n> must be less than 500 characters</span>
+                </mat-error>
                 }
               </mat-form-field>
               <div class="mb-2"></div>
@@ -169,7 +163,7 @@
                 <textarea formControlName="note" matInput></textarea>
                 <mat-hint align="end">{{ formGroupDetail.value.note?.length }} / 500</mat-hint>
                 @if (formGroupDetail.controls['note'].hasError('maxlength')) {
-                  <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
+                <mat-error><span i18n>Remark</span><span i18n> must be less than 500 characters</span></mat-error>
                 }
               </mat-form-field>
             </div>
@@ -182,11 +176,7 @@
             </i>
             Close
           </button>
-          <button
-            (click)="save()"
-            class="add-btn"
-            i18n mat-button
-          >
+          <button (click)="save()" class="add-btn" i18n mat-button>
             <i class="material-symbols-outlined">
               save
             </i>
@@ -203,20 +193,19 @@
     <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
       <mat-card-content>
         <div class="text-warning text-center">
-                    <span class="material-symbols-outlined font-size-5rem">
-                        error
-                    </span>
+          <span class="material-symbols-outlined font-size-5rem">
+            error
+          </span>
         </div>
         <div class="text-center mb-20">
           <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
         </div>
         <div class="text-center mb-20">
-                    <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
-                        You will not be able to recover the deleted data!</span>
+          <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
+            You will not be able to recover the deleted data!</span>
         </div>
         <div class="btn-box text-center">
-          <button type="button" mat-button (click)="closeConfirmDelete()"
-                  class="close-btn  min-with-100 mlr-5">
+          <button type="button" mat-button (click)="closeConfirmDelete()" class="close-btn  min-with-100 mlr-5">
             <i class="material-symbols-outlined">
               close
             </i>
@@ -234,4 +223,3 @@
     </mat-card>
   </div>
 </div>
-

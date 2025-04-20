@@ -7,7 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { ClickOutside } from 'ngxtension/click-outside';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { exampleData, formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef, planFlightByOvernight, planFlightPeriodList } from './international-budget-procurement-car-rental.model';
+import { formula, getHeaderRowDef1, getHeaderRowDef2, getRowDef } from './international-budget-procurement-car-rental.model';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { Constant, round } from 'src/app/crew-trip/shared/utils/constant';
 import { truncateDate } from 'src/app/crew-trip/shared/utils/common';
@@ -15,6 +15,7 @@ import { DigitOnlyModule } from '@uiowa/digit-only';
 import { PlanCategoryEnum } from '../../../budget-procurement.model';
 import moment from 'moment';
 import { ThousandsSeparatorDirective } from 'src/app/crew-trip/shared/directive/thousand-separator.directive';
+import { CategoriesEnum } from '../../../../estimated-cost/estimated-cost.model';
 
 @Component({
   selector: 'app-international-budget-procurement-car-rental',
@@ -30,9 +31,9 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   dataTransformPipe = inject(DataTransformPipe);
   dataSource = new MatTableDataSource();
 
-  headerRowDef1: string[] = getHeaderRowDef1();
-  headerRowDef2: string[] = getHeaderRowDef2();
-  rowDef: string[] = getRowDef();
+  headerRowDef1: string[] = [];
+  headerRowDef2: string[] = [];
+  rowDef: string[] = [];
 
   updateBudgetPlan = input<boolean | undefined>(false); //tích chọn check box Lập kế hoạch sản lượng thay đổi
   yearPlan = input<number>(2024); // năm kế hoạch
@@ -58,7 +59,9 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
     this.cdRef.detectChanges(); // Phát hiện và cập nhật các thay đổi
   }
   ngOnInit(): void {
-
+    this.headerRowDef1 = getHeaderRowDef1(this.type());
+    this.headerRowDef2 = getHeaderRowDef2(this.type());
+    this.rowDef = getRowDef(this.type());
   }
 
   setDataSource(data: any[], isSummary?: boolean) {
@@ -136,10 +139,10 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
         //Số lượt xe
         this.calculate(item, 'numberVehicles');
       }
-      //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
-      this.calculate(item, 'totalAmountForeign');
       //Thành tiền (ngoại tệ) - Bao gồm VAT
       this.calculate(item, 'totalAmountForeignVat');
+      //Thành tiền (ngoại tệ) - Chưa bao gồm VAT
+      this.calculate(item, 'totalAmountForeign');
       //Thành tiền VND (Chưa bao gồm VAT)
       this.calculate(item, 'totalAmount');
       //Thành tiền VND (Bao gồm VAT)
@@ -267,8 +270,9 @@ export class InternationalBudgetProcurementCarRentalComponent implements OnInit,
   }
   clickOutside(data: any, control: string) {
     data[control] = false;
-    if (control === 'unitPriceVatEditing') {
-      data.unitPrice = Number(data.unitPriceVat) / (1 + (Number(data.taxRate) / 100))
+    if (this.type() === PlanCategoryEnum.PROCUREMENT) {
+      data.unitPrice = Number(data.unitPriceVat) / (1 + (Number(this.ctz(data.taxRate)) / 100))
+      data.unitPriceExtraNoVat = Number(data.unitPriceExtra) / (1 + (Number(this.ctz(data.taxRate)) / 100))
     }
     this.calculateData(data, undefined, true);
     this.calculateTotal()

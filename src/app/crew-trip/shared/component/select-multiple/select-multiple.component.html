@@ -33,7 +33,7 @@
       }
 
     </mat-select>
-    <mat-error *ngxControlError="ngControl?.control ?? undefined; track: 'required'">
+    <mat-error *ngxControlError="formControl ?? undefined; track: 'required'">
       {{ label }} {{ MESSAGE.REQUIRED }}
     </mat-error>
     <ng-content select="[mess-error]"></ng-content>

@@ -6,6 +6,7 @@ import { SelectionSuggestComponent } from './selection-suggest/selection-suggest
 import { DatepickerYearMonthComponent } from './datepicker-year-month/datepicker-year-month.component';
 import { DatepickerComponent } from './datepicker/datepicker.component';
 import { HasPermissionDirective } from '../directive/has-permission.directive';
+import { SelectMultipleComponent } from './select-multiple/select-multiple.component';
 
 @NgModule({
   declarations: [],
@@ -14,19 +15,22 @@ import { HasPermissionDirective } from '../directive/has-permission.directive';
     SelectionComponent,
     DatepickerYearMonthComponent,
     SelectionSuggestComponent,
-    HasPermissionDirective
+    HasPermissionDirective,
+    SelectMultipleComponent
   ],
   exports: [
     InputComponent,
     SelectionComponent,
     DatepickerYearMonthComponent,
     SelectionSuggestComponent,
-    HasPermissionDirective
+    HasPermissionDirective,
+    SelectMultipleComponent
   ],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,
       useExisting: [InputComponent, SelectionComponent, SelectionSuggestComponent, DatepickerYearMonthComponent, DatepickerComponent,
+        SelectMultipleComponent
 
       ],
       multi: true,
@@ -34,7 +38,7 @@ import { HasPermissionDirective } from '../directive/has-permission.directive';
     {
       provide: NG_VALIDATORS,
       useExisting: [InputComponent, SelectionComponent, SelectionSuggestComponent, DatepickerYearMonthComponent, DatepickerComponent,
-
+        SelectMultipleComponent
       ],
       multi: true,
     },
