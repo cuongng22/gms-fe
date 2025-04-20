@@ -20,17 +20,19 @@ export function getCategoryCode(categoryCode: string) {
 export function getSendMailName(isEmailSent: boolean) {
     if (isEmailSent) {
         return $localize`:@@sent:Sent`;
-    } else {
+    } else if (isEmailSent === false) {
         return $localize`:@@notSent:Not sent`;
     }
+    return '';
 }
 
 export function getEmailDeliveryStatus(isSendSuccess: boolean) {
     if (isSendSuccess) {
         return $localize`:@@successful:Successful`;
-    } else {
+    } else if (isSendSuccess === false) {
         return $localize`:@@failed:Failed`;
     }
+    return '';
 }
 
 export function getFileName(filePath: string) {
