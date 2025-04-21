@@ -311,7 +311,15 @@ export class WetLeaseDetailComponent extends CommonComponent {
 			? this.wetLeaseGeneral.dataSourceCarRental.data
 			: [];
 		const _planHotel = _dataGeneral.isHotel
-			? this.wetLeaseHotel.dataSource.data
+			? this.wetLeaseHotel.dataSource.data.map((item) => {
+				Object.entries<any>(item.hotelItem).forEach(([hotelCode, hotelValue]) => {
+					hotelValue.totalSingleRoom = Number(hotelValue.totalSingleRoom);
+					hotelValue.totalTwinRoom = Number(hotelValue.totalTwinRoom);
+					hotelValue.twinRoomPrice = Number(hotelValue.twinRoomPrice);
+					hotelValue.singleRoomPrice = Number(hotelValue.singleRoomPrice);
+				});
+				return { ...item, totalSingleRoom: Number(item.totalSingleRoom), totalTwinRoom: Number(item.totalTwinRoom) }
+			})
 			: [];
 		const _planTransports = _dataGeneral.isTransport
 			? this.wetLeaseCarRental.dataSource.data

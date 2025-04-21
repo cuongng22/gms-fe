@@ -14,7 +14,7 @@
             <ng-container matColumnDef="totalNormalRoom">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " rowspan="2"
                     i18n="@@noOfRoomNormal">No. of room - Normal</th>
-                <td mat-cell *matCellDef="let element" class="mat-column-60 right"
+                <td mat-cell *matCellDef="let element" class="mat-column-60 text-right"
                     [style.padding]="element[1]['totalNormalRoomEditing']  && !!!disabled()?'0px !important':''"
                     (click)="clickEdit(element[1], 'totalNormalRoomEditing')">
                     @if(!element[1]['totalNormalRoomEditing'] || !!disabled()){
@@ -35,7 +35,7 @@
             <ng-container matColumnDef="totalECIRoom">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " rowspan="2"
                     i18n="@@noOfRoomECI">No. of room - ECI</th>
-                <td mat-cell *matCellDef="let element" class="mat-column-60 right"
+                <td mat-cell *matCellDef="let element" class="mat-column-60 text-right"
                     [style.padding]="element[1]['totalECIRoomEditing']  && !!!disabled()?'0px !important':''"
                     (click)="clickEdit(element[1], 'totalECIRoomEditing')">
                     @if(!element[1]['totalECIRoomEditing'] || !!disabled()){
@@ -56,7 +56,7 @@
             <ng-container matColumnDef="totalLCORoom">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " rowspan="2"
                     i18n="@@noOfRoomLCO">No. of room - LCO</th>
-                <td mat-cell *matCellDef="let element" class="mat-column-60 right"
+                <td mat-cell *matCellDef="let element" class="mat-column-60 text-right"
                     [style.padding]="element[1]['totalLCORoomEditing']  && !!!disabled()?'0px !important':''"
                     (click)="clickEdit(element[1], 'totalLCORoomEditing')">
                     @if(!element[1]['totalLCORoomEditing'] || !!disabled()){

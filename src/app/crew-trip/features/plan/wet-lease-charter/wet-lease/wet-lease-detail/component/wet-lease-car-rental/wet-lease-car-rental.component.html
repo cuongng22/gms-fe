@@ -3,7 +3,7 @@
         <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
             <ng-container matColumnDef="transportName">
                 <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center " rowspan="2"
-                    i18n="@@supplierName">Supplier name</th>
+                    i18n="@@category">Category</th>
                 <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
                     {{ element.transportName }}
                 </td>

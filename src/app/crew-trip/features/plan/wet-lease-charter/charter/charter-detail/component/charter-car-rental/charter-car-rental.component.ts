@@ -99,6 +99,7 @@ export class CharterCarRentalComponent extends CommonComponent {
 	}
 	exchangeRateSubscription: Subscription;
 	rateVatSubscription: Subscription;
+	transportsSubscription: Subscription;
 
 	override ngOnInit(): void {
 		this.exchangeRateSubscription = this.baseService.exchangeRate$.subscribe(
@@ -116,16 +117,26 @@ export class CharterCarRentalComponent extends CommonComponent {
 		);
 
 		this.rateVatSubscription = this.baseService.rateVat$.subscribe((data) => {
-			if (data) {
-				const _rateVat = Number(data);
-				this.dataSource.data.forEach((element) => {
-					element.rateVat = _rateVat;
+
+			const _rateVat = Number(data ?? 0);
+			this.dataSource.data.forEach((element) => {
+				element.rateVat = _rateVat;
+				this.calculation('totalAmountForex', element);
+				this.calculation('totalAmountIncVat', element);
+				this.calculation('totalAmountExcVat', element);
+			});
+
+		});
+		this.transportsSubscription = this.baseService.transports$.subscribe(data => {
+			this.dataSource.data.forEach((element) => {
+				if (element.carType === data.carType) {
+					element.unitPrice = Number(data.priceIncVat);
 					this.calculation('totalAmountForex', element);
 					this.calculation('totalAmountIncVat', element);
 					this.calculation('totalAmountExcVat', element);
-				});
-			}
-		});
+				}
+			});
+		})
 	}
 
 	setDataSource(value: any[]) {
