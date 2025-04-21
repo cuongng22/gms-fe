@@ -71,9 +71,9 @@
   <mat-card-content>
     <div class="table-responsive">
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="mat-elevation-z8 table-light">
-        <ng-container *ngFor="let column of displayedColumns" [matColumnDef]="column">
+        <ng-container *ngFor="let column of displayedColumns;index as i" [matColumnDef]="column">
           <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
-          <td mat-cell *matCellDef="let element" class="multiline">
+          <td mat-cell *matCellDef="let element" class="multiline" [ngClass]="{'text-center': i >= 3}">
             <!--            {{ element[column] }}-->
             <div [innerHTML]="formatNewLine(element[column])"></div>
           </td>

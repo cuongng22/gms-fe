@@ -1055,7 +1055,7 @@
           Add
         </button>
       </div>
-      <div class="table-responsive">
+      <div class="table-responsive" style="max-height: 500px !important;">
         <form [formGroup]="formGroupDetail">
           <table [dataSource]="dsPriceUnit" class="table-light table-responsive" mat-table mat-table>
             <!-- Cột Tên -->
@@ -1065,7 +1065,7 @@
                   mat-cell>{{ (pageIndex * pageSize) + i + 1 }}
               </td>
             </ng-container>
-            <ng-container matColumnDef="fromDate">
+            <ng-container matColumnDef="fromDate" sticky>
               <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>From Date</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
@@ -1087,7 +1087,7 @@
                 </div>
               </td>
             </ng-container>
-            <ng-container matColumnDef="toDate">
+            <ng-container matColumnDef="toDate" sticky>
               <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>To Date</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
@@ -1109,7 +1109,7 @@
                 </div>
               </td>
             </ng-container>
-            <ng-container matColumnDef="serviceCode">
+            <ng-container matColumnDef="serviceCode" sticky>
               <th *matHeaderCellDef class="required-label" i18n mat-header-cell mat-sort-header>Code</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
@@ -1139,7 +1139,7 @@
                 </div>
               </td>
             </ng-container>
-            <ng-container matColumnDef="serviceName">
+            <ng-container matColumnDef="serviceName" sticky>
               <th *matHeaderCellDef i18n mat-header-cell mat-sort-header>Category name</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
@@ -1300,7 +1300,7 @@
             </ng-container>
             @if (!readMode) {
             <tr
-                *matHeaderRowDef="['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes','action']"
+                *matHeaderRowDef="['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes','action']; sticky: true"
                 mat-header-row></tr>
             <tr
                 *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes','action',];"
@@ -1311,7 +1311,7 @@
             </tr>
             } @else {
             <tr
-                *matHeaderRowDef="['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes']"
+                *matHeaderRowDef="['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes']; sticky: true"
                 mat-header-row></tr>
             <tr
                 *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes']"

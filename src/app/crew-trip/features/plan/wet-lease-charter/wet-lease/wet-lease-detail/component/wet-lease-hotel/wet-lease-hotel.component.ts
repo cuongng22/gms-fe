@@ -181,12 +181,10 @@ export class WetLeaseHotelComponent
 		);
 
 		this.rateVatSubscription = this.baseService.rateVat$.subscribe((data) => {
-			if (data) {
-				const _rateVat = Number(data);
-				if (this.dataGeneral()) {
-					this.dataGeneral().rateVat = _rateVat;
-					this.calculation();
-				}
+			const _rateVat = Number(data ?? 0);
+			if (this.dataGeneral()) {
+				this.dataGeneral().rateVat = _rateVat;
+				this.calculation();
 			}
 		});
 
@@ -253,10 +251,10 @@ export class WetLeaseHotelComponent
 		this.totalPlannedBudgetRowDef = [..._totalPlannedBudgetRowDefCommon];
 	}
 
-	getTotal(formula: string) {
+	getTotal(formula: string, isRound?: boolean) {
 		return this.dataSource.data
 			.map((item: any) => {
-				return Number(this.calWithFormula(formula, item));
+				return Number(this.calWithFormula(formula, item, isRound));
 			})
 			.reduce((acc, value) => acc + value, 0)
 			.toFixed(3);
@@ -313,13 +311,14 @@ export class WetLeaseHotelComponent
 		// });
 	}
 
-	calWithFormula(formula: string, item: any, dataGeneral?: any) {
+	calWithFormula(formula: string, item: any, dataGeneral?: any, isRound?: boolean) {
 		const formulaFunction = new Function(
 			'item',
 			'dataGeneral',
 			`return ${formula};`,
 		);
-		return Math.round(formulaFunction(item, dataGeneral));
+		return isRound
+			? Math.round(formulaFunction(item, dataGeneral)) : formulaFunction(item, dataGeneral);
 	}
 
 	// tính toán tổng số phòng

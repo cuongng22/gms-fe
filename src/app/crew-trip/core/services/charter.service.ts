@@ -20,6 +20,10 @@ export class CharterService extends BaseService {
     private readonly rateVatSubject = new Subject<any>();
     rateVat$ = this.rateVatSubject.pipe(debounceTime(1000));
 
+    private readonly transportsSubject = new Subject<any>();
+    transports$ = this.transportsSubject.pipe(debounceTime(1000));
+
+    
     exchangeRate(body: any): Promise<any> {
         const url = `${this.api}/${this.path}/exchange-rate`;
         const params = new HttpParams({ fromObject: body });
@@ -37,6 +41,10 @@ export class CharterService extends BaseService {
 
     rateVatChange(data: any) {
         this.rateVatSubject.next(data);
+    }
+
+    transportsChange(data:any){
+        this.transportsSubject.next(data);
     }
 
 }

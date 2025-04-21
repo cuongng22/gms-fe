@@ -86,7 +86,7 @@ export class CharterDetailComponent extends CommonComponent {
 	override ngOnInit(): void {
 		this.formCharterGeneral = {
 			isHotel: true,
-			isTransport: true,
+			isCarRental: true,
 		};
 		this.getDetailById(this.id());
 	}
@@ -160,7 +160,7 @@ export class CharterDetailComponent extends CommonComponent {
 		) {
 			return;
 		} else if (
-			(_dataGeneral.isTransport &&
+			(_dataGeneral.isCarRental &&
 				this.charterGeneral.dataSource.data.length <= 0) ||
 			isRequiredTransportation
 		) {
@@ -172,7 +172,7 @@ export class CharterDetailComponent extends CommonComponent {
 			(_dataGeneral.isHotel &&
 				this.charterHotel?.dataSource.data &&
 				this.charterHotel?.dataSource.data.length > 0) ||
-			(_dataGeneral.isTransport &&
+			(_dataGeneral.isCarRental &&
 				this.charterCarRental?.dataSource.data &&
 				this.charterCarRental?.dataSource.data.length > 0)
 		) {
@@ -265,6 +265,7 @@ export class CharterDetailComponent extends CommonComponent {
 	}
 
 	override async save(): Promise<any> {
+		debugger
 		const isRequiredTransportation =
 			this.charterGeneral.checkRequiredTransportation();
 		const _dataGeneral = this.charterGeneral.formGroupDetail.getRawValue();
@@ -275,7 +276,7 @@ export class CharterDetailComponent extends CommonComponent {
 		) {
 			return;
 		} else if (
-			(_dataGeneral.isTransport &&
+			(_dataGeneral.isCarRental &&
 				this.charterGeneral.dataSource.data.length <= 0) ||
 			isRequiredTransportation
 		) {
@@ -311,17 +312,17 @@ export class CharterDetailComponent extends CommonComponent {
 			),
 		};
 		_body.planTransports = [..._planTransports];
-		_body.totalNumberOfTrip = _planTransports
-			.map((item) => item.numberOfTrip)
-			.reduce((acc, value) => acc + value, 0);
+		_body.totalNumberOfTrip = _planTransports.map((item) => item.numberOfTrip).reduce((acc, value) => acc + value, 0);
+
 		_body.totalForex = [
 			..._planHotel.map((item) => item[1].totalForex).flat(),
-			..._planTransports.map((item) => item.totalAmountForex).flat(),
-		].reduce((acc, value) => acc + value, 0);
+			..._planTransports.map((item) => item.totalAmountForex).flat(),].reduce((acc, value) => acc + value, 0);
+
 		_body.totalIncVAT = [
 			..._planHotel.map((item) => item[1].totalIncVAT).flat(),
 			..._planTransports.map((item) => item.totalAmountIncVat).flat(),
 		].reduce((acc, value) => acc + value, 0);
+
 		_body.totalExcVAT = [
 			..._planHotel.map((item) => item[1].totalExcVAT).flat(),
 			..._planTransports.map((item) => item.totalAmountExcVat).flat(),
@@ -347,8 +348,6 @@ export class CharterDetailComponent extends CommonComponent {
 		} finally {
 			this.spinner.hide();
 		}
-
-		this.spinner.hide();
 	}
 
 	charterGeneralClearData() {
@@ -384,7 +383,7 @@ export class CharterDetailComponent extends CommonComponent {
 			this.charterHotel.dataSource.data = [];
 		}
 
-		if (!value.isTransport) {
+		if (!value.isCarRental) {
 			this.planTransports = [];
 			this.charterCarRental.dataSource.data = [];
 		}

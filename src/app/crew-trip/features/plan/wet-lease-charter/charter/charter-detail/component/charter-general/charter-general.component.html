@@ -2,7 +2,7 @@
     <div class="row">
         <div class="d-flex justify-content-start">
             <mat-checkbox formControlName="isHotel" class="mb-2 mr-20" i18n="@@hotel">Hotel</mat-checkbox>
-            <mat-checkbox formControlName="isTransport" class="mb-2 mr-20"
+            <mat-checkbox formControlName="isCarRental" class="mb-2 mr-20"
                 i18n="@@transportation">Transportation</mat-checkbox>
             <mat-checkbox formControlName="isECI" class="mb-2 mr-20" i18n="@@carRental">Early checkin</mat-checkbox>
             <mat-checkbox formControlName="isLCO" class="mb-2" i18n="@@carRental">Late checkout</mat-checkbox>
@@ -182,7 +182,7 @@
     </div>
     }
 
-    @if(this.formGroupDetail.controls.isTransport.value){
+    @if(this.formGroupDetail.controls.isCarRental.value){
     @defer {
     <div class="row mt-2">
         <!-- Bảng nhà xe  -->
@@ -239,7 +239,7 @@
                         [style.padding]="element.priceIncVatEditing  && !!!disabled()?'0px !important':''"
                         (click)="clickEdit(element,'priceIncVatEditing')">
                         @if(!element.priceIncVatEditing || !!disabled()){
-                        <div class="d-flex justify-content-between">
+                        <div class=" text-right">
                             {{element.priceIncVat | number}}
                         </div>
                         }@else {
