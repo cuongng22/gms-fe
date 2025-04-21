@@ -231,6 +231,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
             idParent: null,
             idInvoiceForm: null,
             invoiceNumber: null,
+            fileAttachments: []
           });
         }
       });
@@ -252,8 +253,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   saveAndNext() {
     this.save().then(res => {
-      if (res.code == HttpStatusCode.Ok) {
-        this.nextStepEmit.emit([this.id, this.readMode, 3, this.dataObject]);
+      if (res?.code == HttpStatusCode.Ok) {
+        this.nextStepEmit.emit([res.data.id, this.readMode, 3, this.dataObject]);
         window.scrollTo({top: 0, behavior: 'instant'});
       }
     });
