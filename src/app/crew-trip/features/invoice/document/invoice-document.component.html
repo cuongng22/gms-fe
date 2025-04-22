@@ -274,15 +274,14 @@
                       task_alt
                     </i>
                   </a>
-                }
-                @else{
-                <a class="text-secondary" mat-button
-   type="button">
-  <i (click)="nextStep(element.id,true,3,element)" class="material-symbols-outlined" i18n-title
-     title="View reconciliation">
-    text_compare
-  </i>
-</a>
+                } @else {
+                  <a class="text-secondary" mat-button
+                     type="button">
+                    <i (click)="nextStep(element.id,true,3,element)" class="material-symbols-outlined" i18n-title
+                       title="View reconciliation">
+                      text_compare
+                    </i>
+                  </a>
                 }
                 @if (element.status === 'UNMATCHED' && element.source === 'MANUAL') {
                   <a class="text-danger" mat-button
@@ -365,14 +364,14 @@
             <ng-container matColumnDef="quantity">
               <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Quantity
               </th>
-              <td *matCellDef="let element" mat-cell>
+              <td *matCellDef="let element" mat-cell class="text-right">
                 <span class="label-text">{{ element.quantity | dataTransformPipe:[Constant.NUMBER] }}</span>
               </td>
             </ng-container>
             <ng-container matColumnDef="unitPrice">
               <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Unit Price
               </th>
-              <td *matCellDef="let element" mat-cell>
+              <td *matCellDef="let element" mat-cell class="text-right">
                 <span class="label-text">{{ element.unitPrice | dataTransformPipe:[Constant.NUMBER] }}</span>
               </td>
             </ng-container>
@@ -380,28 +379,28 @@
               <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
                 Amount Fc Before Vat
               </th>
-              <td *matCellDef="let element" mat-cell>
-                <span class="label-text">{{ element.amountFcBeforeVat | dataTransformPipe:[Constant.NUMBER, 4] }}</span>
+              <td *matCellDef="let element" mat-cell class="text-right">
+                <span class="label-text">{{ element.amountFcBeforeVat | dataTransformPipe:[Constant.NUMBER, 2] }}</span>
               </td>
             </ng-container>
             <ng-container matColumnDef="amountVndBeforeVat">
               <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
                 Amount Vnd Before Vat
               </th>
-              <td *matCellDef="let element" mat-cell>
-                <span class="label-text">{{ element.amountVndBeforeVat | dataTransformPipe:[Constant.NUMBER, 4] }}</span>
+              <td *matCellDef="let element" mat-cell class="text-right">
+                <span class="label-text">{{ element.amountVndBeforeVat | dataTransformPipe:[Constant.NUMBER, 0] }}</span>
               </td>
             </ng-container>
             <ng-container matColumnDef="amountFcVat">
               <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Fc</th>
-              <td *matCellDef="let element" mat-cell>
-                <span class="label-text">{{ element.amountFcVat | dataTransformPipe:[Constant.NUMBER, 4] }}</span>
+              <td *matCellDef="let element" mat-cell class="text-right">
+                <span class="label-text">{{ element.amountFcVat | dataTransformPipe:[Constant.NUMBER, 2] }}</span>
               </td>
             </ng-container>
             <ng-container matColumnDef="amountVndVat">
               <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Vnd</th>
-              <td *matCellDef="let element" mat-cell>
-                <span class="label-text">{{ element.amountVndVat | dataTransformPipe:[Constant.NUMBER, 4] }}</span>
+              <td *matCellDef="let element" mat-cell class="text-right">
+                <span class="label-text">{{ element.amountVndVat | dataTransformPipe:[Constant.NUMBER, 0] }}</span>
               </td>
             </ng-container>
             <ng-container matColumnDef="vatType">
@@ -412,7 +411,7 @@
             </ng-container>
             <ng-container matColumnDef="vat">
               <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">%VAT</th>
-              <td *matCellDef="let element" mat-cell>
+              <td *matCellDef="let element" mat-cell class="text-right">
                 <span class="label-text">{{ element.vat | dataTransformPipe:[Constant.NUMBER] }}</span>
               </td>
             </ng-container>
@@ -519,7 +518,7 @@
                 </mat-error>
               </mat-form-field>
             </div>
-            <div class="col-md-12 mt-15" style sizeInput='sm'>
+            <div class="col-md-12 mt-15" sizeInput='sm' style>
               <div class="NgxEditor__Wrapper">
                 <ngx-editor-menu [editor]="editor" [toolbar]="toolbar"></ngx-editor-menu>
                 <ngx-editor [editor]="editor" formControlName="emailContent" required></ngx-editor>
