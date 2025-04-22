@@ -256,3 +256,6 @@ export const reimbursementTotalFc: { [key: string]: string } = {
 export const reimbursementTotalVnd: { [key: string]: string } = {
   required: 'Reimbursement total Vnd' + $localize` is required`,
 };
+export const paymentDueDate: { [key: string]: string } = {
+  required: 'Payment Due Date' + $localize` is required`,
+};
