@@ -170,12 +170,12 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
       await Promise.all([this.search(), this.loadListFlightMarket()]).then(() => {
 
       });
-      this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountBeforeVat',
-        'vat', 'totalAmount', 'reimbursementTotal', 'status', 'statusEmail', 'statusPayment', 'statusPaymentDescription', 'paymentDueDate', 'action'];
+      this._displayedColumnsHeader1 = ['stt', 'airportCode', 'invoice', 'periodDate', 'amountBeforeVat',
+        'vat', 'totalAmount', 'reimbursementTotal', 'status', 'statusEmail', 'statusPayment', 'statusPaymentDescription', 'paymentDueDate', 'contract', 'description', 'action'];
       this._displayedColumnsHeader2 = ['amountFcBeforeVat', 'amountVndBeforeVat', 'vatFc', 'vatVnd', 'totalAmountFc',
         'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd'];
-      this._displayedColumnsRow = ['stt', 'airportCode', 'invoice', 'periodDate', 'contract', 'description', 'amountFcBeforeVat', 'amountVndBeforeVat', 'vatFc', 'vatVnd', 'totalAmountFc',
-        'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd', 'status', 'statusEmail', 'statusPayment', 'statusPaymentDescription', 'paymentDueDate', 'action'];
+      this._displayedColumnsRow = ['stt', 'airportCode', 'invoice', 'periodDate', 'amountFcBeforeVat', 'amountVndBeforeVat', 'vatFc', 'vatVnd', 'totalAmountFc',
+        'totalAmountVnd', 'reimbursementTotalFc', 'reimbursementTotalVnd', 'status', 'statusEmail', 'statusPayment', 'statusPaymentDescription', 'paymentDueDate', 'contract', 'description', 'action'];
       this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
     } catch (e) {
       console.log(e);
@@ -250,7 +250,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
         if (res.code === HttpStatusCode.Ok) {
           this.dataSource.data = res.data.content;
           this.totalElement = res.data.totalElements;
-          if(this.dataSource.data[0]) {
+          if (this.dataSource.data[0]) {
             this.showDocumentDtl(this.dataSource.data[0]);
           }
         }
