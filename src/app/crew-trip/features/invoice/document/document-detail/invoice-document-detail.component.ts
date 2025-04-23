@@ -231,6 +231,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
             idParent: null,
             idInvoiceForm: null,
             invoiceNumber: null,
+            fileAttachments: []
           });
         }
       });
@@ -252,8 +253,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   saveAndNext() {
     this.save().then(res => {
-      if (res.code == HttpStatusCode.Ok) {
-        this.nextStepEmit.emit([this.id, this.readMode, 3, this.dataObject]);
+      if (res?.code == HttpStatusCode.Ok) {
+        this.nextStepEmit.emit([res.data.id, this.readMode, 3, this.dataObject]);
         window.scrollTo({top: 0, behavior: 'instant'});
       }
     });
@@ -280,10 +281,10 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   async setReadMode(form: FormGroup) {
-    const disableFieldAdd = ['paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'currency',
+    const disableFieldAdd = ['paymentDueDay', 'bizDocId', 'partnerCode', 'partnerName', 'currency',
       'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version',
       'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status'];
-    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'paymentDueDate', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType',
+    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType',
       'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version',
       'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status'];
 
@@ -329,14 +330,32 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     });
   }
 
-  calRow(row: any) {
+  calRow(row: any, column?: any) {
+    this.runSubscribe = false;
     let rate = this.formGroupDetail.getRawValue().exchangeRate ?? 0;
-    row.patchValue({
-      amountFcBeforeVat: this.isInternational() ? (row.getRawValue().quantity * row.getRawValue().unitPrice)?.toFixed(4) : null,
-      amountVndBeforeVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100)?.toFixed(4),
-      amountFcVat: this.isInternational() ? (row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat / 100)?.toFixed(4) : null,
-      amountVndVat: (row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100 * row.getRawValue().vat)?.toFixed(4), // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
-    });
+    if (column == 'price') {//tinh don gian
+      let amount = row.getRawValue().amountFcBeforeVat ?? 0;
+      let quantity = row.getRawValue().quantity;
+      row.patchValue({
+        unitPrice: this.roundUpNumber((amount / quantity),2),
+      });
+      row.patchValue({
+        amountVndBeforeVat: this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100), 0),
+        amountFcVat: this.isInternational() ? this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat / 100), 2) : null,
+        amountVndVat: this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100 * row.getRawValue().vat), 0) // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
+      });
+
+    } else {
+      row.patchValue({
+        amountFcBeforeVat: this.isInternational() ? this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice), 2) : null,
+        amountVndBeforeVat: this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100), 0),
+        amountFcVat: this.isInternational() ? this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat / 100), 2) : null,
+        amountVndVat: this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100 * row.getRawValue().vat), 0) // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
+      });
+    }
+    setTimeout(() => {
+      this.runSubscribe = true;
+    }, 100);
   }
 
   calTotal() {
@@ -351,7 +370,11 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       return prev;
     }, {amountFcBeforeVat: 0, vatFc: 0, amountVndBeforeVat: 0, vatVnd: 0, totalAmountFc: 0, totalAmountVnd: 0,});
     Object.keys(sum).forEach(key => {
-      sum[key] = (+sum[key]).toFixed(2);
+      if (['amountFcBeforeVat', 'vatFc', 'totalAmountFc'].includes(key)) {
+        sum[key] = this.roundUpNumber(+sum[key], 2);
+      } else {
+        sum[key] = this.roundUpNumber(+sum[key], 0);
+      }
     });
     this.formGroupDetail.patchValue(sum);
 
@@ -634,20 +657,43 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     if (row) {
       row.controls['unitPrice'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
         if (prev !== curr && !this.firstLoad) {
-          await this.calRow(row);
-          await this.calTotal();
+          this.calRow(row);
+          this.calTotal();
         }
       });
       row.controls['quantity'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
         if (prev !== curr && !this.firstLoad) {
-          await this.calRow(row);
-          await this.calTotal();
+          this.calRow(row);
+          this.calTotal();
+        }
+      });
+      row.controls['amountFcBeforeVat'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
+        if (prev !== curr && !this.firstLoad) {
+          if (row.getRawValue().quantity && row.getRawValue().quantity > 0) {
+            this.calRow(row, 'price');
+          }
+          this.calTotal();
+        }
+      });
+      row.controls['amountVndBeforeVat'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
+        if (prev !== curr && !this.firstLoad) {
+          this.calTotal();
+        }
+      });
+      row.controls['amountFcVat'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
+        if (prev !== curr && !this.firstLoad) {
+          this.calTotal();
+        }
+      });
+      row.controls['amountVndVat'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
+        if (prev !== curr && !this.firstLoad) {
+          this.calTotal();
         }
       });
       row.controls['vat'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
         if (prev !== curr && !this.firstLoad) {
-          await this.calRow(row);
-          await this.calTotal();
+          this.calRow(row);
+          this.calTotal();
         }
       });
     } else {
@@ -661,6 +707,10 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
                 contractServiceType: res.data.marketType.toUpperCase(),
               })
             }
+            let generate = this.isDomestic() ? this.isHotel() ? `KSTB.${value}.` : `XETB.${value}.` : '';
+            this.formGroupDetail.patchValue({
+              invoiceNumber: generate,
+            });
           } catch (e) {
             console.log(e);
             this.baseService.showError(MESSAGE.ERROR);
@@ -672,6 +722,13 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       this.formGroupDetail.controls['partnerType'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
         if (value && !this.firstLoad) {
           this.findContract();
+          if (this.formGroupDetail.getRawValue().airportCode) {
+            let generate = this.isDomestic() ? this.isHotel() ? `KSTB.${this.formGroupDetail.getRawValue().airportCode}.` : `XETB.${this.formGroupDetail.getRawValue().airportCode}.` : '';
+            this.formGroupDetail.patchValue({
+              invoiceNumber: generate,
+            });
+          }
+
         }
       });
       this.formGroupDetail.controls['periodTo'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
@@ -727,10 +784,26 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
         }
       });
       this.formGroupDetail.controls['invoiceReceiveDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (value && !this.firstLoad) {
-          let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
+        if (!this.firstLoad) {
+          let _value = 0;
+          if (this.formGroupDetail.getRawValue().paymentDueDate) {
+            _value = value?.diff(this.formGroupDetail.getRawValue().paymentDueDate, 'days') ?? 0;
+          }
           this.formGroupDetail.patchValue({
-            paymentDueDate: _value?.format('YYYY-MM-DD') || '',
+            paymentDueDay: Math.abs(_value),
+          });
+          // let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
+
+        }
+      });
+      this.formGroupDetail.controls['paymentDueDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
+        if (value && !this.firstLoad) {
+          let _value = 0;
+          if (this.formGroupDetail.getRawValue().invoiceReceiveDate) {
+            _value = value.diff(this.formGroupDetail.getRawValue().invoiceReceiveDate, 'days');
+          }
+          this.formGroupDetail.patchValue({
+            paymentDueDay: Math.abs(_value),
           });
         }
       });

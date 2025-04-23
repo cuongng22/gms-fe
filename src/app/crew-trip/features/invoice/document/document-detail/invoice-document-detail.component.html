@@ -98,7 +98,7 @@ Save
             <mat-form-field>
               <mat-label i18n>Invoice date</mat-label>
               <input [matDatepicker]="invoiceDate" [max]="today" formControlName="invoiceDate" matInput
-                     required trim="blur">
+                     [required]="!isDomestic()" trim="blur">
               <mat-datepicker-toggle [for]="invoiceDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #invoiceDate></mat-datepicker>
               <mat-error>
@@ -144,7 +144,7 @@ Save
             <mat-form-field>
               <mat-label i18n>Receive Date</mat-label>
               <input [matDatepicker]="invoiceReceiveDate" [max]="today" formControlName="invoiceReceiveDate" matInput
-                     required trim="blur">
+                     trim="blur">
               <mat-datepicker-toggle [for]="invoiceReceiveDate" matIconSuffix></mat-datepicker-toggle>
               <mat-datepicker #invoiceReceiveDate></mat-datepicker>
               <mat-error>
