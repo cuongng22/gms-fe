@@ -85,8 +85,7 @@ import { DatepickerComponent } from 'src/app/ui-elements/datepicker/datepicker.c
 })
 export class CharterGeneralComponent
 	extends CommonComponent
-	implements AfterViewChecked, OnDestroy
-{
+	implements AfterViewChecked, OnDestroy {
 	override baseService: CharterService = inject(CharterService);
 	airportCodeChange = output<string>();
 	formValueChange = output<any>();
@@ -112,39 +111,18 @@ export class CharterGeneralComponent
 		endDate: ['', [Validators.required, this.sameMonthValidator.bind(this)]],
 		exchangeRate: [null, [Validators.required]],
 		isHotel: [true],
-		isTransport: [true],
+		isCarRental: [true],
 		isECI: [false],
 		isLCO: [false],
 		rateVat: [],
 		priceHotel: this.formBuilder.group({
-			numberOfNight: [
-				null,
-				ifValidator(() => this.isHotel, [Validators.required]),
-			],
-			priceSingleRoom: [
-				null,
-				ifValidator(() => this.isHotel, [Validators.required]),
-			],
-			priceTwinRoom: [
-				null,
-				ifValidator(() => this.isHotel, [Validators.required]),
-			],
-			priceSingleRoomECI: [
-				null,
-				ifValidator(() => this.isHotel && this.isECI, [Validators.required]),
-			],
-			priceTwinRoomECI: [
-				null,
-				ifValidator(() => this.isHotel && this.isECI, [Validators.required]),
-			],
-			priceSingleRoomLCO: [
-				null,
-				ifValidator(() => this.isHotel && this.isLCO, [Validators.required]),
-			],
-			priceTwinRoomLCO: [
-				null,
-				ifValidator(() => this.isHotel && this.isLCO, [Validators.required]),
-			],
+			numberOfNight: [null, ifValidator(() => this.isHotel, [Validators.required]),],
+			priceSingleRoom: [null, ifValidator(() => this.isHotel, [Validators.required]),],
+			priceTwinRoom: [null, ifValidator(() => this.isHotel, [Validators.required]),],
+			priceSingleRoomECI: [null, ifValidator(() => this.isHotel && this.isECI, [Validators.required]),],
+			priceTwinRoomECI: [null, ifValidator(() => this.isHotel && this.isECI, [Validators.required]),],
+			priceSingleRoomLCO: [null, ifValidator(() => this.isHotel && this.isLCO, [Validators.required]),],
+			priceTwinRoomLCO: [null, ifValidator(() => this.isHotel && this.isLCO, [Validators.required]),],
 		}),
 	});
 	isRequiredCarTypeTransportation: boolean = false;
@@ -162,7 +140,7 @@ export class CharterGeneralComponent
 				this.formGroupDetail.controls.airportCode.disable();
 			}
 			this.controlUnsubscribe();
-			this.formGroupDetail.patchValue(_data, { emitEvent: false });
+			this.formGroupDetail.patchValue(_data);
 			this.controlSubscribe();
 			if (_data.priceTransports) {
 				this.dataSource.data = [..._data.priceTransports];
@@ -185,7 +163,7 @@ export class CharterGeneralComponent
 		this.isHotel = !!this.formGroupDetail.controls.isHotel.value;
 		this.formGroupDetail.controls.priceHotel.updateValueAndValidity();
 
-		this.formGroupDetail.controls.isTransport.valueChanges.subscribe(
+		this.formGroupDetail.controls.isCarRental.valueChanges.subscribe(
 			(value) => {
 				this.dataSource.data = [];
 				this.formValueChange.emit(this.formGroupDetail.getRawValue());
@@ -218,6 +196,7 @@ export class CharterGeneralComponent
 	controlSubscribe() {
 		this.endDateValueChanges =
 			this.formGroupDetail.controls.endDate.valueChanges.subscribe((value) => {
+				console.log('endDate change', value)
 				this.getExchangeRate();
 				this.cleanData.emit();
 			});
@@ -225,6 +204,7 @@ export class CharterGeneralComponent
 		this.startDateValueChanges =
 			this.formGroupDetail.controls.startDate.valueChanges.subscribe(
 				(value) => {
+					console.log('startDate change', value)
 					this.getExchangeRate();
 					this.cleanData.emit();
 				},
@@ -244,6 +224,7 @@ export class CharterGeneralComponent
 	}
 
 	controlUnsubscribe() {
+		debugger
 		this.endDateValueChanges?.unsubscribe();
 		this.startDateValueChanges?.unsubscribe();
 		this.exchangeRateValueChanges?.unsubscribe();
@@ -257,6 +238,7 @@ export class CharterGeneralComponent
 	}
 
 	airportChange(data: any) {
+		console.log('airportChange', data)
 		this.getExchangeRate();
 		this.airportCodeChange.emit(data.value);
 	}
@@ -364,6 +346,8 @@ export class CharterGeneralComponent
 			if (data.carType !== this.carTypeOldValue) {
 				this.cleanData.emit();
 			}
+		} else if (control === 'priceIncVatEditing') {
+			this.baseService.transportsChange({ ...data, priceIncVat: Number(data.priceIncVat ?? 0) });
 		}
 	}
 

@@ -44,7 +44,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
-                    <!-- {{getTotal('item.hotelItem[\''+item.hotelCode+'\'].totalSingleRoom') | number}} -->
+                    {{getTotal('item.hotelItem[\''+item.hotelCode+'\'].totalSingleRoom') | number}}
                 </td>
             </ng-container>
             <ng-container [matColumnDef]="'totalTwinRoom_'+item.hotelCode">
@@ -68,7 +68,7 @@
                     }
                 </td>
                 <td mat-footer-cell *matFooterCellDef class="fw-bold text-right">
-                    <!-- {{getTotal('item.hotelItem[\''+item.hotelCode+'\'].totalTwinRoom') | number}} -->
+                    {{getTotal('item.hotelItem[\''+item.hotelCode+'\'].totalTwinRoom') | number}}
                 </td>
             </ng-container>
             }

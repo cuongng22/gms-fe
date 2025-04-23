@@ -101,15 +101,13 @@ export class CharterHotelComponent
     this.rateVatSubscription.unsubscribe();
   }
   override ngOnInit(): void {
-    // this.dataSource.data = Object.entries(planHotels);
-
     this.hotelSubscription = this.baseService.hotel$.subscribe((data) => {
       if (data) {
         this.dataSource.data.forEach((element) => {
           element[1].numberOfNight = Number(data.numberOfNight);
-          element[1].priceRoom = Number(data.priceSingleRoom);
-          element[1].priceRoomECI = Number(data.priceSingleRoomECI);
-          element[1].priceRoomLCO = Number(data.priceSingleRoomLCO);
+          element[1].priceRoom = Number(element[0] === "single" ? data.priceSingleRoom : data.priceTwinRoom);
+          element[1].priceRoomECI = Number(element[0] === "single" ? data.priceSingleRoomECI : data.priceTwinRoomECI);
+          element[1].priceRoomLCO = Number(element[0] === "single" ? data.priceSingleRoomLCO : data.priceTwinRoomLCO);
           this.calTotalCountForeign(element[1]);
           this.calTotalAmount(element[1]);
         });
@@ -129,13 +127,13 @@ export class CharterHotelComponent
     );
 
     this.rateVatSubscription = this.baseService.rateVat$.subscribe((data) => {
-      if (data) {
-        const _rateVat = Number(data);
-        this.dataSource.data.forEach((element) => {
-          element[1].rateVat = _rateVat;
-          this.calTotalAmount(element[1]);
-        });
-      }
+
+      const _rateVat = Number(data ?? 0);
+      this.dataSource.data.forEach((element) => {
+        element[1].rateVat = _rateVat;
+        this.calTotalAmount(element[1]);
+      });
+
     });
   }
 

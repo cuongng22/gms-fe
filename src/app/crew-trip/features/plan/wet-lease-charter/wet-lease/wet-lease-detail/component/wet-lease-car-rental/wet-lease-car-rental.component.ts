@@ -81,13 +81,13 @@ export class WetLeaseCarRentalComponent extends CommonComponent implements OnDes
     });
 
     this.rateVatSubscription = this.baseService.rateVat$.subscribe(data => {
-      if (data) {
-        const _rateVat = Number(data);
-        if (this.dataGeneral()) {
-          this.dataGeneral().rateVat = _rateVat;
-          this.calculationAll()
-        }
+
+      const _rateVat = Number(data ?? 0);
+      if (this.dataGeneral()) {
+        this.dataGeneral().rateVat = _rateVat;
+        this.calculationAll()
       }
+
     });
 
     this.unitPriceTransportationSubscription = this.baseService.unitPriceTransportation$.subscribe(data => {

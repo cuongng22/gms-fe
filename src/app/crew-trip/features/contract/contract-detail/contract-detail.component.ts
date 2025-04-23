@@ -312,25 +312,25 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
       row.controls['fromDate'].setValidators([afterValidator(row.controls['toDate']), this.beforeValidatorMessage(this.formGroupDetail.controls['effectiveDate'], $localize`From date not less than Effective date`), this.afterValidatorMessage(this.formGroupDetail.controls['expiryDate'], $localize`From date not greater than Expiry date`), this.dateOverlapValidator(row)]);
       row.controls['toDate'].setValidators([beforeValidator(row.controls['fromDate']), this.beforeValidatorMessage(this.formGroupDetail.controls['effectiveDate'], $localize`To date not less than Effective date`), this.afterValidatorMessage(this.formGroupDetail.controls['expiryDate'], $localize`To date not greater than Expiry date`), this.dateOverlapValidator(row)]);
       row.controls['serviceCode'].setValidators([this.dateOverlapValidator(row), Validators.required]);
-      row.controls['priceNoTax'].valueChanges.subscribe((value) => {
-        if (value && row.getRawValue().taxRate) {
-          row.patchValue({
-            originalAmount3: value * row.getRawValue().taxRate / 100, priceWithTax: +value + +(value * row.getRawValue().taxRate / 100)
-          });
-          // row.controls['originalAmount3'].touched;
-          // row.controls['priceWithTax'].touched;
-        }
-      });
-      row.controls['taxRate'].valueChanges.subscribe((value) => {
-        if (value && row.getRawValue().priceNoTax) {
-          row.patchValue({
-            originalAmount3: value * row.getRawValue().priceNoTax / 100,
-            priceWithTax: +row.getRawValue().priceNoTax + +(value * row.getRawValue().priceNoTax / 100)
-          });
-          // row.controls['originalAmount3'].touched;
-          // row.controls['priceWithTax'].touched;
-        }
-      });
+      /*      row.controls['priceNoTax'].valueChanges.subscribe((value) => {
+              if (value && row.getRawValue().taxRate) {
+                row.patchValue({
+                  originalAmount3: value * row.getRawValue().taxRate / 100, priceWithTax: +value + +(value * row.getRawValue().taxRate / 100)
+                });
+                // row.controls['originalAmount3'].touched;
+                // row.controls['priceWithTax'].touched;
+              }
+            });
+            row.controls['taxRate'].valueChanges.subscribe((value) => {
+              if (value && row.getRawValue().priceNoTax) {
+                row.patchValue({
+                  originalAmount3: value * row.getRawValue().priceNoTax / 100,
+                  priceWithTax: +row.getRawValue().priceNoTax + +(value * row.getRawValue().priceNoTax / 100)
+                });
+                // row.controls['originalAmount3'].touched;
+                // row.controls['priceWithTax'].touched;
+              }
+            });*/
 
       init && row.patchValue(init);
       if (row.getRawValue().active) {
@@ -879,12 +879,12 @@ export class ContractDetailComponent extends CommonComponent implements OnInit, 
     let priceUnitInfoInactive = this.formGroupDetail.getRawValue().priceUnitInfo?.filter((s: any) => s.active == false) || [];
     body.priceUnitInfo = [...this.tblPriceUnit.value, ...priceUnitInfoInactive];
     body.priceUnitInfo.forEach((s: any) => {
-      s.priceBeforeTax = s.priceNoTax;
-      s.priceAfterTax = s.priceWithTax;
+      s.priceBeforeTax = (Math.ceil((s.priceNoTax ?? 0) * 100) / 100).toFixed(2);
+      s.priceAfterTax = (Math.ceil((s.priceWithTax ?? 0) * 100) / 100).toFixed(2);
       s.serviceFeeCode = s.serviceCode;
       s.codeNghiepVu = s.vnaTransId;
       s.codeKHNS = s.expenseCatgId;
-      s.totalVatTax = s.originalAmount3;
+      s.totalVatTax = (Math.ceil((s.originalAmount3 ?? 0) * 100) / 100).toFixed(2);
     });
     body.isTaxHotel = body.isTaxHotelRevert;
     body.isTaxVehicle = body.isTaxCarRevert;

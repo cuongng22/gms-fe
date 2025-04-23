@@ -1,37 +1,25 @@
-import { SelectionModel } from '@angular/cdk/collections';
-import { HttpStatusCode } from '@angular/common/http';
-import {
-  AfterViewInit,
-  Component,
-  HostListener,
-  inject,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialog } from '@angular/material/dialog';
-import { MatPaginator, PageEvent } from '@angular/material/paginator';
-import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { saveAs } from 'file-saver';
-import { NgxSpinnerService } from 'ngx-spinner';
-import { ToggleService } from 'src/app/common/header/toggle.service';
-import { BaseService } from 'src/app/crew-trip/core/services/base-service';
-import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
-import { HotelService } from 'src/app/crew-trip/core/services/hotel-service';
-import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-service';
-import { UltilService } from 'src/app/crew-trip/core/services/ultil-service';
-import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
-import {
-  COMMON_CONFIG,
-  Constant,
-  MESSAGE,
-  removeNullValues,
-} from 'src/app/crew-trip/shared/utils/constant';
-import { CustomizerSettingsService } from 'src/app/customizer-settings/customizer-settings.service';
-import { environment } from 'src/environments/environment';
-import { ShowMessageComponent } from './component/show-message/show-message.component';
-import { ListResponse } from './models/common.model';
+import {SelectionModel} from '@angular/cdk/collections';
+import {HttpStatusCode} from '@angular/common/http';
+import {AfterViewInit, Component, HostListener, inject, OnInit, ViewChild,} from '@angular/core';
+import {FormBuilder, FormGroup} from '@angular/forms';
+import {MatDialog} from '@angular/material/dialog';
+import {MatPaginator, PageEvent} from '@angular/material/paginator';
+import {MatTableDataSource} from '@angular/material/table';
+import {Router} from '@angular/router';
+import {saveAs} from 'file-saver';
+import {NgxSpinnerService} from 'ngx-spinner';
+import {ToggleService} from 'src/app/common/header/toggle.service';
+import {BaseService} from 'src/app/crew-trip/core/services/base-service';
+import {FlightMarketService} from 'src/app/crew-trip/core/services/flight-market.service';
+import {HotelService} from 'src/app/crew-trip/core/services/hotel-service';
+import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
+import {UltilService} from 'src/app/crew-trip/core/services/ultil-service';
+import {VehicleService} from 'src/app/crew-trip/core/services/vehicle.service';
+import {COMMON_CONFIG, Constant, MESSAGE, removeNullValues,} from 'src/app/crew-trip/shared/utils/constant';
+import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
+import {environment} from 'src/environments/environment';
+import {ShowMessageComponent} from './component/show-message/show-message.component';
+import {ListResponse} from './models/common.model';
 import * as ERROR_MESSAGE from 'src/app/crew-trip/shared/utils/error-message';
 
 @Component({
@@ -156,7 +144,7 @@ export class CommonComponent
       if (!isNextPage) {
         this.pageIndex = Constant.PAGE;
       }
-      this.formGroupSearch.patchValue({ export: null });
+      this.formGroupSearch.patchValue({export: null});
       const buildBodySearch = {
         page: this.pageIndex,
         size: this.pageSize,
@@ -305,7 +293,7 @@ export class CommonComponent
   }
 
   async showConfirmDelete(id: any) {
-    this.formGroupDetail.patchValue({ id: id });
+    this.formGroupDetail.patchValue({id: id});
     this.toggleDialogDelete();
   }
 
@@ -398,7 +386,7 @@ export class CommonComponent
   }
 
   async loadListFlightMarket(param?: any) {
-    await this._flightMarketService.search({ option: 1, ...param }).then((res) => {
+    await this._flightMarketService.search({option: 1, ...param}).then((res) => {
       if (res.data) {
         this.listFlightMarketAll = res.data;
         this.listFlightMarket = res.data;
@@ -408,7 +396,7 @@ export class CommonComponent
 
   async loadListFeeService() {
     await this._serviceFeeService
-      .search({ page: 0, limit: 9999 })
+      .search({page: 0, limit: 9999})
       .then((res) => {
         if (res.data) {
           this.listFeeService = res.data.content.filter((s: any) => s.active == true);
@@ -417,7 +405,7 @@ export class CommonComponent
   }
 
   async loadListHotel() {
-    await this._hotelService.search({ limit: 9999 }).then((res) => {
+    await this._hotelService.search({limit: 9999}).then((res) => {
       if (res.data) {
         this.listHotels = res.data.content;
       }
@@ -425,7 +413,7 @@ export class CommonComponent
   }
 
   async loadListVehicle() {
-    await this._vehicleService.search({ limit: 9999 }).then((res) => {
+    await this._vehicleService.search({limit: 9999}).then((res) => {
       if (res.data) {
         this.listVehicles = res.data.content;
       }
@@ -434,5 +422,11 @@ export class CommonComponent
 
   getErrorMessage(errorKey: string) {
     return this.errorMessages[errorKey];
+  }
+
+  roundUpNumber(value: any, fix: any) {
+    let _value = value ?? 0;
+    const _fix = fix == 0 ? 100 : Math.pow(10, fix);
+    return (Math.ceil((_value) * _fix) / _fix).toFixed(fix);
   }
 }
