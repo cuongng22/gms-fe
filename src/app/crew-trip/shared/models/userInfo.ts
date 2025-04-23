@@ -9,7 +9,7 @@ export class UserLogin {
   id: number;
   fullName: string;
   department: string;
-  avartarUrl: string;
+  avartarUrl: string | null;
   phone: string;
   gender: number;
   description: string;
@@ -30,7 +30,7 @@ export class UserLogin {
     this.id = id;
     this.fullName = fullName;
     this.department = department;
-    this.avartarUrl = avartarUrl.includes(environment.baseUrl) ? this.avartarUrl = avartarUrl : `${environment.baseUrl}/${avartarUrl}`;
+    this.avartarUrl = avartarUrl ? ( avartarUrl.includes(environment.baseUrl) ? this.avartarUrl = avartarUrl : `${environment.baseUrl}/${avartarUrl}` ): null;
     this.phone = phone;
     this.gender = !gender ? 0 : 1;
     this.description = description;

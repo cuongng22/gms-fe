@@ -110,7 +110,7 @@
       </li>
       <li>
         <button mat-button [matMenuTriggerFor]="profileMenu" class="profile-menu-btn">
-          <img [src]="!!userInfo?.avartarUrl?userInfo?.avartarUrl:'images/default_avatar.png'" class="rounded-circle"
+          <img [src]="!!userInfo?.avartarUrl?userInfo?.avartarUrl:'images/default-img-fb.png'" class="rounded-circle"
                alt="admin-image">
           <span class="fw-semibold text-black">
             {{ userInfo?.fullName }}
@@ -118,7 +118,7 @@
         </button>
         <mat-menu class="profile-menu-dropdown" #profileMenu="matMenu" xPosition="before">
           <div class="admin d-flex align-items-center">
-            <img [src]="!!userInfo?.avartarUrl?userInfo?.avartarUrl:'images/default_avatar.png'" class="rounded-circle"
+            <img [src]="!!userInfo?.avartarUrl?userInfo?.avartarUrl:'images/default-img-fb.png'" class="rounded-circle"
                  alt="admin-image">
             <div>
               <span class="d-block text-black fw-medium">
