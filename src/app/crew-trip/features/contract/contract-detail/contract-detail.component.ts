@@ -408,8 +408,8 @@ export class ContractDetailComponent
       ]);
       row.controls['priceWithTax'].valueChanges.pipe(debounceTime(500)).subscribe((value) => {
         if (value && row.getRawValue().taxRate) {
-          let priceWithTax = value;
-          let taxRate = row.getRawValue().taxRate;
+          let priceWithTax = +value;
+          let taxRate = +row.getRawValue().taxRate;
           row.patchValue({
             priceNoTax: this.roundUpNumber(priceWithTax / (1 + taxRate),2),
             originalAmount3: this.roundUpNumber((priceWithTax / (1 + taxRate)) * taxRate,2),
@@ -419,8 +419,8 @@ export class ContractDetailComponent
       });
       row.controls['taxRate'].valueChanges.subscribe((value) => {
         if (value && row.getRawValue().priceWithTax) {
-          let priceWithTax = row.getRawValue().priceWithTax;
-          let taxRate = value;
+          let priceWithTax = +row.getRawValue().priceWithTax;
+          let taxRate = +value;
           row.patchValue({
             priceNoTax: this.roundUpNumber(priceWithTax / (1 + taxRate),2),
             originalAmount3: this.roundUpNumber((priceWithTax / (1 + taxRate)) * taxRate,2)
