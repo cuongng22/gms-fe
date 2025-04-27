@@ -333,8 +333,8 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     this.runSubscribe = false;
     let rate = this.formGroupDetail.getRawValue().exchangeRate ?? 0;
     if (column == 'price') {//tinh don gian
-      let amount = row.getRawValue().amountFcBeforeVat ?? 0;
-      let quantity = row.getRawValue().quantity;
+      let amount = +row.getRawValue().amountFcBeforeVat ?? 0;
+      let quantity = +row.getRawValue().quantity;
       row.patchValue({
         unitPrice: this.roundUpNumber((amount / quantity), 2),
       });
