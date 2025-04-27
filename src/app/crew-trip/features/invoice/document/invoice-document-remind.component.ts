@@ -55,7 +55,7 @@ export class InvoiceDocumentRemindComponent extends CommonComponent implements O
     {label: $localize`Airport Code`, value: 'airportCode'},
     {label: $localize`Partner Name`, value: 'partnerName'},
     {label: $localize`Partner Type`, value: 'partnerType'},
-    {label: $localize`Period Occurrence`, value: 'periodOccurrence'},
+    {label: $localize`Period Occurrence`, value: 'periodOccurrence', type: Constant.DATE, format: Constant.MONTH_FORMAT},
     {label: $localize`Email Status`, value: 'statusEmail'},
   ];
   @Input() contractId: any;
