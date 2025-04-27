@@ -427,6 +427,6 @@ export class CommonComponent
   roundUpNumber(value: any, fix: any) {
     let _value = value ?? 0;
     const _fix = fix == 0 ? 100 : Math.pow(10, fix);
-    return (Math.ceil((_value) * _fix) / _fix).toFixed(fix);
+    return (Math.round((_value) * _fix) / _fix).toFixed(fix);
   }
 }
