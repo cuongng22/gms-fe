@@ -377,7 +377,7 @@
             </ng-container>
             <ng-container matColumnDef="amountFcBeforeVat">
               <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">
-                Amount Fc Before Vat
+                Amount Currency Before Vat
               </th>
               <td *matCellDef="let element" mat-cell class="text-right">
                 <span class="label-text">{{ element.amountFcBeforeVat | dataTransformPipe:[Constant.NUMBER, 2] }}</span>
@@ -392,7 +392,7 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="amountFcVat">
-              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Fc</th>
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Currency</th>
               <td *matCellDef="let element" mat-cell class="text-right">
                 <span class="label-text">{{ element.amountFcVat | dataTransformPipe:[Constant.NUMBER, 2] }}</span>
               </td>

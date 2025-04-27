@@ -113,7 +113,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     {label: "Time Stay", value: "timeStay", type: "Constant.NUMBER", rowspan: "2"},
     {label: "Toll", value: "toll", type: "Constant.NUMBER", rowspan: "2"},
     {label: "Total Amount Cc", value: "totalAmountCc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Amount Fc", value: "totalAmountFc", type: "Constant.NUMBER", rowspan: "2"},
+    {label: "Total Amount Currency", value: "totalAmountFc", type: "Constant.NUMBER", rowspan: "2"},
     {label: "Total Breakfast Cc Charge", value: "breakfastCcCharge", type: "Constant.NUMBER", rowspan: "2"},
     {label: "Total Breakfast Fc Charge", value: "breakfastFcCharge", type: "Constant.NUMBER", rowspan: "2"},
     {label: "Total Charge", value: "totalCharge", type: "Constant.NUMBER", rowspan: "2"},

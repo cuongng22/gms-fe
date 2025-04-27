@@ -152,7 +152,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     {label: $localize`Time Stay`, value: "timeStay", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Toll`, value: "toll", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Amount Cc`, value: "totalAmountCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
-    {label: $localize`Total Amount Fc`, value: "totalAmountFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Total Amount Currency`, value: "totalAmountFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Breakfast Cc Charge`, value: "breakfastCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Breakfast Fc Charge`, value: "breakfastFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Charge`, value: "totalCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},

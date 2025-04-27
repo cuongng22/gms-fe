@@ -479,7 +479,7 @@
             </ng-container>
             <ng-container matColumnDef="amountFcBeforeVat">
               <th *matHeaderCellDef class="text-center required-label" i18n mat-header-cell mat-sort-header rowspan="2">
-                Amount Fc Before Vat
+                Amount Currency Before Vat
               </th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
@@ -508,7 +508,7 @@
               </td>
             </ng-container>
             <ng-container matColumnDef="amountFcVat">
-              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Fc</th>
+              <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Currency</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
                 <div class="input-cell">
                   <mat-form-field class="edit-inline-table">
@@ -612,7 +612,7 @@
             <mat-grid-tile [colspan]="3">
               <div class="w-100 ok" sizeInput='sm'>
                 <mat-form-field>
-                  <mat-label i18n>Amount Fc Before Vat</mat-label>
+                  <mat-label i18n>Amount Currency Before Vat</mat-label>
                   <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput
                          trim="blur">
                   <mat-error>
@@ -624,7 +624,7 @@
             <mat-grid-tile [colspan]="3">
               <div class="w-100" sizeInput='sm'>
                 <mat-form-field>
-                  <mat-label i18n>Vat Fc</mat-label>
+                  <mat-label i18n>Vat Currency</mat-label>
                   <input appThousandsSeparator formControlName="vatFc" matInput
                          trim="blur">
                   <mat-error>
@@ -636,7 +636,7 @@
             <mat-grid-tile [colspan]="3">
               <div class="w-100" sizeInput='sm'>
                 <mat-form-field>
-                  <mat-label i18n>Total Amount Fc</mat-label>
+                  <mat-label i18n>Total Amount Currency</mat-label>
                   <input #inputElementRef3 appThousandsSeparator formControlName="totalAmountFc" matInput
                          trim="blur">
                   <mat-error>
@@ -648,7 +648,7 @@
             <mat-grid-tile [colspan]="3">
               <div class="w-100" sizeInput='sm'>
                 <mat-form-field>
-                  <mat-label i18n>Reimbursement Total Fc</mat-label>
+                  <mat-label i18n>Reimbursement Total Currency</mat-label>
                   <input appThousandsSeparator formControlName="reimbursementTotalFc" matInput
                          trim="blur">
                   <mat-error>
