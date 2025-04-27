@@ -75,7 +75,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
     {label: $localize`Partner Name`, value: 'partnerName', sticky:true},
     {label: $localize`Airport Code`, value: 'airportCode', sticky:true},
     {label: $localize`Type`, value: 'ctype'},
-    {label: $localize`Period Occurrence`, value: 'periodOccurrence', type: Constant.DATE, format: Constant.DATE_FORMAT},
+    {label: $localize`Period Occurrence`, value: 'periodOccurrence', type: Constant.DATE, format: Constant.MONTH_FORMAT},
     {label: $localize`Currency`, value: 'currency'},
     {label: $localize`Exchange Rate`, value: 'exchangeRate', type: Constant.NUMBER},
     {label: $localize`Number Trip`, value: 'numberTrip', type: Constant.NUMBER},
@@ -255,11 +255,13 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
           page: this.pageIndex,
           size: this.pageSize,
           limit: this.pageSize,
+          partnerType:this.partnerType,
           partnerCode: item.partnerCode,
           airportCode: item.airportCode,
           listAirportCode: item.airportCode,
-          periodFrom: moment(item.periodOccurrence).startOf('month').format('YYYY-MM-DD'),
-          periodTo: moment(item.periodOccurrence).endOf('month').format('YYYY-MM-DD'),
+          periodOccurrence: moment(item.periodOccurrence).startOf('month').format('YYYY-MM-DD'),
+          // periodFrom: moment(item.periodOccurrence).startOf('month').format('YYYY-MM-DD'),
+          // periodTo: moment(item.periodOccurrence).endOf('month').format('YYYY-MM-DD'),
           status: InvoiceDocumentStatusEnum.FINISHED
         }).then((res: any) => {
           this.listInvoice = res?.data?.content;
