@@ -529,7 +529,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       periodOccurrence: [{value: this.formGroupDetail.getRawValue().periodOccurrence, disabled: true}, [Validators.required]],
       nsCode: ['D2',],
       quantity: ['', [Validators.min(0), Validators.max(999), Validators.pattern(PATTERN.NUMBER2)]],
-      unitPrice: ['', [Validators.max(999999999), Validators.pattern(PATTERN.NUMBER2)]],
+      unitPrice: ['', [Validators.max(999999999), Validators.pattern(PATTERN.NUMBER3)]],
       amountFcBeforeVat: ['',],
       amountVndBeforeVat: ['',],
       amountFcVat: ['',],
