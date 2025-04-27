@@ -77,18 +77,18 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
     {label: $localize`Type`, value: 'ctype'},
     {label: $localize`Period Occurrence`, value: 'periodOccurrence', type: Constant.DATE, format: Constant.DATE_FORMAT},
     {label: $localize`Currency`, value: 'currency'},
-    {label: $localize`Exchange Rate`, value: 'exchangeRate'},
+    {label: $localize`Exchange Rate`, value: 'exchangeRate', type: Constant.NUMBER},
     {label: $localize`Number Trip`, value: 'numberTrip', type: Constant.NUMBER},
     {label: $localize`Single Room Fc`, value: 'singleRoomFc', type: Constant.NUMBER},
     {label: $localize`Single Room Cc`, value: 'singleRoomCc', type: Constant.NUMBER},
     {label: $localize`Twin Room Cc`, value: 'twinRoomCc', type: Constant.NUMBER},
     {label: $localize`Total Amount`, value: 'totalAmount', type: Constant.NUMBER},
     {label: $localize`Actual Payment`, value: 'actualPayment', type: Constant.NUMBER},
-    {label: $localize`Actual Payment (Fc)`, value: 'actualPaymentFc', type: Constant.NUMBER},
+    {label: $localize`Actual Payment Currency`, value: 'actualPaymentFc', type: Constant.NUMBER},
     {label: $localize`Actual Payment (Vnd)`, value: 'actualPaymentVnd', type: Constant.NUMBER},
-    {label: $localize`Difference (Fc)`, value: 'differenceFc', type: Constant.NUMBER},
+    {label: $localize`Difference Currency`, value: 'differenceFc', type: Constant.NUMBER},
     {label: $localize`Difference (Vnd)`, value: 'differenceVnd', type: Constant.NUMBER},
-    {label: $localize`Tax Refund (Fc)`, value: 'taxRefundFc', type: Constant.NUMBER},
+    {label: $localize`Tax Refund Currency`, value: 'taxRefundFc', type: Constant.NUMBER},
     {label: $localize`Tax Refund (Vnd)`, value: 'taxRefundVnd', type: Constant.NUMBER},
     {label: $localize`Budget Amount`, value: 'budgetAmount', type: Constant.NUMBER},
     {label: $localize`Remaining Amount`, value: 'remainingAmount', type: Constant.NUMBER},
@@ -131,7 +131,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
     // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
     await Promise.all([this.loadListFlightMarket(), this.search(),]).then(() => {
       if (this.partnerType == 'HOTEL') {
-        this.displayedColumns = ['stt', ...this._displayedColumns.filter(s => !['numberTrip'].includes(s.value)).map(s => s.value), 'action'];
+        this.displayedColumns = ['stt', ...this._displayedColumns.filter(s => ![''].includes(s.value)).map(s => s.value), 'action'];
       } else if (this.partnerType == 'TRANSPORTATION') {
         this.displayedColumns = ['stt', ...this._displayedColumns.filter(s => !['singleRoomFc', 'singleRoomCc', 'twinRoomCc'].includes(s.value)).map(s => s.value), 'action'];
 

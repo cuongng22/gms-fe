@@ -169,7 +169,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       partnerType: ['HOTEL'],
       contractServiceType: [],
       currency: [],
-      exchangeRate: [],
+      exchangeRate: [1],
       exchangeRateDate: [],
       exchangeRateType: [],
       description: [, [Validators.maxLength(500)]],
@@ -230,7 +230,6 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
             id: null,
             idParent: null,
             idInvoiceForm: null,
-            invoiceNumber: null,
             fileAttachments: []
           });
         }
@@ -337,7 +336,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       let amount = row.getRawValue().amountFcBeforeVat ?? 0;
       let quantity = row.getRawValue().quantity;
       row.patchValue({
-        unitPrice: this.roundUpNumber((amount / quantity),2),
+        unitPrice: this.roundUpNumber((amount / quantity), 2),
       });
       row.patchValue({
         amountVndBeforeVat: this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100), 0),
@@ -530,7 +529,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       periodOccurrence: [{value: this.formGroupDetail.getRawValue().periodOccurrence, disabled: true}, [Validators.required]],
       nsCode: ['D2',],
       quantity: ['', [Validators.min(0), Validators.max(999), Validators.pattern(PATTERN.NUMBER2)]],
-      unitPrice: ['', [Validators.min(0), Validators.max(999999999), Validators.pattern(PATTERN.NUMBER2)]],
+      unitPrice: ['', [Validators.max(999999999), Validators.pattern(PATTERN.NUMBER2)]],
       amountFcBeforeVat: ['',],
       amountVndBeforeVat: ['',],
       amountFcVat: ['',],
@@ -568,7 +567,11 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
     this.formGroupDetail.getRawValue().invoiceDocumentDtl?.forEach((s: any) => {
       if (this.isDataClone()) {
         s.id = null;
-        this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.UNMATCHED});
+        let generate = this.isDomestic() ? this.isHotel() ? `KSTB.${this.formGroupDetail.getRawValue().airportCode}.` : `XETB.${this.formGroupDetail.getRawValue().airportCode}.` : '';
+        this.formGroupDetail.patchValue({
+          invoiceNumber: generate,
+          status: InvoiceDocumentStatusEnum.UNMATCHED
+        });
       }
       this.addRow(s);
     });

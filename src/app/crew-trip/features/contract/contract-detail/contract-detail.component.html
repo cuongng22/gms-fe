@@ -922,6 +922,7 @@
           </div>
         </div>
         <!--        dong3-->
+        @if (isVehicle()) {
         <div class="row mt-20">
 <!--          <div class="col-6" sizeInput='sm'>-->
 <!--            <mat-form-field>-->
@@ -939,7 +940,7 @@
 <!--              </mat-error>-->
 <!--            </mat-form-field>-->
 <!--          </div>-->
-          @if (isVehicle()) {
+
           <div class="col-6" sizeInput='sm'>
             <mat-form-field>
               <mat-label i18n>Vehicle Type</mat-label>
@@ -953,8 +954,9 @@
           </mat-error>
         </mat-form-field>
       </div>
-          }
+
         </div>
+        }
         <!--        dong4-->
         @if (isHotel()) {
         <div class="row mt-20">
