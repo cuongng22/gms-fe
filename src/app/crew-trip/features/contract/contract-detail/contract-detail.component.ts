@@ -411,10 +411,10 @@ export class ContractDetailComponent
           let priceWithTax = +value;
           let taxRate = +row.getRawValue().taxRate;
           row.patchValue({
-            priceNoTax: this.roundUpNumber(priceWithTax / (1 + taxRate),2),
-            originalAmount3: this.roundUpNumber((priceWithTax / (1 + taxRate)) * taxRate,2),
-            priceWithTax: this.roundUpNumber(value,2)
-          },{ emitEvent: false });
+            priceNoTax: this.roundUpNumber(priceWithTax / (1 + (taxRate / 100)), 2),
+            originalAmount3: this.roundUpNumber((priceWithTax / (1 + (taxRate / 100))) * taxRate / 100, 2),
+            priceWithTax: this.roundUpNumber(value, 2)
+          }, {emitEvent: false});
         }
       });
       row.controls['taxRate'].valueChanges.subscribe((value) => {
@@ -422,8 +422,8 @@ export class ContractDetailComponent
           let priceWithTax = +row.getRawValue().priceWithTax;
           let taxRate = +value;
           row.patchValue({
-            priceNoTax: this.roundUpNumber(priceWithTax / (1 + taxRate),2),
-            originalAmount3: this.roundUpNumber((priceWithTax / (1 + taxRate)) * taxRate,2)
+            priceNoTax: this.roundUpNumber(priceWithTax / (1 + (taxRate / 100)), 2),
+            originalAmount3: this.roundUpNumber((priceWithTax / (1 + (taxRate / 100))) * taxRate / 100, 2),
           });
           // row.controls['originalAmount3'].touched;
           // row.controls['priceWithTax'].touched;
