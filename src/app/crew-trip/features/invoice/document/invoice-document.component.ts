@@ -422,7 +422,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
     this.toggleDialogCreate();
     try {
       let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
-      let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_REMINDER', marketClass: data.contractServiceType});
+      let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_CONFIRMATION', marketClass: data.contractServiceType});
       let emailTitle = res1.data?.content[0]?.title;
       let emailContent = res1.data?.content[0]?.content;
       this.formGroupDetail.patchValue({
