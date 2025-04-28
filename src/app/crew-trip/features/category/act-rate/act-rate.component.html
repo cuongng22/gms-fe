@@ -78,13 +78,19 @@
     <mat-card-title>
     </mat-card-title>
     <mat-card-subtitle>
-      <button *appHasPermission="['API_CURRENCY_ACTUAL_LIST']" class="add-btn" type="button" mat-button
+      <button *appHasPermission="['API_CURRENCY_ACTUAL_LIST']" class="add-btn mr-10" type="button" mat-button
         (click)="exportFileOptions(null,'Actual_exchange_rate.xlsx','actual')">
         <i class="material-symbols-outlined">
           download
         </i>
         <span i18n="@@export">Export</span>
       </button>
+      <button class="add-btn " type="button" mat-button (click)="sync()">
+        <i class="material-symbols-outlined">
+            sync
+        </i>
+        <span i18n="@@sync">Sync</span>
+    </button>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>

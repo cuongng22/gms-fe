@@ -56,12 +56,12 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
     hotelName: ['', [Validators.required, Validators.maxLength(250)]],
     address: ['', Validators.maxLength(500)],
     fullName: ['', Validators.maxLength(250)],
-    email: [[],
-    [
-      Validators.required,
-      // Validators.maxLength(250), Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
-    ]
-    ],
+    // email: [[],
+    // [
+    //   Validators.required,
+    //   // Validators.maxLength(250), Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
+    // ]
+    // ],
     phone: ['', [Validators.maxLength(20), Validators.pattern('^[0-9()+ ]+$')]],
     notes: ['', Validators.maxLength(500)],
     active: [true, Validators.required]
@@ -102,7 +102,7 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
       return;
     }
     const hotelCode = this.formGroupDetail.controls['hotelCode'].value as string;
-    const email = (this.formGroupDetail.controls.email.value ?? []).join(";")
+    const email = null// (this.formGroupDetail.controls.email.value ?? []).join(";")
     console.log('email: ', email)
     const data = { ...this.formGroupDetail.value, hotelCode: hotelCode?.toUpperCase().trim(), email: email }
     this.dialogRef.close(data);
@@ -133,7 +133,7 @@ export class HotelDetailComponent extends CommonComponent implements OnInit {
         this.mailFormatInvalid = false;
         event.chipInput!.clear();
       } else {
-        this.formGroupDetail.controls.email.markAsTouched()
+        // this.formGroupDetail.controls.email.markAsTouched()
         this.mailFormatInvalid = true;
       }
     }

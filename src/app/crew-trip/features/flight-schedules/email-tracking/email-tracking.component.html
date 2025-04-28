@@ -182,7 +182,7 @@
                         Email delivery status
                     </th>
                     <td mat-cell *matCellDef="let element">
-                        {{getEmailDeliveryStatus(element.isSendSuccess)}}
+                        {{element.isEmailSent ? getEmailDeliveryStatus(element.isSendSuccess): null}}
                     </td>
                 </ng-container>
 
@@ -193,7 +193,7 @@
                     </th>
                     <td mat-cell *matCellDef="let element;let i = dataIndex">
                         <div class="action-buttons d-flex justify-content-end">
-                            @if(element.isEmailSent){
+                            @if(!element.isEmailSent){
                             <button mat-button title="View" i18n-title="@@view" class="text-vna"
                                 (click)="showPopSendMail(element)">
                                 <i class="material-symbols-outlined " text-primary>

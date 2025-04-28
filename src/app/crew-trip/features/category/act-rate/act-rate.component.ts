@@ -151,5 +151,18 @@ export class ActRateComponent extends CommonComponent implements OnInit {
       await this.spinner.hide();
     }
   }
+
+  sync() {
+    // try {
+    //   await this.spinner.show();
+    //   this.baseService.syncEstimate();
+    // } catch (e: any) {
+    //   this.showError(
+    //     e.error?.data ?? e.error?.error ?? e.error ?? this.MESSAGE.ERROR,
+    //   );
+    // } finally {
+    //   this.spinner.hide()
+    // }
+  }
 }
 

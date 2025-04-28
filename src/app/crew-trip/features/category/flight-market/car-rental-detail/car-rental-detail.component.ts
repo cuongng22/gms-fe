@@ -53,12 +53,12 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
     name: ['', [Validators.required, Validators.maxLength(250)]],
     address: ['', Validators.maxLength(500)],
     fullName: ['', Validators.maxLength(250)],
-    email: [[],
-    [
-      Validators.required,
-      // Validators.maxLength(250), Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
-    ]
-    ],
+    // email: [[],
+    // [
+    //   Validators.required,
+    //   // Validators.maxLength(250), Validators.pattern('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'),
+    // ]
+    // ],
     phone: ['', [Validators.maxLength(20), Validators.pattern('^[0-9()+ ]+$')]],
     notes: ['', Validators.maxLength(500)],
     active: [true, Validators.required]
@@ -96,7 +96,7 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
     if (this.formGroupDetail.invalid) {
       return;
     }
-    const email = (this.formGroupDetail.controls.email.value ?? []).join(";")
+    const email = null//(this.formGroupDetail.controls.email.value ?? []).join(";")
     this.dialogRef.close({ ...this.formGroupDetail.value, code: this.formGroupDetail.controls.code.value?.toUpperCase().trim(), email: email });
   }
 
@@ -126,7 +126,7 @@ export class CarRentalDetailComponent extends CommonComponent implements OnInit 
         this.mailFormatInvalid = false;
         event.chipInput!.clear();
       } else {
-        this.formGroupDetail.controls.email.markAsTouched()
+        // this.formGroupDetail.controls.email.markAsTouched()
         this.mailFormatInvalid = true;
       }
     }
