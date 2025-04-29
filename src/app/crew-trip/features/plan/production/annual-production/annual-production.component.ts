@@ -23,10 +23,12 @@ import { AirplaneService } from 'src/app/crew-trip/core/services/airplane-servic
 import { debounceTime, startWith, Subject } from 'rxjs';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import {
-  EstAnnualProduction
+  EstAnnualProduction,
+  NetWorkOptions
 } from 'src/app/crew-trip/features/plan/production/est-annual-production/est-annual-production.model';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 
 @Component({
   selector: 'app-annual-production',
@@ -35,7 +37,7 @@ import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-p
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, DataTransformPipe, RouterModule, FileUploadModule,
-    NgxTrimDirectiveModule, HasPermissionDirective],
+    NgxTrimDirectiveModule, HasPermissionDirective, SelectionComponent],
   templateUrl: './annual-production.component.html',
   styleUrl: './annual-production.component.scss',
   providers: [HasPermissionDirective]
@@ -73,6 +75,7 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
   filteredOptionsVersion = model<string[]>([]); // filtered Des
   keySearchVersion = new Subject<string>();
 
+  netWorkOptions = NetWorkOptions;
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     // {label: $localize`:@@id:ID`, value: 'id'},
@@ -104,7 +107,8 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
     acId: new FormControl(''),
     acGroup: new FormControl(''),
     versionId: new FormControl('', Validators.required),
-    myControl: new FormControl('')
+    myControl: new FormControl(''),
+    network: new FormControl(''),
   });
 
   showDialogUpload = false;

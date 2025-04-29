@@ -21,27 +21,27 @@ export class EstAnnualProduction {
   rateBhFls: number;
 
   constructor(data: {
-        id: string;
-        verType: string;
-        network: string;
-        route: string;
-        routeId: number;
-        route2w: string;
-        ori: string;
-        des: string;
-        oriCountry: string;
-        desCountry: string;
-        verId: number;
-        acId: string;
-        acGroup: string;
-        carrier: string;
-        fltDate: string;
-        fltMonth: number;
-        fltYear: number;
-        bh: number;
-        fls: number;
-        rateBhFls: number;
-    }) {
+    id: string;
+    verType: string;
+    network: string;
+    route: string;
+    routeId: number;
+    route2w: string;
+    ori: string;
+    des: string;
+    oriCountry: string;
+    desCountry: string;
+    verId: number;
+    acId: string;
+    acGroup: string;
+    carrier: string;
+    fltDate: string;
+    fltMonth: number;
+    fltYear: number;
+    bh: number;
+    fls: number;
+    rateBhFls: number;
+  }) {
     this.id = data.id;
     this.verType = data.verType;
     this.network = data.network;
@@ -64,3 +64,12 @@ export class EstAnnualProduction {
     this.rateBhFls = data.rateBhFls;
   }
 }
+
+export const NetWorkOptions = [
+  {
+    value: 'DOM', display: 'Domestic'
+  },
+  {
+    value: 'INT', display: 'International'
+  }
+]
