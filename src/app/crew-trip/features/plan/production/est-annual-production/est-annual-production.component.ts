@@ -20,11 +20,12 @@ import { EstimatedAnnualProductionService } from 'src/app/crew-trip/core/service
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
-import { EstAnnualProduction } from './est-annual-production.model';
+import { EstAnnualProduction, NetWorkOptions } from './est-annual-production.model';
 import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 import { FileUploadModule, FileUploadValidators } from '@iplab/ngx-file-upload';
 import { error } from 'console';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 
 @Component({
   selector: 'app-est-annual-production',
@@ -33,7 +34,7 @@ import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-p
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, DataTransformPipe, RouterModule, FileUploadModule,
-    HasPermissionDirective],
+    HasPermissionDirective, SelectionComponent],
   providers: [HasPermissionDirective],
   templateUrl: './est-annual-production.component.html',
   styleUrl: './est-annual-production.component.scss'
@@ -72,6 +73,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
   filteredOptionsVersion = model<string[]>([]); // filtered Des
   keySearchVersion = new Subject<string>();
 
+  netWorkOptions = NetWorkOptions;
 
   _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
     // {label: $localize`:@@id:ID`, value: 'id'},
@@ -103,7 +105,8 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
     acId: new FormControl(''),
     acGroup: new FormControl(''),
     versionId: new FormControl('', Validators.required),
-    myControl: new FormControl('')
+    myControl: new FormControl(''),
+    network: new FormControl(''),
   });
 
   showDialogUpload = false;
