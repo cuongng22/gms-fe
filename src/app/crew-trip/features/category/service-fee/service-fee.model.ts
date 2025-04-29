@@ -8,5 +8,6 @@ export const feeOptions: any[] = [
     { value: 'LCO_SR_FEE', label: $localize`:@@lateCheckoutFeeForSingleRoom:Late checkout fee for single room` },
     { value: 'LCO_TR_FEE', label:$localize`:@@lateCheckoutFeeForTwinRoom:Late checkout fee for twin room`  },
     { value: 'CARRENTAL_FEE', label:$localize`:@@transportation fee:Transportation fee`  },
-    { value: 'CARRENTAL_OTHER_FEE', label:$localize`:@@otherFeeForTransportation:Other fee for transportation`  }
+    { value: 'CARRENTAL_OTHER_FEE', label:$localize`:@@otherFeeForTransportation:Other fee for transportation`  },
+    { value: 'HOTEL_TR_DOUBLE_FEE', label:$localize`:@@doubleFeeForTwinRoom:Double fee for twin room`  },
 ];
