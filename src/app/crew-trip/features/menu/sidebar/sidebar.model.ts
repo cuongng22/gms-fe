@@ -351,20 +351,30 @@ export const menu: Menu[] = [
   {
     title: $localize`:@@reportManagement:REPORTS`,
     rootPath: 'reports',
-    permissionCode: [],
+    permissionCode: ['REPORT_1',
+      'REPORT_2',
+      'REPORT_3',
+      'REPORT_4',
+      'REPORT_5',
+      'REPORT_6',
+      'REPORT_7',
+      'REPORT_8',
+      'REPORT_9',
+      'REPORT_10',
+      'REPORT_11'],
     subMenu: [
       {
         path: 'reports/report1',
         title: $localize`:@@budgetReport:Actual vs. budgeted cost report`,
         icon: 'ri-folder-chart-line',
-        permissionCode: [],
+        permissionCode: ['REPORT_1'],
         menu: [],
       },
       {
         path: 'reports/report2',
         title: $localize`:@@budgetReport:Market cost report `,
         icon: 'ri-folder-chart-line',
-        permissionCode: [],
+        permissionCode: ['REPORT_2'],
         menu: [],
       },
       {
@@ -372,63 +382,63 @@ export const menu: Menu[] = [
         title: $localize`:@@budgetReport:Room quantity report `,
         icon: 'ri-folder-chart-line',
         menu: [],
-        permissionCode: []
+        permissionCode: ['REPORT_3']
       },
       {
         path: 'reports/report4',
         title: $localize`:@@budgetReport:Monthly performance report `,
         icon: 'ri-folder-chart-line',
         menu: [],
-        permissionCode: []
+        permissionCode: ['REPORT_4']
       },
       {
         path: 'reports/report5',
         title: $localize`:@@budgetReport:Cost savings report `,
         icon: 'ri-folder-chart-line',
         menu: [],
-        permissionCode: []
+        permissionCode: ['REPORT_5']
       },
       {
         path: 'reports/report6',
         title: $localize`:@@budgetReport:Accounts payable report `,
         icon: 'ri-folder-chart-line',
         menu: [],
-        permissionCode: []
+        permissionCode: ['REPORT_6']
       },
       {
         path: 'reports/report7',
         title: $localize`:@@budgetReport:Quarterly cost report `,
         icon: 'ri-folder-chart-line',
         menu: [],
-        permissionCode: []
+        permissionCode: ['REPORT_7']
       },
       {
         path: 'reports/report8',
         title: $localize`:@@budgetReport:Hotel room and cost report`,
         icon: 'ri-folder-chart-line',
         menu: [],
-        permissionCode: []
+        permissionCode: ['REPORT_8']
       },
       {
         path: 'reports/report9',
         title: $localize`:@@budgetReport:Car usage and cost report `,
         icon: 'ri-folder-chart-line',
         menu: [],
-        permissionCode: []
+        permissionCode: ['REPORT_9']
       },
       {
         path: 'reports/report10',
         title: $localize`:@@budgetReport:Cost planning - Actual report`,
         icon: 'ri-folder-chart-line',
         menu: [],
-        permissionCode: []
+        permissionCode: ['REPORT_10']
       },
       {
         path: 'reports/report11',
         title: $localize`:@@budgetReport:Cost planning - Estimate cost report `,
         icon: 'ri-folder-chart-line',
         menu: [],
-        permissionCode: []
+        permissionCode: ['REPORT_11']
       },
     ],
   },
