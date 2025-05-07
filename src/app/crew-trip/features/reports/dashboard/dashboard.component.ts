@@ -1,14 +1,18 @@
-import { Component, inject, OnInit,CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
+import {
+	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
+	inject,
+	OnInit,
+} from '@angular/core';
+import { MatCardModule } from '@angular/material/card';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { ReportService } from 'src/app/crew-trip/core/services/report-service';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatButtonModule } from '@angular/material/button';
 import { MatInputModule } from '@angular/material/input';
-import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
@@ -20,25 +24,34 @@ import { MatPaginatorModule } from '@angular/material/paginator';
 @Component({
 	selector: 'app-dashboard',
 	standalone: true,
-  imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
-    MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule
-  ],
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	imports: [
+		MatCardModule,
+		FormsModule,
+		MatFormFieldModule,
+		ReactiveFormsModule,
+		MatSelectModule,
+		MatButtonModule,
+		MatInputModule,
+		MatDatepickerModule,
+		MatNativeDateModule,
+		NgxMaterialTimepickerModule,
+		MatAutocompleteModule,
+		CommonModule,
+		MatTableModule,
+		MatPaginatorModule,
+	],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	templateUrl: './dashboard.component.html',
 	styleUrl: './dashboard.component.scss',
 })
 export class DashboardComponent extends CommonComponent implements OnInit {
 	override baseService = inject(ReportService);
-	iframeUrl = '';
-	ticket: string;
-	report: string;
+	iframeUrl: SafeResourceUrl;
 	codeReport = 'CR_DASHBOARD';
 
-	constructor() {
-		super();
-	}
+  constructor(private sanitizer: DomSanitizer) {
+    super();
+  }
 
 	override async ngOnInit() {
 		await this.spinner.show();
@@ -53,10 +66,13 @@ export class DashboardComponent extends CommonComponent implements OnInit {
 	async loadReport() {
 		try {
 			this.baseService.getReportLink(this.codeReport).then((res) => {
-				this.iframeUrl = res.data;
+				this.iframeUrl = this.sanitizeUrl(res.data);
 			});
 		} catch (Error: any) {
 			console.log(Error);
 		}
+	}
+	sanitizeUrl(url: string): SafeResourceUrl {
+		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
 }

@@ -58,10 +58,7 @@ import {ReportService} from 'src/app/crew-trip/core/services/report-service';
 })
 export class reportcomponent extends CommonComponent implements OnInit {
 	override baseService = inject(ReportService);
-	iframeUrl = '';
-  serverUrl: string;
-  ticket: string;
-  report: string;
+  iframeUrl: SafeResourceUrl;
 	codeReport = 'BC_7_1';
 
 	constructor(private sanitizer: DomSanitizer) {
@@ -80,9 +77,9 @@ export class reportcomponent extends CommonComponent implements OnInit {
 
 	async loadReport() {
 		try {
-			this.baseService.getReportLink(this.codeReport).then((res) => {
-				this.iframeUrl = res.data;
-       	});
+      this.baseService.getReportLink(this.codeReport).then(res => {
+        this.iframeUrl = this.sanitizeUrl(res.data);
+      });
 		} catch (Error: any) {
 			console.log(Error);
 		}
