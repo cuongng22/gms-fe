@@ -84,10 +84,9 @@ export class SignInComponent implements OnInit {
         this.route.fragment.subscribe(fragment => {
           if (fragment === '401') {
             const _url = this.location.path(false);
-            console.log(_url)
             this.router.navigateByUrl(_url);
           } else {
-            this.router.navigate(['category/crews']);
+            this.router.navigate(['/reports/dashboard']);
           }
         });
         this.spinner.hide();
