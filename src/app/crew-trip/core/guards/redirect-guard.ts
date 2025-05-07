@@ -12,7 +12,7 @@ export class RedirectGuard implements CanActivate {
 
   canActivate(): boolean {
     if (this.usersService.isLoggedIn()) {
-      this.router.navigate(['/category/vehicle']);
+      this.router.navigate(['/reports/dashboard']);
     } else {
       this.router.navigate(['/auth/login']);
     }
