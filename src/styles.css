@@ -3065,10 +3065,10 @@ input::placeholder {
   -webkit-appearance: none;
 }
 .table-responsive::-webkit-scrollbar:vertical {
-  width: 6px;
+  width: 16px;
 }
 .table-responsive::-webkit-scrollbar:horizontal {
-  height: 6px;
+  height: 16px;
 }
 .table-responsive::-webkit-scrollbar-thumb {
   cursor: pointer;
@@ -3699,10 +3699,10 @@ apx-chart .apexcharts-xcrosshairs, apx-chart .apexcharts-ycrosshairs {
   -webkit-appearance: none;
 }
 .mat-mdc-select-panel::-webkit-scrollbar:vertical {
-  width: 6px;
+  width: 16px;
 }
 .mat-mdc-select-panel::-webkit-scrollbar:horizontal {
-  height: 6px;
+  height: 16px;
 }
 .mat-mdc-select-panel::-webkit-scrollbar-thumb {
   cursor: pointer;
