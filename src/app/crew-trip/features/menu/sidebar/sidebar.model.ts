@@ -215,7 +215,9 @@ export const menu: Menu[] = [
   {
     title: $localize`:@@invoice:INVOICE`,
     rootPath: 'invoice',
-    permissionCode: [],
+    permissionCode: ['API_INVOICE_FORM_LIST',
+    'API_INVOICE_DOCUMENT_LIST',
+    'API_INVOICE_ACTUAL_COST_LIST'],
     subMenu: [
       {
         path: 'invoice/invoice-form-tab',
@@ -446,7 +448,10 @@ export const menu: Menu[] = [
   {
     title: $localize`:@@system:System`,
     rootPath: 'system',
-    permissionCode: [],
+    permissionCode: [
+      'API_USER_GET_ALL_LIST','API_ROLES_LIST','API_FUNCTIONS_LIST'
+      ,'API_CREW_FLIGHTS_LIST','API_AUTHLOG_LIST'
+    ],
     subMenu: [
       {
         path: '',
