@@ -68,6 +68,8 @@ export const NegotiateCompetence = [
 export const CheckType = [
   {key: 'EARLY', value: $localize`Early checkin`},
   {key: 'LATE', value: $localize`Late checkout`},
+  {key: 'EARLY_LATE_IN', value: $localize`Early late in`},
+  {key: 'EARLY_LATE_OUT', value: $localize`Early late out`},
 ];
 
 /*export const FlightGroup = [
