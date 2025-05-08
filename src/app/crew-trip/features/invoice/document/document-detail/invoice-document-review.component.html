@@ -410,8 +410,8 @@
                             [ngClass]="{'text-right': innerColumn.type === Constant.NUMBER}"
                             [attr.rowspan]="getRowSpan(i,innerColumn,element)"
                             [style.display]="shouldShowRowSpan(i,innerColumn) ? '' : 'none'"
-                            [class.reconcile-row1]="+element.reconcile==1 && ['ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime','fltno', 'cdate'].includes(innerColumn.value)"
-                            [class.reconcile-row2]="+element.reconcile==2 && ['ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime','fltno', 'cdate'].includes(innerColumn.value)"
+                            [class.reconcile-row1]="+element.reconcile==1 && element.aves && ['ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime','fltno', 'cdate'].includes(innerColumn.value)"
+                            [class.reconcile-row2]="+element.reconcile==2 && element.aves && ['ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime','fltno', 'cdate'].includes(innerColumn.value)"
                             mat-cell *matCellDef="let element;let i = index">
                 <span [ngClass]="{
                   'badge': innerColumn.value === 'activeLabel',
