@@ -151,6 +151,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     {label: $localize`Single Room Fc Charge`, value: "singleRoomFcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Time Stay`, value: "timeStay", type: Constant.NUMBER, rowspan: "2"},
     {label: $localize`Toll`, value: "toll", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Toll (total)`, value: "totalToll", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Amount Cc`, value: "totalAmountCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Amount Currency`, value: "totalAmountFc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Breakfast Cc Charge`, value: "breakfastCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -164,6 +165,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
     {label: $localize`Total Twin Rooms Cc`, value: "totalTwinRoomsCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Total Vat`, value: "totalVat", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Transit Duty`, value: "transitDuty", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
+    {label: $localize`Number of transfers`, value: "numberOfTransfers", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Transport Charge`, value: "transportCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Twin Room Cc`, value: "twinRoomCc", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
     {label: $localize`Twin Room Cc Charge`, value: "twinRoomCcCharge", type: Constant.NUMBER, rowspan: "2", displayTotal: true},
@@ -213,13 +215,13 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
             'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge', 'singleRoomCcCharge',
             'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge', 'lcoTwinRoomCcCharge',
             'breakfastFcCharge', 'breakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge', 'accommodationTaxFcCharge',
-            'accommodationTaxCcCharge', 'transportCharge', 'totalCharges', 'remark'];
+            'accommodationTaxCcCharge', 'numberOfTransfers' , 'transportCharge', 'totalCharges', 'remark'];
           this._displayedColumnsHeader2 = ['ciFltno', 'ciDate', 'coFltno', 'coDate'];
           this._displayedColumnsRow = ['stt', 'ciFltno', 'ciDate', 'coFltno', 'coDate', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights',
             'earlyCheckin', 'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge',
             'singleRoomCcCharge', 'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge',
             'lcoTwinRoomCcCharge', 'breakfastFcCharge', 'breakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge',
-            'accommodationTaxFcCharge', 'accommodationTaxCcCharge', 'transportCharge', 'totalCharges', 'remark'];
+            'accommodationTaxFcCharge', 'accommodationTaxCcCharge', 'numberOfTransfers', 'transportCharge', 'totalCharges', 'remark'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
           this.totalColSpan = 5;
         } else if (this.formGroupDetail.getRawValue().ctype === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
@@ -231,9 +233,9 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
           this.totalColSpan = 8;
         } else if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
           this.formType = 3;
-          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice','accessBridge','toll','transitDuty','airportParkingFee', 'totalCharge', 'remark'];
+          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice','accessBridge','toll','totalToll','transitDuty','airportParkingFee', 'totalCharge', 'remark'];
           this._displayedColumnsHeader2 = [];
-          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice','accessBridge','toll','transitDuty','airportParkingFee', 'totalCharge', 'remark'];
+          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice','accessBridge','toll','totalToll','transitDuty','airportParkingFee', 'totalCharge', 'remark'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
         } else if (this.formGroupDetail.getRawValue().ctype === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
           this.formType = 4;
