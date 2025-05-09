@@ -127,13 +127,13 @@
             i18n="@@effectiveDate">
             Effective date
           </th>
-          <td mat-cell class="text-center" *matCellDef="let element">{{ element.currDate | date: 'dd/MM/yyyy' }}</td>
+          <td mat-cell class="text-center" *matCellDef="let element">{{ element.currDate | date: 'dd/MM/yyyy' : 'UTC' }}</td>
         </ng-container>
         <ng-container matColumnDef="updatedDate">
           <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center" i18n="@@updatedOn">
             Updated date
           </th>
-          <td mat-cell class="text-center" *matCellDef="let element">{{ element.updatedDate | date: 'dd/MM/yyyy' }}</td>
+          <td mat-cell class="text-center" *matCellDef="let element">{{ element.updatedDate | date: 'dd/MM/yyyy' : 'UTC'}}</td>
         </ng-container>
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
