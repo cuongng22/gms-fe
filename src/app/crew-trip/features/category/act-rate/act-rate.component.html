@@ -85,7 +85,7 @@
         </i>
         <span i18n="@@export">Export</span>
       </button>
-      <button class="add-btn " type="button" mat-button (click)="sync()">
+      <button *appHasPermission="['API_CURRENCY_ACTUAL_SYNC_LIST']" class="add-btn " type="button" mat-button (click)="sync()">
         <i class="material-symbols-outlined">
             sync
         </i>
