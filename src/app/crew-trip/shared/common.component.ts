@@ -429,4 +429,11 @@ export class CommonComponent
     const _fix = fix == 0 ? 100 : Math.pow(10, fix);
     return (Math.round((_value) * _fix) / _fix).toFixed(fix);
   }
+
+  displayColumnHasData(column: string, data: any): boolean {
+    return data.some(row => {
+      const value = row[column];
+      return value !== null && value !== undefined && value !== '';
+    });
+  }
 }
