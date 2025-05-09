@@ -430,10 +430,10 @@ export class CommonComponent
     return (Math.round((_value) * _fix) / _fix).toFixed(fix);
   }
 
-  displayColumnHasData(column: string, data: any): boolean {
+  /*displayColumnHasData(column: string, data: any): boolean {
     return data.some(row => {
       const value = row[column];
       return value !== null && value !== undefined && value !== '';
     });
-  }
+  }*/
 }
