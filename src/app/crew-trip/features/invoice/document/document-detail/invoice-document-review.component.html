@@ -428,7 +428,12 @@
                         <td mat-footer-cell *matFooterCellDef class="text-right">
                           @if (innerColumn.displayTotal) {
                             <span>
-                    {{ calTotal(innerColumn) | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+                    {{ calTotal(innerColumn, 'form') | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+                              @if (calTotal(innerColumn, 'form') !== calTotal(innerColumn, 'aves')) {
+                                <span
+                                    class="text-danger">({{ calTotal(innerColumn, 'aves') | dataTransformPipe:[innerColumn.type, innerColumn.format] }}
+                                  )</span>
+                              }
                       </span>
                           }
                         </td>

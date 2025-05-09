@@ -80,6 +80,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   @Input() formType: any;
   tblAttachedDocument = new MatTableDataSource();
   tblDocumentReviewForm = new MatTableDataSource();
+  tblDocumentReviewAves = new MatTableDataSource();
   expandList = new Set<string>(['tab1', 'tab2', 'tab3']);
   formGroupFileUpload!: FormGroup;
   showDialogDeleteFile = false;
@@ -215,7 +216,8 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
       fileUpload: [],
       invoiceDocumentReviewProjection: [],
       invoiceDocumentReview: [],
-      invoiceDocumentReviewForm: []
+      invoiceDocumentReviewForm: [],
+      invoiceDocumentReviewAves: []
     });
     this.formGroupSearch = this.fb.group({
       fltNo: [], fltDate: [], dateFrom: [], dateTo: [],
@@ -258,16 +260,22 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
         let reviewStatus = this.reviewMatch() ? InvoiceDocumentStatusEnum.VERIFIED : InvoiceDocumentStatusEnum.UNVERIFIED
         let filterForm = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((s: any) => s.sourceData == 'FORM');
+        let filterAves = this.formGroupDetail.getRawValue().invoiceDocumentReview.filter((s: any) => s.sourceData == 'AVES');
         this.tblDocumentReviewForm.data = filterForm;
+        this.tblDocumentReviewAves.data = filterAves;
         this.tblDocumentReviewForm.filterPredicate = (data: any, filter: any) => {
           const searchTerms = JSON.parse(filter);
-          console.log(data.ciDate, moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT), data)
-          console.log(data.ciDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT))
           let fltNoSearch = searchTerms.fltNo ? (data.ciFltno?.toUpperCase().includes(searchTerms.fltNo) || data.coFltno?.toUpperCase().includes(searchTerms.fltNo) || data.fltno?.toUpperCase().includes(searchTerms.fltNo)) : true;
           let fltDateSearch = searchTerms.fltDate ? (data.ciDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT) || data.cDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT) || data.cdate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT)) : true
           return (fltNoSearch && fltDateSearch);
         };
-        this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm, status: reviewStatus});
+        this.tblDocumentReviewAves.filterPredicate = (data: any, filter: any) => {
+          const searchTerms = JSON.parse(filter);
+          let fltNoSearch = searchTerms.fltNo ? (data.ciFltno?.toUpperCase().includes(searchTerms.fltNo) || data.coFltno?.toUpperCase().includes(searchTerms.fltNo) || data.fltno?.toUpperCase().includes(searchTerms.fltNo)) : true;
+          let fltDateSearch = searchTerms.fltDate ? (data.ciDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT) || data.cDate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT) || data.cdate == moment(searchTerms.fltDate).format(Constant.LOCAL_DATE_FORMAT)) : true
+          return (fltNoSearch && fltDateSearch);
+        };
+        this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm, invoiceDocumentReviewAves: filterAves, status: reviewStatus});
         this.reviewFooter = this.calFooter();
       });
 
@@ -330,16 +338,27 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
     this.formGroupDetail.patchValue({invoiceDocumentDtl: listDtl});
   }
 
-  calTotal(column: any) {
+  calTotal(column: any, type?: string) {
     if (column.type === Constant.NUMBER) {
-      return this.tblDocumentReviewForm.filteredData?.reduce((prev: any, cur: any) => {
-        // prev + +cur[column.value]
-        if (cur.typeRoom === 'CC Twin room') {
-          return prev + +(cur[column.value] / 2);
-        } else {
-          return prev + +cur[column.value];
-        }
-      }, 0)
+      if (type == 'form') {
+        return this.tblDocumentReviewForm.filteredData?.reduce((prev: any, cur: any) => {
+          // prev + +cur[column.value]
+          if (cur.typeRoom === 'CC Twin room') {
+            return prev + +(cur[column.value] / 2);
+          } else {
+            return prev + +cur[column.value];
+          }
+        }, 0)
+      } else if (type == 'aves') {
+        return this.tblDocumentReviewAves.filteredData?.reduce((prev: any, cur: any) => {
+          // prev + +cur[column.value]
+          if (cur.typeRoom === 'CC Twin room') {
+            return prev + +(cur[column.value] / 2);
+          } else {
+            return prev + +cur[column.value];
+          }
+        }, 0)
+      } else return 0;
     } else {
       return '';
     }
