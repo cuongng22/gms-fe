@@ -59,6 +59,8 @@ export const SelectOptions = {
       label: 'Notification: Cost status compared to the planned budget', code: 'COST_PLAN_STATUS'
     }, {
       label: 'Notification: Estimated cost completed', code: 'ESTIMATED_COMPLETE'
+    },{
+      label: 'Notification: The partner has sent a statement of supporting documents and invoices', code: 'SEND_INVOICE'
     }
   ],
   NOTI_SETTING_VALUE_TYPE: [
