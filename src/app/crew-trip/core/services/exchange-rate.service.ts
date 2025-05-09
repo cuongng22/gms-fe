@@ -30,6 +30,12 @@ export class ExchangeRateService extends BaseService {
     return firstValueFrom(this.http.get<any>(url, { params }));
   }
 
+  actualSync(): Promise<any> {
+    const url = `${this.api}/${this.path}/actual/sync`;
+    // const params = new HttpParams({ fromObject: body });
+    return firstValueFrom(this.http.get<any>(url));
+  }
+
   actDetail(curCode: any): Promise<any> {
     const url = `${this.api}/${this.path}/actual/get-code?curCode=${curCode}`;
     return firstValueFrom(this.http.get<any>(url, this.httpOptions));
