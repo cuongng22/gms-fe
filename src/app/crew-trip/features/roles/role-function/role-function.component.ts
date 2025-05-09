@@ -134,62 +134,78 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
   }
 
   checkBoxChange(row?: any, parent?: any) {
-    console.log(this.listFunction, this.listRoleFunction);
     const nextValue = row ? !row.active : this.selectAllChecked;
-    if (row?.child) {//cap cha
-      if (nextValue) {
-        row.child.forEach((s: any) => {
-          this.listRoleFunction = [...this.listRoleFunction, {
-            roleName: this.dataSelected.roleName, functionId: s.id, functionName: s.name, functionDescription: s.alias
-          }];
-          s.active = nextValue;
-        });
-      } else {
-        row.child.forEach((s: any) => {
-          this.listRoleFunction.pop((s1: any) => s1.functionId == s.id);
-          s.active = nextValue;
-        });
-        this.selectAllChecked = false;
-      }
+    if (row?.child) {
+      // Trường hợp: Check/uncheck node cha
       row.active = nextValue;
       row.indeterminate = false;
-    } else if (row) {//cap con
-      if (nextValue) {
-        this.listRoleFunction = [...this.listRoleFunction, {
-          roleName: this.dataSelected.roleName, functionId: row.id, functionName: row.name, functionDescription: row.alias
-        }];
-      } else {
-        this.listRoleFunction.pop((s: any) => s.functionId == row.id);
+      row.child.forEach((child: any) => {
+        child.active = nextValue;
+        if (nextValue) {
+          // Thêm child vào listRoleFunction nếu chưa tồn tại
+          if (!this.listRoleFunction.some((item: any) => item.functionId === child.id)) {
+            this.listRoleFunction = [...this.listRoleFunction, {
+              roleName: this.dataSelected.roleName,
+              functionId: child.id,
+              functionName: child.name,
+              functionDescription: child.alias
+            }];
+          }
+        } else {
+          // Xóa child khỏi listRoleFunction
+          this.listRoleFunction = this.listRoleFunction.filter(
+            (item: any) => item.functionId !== child.id
+          );
+        }
+      });
+      if (!nextValue) {
         this.selectAllChecked = false;
       }
+    } else if (row) {
+      // Trường hợp: Check/uncheck node con
       row.active = nextValue;
-
-      //check indeterminate
-      const has = parent.child.some((s: any) => s.active == true);
-      const every = parent.child.every((s: any) => s.active == true);
-      parent.indeterminate = has && !every;
-      parent.active = every;
-    } else {//select all
       if (nextValue) {
-        this.listFunction.forEach((item: any) => {
-          item.child.forEach((s: any) => {
-            this.listRoleFunction = [...this.listRoleFunction, {
-              roleName: this.dataSelected.roleName, functionId: s.id, functionName: s.name, functionDescription: s.alias
-            }];
-            s.active = nextValue;
-          });
-          item.indeterminate = false;
-          item.active = nextValue;
-        });
+        // Thêm node con vào listRoleFunction nếu chưa tồn tại
+        if (!this.listRoleFunction.some((item: any) => item.functionId === row.id)) {
+          this.listRoleFunction = [...this.listRoleFunction, {
+            roleName: this.dataSelected.roleName,
+            functionId: row.id,
+            functionName: row.name,
+            functionDescription: row.alias
+          }];
+        }
       } else {
-        this.listFunction.forEach((item: any) => {
-          item.child.forEach((s: any) => {
-            this.listRoleFunction.pop((s1: any) => s1.functionId == s.id);
-            s.active = nextValue;
-          });
-          item.active = nextValue;
-        });
+        // Xóa node con khỏi listRoleFunction
+        this.listRoleFunction = this.listRoleFunction.filter(
+          (item: any) => item.functionId !== row.id
+        );
+        this.selectAllChecked = false;
       }
+      // Cập nhật trạng thái node cha
+      const hasActive = parent.child.some((s: any) => s.active);
+      const allActive = parent.child.every((s: any) => s.active);
+      parent.indeterminate = hasActive && !allActive;
+      parent.active = allActive;
+    } else {
+      // Trường hợp: Check/uncheck tất cả
+      this.selectAllChecked = nextValue;
+      this.listRoleFunction = []; // Reset listRoleFunction
+      this.listFunction.forEach((item: any) => {
+        item.active = nextValue;
+        item.indeterminate = false;
+        item.child.forEach((child: any) => {
+          child.active = nextValue;
+          if (nextValue) {
+            // Thêm child vào listRoleFunction
+            this.listRoleFunction = [...this.listRoleFunction, {
+              roleName: this.dataSelected.roleName,
+              functionId: child.id,
+              functionName: child.name,
+              functionDescription: child.alias
+            }];
+          }
+        });
+      });
     }
   }
 
