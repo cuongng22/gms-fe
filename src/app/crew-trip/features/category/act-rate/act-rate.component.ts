@@ -155,7 +155,8 @@ export class ActRateComponent extends CommonComponent implements OnInit {
   async sync() {
     try {
       await this.spinner.show();
-      this.baseService.actualSync();
+      await this.baseService.actualSync();
+      this.baseService.showSuccess(MESSAGE.SYNC_SUCCESS);
     } catch (e: any) {
       this.showError(
         e.error?.data ?? e.error?.error ?? e.error ?? this.MESSAGE.ERROR,
