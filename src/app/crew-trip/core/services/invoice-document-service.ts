@@ -3,7 +3,6 @@ import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {firstValueFrom} from 'rxjs';
 import {HttpHeaders, HttpParams} from '@angular/common/http';
 import {removeNullValues} from 'src/app/crew-trip/shared/utils/constant';
-import {DetailResponse} from "src/app/crew-trip/shared/models/common.model";
 
 @Injectable({
   providedIn: 'root'
@@ -36,12 +35,20 @@ export class InvoiceDocumentService extends BaseService {
       }),
       responseType: 'blob' as any,
     };
-    return firstValueFrom(this.http.post<Blob>(url,body, httpOptionsExport));
+    return firstValueFrom(this.http.post<Blob>(url, body, httpOptionsExport));
   }
 
   override create<T = any>(body: any): Promise<T> {
     const url = `${this.api}/${this.path}`;
     return firstValueFrom(this.http.post<T>(url, body, this.httpOptions));
+  }
+
+  async reconcile(body: any): Promise<any> {
+    const url = `${this.api}/${this.path}/reconcile`;
+    const headers = {
+      headers: new HttpHeaders()
+    };
+    return firstValueFrom(this.http.post(url, body, headers));
   }
 
   override update<T = any>(body: any): Promise<T> {
@@ -135,6 +142,7 @@ export class InvoiceDocumentService extends BaseService {
     };
     return firstValueFrom(this.http.post(url, body, headers));
   }
+
   getExchangeRate(body: any): Promise<any> {
     const url = `${this.api}/invoice/common/get-exchange-rate`;
     const headers = {

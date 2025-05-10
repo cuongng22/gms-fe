@@ -277,6 +277,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
         };
         this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm, invoiceDocumentReviewAves: filterAves, status: reviewStatus});
         this.reviewFooter = this.calFooter();
+        console.log(filterForm,'filterFormfilterForm')
       });
 
     } catch (e) {

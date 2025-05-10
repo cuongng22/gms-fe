@@ -125,7 +125,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
       });
 
     }*/
-
+  showDialogReconcile = false;
 
   constructor() {
     super();
@@ -456,5 +456,41 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
         }
       }
     })
+  }
+
+  async reconcile() {
+    try {
+      await this.spinner.show();
+      const res = await this.baseService.reconcile({
+          id: this.formGroupDetail.getRawValue().id
+        }
+      );
+      this.baseService.showSuccess(MESSAGE.SUCCESS);
+    } catch (e: any) {
+      this.baseService.showError(
+        e.error?.error ?? e.error?.error?.code ?? MESSAGE.ERROR,
+      );
+      throw e;
+    } finally {
+      await this.spinner.hide();
+      await this.closeConfirmReconcile();
+    }
+  }
+
+  async showConfirmReconcile(id: any) {
+    this.formGroupDetail.patchValue({id: id});
+    this.toggleDialogReconcile();
+  }
+
+  async closeConfirmReconcile() {
+    this.formGroupDetail?.reset(this.formGroupDetailInit);
+    this.formGroupDetail?.markAsUntouched();
+    this.formGroupDetail?.markAsPristine();
+    this.formGroupDetail?.updateValueAndValidity();
+    this.toggleDialogReconcile();
+  }
+
+  toggleDialogReconcile() {
+    this.showDialogReconcile = !this.showDialogReconcile;
   }
 }
