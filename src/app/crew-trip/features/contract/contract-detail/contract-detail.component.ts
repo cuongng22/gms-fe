@@ -377,7 +377,17 @@ export class ContractDetailComponent
         active: [true],
         serviceName: [],
         serviceUnit: [],
+        fromHour: [],
+        toHour: [],
       });
+      row.controls['fromHour'].setValidators([
+        timeAfterValidator(row.controls['toHour']),
+        Validators.pattern(PATTERN.HOUR24),
+      ]);
+      row.controls['toHour'].setValidators([
+        timeBeforeValidator(row.controls['fromHour']),
+        Validators.pattern(PATTERN.HOUR24),
+      ]);
       row.controls['fromDate'].setValidators([
         afterValidator(row.controls['toDate']),
         this.beforeValidatorMessage(
