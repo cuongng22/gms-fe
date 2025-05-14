@@ -1340,56 +1340,16 @@
                 </div>
               </td>
             </ng-container>
-            @if (isVehicle()){
-        @if (!readMode) {
-        <tr
-            *matHeaderRowDef="['stt','fromDate','toDate','serviceCode','serviceName','fromHour','toHour','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes','action']; sticky: true"
+            <tr
+            *matHeaderRowDef="displayedColumns; sticky: true"
             mat-header-row></tr>
         <tr
-            *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceCode','serviceName','fromHour','toHour','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes','action',];"
+            *matRowDef="let row; columns: displayedColumns;"
             class="input-row" mat-row></tr>
         <tr *matNoDataRow class="mat-row">
           <td [attr.colspan]="15" class="mat-cell border-none text-center"><span
               i18n>No data!</span></td>
         </tr>
-        } @else {
-        <tr
-            *matHeaderRowDef="['stt','fromDate','toDate','serviceCode','serviceName','fromHour','toHour','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes']; sticky: true"
-            mat-header-row></tr>
-        <tr
-            *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceCode','serviceName','fromHour','toHour','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes']"
-            class="input-row" mat-row></tr>
-        <tr *matNoDataRow class="mat-row">
-          <td [attr.colspan]="14" class="mat-cell border-none text-center"><span
-              i18n>No data!</span></td>
-        </tr>
-        }
-        }
-            @else{
-        @if (!readMode) {
-        <tr
-            *matHeaderRowDef="['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes','action']; sticky: true"
-            mat-header-row></tr>
-        <tr
-            *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes','action',];"
-            class="input-row" mat-row></tr>
-        <tr *matNoDataRow class="mat-row">
-          <td [attr.colspan]="15" class="mat-cell border-none text-center"><span
-              i18n>No data!</span></td>
-        </tr>
-        } @else {
-        <tr
-            *matHeaderRowDef="['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes']; sticky: true"
-            mat-header-row></tr>
-        <tr
-            *matRowDef="let row; columns: ['stt','fromDate','toDate','serviceCode','serviceName','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes']"
-            class="input-row" mat-row></tr>
-        <tr *matNoDataRow class="mat-row">
-          <td [attr.colspan]="14" class="mat-cell border-none text-center"><span
-              i18n>No data!</span></td>
-        </tr>
-        }
-        }
           </table>
         </form>
       </div>
