@@ -580,18 +580,32 @@ export class ContractDetailComponent
           standardCheckOut: this.formGroupDetail.getRawValue().standardCheckout, //exchangeRate: this.numberPipe.transform(this.formGroupDetail.getRawValue().exchangeRate,),
         });
 
-        this.getPartnerInfo(this.formGroupDetail.getRawValue().partnerCode);
+        await this.getPartnerInfo(this.formGroupDetail.getRawValue().partnerCode);
         this.tblAttachedDocument = new MatTableDataSource(
           this.formGroupDetail.getRawValue().documentsList ?? [],
         );
 
         //tao list ncc
-        this.buildListPartner(this.contractObj.marketCode);
+        await this.buildListPartner(this.contractObj.marketCode??'');
 
-        this.setReadModeDtl();
+        await this.setReadModeDtl();
+
+        if (this.isVehicle()) {
+          if (!this.readMode) {
+            this.displayedColumns = ['stt', 'fromDate', 'toDate', 'serviceCode', 'serviceName', 'fromHour', 'toHour', 'serviceUnit', 'vnaTransId', 'expenseCatgId', 'priceNoTax', 'taxCode', 'taxRate', 'originalAmount3', 'priceWithTax', 'notes', 'action']
+          } else {
+            this.displayedColumns = ['stt', 'fromDate', 'toDate', 'serviceCode', 'serviceName', 'fromHour', 'toHour', 'serviceUnit', 'vnaTransId', 'expenseCatgId', 'priceNoTax', 'taxCode', 'taxRate', 'originalAmount3', 'priceWithTax', 'notes']
+          }
+        } else {
+          if (!this.readMode) {
+            this.displayedColumns = ['stt', 'fromDate', 'toDate', 'serviceCode', 'serviceName', 'serviceUnit', 'vnaTransId', 'expenseCatgId', 'priceNoTax', 'taxCode', 'taxRate', 'originalAmount3', 'priceWithTax', 'notes', 'action']
+          } else {
+            this.displayedColumns = ['stt', 'fromDate', 'toDate', 'serviceCode', 'serviceName', 'serviceUnit', 'vnaTransId', 'expenseCatgId', 'priceNoTax', 'taxCode', 'taxRate', 'originalAmount3', 'priceWithTax', 'notes']
+          }
+        }
       });
     } catch (e) {
-      // console.log(e);
+      console.log(e);
     } finally {
       await this.spinner.hide();
     }
