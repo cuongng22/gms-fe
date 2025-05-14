@@ -1340,7 +1340,7 @@
                 </div>
               </td>
             </ng-container>
-            @if (this.isVehicle()){
+            @if (isVehicle()){
         @if (!readMode) {
         <tr
             *matHeaderRowDef="['stt','fromDate','toDate','serviceCode','serviceName','fromHour','toHour','serviceUnit','vnaTransId','expenseCatgId','priceNoTax','taxCode','taxRate','originalAmount3','priceWithTax','notes','action']; sticky: true"
