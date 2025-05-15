@@ -192,3 +192,8 @@ export function ctz(value: any) {
   }
   return 0;
 }
+
+export class SERVICE_CODE {
+  static TRANSPORT_DAYTIME= "TTDHKT.00167";
+  static TRANSPORT_NIGHTTIME= "TTDHKT.00168";
+}
