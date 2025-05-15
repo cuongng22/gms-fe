@@ -586,7 +586,7 @@ export class ContractDetailComponent
         );
 
         //tao list ncc
-        await this.buildListPartner(this.contractObj.marketCode??'');
+        await this.buildListPartner(this.contractObj?.marketCode??'');
 
         await this.setReadModeDtl();
 
