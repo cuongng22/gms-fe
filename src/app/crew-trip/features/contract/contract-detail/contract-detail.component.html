@@ -1181,7 +1181,7 @@
                     <mat-form-field class="edit-inline-table">
                       <input [disableClick]="true" [format]="24"
                              [ngxTimepicker]="toHour" formControlName="toHour" matInput
-                             required trim="blur">
+                             [required]="isTransportDayNight(row)" trim="blur">
                       <ngx-material-timepicker-toggle [for]="toHour"
                                                       class="time-picker-clock"></ngx-material-timepicker-toggle>
                       <ngx-material-timepicker #toHour [appendToInput]="true" [cancelBtnTmpl]="cancelBtn"
