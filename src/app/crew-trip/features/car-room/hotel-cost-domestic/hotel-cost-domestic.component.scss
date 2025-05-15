@@ -1,0 +1,52 @@
+.table-container {
+  max-height: 400px;
+  overflow-y: auto;
+  display: block;
+}
+/* Header dòng 1 (có rowspan) */
+.header-row-level-1 {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: white;
+}
+
+/* Header dòng 2, nằm dưới dòng 1 */
+.header-row-level-2 {
+  position: sticky;
+  top: 42px;
+  z-index: 19;
+  background: white;
+}
+
+.mat-header-cell {
+  background: white;
+  z-index: 21;
+}
+
+/* Sticky cột */
+.sticky-col {
+  position: sticky;
+  background: white;
+  z-index: 10;
+}
+
+.sticky-col-1 {
+  left: 0;
+  z-index: 11;
+}
+
+.sticky-col-2 {
+  left: 60px; // width cột 1
+  z-index: 11;
+}
+
+.sticky-col-3 {
+  left: 160px; // width cột 1 + width cột 2
+  z-index: 11;
+}
+
+/* Ưu tiên header hiển thị */
+.mat-header-cell.sticky-col {
+  z-index: 12;
+}

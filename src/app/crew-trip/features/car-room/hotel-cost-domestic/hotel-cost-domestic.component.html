@@ -54,12 +54,12 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+    <div class="table-responsive scroll-container">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light table-container">
         @for (col of displayedFirst; track col.name) {
           <ng-container matColumnDef="{{ col.name }}">
             <th mat-header-cell *matHeaderCellDef [attr.colspan]="col.colSpan" [attr.rowSpan]="col.rowSpan"
-                class="text-center">{{ col.field }}
+                class="text-center" >{{ col.field }}
             </th>
             @if (col.name === '#') {
               <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
@@ -114,9 +114,9 @@
           </ng-container>
         }
         <tr mat-header-row
-            *matHeaderRowDef="displayedFirstArr"></tr>
+            *matHeaderRowDef="displayedFirstArr" class="header-row-level-1"></tr>
         <tr mat-header-row
-            *matHeaderRowDef="displayedSecondArr"></tr>
+            *matHeaderRowDef="displayedSecondArr" class="header-row-level-2"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsArr;"></tr>
         <tr mat-footer-row *matFooterRowDef="displayedFooterArr" [hidden]="dataSource.data.length === 0">
         </tr>
