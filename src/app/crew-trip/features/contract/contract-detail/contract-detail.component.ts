@@ -17,7 +17,7 @@ import {BaseImport} from 'src/app/crew-trip/shared/base-import';
 import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
 import {PdfViewerComponent} from 'src/app/crew-trip/shared/pdf-viewer/pdf-viewer.component';
 import {afterValidator, beforeValidator, lessThanValidator, timeAfterValidator, timeBeforeValidator,} from 'src/app/crew-trip/shared/utils/common';
-import {DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN,} from 'src/app/crew-trip/shared/utils/constant';
+import {DATE_FORMAT_DD_MM_YYYY, MESSAGE, PATTERN, SERVICE_CODE,} from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
   selector: 'app-contract-detail',
@@ -381,11 +381,9 @@ export class ContractDetailComponent
         toHour: [],
       });
       row.controls['fromHour'].setValidators([
-        timeAfterValidator(row.controls['toHour']),
         Validators.pattern(PATTERN.HOUR24),
       ]);
       row.controls['toHour'].setValidators([
-        timeBeforeValidator(row.controls['fromHour']),
         Validators.pattern(PATTERN.HOUR24),
       ]);
       row.controls['fromDate'].setValidators([
@@ -586,7 +584,7 @@ export class ContractDetailComponent
         );
 
         //tao list ncc
-        await this.buildListPartner(this.contractObj?.marketCode??'');
+        await this.buildListPartner(this.contractObj?.marketCode ?? '');
 
         await this.setReadModeDtl();
 
@@ -1409,6 +1407,12 @@ export class ContractDetailComponent
     row.patchValue({
       expenseCatgId: data.value,
     });
+  }
+
+  isTransportDayNight(row: any) {
+    if (row.getRawValue().serviceCode == SERVICE_CODE.TRANSPORT_DAYTIME ||
+      row.getRawValue().serviceCode == SERVICE_CODE.TRANSPORT_NIGHTTIME
+    ) {return true} else {return false}
   }
 
   private async buildListPartner(partnerCode?: any) {

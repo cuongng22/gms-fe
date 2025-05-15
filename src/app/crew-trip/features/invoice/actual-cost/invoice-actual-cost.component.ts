@@ -70,10 +70,10 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
   formType = 1;
   _displayedColumns: {
-    label: string; value: string, type?: string, format?: string,sticky?:boolean
+    label: string; value: string, type?: string, format?: string, sticky?: boolean
   }[] = [
-    {label: $localize`Partner Name`, value: 'partnerName', sticky:true},
-    {label: $localize`Airport Code`, value: 'airportCode', sticky:true},
+    {label: $localize`Partner Name`, value: 'partnerName', sticky: true},
+    {label: $localize`Airport Code`, value: 'airportCode', sticky: true},
     {label: $localize`Type`, value: 'ctype'},
     {label: $localize`Period Occurrence`, value: 'periodOccurrence', type: Constant.DATE, format: Constant.MONTH_FORMAT},
     {label: $localize`Currency`, value: 'currency'},
@@ -176,7 +176,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
 
       if (res) {
         if (res.code === HttpStatusCode.Ok) {
-          this.dataSource.data = res.data;
+          this.dataSource.data = res.data.content;
           this.totalElement = res.data.totalElements;
         }
         return res;
@@ -193,7 +193,9 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
       await this.spinner.show();
       const res = await this.baseService.exportData({
         ctype: this.formGroupFile.getRawValue().ctype,
-        partnerType: this.formGroupFile.getRawValue().partnerType
+        partnerType: this.formGroupFile.getRawValue().partnerType,
+        page: 0,
+        limit: 999999
       });
       this.downloadFile(res.blob, filename ?? res.fileName);
     } catch (e: any) {
@@ -255,7 +257,7 @@ export class InvoiceActualCostComponent extends CommonComponent implements OnIni
           page: this.pageIndex,
           size: this.pageSize,
           limit: this.pageSize,
-          partnerType:this.partnerType,
+          partnerType: this.partnerType,
           partnerCode: item.partnerCode,
           airportCode: item.airportCode,
           listAirportCode: item.airportCode,
