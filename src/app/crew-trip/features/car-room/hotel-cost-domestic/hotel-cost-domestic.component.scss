@@ -23,30 +23,24 @@
   background: white;
   z-index: 21;
 }
+// .sticky-col-1, .sticky-col-2, .sticky-col-3 {
+//   position: sticky;
+//   background: white;
+//   z-index: 10;
+// }
 
-/* Sticky cột */
-.sticky-col {
-  position: sticky;
-  background: white;
-  z-index: 10;
-}
+// /* Chỉ định khoảng cách từ trái */
+// .sticky-col-1 {
+//   left: 0;
+//   z-index: 11;
+// }
 
-.sticky-col-1 {
-  left: 0;
-  z-index: 11;
-}
+// .sticky-col-2 {
+//   left: 50px; /* điều chỉnh theo chiều rộng cột 1 */
+//   z-index: 11;
+// }
 
-.sticky-col-2 {
-  left: 60px; // width cột 1
-  z-index: 11;
-}
-
-.sticky-col-3 {
-  left: 160px; // width cột 1 + width cột 2
-  z-index: 11;
-}
-
-/* Ưu tiên header hiển thị */
-.mat-header-cell.sticky-col {
-  z-index: 12;
-}
+// .sticky-col-3 {
+//   left: 166px; /* = 60px (col 1) + 100px (col 2), tùy chỉnh */
+//   z-index: 11;
+// }
