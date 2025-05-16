@@ -294,7 +294,7 @@
                     </i>
                   </a>
                 }
-                @if (element.status === 'UNMATCHED' && element.source === 'MANUAL') {
+                @if (element.status === 'UNMATCHED') {
                   <a class="text-danger" mat-button
                      type="button">
                     <i (click)="showConfirmDelete(element.id)" class="material-symbols-outlined" i18n-title
