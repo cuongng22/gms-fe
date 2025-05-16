@@ -277,7 +277,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
         };
         this.formGroupDetail.patchValue({invoiceDocumentReviewForm: filterForm, invoiceDocumentReviewAves: filterAves, status: reviewStatus});
         this.reviewFooter = this.calFooter();
-        console.log(filterForm,'filterFormfilterForm')
+        console.log(filterForm, 'filterFormfilterForm')
       });
 
     } catch (e) {
@@ -351,14 +351,23 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
           }
         }, 0)
       } else if (type == 'aves') {
-        return this.tblDocumentReviewAves.filteredData?.reduce((prev: any, cur: any) => {
+        let value1 = this.tblDocumentReviewForm.filteredData?.filter((s: any) => s.labelGroup == 'AVES').reduce((prev: any, cur: any) => {
           // prev + +cur[column.value]
           if (cur.typeRoom === 'CC Twin room') {
             return prev + +(cur[column.value] / 2);
           } else {
             return prev + +cur[column.value];
           }
-        }, 0)
+        }, 0) as number;
+        let value2 = this.tblDocumentReviewAves.filteredData?.reduce((prev: any, cur: any) => {
+          // prev + +cur[column.value]
+          if (cur.typeRoom === 'CC Twin room') {
+            return prev + +(cur[column.value] / 2);
+          } else {
+            return prev + +cur[column.value];
+          }
+        }, 0) as number;
+        return value1 + value2;
       } else return 0;
     } else {
       return '';
