@@ -194,7 +194,7 @@
                     <td mat-cell *matCellDef="let element;let i = dataIndex">
                         <div class="action-buttons d-flex justify-content-end">
                             @if(!element.isEmailSent){
-                            <button mat-button title="View" i18n-title="@@view" class="text-vna"
+                            <button mat-button title="Send email" i18n-title="@@sendEmail" class="text-vna"
                                 (click)="showPopSendMail(element)">
                                 <i class="material-symbols-outlined " text-primary>
                                     mail
@@ -203,7 +203,7 @@
                             }
 
                             @if(!element.isSendSuccess){
-                            <button mat-button title="View" i18n-title="@@view" class="text-vna"
+                            <button mat-button title="Upload" i18n-title="@@upload" class="text-vna"
                                 (click)="showPopUpload(element)">
                                 <i class="material-symbols-outlined " text-primary>
                                     upload

@@ -107,13 +107,14 @@ export class DialogSendMailComponent implements OnInit {
     
     this.formGroupDetail.patchValue({ ...this.data });
     await this.spinner.show();
+    const emailClass = this.data.scheType === 'ESTIMATED_FLIGHT' ? 'ESTIMATED_SCHEDULE' : 'CHANGED_SCHEDULE';
     Promise.all([
       this.groupMailService.getEmails(this.data.marketCode).then((res: DetailResponse<any>) => {
         this.groupMails = res.data;
         // this.formGroupDetail.controls.email.setValue(res.data);
         // this.formGroupDetail.controls.email.disable();
       }),
-      this.emailSupplierService.content({ emailClass: 'INVOICE_REMINDER', marketCode: this.data.marketCode }).then((res: DetailResponse<any>) => {
+      this.emailSupplierService.content({ emailClass: emailClass, marketCode: this.data.marketCode }).then((res: DetailResponse<any>) => {
         this.formGroupDetail.controls.title.setValue(res.data.title);
         this.formGroupDetail.controls.content.setValue(res.data.content);
       })
