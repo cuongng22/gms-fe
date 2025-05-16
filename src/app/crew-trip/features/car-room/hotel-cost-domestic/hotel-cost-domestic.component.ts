@@ -1,4 +1,4 @@
-import { DatePipe, DecimalPipe } from '@angular/common';
+import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
@@ -64,6 +64,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
     MatFooterCell,
     MatFooterCellDef,
     DataCalculateTotal,
+    CommonModule
   ],
   templateUrl: './hotel-cost-domestic.component.html',
   styleUrl: './hotel-cost-domestic.component.scss',
@@ -236,6 +237,10 @@ export class HotelCostDomesticComponent
     await this.search();
     await this.spinner.hide();
   }
+
+isStickyCol(index: number): string {
+  return ['sticky-col-1', 'sticky-col-2', 'sticky-col-3'][index] || '';
+}
 
   override async search() {
     await this.spinner.show();

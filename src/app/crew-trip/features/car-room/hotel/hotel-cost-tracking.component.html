@@ -57,7 +57,7 @@
   </mat-card-header>
   <mat-card-content>
     <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light table-container">
         <ng-container matColumnDef="#">
           <th mat-header-cell *matHeaderCellDef [attr.rowSpan]="2" class="text-center">#</th>
           <td mat-cell *matCellDef="let element; let i = dataIndex"

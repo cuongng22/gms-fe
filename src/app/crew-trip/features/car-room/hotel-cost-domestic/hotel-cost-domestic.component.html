@@ -54,29 +54,29 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
-        @for (col of displayedFirst; track col.name) {
+    <div class="table-responsive scroll-container">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light table-container">
+        @for (col of displayedFirst; track col.name;let i = $index) {
           <ng-container matColumnDef="{{ col.name }}">
             <th mat-header-cell *matHeaderCellDef [attr.colspan]="col.colSpan" [attr.rowSpan]="col.rowSpan"
-                class="text-center">{{ col.field }}
+                class="text-center" [ngClass]="isStickyCol(i)">{{ col.field }}
             </th>
             @if (col.name === '#') {
-              <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">
+              <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center" [ngClass]="isStickyCol(i)">
                 {{ i + 1 }}
               </td>
-              <td mat-footer-cell *matFooterCellDef class="text-center fw-bold" [colSpan]="7">Total</td>
+              <td mat-footer-cell *matFooterCellDef class="text-center fw-bold" [colSpan]="7" [ngClass]="isStickyCol(i)">Total</td>
             }
             @if (col.rowSpan === 2 && col.name !== '#') {
               <td mat-cell *matCellDef="let element"
-                  class="text-center">
+                  class="text-center" [ngClass]="isStickyCol(i)">
                 @if (col.name === 'totalChargeVnd') {
                   {{ element[col.key] | number }}
                 } @else {
                   {{ element[col.key] }}
                 }
               </td>
-              <td mat-footer-cell *matFooterCellDef class="text-center">
+              <td mat-footer-cell *matFooterCellDef class="text-center" [ngClass]="isStickyCol(i)">
                 @if (['totalChargeVnd', 'numberOfNights', 'earlyCheckin', 'lateCheckout', 'totalNights'].includes(col.name)) {
                   <span class="fw-bold">
                     {{ (dataSource.data | dataCalculateTotal: col.key) | number }}
@@ -87,11 +87,11 @@
             }
           </ng-container>
         }
-        @for (col of displayedSecond; track col) {
+        @for (col of displayedSecond; track col;let i = $index) {
           <ng-container matColumnDef="{{ col.name }}">
-            <th mat-header-cell *matHeaderCellDef class="text-center">{{ col.field }}</th>
+            <th mat-header-cell *matHeaderCellDef class="text-center" [ngClass]="isStickyCol(i)">{{ col.field }}</th>
             <td mat-cell
-                *matCellDef="let element">
+                *matCellDef="let element" [ngClass]="isStickyCol(i)" >
               @if (col.name === 'checkinDate' || col.name === 'checkoutDate') {
                 {{ element[col.key] | date: 'dd/MM/yyyy' }}
               } @else if (col.name === 'checkinTime' || col.name === 'checkoutTime') {
@@ -104,19 +104,19 @@
             </td>
 
             @if (['quantityfc', 'quantityCcMen', 'quantityCcWomen', 'fcSingle', 'ccSingle', 'ccTwin', 'roomChargeFc', 'roomChargeCc', 'roomChargeTwin'].includes(col.name)) {
-              <td mat-footer-cell *matFooterCellDef class="text-center">
+              <td mat-footer-cell *matFooterCellDef class="text-center" [ngClass]="isStickyCol(i)">
                 <span class="fw-bold"> {{ (dataSource.data | dataCalculateTotal: col.key) | number }}</span>
               </td>
             } @else {
-              <td mat-footer-cell *matFooterCellDef class="text-center">
+              <td mat-footer-cell *matFooterCellDef class="text-center" [ngClass]="isStickyCol(i)">
               </td>
             }
           </ng-container>
         }
         <tr mat-header-row
-            *matHeaderRowDef="displayedFirstArr"></tr>
+            *matHeaderRowDef="displayedFirstArr" class="header-row-level-1"></tr>
         <tr mat-header-row
-            *matHeaderRowDef="displayedSecondArr"></tr>
+            *matHeaderRowDef="displayedSecondArr" class="header-row-level-2"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumnsArr;"></tr>
         <tr mat-footer-row *matFooterRowDef="displayedFooterArr" [hidden]="dataSource.data.length === 0">
         </tr>
