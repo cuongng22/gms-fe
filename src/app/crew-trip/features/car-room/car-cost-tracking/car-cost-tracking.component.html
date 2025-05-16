@@ -88,7 +88,7 @@
                 {{ element[col.key] | date: 'dd/MM/yyyy' }}
               </ng-container>
               <ng-template #otherFields>
-                <ng-container *ngIf="['unitPrice', 'accessBridge', 'toll', 'airportParkFee', 'transitDuty', 'totalCharge', 'totalChargeVnd'].includes(col.name); else defaultField">
+                <ng-container *ngIf="['unitPrice', 'accessBridge', 'toll','tollTotal', 'airportParkFee', 'transitDuty', 'totalCharge', 'totalChargeVnd'].includes(col.name); else defaultField">
                   {{ element[col.key] | number }}
                 </ng-container>
                 <ng-template #defaultField>
@@ -96,7 +96,7 @@
                 </ng-template>
               </ng-template>
             </td>
-            <ng-container *ngIf="['accessBridge', 'toll', 'airportParkFee', 'transitDuty', 'totalCharge', 'totalChargeVnd', 'numberOfFc', 'numberOfVehicle', 'numberOfCc', 'numberOfCrew'].includes(col.name); else footerDefault">
+            <ng-container *ngIf="['accessBridge', 'toll','tollTotal', 'airportParkFee', 'transitDuty', 'totalCharge', 'totalChargeVnd', 'numberOfFc', 'numberOfVehicle', 'numberOfCc', 'numberOfCrew'].includes(col.name); else footerDefault">
               <td mat-footer-cell *matFooterCellDef [ngClass]="{'text-right': ['totalCharge', 'totalChargeVnd'].includes(col.name), 'text-center': !['totalCharge', 'totalChargeVnd'].includes(col.name)}" class="fw-bold">
                 {{ (dataSource.data | dataCalculateTotal: col.key) | number }}
               </td>
@@ -111,7 +111,7 @@
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <tr mat-footer-row *matFooterRowDef="displayedFooterColumns" [hidden]="dataSource.data.length === 0"></tr>
         <tr class="mat-row" *matNoDataRow>
-          <td class="mat-cell text-center" colspan="15">No data!</td>
+          <td class="mat-cell text-center" colspan="16">No data!</td>
         </tr>
       </table>
     </div>
