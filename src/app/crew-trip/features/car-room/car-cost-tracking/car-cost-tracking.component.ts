@@ -99,6 +99,7 @@ export class CarCostTrackingComponent
 		{ name: 'unitPrice', field: 'Unit Price', key: 'unitprice' },
 		{ name: 'accessBridge', field: 'Access Bridge', key: 'accessbridgefee' },
 		{ name: 'toll', field: 'Toll', key: 'tollfee' },
+		{ name: 'tollTotal', field: 'Toll (Total)', key: 'tollTotal' },
 		{ name: 'transitDuty', field: 'Transit Duty', key: 'transitdutyfee' },
 		{
 			name: 'airportParkFee',
