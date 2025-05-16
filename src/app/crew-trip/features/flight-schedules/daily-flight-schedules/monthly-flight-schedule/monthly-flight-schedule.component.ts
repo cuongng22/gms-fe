@@ -156,7 +156,7 @@ export class MonthlyFlightScheduleComponent extends CommonComponent {
   async syncMonthly() {
     try {
       await this.spinner.show();
-      this.baseService.syncMonthly();
+      await this.baseService.syncMonthly();
     } catch (e: any) {
       this.showError(
         e.error?.data ?? e.error?.error ?? e.error ?? this.MESSAGE.ERROR,
