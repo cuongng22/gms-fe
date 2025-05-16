@@ -88,3 +88,8 @@ export const ServiceCodeColumnToData: any = {
   totalCharge: 'totalCharge',
   totalCharges: 'totalCharges',
 }
+
+export const InvoicePartnerType = [
+  {key: 'HOTEL', value: $localize`HOTEL`},
+  {key: 'TRANSPORTATION', value: $localize`TRANSPORTATION`},
+];

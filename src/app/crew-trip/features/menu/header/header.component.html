@@ -84,6 +84,16 @@
             </a>
           </div>
           <ul class="menu-body p-0 mt-0 list-unstyled">
+            <div *ngIf="isLoading" class="text-center p-3">
+              <mat-spinner diameter="30" class="mx-auto"></mat-spinner>
+              <p class="mt-2 mb-0">Loading notifications...</p>
+            </div>
+            <div *ngIf="!isLoading && messagesNotice.length === 0" class="text-center p-3">
+              <i class="material-symbols-outlined" style="font-size: 24px; color: #999;">
+                notifications_off
+              </i>
+              <p class="mt-2 mb-0">No notifications</p>
+            </div>
             <li class="position-relative" *ngFor="let message of messagesNotice">
               <div
                 class="icon rounded-circle d-flex align-items-center justify-content-center position-absolute text-center transition">
@@ -102,7 +112,7 @@
             </li>
           </ul>
           <div class="menu-footer text-center">
-            <a routerLink="/dashboard/notifications" class="d-inline-block fw-medium position-relative text-primary">
+            <a routerLink="/system/config/noti-warning" class="d-inline-block fw-medium position-relative text-primary">
               See All Notifications
             </a>
           </div>

@@ -11,6 +11,7 @@ import {Router, RouterLink} from '@angular/router';
 import {MatMenuModule} from '@angular/material/menu';
 import {MatButtonModule} from '@angular/material/button';
 import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
 import {ToggleService} from 'src/app/common/header/toggle.service';
 import {UsersService} from 'src/app/crew-trip/core/services/users-service';
@@ -43,12 +44,13 @@ import {BaseService} from 'src/app/crew-trip/core/services/base-service';
 import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 import {HttpStatusCode} from '@angular/common/http';
 import {WebsocketService} from 'src/app/crew-trip/core/services/websocket-service';
+import {NotificationService} from 'src/app/crew-trip/core/services/notification.service';
 
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [RouterLink, FormsModule, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, NgxTrimDirectiveModule],
+  imports: [RouterLink, FormsModule, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, NgxTrimDirectiveModule, MatProgressSpinnerModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
@@ -60,7 +62,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   themeService = inject(CustomizerSettingsService);
   userService = inject(UsersService);
   router = inject(Router);
-  spinner = inject(NgxSpinnerService);
+  isLoading = false;
   dialog = inject(MatDialog); // Inject MatDialog
   // isSidebarToggled
   isSidebarToggled = false;
@@ -78,7 +80,12 @@ export class HeaderComponent implements OnInit, OnDestroy {
   messagesNotice: any[] = [];
   private subscription!: Subscription;
 
-  constructor(private languageService: LanguageService, private webSocketService: WebsocketService) {
+  constructor(
+    private languageService: LanguageService, 
+    private webSocketService: WebsocketService,
+    private notificationService: NotificationService,
+    private spinner: NgxSpinnerService
+  ) {
     this.userService.userInfo$.subscribe(user => {
       this.userInfo = user;
     });
@@ -95,6 +102,16 @@ export class HeaderComponent implements OnInit, OnDestroy {
       newPassword: ['', [Validators.required]],
       confirmNewPassword: ['', [Validators.required]],
     });
+  }
+
+ showSpinner() {
+    this.isLoading = true;
+    this.spinner.show();
+  }
+
+  hideSpinner() {
+    this.spinner.hide();
+    this.isLoading = false;
   }
 
   changeLanguage(language: string) {
@@ -144,6 +161,8 @@ export class HeaderComponent implements OnInit, OnDestroy {
     const username = this.userInfo?.email; // Thay bằng username thực tế
     if (username) {
       this.webSocketService.connect(username);
+      // Fetch existing notifications when component initializes
+      this.fetchNotifications();
     } else {
       console.error('Username is undefined');
     }
@@ -161,14 +180,45 @@ export class HeaderComponent implements OnInit, OnDestroy {
         if (this.messagesNotice.length > 5) {
           this.messagesNotice = this.messagesNotice.slice(-5);
         }
-        this.messagesNotice = this.messagesNotice.map(item => {
-          item.sendTimeFormatted = format(new Date(item.timeSend), 'dd/MM/yyyy HH:mm:ss');
-          return item;
-        });
+        this.formatNotificationTimes();
       },
       error: (err) => console.error(err),
     });
+  }
 
+  /**
+   * Fetch notifications from API
+   */
+  async fetchNotifications() {
+    try {
+      this.spinner.show();
+      const response = await this.notificationService.search({
+        page: 0,
+        size: 10,
+        limit: 10,
+        mode: 1
+      });
+      
+      if (response && response.content) {
+        this.messagesNotice = response.content;
+        this.formatNotificationTimes();
+      }
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+      this.baseService.showError('Failed to load notifications');
+    } finally {
+      this.spinner.hide();
+    }
+  }
+
+  /**
+   * Format notification times for display
+   */
+  formatNotificationTimes() {
+    this.messagesNotice = this.messagesNotice.map(item => {
+      item.sendTimeFormatted = format(new Date(item.timeSend), 'dd/MM/yyyy HH:mm:ss');
+      return item;
+    });
   }
 
   clearAllNoti() {
