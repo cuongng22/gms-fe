@@ -115,7 +115,8 @@ export class EmailTrackingComponent extends CommonComponent {
 				marketType: getCategoryCode(data.marketType),
 				marketCode: data.marketCode,
 				id: data.id,
-				attachment: data.files
+				attachment: data.files,
+				fileType: data.fileType
 			}
 		}).afterClosed().subscribe(res => {
 			this.search()
