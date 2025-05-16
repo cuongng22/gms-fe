@@ -342,16 +342,16 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   calTotal(column: any, type?: string) {
     if (column.type === Constant.NUMBER) {
       if (type == 'form') {
-        return this.tblDocumentReviewForm.filteredData?.reduce((prev: any, cur: any) => {
+        return this.tblDocumentReviewForm.filteredData?.filter((s: any) => s.labelGroup != 'AVES').reduce((prev: any, cur: any) => {
           // prev + +cur[column.value]
           if (cur.typeRoom === 'CC Twin room') {
             return prev + +(cur[column.value] / 2);
           } else {
             return prev + +cur[column.value];
           }
-        }, 0)
+        }, 0);
       } else if (type == 'aves') {
-        let value1 = this.tblDocumentReviewForm.filteredData?.filter((s: any) => s.labelGroup == 'AVES').reduce((prev: any, cur: any) => {
+        return this.tblDocumentReviewForm.filteredData?.filter((s: any) => s.labelGroup == 'AVES' || s.aves).reduce((prev: any, cur: any) => {
           // prev + +cur[column.value]
           if (cur.typeRoom === 'CC Twin room') {
             return prev + +(cur[column.value] / 2);
@@ -359,15 +359,6 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
             return prev + +cur[column.value];
           }
         }, 0) as number;
-        let value2 = this.tblDocumentReviewAves.filteredData?.reduce((prev: any, cur: any) => {
-          // prev + +cur[column.value]
-          if (cur.typeRoom === 'CC Twin room') {
-            return prev + +(cur[column.value] / 2);
-          } else {
-            return prev + +cur[column.value];
-          }
-        }, 0) as number;
-        return value1 + value2;
       } else return 0;
     } else {
       return '';
