@@ -9,7 +9,7 @@ import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/for
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {InvoiceDocumentEmailTypeEnum, InvoiceDocumentExportType} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentEmailTypeEnum, InvoiceDocumentExportType, InvoicePartnerType} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {cloneDeep} from "lodash";
 import moment from "moment";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
@@ -46,6 +46,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
   dataObject: any;
   listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus.filter(s => s.key != 'MATCHED');
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
+  listInvoicePartnerType = InvoiceLookup.InvoicePartnerType;
   startOfMonth = moment().startOf('year').format('YYYY-MM-DD');
   endOfMonth = moment().format('YYYY-MM-DD');
   //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
