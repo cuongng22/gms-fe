@@ -76,68 +76,60 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div class="table-responsive">
+    <div class="table-responsive scroll-container">
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="mat-elevation-z8 table-light">
         <!-- Cột "No." -->
         <ng-container matColumnDef="No.">
-          <th mat-header-cell *matHeaderCellDef>No.</th>
-          <!--          <td mat-cell *matCellDef="let row" [attr.colspan]="row.isMergedRow ? displayedColumns.length : 1" [class.merged-row]="row.isMergedRow">-->
-          <!--            <ng-container *ngIf="!row.isMergedRow; else mergedRow">-->
-          <!--              {{ row["No."] }}-->
-          <!--            </ng-container>-->
-          <!--            <ng-template #mergedRow>-->
-          <!--              {{ row["No."] }}-->
-          <!--            </ng-template>-->
-          <!--          </td>-->
-          <td mat-cell *matCellDef="let row" [class.merged-row]="row.isMergedRow">
+          <th mat-header-cell *matHeaderCellDef [ngClass]="{'sticky-col': true, 'sticky-header': true, 'col-width-1': true}">No.</th>
+          <td mat-cell *matCellDef="let row" [ngClass]="{'sticky-col': true, 'col-width-1': true, 'merged-row': row.isMergedRow}">
             {{ row["No."] }}
           </td>
         </ng-container>
         <ng-container matColumnDef="Arr. Date">
-          <th mat-header-cell *matHeaderCellDef>Arr. Date</th>
-          <td mat-cell *matCellDef="let row">{{ row["Arr. Date"] }}</td>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="{'sticky-col': true, 'sticky-header': true, 'col-width-2': true}">Arr. Date</th>
+          <td mat-cell *matCellDef="let row"   [ngClass]="{'sticky-col': true, 'col-width-2': true}">{{ row["Arr. Date"] }}</td>
         </ng-container>
         <ng-container matColumnDef="Arr. Flt No">
-          <th mat-header-cell *matHeaderCellDef>Arr. Flt No</th>
-          <td mat-cell *matCellDef="let row" class="multiline">
-            <div [innerHTML]="formatNewLine(row['Arr. Flt No'])"></div>
+          <th mat-header-cell *matHeaderCellDef  [ngClass]="{'sticky-col': true, 'sticky-header': true, 'col-width-3': true}">Arr. Flt No</th>
+          <td mat-cell *matCellDef="let row" class="multiline" [ngClass]="{'sticky-col': true, 'col-width-3': true}">
+            <div [innerHTML]="formatNewLine(row['Arr. Flt No'])" ></div>
           </td>
         </ng-container>
         <ng-container matColumnDef="Arr. Time">
-          <th mat-header-cell *matHeaderCellDef>Arr. Time</th>
+          <th mat-header-cell *matHeaderCellDef  [ngClass]="{'sticky-header': true}">Arr. Time</th>
           <td mat-cell *matCellDef="let row">{{ row["Arr. Time"] }}</td>
         </ng-container>
         <ng-container matColumnDef="Dep. Date">
-          <th mat-header-cell *matHeaderCellDef>Dep. Date</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="{'sticky-header': true}">Dep. Date</th>
           <td mat-cell *matCellDef="let row">{{ row["Dep. Date"] }}</td>
         </ng-container>
         <ng-container matColumnDef="Dep. Flt No">
-          <th mat-header-cell *matHeaderCellDef>Dep. Flt No</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="{'sticky-header': true}">Dep. Flt No</th>
           <td mat-cell *matCellDef="let row" class="multiline">
             <div [innerHTML]="formatNewLine(row['Dep. Flt No'])"></div>
           </td>
         </ng-container>
         <ng-container matColumnDef="Dep. Time">
-          <th mat-header-cell *matHeaderCellDef>Dep. Time</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="{'sticky-header': true}">Dep. Time</th>
           <td mat-cell *matCellDef="let row">{{ row["Dep. Time"] }}</td>
         </ng-container>
         <ng-container matColumnDef="Crew Count">
-          <th mat-header-cell *matHeaderCellDef>Crew Count</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="{'sticky-header': true}">Crew Count</th>
           <td mat-cell *matCellDef="let row">{{ row["Crew Count"] }}</td>
         </ng-container>
         <ng-container matColumnDef="Crews Info">
-          <th mat-header-cell *matHeaderCellDef>Crews Info</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="{'sticky-header': true}">Crews Info</th>
           <td mat-cell *matCellDef="let row" class="multiline">
             <div [innerHTML]="formatNewLine(row['Crews Info'])"></div>
           </td>
         </ng-container>
         <ng-container matColumnDef="Note">
-          <th mat-header-cell *matHeaderCellDef>Note</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="{'sticky-header': true}">Note</th>
           <td mat-cell *matCellDef="let row" class="multiline">
             <div [innerHTML]="formatNewLine(row['Note'])"></div>
           </td>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="sticky-header-row"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center" [attr.colspan]="displayedColumns.length">No data!</td>

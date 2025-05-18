@@ -1,4 +1,80 @@
+.table-responsive.scroll-container {
+  max-width: 100%;
+  overflow-x: auto;
+  overflow-y: auto; /* Enable vertical scrolling */
+  position: relative;
+  max-height: 500px; /* Adjust based on your needs */
+}
+
+.table-container {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+/* Fixed column widths */
+.col-width-1 {
+  width: 70px; /* Width for first column */
+  min-width: 70px;
+  max-width: 70px;
+}
+
+.col-width-2 {
+  width: 200px; /* Width for second column */
+  min-width: 200px;
+  max-width: 200px;
+}
+
+.col-width-3 {
+  width: 100px; /* Width for third column */
+  min-width: 100px;
+  max-width: 100px;
+}
+
+.col-width-default {
+  width: 150px; /* Default width for non-sticky columns */
+  min-width: 150px;
+}
+
+/* Sticky columns */
+.sticky-col {
+  position: sticky;
+  z-index: 2; /* Cells */
+  background: #fff; /* Prevent transparency */
+}
+
+/* Sticky headers */
+.sticky-header {
+  z-index: 3; /* Headers above cells */
+  background: #f8f9fa; /* Match header background */
+}
+
+/* Sticky header row */
+tr.sticky-header-row {
+  position: sticky;
+  top: 0;
+  z-index: 4; /* Header row above all */
+}
+
+/* Position sticky columns */
+.sticky-col:nth-child(1) { left: 0; }
+.sticky-col:nth-child(2) { left: 70px; }
+.sticky-col:nth-child(3) { left: 270px; }
+
+/* Add border to separate sticky columns */
+.sticky-col {
+  border-right: 1px solid #ddd;
+}
+
+/* Multiline content */
 .multiline {
-  white-space: pre-line;
-  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Ensure table cells respect fixed widths */
+th, td {
+  box-sizing: border-box;
+  padding: 8px;
 }

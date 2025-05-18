@@ -69,16 +69,35 @@
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
-    <div class="table-responsive">
-      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="mat-elevation-z8 table-light">
-        <ng-container *ngFor="let column of displayedColumns;index as i" [matColumnDef]="column">
-          <th mat-header-cell *matHeaderCellDef>{{ column }}</th>
-          <td mat-cell *matCellDef="let element" class="multiline" [ngClass]="{'text-center': i >= 3}">
-            <!--            {{ element[column] }}-->
+    <div class="table-responsive scroll-container">
+      <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="mat-elevation-z8 table-light table-container">
+        <ng-container *ngFor="let column of displayedColumns; index as i" [matColumnDef]="column">
+          <th mat-header-cell *matHeaderCellDef
+              [ngClass]="{
+            'sticky-col': i < 3,
+            'sticky-header': true,
+            'col-width-1': i === 0,
+            'col-width-2': i === 1,
+            'col-width-3': i === 2,
+            'col-width-default': i >= 3,
+            'text-center': i >= 3 || i == 0
+          }">
+            {{ column }}
+          </th>
+          <td mat-cell *matCellDef="let element"
+              class="multiline"
+              [ngClass]="{
+            'sticky-col': i < 3,
+            'col-width-1': i === 0,
+            'col-width-2': i === 1,
+            'col-width-3': i === 2,
+            'col-width-default': i >= 3,
+            'text-center': i >= 3
+          }">
             <div [innerHTML]="formatNewLine(element[column])"></div>
           </td>
         </ng-container>
-        <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+        <tr mat-header-row *matHeaderRowDef="displayedColumns" class="sticky-header-row"></tr>
         <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
         <tr class="mat-row" *matNoDataRow>
           <td class="mat-cell text-center" [attr.colspan]="displayedColumns.length">No data!</td>
