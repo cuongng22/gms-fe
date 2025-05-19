@@ -105,7 +105,6 @@ export class EmailTrackingComponent extends CommonComponent {
 		if (data.files && data.files.length > 0) {
 			data.files = data.files.map((element: string) => environment.baseUrl + '/' + element);
 		}
-
 		this.dialog.open(DialogSendMailComponent, {
 			minWidth: 900,
 			autoFocus: false,
