@@ -13,8 +13,11 @@ export class ReportService extends BaseService {
     this.path = 'report';
   }
 
-  getReportLink(reportCode: string) {
-    const url = `${this.api}/${this.path}?viewName=${reportCode}`;
+  getReportLink(reportCode: string,sync?:boolean) {
+    let url = `${this.api}/${this.path}?viewName=${reportCode}`;
+    if (sync === true) {
+      url += `&sync=true`;
+    }
     return firstValueFrom(this.http.get<any>(url));
   }
 }
