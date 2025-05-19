@@ -63,7 +63,27 @@
       <!--          </ul>-->
       <!--        </mat-menu>-->
       <!--      </li>-->
-
+      <li>
+        <button mat-button [matMenuTriggerFor]="hdsdMenu" class="hdsd-menu-btn" matTooltip="Xem Hướng Dẫn Sử Dụng">
+          <i class="material-symbols-outlined">
+            help
+          </i>
+        </button>
+        <mat-menu #hdsdMenu="matMenu" xPosition="before">
+          <button mat-menu-item (click)="openLink('source/documents/HDSD_Quan_ly_du_lieu.pdf')">
+            <span class="menu-item-content">
+              <i class="material-symbols-outlined">person</i>
+              <span>Data management</span>
+            </span>
+          </button>
+          <button mat-menu-item (click)="openLink('source/documents/HDSD_Quan_tri_he_thong.pdf')">
+            <span class="menu-item-content">
+              <i class="material-symbols-outlined">settings</i>
+              <span>System Administration</span>
+            </span>
+          </button>
+        </mat-menu>
+      </li>
       <li>
         <button mat-button [matMenuTriggerFor]="notificationsMenu" class="notifications-menu-btn">
           <i class="material-symbols-outlined">
