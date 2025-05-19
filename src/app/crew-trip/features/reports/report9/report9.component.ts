@@ -47,14 +47,29 @@ import {Constant, DATE_FORMAT_DD_MM_YYYY} from 'src/app/crew-trip/shared/utils/c
 import {MAT_MOMENT_DATE_FORMATS, provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {ReportService} from "src/app/crew-trip/core/services/report-service";
 import {DomSanitizer, SafeResourceUrl} from "@angular/platform-browser";
+import {HasPermissionDirective} from "src/app/crew-trip/shared/directive/has-permission.directive";
 
 @Component({
   selector: 'app-report',
   standalone: true,
-  imports: [MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-    MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
-    MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule
+  imports: [
+    MatCardModule,
+    FormsModule,
+    MatFormFieldModule,
+    ReactiveFormsModule,
+    MatSelectModule,
+    MatButtonModule,
+    MatFormField,
+    MatInputModule,
+    InputSizeComponent,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    NgxMaterialTimepickerModule,
+    MatAutocompleteModule,
+    CommonModule,
+    MatTableModule,
+    MatPaginatorModule,
+    HasPermissionDirective,
   ],
   providers: [DataTransformPipe,
     provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
@@ -81,9 +96,9 @@ export class reportcomponent9 extends CommonComponent implements OnInit {
     await this.spinner.hide();
   }
 
-  async loadReport() {
+  async loadReport(sync?: boolean) {
     try {
-      this.baseService.getReportLink(this.codeReport).then(res => {
+      this.baseService.getReportLink(this.codeReport,sync).then(res => {
         this.iframeUrl = this.sanitizeUrl(res.data);
       });
     } catch (Error: any) {

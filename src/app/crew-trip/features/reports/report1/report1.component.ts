@@ -25,12 +25,13 @@ import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
 import {Constant, DATE_FORMAT_DD_MM_YYYY} from 'src/app/crew-trip/shared/utils/constant';
 import {MAT_MOMENT_DATE_FORMATS, provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {ReportService} from 'src/app/crew-trip/core/services/report-service';
+import {HasPermissionDirective} from "src/app/crew-trip/shared/directive/has-permission.directive";
 
 
 @Component({
 	selector: 'app-report',
 	standalone: true,
-  schemas: [CUSTOM_ELEMENTS_SCHEMA],
+	schemas: [CUSTOM_ELEMENTS_SCHEMA],
 	imports: [
 		MatCardModule,
 		FormsModule,
@@ -48,6 +49,7 @@ import {ReportService} from 'src/app/crew-trip/core/services/report-service';
 		CommonModule,
 		MatTableModule,
 		MatPaginatorModule,
+		HasPermissionDirective,
 	],
 	providers: [
 		DataTransformPipe,
@@ -58,7 +60,7 @@ import {ReportService} from 'src/app/crew-trip/core/services/report-service';
 })
 export class reportcomponent extends CommonComponent implements OnInit {
 	override baseService = inject(ReportService);
-  iframeUrl: SafeResourceUrl;
+	iframeUrl: SafeResourceUrl;
 	codeReport = 'BC_7_1';
 
 	constructor(private sanitizer: DomSanitizer) {
@@ -75,11 +77,11 @@ export class reportcomponent extends CommonComponent implements OnInit {
 		await this.spinner.hide();
 	}
 
-	async loadReport() {
+	async loadReport(sync?: boolean) {
 		try {
-      this.baseService.getReportLink(this.codeReport).then(res => {
-        this.iframeUrl = this.sanitizeUrl(res.data);
-      });
+			this.baseService.getReportLink(this.codeReport, sync).then((res) => {
+				this.iframeUrl = this.sanitizeUrl(res.data);
+			});
 		} catch (Error: any) {
 			console.log(Error);
 		}
