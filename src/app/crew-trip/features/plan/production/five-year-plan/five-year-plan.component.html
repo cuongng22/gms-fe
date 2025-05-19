@@ -102,7 +102,7 @@
         'text-soft-dark': innerColumn.value === 'activeLabel' && element['active'] == 0
         }">{{
               innerColumn.type === 'number'
-              ? (element[innerColumn.value] | number : (innerColumn.format || '1.0-10'))
+              ? (element[innerColumn.value].toFixed(2) | number : (innerColumn.format || '1.0-10'))
               : element[innerColumn.value]
               }}</span>
           </td>

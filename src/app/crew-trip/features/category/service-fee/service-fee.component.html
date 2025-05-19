@@ -230,10 +230,10 @@
                 </div>
 
                 <mat-form-field>
-                  <mat-label i18n>Note</mat-label>
+                  <mat-label i18n="@@remark">Remark</mat-label>
                   <textarea formControlName="description" i18n-placeholder matInput></textarea>
                   @if (!!formGroupDetail.controls['description'].hasError('maxlength')) {
-                  <mat-error><span i18n>Note</span><span i18n> must be less than 500 characters</span></mat-error>
+                  <mat-error><span i18n="@@remark">Remark</span><span i18n> must be less than 500 characters</span></mat-error>
                   }
                   <mat-hint align="end">{{ formGroupDetail.value.description?.length }} / 500</mat-hint>
                 </mat-form-field>

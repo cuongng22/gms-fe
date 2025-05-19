@@ -169,14 +169,14 @@
                 <div class="col-sm-12 col-md-12">
                     <div class="form-group mb-20">
                         <mat-form-field>
-                            <mat-label i18n="@@notes">
-                                Notes
+                            <mat-label i18n="@@remark">
+                                Remark
                             </mat-label>
                             <textarea matInput formControlName="notes" cdkAutosizeMinRows="2" cdkAutosizeMaxRows="5"
                                 matTextareaAutosize cdkTextareaAutosize #autosize="cdkTextareaAutosize"></textarea>
                             <mat-error *ngxControlError="formGroupDetail.controls.notes; track: 'maxlength'"
-                                i18n="@@noteMaxlength">
-                                Note {{ MESSAGE.MAX_LENGTH_INVALID |
+                                i18n="@@remarkMaxlength">
+                                Remark {{ MESSAGE.MAX_LENGTH_INVALID |
                                 dataTransformPipe:[Constant.STRING_FORMAT,500]}}
                             </mat-error>
                         </mat-form-field>

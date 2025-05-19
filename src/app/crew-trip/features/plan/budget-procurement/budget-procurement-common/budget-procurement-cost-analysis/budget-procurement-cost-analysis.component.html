@@ -53,13 +53,13 @@
     <div class="row">
         <mat-form-field class="mb-2">
             <mat-label i18n="@@carRatePlannedYearVsCurrentYear">
-                Note
+                Remark
             </mat-label>
             <textarea matInput formControlName="notes" cdkAutosizeMaxRows="5" matTextareaAutosize
                 cdkTextareaAutosize #autosize="cdkTextareaAutosize">
             </textarea>
-            <mat-error *ngxControlError="formGroupDetail.controls.notes; track: 'maxlength'" i18n="@@noteMaxlength">
-                Note {{ MESSAGE.MAX_LENGTH_INVALID |
+            <mat-error *ngxControlError="formGroupDetail.controls.notes; track: 'maxlength'" i18n="@@remarkMaxlength">
+                Remark {{ MESSAGE.MAX_LENGTH_INVALID |
                 dataTransformPipe:[Constant.STRING_FORMAT,500]}}
             </mat-error>
         </mat-form-field>

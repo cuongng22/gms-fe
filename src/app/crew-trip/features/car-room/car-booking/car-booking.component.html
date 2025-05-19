@@ -124,7 +124,7 @@
           </td>
         </ng-container>
         <ng-container matColumnDef="Note">
-          <th mat-header-cell *matHeaderCellDef [ngClass]="{'sticky-header': true}">Note</th>
+          <th mat-header-cell *matHeaderCellDef [ngClass]="{'sticky-header': true}" i18n="@@remark">Remark</th>
           <td mat-cell *matCellDef="let row" class="multiline">
             <div [innerHTML]="formatNewLine(row['Note'])"></div>
           </td>

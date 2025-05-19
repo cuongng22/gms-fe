@@ -1015,7 +1015,7 @@
               <textarea formControlName="notes" matInput trim="blur"></textarea>
               <mat-hint align="end">{{ formGroupDetail.getRawValue().notes?.length }} / 500</mat-hint>
               @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
-              <mat-error><span i18n>Notes</span><span i18n> too long</span></mat-error>
+              <mat-error><span i18n="@@remark">Remark</span><span i18n> too long</span></mat-error>
               }
               <mat-error *ngxControlError="formGroupDetail.controls['notes']; track: 'maxlength'">
                 <span i18n>Remark</span><span i18n> must be less than 500 characters</span>

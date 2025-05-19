@@ -88,6 +88,7 @@ export class EstimatedFlightScheduleComponent extends CommonComponent {
     try {
       await this.spinner.show();
       await this.baseService.syncEstimate();
+      this.baseService.showSuccess(this.MESSAGE.SYNC_SUCCESS);
     } catch (e: any) {
       this.showError(
         e.error?.data ?? e.error?.error ?? e.error ?? this.MESSAGE.ERROR,
