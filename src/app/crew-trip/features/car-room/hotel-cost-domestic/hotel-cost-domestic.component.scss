@@ -23,24 +23,69 @@
   background: white;
   z-index: 21;
 }
-// .sticky-col-1, .sticky-col-2, .sticky-col-3 {
-//   position: sticky;
-//   background: white;
-//   z-index: 10;
-// }
 
-// /* Chỉ định khoảng cách từ trái */
-// .sticky-col-1 {
-//   left: 0;
-//   z-index: 11;
-// }
 
-// .sticky-col-2 {
-//   left: 50px; /* điều chỉnh theo chiều rộng cột 1 */
-//   z-index: 11;
-// }
 
-// .sticky-col-3 {
-//   left: 166px; /* = 60px (col 1) + 100px (col 2), tùy chỉnh */
-//   z-index: 11;
-// }
+.sticky-col {
+  position: sticky;
+  z-index: 2; /* Cells */
+  background: #fff; /* Prevent transparency */
+}
+
+th.sticky-col {
+  z-index: 3; /* Headers above cells */
+  background: #f8f9fa; /* Match header background */
+}
+
+/* Position the first 6 columns (adjust left values based on actual column widths) */
+.sticky-col:nth-child(1) { left: 0; }
+.sticky-col:nth-child(2) { left: 50px; } /* Example width: 50px */
+.sticky-col:nth-child(3) { left: 156px; }
+.sticky-col:nth-child(4) { left: 262px; }
+.sticky-col:nth-child(5) { left: 368px; }
+.sticky-col:nth-child(6) { left: 474px; }
+
+/* Add border to separate sticky columns */
+.sticky-col {
+  border-right: 1px solid #ddd;
+}
+
+/* Footer cells */
+td.mat-footer-cell.sticky-col {
+  background: #f8f9fa; /* Match footer background */
+  font-weight: bold;
+  z-index: 2;
+}
+
+//
+//
+//
+//
+//th.sticky, td.sticky {
+//  position: sticky;
+//  z-index: 2; /* Ensure sticky columns are above non-sticky ones */
+//  background: #fff; /* Prevent transparency issues */
+//}
+//
+//th.sticky {
+//  z-index: 3; /* Headers above cells */
+//}
+//
+///* Position the first 6 columns */
+//th.sticky:nth-child(1), td.sticky:nth-child(1) { left: 0px; }
+//th.sticky:nth-child(2), td.sticky:nth-child(2) { left: 50px; } /* Adjust based on column width */
+//th.sticky:nth-child(3), td.sticky:nth-child(3) { left: 156px; }
+//th.sticky:nth-child(4), td.sticky:nth-child(4) { left: 253px; }
+//th.sticky:nth-child(5), td.sticky:nth-child(5) { left: 368px; }
+//th.sticky:nth-child(6), td.sticky:nth-child(6) { left: 474px; }
+//
+///* Optional: Add border to separate sticky columns */
+//th.sticky, td.sticky {
+//  border-right: 1px solid #ddd;
+//}
+//
+///* Ensure footer cells are styled similarly */
+//td.mat-footer-cell.sticky {
+//  background: #f8f9fa; /* Match footer background */
+//  font-weight: bold;
+//}

@@ -75,7 +75,7 @@
                                 Version {{MESSAGE.REQUIRED}}
                             </mat-error>
                             <mat-error *ngxControlError="formGroupDetail.controls.version; track: 'maxlength'"
-                                i18n="@@noteMaxlength">
+                                i18n="@@versionMaxlength">
                                 Version {{ MESSAGE.MAX_LENGTH_INVALID |
                                 dataTransformPipe:[Constant.STRING_FORMAT,20]}}
                             </mat-error>

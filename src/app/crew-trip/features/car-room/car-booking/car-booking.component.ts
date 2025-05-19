@@ -20,192 +20,200 @@ import {
   MatRow,
   MatRowDef, MatTable
 } from "@angular/material/table";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {ListResponse} from "src/app/crew-trip/shared/models/common.model";
 import {MESSAGE, removeNullValues} from "src/app/crew-trip/shared/utils/constant";
 import {TransportBookingService} from "src/app/crew-trip/core/services/transport-booking.service";
 
 @Component({
-  selector: 'app-car-booking',
-  standalone: true,
-  imports: [
-    InputSizeComponent,
-    MatButton,
-    MatCard,
-    MatCardContent,
-    MatCardTitle,
-    ReactiveFormsModule,
-    SelectionComponent,
-    SelectionSuggestComponent,
-    MatCardHeader,
-    MatCardSubtitle,
-    MatCell,
-    MatCellDef,
-    MatHeaderCell,
-    MatHeaderRow,
-    MatHeaderRowDef,
-    MatRow,
-    MatRowDef,
-    MatTable,
-    NgForOf,
-    MatColumnDef,
-    MatHeaderCellDef,
-    NgIf,
-    MatNoDataRow
-  ],
-  templateUrl: './car-booking.component.html',
-  styleUrl: './car-booking.component.scss'
+	selector: 'app-car-booking',
+	standalone: true,
+	imports: [
+		InputSizeComponent,
+		MatButton,
+		MatCard,
+		MatCardContent,
+		MatCardTitle,
+		ReactiveFormsModule,
+		SelectionComponent,
+		SelectionSuggestComponent,
+		MatCardHeader,
+		MatCardSubtitle,
+		MatCell,
+		MatCellDef,
+		MatHeaderCell,
+		MatHeaderRow,
+		MatHeaderRowDef,
+		MatRow,
+		MatRowDef,
+		MatTable,
+		NgForOf,
+		MatColumnDef,
+		MatHeaderCellDef,
+		NgIf,
+		MatNoDataRow,
+		NgClass,
+	],
+	templateUrl: './car-booking.component.html',
+	styleUrl: './car-booking.component.scss',
 })
 export class CarBookingComponent extends CommonComponent implements OnInit {
-  override baseService = inject(TransportBookingService);
-  optionsFlightScheduleType = SelectOptions.FLIGHT_SCHEDULE_TYPE;
-  optionsServiceApplied = SelectOptions.SERVICE_APPLIED;
-  transportType = SelectOptions.TRANSPORT_TYPE;
-  monthSelection: string[] = [];
-  fb: FormBuilder = inject(FormBuilder);
-  markets: string[] = [];
-  listYear: number[] = [];
-  sheetIndex: number;
-  excelFile: Blob | null = null;
+	override baseService = inject(TransportBookingService);
+	optionsFlightScheduleType = SelectOptions.FLIGHT_SCHEDULE_TYPE;
+	optionsServiceApplied = SelectOptions.SERVICE_APPLIED;
+	transportType = SelectOptions.TRANSPORT_TYPE;
+	monthSelection: string[] = [];
+	fb: FormBuilder = inject(FormBuilder);
+	markets: string[] = [];
+	listYear: number[] = [];
+	sheetIndex: number;
+	excelFile: Blob | null = null;
 
-  constructor(private http: HttpClient) {
-    super();
-    for (let i = 1; i <= 12; i++) {
-      this.monthSelection.push(i + '');
-    }
-    //Create list year
-    const currentYear = new Date().getFullYear();
-    const currentMonth = new Date().getMonth() + 1 + '';
-    const startYear = 2020;
-    const endYear = startYear + 20;
-    for (let year = startYear; year <= endYear; year++) {
-      this.listYear.push(year);
-    }
-    this.formGroupSearch = this.fb.group({
-      scheduleType: ['2', [Validators.required]],
-      marketCode: [null, [Validators.required]],
-      month: [currentMonth, [Validators.required]],
-      year: [currentYear, [Validators.required]],
-      type: ['FC', [Validators.required]],
-      timezone: ['FC', [Validators.required]],
-      transportType: ['TO_HOTEL', [Validators.required]],
-      export: [false]
-    });
-  }
+	constructor(private http: HttpClient) {
+		super();
+		for (let i = 1; i <= 12; i++) {
+			this.monthSelection.push(i + '');
+		}
+		//Create list year
+		const currentYear = new Date().getFullYear();
+		const currentMonth = new Date().getMonth() + 1 + '';
+		const startYear = 2020;
+		const endYear = startYear + 20;
+		for (let year = startYear; year <= endYear; year++) {
+			this.listYear.push(year);
+		}
+		this.formGroupSearch = this.fb.group({
+			scheduleType: ['2', [Validators.required]],
+			marketCode: [null, [Validators.required]],
+			month: [currentMonth, [Validators.required]],
+			year: [currentYear, [Validators.required]],
+			type: ['FC', [Validators.required]],
+			timezone: ['FC', [Validators.required]],
+			transportType: ['TO_HOTEL', [Validators.required]],
+			export: [false],
+		});
+	}
 
-  override async ngOnInit(): Promise<void> {
-    await this.spinner.show();
-    try {
-      const marketCodes = await this._flightMarketService.search({
-        option: 1,
-        status: 'Operational',
-      });
-      this.markets = marketCodes.data;
-      this.formGroupSearch.patchValue({
-        marketCode:this.markets[0]
-      })
-    } catch (error: any) {
-      this.showError(error);
-    }
-    this.search();
-    await this.spinner.hide();
-  }
+	override async ngOnInit(): Promise<void> {
+		await this.spinner.show();
+		try {
+			const marketCodes = await this._flightMarketService.search({
+				option: 1,
+				status: 'Operational',
+			});
+			this.markets = marketCodes.data;
+			this.formGroupSearch.patchValue({
+				marketCode: this.markets[0],
+			});
+		} catch (error: any) {
+			this.showError(error);
+		}
+		this.search();
+		await this.spinner.hide();
+	}
 
-  loadExcelFile(url: any): void {
-    this.http
-      .get(url, {responseType: 'blob'})
-      .subscribe(
-        (fileBlob: Blob) => {
-          this.excelFile = fileBlob;
-        },
-        (error) => {
-          console.error('Error loading Excel file:', error);
-        }
-      );
-  }
+	loadExcelFile(url: any): void {
+		this.http.get(url, { responseType: 'blob' }).subscribe(
+			(fileBlob: Blob) => {
+				this.excelFile = fileBlob;
+			},
+			(error) => {
+				console.error('Error loading Excel file:', error);
+			},
+		);
+	}
 
+	override async search<T>(
+		body?: any,
+		isNextPage?: boolean,
+		fnSearch?: (bodySearch: any) => ListResponse<T> | any,
+	) {
+		try {
+			this.formGroupSearch.patchValue({
+				export: false,
+			});
+			this.formGroupSearch.markAllAsTouched();
+			if (this.formGroupSearch.invalid) {
+				this.findInvalidControls(this.formGroupSearch);
+				return;
+			}
+			await this.spinner.show();
+			const buildBodySearch = {
+				...(removeNullValues(body) ||
+					removeNullValues(this.formGroupSearch.value)),
+			};
+			let res;
+			if (fnSearch) {
+				res = await fnSearch(buildBodySearch);
+			} else {
+				res = await this.baseService.search<ListResponse<T>>(buildBodySearch);
+			}
+			if (res) {
+				if (res.status === HttpStatusCode.Ok) {
+					this.displayedColumns = res.data.columns;
+					console.log(this.displayedColumns);
+					this.dataSource.data = res.data.data;
+					this.dataSource.data = this.dataSource.data.map((row) => {
+						const rowData: any = {};
+						this.displayedColumns.forEach((col, index) => {
+							rowData[col] = row[index] || '';
+						});
+						rowData.isMergedRow = this.isMergedRow(rowData);
+						return rowData;
+					});
+					console.log('  this.dataSource.data:', this.dataSource.data);
+				}
+				return res;
+			}
+		} catch (e: any) {
+			this.baseService.showError(
+				e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
+			);
+		} finally {
+			await this.spinner.hide();
+		}
+	}
 
-  override async search<T>(body?: any, isNextPage?: boolean, fnSearch?: (bodySearch: any) => (ListResponse<T> | any)) {
-    try {
-      this.formGroupSearch.patchValue({
-        export: false,
-      });
-      this.formGroupSearch.markAllAsTouched();
-      if (this.formGroupSearch.invalid) {
-        this.findInvalidControls(this.formGroupSearch);
-        return;
-      }
-      await this.spinner.show();
-      const buildBodySearch = {
-        ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
-      }
-      let res;
-      if (fnSearch) {
-        res = await fnSearch(buildBodySearch);
-      } else {
-        res = await this.baseService.search<ListResponse<T>>(buildBodySearch);
-      }
-      if (res) {
-        if (res.status === HttpStatusCode.Ok) {
-          this.displayedColumns = res.data.columns;
-          console.log(this.displayedColumns)
-          this.dataSource.data = res.data.data;
-          this.dataSource.data = this.dataSource.data.map(row => {
-            const rowData: any = {};
-            this.displayedColumns.forEach((col, index) => {
-              rowData[col] = row[index] || '';
-            });
-            rowData.isMergedRow = this.isMergedRow(rowData);
-            return rowData;
-          });
-          console.log("  this.dataSource.data:", this.dataSource.data)
-        }
-        return res
-      }
-    } catch (e: any) {
-      this.baseService.showError(
-        e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
-      );
-    } finally {
-      await this.spinner.hide();
-    }
-  }
+	isMergedRow(row: any): boolean {
+		return Object.values(row)
+			.slice(1)
+			.every((value) => value === '');
+	}
 
-  isMergedRow(row: any): boolean {
-    return Object.values(row).slice(1).every(value => value === "");
-  }
+	formatNewLine(value: string): string {
+		if (value) {
+			return value.replace(/\n/g, '<br/>');
+		}
+		return value;
+	}
 
-
-  formatNewLine(value: string): string {
-    if (value) {
-      return value.replace(/\n/g, '<br/>');
-    }
-    return value;
-  }
-
-  override async exportFileOptions(body?: any, filename?: string, sourcePath?: string) {
-    try {
-      await this.spinner.show();
-      this.formGroupSearch.markAllAsTouched();
-      if (this.formGroupSearch.invalid) {
-        this.findInvalidControls(this.formGroupSearch);
-        return;
-      }
-      this.formGroupSearch.patchValue({
-        export: true,
-      });
-      const res = await this.baseService.exportDataOptions(
-        {
-          ...(removeNullValues(body) ||
-            removeNullValues(this.formGroupSearch.value)),
-        },
-        sourcePath,
-      );
-      this.downloadFile(res.blob, filename ?? res.fileName);
-    } catch (e: any) {
-      this.baseService.showError(e.error?.error?.code ?? MESSAGE.ERROR);
-    } finally {
-      await this.spinner.hide();
-    }
-  }
+	override async exportFileOptions(
+		body?: any,
+		filename?: string,
+		sourcePath?: string,
+	) {
+		try {
+			await this.spinner.show();
+			this.formGroupSearch.markAllAsTouched();
+			if (this.formGroupSearch.invalid) {
+				this.findInvalidControls(this.formGroupSearch);
+				return;
+			}
+			this.formGroupSearch.patchValue({
+				export: true,
+			});
+			const res = await this.baseService.exportDataOptions(
+				{
+					...(removeNullValues(body) ||
+						removeNullValues(this.formGroupSearch.value)),
+				},
+				sourcePath,
+			);
+			this.downloadFile(res.blob, filename ?? res.fileName);
+		} catch (e: any) {
+			this.baseService.showError(e.error?.error?.code ?? MESSAGE.ERROR);
+		} finally {
+			await this.spinner.hide();
+		}
+	}
 }

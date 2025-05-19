@@ -180,7 +180,7 @@ export const menu: Menu[] = [
               },
               {
                 path: 'service/hotel/cost-tracking',
-                title: $localize`:@@plannedExchangeRate:Hotel cost tracking (AVES)`,
+                title: $localize`:@@hotelCost:Hotel cost (AVES)`,
                 icon: 'ri-exchange-cny-line',
                 permissionCode: ['API_ROOM_COST_LIST']
               },
@@ -196,13 +196,13 @@ export const menu: Menu[] = [
             subMenu: [
               {
                 path: 'service/car/car-booking',
-                title: $localize`:@@carBooking:Transportations booking`,
+                title: $localize`:@@transportationsBooking:Transportations booking`,
                 icon: 'ri-folder-chart-line',
                 permissionCode: ['API_AVES_TRANSPORT_TRACKING_LIST']
               },
               {
                 path: 'service/car/cost-tracking',
-                title: $localize`:@@carCostTracking:Transportations cost tracking (AVES)`,
+                title: $localize`:@@transportationsCost:Transportations cost (AVES)`,
                 icon: 'ri-folder-chart-line',
                 permissionCode: ['API_CAR_COST_TRACKING_LIST']
               },

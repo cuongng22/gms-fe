@@ -238,10 +238,6 @@ export class HotelCostDomesticComponent
     await this.spinner.hide();
   }
 
-isStickyCol(index: number): string {
-  return ['sticky-col-1', 'sticky-col-2', 'sticky-col-3'][index] || '';
-}
-
   override async search() {
     await this.spinner.show();
     const { marketCode, month, year } = this.formGroupSearch.value;
@@ -260,4 +256,5 @@ isStickyCol(index: number): string {
     exportObj = { ...exportObj, export: true };
     await this.exportFileOptions(exportObj);
   }
+
 }

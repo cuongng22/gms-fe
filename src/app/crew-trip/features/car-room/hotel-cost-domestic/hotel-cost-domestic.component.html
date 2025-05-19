@@ -59,24 +59,24 @@
         @for (col of displayedFirst; track col.name;let i = $index) {
           <ng-container matColumnDef="{{ col.name }}">
             <th mat-header-cell *matHeaderCellDef [attr.colspan]="col.colSpan" [attr.rowSpan]="col.rowSpan"
-                class="text-center" [ngClass]="isStickyCol(i)">{{ col.field }}
+                class="text-center" [ngClass]="{'sticky': i < 6, 'sticky-col': i < 6}">{{ col.field }}
             </th>
             @if (col.name === '#') {
-              <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center" [ngClass]="isStickyCol(i)">
+              <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center" [ngClass]="{'sticky': i < 6, 'sticky-col': i < 6}">
                 {{ i + 1 }}
               </td>
-              <td mat-footer-cell *matFooterCellDef class="text-center fw-bold" [colSpan]="7" [ngClass]="isStickyCol(i)">Total</td>
+              <td mat-footer-cell *matFooterCellDef class="text-center fw-bold" [colSpan]="7" [ngClass]="{'sticky': i < 6, 'sticky-col': i < 6}">Total</td>
             }
             @if (col.rowSpan === 2 && col.name !== '#') {
               <td mat-cell *matCellDef="let element"
-                  class="text-center" [ngClass]="isStickyCol(i)">
+                  class="text-center" [ngClass]="{'sticky': i < 6, 'sticky-col': i < 6}">
                 @if (col.name === 'totalChargeVnd') {
                   {{ element[col.key] | number }}
                 } @else {
                   {{ element[col.key] }}
                 }
               </td>
-              <td mat-footer-cell *matFooterCellDef class="text-center" [ngClass]="isStickyCol(i)">
+              <td mat-footer-cell *matFooterCellDef class="text-center" [ngClass]="{'sticky': i < 6, 'sticky-col': i < 6}">
                 @if (['totalChargeVnd', 'numberOfNights', 'earlyCheckin', 'lateCheckout', 'totalNights'].includes(col.name)) {
                   <span class="fw-bold">
                     {{ (dataSource.data | dataCalculateTotal: col.key) | number }}
@@ -89,9 +89,9 @@
         }
         @for (col of displayedSecond; track col;let i = $index) {
           <ng-container matColumnDef="{{ col.name }}">
-            <th mat-header-cell *matHeaderCellDef class="text-center" [ngClass]="isStickyCol(i)">{{ col.field }}</th>
+            <th mat-header-cell *matHeaderCellDef class="text-center" [ngClass]="{'sticky': i < 6, 'sticky-col': i < 6}">{{ col.field }}</th>
             <td mat-cell
-                *matCellDef="let element" [ngClass]="isStickyCol(i)" >
+                *matCellDef="let element" [ngClass]="{'sticky': i < 6, 'sticky-col': i < 6}">
               @if (col.name === 'checkinDate' || col.name === 'checkoutDate') {
                 {{ element[col.key] | date: 'dd/MM/yyyy' }}
               } @else if (col.name === 'checkinTime' || col.name === 'checkoutTime') {
@@ -104,11 +104,11 @@
             </td>
 
             @if (['quantityfc', 'quantityCcMen', 'quantityCcWomen', 'fcSingle', 'ccSingle', 'ccTwin', 'roomChargeFc', 'roomChargeCc', 'roomChargeTwin'].includes(col.name)) {
-              <td mat-footer-cell *matFooterCellDef class="text-center" [ngClass]="isStickyCol(i)">
+              <td mat-footer-cell *matFooterCellDef class="text-center" [ngClass]="{'sticky': i < 6, 'sticky-col': i < 6}">
                 <span class="fw-bold"> {{ (dataSource.data | dataCalculateTotal: col.key) | number }}</span>
               </td>
             } @else {
-              <td mat-footer-cell *matFooterCellDef class="text-center" [ngClass]="isStickyCol(i)">
+              <td mat-footer-cell *matFooterCellDef class="text-center" [ngClass]="{'sticky': i < 6, 'sticky-col': i < 6}">
               </td>
             }
           </ng-container>

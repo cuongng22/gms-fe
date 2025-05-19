@@ -18,8 +18,8 @@
                     </ng-container>
                     <ng-container matColumnDef="rateOrTotal">
                         <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                            i18n="@@hotelName">
-                            Total Number of Flights
+                            i18n="@@numberOfNationalFlights">
+                            Number of national flights
                         </th>
                         <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-right">
                             {{element.value |number}}
