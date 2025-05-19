@@ -45,6 +45,7 @@ import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
 import {HttpStatusCode} from '@angular/common/http';
 import {WebsocketService} from 'src/app/crew-trip/core/services/websocket-service';
 import {NotificationService} from 'src/app/crew-trip/core/services/notification.service';
+import {environment} from "src/environments/environment";
 
 
 @Component({
@@ -81,7 +82,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
   private subscription!: Subscription;
 
   constructor(
-    private languageService: LanguageService, 
+    private languageService: LanguageService,
     private webSocketService: WebsocketService,
     private notificationService: NotificationService,
     private spinner: NgxSpinnerService
@@ -198,7 +199,7 @@ export class HeaderComponent implements OnInit, OnDestroy {
         limit: 10,
         mode: 1
       });
-      
+
       if (response && response.content) {
         this.messagesNotice = response.content;
         this.formatNotificationTimes();
@@ -347,5 +348,10 @@ export class HeaderComponent implements OnInit, OnDestroy {
       this.subscription.unsubscribe();
     }
     this.webSocketService.disconnect();
+  }
+
+  openLink(path: string): void {
+    const fullUrl = `${environment.baseUrl}/${path}`;
+    window.open(fullUrl, '_blank');
   }
 }

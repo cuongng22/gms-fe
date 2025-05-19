@@ -1283,6 +1283,10 @@
     }
 
 }
-
+.menu-item-content {
+  display: flex;
+  align-items: center;
+  gap: 8px; // khoảng cách giữa icon và text
+}
 /* Min width 1600px */
 @media only screen and (min-width: 1600px) {}
