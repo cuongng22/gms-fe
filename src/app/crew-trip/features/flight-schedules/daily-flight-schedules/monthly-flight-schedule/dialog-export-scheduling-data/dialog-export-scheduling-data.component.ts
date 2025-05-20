@@ -65,7 +65,7 @@ export class DialogExportSchedulingDataComponent extends CommonComponent {
   airports: any[] = [];
 
   override ngOnInit(): void {
-    this.flightMarketService.search<any>({ option: 0, page: 0, size: 999999, status: FlightMarketStatusEnum.OPERATIONAL }).then((res: ListResponse<any>) => {
+    this.flightMarketService.search<any>({ option: 0, page: 0, size: 999999, limit: 999999, status: FlightMarketStatusEnum.OPERATIONAL }).then((res: ListResponse<any>) => {
       this.airports = res.data.content.map((item: any) => {
         return {
           marketCode: item.marketCode,
