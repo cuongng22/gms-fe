@@ -71,7 +71,7 @@
   <mat-card-content>
     <div class="table-responsive scroll-container">
       <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="mat-elevation-z8 table-light table-container">
-        <ng-container *ngFor="let column of displayedColumns; index as i" [matColumnDef]="column">
+        <ng-container *ngFor="let column of displayedColumns; index as i" [matColumnDef]="column" >
           <th mat-header-cell *matHeaderCellDef
               [ngClass]="{
             'sticky-col': i < 3,
