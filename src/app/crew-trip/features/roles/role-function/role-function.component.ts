@@ -154,7 +154,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
         } else {
           // Xóa child khỏi listRoleFunction
           this.listRoleFunction = this.listRoleFunction.filter(
-            (item: any) => item.functionId !== child.id
+            (item: any) => item.functionId !== String(child.id) // Ép kiểu để đảm bảo khớp
           );
         }
       });
@@ -166,7 +166,7 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
       row.active = nextValue;
       if (nextValue) {
         // Thêm node con vào listRoleFunction nếu chưa tồn tại
-        if (!this.listRoleFunction.some((item: any) => item.functionId === row.id)) {
+        if (!this.listRoleFunction.some((item: any) => item.functionId === String(row.id))) {
           this.listRoleFunction = [...this.listRoleFunction, {
             roleName: this.dataSelected.roleName,
             functionId: row.id,
@@ -176,16 +176,19 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
         }
       } else {
         // Xóa node con khỏi listRoleFunction
+        const originalLength = this.listRoleFunction.length;
         this.listRoleFunction = this.listRoleFunction.filter(
-          (item: any) => item.functionId !== row.id
+          (item: any) => item.functionId !== String(row.id) // Ép kiểu để đảm bảo khớp
         );
         this.selectAllChecked = false;
       }
       // Cập nhật trạng thái node cha
-      const hasActive = parent.child.some((s: any) => s.active);
-      const allActive = parent.child.every((s: any) => s.active);
-      parent.indeterminate = hasActive && !allActive;
-      parent.active = allActive;
+      if (parent) {
+        const hasActive = parent.child.some((s: any) => s.active);
+        const allActive = parent.child.every((s: any) => s.active);
+        parent.indeterminate = hasActive && !allActive;
+        parent.active = allActive;
+      }
     } else {
       // Trường hợp: Check/uncheck tất cả
       this.selectAllChecked = nextValue;
@@ -207,6 +210,25 @@ export class RoleFunctionComponent extends CommonComponent implements OnInit {
         });
       });
     }
+    // Đồng bộ listRoleFunction với trạng thái active
+    this.syncListRoleFunction();
+  }
+
+  syncListRoleFunction() {
+    // Làm trống và xây lại listRoleFunction dựa trên trạng thái active
+    this.listRoleFunction = [];
+    this.listFunction.forEach((item: any) => {
+      item.child.forEach((child: any) => {
+        if (child.active) {
+          this.listRoleFunction.push({
+            roleName: this.dataSelected.roleName,
+            functionId: child.id,
+            functionName: child.name,
+            functionDescription: child.alias
+          });
+        }
+      });
+    });
   }
 
   goBack() {
