@@ -11,38 +11,6 @@
   border-collapse: collapse;
 }
 
-/* Fixed column widths */
-.col-width-1 {
-  width: 70px; /* Width for first column (No.) */
-  min-width: 70px;
-  max-width: 70px;
-}
-
-.col-width-2 {
-  width: 200px; /* Width for second column (Arr. Date) */
-  min-width: 200px;
-  max-width: 200px;
-}
-
-.col-width-3 {
-  width: 100px; /* Width for third column (Arr. Flt No) */
-  min-width: 100px;
-  max-width: 100px;
-}
-
-.col-width-default {
-  width: 150px; /* Default width for non-sticky columns */
-  min-width: 150px;
-}
-
-/* Sticky columns */
-.sticky-col {
-  position: sticky;
-  z-index: 10; /* Higher z-index to stay above non-sticky columns */
-  background-color: #ffffff !important; /* Opaque white background, high priority */
-  box-shadow: 2px 0 4px rgba(0, 0, 0, 0.1); /* Subtle shadow to separate sticky columns */
-}
-
 /* Sticky headers */
 .sticky-header {
   z-index: 15; /* Headers above cells */
@@ -54,22 +22,6 @@ tr.sticky-header-row {
   position: sticky;
   top: 0;
   z-index: 20; /* Header row above all */
-}
-
-/* Non-sticky columns */
-.non-sticky-col {
-  z-index: 1; /* Lower z-index to stay below sticky columns */
-  background-color: #ffffff; /* Ensure consistent background */
-}
-
-/* Position sticky columns */
-.sticky-col:nth-child(1) { left: 0; }
-.sticky-col:nth-child(2) { left: 70px; } /* 70px */
-.sticky-col:nth-child(3) { left: 270px; } /* 70px + 200px */
-
-/* Add border to separate sticky columns */
-.sticky-col {
-  border-right: 1px solid #ddd;
 }
 
 /* Multiline content */
@@ -84,14 +36,4 @@ tr.sticky-header-row {
 th, td {
   box-sizing: border-box;
   padding: 8px;
-}
-
-/* Prevent Angular Material overrides */
-:host ::ng-deep .mat-table {
-  background-color: transparent !important;
-}
-
-:host ::ng-deep .mat-cell,
-:host ::ng-deep .mat-header-cell {
-  background-color: inherit !important;
 }
