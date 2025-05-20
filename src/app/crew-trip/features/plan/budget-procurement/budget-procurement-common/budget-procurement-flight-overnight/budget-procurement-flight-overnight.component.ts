@@ -30,7 +30,7 @@ import { checkChange } from '../international/international-budget-procurement-h
 export class BudgetProcurementFlightOvernightComponent extends ShowMessageComponent implements AfterViewChecked {
   cdRef = inject(ChangeDetectorRef);
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ["numberOfOvernight", "flightRate", "action"];
+  displayedColumns: string[] = ["numberOfOvernight", "flightRate"];
   indexDelete = -1;
   showDialogDelete = false;
   valueChange = output<any>();
@@ -45,6 +45,13 @@ export class BudgetProcurementFlightOvernightComponent extends ShowMessageCompon
     effect(() => {
       if (this.data()) {
         this.setDataSource(this.data());
+      }
+    })
+    effect(() => {
+      if (this.disabled()) {
+        this.displayedColumns = this.displayedColumns.filter((item: string) => item !== 'action');
+      } else {
+        this.displayedColumns.push('action');
       }
     })
   }
@@ -70,6 +77,7 @@ export class BudgetProcurementFlightOvernightComponent extends ShowMessageCompon
         this.valueChange.emit({ ...overnight, actionType: 'edit', overnightLength: this.dataSource.data.length });
       }
     });
+
   }
 
   setDataSource(data: any[]) {
