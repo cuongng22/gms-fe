@@ -77,6 +77,17 @@ export class DashboardComponent extends CommonComponent implements OnInit {
 			console.log(Error);
 		}
 	}
+  async refreshReport(sync?: boolean) {
+    try {
+      await this.spinner.show();
+      await this.baseService.getReportLink(this.codeReport, sync).then((res) => {
+      });
+    } catch (Error: any) {
+      await this.spinner.hide();
+      console.log(Error);
+    }
+    await this.spinner.hide();
+  }
 	sanitizeUrl(url: string): SafeResourceUrl {
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);
 	}
