@@ -26,7 +26,7 @@ import { checkChange } from '../international-estimated-cost-hotel/international
 })
 export class InternationalEstimatedCostOvernightComponent extends ShowMessageComponent {
   dataSource = new MatTableDataSource();
-  displayedColumns: string[] = ["numberOfOvernight", "flightRate", "action"];
+  displayedColumns: string[] = ["numberOfOvernight", "flightRate"];
   indexDelete = -1;
   showDialogDelete = false;
   valueChange = output<any>();
@@ -42,6 +42,13 @@ export class InternationalEstimatedCostOvernightComponent extends ShowMessageCom
       console.log('effect data InternationalEstimatedCostOvernightComponent: ', this.data())
       if (this.data()) {
         this.setDataSource(this.data());
+      }
+    })
+    effect(() => {
+      if (this.disabled()) {
+        this.displayedColumns = this.displayedColumns.filter((item: string) => item !== 'action');
+      } else {
+        this.displayedColumns.push('action');
       }
     })
   }
