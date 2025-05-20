@@ -268,8 +268,11 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   async doSave() {
-    await this.save();
-    this.goBack();
+    let response = await this.save();
+    console.log(response,'ress')
+    if (response) {
+      this.goBack();
+    }
   }
 
   toggleDialogFinish() {
