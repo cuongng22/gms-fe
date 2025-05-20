@@ -449,8 +449,20 @@ export const menu: Menu[] = [
     title: $localize`:@@system:System`,
     rootPath: 'system',
     permissionCode: [
-      'API_USER_GET_ALL_LIST','API_ROLES_LIST','API_FUNCTIONS_LIST'
-      ,'API_CREW_FLIGHTS_LIST','API_AUTHLOG_LIST'
+      'API_USER_GET_ALL_LIST','API_ROLES_LIST'
+      ,'API_FUNCTIONS_LIST'
+      ,'API_CREW_FLIGHTS_LIST',
+      'API_AUTHLOG_LIST',
+      'API_OVERNIGHT_RATE_LIST',
+      'API_GROUP_MAIL_LIST',
+      'API_PAYMENT_MAIL_LIST',
+      'API_EMAIL_CONFIG_LIST',
+      'API_NOTI_CONFIG_LIST',
+      'API_NOTI_SETUP_LIST',
+      'API_PLANE_LIST',
+      'API_AUTHLOG_LIST',
+      'API_EMAIL_HISTORY_LIST',
+      'API_NOTIFICATION_LIST'
     ],
     subMenu: [
       {
