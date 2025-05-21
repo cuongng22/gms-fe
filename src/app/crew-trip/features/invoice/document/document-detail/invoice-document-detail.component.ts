@@ -8,7 +8,7 @@ import {cloneDeep, transform} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {InvoiceDocumentStatusEnum, InvoiceDocumentTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentStatusEnum, InvoiceDocumentStatusPayment, InvoiceDocumentTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import {ContractService} from "src/app/crew-trip/core/services/contract-service";
 import {HttpStatusCode} from "@angular/common/http";
@@ -61,6 +61,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   listDocumentType = InvoiceLookup.InvoiceDocumentType;
   listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
   listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
+  listInvoiceDocumentStatusPayment = InvoiceLookup.InvoiceDocumentStatusPayment;
   today = new Date();
 
   _displayedColumnsHeader1: string[] = [];
@@ -178,6 +179,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       note: [, [Validators.maxLength(500)]],
       status: [InvoiceDocumentStatusEnum.UNMATCHED],
       statusEmail: [],
+      statusPayment: [],
       amountFcBeforeVat: [],
       vatFc: [],
       totalAmountFc: [],
@@ -269,7 +271,6 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
 
   async doSave() {
     let response = await this.save();
-    console.log(response,'ress')
     if (response) {
       this.goBack();
     }

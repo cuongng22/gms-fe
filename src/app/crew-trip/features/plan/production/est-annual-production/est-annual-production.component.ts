@@ -75,7 +75,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
 
   netWorkOptions = NetWorkOptions;
 
-  _displayedColumns: { label: string; value: string, type?: string, format?: string }[] = [
+  _displayedColumns: { label: string; value: string, type?: string, format?: any }[] = [
     // {label: $localize`:@@id:ID`, value: 'id'},
     { label: $localize`:@@network:NETWORK`, value: 'network' },
     { label: $localize`:@@route:ROUTE`, value: 'route' },
@@ -83,18 +83,18 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
     { label: $localize`:@@route2w:ROUTE_2W`, value: 'route2w' },
     { label: $localize`:@@ori:ORI`, value: 'ori' },
     { label: $localize`:@@des:DES`, value: 'des' },
-    { label: $localize`:@@oriCountry:ORI_COUNTRY`, value: 'oriCountry' },
-    { label: $localize`:@@desCountry:DES_COUNTRY`, value: 'desCountry' },
-    { label: $localize`:@@verId:VER_ID`, value: 'verId' },
+    // { label: $localize`:@@oriCountry:ORI_COUNTRY`, value: 'oriCountry' },
+    // { label: $localize`:@@desCountry:DES_COUNTRY`, value: 'desCountry' },
+    // { label: $localize`:@@verId:VER_ID`, value: 'verId' },
     { label: $localize`:@@acId:AC_ID`, value: 'acId' },
     { label: $localize`:@@acGroup:AC_GROUP`, value: 'acGroup' },
-    { label: $localize`:@@carrier:CARRIER`, value: 'carrier' },
+    // { label: $localize`:@@carrier:CARRIER`, value: 'carrier' },
     { label: $localize`:@@fltDate:FLT_DATE`, value: 'fltDate', type: Constant.DATE, format: Constant.DATE_FORMAT },
     { label: $localize`:@@fltMonth:FLT_MONTH`, value: 'fltMonth' },
-    { label: $localize`:@@fltYear:FLT_YEAR`, value: 'fltYear' },
+    // { label: $localize`:@@fltYear:FLT_YEAR`, value: 'fltYear' },
     { label: $localize`:@@bh:BH`, value: 'bh' },
     { label: $localize`:@@fls:FLS`, value: 'fls' },
-    { label: $localize`:@@rateBhFls:BH/FLS`, value: 'rateBhFls' },
+    { label: $localize`:@@rateBhFls:BH/FLS`, value: 'rateBhFls', type: Constant.NUMBER, format: 2 },
   ];
 
   override formGroupSearch = this.formBuilder.group({

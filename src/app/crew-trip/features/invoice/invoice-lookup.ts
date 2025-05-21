@@ -51,7 +51,6 @@ export const InvoiceDocumentStatusPayment = [
   {key: 'PAID', value: $localize`PAID`},
   {key: 'VOIDED', value: $localize`VOIDED`},
   {key: 'UNPAID', value: $localize`UNPAID`},
-
 ];
 
 export enum InvoiceDocumentExportType {

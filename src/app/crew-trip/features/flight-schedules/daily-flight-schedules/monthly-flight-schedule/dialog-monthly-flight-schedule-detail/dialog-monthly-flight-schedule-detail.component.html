@@ -55,7 +55,7 @@
                         <td class="text-center" mat-cell>
                             <mat-checkbox (click)="$event.stopPropagation()"
                                 (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
-                                [disabled]="row.disable">
+                                [disabled]="row.type !== 'Crew'">
                             </mat-checkbox>
                         </td>
                     </ng-container>

@@ -78,7 +78,6 @@
                         class="font-weight-bold text-center" i18n="@@action">
                         Action
                     </th>
-                    @if(!disabled()){
                     <td mat-cell *matCellDef="let element; let i = dataIndex">
                         <div class="action-buttons d-flex justify-content-end">
                             <button type="button" mat-button title="Delete" i18n-title="@@delete" class="text-danger"
@@ -89,7 +88,6 @@
                             </button>
                         </div>
                     </td>
-                    }
                 </ng-container>
                 <tr mat-header-row *matHeaderRowDef="['addBtn']"></tr>
                 <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>

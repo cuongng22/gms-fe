@@ -353,6 +353,20 @@
               </mat-error>
             </mat-form-field>
           </div>
+          <div class="col-3" sizeInput='sm'>
+            <mat-form-field>
+              <mat-label i18n>Payment Status</mat-label>
+              <mat-select formControlName="statusPayment">
+                <mat-option [value]="null" i18n>-- Empty --</mat-option>
+                @for (item of listInvoiceDocumentStatusPayment; track item) {
+                  <mat-option [value]="item.key">{{ item.value }}</mat-option>
+                }
+              </mat-select>
+              <mat-error>
+                <app-control-error controlName="status"></app-control-error>
+              </mat-error>
+            </mat-form-field>
+          </div>
         </div>
       </form>
     </mat-panel-description>

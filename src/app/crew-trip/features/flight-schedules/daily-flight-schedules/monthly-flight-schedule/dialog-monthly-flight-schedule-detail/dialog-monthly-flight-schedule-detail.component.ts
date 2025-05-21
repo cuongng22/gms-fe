@@ -45,9 +45,9 @@ export class DialogMonthlyFlightScheduleDetailComponent extends CommonComponent 
   readonly data = inject<any>(MAT_DIALOG_DATA);
   override baseService = inject(DailyFlightSchedulesService);
 
-  _displayedColumns: { label: string; value: string, type?: string, format?: string, class?: string, sticky?:boolean }[] = [
+  _displayedColumns: { label: string; value: string, type?: string, format?: string, class?: string, sticky?: boolean }[] = [
     { label: $localize`:@@code:Code`, value: 'persCode', class: 'text-left' },
-    { label: $localize`:@@fullName:Full Name`, value: 'fullName', class: 'text-left' , sticky: true},
+    { label: $localize`:@@fullName:Full Name`, value: 'fullName', class: 'text-left', sticky: true },
     { label: $localize`:@@cmsName:CMS Name`, value: 'cmsname', class: 'text-left' },
     { label: $localize`:@@gender:Gender`, value: 'gender', class: 'text-left' },
     { label: $localize`:@@phone:Phone`, value: 'phone', class: 'text-center' },
@@ -70,6 +70,9 @@ export class DialogMonthlyFlightScheduleDetailComponent extends CommonComponent 
     const response = await super.search({ flightId: this.data.flightId, timeZone: this.data.timeZone }, false, this.baseService.flightCrewDetail.bind(this.baseService))
     this.dataSource.data = response.data.crewMembers;
     this.flightInfo = response.data.flightInfo;
+    this.selection.clear()
+    const selecteds = this.dataSource.data.filter((item: any) => item.nonOverNight == 'Y');
+    this.selection.select(...selecteds);
   }
 
   close() {
@@ -90,18 +93,18 @@ export class DialogMonthlyFlightScheduleDetailComponent extends CommonComponent 
     if (this.selection.selected.length > 0) {
       try {
         await this.spinner.show();
-        const bodyArr = this.selection.selected.map(item => {
+
+        const bodyArr = this.dataSource.data.map(item => {
           return {
             flightId: this.flightInfo.flightId,
             persCode: item.persCode,
-            nonOverNight: "Y"
+            nonOverNight: this.selection.isSelected(item) ? "Y" : null
           }
         })
         let res = await this.baseService.updateNonOvernight(bodyArr);
 
         await this.onSearch();
         this.baseService.showSuccess(this.MESSAGE.UPDATE_SUCCESS);
-        this.selection.clear()
         return res;
       } catch (e: any) {
         console.error(e)
