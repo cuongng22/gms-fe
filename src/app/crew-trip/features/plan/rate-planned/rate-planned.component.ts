@@ -25,6 +25,8 @@ import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { Observable, of, take } from 'rxjs';
 import { ExchangeRateService } from 'src/app/crew-trip/core/services/exchange-rate.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import {
@@ -54,14 +56,15 @@ import {
 		MatTableModule,
 		MatPaginatorModule,
 		FileUploadComponent,
-		HasPermissionDirective
+		HasPermissionDirective, SelectionSuggestComponent
 	],
 	templateUrl: './rate-planned.component.html',
 	styleUrl: './rate-planned.component.scss',
-	providers: [HasPermissionDirective]
+	providers: [HasPermissionDirective, DataTransformPipe]
 })
 export class RatePlannedComponent extends CommonComponent implements OnInit {
 	override baseService = inject(ExchangeRateService);
+	dataTransformPipe: DataTransformPipe = inject(DataTransformPipe);
 
 	showDialogUpload = false;
 	fileUpload = new FormControl<File[]>(
@@ -74,13 +77,18 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 	listYear: Observable<number[]> = of(
 		Array.from({ length: 10 }, (v, i) => 2024 + i),
 	);
-	listVersion: Observable<string[]> = of([]);
+	listVersion: any[] = [] // Observable<string[]> = of([]);
+
+	version: string | null = null;
+	createdDate: string | null = null;
 
 	override formGroupSearch = this.formBuilder.group({
 		s: [null], //Keyword Search
 		version: ['', Validators.required],
 		sourceType: [''],
 		export: [false],
+		startDate: [],
+		endDate: [],
 	});
 
 	override async ngOnInit() {
@@ -103,23 +111,29 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 			'december',
 			'average',
 			'rateUth',
-			'version',
+			// 'version',
 		];
 		await this.initSearchVersion();
 		await this.search();
 		this.fileUpload.valueChanges.subscribe((value) => {
 			this.uploadFileError = {};
 		});
+
+		this.formGroupSearch.controls.startDate.valueChanges.subscribe(() => {
+			this.changeCreatedDate();
+		});
+		this.formGroupSearch.controls.endDate.valueChanges.subscribe(() => {
+			this.changeCreatedDate();
+		});
 	}
 
-	async initSearchVersion() {
-		await this.baseService.getListVersion({ option: 1 }).then((res) => {
-			this.listVersion = of(res.data.map((it: any) => it.version));
+	async initSearchVersion(params?: any) {
+		await this.baseService.getListVersion({ option: 1, ...removeNullValues(params) }).then((res) => {
+			this.listVersion = res.data;
 			if (this.listVersion) {
-				this.listVersion.pipe(take(1)).subscribe((versions) => {
-					const firstVersion = versions[0];
-					this.formGroupSearch.patchValue({ version: firstVersion });
-				});
+				const firstVersion = this.listVersion[0];
+				this.formGroupSearch.controls.version.patchValue(firstVersion.version);
+
 			}
 		});
 	}
@@ -131,6 +145,8 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 				this.pageIndex = Constant.PAGE;
 			}
 			this.formGroupSearch.patchValue({ export: false });
+			let startDate = this.formGroupSearch.controls.startDate.value;
+			let endDate = this.formGroupSearch.controls.endDate.value;
 			const res = await this.baseService.search({
 				page: this.pageIndex,
 				size: this.pageSize,
@@ -139,17 +155,21 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 				limit: this.pageSize,
 				...(removeNullValues(body) ||
 					removeNullValues(this.formGroupSearch.value)),
+				startDate: startDate ? this.dataTransformPipe.transform(startDate, ['date', Constant.LOCAL_DATE_FORMAT]) : '',
+				endDate: endDate ? this.dataTransformPipe.transform(endDate, ['date', Constant.LOCAL_DATE_FORMAT]) : ''
 			});
 			if (res) {
 				if (res.status === HttpStatusCode.Ok) {
-					this.dataSource.data = res.data.content;
+					this.version = this.formGroupSearch.controls.version.value;
+					this.createdDate = res.data.createdDate;
+					this.dataSource.data = res.data?.pages?.content;
 					this.dataSource.data = this.dataSource.data.map((s: any) => ({
 						...s,
 						isActiveLabel: s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
 						activeLabel:
 							!!s.active || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
 					}));
-					this.totalElement = res.data.totalElements;
+					this.totalElement = res.data?.pages?.totalElements;
 				}
 				return res;
 			}
@@ -236,6 +256,16 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 			this.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR)
 		} finally {
 			this.spinner.hide()
+		}
+	}
+
+	changeCreatedDate() {
+		let startDate = this.formGroupSearch.controls.startDate.value;
+		let endDate = this.formGroupSearch.controls.endDate.value;
+		if (startDate && endDate) {
+			startDate = this.dataTransformPipe.transform(startDate, ['date', Constant.LOCAL_DATE_FORMAT]);
+			endDate = this.dataTransformPipe.transform(endDate, ['date', Constant.LOCAL_DATE_FORMAT]);
+			this.initSearchVersion({ startDate: startDate, endDate: endDate });
 		}
 	}
 }

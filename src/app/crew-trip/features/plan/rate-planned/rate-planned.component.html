@@ -24,14 +24,38 @@
       <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-11 col-lg-11">
           <div class="row">
-            <div class="col-sm-3" sizeInput='sm'>
+            <div class="col mb-2" sizeInput='sm'>
               <mat-form-field class="mb-1">
                 <mat-label i18n="@@keyword">Keyword</mat-label>
                 <input matInput formControlName="s">
               </mat-form-field>
             </div>
-            <div class="col-sm-3" sizeInput='sm'>
+            <div class="col mb-2" sizeInput="sm">
               <mat-form-field class="mb-1">
+                <mat-date-range-input [rangePicker]="contractRangePicker">
+                  <input trim="blur" matStartDate i18n-placeholder="@@startDate" placeholder="dd/mm/yyyy"
+                    formControlName="startDate">
+                  <input trim="blur" matEndDate i18n-placeholder="@@endDate" placeholder="dd/mm/yyyy"
+                    formControlName="endDate">
+                </mat-date-range-input>
+                <mat-label i18n="@@contractEndDate">Created date</mat-label>
+                <mat-datepicker-toggle matIconSuffix [for]="contractRangePicker"></mat-datepicker-toggle>
+                <mat-date-range-picker #contractRangePicker>
+                  <mat-date-range-picker-actions>
+                    <button sizeButton="sm" mat-button matDateRangePickerCancel i18n="@@cancel">Cancel</button>
+                    <button sizeButton="sm" mat-raised-button color="primary" matDateRangePickerApply
+                      i18n="@@apply">Apply
+                    </button>
+                  </mat-date-range-picker-actions>
+                </mat-date-range-picker>
+              </mat-form-field>
+            </div>
+            <div class="col mb-2">
+              <app-selection-suggest size="sm" formControlName="version" [options]="listVersion" label="Version"
+                i18n-label="@@version" attrDisplay="version" attrValue="version">
+
+              </app-selection-suggest>
+              <!-- <mat-form-field class="mb-1">
                 <mat-label i18n="@@airport"> Version</mat-label>
                 <input type="text" matInput formControlName="version" [matAutocomplete]="versionComplete">
                 <mat-autocomplete autoActiveFirstOption requireSelection #versionComplete="matAutocomplete">
@@ -43,9 +67,9 @@
                 @if (!!formGroupSearch.controls['version'].hasError('required')) {
                 <mat-error><span i18n>Version</span><span i18n> is required</span></mat-error>
                 }
-              </mat-form-field>
+              </mat-form-field> -->
             </div>
-            <div class="col-sm-3" sizeInput='sm'>
+            <div class="col mb-2" sizeInput='sm'>
               <mat-form-field class="mb-1">
                 <mat-label i18n="@@airport"> Datasource</mat-label>
                 <input type="text" matInput formControlName="sourceType" [matAutocomplete]="sourceComplete">
@@ -57,7 +81,7 @@
                 </mat-autocomplete>
               </mat-form-field>
             </div>
-            <div class="col-sm-3">
+            <div class="col mb-2">
               <mat-card-header class="mb-0">
                 <mat-card-title>
                   <button class="search-btn" type="submit" mat-button>
@@ -78,6 +102,9 @@
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
   <mat-card-header class="mb-10">
     <mat-card-title>
+      <h6 class="mb-0">
+        Version: {{version}}; Created Date: {{createdDate}}
+      </h6>
     </mat-card-title>
     <mat-card-subtitle>
       <button class="add-btn  mr-10" type="button" mat-button
@@ -95,7 +122,7 @@
         <span i18n="@@import">Import</span>
       </button>
       <button *appHasPermission="['API_CURRENCY_SYNC_LIST']" class="add-btn mr-10" type="button" mat-button
-      (click)="sync()">
+        (click)="sync()">
         <i class="material-symbols-outlined">
           sync
         </i>
