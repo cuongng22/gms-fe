@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, viewChild } from '@angular/core';
 import { FileUploadComponent, FileUploadValidators } from '@iplab/ngx-file-upload';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { MatAnchor, MatButton, MatButtonModule } from '@angular/material/button';
@@ -36,6 +36,8 @@ import { CommonModule } from '@angular/common';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { HttpStatusCode } from '@angular/common/http';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 
 @Component({
   selector: 'app-rate-uth',
@@ -44,48 +46,61 @@ import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-p
     MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-    MatTableModule, MatPaginatorModule, MatCheckbox, FileUploadComponent, HasPermissionDirective
+    MatTableModule, MatPaginatorModule, MatCheckbox, FileUploadComponent, HasPermissionDirective,
+    SelectionSuggestComponent
   ],
   templateUrl: './rate-uth.component.html',
   styleUrl: './rate-uth.component.scss',
-  providers: [HasPermissionDirective]
+  providers: [HasPermissionDirective, DataTransformPipe]
 })
 export class RateUthComponent extends CommonComponent implements OnInit {
   override baseService = inject(ExchangeRateService);
+  dataTransformPipe: DataTransformPipe = inject(DataTransformPipe);
+
 
   showDialogUpload = false;
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
   listDatasource: Observable<string[]> = of(['Sync', 'Excel']);
-  listVersion: Observable<string[]> = of([]);
+  listVersion: any[] = []//Observable<string[]> = of([]);
+
+  version: string | null = null;
+  createdDate: string | null = null;
 
   override formGroupSearch = this.formBuilder.group({
     s: [''], //Keyword Search
     version: ['', Validators.required],
     sourceType: [''],
     export: [false],
+    startDate: [],
+    endDate: [],
   });
 
   override async ngOnInit() {
     super.ngOnInit();
     this.displayedColumns = ['stt', 'currencyCode', 'planUth', 'january', 'february', 'march', 'april', 'may'
-      , 'june', 'july', 'august', 'september', 'october', 'november', 'december', 'average', 'rateDtTh', 'version'
+      , 'june', 'july', 'august', 'september', 'october', 'november', 'december', 'average', 'rateDtTh',// 'version'
     ];
     await this.initSearchVersion();
     await this.search();
     this.fileUpload.valueChanges.subscribe(value => {
       this.uploadFileError = {};
     });
+    this.formGroupSearch.controls.startDate.valueChanges.subscribe(() => {
+      this.changeCreatedDate();
+    });
+    this.formGroupSearch.controls.endDate.valueChanges.subscribe(() => {
+      this.changeCreatedDate();
+    });
   }
 
-  async initSearchVersion() {
-    await this.baseService.getListVersion({ option: 0 }).then(res => {
-      this.listVersion = of(res.data.map((it: any) => it.version));
+  async initSearchVersion(params?: any) {
+    await this.baseService.getListVersion({ option: 0, ...removeNullValues(params) }).then(res => {
+      this.listVersion = res.data;
       if (this.listVersion) {
-        this.listVersion.pipe(take(1)).subscribe(versions => {
-          const firstVersion = versions[0];
-          this.formGroupSearch.patchValue({ version: firstVersion });
-        });
+        const firstVersion = this.listVersion[0];
+        this.formGroupSearch.controls.version.patchValue(firstVersion.version);
+       
       }
     });
   }
@@ -97,20 +112,26 @@ export class RateUthComponent extends CommonComponent implements OnInit {
         this.pageIndex = Constant.PAGE;
       }
       this.formGroupSearch.patchValue({ export: false });
+      let startDate = this.formGroupSearch.controls.startDate.value;
+      let endDate = this.formGroupSearch.controls.endDate.value;
       const res = await this.baseService.uthSearch({
         page: this.pageIndex,
         size: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
-        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value)
+        limit: this.pageSize, ...removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
+        startDate: startDate ? this.dataTransformPipe.transform(startDate, ['date', Constant.LOCAL_DATE_FORMAT]) : '',
+        endDate: endDate ? this.dataTransformPipe.transform(endDate, ['date', Constant.LOCAL_DATE_FORMAT]) : ''
       });
       if (res) {
         if (res.status === HttpStatusCode.Ok) {
-          this.dataSource.data = res.data.content;
+          this.version = this.formGroupSearch.controls.version.value;
+          this.createdDate = res.data.createdDate;
+          this.dataSource.data = res.data?.pages?.content;
           this.dataSource.data = this.dataSource.data.map((s: any) => ({
             ...s,
             isActiveLabel: s.isActive ? MESSAGE.ACTIVE : MESSAGE.INACTIVE,
             activeLabel: !!s.active || !!s.status ? MESSAGE.ACTIVE : MESSAGE.INACTIVE
           }));
-          this.totalElement = res.data.totalElements;
+          this.totalElement = res.data?.pages?.totalElements;
         }
         return res;
       }
@@ -175,7 +196,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
     this.fileUpload.setValue([]);
     this.fileUpload.reset();
   }
-  
+
   async sync() {
     try {
       await this.spinner.show();
@@ -185,6 +206,16 @@ export class RateUthComponent extends CommonComponent implements OnInit {
       this.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR)
     } finally {
       this.spinner.hide()
+    }
+  }
+
+  changeCreatedDate() {
+    let startDate = this.formGroupSearch.controls.startDate.value;
+    let endDate = this.formGroupSearch.controls.endDate.value;
+    if (startDate && endDate) {
+      startDate = this.dataTransformPipe.transform(startDate, ['date', Constant.LOCAL_DATE_FORMAT]);
+      endDate = this.dataTransformPipe.transform(endDate, ['date', Constant.LOCAL_DATE_FORMAT]);
+      this.initSearchVersion({ startDate: startDate, endDate: endDate });
     }
   }
 }

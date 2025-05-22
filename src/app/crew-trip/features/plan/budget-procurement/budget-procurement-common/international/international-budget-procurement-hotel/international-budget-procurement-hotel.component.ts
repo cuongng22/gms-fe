@@ -425,8 +425,12 @@ export class InternationalBudgetProcurementHotelComponent implements OnInit, Aft
       if (this.generalData.crewTransportFeeFlag) {
         //Tổng tiền xe chở tổ bay (ngoại tệ)
         this.calculate(item, 'totalAmountForeignTransport');
+        //Tổng tiền xe chở tổ bay VND chưa VAT
+        this.calculate(item, 'totalAmountTransport');
         //Tổng tiền xe chở tổ bay (ngoại tệ) có vat
         this.calculate(item, 'totalAmountForeignTransVat');
+        //Tổng tiền xe chở tổ bay VND có VAT
+        this.calculate(item, 'totalAmountTransportVat');
       }
 
       if (!this.updateBudgetPlan()) {

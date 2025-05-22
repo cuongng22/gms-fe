@@ -18,11 +18,19 @@ export const formula: any = {
     formula: '(generalData.crewTransportFeeFlag ? (ctz(data.numberOfFlights) * 2 * ctz(data.priceCrewTransport)) : 0)',
     groupFormula: 'aircraftTypeGroup',
   },
+  //Tổng tiền xe chở tổ bay VND chưa VAT
+  totalAmountTransport:{
+    formula: 'ctz(data.totalAmountForeignTransport) * ctz(data.rateInPeriod)',
+  },
   //Tổng tiền xe chở tổ bay (ngoại tệ) có vat
   totalAmountForeignTransVat: {
     // formula: 'ctz(data.numberOfFlights) * 2 * ctz(data.priceCrewTransportVat)',
     formula: '(generalData.crewTransportFeeFlag ? (ctz(data.numberOfFlights) * 2 * ctz(data.priceCrewTransportVat)) : 0)',
     groupFormula: 'aircraftTypeGroup',
+  },
+  //Tổng tiền xe chở tổ bay VND có VAT
+  totalAmountTransportVat:{
+    formula: 'ctz(data.totalAmountForeignTransVat) * ctz(data.rateInPeriod)',
   },
   //Số phòng đơn
   singleRoom: {
