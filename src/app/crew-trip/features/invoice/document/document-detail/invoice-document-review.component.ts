@@ -351,7 +351,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
           }
         }, 0);
       } else if (type == 'aves') {
-        return this.tblDocumentReviewForm.filteredData?.filter((s: any) => s.labelGroup == 'AVES' || s.aves).reduce((prev: any, cur: any) => {
+        return this.tblDocumentReviewAves.filteredData?.filter((s: any) => s.sourceData == 'AVES').reduce((prev: any, cur: any) => {
           // prev + +cur[column.value]
           if (cur.typeRoom === 'CC Twin room') {
             return prev + +(cur[column.value] / 2);
