@@ -20,6 +20,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
+import { SelectionComponent } from "../../../../shared/component/selection/selection.component";
 
 @Component({
   selector: 'app-payment-mail',
@@ -43,7 +44,8 @@ import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-p
     DataTransformPipe,
     MatAutocomplete,
     MatAutocompleteTrigger,
-    MatOption, HasPermissionDirective
+    MatOption, HasPermissionDirective,
+    SelectionComponent
   ],
   templateUrl: './payment-mail.component.html',
   styleUrl: './payment-mail.component.scss',
@@ -58,6 +60,10 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
   autocompleteTrigger!: MatAutocompleteTrigger;
   markets: string[] = [];
   filteredOptionsMarket: any[];
+  types: any[] = [
+    { value: 'HOTEL', display: $localize`:@@hotel:Hotel` },
+    { value: 'TRANSPORT', display: $localize`:@@transportation:Transportation` }
+  ]
 
   _displayedColumns: {
     label: string;
@@ -65,6 +71,7 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
     type?: string;
     format?: string;
   }[] = [
+      { label: $localize`:@@type:Type`, value: 'type'},
       { label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
       { label: $localize`:@@name:Email`, value: 'emails' },
       { label: $localize`:@@note:Remark`, value: 'note' }
@@ -85,7 +92,8 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
     marketCode: ['', [Validators.required]],
     emailsInput: ['', [Validators.required, Validators.maxLength(500)]],
     note: ['', Validators.maxLength(500)],
-    emails: [[''], [Validators.required]]
+    emails: [[''], [Validators.required]],
+    type: ['', [Validators.required]],
   });
 
   override async ngOnInit() {

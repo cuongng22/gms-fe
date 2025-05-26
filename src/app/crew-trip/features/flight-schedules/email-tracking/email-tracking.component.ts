@@ -32,6 +32,7 @@ import { DialogSendMailComponent } from './dialog-send-mail/dialog-send-mail.com
 import { DialogUploadFileComponent } from './dialog-upload-file/dialog-upload-file.component';
 import { environment } from 'src/environments/environment';
 import { categories } from '../../plan/budget-procurement/budget-procurement.model';
+import { Constant } from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
 	selector: 'app-email-tracking',
@@ -139,6 +140,7 @@ export class EmailTrackingComponent extends CommonComponent {
 				marketCode: data.marketCode,
 				scheType: this.formGroupSearch.controls.scheType.value,
 				id: data.id,
+				exportTime: this.dataTransformPipe.transform(data.exportTime, [this.Constant.DATE, Constant.LOCAL_DATE_FORMAT]),
 			}
 		}).afterClosed().subscribe(res => {
 			this.search()
