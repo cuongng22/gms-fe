@@ -510,8 +510,13 @@
             <div class="col-md-12 mt-15" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>To</mat-label>
-                <input formControlName="emailTo" matInput required
-                       trim="blur" type="text">
+                <mat-select required formControlName="emailTo">
+                  @for (item of listEmailTo; track item) {
+                    <mat-option [value]="item">{{ item }}</mat-option>
+                  }
+                </mat-select>
+<!--                <input formControlName="emailTo" matInput required-->
+<!--                       trim="blur" type="text">-->
                 <mat-error>
                   <app-control-error controlName="emailTo" manualKey="email"></app-control-error>
                 </mat-error>

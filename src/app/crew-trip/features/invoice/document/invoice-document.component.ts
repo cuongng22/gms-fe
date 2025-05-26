@@ -9,7 +9,7 @@ import {InvoiceFormDetailComponent} from "src/app/crew-trip/features/invoice/for
 import {provideMomentDateAdapter} from "@angular/material-moment-adapter";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {InvoiceDocumentEmailTypeEnum, InvoiceDocumentExportType, InvoicePartnerType} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentEmailTypeEnum, InvoiceDocumentExportType} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {cloneDeep} from "lodash";
 import moment from "moment";
 import {BaseImport} from "src/app/crew-trip/shared/base-import";
@@ -127,6 +127,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
 
     }*/
   showDialogReconcile = false;
+  listEmailTo: any[];
 
   constructor() {
     super();
@@ -422,12 +423,16 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
   async showDialogSendEmail(data: any) {
     this.toggleDialogCreate();
     try {
-      let res: any = await this.paymentMailService.getAirportEmail(data.airportCode);
-      let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_CONFIRMATION', marketClass: data.contractServiceType});
+      let res: any = await this.paymentMailService.getAirportEmail(data.airportCode, 'TRANSPORTATION');
+      if (res.status === HttpStatusCode.Ok) {
+        this.listEmailTo = res.data.emails?.split(';').map((s: any) => s.trim());
+      }
+
+      let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_CONFIRMATION', marketClass: data.contractServiceType,});
       let emailTitle = res1.data?.content[0]?.title;
       let emailContent = res1.data?.content[0]?.content;
       this.formGroupDetail.patchValue({
-        emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
+        // emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
         emailSubject: emailTitle ?? '',
         emailContent: emailContent ?? ''
       })
