@@ -15,6 +15,7 @@ export class Constant {
   static TIME_ZONE = 'Asia/Ho_Chi_Minh';
   static DATE_FORMAT_YYYYMMDD = 'YYYY/MM/DD';
   static LOCAL_DATE_FORMAT = 'YYYY-MM-DD'
+  static LOCAL_DATE_TIME_FORMAT = 'YYYY-MM-DD HH:mm:ss';
 }
 
 export class MESSAGE {
