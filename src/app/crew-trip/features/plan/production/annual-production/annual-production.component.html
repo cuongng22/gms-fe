@@ -29,7 +29,7 @@
               </mat-form-field>
             </div>
             <div class="col mb-2" sizeInput="md">
-              <mat-form-field>
+              <!-- <mat-form-field>
                 <mat-label>ORI</mat-label>
                 <input trim="blur" type="text" matInput formControlName="ori" #ori [matAutocomplete]="oriComplete"
                   (input)="filterOri()">
@@ -39,10 +39,12 @@
                   <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
-              </mat-form-field>
+              </mat-form-field> -->
+              <app-select-multiple formControlName="ori"  label="ORI" [options]="filteredOptionsOri()" attrDisplay="" attrValue=""
+                [isSearch]="true"></app-select-multiple>
             </div>
             <div class="col mb-2" sizeInput="md">
-              <mat-form-field>
+              <!-- <mat-form-field>
                 <mat-label>DES</mat-label>
                 <input trim="blur" type="text" matInput formControlName="des" #des [matAutocomplete]="desComplete"
                   (input)="filterDes()">
@@ -52,22 +54,10 @@
                   <mat-option [value]="option">{{ option }}</mat-option>
                   }
                 </mat-autocomplete>
-              </mat-form-field>
+              </mat-form-field> -->
+              <app-select-multiple formControlName="des"  label="DES" [options]="filteredOptionsDes()" attrDisplay="" attrValue=""
+                [isSearch]="true"></app-select-multiple>
             </div>
-            <div class="col mb-2" sizeInput="md">
-              <mat-form-field>
-                <mat-label>FLT_Month</mat-label>
-                <mat-select formControlName="fltMonth" class="w-100">
-                  <mat-option [value]="null">-- All FLT_Month --</mat-option>
-                  <mat-option *ngFor="let month of fltMonthList" [value]="month">{{
-                    month
-                    }}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </div>
-          </div>
-          <div class="row">
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>AC_ID</mat-label>
@@ -94,6 +84,28 @@
                 </mat-autocomplete>
               </mat-form-field>
             </div>
+           
+            
+          </div>
+          <div class="row">
+            
+            
+            <div class="col mb-2">
+              <app-selection label="Year" i18n-label="@@year" [options]="years" formControlName="year" attrValue=""
+                attrDisplay=""></app-selection>
+            </div>
+            <div class="col mb-2" sizeInput="md">
+              <mat-form-field>
+                <mat-label>FLT_Month</mat-label>
+                <mat-select formControlName="fltMonth" class="w-100">
+                  <mat-option [value]="null">-- All FLT_Month --</mat-option>
+                  <mat-option *ngFor="let month of fltMonthList" [value]="month">{{
+                    month
+                    }}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </div>
             <div class="col mb-2" sizeInput="md">
               <mat-form-field>
                 <mat-label>VER_ID</mat-label>
@@ -110,14 +122,11 @@
                 }
               </mat-form-field>
             </div>
-            <div class="col mb-2" sizeInput="sm">
+             <div class="col mb-2" sizeInput="sm">
               <app-selection [options]="netWorkOptions" [isFirstBlank]="true" labelFirst="----Network---"
                 label="Network" in18n="@@network" formControlName="network"></app-selection>
             </div>
-
-          </div>
-          <div class="row">
-            <div class="col d-sm-flex flex-row  justify-content-md-center">
+            <div class="col mb-2 d-sm-flex flex-row  justify-content-md-center">
               <mat-card-header class="mb-0 search">
                 <mat-card-title>
                   <button class="search-btn" type="submit" mat-button>
@@ -129,6 +138,10 @@
                 </mat-card-title>
               </mat-card-header>
             </div>
+
+          </div>
+          <div class="row">
+            
           </div>
         </div>
       </div>
@@ -141,6 +154,9 @@
 <mat-card class="mb-10 p-15 border-radius d-block bg-white border-0 shadow-none">
   <mat-card-header class="mb-10">
     <mat-card-title>
+      <h6 class="mb-0">
+        Version: {{versionResult}}; Created Date: {{createdDateResult}}
+      </h6>
     </mat-card-title>
     <mat-card-subtitle>
       <button class="add-btn mr-10" type="button" mat-button (click)="exportFileOptions()">

@@ -29,6 +29,7 @@ import {
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
+import { SelectMultipleComponent } from "../../../../shared/component/select-multiple/select-multiple.component";
 
 @Component({
   selector: 'app-annual-production',
@@ -37,7 +38,7 @@ import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection
     MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
     MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
     MatTableModule, MatPaginatorModule, DataTransformPipe, RouterModule, FileUploadModule,
-    NgxTrimDirectiveModule, HasPermissionDirective, SelectionComponent],
+    NgxTrimDirectiveModule, HasPermissionDirective, SelectionComponent, SelectMultipleComponent],
   templateUrl: './annual-production.component.html',
   styleUrl: './annual-production.component.scss',
   providers: [HasPermissionDirective]
@@ -109,11 +110,15 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
     versionId: new FormControl('', Validators.required),
     myControl: new FormControl(''),
     network: new FormControl(''),
+    year: []
   });
 
   showDialogUpload = false;
   fileUpload = new FormControl<File[]>([], [Validators.required, FileUploadValidators.filesLimit(1)]);
   uploadFileError: { blob?: Blob, fileName?: string, totalErrors?: string } = {};
+  years: number[] = []; // danh sách năm
+  versionResult: string | null = null;
+  createdDateResult: string | null = null;
 
   constructor() {
     super();
@@ -142,7 +147,7 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
       this.uploadFileError = {};
     });
 
-    this.initSearchVersion();
+    this.initYear();
 
     // --------------------handle valueChange for filterd-----------------
     this.keySearchOri.pipe(
@@ -225,7 +230,20 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
       option: 1,
       export: false,
       versionId: this.formGroupSearch.controls.versionId.value
-    }, isNextPage);
+    }, isNextPage).then((res) => {
+      if (res && res.data && res.data.page && res.data.page.content.length > 0) {
+        this.versionResult = this.formGroupSearch.controls.versionId.value;
+        this.createdDateResult = res.data.createdDate;
+        this.dataSource.data = res.data?.page?.content;
+        this.dataSource.data = this.dataSource.data.map((s: any) => ({
+          ...s,
+          isActiveLabel: s.isActive ? this.MESSAGE.ACTIVE : this.MESSAGE.INACTIVE,
+          activeLabel:
+            !!s.active || !!s.status ? this.MESSAGE.ACTIVE : this.MESSAGE.INACTIVE,
+        }));
+        this.totalElement = res.data?.page?.totalElements;
+      }
+    });
   }
 
   override exportFileOptions(): any {
@@ -236,9 +254,21 @@ export class AnnualProductionComponent extends CommonComponent implements OnInit
       versionId: this.formGroupSearch.controls.versionId.value
     });
   }
-
+  async initYear() {
+    const years = await this.baseService.listYear();
+    if (years && years.data && years.data.length > 0) {
+      this.formGroupSearch.controls.year.setValue(years.data[0]);
+      this.years = years.data;
+      this.initSearchVersion();
+    }
+    this.formGroupSearch.controls.year.valueChanges.subscribe((year: any) => {
+      if (year) {
+        this.initSearchVersion();
+      }
+    });
+  }
   async initSearchVersion() {
-    this.baseService.getVersion(1).then((res) => {
+    this.baseService.getVersion(1, this.formGroupSearch.controls.year.value).then((res) => {
       this.versionList = res.data;
       if (this.versionList.length > 0) {
         this.formGroupSearch.controls['versionId'].setValue(this.versionList[0]);
