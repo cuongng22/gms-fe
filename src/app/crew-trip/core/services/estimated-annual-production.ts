@@ -16,9 +16,10 @@ export class EstimatedAnnualProductionService extends BaseService {
    * @param type 1: Sản lượng plan, 0: sản lượng ước
    * @returns any
    */
-  getVersion(type: number): Promise<any> {
-    const url = `${this.api}/${this.path}/versions?type=${type}`;
-    return firstValueFrom(this.http.get<any>(url));
+  getVersion(type: number, year: any): Promise<any> {
+    const url = `${this.api}/${this.path}/versions`;
+    const params = { year: year, type: type };
+    return firstValueFrom(this.http.get<any>(url, { params }));
   }
 
   /**
@@ -34,6 +35,11 @@ export class EstimatedAnnualProductionService extends BaseService {
   sync(): Promise<any> {
     const url = `${this.api}/${this.path}/sync`;
     // const params = new HttpParams({ fromObject: body });
+    return firstValueFrom(this.http.get<any>(url));
+  }
+
+  listYear(): Promise<any> {
+    const url = `${this.api}/${this.path}/list-years?type=0`;
     return firstValueFrom(this.http.get<any>(url));
   }
 }
