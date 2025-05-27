@@ -17,4 +17,9 @@ export class GroupMailService extends BaseService {
     const params = new HttpParams({ fromObject: { marketCode: marketCode } });
     return firstValueFrom(this.http.get<DetailResponse<T>>(url, { params }));
   }
+
+  getEmailSuggets<T = any>(): Promise<DetailResponse<T> | any> {
+    const url = `${this.api}/${this.path}/list`;
+    return firstValueFrom(this.http.get<DetailResponse<T>>(url));
+  }
 }

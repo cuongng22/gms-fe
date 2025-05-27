@@ -17,3 +17,26 @@
 .vna-color-icon-btn {
   color: var(--vnaXanhColor);
 }
+
+.email-input {
+  width: 100%;
+}
+
+.readonly-input {
+  padding: 8px;
+}
+
+mat-autocomplete {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+mat-autocomplete-panel {
+  z-index: 1000;
+}
+
+mat-error {
+  display: block !important;
+  color: red;
+  font-size: 12px;
+}
