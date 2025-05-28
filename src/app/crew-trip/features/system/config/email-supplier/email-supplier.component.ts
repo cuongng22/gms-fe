@@ -199,7 +199,11 @@ export class EmailSupplierComponent
 
   override async save() {
     try {
-      if (this.formGroupDetail.get('content')?.value == '<p></p>') {
+
+      const test = this.sanitizeService.sanitizeToString('<p>Dear all <br><script>alert("XSS")</script><br></p>');
+      console.log("aaaac âs dá ads a:",test);
+      let content = this.formGroupDetail.get('content')?.value;
+      if (content == '<p></p>') {
         this.formGroupDetail.get('content')?.setValue('');
         this.formGroupDetail.get('content')?.markAsTouched();
         this.formGroupDetail.get('content')?.updateValueAndValidity();
@@ -211,11 +215,18 @@ export class EmailSupplierComponent
       }
       const update = !!this.formGroupDetail.getRawValue().id;
       await this.spinner.show();
+      console.log("content: ", content)
+      const sanitizedContent = content ? this.sanitizeService.sanitizeToString(content) : '';
+      const payload = {
+        ...this.formGroupDetail.getRawValue(),
+        content: sanitizedContent
+      };
+      console.log('Payload:', payload);
       let res;
       if (update) {
-        res = await this.baseService.update(this.formGroupDetail.getRawValue());
+        res = await this.baseService.update(payload);
       } else {
-        res = await this.baseService.create(this.formGroupDetail.getRawValue());
+        res = await this.baseService.create(payload);
       }
       await this.search();
       this.baseService.showSuccess(
@@ -241,17 +252,19 @@ export class EmailSupplierComponent
     }
   }
 
-  onEditorChange(value: string) {
+  onEditorChange(value: string): void {
     if (!value || value === '<p></p>') {
       this.sanitizedContent = '';
+      this.formGroupDetail.get('content')?.setValue('', { emitEvent: false });
+      this.formGroupDetail.get('content')?.markAsTouched();
+      this.formGroupDetail.get('content')?.updateValueAndValidity({ onlySelf: true });
     } else {
-      const sanitizedValue = this.sanitizeService.sanitizeInput(value);
-      console.log("sanitizedValuesanitizedValue:",sanitizedValue)
-      if (sanitizedValue !== this.formGroupDetail.get('content')?.value) {
-        this.sanitizedContent = sanitizedValue;
-        this.formGroupDetail.get('content')?.setValue(this.sanitizedContent, { emitEvent: false });
-        this.formGroupDetail.get('content')?.updateValueAndValidity({ onlySelf: true });
-      }
+      const sanitizedValue = this.sanitizeService.sanitizeToString(value);
+      console.log('Sanitized value:', sanitizedValue); // Debug
+      this.sanitizedContent = this.sanitizeService.sanitizeToString(sanitizedValue);
+      // Không cập nhật form control ngay để tránh mất con trỏ
+      // Lưu giá trị gốc để đồng bộ khi save
+      this.formGroupDetail.get('content')?.setValue(sanitizedValue, { emitEvent: false });
     }
   }
 

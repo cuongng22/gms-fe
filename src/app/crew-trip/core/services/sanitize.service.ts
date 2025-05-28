@@ -1,21 +1,45 @@
 import { Injectable } from '@angular/core';
-import sanitizeHtml from 'sanitize-html';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
+import DOMPurify from 'dompurify';
 
 @Injectable({
   providedIn: 'root',
 })
 export class SanitizeService {
-  constructor() {}
+  constructor(private sanitizer: DomSanitizer) {}
 
-  sanitizeInput(input: string): string {
-    return sanitizeHtml(input, {
-      allowedTags: ['p', 'b', 'strong', 'i', 'ul', 'ol', 'li', 'a'], // Chỉ cho phép các thẻ này
-      allowedAttributes: {
-        a: ['href', 'title'], // Chỉ cho phép thuộc tính href, title trên thẻ <a>
-      },
-      allowedSchemes: ['http', 'https'], // Chỉ chấp nhận http:// và https://
-      allowedSchemesAppliedToAttributes: ['href'], // Áp dụng whitelist vào thuộc tính href
-      disallowedTagsMode: 'discard', // Loại bỏ các thẻ không hợp lệ
-    });
+  sanitize(htmlContent: string): SafeHtml {
+    const config = {
+      ALLOWED_TAGS: ['p', 'a', 'strong', 'em', 'div', 'span', 'ul', 'li', 'br'],
+      ALLOWED_ATTR: ['href', 'class', 'style'],
+      ALLOWED_URI_REGEXP: /^(https?:\/\/)/i,
+      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'style'],
+      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onchange', 'onmouseover', 'onmouseout'],
+      KEEP_CONTENT: true
+    };
+    // Decode HTML entities trước khi sanitize
+    const decodedContent = this.decodeHtml(htmlContent || '');
+    const cleanHtml = DOMPurify.sanitize(decodedContent, config);
+    return this.sanitizer.bypassSecurityTrustHtml(cleanHtml);
+  }
+
+  sanitizeToString(htmlContent: string): string {
+    const config = {
+      ALLOWED_TAGS: ['p', 'a', 'strong', 'em', 'div', 'span', 'ul', 'li', 'br'],
+      ALLOWED_ATTR: ['href', 'class', 'style'],
+      ALLOWED_URI_REGEXP: /^(https?:\/\/)/i,
+      FORBID_TAGS: ['script', 'iframe', 'object', 'embed', 'form', 'input', 'style'],
+      FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onchange', 'onmouseover', 'onmouseout'],
+      KEEP_CONTENT: true
+    };
+    // Decode HTML entities trước khi sanitize
+    const decodedContent = this.decodeHtml(htmlContent || '');
+    return DOMPurify.sanitize(decodedContent, config);
+  }
+
+  private decodeHtml(html: string): string {
+    const txt = document.createElement('textarea');
+    txt.innerHTML = html;
+    return txt.value;
   }
 }
