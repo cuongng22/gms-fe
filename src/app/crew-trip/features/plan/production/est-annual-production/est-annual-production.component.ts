@@ -245,7 +245,7 @@ export class EstAnnualProductionComponent extends CommonComponent implements OnI
   }
 
   async initYear() {
-    const years = await this.baseService.listYear();
+    const years = await this.baseService.listYear(0);
     if (years && years.data && years.data.length > 0) {
       this.formGroupSearch.controls.year.setValue(years.data[0]);
       this.years = years.data;
