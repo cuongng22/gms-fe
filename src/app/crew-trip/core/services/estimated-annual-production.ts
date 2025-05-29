@@ -38,8 +38,9 @@ export class EstimatedAnnualProductionService extends BaseService {
     return firstValueFrom(this.http.get<any>(url));
   }
 
-  listYear(): Promise<any> {
-    const url = `${this.api}/${this.path}/list-years?type=0`;
-    return firstValueFrom(this.http.get<any>(url));
+  listYear(type: number): Promise<any> {
+    const params = { type: type };
+    const url = `${this.api}/${this.path}/list-years`;
+    return firstValueFrom(this.http.get<any>(url, { params }));
   }
 }
