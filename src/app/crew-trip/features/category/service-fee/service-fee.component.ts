@@ -1,11 +1,11 @@
 import { CommonModule, NgClass, NgIf } from '@angular/common';
 import { HttpStatusCode } from '@angular/common/http';
 import {
-	Component,
 	CUSTOM_ELEMENTS_SCHEMA,
-	inject,
+	Component,
 	NO_ERRORS_SCHEMA,
 	OnInit,
+	inject,
 } from '@angular/core';
 import {
 	AbstractControl,
@@ -86,7 +86,7 @@ export class ServiceFeeComponent extends CommonComponent implements OnInit {
 			value: 'name',
 		},
 		{ label: $localize`Unit`, value: 'unit' },
-		{ label: $localize`Note`, value: 'description' },
+		{ label: $localize`Remarks`, value: 'description' },
 		{
 			label: $localize`Status`,
 			value: 'activeLabel',
