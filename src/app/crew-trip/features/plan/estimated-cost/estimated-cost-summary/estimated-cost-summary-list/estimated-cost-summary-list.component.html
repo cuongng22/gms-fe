@@ -1,304 +1,310 @@
 <mat-card class="mb-10  pl-0 pr-0 border-radius d-block bg-white border-0 shadow-none">
-    <mat-card-header class="mb-10">
-        <mat-card-title>
-            <!-- <h5 i18n="@@planSummaryList">Plan Summary List</h5> -->
-        </mat-card-title>
-        <mat-card-subtitle>
-            @if (categoryType()){
-            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_UPDATE_STATUS_MULTI_INSERT']"
-                class="add-btn mr-10" type="button" mat-button (click)="completed()">
-                <i class="material-symbols-outlined">
-                    check_circle
-                </i>
-                <span i18n="@@completed">Completed</span>
-            </button>
-            }
-            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_EXPORT_INSERT']" class="add-btn mr-10"
-                type="button" mat-button>
-                <i class="material-symbols-outlined">
-                    download
-                </i>
-                <span i18n="@@export">Export</span>
-            </button>
-            <!-- <button class="add-btn" type="button" mat-button>
-                <i class="material-symbols-outlined">
-                    add
-                </i>
-                <span i18n="@@createPlan">Create Plan</span>
-            </button> -->
-        </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
-                <ng-container matColumnDef="select">
-                    <th mat-header-cell *matHeaderCellDef class="text-center">
-                        <mat-checkbox (change)="$event ? toggleAllRows() : null"
-                            [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="indeterminateSelection()" [aria-label]="checkboxLabel()">
-                        </mat-checkbox>
-                    </th>
-                    <ng-container *matCellDef="let row">
-                        <td class="text-center" mat-cell>
-                            <mat-checkbox (click)="$event.stopPropagation()"
-                                (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
-                                [disabled]="row.status === StatusSummaryEnum.COMPLETED">
-                            </mat-checkbox>
-                        </td>
-                    </ng-container>
+	<mat-card-header class="mb-10">
+		<mat-card-title>
+			<!-- <h5 i18n="@@planSummaryList">Plan Summary List</h5> -->
+		</mat-card-title>
+		<mat-card-subtitle>
+			@if (categoryType()) {
+				<button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_UPDATE_STATUS_MULTI_INSERT']"
+								class="add-btn mr-10" type="button" mat-button (click)="completed()">
+					<i class="material-symbols-outlined">
+						check_circle
+					</i>
+					<span i18n="@@completed">Completed</span>
+				</button>
+			}
+			<button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_EXPORT_INSERT']" class="add-btn mr-10"
+							type="button" mat-button>
+				<i class="material-symbols-outlined">
+					download
+				</i>
+				<span i18n="@@export">Export</span>
+			</button>
+			<!-- <button class="add-btn" type="button" mat-button>
+					<i class="material-symbols-outlined">
+							add
+					</i>
+					<span i18n="@@createPlan">Create Plan</span>
+			</button> -->
+		</mat-card-subtitle>
+	</mat-card-header>
+	<mat-card-content>
+		<div class="table-responsive">
+			<table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+				<ng-container matColumnDef="select">
+					<th mat-header-cell *matHeaderCellDef class="text-center">
+						<mat-checkbox (change)="$event ? toggleAllRows() : null"
+													[checked]="selection.hasValue() && isAllSelected()"
+													[indeterminate]="indeterminateSelection()" [aria-label]="checkboxLabel()">
+						</mat-checkbox>
+					</th>
+					<ng-container *matCellDef="let row">
+						<td class="text-center" mat-cell>
+							<mat-checkbox (click)="$event.stopPropagation()"
+														(change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"
+														[disabled]="row.status === StatusSummaryEnum.COMPLETED">
+							</mat-checkbox>
+						</td>
+					</ng-container>
 
-                </ng-container>
-                <ng-container matColumnDef="stt">
-                    <th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center">#</th>
-                    <td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">{{ i + 1 }}</td>
-                </ng-container>
-                <ng-container matColumnDef="category" sticky>
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@category">
-                        Category
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.category }}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="name" sticky>
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@goodsAndServicesCatalog">
-                        Goods and Services Catalog
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.serviceType === serviceType.HOTEL? 'Thuê Khách sạn tổ bay tại ':
-                        'Thuê xe chở tổ bay tại ' }}
-                        {{element.name}}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="unitPrice">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@unitPrice">
-                        Unit Price
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        @if(element.serviceType === serviceType.HOTEL){
-                        <span>
+				</ng-container>
+				<ng-container matColumnDef="stt">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header class="font-weight-bold text-center">#</th>
+					<td mat-cell *matCellDef="let element; let i = dataIndex" class="text-center">{{ i + 1 }}</td>
+				</ng-container>
+				<ng-container matColumnDef="category" sticky>
+					<th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+							i18n="@@category">
+						Category
+					</th>
+					<td mat-cell *matCellDef="let element">
+						{{ element.category }}
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="name" sticky>
+					<th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+							i18n="@@goodsAndServicesCatalog">
+						Goods and Services Catalog
+					</th>
+					<td mat-cell *matCellDef="let element">
+						{{
+							element.serviceType === serviceType.HOTEL ? 'Thuê Khách sạn tổ bay tại ' :
+								'Thuê xe chở tổ bay tại '
+						}}
+						{{ element.name }}
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="unitPrice">
+					<th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+							i18n="@@unitPrice">
+						Unit Price
+					</th>
+					<td mat-cell *matCellDef="let element">
+						@if (element.serviceType === serviceType.HOTEL) {
+							<span>
                             <span class="text-secondary-bootstrap" i18n="@@singleRoom">Single Room</span>:<br />
                             <span [innerHTML]="getUnitPrice(element.unitPriceSingleHotel)"></span>
                         </span>
-                        <br>
-                        <span>
+							<br>
+							<span>
                             <span class="text-secondary-bootstrap" i18n="@@doubleRoom">Double Room</span>:<br />
                             <span [innerHTML]="getUnitPrice(element.unitPriceDoubleHotel)"></span>
                         </span>
-                        }@else{
-                        <span [innerHTML]="getUnitPrice(element.unitPriceCar)"></span>
-                        }
+						} @else {
+							<span [innerHTML]="getUnitPrice(element.unitPriceCar)"></span>
+						}
 
 
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="cost">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@cost">
-                        Cost
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{(element.serviceType === serviceType.HOTEL ? round(element.costHotel) :
-                        round(element.costCar)) | number}}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="budget">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold wrap-text text-center"
-                        i18n="@@budgetIncludingVat">
-                        Budget (Including VAT)
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{(element.serviceType === serviceType.HOTEL ? round(element.budgetVatHotel) :
-                        round(element.budgetVatCar)) | number}}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="vat">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@percentVAT">
-                        % VAT
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.vat}}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="notes">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@notes">
-                        Note
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.notes}}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="status">
-                    <th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
-                        i18n="@@status">
-                        Status
-                    </th>
-                    <td mat-cell *matCellDef="let element">
-                        {{element.statusName}}
-                    </td>
-                </ng-container>
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="cost">
+					<th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+							i18n="@@cost">
+						Cost
+					</th>
+					<td mat-cell *matCellDef="let element">
+						{{
+							(element.serviceType === serviceType.HOTEL ? round(element.costHotel) :
+								round(element.costCar)) | number
+						}}
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="budget">
+					<th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold wrap-text text-center"
+							i18n="@@budgetIncludingVat">
+						Budget (Including VAT)
+					</th>
+					<td mat-cell *matCellDef="let element">
+						{{
+							(element.serviceType === serviceType.HOTEL ? round(element.budgetVatHotel) :
+								round(element.budgetVatCar)) | number
+						}}
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="vat">
+					<th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+							i18n="@@percentVAT">
+						% VAT
+					</th>
+					<td mat-cell *matCellDef="let element">
+						{{ element.vat }}
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="notes">
+					<th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+							i18n="@@notes">
+						Remarks
+					</th>
+					<td mat-cell *matCellDef="let element">
+						{{ element.notes }}
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="status">
+					<th mat-sort-header mat-header-cell *matHeaderCellDef class="font-weight-bold text-center"
+							i18n="@@status">
+						Status
+					</th>
+					<td mat-cell *matCellDef="let element">
+						{{ element.statusName }}
+					</td>
+				</ng-container>
 
-                <ng-container matColumnDef="action" stickyEnd>
-                    <th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef
-                        class="font-weight-bold text-center" i18n="@@action">
-                        Action
-                    </th>
-                    <td mat-cell *matCellDef="let element; let i = dataIndex">
-                        <div class="action-buttons d-flex align-items-center justify-content-end">
-                            @if (categoryType() !== CategoriesEnum.ALL && element.status !==
-                            StatusSummaryEnum.COMPLETED) {
-                            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_UPDATE_STATUS_INSERT']"
-                                type="button" mat-button class="text-vna"
-                                (click)="changeStatus(element.id, StatusSummaryEnum.COMPLETED)">
-                                <i class="material-symbols-outlined " title="Completed" i18n-title="@@completed">
-                                    check_circle
-                                </i>
-                            </button>
-                            }
-                            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_DETAILS']" type="button"
-                                mat-button class="text-vna"
-                                [routerLink]="['/plan/est-plan/est-cost',element.planBudgetProcurementId,'summary',element.id,'detail']"
-                                [queryParams]="{'year-plan': element.yearPlan,'airport-code': element.airportCode,'category':element.category}"
-                                routerLinkActive="router-link-active">
-                                <i class="material-symbols-outlined " title="Detail" i18n-title="@@detail">
-                                    zoom_in
-                                </i>
-                            </button>
-                            @if (categoryType() !== CategoriesEnum.ALL && element.status !==
-                            StatusSummaryEnum.COMPLETED) {
-                            <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_DELETE']" type="button"
-                                mat-button title="Delete" i18n-title="@@delete" class="text-danger"
-                                (click)="showConfirmDelete(element.id)">
-                                <i class="material-symbols-outlined text-danger">
-                                    delete
-                                </i>
-                            </button>
-                            }
+				<ng-container matColumnDef="action" stickyEnd>
+					<th mat-header-cell mat-sort-header mat-header-cell *matHeaderCellDef
+							class="font-weight-bold text-center" i18n="@@action">
+						Action
+					</th>
+					<td mat-cell *matCellDef="let element; let i = dataIndex">
+						<div class="action-buttons d-flex align-items-center justify-content-end">
+							@if (categoryType() !== CategoriesEnum.ALL && element.status !==
+							StatusSummaryEnum.COMPLETED) {
+								<button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_UPDATE_STATUS_INSERT']"
+												type="button" mat-button class="text-vna"
+												(click)="changeStatus(element.id, StatusSummaryEnum.COMPLETED)">
+									<i class="material-symbols-outlined " title="Completed" i18n-title="@@completed">
+										check_circle
+									</i>
+								</button>
+							}
+							<button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_DETAILS']" type="button"
+											mat-button class="text-vna"
+											[routerLink]="['/plan/est-plan/est-cost',element.planBudgetProcurementId,'summary',element.id,'detail']"
+											[queryParams]="{'year-plan': element.yearPlan,'airport-code': element.airportCode,'category':element.category}"
+											routerLinkActive="router-link-active">
+								<i class="material-symbols-outlined " title="Detail" i18n-title="@@detail">
+									zoom_in
+								</i>
+							</button>
+							@if (categoryType() !== CategoriesEnum.ALL && element.status !==
+							StatusSummaryEnum.COMPLETED) {
+								<button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_DELETE']" type="button"
+												mat-button title="Delete" i18n-title="@@delete" class="text-danger"
+												(click)="showConfirmDelete(element.id)">
+									<i class="material-symbols-outlined text-danger">
+										delete
+									</i>
+								</button>
+							}
 
 
-                        </div>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="serviceType">
-                    <ng-container *matCellDef="let element">
-                        @if(element?.isFirst){
-                        @if(element.serviceType === 'Hotel'){
-                        @if (!!categoryType()) {
-                        <td class="text-center" mat-cell>
-                            <mat-checkbox (change)="$event ? toggleAllRows(serviceType.HOTEL) : null"
-                                [checked]="selection.hasValue() && isAllSelected(serviceType.HOTEL)"
-                                [indeterminate]="indeterminateSelection(serviceType.HOTEL)">
-                            </mat-checkbox>
-                        </td>
-                        }
-                        <td mat-cell class="" [attr.colspan]="22" class="bg-success-200">
-                            <span class="fw-bold">A. <span i18n="@@hotel">Hotel</span></span>
-                        </td>
-                        }@else if (element.serviceType === 'CarRental') {
-                        @if(!!categoryType()){
-                        <td class="text-center" mat-cell>
+						</div>
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="serviceType">
+					<ng-container *matCellDef="let element">
+						@if (element?.isFirst) {
+							@if (element.serviceType === 'Hotel') {
+								@if (!!categoryType()) {
+									<td class="text-center" mat-cell>
+										<mat-checkbox (change)="$event ? toggleAllRows(serviceType.HOTEL) : null"
+																	[checked]="selection.hasValue() && isAllSelected(serviceType.HOTEL)"
+																	[indeterminate]="indeterminateSelection(serviceType.HOTEL)">
+										</mat-checkbox>
+									</td>
+								}
+								<td mat-cell class="" [attr.colspan]="22" class="bg-success-200">
+									<span class="fw-bold">A. <span i18n="@@hotel">Hotel</span></span>
+								</td>
+							} @else if (element.serviceType === 'CarRental') {
+								@if (!!categoryType()) {
+									<td class="text-center" mat-cell>
 
-                            <mat-checkbox (change)="$event ? toggleAllRows(serviceType.CAR_RENTAL) : null"
-                                [checked]="selection.hasValue() && isAllSelected(serviceType.CAR_RENTAL)"
-                                [indeterminate]="indeterminateSelection(serviceType.CAR_RENTAL)">
-                            </mat-checkbox>
-                        </td>
-                        }
-                        <td mat-cell class="fw-bold" [attr.colspan]="22" class="bg-success-200">
-                            <span class="fw-bold"> B. <span i18n="@@transportation">Transportation</span></span>
-                        </td>
-                        }
+										<mat-checkbox (change)="$event ? toggleAllRows(serviceType.CAR_RENTAL) : null"
+																	[checked]="selection.hasValue() && isAllSelected(serviceType.CAR_RENTAL)"
+																	[indeterminate]="indeterminateSelection(serviceType.CAR_RENTAL)">
+										</mat-checkbox>
+									</td>
+								}
+								<td mat-cell class="fw-bold" [attr.colspan]="22" class="bg-success-200">
+									<span class="fw-bold"> B. <span i18n="@@transportation">Transportation</span></span>
+								</td>
+							}
 
-                        }
-                    </ng-container>
-                </ng-container>
+						}
+					</ng-container>
+				</ng-container>
 
-                <!-- Phần total cho từng mục Hotel, CarRental -->
-                <ng-container matColumnDef="total">
-                    <ng-container *matCellDef="let element">
-                        @if(element?.isLast){
-                        <td class="text-center " mat-cell [attr.colspan]="categoryType()?4:3">
-                            <span class="fw-bold">Total</span>
-                        </td>
+				<!-- Phần total cho từng mục Hotel, CarRental -->
+				<ng-container matColumnDef="total">
+					<ng-container *matCellDef="let element">
+						@if (element?.isLast) {
+							<td class="text-center " mat-cell [attr.colspan]="categoryType()?4:3">
+								<span class="fw-bold">Total</span>
+							</td>
 
-                        }
-                    </ng-container>
-                </ng-container>
+						}
+					</ng-container>
+				</ng-container>
 
-                <ng-container matColumnDef="unitPriceTotal">
-                    <ng-container *matCellDef="let element">
-                        @if(element?.isLast){
-                        <td class="text-center " mat-cell>
-                        </td>
-                        }
-                    </ng-container>
-                </ng-container>
-                <ng-container matColumnDef="costTotal">
-                    <ng-container *matCellDef="let element">
-                        @if(element?.isLast){
-                        <td class="" mat-cell>
-                            <span class="fw-bold">{{getTotal('cost',element.serviceType, true) | number}}</span>
-                        </td>
-                        }
-                    </ng-container>
-                </ng-container>
-                <ng-container matColumnDef="budgetTotal">
-                    <ng-container *matCellDef="let element">
-                        @if(element?.isLast){
-                        <td class="" mat-cell>
-                            <span class="fw-bold">{{getTotal('budget',element.serviceType, true) | number}}</span>
-                        </td>
-                        }
-                    </ng-container>
-                </ng-container>
-                <ng-container matColumnDef="vatTotal">
-                    <ng-container *matCellDef="let element">
-                        @if(element?.isLast){
-                        <td class="" mat-cell>
-                        </td>
-                        }
-                    </ng-container>
-                </ng-container>
-                <ng-container matColumnDef="notesTotal">
-                    <ng-container *matCellDef="let element">
-                        @if(element?.isLast){
-                        <td class="" mat-cell>
-                        </td>
-                        }
-                    </ng-container>
-                </ng-container>
-                <ng-container matColumnDef="statusTotal">
-                    <ng-container *matCellDef="let element">
-                        @if(element?.isLast){
-                        <td class="" mat-cell>
-                        </td>
-                        }
-                    </ng-container>
-                </ng-container>
-                <ng-container matColumnDef="actionTotal">
-                    <ng-container *matCellDef="let element">
-                        @if(element?.isLast){
-                        <td class="" mat-cell>
-                        </td>
-                        }
-                    </ng-container>
-                </ng-container>
+				<ng-container matColumnDef="unitPriceTotal">
+					<ng-container *matCellDef="let element">
+						@if (element?.isLast) {
+							<td class="text-center " mat-cell>
+							</td>
+						}
+					</ng-container>
+				</ng-container>
+				<ng-container matColumnDef="costTotal">
+					<ng-container *matCellDef="let element">
+						@if (element?.isLast) {
+							<td class="" mat-cell>
+								<span class="fw-bold">{{ getTotal('cost', element.serviceType, true) | number }}</span>
+							</td>
+						}
+					</ng-container>
+				</ng-container>
+				<ng-container matColumnDef="budgetTotal">
+					<ng-container *matCellDef="let element">
+						@if (element?.isLast) {
+							<td class="" mat-cell>
+								<span class="fw-bold">{{ getTotal('budget', element.serviceType, true) | number }}</span>
+							</td>
+						}
+					</ng-container>
+				</ng-container>
+				<ng-container matColumnDef="vatTotal">
+					<ng-container *matCellDef="let element">
+						@if (element?.isLast) {
+							<td class="" mat-cell>
+							</td>
+						}
+					</ng-container>
+				</ng-container>
+				<ng-container matColumnDef="notesTotal">
+					<ng-container *matCellDef="let element">
+						@if (element?.isLast) {
+							<td class="" mat-cell>
+							</td>
+						}
+					</ng-container>
+				</ng-container>
+				<ng-container matColumnDef="statusTotal">
+					<ng-container *matCellDef="let element">
+						@if (element?.isLast) {
+							<td class="" mat-cell>
+							</td>
+						}
+					</ng-container>
+				</ng-container>
+				<ng-container matColumnDef="actionTotal">
+					<ng-container *matCellDef="let element">
+						@if (element?.isLast) {
+							<td class="" mat-cell>
+							</td>
+						}
+					</ng-container>
+				</ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: ['serviceType'];"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumnTotals;"></tr>
-                <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell text-center" colspan="99">No data!</td>
-                </tr>
-            </table>
-        </div>
-    </mat-card-content>
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: ['serviceType'];"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumnTotals;"></tr>
+				<tr class="mat-row" *matNoDataRow>
+					<td class="mat-cell text-center" colspan="99">No data!</td>
+				</tr>
+			</table>
+		</div>
+	</mat-card-content>
 </mat-card>
 
 <!-- End List  -->
@@ -306,38 +312,38 @@
 
 <!-- Dialog delete  -->
 <div class="add-new-popup" [class.active]="showDialogDelete">
-    <div class="popup-dialog dialog-delete-with">
-        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
-            <mat-card-content>
-                <div class="text-warning text-center">
+	<div class="popup-dialog dialog-delete-with">
+		<mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+			<mat-card-content>
+				<div class="text-warning text-center">
                     <span class="material-symbols-outlined font-size-5rem">
                         error
                     </span>
-                </div>
-                <div class="text-center mb-20">
-                    <h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
-                </div>
-                <div class="text-center mb-20">
+				</div>
+				<div class="text-center mb-20">
+					<h3 class="mb-0" i18n="@@deleteMessage">Are you sure you want to delete?</h3>
+				</div>
+				<div class="text-center mb-20">
                     <span class="font-weight-normal color-black font-size-19" i18n="@@warningDeleteMessage">
                         You will not be able to recover the deleted data!</span>
-                </div>
-                <div class="btn-box text-center">
-                    <button type="button" mat-button (click)="closeConfirmDelete()"
-                        class="close-btn  min-with-100 mlr-5">
-                        <i class="material-symbols-outlined">
-                            close
-                        </i>
-                        <span i18n="@@cancel">Cancel</span>
-                    </button>
-                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
-                        <i class="material-symbols-outlined">
-                            save
-                        </i>
-                        <span i18n="@@confirm">Confirm</span>
-                    </button>
+				</div>
+				<div class="btn-box text-center">
+					<button type="button" mat-button (click)="closeConfirmDelete()"
+									class="close-btn  min-with-100 mlr-5">
+						<i class="material-symbols-outlined">
+							close
+						</i>
+						<span i18n="@@cancel">Cancel</span>
+					</button>
+					<button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="delete()">
+						<i class="material-symbols-outlined">
+							save
+						</i>
+						<span i18n="@@confirm">Confirm</span>
+					</button>
 
-                </div>
-            </mat-card-content>
-        </mat-card>
-    </div>
+				</div>
+			</mat-card-content>
+		</mat-card>
+	</div>
 </div>
