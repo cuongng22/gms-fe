@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpStatusCode } from '@angular/common/http';
-import { Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, inject, OnInit } from '@angular/core';
 import {
 	FormControl,
 	FormsModule,
@@ -22,7 +22,7 @@ import {
 	FileUploadValidators,
 } from '@iplab/ngx-file-upload';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { Observable, of, take } from 'rxjs';
+import { Observable, of } from 'rxjs';
 import { ExchangeRateService } from 'src/app/crew-trip/core/services/exchange-rate.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
@@ -56,15 +56,17 @@ import {
 		MatTableModule,
 		MatPaginatorModule,
 		FileUploadComponent,
-		HasPermissionDirective, SelectionSuggestComponent
+		HasPermissionDirective,
+		SelectionSuggestComponent,
 	],
 	templateUrl: './rate-planned.component.html',
 	styleUrl: './rate-planned.component.scss',
-	providers: [HasPermissionDirective, DataTransformPipe]
+	providers: [HasPermissionDirective, DataTransformPipe],
 })
 export class RatePlannedComponent extends CommonComponent implements OnInit {
 	override baseService = inject(ExchangeRateService);
 	dataTransformPipe: DataTransformPipe = inject(DataTransformPipe);
+	cdr: ChangeDetectorRef = inject(ChangeDetectorRef);
 
 	showDialogUpload = false;
 	fileUpload = new FormControl<File[]>(
@@ -77,7 +79,7 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 	listYear: Observable<number[]> = of(
 		Array.from({ length: 10 }, (v, i) => 2024 + i),
 	);
-	listVersion: any[] = [] // Observable<string[]> = of([]);
+	listVersion: any[] = []; // Observable<string[]> = of([]);
 
 	version: string | null = null;
 	createdDate: string | null = null;
@@ -128,14 +130,19 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 	}
 
 	async initSearchVersion(params?: any) {
-		await this.baseService.getListVersion({ option: 1, ...removeNullValues(params) }).then((res) => {
-			this.listVersion = res.data;
-			if (this.listVersion) {
-				const firstVersion = this.listVersion[0];
-				this.formGroupSearch.controls.version.patchValue(firstVersion.version);
-
-			}
+		const res = await this.baseService.getListVersion({
+			option: 1,
+			...removeNullValues(params),
 		});
+		this.listVersion = res.data;
+		if (this.listVersion && this.listVersion.length > 0) {
+			const firstVersion = this.listVersion[0];
+			this.formGroupSearch.controls.version.patchValue(firstVersion.version);
+      this.cdr.detectChanges();
+		} else {
+			this.formGroupSearch.controls.version.patchValue('');
+      this.cdr.detectChanges();
+    }
 	}
 
 	override async search(body?: any, isNextPage?: boolean) {
@@ -155,8 +162,18 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 				limit: this.pageSize,
 				...(removeNullValues(body) ||
 					removeNullValues(this.formGroupSearch.value)),
-				startDate: startDate ? this.dataTransformPipe.transform(startDate, ['date', Constant.LOCAL_DATE_FORMAT]) : '',
-				endDate: endDate ? this.dataTransformPipe.transform(endDate, ['date', Constant.LOCAL_DATE_FORMAT]) : ''
+				startDate: startDate
+					? this.dataTransformPipe.transform(startDate, [
+							'date',
+							Constant.LOCAL_DATE_FORMAT,
+						])
+					: '',
+				endDate: endDate
+					? this.dataTransformPipe.transform(endDate, [
+							'date',
+							Constant.LOCAL_DATE_FORMAT,
+						])
+					: '',
 			});
 			if (res) {
 				if (res.status === HttpStatusCode.Ok) {
@@ -246,16 +263,17 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 		this.fileUpload.reset();
 	}
 
-
 	async sync() {
 		try {
 			await this.spinner.show();
 			await this.baseService.sync();
-			this.showSuccess(MESSAGE.SYNC_SUCCESS)
+			this.showSuccess(MESSAGE.SYNC_SUCCESS);
 		} catch (e: any) {
-			this.showError(e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR)
+			this.showError(
+				e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
+			);
 		} finally {
-			this.spinner.hide()
+			this.spinner.hide();
 		}
 	}
 
@@ -263,8 +281,14 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 		let startDate = this.formGroupSearch.controls.startDate.value;
 		let endDate = this.formGroupSearch.controls.endDate.value;
 		if (startDate && endDate) {
-			startDate = this.dataTransformPipe.transform(startDate, ['date', Constant.LOCAL_DATE_FORMAT]);
-			endDate = this.dataTransformPipe.transform(endDate, ['date', Constant.LOCAL_DATE_FORMAT]);
+			startDate = this.dataTransformPipe.transform(startDate, [
+				'date',
+				Constant.LOCAL_DATE_FORMAT,
+			]);
+			endDate = this.dataTransformPipe.transform(endDate, [
+				'date',
+				Constant.LOCAL_DATE_FORMAT,
+			]);
 			this.initSearchVersion({ startDate: startDate, endDate: endDate });
 		}
 	}
