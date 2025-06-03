@@ -48,6 +48,16 @@
                     </button>
                   </mat-date-range-picker-actions>
                 </mat-date-range-picker>
+                @if (!!formGroupSearch.controls['startDate'].hasError('matDatepickerParse')) {
+                  <mat-error i18n="@@startDateInvalidFormat">Created date invalid format</mat-error>
+                }
+                @if (!!formGroupSearch.controls['endDate'].hasError('matDatepickerParse')) {
+                  <mat-error i18n="@@endDateInvalidFormat">Created date invalid format</mat-error>
+                }
+                @if (formGroupSearch.controls.startDate.hasError('matStartDateInvalid') ||
+                     formGroupSearch.controls.endDate.hasError('matEndDateInvalid')) {
+                  <mat-error i18n="@@endDateMustBeAfterStartDate">End date must be after start date</mat-error>
+                }
               </mat-form-field>
             </div>
             <div class="col mb-2">
