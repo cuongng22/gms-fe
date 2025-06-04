@@ -510,7 +510,7 @@
             <div class="col-md-12 mt-15" sizeInput='sm'>
               <mat-form-field>
                 <mat-label i18n>To</mat-label>
-                <mat-select required formControlName="emailTo">
+                <mat-select required formControlName="emailTo" #controlEl [matTooltip]="controlEl.triggerValue">
                   @for (item of listEmailTo; track item) {
                     <mat-option [value]="item">{{ item }}</mat-option>
                   }
