@@ -8,7 +8,7 @@ import {cloneDeep, transform} from 'lodash';
 import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
 import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
 import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {InvoiceDocumentStatusEnum, InvoiceDocumentStatusPayment, InvoiceDocumentTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
+import {InvoiceDocumentStatusEnum, InvoiceDocumentTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
 import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
 import {ContractService} from "src/app/crew-trip/core/services/contract-service";
 import {HttpStatusCode} from "@angular/common/http";
@@ -18,6 +18,7 @@ import {debounceTime, filter, pairwise} from "rxjs";
 import {afterValidator, beforeValidator} from "src/app/crew-trip/shared/utils/common";
 import {quantity} from "src/app/crew-trip/shared/utils/error-message";
 import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
+import {MessageDialog} from 'src/app/crew-trip/shared/dialog/message-dialog/message-dialog';
 
 
 @Component({
@@ -612,27 +613,44 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
             bizDocId: res.data?.bizDocId,
             partnerCode: res.data?.partnerCode,
             partnerName: res.data?.partnerName,
-            currency: res.data?.currency,
+            // currency: res.data?.currency,
             description: description
           })
           //paymentDueDate
           let invoiceDate = this.formGroupDetail.getRawValue().invoiceDate;
           let _value = (moment(invoiceDate) || invoiceDate)?.add(res.data?.dueDateNumber || 0, 'days')
           this.formGroupDetail.patchValue({
-            paymentDueDate: _value?.format('YYYY-MM-DD') || ''
+            paymentDueDate: _value
           });
 
           //du lieu priceunit hd
-          this.tblInvoiceDocumentDtl = this.fb.array([]);
-          res.data?.priceUnitInfo.forEach((s: any) => {
-            let item = {
-              serviceCode: s.serviceCode,
-              vat: s.taxRate,
-              vatType: s.taxCode
-            }
-            let row = this.addRow(item);
-            this.changeServiceFee(row);
-          })
+          if (this.tblInvoiceDocumentDtl.length > 0) {
+            const dialogRef = this.dialog.open(MessageDialog, {
+              data: {
+                icon: 'warning',
+                mainText: 'Changing the payment period',
+                subText: 'It will automatically update the corresponding contract and clear all detailed payment information of the current invoice. Are you sure you want to proceed?'
+              }
+            });
+            dialogRef.afterClosed().subscribe(result => {
+              if (result) {
+                this.formGroupDetail.patchValue({
+                  currency: res.data?.currency,
+                })
+                this.tblInvoiceDocumentDtl = this.fb.array([]);
+                res.data?.priceUnitInfo.forEach((s: any) => {
+                  let item = {
+                    serviceCode: s.serviceCode,
+                    vat: s.taxRate,
+                    vatType: s.taxCode,
+                    unitPrice: s.priceNoTax
+                  }
+                  let row = this.addRow(item);
+                  this.changeServiceFee(row);
+                })
+              }
+            });
+          }
         } else {
           // this.showError($localize`Can not find any contract.`);
         }
@@ -755,11 +773,11 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       });
       this.formGroupDetail.controls['invoiceDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
         if (value && !this.firstLoad) {
-          this.formGroupDetail.patchValue({
+          /*this.formGroupDetail.patchValue({
             invoiceReceiveDate: '',
             periodFrom: '',
             periodTo: ''
-          });
+          });*/
           // this.formGroupDetail.controls['periodTo'].updateValueAndValidity();
           // this.formGroupDetail.controls['periodFrom'].updateValueAndValidity();
         }

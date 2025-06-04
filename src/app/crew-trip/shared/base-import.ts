@@ -43,6 +43,7 @@ import {NgxUpperCaseDirectiveModule} from "ngx-upper-case-directive";
 import {SelectMultipleComponent} from "src/app/crew-trip/shared/component/select-multiple/select-multiple.component";
 import {MatListModule} from "@angular/material/list";
 import {HasPermissionDirective} from "src/app/crew-trip/shared/directive/has-permission.directive";
+import { MessageDialog } from "./dialog/message-dialog/message-dialog";
 
 export const BaseImport = [
   FormsModule,
@@ -86,6 +87,7 @@ export const BaseImport = [
   NgxControlError,
   SelectionSuggestComponent,
   ConfirmDialog,
+  MessageDialog,
   ThousandsSeparatorDirective,
   ControlErrorComponent,
   SelectionSuggest2Component,
