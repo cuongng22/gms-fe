@@ -156,8 +156,26 @@
             <div class="col-sm-12 col-md-12 mb-2">
               <mat-form-field>
                 <mat-label i18n>Supplier payment email</mat-label>
-                <input formControlName="emailsInput" [required]="true" matInput>
-                <mat-hint align="start" i18n>Input multiple email addresses, separated by ;.</mat-hint>
+                <mat-chip-grid formControlName="emailsInput" #chipGrid aria-label="Enter email">
+                  @for (email of emails(); track email) {
+                  <mat-chip-row (removed)="remove(email)" [editable]="true" (edited)="edit(email, $event)"
+                    [aria-description]="'press enter to edit ' + email">
+                    {{email}}
+                    <button matChipRemove [attr.aria-label]="'remove ' + email">
+                      <i class="material-symbols-outlined" style="font-size: 15px;">
+                        close
+                      </i>
+                    </button>
+                  </mat-chip-row>
+                  }
+                  <input placeholder="New email..." [matChipInputFor]="chipGrid" (input)="emailInputChange($event)"
+                    [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
+                    (matChipInputTokenEnd)="add($event)" />
+
+                </mat-chip-grid>
+
+                <!-- <input formControlName="emailsInput" [required]="true" matInput>
+                <mat-hint align="start" i18n>Input multiple email addresses, separated by ;.</mat-hint> -->
                 @if (formGroupDetail.controls['emailsInput'].hasError('required')) {
                 <mat-error><span i18n>Supplier payment email</span><span i18n> is required</span></mat-error>
                 } @else if (formGroupDetail.controls['emailsInput'].hasError('invalid')) {

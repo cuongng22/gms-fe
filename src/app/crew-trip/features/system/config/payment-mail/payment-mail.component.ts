@@ -1,4 +1,4 @@
-import { Component, ElementRef, inject, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, inject, OnInit, signal, ViewChild } from '@angular/core';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
@@ -21,6 +21,9 @@ import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-mark
 import { HttpErrorResponse, HttpStatusCode } from '@angular/common/http';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { SelectionComponent } from "../../../../shared/component/selection/selection.component";
+import { MatChipEditedEvent, MatChipInputEvent, MatChipsModule } from '@angular/material/chips';
+import { LiveAnnouncer } from '@angular/cdk/a11y';
+import { COMMA, ENTER, SEMICOLON } from '@angular/cdk/keycodes';
 
 @Component({
   selector: 'app-payment-mail',
@@ -45,7 +48,7 @@ import { SelectionComponent } from "../../../../shared/component/selection/selec
     MatAutocomplete,
     MatAutocompleteTrigger,
     MatOption, HasPermissionDirective,
-    SelectionComponent
+    SelectionComponent, MatChipsModule
   ],
   templateUrl: './payment-mail.component.html',
   styleUrl: './payment-mail.component.scss',
@@ -71,12 +74,18 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
     type?: string;
     format?: string;
   }[] = [
-      { label: $localize`:@@type:Type`, value: 'type'},
+      { label: $localize`:@@type:Type`, value: 'type' },
       { label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
       { label: $localize`:@@name:Email`, value: 'emails' },
       { label: $localize`:@@note:Remark`, value: 'note' }
       // { label: $localize`:@@status:Status`, value: 'status' }
     ];
+
+  readonly emails = signal<string[]>([]);
+  readonly announcer = inject(LiveAnnouncer);
+  regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
+  mailFormatInvalid = false;
+  readonly separatorKeysCodes = [ENTER, COMMA, SEMICOLON] as const;
 
   constructor() {
     super();
@@ -90,7 +99,7 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
   override formGroupDetail = this.formBuilder.group({
     id: [''],
     marketCode: ['', [Validators.required]],
-    emailsInput: ['', [Validators.required, Validators.maxLength(500)]],
+    emailsInput: [[], [Validators.required, Validators.maxLength(500)]],
     note: ['', Validators.maxLength(500)],
     emails: [[''], [Validators.required]],
     type: ['', [Validators.required]],
@@ -109,14 +118,13 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 
   override async save() {
     try {
-      const emailInput = this.formGroupDetail.get('emailsInput')
-        ?.value;
+      const emailInput = this.formGroupDetail.controls.emailsInput?.value;
       if (emailInput) {
-        const emailList = emailInput
-          .split(';')
-          .map((email: string) => email.trim());
+        // const emailList = emailInput
+        //   .split(';')
+        //   .map((email: string) => email.trim());
         this.formGroupDetail.patchValue({
-          emails: emailList
+          emails: emailInput
         });
       }
       await super.save();
@@ -157,11 +165,13 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 
   override async showDialogDetail(id?: any, type?: string) {
     // const email = this.dataSource.data[id] ? this.dataSource.data[id] : '';
+    this.emails.set([]);
     if (id != null && type === 'index') {
-      const data = this.dataSource.data[id] as Data;
+      const data = { ...this.dataSource.data[id] as Data };
       if (typeof data.emails === 'string') {
         data.emailsInput = data.emails;
-        data.emails = data.emails ? data.emails.split(';') : [];
+        data.emails = data.emails ? data.emails.split(';').map(s => s.trim()) : [];
+        this.emails.set(data.emails);
       }
       // data.emailsInput = data.emails;
       this.formGroupDetail.patchValue(data);
@@ -174,6 +184,61 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
   onFocusMarket(): void {
     this.filteredOptionsMarket = this.markets;
     this.autocompleteTrigger.openPanel();
+  }
+
+  emailInputChange(event: any) {
+    this.mailFormatInvalid = false;
+  }
+
+  add(event: MatChipInputEvent): void {
+    const value = (event.value || '').trim();
+
+    // Add our fruit
+    if (value) {
+      if (this.regexEmail.test(value)) {
+        this.emails.update(emails => [...emails, value]);
+        // Clear the input value
+        this.mailFormatInvalid = false;
+        event.chipInput!.clear();
+      } else {
+        // this.formGroupDetail.controls.email.markAsTouched()
+        this.mailFormatInvalid = true;
+      }
+    }
+
+  }
+
+  remove(email: string): void {
+    this.emails.update(emails => {
+      const index = emails.indexOf(email);
+      if (index < 0) {
+        return emails;
+      }
+
+      emails.splice(index, 1);
+      this.announcer.announce(`Removed ${emails}`);
+      return [...emails];
+    });
+  }
+
+  edit(email: string, event: MatChipEditedEvent) {
+    const value = event.value.trim();
+
+    // Remove fruit if it no longer has a name
+    if (!value) {
+      this.remove(email);
+      return;
+    }
+
+    // Edit existing fruit
+    this.emails.update(emails => {
+      const index = emails.indexOf(email);
+      if (index >= 0) {
+        emails[index] = value;
+        return [...emails];
+      }
+      return emails;
+    });
   }
 }
 
