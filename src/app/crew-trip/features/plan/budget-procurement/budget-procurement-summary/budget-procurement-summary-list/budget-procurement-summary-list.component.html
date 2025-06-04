@@ -14,7 +14,7 @@
             </button>
             }
             <button *appHasPermission="['API_PLAN_BUDGET_PROCUREMENT_SUMMARY_EXPORT_INSERT']" class="add-btn mr-10"
-                type="button" mat-button>
+                type="button" mat-button (click)="exportFile({planBudgetProcurementId:planBudgetProcurementId()}, 'plan-budget-procurement-summary.xlsx', 'summary/export')">
                 <i class="material-symbols-outlined">
                     download
                 </i>

@@ -219,4 +219,6 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
     }
   }
 
+  
+
 }
