@@ -16,7 +16,7 @@
             <ng-container matColumnDef="totalRoomsInCurrentYear">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
                     i18n="@@totalRoomsInCurrentYear">
-                    Total rooms in current year
+                    Total rooms in {{yearPlan() - 1}}
                 </th>
             </ng-container>
             <ng-container matColumnDef="numberOfRoom">
@@ -82,7 +82,7 @@
             <ng-container matColumnDef="estimatedRoomsInPlannedYear">
                 <th mat-sort-header mat-header-cell *matHeaderCellDef class="fw-bold text-center" [attr.colspan]="2"
                     i18n="@@estimatedRoomsInPlannedYear">
-                    Estimated rooms in planned year
+                    Estimated rooms in {{yearPlan()}}
                 </th>
             </ng-container>
             <ng-container matColumnDef="singleRoom">
