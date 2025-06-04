@@ -423,7 +423,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
   async showDialogSendEmail(data: any) {
     this.toggleDialogCreate();
     try {
-      let res: any = await this.paymentMailService.getAirportEmail(data.airportCode, 'TRANSPORTATION');
+      let res: any = await this.paymentMailService.getAirportEmail(data.airportCode, 'TRANSPORT');
       if (res.status === HttpStatusCode.Ok) {
         this.listEmailTo = res.data.emails?.split(';').map((s: any) => s.trim());
       }
