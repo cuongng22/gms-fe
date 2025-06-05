@@ -1,0 +1,36 @@
+<!-- Delete confirm Popup -->
+<div class="add-new-popup active">
+  <div class="popup-dialog dialog-delete-with">
+    <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+      <mat-card-content>
+        <div class="text-warning text-center">
+                    <span class="material-symbols-outlined font-size-5rem">
+                        {{ data.icon }}
+                    </span>
+        </div>
+        <div class="text-center mb-20">
+          <h3 class="mb-0" i18n>{{ data.mainText }}</h3>
+        </div>
+        <div class="text-center mb-20">
+                    <span class="font-weight-normal color-black font-size-19" i18n>
+                        {{data.subText}}</span>
+        </div>
+        <div class="btn-box text-center">
+          <button (click)="closeConfirm()" class="close-btn  min-with-100 mlr-5" mat-button
+                  type="button">
+            <i class="material-symbols-outlined">
+              close
+            </i>
+            <span i18n>Cancel</span>
+          </button>
+          <button (click)="doConfirm()" class="add-btn min-with-100 mlr-5" mat-button type="button">
+            <i class="material-symbols-outlined">
+              save
+            </i>
+            <span i18n>Confirm</span>
+          </button>
+        </div>
+      </mat-card-content>
+    </mat-card>
+  </div>
+</div>
