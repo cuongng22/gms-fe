@@ -104,7 +104,7 @@ export class DialogSendMailComponent implements OnInit {
   environment = environment;
   async ngOnInit() {
     this.editor = new Editor();
-    
+
     this.formGroupDetail.patchValue({ ...this.data });
     await this.spinner.show();
     const emailClass = this.data.scheType === 'ESTIMATED_FLIGHT' ? 'ESTIMATED_SCHEDULE' : 'CHANGED_SCHEDULE';
@@ -114,7 +114,7 @@ export class DialogSendMailComponent implements OnInit {
         // this.formGroupDetail.controls.email.setValue(res.data);
         // this.formGroupDetail.controls.email.disable();
       }),
-      this.emailSupplierService.content({ emailClass: emailClass, marketCode: this.data.marketCode, fileType:this.data.fileType?this.data.fileType:'' }).then((res: DetailResponse<any>) => {
+      this.emailSupplierService.content({ emailClass: emailClass, marketCode: this.data.marketCode, fileType: this.data.fileType ? this.data.fileType : '' }).then((res: DetailResponse<any>) => {
         this.formGroupDetail.controls.title.setValue(res.data.title);
         this.formGroupDetail.controls.content.setValue(res.data.content);
       })
@@ -137,11 +137,10 @@ export class DialogSendMailComponent implements OnInit {
           ...this.formGroupDetail.getRawValue(),
           attachment: this.fileAttachment
         }
-        this.emailTrackingService.create(body).then(res => {
-          this.close()
-        });
+        await this.emailTrackingService.create(body);
+        this.close()
       } catch (error) {
-
+        console.error('Error sending email:', error);
       } finally {
         this.spinner.hide();
       }
