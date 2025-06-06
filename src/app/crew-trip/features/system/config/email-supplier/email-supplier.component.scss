@@ -2,3 +2,18 @@ mat-error {
   font-style: italic;
   font-size: 12px;
 }
+
+.mat-column-airports {
+  word-wrap: break-word !important;
+  white-space: unset !important;
+  min-width: 250px !important;
+  max-width: 250px !important;
+  overflow-wrap: break-word;
+
+  word-break: break-word;
+
+  -ms-hyphens: auto;
+  -moz-hyphens: auto;
+  -webkit-hyphens: auto;
+  hyphens: auto;
+}
