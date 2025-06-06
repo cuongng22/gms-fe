@@ -31,7 +31,7 @@ export class ShowMessageComponent {
   showError(message: string | undefined) {
     if (message) {
       this.showNotification(message, {
-        duration: 3000,
+        // duration: 3000,
         horizontalPosition: 'right',
         verticalPosition: 'top',
         data: { type: 'error', message: message }
