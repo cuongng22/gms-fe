@@ -170,6 +170,23 @@ export class EmailSupplierComponent
 		if (id != null && type === 'index') {
 		} else if (id != null) {
 			await this.detail(id);
+			if (this.formGroupDetail.controls.marketClass.value === 'DOMESTIC') {
+				this.airports = (
+					await this._flightMarketService.search({
+						option: 1,
+						// status: 'Operational',
+						type: 'Domestic',
+					})
+				).data;
+			} else {
+				this.airports = (
+					await this._flightMarketService.search({
+						option: 1,
+						// status: 'Operational',
+						type: 'International',
+					})
+				).data;
+			}
 		}
 		this.toggleDialogCreate();
 	}
