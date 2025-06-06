@@ -376,13 +376,22 @@ export class CommonComponent
 
   findInvalidControls(formData: FormGroup) {
     const invalid = [];
+    const errorMessages: string[] = [];
     const controls = formData.controls;
     for (const name in controls) {
       if (controls[name].invalid) {
         invalid.push(name);
+        const errors = controls[name].errors;
+        if (errors) {
+          Object.keys(errors).forEach(errorKey => {
+            const errorMsg = this.errorMessages[name][errorKey];
+            errorMessages.push(errorMsg);
+          });
+        }
       }
     }
     console.log(invalid)
+    return errorMessages;
   }
 
   async loadListFlightMarket(param?: any) {

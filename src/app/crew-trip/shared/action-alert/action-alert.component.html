@@ -1,22 +1,35 @@
 @if (type === 'success') {
-  <div class="alert alert-bg-success d-flex align-items-center" role="alert">
+  <div class="alert alert-bg-success d-flex align-items-center message-pre-line" role="alert">
     <i class="ri-check-double-line"></i>
     {{ message }}
   </div>
 } @else if (type === 'warning') {
-  <div class="alert alert-bg-warning d-flex align-items-center" role="alert">
+  <div class="alert alert-bg-warning d-flex align-items-center message-pre-line" role="alert">
     <i class="ri-error-warning-line"></i>
     {{ message }}
   </div>
 } @else if (type === 'info') {
-  <div class="alert alert-bg-info d-flex align-items-center" role="alert">
+  <div class="alert alert-bg-info d-flex align-items-center message-pre-line" role="alert">
     <i class="ri-error-warning-line"></i>
     {{ message }}
   </div>
-}
-@else if (type === 'error') {
-  <div class="alert alert-bg-danger d-flex align-items-center" role="alert">
+} @else if (type === 'error') {
+  <div class="alert alert-bg-danger d-flex align-items-center message-pre-line" role="alert">
     <i class="ri-error-danger-line"></i>
     {{ message }}
+    @if (!pinned) {
+      <button class="ml-auto text-white" mat-icon-button (click)="pin()">
+        <i class="material-symbols-outlined fs-20">
+          keep
+        </i>
+      </button>
+    } @else {
+      <button class="ml-auto text-white" mat-icon-button (click)="close()">
+        <i class="material-symbols-outlined fs-20">
+          keep_off
+        </i>
+      </button>
+    }
+
   </div>
 }
