@@ -9,6 +9,7 @@ import {
 	MatCardSubtitle,
 	MatCardTitle,
 } from '@angular/material/card';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import {
@@ -70,6 +71,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 		DataCalculateTotal,
 		DatePipe,
 		MatNoDataRow,
+		MatDialogModule,
 	],
 })
 export class HotelCostTrackingComponent
@@ -234,8 +236,8 @@ export class HotelCostTrackingComponent
 		this.formGroupSearch.controls['marketCode'].setValue(this.markets[0]);
 		//Create list year
 		const currentYear = new Date().getFullYear();
-		const startYear = Math.floor(currentYear / 100) * 100;
-		const endYear = startYear + 99;
+		const startYear = currentYear - 5;
+		const endYear = currentYear + 5;
 
 		for (let year = startYear; year <= endYear; year++) {
 			this.listYear.push(year);
@@ -243,9 +245,9 @@ export class HotelCostTrackingComponent
 
 		//default current month
 		const month = new Date().getMonth() + 1;
-		this.formGroupSearch.controls['month'].setValue(
-			month < 10 ? '0' + month : month.toString(),
-		);
+		const monthString = month < 10 ? '0' + month : month.toString();
+		this.formGroupSearch.controls['month'].setValue(monthString);
+
 		//default current year
 		this.formGroupSearch.controls['year'].setValue(new Date().getFullYear());
 		this.formGroupSearchInit = { ...this.formGroupSearch.value };
@@ -272,4 +274,6 @@ export class HotelCostTrackingComponent
 		exportObj = { ...exportObj, export: true };
 		await this.exportFileOptions(exportObj);
 	}
+
+	openExportDialog() {}
 }

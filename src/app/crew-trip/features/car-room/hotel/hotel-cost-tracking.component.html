@@ -53,6 +53,12 @@
         </i>
         <span i18n="@@export">Export</span>
       </button>
+      <button class="add-btn mr-10" type="button" mat-button (click)="openExportDialog()">
+        <i class="material-symbols-outlined">
+          filter_alt
+        </i>
+        <span i18n="@@exportFiltered">Export with Filters</span>
+      </button>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
@@ -456,7 +462,7 @@
         </ng-container>
 
         <ng-container matColumnDef="totalCharge">
-          <th mat-header-cell *matHeaderCellDef class="text-right" [rowSpan]="2">Total Charge (ngoại tệ)</th>
+          <th mat-header-cell *matHeaderCellDef class="text-right" [rowSpan]="2">Total Charge (Currency)</th>
           <td mat-cell *matCellDef="let element"> {{ element.totalCharge | number }}</td>
           <td mat-footer-cell *matFooterCellDef>
             {{ tableData | dataCalculateTotal: 'totalCharge' | number }}
@@ -482,3 +488,4 @@
     </div>
   </mat-card-content>
 </mat-card>
+
