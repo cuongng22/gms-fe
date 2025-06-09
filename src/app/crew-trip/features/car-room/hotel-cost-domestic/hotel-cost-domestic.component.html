@@ -51,6 +51,12 @@
         </i>
         <span i18n="@@export">Export</span>
       </button>
+      <button class="add-btn mr-10" type="button" mat-button (click)="openExportDialog()">
+        <i class="material-symbols-outlined">
+          filter_alt
+        </i>
+        <span i18n="@@exportFiltered">Export with Filters</span>
+      </button>
     </mat-card-subtitle>
   </mat-card-header>
   <mat-card-content>
@@ -127,3 +133,4 @@
     </div>
   </mat-card-content>
 </mat-card>
+

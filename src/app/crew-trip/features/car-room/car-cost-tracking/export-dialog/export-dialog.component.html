@@ -1,0 +1,56 @@
+<h2 mat-dialog-title>Export with Filters</h2>
+<mat-dialog-content>
+  <div class="container pt-15 pb-15">
+    <form [formGroup]="exportForm">
+      <div class="row mb-15">
+        <div class="col-12" sizeInput="sm">
+          <app-select-multiple
+            label="Airport code"
+            [options]="markets"
+            [required]="true"
+            formControlName="marketCode"
+            size="sm"
+          ></app-select-multiple>
+        </div>
+      </div>
+
+      <div class="row mb-15">
+        <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6" sizeInput="sm">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Month</mat-label>
+            <mat-select formControlName="month" placeholder="Month">
+              @for (month of monthSelection; track month) {
+                <mat-option [value]="month">{{ month }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+        <div class="col-md-6 col-xs-6 col-sm-6 col-lg-6" sizeInput="sm">
+          <mat-form-field appearance="outline" class="w-100">
+            <mat-label>Year</mat-label>
+            <mat-select formControlName="year" placeholder="Year">
+              @for (year of listYear; track year) {
+                <mat-option [value]="year">{{ year }}</mat-option>
+              }
+            </mat-select>
+          </mat-form-field>
+        </div>
+      </div>
+    </form>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button (click)="onCancel()" class="close-btn">
+		<i class="material-symbols-outlined">
+			close
+		</i>
+		<span i18n="@@cancel">Cancel</span>
+	</button>
+  <button class="add-btn" mat-button color="primary" (click)="onExport()" [disabled]="!exportForm.valid">
+		<i class="material-symbols-outlined">
+			download
+		</i>
+		<span i18n="@@export">Export</span>
+	</button>
+</mat-dialog-actions>
