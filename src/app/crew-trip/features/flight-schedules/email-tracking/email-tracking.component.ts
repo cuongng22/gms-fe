@@ -105,6 +105,7 @@ export class EmailTrackingComponent extends CommonComponent {
 		'dataFile', //'fcFile', 'ccFile',
 		'totalFile',
 		'exportTime',
+		'exportBy',
 		'emailTime',
 		'isEmailSent',
 		'isSendSuccess',

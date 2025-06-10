@@ -157,7 +157,15 @@
 							class="font-weight-bold text-center">File export time
 					</th>
 					<td mat-cell *matCellDef="let element">
-						{{ element.exportTime | dataTransformPipe:[Constant.DATE, 'DD/MM/YYYY'] }}
+						{{ element.exportTime | dataTransformPipe:[Constant.DATE, 'HH:mm DD/MM/YYYY', 'UTC'] }}
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="exportBy">
+					<th mat-header-cell *matHeaderCellDef mat-sort-header i18n="@@fileExportTime"
+							class="font-weight-bold text-center">User Export
+					</th>
+					<td mat-cell *matCellDef="let element">
+						{{ element.exportBy }}
 					</td>
 				</ng-container>
 				<ng-container matColumnDef="emailTime">
@@ -165,7 +173,7 @@
 							class="font-weight-bold text-center">Email sent time
 					</th>
 					<td mat-cell *matCellDef="let element">
-						{{ element.emailTime | dataTransformPipe:[Constant.DATE, Constant.DATE_FORMAT] }}
+						{{ element.emailTime | dataTransformPipe:[Constant.DATE, 'HH:mm DD/MM/YYYY', 'UTC'] }}
 					</td>
 				</ng-container>
 				<ng-container matColumnDef="isEmailSent">

@@ -1,124 +1,120 @@
 <mat-card class="mb-10 mt-10 p-0 border-radius d-block bg-white border-0 shadow-none">
-    <mat-card-header class="mb-10">
-        <mat-card-title></mat-card-title>
-        <mat-card-subtitle>
-            <button class="add-btn mr-10" type="button" mat-button (click)="markAsRead()">
-                <i class="material-symbols-outlined">
-                    done_all
-                </i>
-                <span i18n="@@export">mark as read</span>
-            </button>
-        </mat-card-subtitle>
-    </mat-card-header>
-    <mat-card-content>
-        <div class="table-responsive">
-            <table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
-                <ng-container matColumnDef="select">
-                    <th *matHeaderCellDef mat-header-cell>
-                        <mat-checkbox (change)="$event ? toggleAllRows() : null" [aria-label]="checkboxLabel()"
-                            [checked]="selection.hasValue() && isAllSelected()"
-                            [indeterminate]="selection.hasValue() && !isAllSelected()">
-                        </mat-checkbox>
-                    </th>
-                    <td *matCellDef="let row" mat-cell>
-                        <mat-checkbox (change)="$event ? selection.toggle(row) : null"
-                            (click)="$event.stopPropagation()" [aria-label]="checkboxLabel(row)"
-                            [checked]="selection.isSelected(row)" [disabled]="row.isRead">
-                        </mat-checkbox>
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="receiver">
-                    <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@receiver">
-                        Receiver
-                    </th>
-                    <td mat-cell *matCellDef="let element;" class="text-center">
-                        {{element.receiver}}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="title">
-                    <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@title">
-                        Title
-                    </th>
-                    <td mat-cell *matCellDef="let element;" class="text-center">
-                        {{element.title}}
-                    </td>
-                </ng-container>
-                <ng-container matColumnDef="content">
-                    <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@content">
-                        Content
-                    </th>
-                    <td mat-cell *matCellDef="let element;" class="text-center">
-                        {{element.content}}
-                    </td>
-                </ng-container>
+	<mat-card-header class="mb-10">
+		<mat-card-title></mat-card-title>
+		<mat-card-subtitle>
+			<button class="add-btn mr-10" type="button" mat-button (click)="markAsRead()">
+				<i class="material-symbols-outlined">
+					done_all
+				</i>
+				<span i18n="@@export">Mark as read</span>
+			</button>
+		</mat-card-subtitle>
+	</mat-card-header>
+	<mat-card-content>
+		<div class="table-responsive">
+			<table mat-table [dataSource]="dataSource" multiTemplateDataRows="true" class="table-light">
+				<ng-container matColumnDef="select">
+					<th *matHeaderCellDef mat-header-cell>
+						<mat-checkbox (change)="$event ? toggleAllRows() : null" [aria-label]="checkboxLabel()"
+													[checked]="selection.hasValue() && isAllSelected()"
+													[indeterminate]="selection.hasValue() && !isAllSelected()">
+						</mat-checkbox>
+					</th>
+					<td *matCellDef="let row" mat-cell>
+						<mat-checkbox (change)="$event ? selection.toggle(row) : null"
+													(click)="$event.stopPropagation()" [aria-label]="checkboxLabel(row)"
+													[checked]="selection.isSelected(row)" [disabled]="row.isRead">
+						</mat-checkbox>
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="receiver">
+					<th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@receiver">
+						Receiver
+					</th>
+					<td mat-cell *matCellDef="let element;" class="text-center">
+						{{ element.receiver }}
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="title">
+					<th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@title">
+						Title
+					</th>
+					<td mat-cell *matCellDef="let element;" class="text-center">
+						{{ element.title }}
+					</td>
+				</ng-container>
+				<ng-container matColumnDef="content">
+					<th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@content">
+						Content
+					</th>
+					<td mat-cell *matCellDef="let element;" class="text-center">
+						{{ element.content }}
+					</td>
+				</ng-container>
 
-                <ng-container matColumnDef="timeSend">
-                    <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@sentTime">
-                        Sent time
-                    </th>
-                    <td mat-cell *matCellDef="let element;" class="text-center">
-                        {{element.timeSend | dataTransformPipe:[Constant.DATE, 'HH:mm:ss DD/MM/YYYY']}}
-                    </td>
-                </ng-container>
+				<ng-container matColumnDef="timeSend">
+					<th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@sentTime">
+						Sent time
+					</th>
+					<td mat-cell *matCellDef="let element;" class="text-center">
+						{{ element.timeSend | dataTransformPipe:[Constant.DATE, 'HH:mm:ss DD/MM/YYYY'] }}
+					</td>
+				</ng-container>
 
-                <ng-container matColumnDef="status">
-                    <th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@status">
-                        Status
-                    </th>
-                    <td mat-cell *matCellDef="let element;" class="text-center">
-                        {{element.status ? READ:UNREAD}}
-                    </td>
-                </ng-container>
+				<ng-container matColumnDef="status">
+					<th mat-header-cell *matHeaderCellDef class="text-center" i18n="@@status">
+						Status
+					</th>
+					<td mat-cell *matCellDef="let element;" class="text-center">
+						{{ element.status ? READ : UNREAD }}
+					</td>
+				</ng-container>
 
-                <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-                <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
-                <tr class="mat-row" *matNoDataRow>
-                    <td class="mat-cell text-center" colspan="999999">No data!</td>
-                </tr>
-            </table>
-            <mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
-                [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
-                [pageIndex]="pageIndex" aria-label="Select page" i18n-aria-label="@@selectPage">
-            </mat-paginator>
-        </div>
-    </mat-card-content>
+				<tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+				<tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+				<tr class="mat-row" *matNoDataRow>
+					<td class="mat-cell text-center" colspan="999999">No data!</td>
+				</tr>
+			</table>
+			<mat-paginator (page)="onPageChange($event)" [length]="totalElement" [pageSize]="pageSize"
+										 [showFirstLastButtons]="showFirstLastButtons" [pageSizeOptions]="pageSizeOptions"
+										 [pageIndex]="pageIndex" aria-label="Select page" i18n-aria-label="@@selectPage">
+			</mat-paginator>
+		</div>
+	</mat-card-content>
 </mat-card>
-
-
-
-
 
 
 <!-- Dialog delete FlightMarket -->
 <div class="add-new-popup" [class.active]="showDialogDelete">
-    <div class="popup-dialog dialog-delete-with">
-        <mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
-            <mat-card-content>
-                <div class="text-warning text-center">
+	<div class="popup-dialog dialog-delete-with">
+		<mat-card class="border-radius d-block bg-white border-0 shadow-none width-percent-100">
+			<mat-card-content>
+				<div class="text-warning text-center">
                     <span class="material-symbols-outlined font-size-5rem">
                         error
                     </span>
-                </div>
-                <div class="text-center mb-20">
-                    <h3 class="mb-0" i18n="@@deleteMessage">Confirm marking these notifications as read?</h3>
-                </div>
-                <div class="btn-box text-center">
-                    <button type="button" mat-button (click)="closeConfirmDelete()"
-                        class="close-btn  min-with-100 mlr-5">
-                        <i class="material-symbols-outlined">
-                            close
-                        </i>
-                        <span i18n="@@cancel">Cancel</span>
-                    </button>
-                    <button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="confirmMaskAsRead()">
-                        <i class="material-symbols-outlined">
-                            save
-                        </i>
-                        <span i18n="@@confirm">Confirm</span>
-                    </button>
+				</div>
+				<div class="text-center mb-20">
+					<h3 class="mb-0" i18n="@@deleteMessage">Confirm marking these notifications as read?</h3>
+				</div>
+				<div class="btn-box text-center">
+					<button type="button" mat-button (click)="closeConfirmDelete()"
+									class="close-btn  min-with-100 mlr-5">
+						<i class="material-symbols-outlined">
+							close
+						</i>
+						<span i18n="@@cancel">Cancel</span>
+					</button>
+					<button mat-button type="button" class="add-btn min-with-100 mlr-5" (click)="confirmMaskAsRead()">
+						<i class="material-symbols-outlined">
+							save
+						</i>
+						<span i18n="@@confirm">Confirm</span>
+					</button>
 
-                </div>
-            </mat-card-content>
-        </mat-card>
-    </div>
+				</div>
+			</mat-card-content>
+		</mat-card>
+	</div>
 </div>
