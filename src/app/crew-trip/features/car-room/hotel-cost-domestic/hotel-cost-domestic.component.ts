@@ -1,33 +1,44 @@
 import { CommonModule, DatePipe, DecimalPipe } from '@angular/common';
-import { Component, OnInit, TemplateRef, ViewChild, inject } from '@angular/core';
-import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import {
+	Component,
+	OnInit,
+	TemplateRef,
+	ViewChild,
+	inject,
+} from '@angular/core';
+import {
+	FormBuilder,
+	FormsModule,
+	ReactiveFormsModule,
+	Validators,
+} from '@angular/forms';
 import { MatButton } from '@angular/material/button';
-import { MatCard, MatCardContent, MatCardModule, MatCardActions } from '@angular/material/card';
+import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
 import { MatOption } from '@angular/material/core';
-import { MatDialog, MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule, MatLabel } from '@angular/material/form-field';
 import { MatSelect } from '@angular/material/select';
 import {
-  MatCell,
-  MatCellDef,
-  MatColumnDef,
-  MatFooterCell,
-  MatFooterCellDef,
-  MatFooterRow,
-  MatFooterRowDef,
-  MatHeaderCell,
-  MatHeaderCellDef,
-  MatHeaderRow,
-  MatHeaderRowDef,
-  MatNoDataRow,
-  MatRow,
-  MatRowDef,
-  MatTable,
+	MatCell,
+	MatCellDef,
+	MatColumnDef,
+	MatFooterCell,
+	MatFooterCellDef,
+	MatFooterRow,
+	MatFooterRowDef,
+	MatHeaderCell,
+	MatHeaderCellDef,
+	MatHeaderRow,
+	MatHeaderRowDef,
+	MatNoDataRow,
+	MatRow,
+	MatRowDef,
+	MatTable,
 } from '@angular/material/table';
 import { AvesCostRoomTrackingService } from 'src/app/crew-trip/core/services/aves-cost-room-tracking.service';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
+import { HotelExportDialogComponent } from 'src/app/crew-trip/features/car-room/hotel/export-dialog/hotel-export-dialog.component';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataCalculateTotal } from 'src/app/crew-trip/shared/data-calculate-total';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
@@ -43,7 +54,6 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 		MatCardContent,
 		ReactiveFormsModule,
 		SelectionSuggestComponent,
-		SelectMultipleComponent,
 		MatLabel,
 		MatOption,
 		MatSelect,
@@ -78,7 +88,20 @@ export class HotelCostDomesticComponent
 	implements OnInit
 {
 	markets: string[] = [];
-	monthSelection: string[] = [];
+	monthSelection: string[] = [
+		'01',
+		'02',
+		'03',
+		'04',
+		'05',
+		'06',
+		'07',
+		'08',
+		'09',
+		'10',
+		'11',
+		'12',
+	];
 	listYear: number[] = [];
 	fb: FormBuilder = inject(FormBuilder);
 	flightMarketService = inject(FlightMarketService);
@@ -181,9 +204,7 @@ export class HotelCostDomesticComponent
 
 	constructor() {
 		super();
-		for (let i = 1; i <= 12; i++) {
-			this.monthSelection.push(i + '');
-		}
+
 		const currentYear = new Date().getFullYear();
 		const startYear = Math.floor(currentYear / 100) * 100;
 		const endYear = startYear + 99;
@@ -239,9 +260,10 @@ export class HotelCostDomesticComponent
 				status: 'Operational',
 			})
 		).data;
+		const month = new Date().getMonth() + 1;
 		this.formGroupSearch.patchValue({
 			marketCode: this.markets[0],
-			month: new Date().getMonth() + 1 + '',
+			month: month < 10 ? '0' + month : month.toString(),
 			year: new Date().getFullYear(),
 		});
 		await this.search();
@@ -268,7 +290,20 @@ export class HotelCostDomesticComponent
 	}
 
 	openExportDialog() {
-		this.dialog.open(this.exportDialog);
+		const dialogRef = this.dialog.open(HotelExportDialogComponent, {
+			width: '500px',
+			position: { top: '100px' },
+			data: {
+				markets: this.markets,
+				monthSelection: this.monthSelection,
+				listYear: this.listYear,
+			},
+		});
+		dialogRef.afterClosed().subscribe(async (result) => {
+			if (result) {
+				await this.exportFileOptions(result);
+			}
+		});
 	}
 
 	closeExportDialog() {

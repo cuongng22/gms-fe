@@ -9,6 +9,12 @@ import {
 } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import {
+	MatCard,
+	MatCardContent,
+	MatCardHeader,
+	MatCardTitle,
+} from '@angular/material/card';
+import {
 	MAT_DIALOG_DATA,
 	MatDialogModule,
 	MatDialogRef,
@@ -21,7 +27,7 @@ import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/sele
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 
 @Component({
-	selector: 'app-export-dialog',
+	selector: 'app-hotel-export-dialog',
 	standalone: true,
 	imports: [
 		CommonModule,
@@ -34,12 +40,16 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 		MatSelectModule,
 		SelectMultipleComponent,
 		InputSizeComponent,
+		MatCard,
+		MatCardHeader,
+		MatCardTitle,
+		MatCardContent,
 		BaseImport,
 	],
-	templateUrl: './export-dialog.component.html',
-	styleUrls: ['./export-dialog.component.scss'],
+	templateUrl: './hotel-export-dialog.component.html',
+	styleUrls: ['./hotel-export-dialog.component.scss'],
 })
-export class ExportDialogComponent implements OnInit {
+export class HotelExportDialogComponent implements OnInit {
 	exportForm: FormGroup;
 	markets: string[] = [];
 	monthSelection: string[] = [];
@@ -47,7 +57,7 @@ export class ExportDialogComponent implements OnInit {
 	fb: FormBuilder = inject(FormBuilder);
 
 	constructor(
-		public dialogRef: MatDialogRef<ExportDialogComponent>,
+		public dialogRef: MatDialogRef<HotelExportDialogComponent>,
 		@Inject(MAT_DIALOG_DATA) public data: any,
 	) {
 		this.exportForm = this.fb.group({
