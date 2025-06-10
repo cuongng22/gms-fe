@@ -9,7 +9,7 @@ import {
 	MatCardSubtitle,
 	MatCardTitle,
 } from '@angular/material/card';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import {
@@ -34,6 +34,7 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataCalculateTotal } from 'src/app/crew-trip/shared/data-calculate-total';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { HotelExportDialogComponent } from './export-dialog/hotel-export-dialog.component';
 
 @Component({
 	selector: 'app-hotel-cost-tracking',
@@ -79,6 +80,7 @@ export class HotelCostTrackingComponent
 	implements OnInit
 {
 	override baseService = inject(AvesCostRoomTrackingService);
+	override dialog = inject(MatDialog);
 	markets: string[] = [];
 	monthSelection = [
 		'01',
@@ -275,5 +277,21 @@ export class HotelCostTrackingComponent
 		await this.exportFileOptions(exportObj);
 	}
 
-	openExportDialog() {}
+	openExportDialog() {
+		const dialogRef = this.dialog.open(HotelExportDialogComponent, {
+			width: '500px',
+			position: { top: '100px' },
+			data: {
+				markets: this.markets,
+				monthSelection: this.monthSelection,
+				listYear: this.listYear,
+			},
+		});
+
+		dialogRef.afterClosed().subscribe(async (result) => {
+			if (result) {
+				await this.exportFileOptions(result);
+			}
+		});
+	}
 }
