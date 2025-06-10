@@ -46,11 +46,11 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 		MatTabGroup,
 		MatTab,
 		PaymentEmailComponent,
-		HasPermissionDirective
+		HasPermissionDirective,
 	],
 	templateUrl: './group-mail.component.html',
 	styleUrl: './group-mail.component.scss',
-	providers: [HasPermissionDirective]
+	providers: [HasPermissionDirective],
 })
 export class GroupMailComponent extends CommonComponent implements OnInit {
 	override baseService = inject(GroupMailService);
@@ -61,11 +61,11 @@ export class GroupMailComponent extends CommonComponent implements OnInit {
 		type?: string;
 		format?: string;
 	}[] = [
-			{ label: $localize`:@@name:Name`, value: 'groupName' },
-			{ label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
-			{ label: $localize`:@@note:Description`, value: 'notes' },
-			// { label: $localize`:@@status:Status`, value: 'status' }
-		];
+		{ label: $localize`:@@name:Name`, value: 'groupName' },
+		{ label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
+		{ label: $localize`:@@note:Description`, value: 'notes' },
+		// { label: $localize`:@@status:Status`, value: 'status' }
+	];
 
 	constructor() {
 		super();

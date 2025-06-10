@@ -75,7 +75,7 @@
           <td *matCellDef="let element;let i = dataIndex" mat-cell>
             <div class="action-buttons d-flex align-items-center justify-content-end">
               <a *appHasPermission="['API_PAYMENT_MAIL_UPDATE']" type="button" mat-button
-                (click)="showDialogDetail(i,'index')">
+                (click)="showDialogDetail(element.id)">
                 <i class="material-symbols-outlined text-warning" title="Edit" i18n-title="@@edit">
                   edit
                 </i>
@@ -126,32 +126,24 @@
       <mat-card-content>
         <form [formGroup]="formGroupDetail" autocomplete="off">
           <div class="row">
+						<div class="col-sm-12 col-md-12 mb-2">
+							<mat-form-field>
+								<mat-label i18n>Group name</mat-label>
+								<input formControlName="groupName" matInput required sizeInput="sm">
+								@if (formGroupDetail.controls['groupName'].hasError('required')) {
+								<mat-error><span i18n>Group name</span><span i18n> is required</span></mat-error>
+								} @else if (formGroupDetail.controls['groupName'].hasError('maxlength')) {
+								<mat-error><span i18n>Group name</span><span i18n> must be less than 100 characters</span></mat-error>
+								}
+							</mat-form-field>
+						</div>
             <div class="col-sm-12 col-md-12 mb-2">
-              <app-selection size="lg" formControlName="type" label="Type" i18n-label="@@label"
+              <app-selection size="sm" formControlName="type" label="Type" i18n-label="@@label"
                 [options]="types"></app-selection>
             </div>
             <div class="col-sm-12 col-md-12 mb-2">
-              <mat-form-field>
-                <mat-label i18n="@@airportCode">Airport code</mat-label>
-                <input type="text" #marketCode matInput formControlName="marketCode" [matAutocomplete]="marketComplete"
-                  [required]="true" (input)="filterMarket()" (focus)="onFocusMarket()">
-                <mat-autocomplete autoActiveFirstOption requireSelection #marketComplete="matAutocomplete">
-                  <mat-option [value]="null">
-                    -- Choose airport code --
-                  </mat-option>
-                  <mat-option *ngFor="let option of filteredOptionsMarket" [value]="option">
-                    {{ option }}
-                  </mat-option>
-                </mat-autocomplete>
-                @if (formGroupDetail.controls['marketCode'].hasError('required')) {
-                <mat-error><span i18n>Airport code</span><span i18n> is required</span></mat-error>
-                } @else if (formGroupDetail.controls['marketCode'].hasError('conflict')) {
-                <mat-error>
-                  <!--                    {{ formGroupDetail.controls['marketCode'].getError('message') }}-->
-                  Airport code has already existed in payment email config.
-                </mat-error>
-                }
-              </mat-form-field>
+								<app-selection-suggest i18n-label="@@airportCodes" label="Airport code" [options]="markets" formControlName="marketCode" size="sm">
+								</app-selection-suggest>
             </div>
             <div class="col-sm-12 col-md-12 mb-2">
               <mat-form-field>
@@ -170,7 +162,7 @@
                   }
                   <input placeholder="New email..." [matChipInputFor]="chipGrid" (input)="emailInputChange($event)"
                     [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
-                    (matChipInputTokenEnd)="add($event)" />
+                    (matChipInputTokenEnd)="add($event)" sizeInput="sm" />
 
                 </mat-chip-grid>
 
