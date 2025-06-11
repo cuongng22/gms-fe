@@ -308,7 +308,7 @@ export class EmailSupplierComponent
 				type: 'Domestic',
 			});
 			this.airports = marketList.data;
-			console.log(this.airports.length);
+			this.formGroupDetail.patchValue({ airports: '' });
 		} else {
 			const marketList = await this._flightMarketService.search({
 				option: 1,
@@ -316,7 +316,7 @@ export class EmailSupplierComponent
 				type: 'International',
 			});
 			this.airports = marketList.data;
-			console.log(this.airports.length);
+			this.formGroupDetail.patchValue({ airports: '' });
 		}
 	}
 
