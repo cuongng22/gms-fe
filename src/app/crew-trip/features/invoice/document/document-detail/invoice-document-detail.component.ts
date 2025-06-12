@@ -617,7 +617,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
             description: description
           })
           //paymentDueDate
-          let invoiceDate = this.formGroupDetail.getRawValue().invoiceDate;
+          let invoiceDate = this.formGroupDetail.getRawValue().invoiceReceiveDate;
           let _value = (moment(invoiceDate) || invoiceDate)?.add(res.data?.dueDateNumber || 0, 'days')
           this.formGroupDetail.patchValue({
             paymentDueDate: _value
