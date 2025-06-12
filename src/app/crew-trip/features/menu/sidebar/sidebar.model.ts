@@ -554,6 +554,12 @@ export const menu: Menu[] = [
 								icon: 'ri-mail-add-line',
 								permissionCode: ['API_PLANE_LIST'],
 							},
+							{
+								path: 'system/config/aves-config',
+								title: $localize`:@@avesConfig:AVES configuration`,
+								icon: 'ri-mail-add-line',
+								permissionCode: ['API_CONFIG_AVES_LIST'],
+							},
 						],
 					},
 					{

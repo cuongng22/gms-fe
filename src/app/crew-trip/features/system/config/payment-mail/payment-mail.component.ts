@@ -252,6 +252,11 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 			return emails;
 		});
 	}
+
+	override async closeDetail() {
+		await super.closeDetail();
+		this.emails.set([]);
+	}
 }
 
 interface Data {
