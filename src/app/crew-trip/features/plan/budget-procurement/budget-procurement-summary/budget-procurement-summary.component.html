@@ -35,7 +35,7 @@
             <mat-tab label="All" i18n="@@all">
                 <ng-template matTabContent>
                     <app-budget-procurement-summary-search categoryType="All"
-                        (searchEvent)="searchSummary($event,'All')">
+                        (searchEvent)="searchSummary($event,'All')" (formChangeEvent)="formSearchChange($event,'All')">
                     </app-budget-procurement-summary-search>
                     <app-budget-procurement-summary-list [planBudgetProcurementId]="id()"
                         #budgetProcurementSummaryListAll>
@@ -45,7 +45,7 @@
             <mat-tab label="International" i18n="@@international">
                 <ng-template matTabContent>
                     <app-budget-procurement-summary-search [categoryType]="CategoryEnum.INTERNATIONAL"
-                        (searchEvent)="searchSummary($event,CategoryEnum.INTERNATIONAL)">
+                        (searchEvent)="searchSummary($event,CategoryEnum.INTERNATIONAL)" (formChangeEvent)="formSearchChange($event,CategoryEnum.INTERNATIONAL)">
                     </app-budget-procurement-summary-search>
                     <app-budget-procurement-summary-list [categoryType]="CategoryEnum.INTERNATIONAL"
                         [planBudgetProcurementId]="id()" #budgetProcurementSummaryListInternational>
@@ -56,7 +56,7 @@
             <mat-tab label="Domestic" i18n="@@domestic">
                 <ng-template matTabContent>
                     <app-budget-procurement-summary-search [categoryType]="CategoryEnum.DOMESTIC"
-                        (searchEvent)="searchSummary($event,CategoryEnum.DOMESTIC)">
+                        (searchEvent)="searchSummary($event,CategoryEnum.DOMESTIC)" (formChangeEvent)="formSearchChange($event,CategoryEnum.DOMESTIC)">
                     </app-budget-procurement-summary-search>
                     <app-budget-procurement-summary-list [categoryType]="CategoryEnum.DOMESTIC"
                         [planBudgetProcurementId]="id()" #budgetProcurementSummaryListDomestic>
