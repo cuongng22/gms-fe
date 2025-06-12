@@ -35,6 +35,7 @@ import { DashboardComponent } from 'src/app/crew-trip/features/reports/dashboard
 import { Report11Component } from 'src/app/crew-trip/features/reports/report11/report11.component';
 import { RolesComponent } from 'src/app/crew-trip/features/roles/roles.component';
 import { AircraftDataComponent } from 'src/app/crew-trip/features/system/config/aircraft-data/aircraft-data.component';
+import { AvesConfigComponent } from 'src/app/crew-trip/features/system/config/aves-config/aves-config.component';
 import { EmailSupplierComponent } from 'src/app/crew-trip/features/system/config/email-supplier/email-supplier.component';
 import { GroupMailComponent } from 'src/app/crew-trip/features/system/config/group-mail/group-mail.component';
 import { NotificationComponent } from 'src/app/crew-trip/features/system/config/notification/notification.component';
@@ -151,6 +152,14 @@ export const routes: Routes = [
 						canActivate: [AuthGuard],
 						data: {
 							permissionCodes: ['API_NOTI_CONFIG_LIST', 'API_NOTI_SETUP_LIST'],
+						},
+					},
+					{
+						path: 'aves-config',
+						component: AvesConfigComponent,
+						canActivate: [AuthGuard],
+						data: {
+							permissionCodes: ['API_CONFIG_AVES_LIST'],
 						},
 					},
 				],

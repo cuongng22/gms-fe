@@ -114,7 +114,7 @@ export class EmailSupplierComponent
 		title: ['', [Validators.maxLength(250)]],
 		note: ['', [Validators.maxLength(500)]],
 		active: [true],
-		airports: [''],
+		airports: ['', Validators.required],
 	});
 
 	constructor(private sanitizeService: SanitizeService) {
