@@ -49,6 +49,26 @@ export class BudgetProcurementSummaryComponent extends CommonComponent implement
     console.log(data)
   }
 
+
+  formSearchChange(data: any, type: string) {
+    let bodySearch: any = {
+      status: data.status,
+      airportCodes: data.airportCodes
+    }
+    switch (type) {
+      case 'All':
+        bodySearch.category = data.category;
+        this.summaryAll.setBodyExport(bodySearch);
+        break;
+      case CategoryEnum.INTERNATIONAL:
+        this.summaryInternational.setBodyExport(bodySearch);
+        break;
+      case CategoryEnum.DOMESTIC:
+        this.summaryDomestic.setBodyExport(bodySearch);
+        break;
+    }
+  }
+
   override ngOnInit(): void {
   }
 }

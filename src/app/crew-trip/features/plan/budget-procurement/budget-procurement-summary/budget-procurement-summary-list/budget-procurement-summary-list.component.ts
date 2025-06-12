@@ -69,6 +69,15 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
     this.displayedColumnTotals = getDisplayedColumnTotals(type);
   }
 
+  setBodyExport(bodySearch: any) {
+    this.bodySearch = {
+      ...bodySearch,
+      planBudgetProcurementId: this.planBudgetProcurementId(),
+      category: this.categoryType()
+    }
+
+  }
+
   override async search(bodySearch?: any) {
     try {
       await this.spinner.show();
@@ -219,6 +228,6 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
     }
   }
 
-  
+
 
 }

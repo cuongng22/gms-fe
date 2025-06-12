@@ -42,6 +42,7 @@ export class BudgetProcurementSummarySearchComponent extends CommonComponent imp
 
   _categoryType: string = '';
   searchEvent = output<any>();
+  formChangeEvent = output<any>();
 
   @ViewChild('airport') airport: ElementRef<HTMLInputElement>;
   filteredOptionsAirport = model<any[]>([]);
@@ -60,7 +61,10 @@ export class BudgetProcurementSummarySearchComponent extends CommonComponent imp
 
   override ngOnInit(): void {
     const typeAirport = this.categoryType === CategoriesEnum.ALL || this.categoryType === 'All' ? '' : this.categoryType;
-    this.loadListFlightMarket({ type: typeAirport })
+    this.loadListFlightMarket({ type: typeAirport });
+    this.formGroupSearch.valueChanges.subscribe((value) => {
+      this.formChangeEvent.emit(value);
+    });
   }
 
 

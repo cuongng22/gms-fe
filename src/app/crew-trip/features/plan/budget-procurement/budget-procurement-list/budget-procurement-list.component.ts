@@ -32,6 +32,7 @@ import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection
 import { SelectMultipleComponent } from 'src/app/crew-trip/shared/component/select-multiple/select-multiple.component';
 import { EstimatedAnnualProductionService } from 'src/app/crew-trip/core/services/estimated-annual-production';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
+import { BudgetProcurementSummaryListComponent } from '../budget-procurement-summary/budget-procurement-summary-list/budget-procurement-summary-list.component';
 
 @Component({
   selector: 'app-budget-procurement-list',
@@ -50,6 +51,8 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
 
   private readonly destroyRef = inject(DestroyRef);
   override baseService = inject(PlanBudgetProcurementService);
+  // budgetProcurementSummaryListComponent = inject(BudgetProcurementSummaryListComponent);
+  planBudgetProcurementService = inject(PlanBudgetProcurementService);
 
   versions = model<any[]>([]);
   statuses = Statuses;
@@ -187,6 +190,18 @@ export class BudgetProcurementListComponent extends CommonComponent implements O
 
   toggleDialogReject() {
     this.showDialogReject = !this.showDialogReject;
+  }
+
+  export() {
+    if (this.selection.isEmpty()) {
+      this.baseService.showError($localize`:@@noPlanSelected:Cannot export data if no plan is selected`);
+      return;
+    }
+    if (this.selection.selected.length > 1) {
+      this.baseService.showError($localize`:@@cannotExportMultiplePlans:Cannot export multiple plans at once`);
+      return;
+    }
+    this.exportFile.bind(this)({ planBudgetProcurementId: this.selection.selected[0].id }, 'plan-budget-procurement-summary.xlsx', 'summary/export');
   }
 }
 
