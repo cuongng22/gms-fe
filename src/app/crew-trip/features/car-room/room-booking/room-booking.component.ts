@@ -7,6 +7,7 @@ import {
 	ReactiveFormsModule,
 	Validators,
 } from '@angular/forms';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatButton } from '@angular/material/button';
 import { MatCard, MatCardContent, MatCardModule } from '@angular/material/card';
 import {
@@ -22,7 +23,9 @@ import {
 	MatRowDef,
 	MatTable,
 } from '@angular/material/table';
+import moment from 'moment';
 import { RoomBookingService } from 'src/app/crew-trip/core/services/room-booking.service';
+import { BaseImport } from 'src/app/crew-trip/shared/base-import';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
@@ -30,6 +33,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 import { ListResponse } from 'src/app/crew-trip/shared/models/common.model';
 import { SelectOptions } from 'src/app/crew-trip/shared/select-option';
 import {
+	DATE_FORMAT_DD_MM_YYYY,
 	MESSAGE,
 	removeNullValues,
 } from 'src/app/crew-trip/shared/utils/constant';
@@ -59,6 +63,11 @@ import {
 		MatHeaderRowDef,
 		MatRowDef,
 		MatNoDataRow,
+		BaseImport,
+	],
+	providers: [
+		// provideMomentDateAdapter(),
+		provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
 	],
 	templateUrl: './room-booking.component.html',
 	styleUrl: './room-booking.component.scss',
@@ -71,32 +80,21 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
 	fb: FormBuilder = inject(FormBuilder);
 	markets: string[] = [];
 	listYear: number[] = [];
-	sheetIndex: number;
 	excelFile: Blob | null = null;
 	override displayedColumns: string[] = [];
 
 	constructor(private http: HttpClient) {
 		super();
-		for (let i = 1; i <= 12; i++) {
-			this.monthSelection.push(i + '');
-		}
-		//Create list year
-		const currentYear = new Date().getFullYear();
-		const currentMonth = new Date().getMonth() + 1 + '';
-		const startYear = 2020;
-		const endYear = startYear + 20;
-
-		for (let year = startYear; year <= endYear; year++) {
-			this.listYear.push(year);
-		}
 		this.formGroupSearch = this.fb.group({
 			scheduleType: ['2', [Validators.required]],
 			marketCode: ['', [Validators.required]],
-			month: [currentMonth, [Validators.required]],
-			year: [currentYear, [Validators.required]],
+			// month: [currentMonth, [Validators.required]],
+			// year: [currentYear, [Validators.required]],
 			type: ['FC', [Validators.required]],
 			timezone: ['FC'],
 			export: [false],
+			startDate: [''],
+			endDate: [''],
 		});
 	}
 
@@ -110,11 +108,14 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
 			this.markets = marketCodes.data;
 			this.formGroupSearch.patchValue({
 				marketCode: this.markets[0],
+				startDate: moment().startOf('month').format('YYYY/MM/DD'),
+				endDate: moment().endOf('month').format('YYYY/MM/DD'),
 			});
 		} catch (error: any) {
+			console.log('Error fetching market codes:', error);
 			this.showError(error);
 		}
-		this.search();
+		await this.search();
 		await this.spinner.hide();
 	}
 
@@ -151,6 +152,20 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
 				export: false,
 			});
 			this.formGroupSearch.markAllAsTouched();
+			if (this.formGroupSearch.getRawValue().startDate) {
+				this.formGroupSearch.patchValue({
+					startDate: moment(
+						this.formGroupSearch.getRawValue().startDate,
+					).format('YYYY-MM-DD'),
+				});
+			}
+			if (this.formGroupSearch.getRawValue().endDate) {
+				this.formGroupSearch.patchValue({
+					endDate: moment(this.formGroupSearch.getRawValue().endDate).format(
+						'YYYY-MM-DD',
+					),
+				});
+			}
 			if (this.formGroupSearch.invalid) {
 				this.findInvalidControls(this.formGroupSearch);
 				return;
@@ -181,6 +196,7 @@ export class RoomBookingComponent extends CommonComponent implements OnInit {
 				return res;
 			}
 		} catch (e: any) {
+			console.log(e);
 			this.baseService.showError(
 				e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
 			);
