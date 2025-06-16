@@ -34,17 +34,19 @@
         <mat-tab-group mat-stretch-tabs="false" mat-align-tabs="start">
             <mat-tab label="All" i18n="@@all">
                 <ng-template matTabContent>
-                    <app-estimated-cost-summary-search [categoryType]="CategoriesEnum.ALL" (searchEvent)="searchSummary($event,'All')">
+                    <app-estimated-cost-summary-search [categoryType]="CategoriesEnum.ALL"
+                        (searchEvent)="searchSummary($event,'All')" (formChangeEvent)="formSearchChange($event,'All')">
                     </app-estimated-cost-summary-search>
-                    <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.ALL" [planBudgetProcurementId]="id()"
-                        #budgetProcurementSummaryListAll>
+                    <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.ALL"
+                        [planBudgetProcurementId]="id()" #budgetProcurementSummaryListAll>
                     </app-estimated-cost-summary-list>
                 </ng-template>
             </mat-tab>
             <mat-tab label="International" i18n="@@international">
                 <ng-template matTabContent>
                     <app-estimated-cost-summary-search [categoryType]="CategoriesEnum.INTERNATIONAL"
-                        (searchEvent)="searchSummary($event,CategoriesEnum.INTERNATIONAL)">
+                        (searchEvent)="searchSummary($event,CategoriesEnum.INTERNATIONAL)"
+                        (formChangeEvent)="formSearchChange($event,CategoriesEnum.INTERNATIONAL)">
                     </app-estimated-cost-summary-search>
                     <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.INTERNATIONAL"
                         [planBudgetProcurementId]="id()" #estimatedCostSummaryListInternational>
@@ -55,7 +57,8 @@
             <mat-tab label="Domestic" i18n="@@domestic">
                 <ng-template matTabContent>
                     <app-estimated-cost-summary-search [categoryType]="CategoriesEnum.DOMESTIC"
-                        (searchEvent)="searchSummary($event,CategoriesEnum.DOMESTIC)">
+                        (searchEvent)="searchSummary($event,CategoriesEnum.DOMESTIC)"
+                        (formChangeEvent)="formSearchChange($event,CategoriesEnum.DOMESTIC)">
                     </app-estimated-cost-summary-search>
                     <app-estimated-cost-summary-list [categoryType]="CategoriesEnum.DOMESTIC"
                         [planBudgetProcurementId]="id()" #estimatedCostSummaryListDomestic>

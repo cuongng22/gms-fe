@@ -53,6 +53,7 @@ export class EstimatedCostSummarySearchComponent extends CommonComponent impleme
   categories = categories;
   // categoryOfPlans = categoryOfPlans;
   statuses = StatusesSummary;
+  formChangeEvent = output<any>();
 
   override  formGroupSearch = this.formBuilder.group({
     airportCodes: [''],
@@ -64,7 +65,10 @@ export class EstimatedCostSummarySearchComponent extends CommonComponent impleme
 
   override ngOnInit(): void {
     const typeAirport = this.categoryType === CategoriesEnum.ALL ? '' : this.categoryType;
-    this.loadListFlightMarket({ type: typeAirport })
+    this.loadListFlightMarket({ type: typeAirport });
+    this.formGroupSearch.valueChanges.subscribe((value) => {
+      this.formChangeEvent.emit(value);
+    });
   }
 
 
