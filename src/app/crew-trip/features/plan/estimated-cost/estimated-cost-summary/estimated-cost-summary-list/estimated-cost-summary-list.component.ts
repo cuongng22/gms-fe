@@ -48,6 +48,7 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
   displayedColumnTotals: string[] = [];
   bodySearch: any;
   round = round;
+  
 
   override baseService = inject(PlanBudgetProcurementService);
   override formGroupDetail = this.formBuilder.group({
@@ -62,6 +63,17 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
   setDisplayedColumns(type: string) {
     this.displayedColumns = getDisplayedColumns(type, this.categoryType());
     this.displayedColumnTotals = getDisplayedColumnTotals(type);
+  }
+
+
+  setBodyExport(bodySearch: any) {
+    this.bodySearch = {
+      ...bodySearch,
+      planBudgetProcurementId: this.planBudgetProcurementId(),
+      category: this.categoryType(),
+      type: 'UTH'
+    }
+
   }
 
   override async search(bodySearch?: any) {
