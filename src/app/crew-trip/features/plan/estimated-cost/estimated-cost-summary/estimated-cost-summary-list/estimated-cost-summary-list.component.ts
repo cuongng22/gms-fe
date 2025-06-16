@@ -48,7 +48,7 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
   displayedColumnTotals: string[] = [];
   bodySearch: any;
   round = round;
-  
+
 
   override baseService = inject(PlanBudgetProcurementService);
   override formGroupDetail = this.formBuilder.group({
@@ -85,7 +85,7 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
         category: this.categoryType(),
         ...bodySearch
       }
-      this.bodySearch = body
+      this.bodySearch = { ...body, type: 'UTH' };
       this.baseService.summarySearch(body).then((data: any) => {
         let firstHotelIndex = -1;
         let firstCarRentalIndex = -1;
