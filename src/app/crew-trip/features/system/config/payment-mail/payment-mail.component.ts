@@ -117,7 +117,7 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 	override formGroupDetail = this.formBuilder.group({
 		id: [''],
 		marketCode: ['', [Validators.required]],
-		emailsInput: [[], [Validators.required, Validators.maxLength(500)]],
+		emailsInput: [[''], [Validators.required, Validators.maxLength(500)]],
 		note: ['', Validators.maxLength(500)],
 		emails: [[''], [Validators.required]],
 		type: ['', [Validators.required]],
@@ -177,18 +177,18 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 		if (id != null) {
 			await this.spinner.show();
 			const res = await this.baseService.detail(id);
+			const emailList = res.data.emails
+				.split('; ')
+				.map((email: string) => email.trim());
 			this.formGroupDetail.patchValue({
 				id: res.data.id,
 				marketCode: res.data.marketCode,
-				emailsInput: res.data.emails,
-				note: res.data.note,
-				emails: res.data.emails,
+				emailsInput: emailList,
+				emails: emailList,
 				type: res.data.type,
 				groupName: res.data.groupName,
 			});
-			this.emails.set(
-				res.data.emails.split('; ').map((email: string) => email.trim()),
-			);
+			this.emails.set(emailList);
 			await this.spinner.hide();
 		}
 		this.toggleDialogCreate();
