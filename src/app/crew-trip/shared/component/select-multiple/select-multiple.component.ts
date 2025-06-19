@@ -9,16 +9,11 @@ import {
 	Input,
 	OnChanges,
 	OnInit,
-	Optional,
-	Self,
 	SimpleChanges,
 } from '@angular/core';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import {
-	ControlValueAccessor,
 	FormControl,
 	FormsModule,
-	NgControl,
 	ReactiveFormsModule,
 	Validators,
 } from '@angular/forms';
@@ -34,11 +29,10 @@ import { MatSelect, MatSelectModule } from '@angular/material/select';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
 import { NgxControlError } from 'ngxtension/control-error';
-import { debounceTime, tap } from 'rxjs';
+import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
+import { debounceTime } from 'rxjs';
 import { InputSizeComponent } from '../../input/input-size.component';
 import { MESSAGE } from '../../utils/constant';
-import { ClickOutside } from 'ngxtension/click-outside';
-import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
 
 @Component({
 	selector: 'app-select-multiple',
@@ -59,16 +53,15 @@ import { NgxControlValueAccessor } from 'ngxtension/control-value-accessor';
 		MatInputModule,
 		NgxControlError,
 		NgxTrimDirectiveModule,
-		ClickOutside
 	],
 	templateUrl: './select-multiple.component.html',
 	styleUrl: './select-multiple.component.scss',
 	hostDirectives: [NgxControlValueAccessor],
-	changeDetection: ChangeDetectionStrategy.OnPush
+	changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SelectMultipleComponent
-	implements OnInit, OnChanges, AfterViewInit, AfterViewChecked {
-
+	implements OnInit, OnChanges, AfterViewInit, AfterViewChecked
+{
 	@Input() placeholder = '';
 	@Input() size = 'sm';
 	@Input() label = '';
@@ -123,15 +116,13 @@ export class SelectMultipleComponent
 					return attr.toLowerCase().includes(keySearch.toLowerCase());
 				});
 
-				this.selectOptionsRaw = filteredOptions.length > 0 ? filteredOptions : [];//[...this.options];
-
+				this.selectOptionsRaw =
+					filteredOptions.length > 0 ? filteredOptions : []; //[...this.options];
 			}
 		});
 	}
-	ngAfterViewChecked(): void {
-	}
-	ngAfterViewInit(): void {
-	}
+	ngAfterViewChecked(): void {}
+	ngAfterViewInit(): void {}
 
 	ngOnChanges(changes: SimpleChanges) {
 		const ocSelectOptions = changes?.['selectOptions'];
@@ -149,7 +140,9 @@ export class SelectMultipleComponent
 	}
 
 	get formControl(): FormControl {
-		return (this.ngControl?.ngControl?.control as FormControl) ?? new FormControl();
+		return (
+			(this.ngControl?.ngControl?.control as FormControl) ?? new FormControl()
+		);
 	}
 	get requiredControl(): boolean {
 		return this.formControl.hasValidator(Validators.required);
@@ -219,15 +212,16 @@ export class SelectMultipleComponent
 	toggleSelectAll() {
 		this.allSelected = !this.allSelected;
 		const selectedValues = this.allSelected
-			? this.selectOptionsRaw.map(option => this.attrValue ? option[this.attrValue] : option)
+			? this.selectOptionsRaw.map((option) =>
+					this.attrValue ? option[this.attrValue] : option,
+				)
 			: [];
 		this.formControl.setValue(selectedValues);
-
 	}
 
 	openedChange(isOpen: boolean) {
 		if (!isOpen) {
-			this.search.setValue('')
+			this.search.setValue('');
 		}
 	}
 }

@@ -17,3 +17,9 @@ mat-error {
   -webkit-hyphens: auto;
   hyphens: auto;
 }
+.add-new-popup {
+  mat-card {
+    min-width: 119%;
+
+  }
+}

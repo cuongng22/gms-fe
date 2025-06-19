@@ -24,7 +24,6 @@ import {
 	MatLabel,
 } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatList } from '@angular/material/list';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
@@ -69,7 +68,6 @@ import { marketType, MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
 		MatPaginator,
 		MatAnchor,
 		HasPermissionDirective,
-		MatList,
 		BaseImport,
 	],
 	templateUrl: './email-supplier.component.html',
