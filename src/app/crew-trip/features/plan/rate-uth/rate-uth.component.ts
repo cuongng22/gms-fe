@@ -138,7 +138,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 		this.listVersion = data.data;
 		if (this.listVersion && this.listVersion.length > 0) {
 			const firstVersion = this.listVersion[0];
-			this.formGroupSearch.controls.version.patchValue(firstVersion.version);
+			this.formGroupSearch.patchValue({ version: firstVersion.version });
 			this.cdr.detectChanges();
 		} else {
 			this.formGroupSearch.controls.version.patchValue('');

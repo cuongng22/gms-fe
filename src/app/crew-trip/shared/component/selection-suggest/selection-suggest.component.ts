@@ -138,6 +138,9 @@ export class SelectionSuggestComponent
 		return this.formControl.hasValidator(Validators.required);
 	}
 
+	// Thêm biến private để lưu giá trị ban đầu
+	private _initialValue: any = null;
+
 	ngOnInit(): void {
 		this.keySearch
 			.pipe(debounceTime(500), distinctUntilChanged(), startWith(''))
@@ -162,8 +165,22 @@ export class SelectionSuggestComponent
 			});
 
 		this.selectionControl.writeValue = (value: any) => {
+			this._initialValue = value;
+			this.applyValueIfOptionsReady();
+		};
+	}
+
+	private applyValueIfOptionsReady(): void {
+		if (
+			this.options &&
+			this.options.length > 0 &&
+			this._initialValue !== undefined
+		) {
 			const selected = this.options.find((option: any) => {
-				return value === (this.attrValue ? option[this.attrValue] : option);
+				return (
+					this._initialValue ===
+					(this.attrValue ? option[this.attrValue] : option)
+				);
 			});
 			if (selected) {
 				this.viewControl.setValue(
@@ -172,7 +189,9 @@ export class SelectionSuggestComponent
 			} else {
 				this.viewControl.setValue('');
 			}
-		};
+		} else {
+			this.viewControl.setValue('');
+		}
 	}
 
 	setViewValueInit(value: any, force?: boolean) {
@@ -217,7 +236,9 @@ export class SelectionSuggestComponent
 	@Input() set options(options: any[]) {
 		this._options = options;
 		this.filtered.set([...(this._options ?? [])]);
-		this.setViewValueInit(this.formControl.value);
+
+		// Áp dụng giá trị đã lưu sau khi options được cập nhật
+		this.applyValueIfOptionsReady();
 	}
 
 	get options(): any[] {
