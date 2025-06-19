@@ -122,10 +122,10 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 		this.fileUpload.valueChanges.subscribe((value) => {
 			this.uploadFileError = {};
 		});
-		this.formGroupSearch.controls.startDate.valueChanges.subscribe(() => {
+		this.formGroupSearch.controls.startDate.valueChanges.subscribe(async () => {
 			this.changeCreatedDate();
 		});
-		this.formGroupSearch.controls.endDate.valueChanges.subscribe(() => {
+		this.formGroupSearch.controls.endDate.valueChanges.subscribe(async () => {
 			this.changeCreatedDate();
 		});
 	}
@@ -319,15 +319,29 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 		}
 	}
 
-	changeCreatedDate() {
+	async changeCreatedDate() {
 		let startDate = this.formGroupSearch.controls.startDate.value;
 		let endDate = this.formGroupSearch.controls.endDate.value;
 		if (startDate && endDate) {
-			this.initSearchVersion({
+			await this.initSearchVersion({
 				startDate: this.dataTransformPipe.transform(startDate, [
 					'date',
 					Constant.LOCAL_DATE_FORMAT,
 				]),
+				endDate: this.dataTransformPipe.transform(endDate, [
+					'date',
+					Constant.LOCAL_DATE_FORMAT,
+				]),
+			});
+		} else if (startDate) {
+			await this.initSearchVersion({
+				startDate: this.dataTransformPipe.transform(startDate, [
+					'date',
+					Constant.LOCAL_DATE_FORMAT,
+				]),
+			});
+		} else if (endDate) {
+			await this.initSearchVersion({
 				endDate: this.dataTransformPipe.transform(endDate, [
 					'date',
 					Constant.LOCAL_DATE_FORMAT,
