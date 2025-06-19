@@ -7,6 +7,7 @@ import {
 	ReactiveFormsModule,
 	Validators,
 } from '@angular/forms';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
@@ -31,6 +32,7 @@ import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-p
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import {
 	Constant,
+	DATE_FORMAT_DD_MM_YYYY,
 	MESSAGE,
 	removeNullValues,
 } from 'src/app/crew-trip/shared/utils/constant';
@@ -61,7 +63,11 @@ import {
 	],
 	templateUrl: './rate-planned.component.html',
 	styleUrl: './rate-planned.component.scss',
-	providers: [HasPermissionDirective, DataTransformPipe],
+	providers: [
+		HasPermissionDirective,
+		DataTransformPipe,
+		provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY),
+	],
 })
 export class RatePlannedComponent extends CommonComponent implements OnInit {
 	override baseService = inject(ExchangeRateService);
@@ -129,6 +135,46 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 		});
 	}
 
+	override async exportFileOptions(
+		body?: any,
+		filename?: string,
+		sourcePath?: string,
+	) {
+		try {
+			await this.spinner.show();
+			let startDate = this.formGroupSearch.controls.startDate.value;
+			let endDate = this.formGroupSearch.controls.endDate.value;
+			if (startDate) {
+				startDate = this.dataTransformPipe.transform(startDate, [
+					'date',
+					Constant.LOCAL_DATE_FORMAT,
+				]);
+			}
+			if (endDate) {
+				endDate = this.dataTransformPipe.transform(endDate, [
+					'date',
+					Constant.LOCAL_DATE_FORMAT,
+				]);
+			}
+			this.formGroupSearch.patchValue({
+				startDate: startDate,
+				endDate: endDate,
+				export: true,
+			});
+			const res = await this.baseService.exportDataOptions(
+				removeNullValues(body) || removeNullValues(this.formGroupSearch.value),
+			);
+			this.downloadFile(res.blob, filename ?? res.fileName);
+		} catch (e: any) {
+			console.log(e);
+			this.baseService.showError(
+				e.error?.data ?? e.error?.error ?? e.error ?? MESSAGE.ERROR,
+			);
+		} finally {
+			await this.spinner.hide();
+		}
+	}
+
 	async initSearchVersion(params?: any) {
 		const res = await this.baseService.getListVersion({
 			option: 1,
@@ -138,11 +184,11 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 		if (this.listVersion && this.listVersion.length > 0) {
 			const firstVersion = this.listVersion[0];
 			this.formGroupSearch.controls.version.patchValue(firstVersion.version);
-      this.cdr.detectChanges();
+			this.cdr.detectChanges();
 		} else {
 			this.formGroupSearch.controls.version.patchValue('');
-      this.cdr.detectChanges();
-    }
+			this.cdr.detectChanges();
+		}
 	}
 
 	override async search(body?: any, isNextPage?: boolean) {
@@ -290,6 +336,18 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 				Constant.LOCAL_DATE_FORMAT,
 			]);
 			this.initSearchVersion({ startDate: startDate, endDate: endDate });
+		} else if (endDate) {
+			endDate = this.dataTransformPipe.transform(endDate, [
+				'date',
+				Constant.LOCAL_DATE_FORMAT,
+			]);
+			this.initSearchVersion({ endDate: endDate });
+		} else if (startDate) {
+			startDate = this.dataTransformPipe.transform(startDate, [
+				'date',
+				Constant.LOCAL_DATE_FORMAT,
+			]);
+			this.initSearchVersion({ startDate: startDate });
 		}
 	}
 }
