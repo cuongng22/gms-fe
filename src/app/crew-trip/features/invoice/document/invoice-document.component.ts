@@ -429,8 +429,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
         this.listEmailTo = res.data.map((s: any) => ({groupName: s.groupName, emails: s.emails}));
       }
 
-      // let res1: any = await this.emailSupplierService.content({emailClass: 'INVOICE_CONFIRMATION', marketCode: data.airportCode,});
-      let res1: any = await this.emailSupplierService.content({emailClass: 'INVOICE_CONFIRMATION', marketCode: 'HPH'});
+      let res1: any = await this.emailSupplierService.content({emailClass: 'INVOICE_CONFIRMATION', marketCode: data.airportCode,});
       if (res1.status === HttpStatusCode.Ok) {
         this.listEmailSubject = res1.data;
       }
