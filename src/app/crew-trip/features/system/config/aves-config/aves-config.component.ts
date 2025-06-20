@@ -26,9 +26,11 @@ export class AvesConfigComponent extends CommonComponent {
 	}
 
 	override async ngOnInit() {
+		await this.spinner.show();
 		const data = await this.avesConfigService.search({});
 		this.dataSource = data?.data || [];
 		this.formGroupDetailInit = { ...this.formGroupDetail };
+		await this.spinner.hide();
 	}
 
 	editItem(item: any) {
@@ -49,7 +51,8 @@ export class AvesConfigComponent extends CommonComponent {
 		//validate month and date
 		const month = data.month; //current format = JAN, FEB
 		const date = data.date; //current format = 01, 02, ..., 31
-		if (!moment(month + date, 'MMM D', true).isValid()) {
+		const currentYear = new Date().getFullYear();
+		if (!moment(month + date + currentYear, 'MMMDDYYYY').isValid()) {
 			this.formGroupDetail.controls['date'].setErrors({
 				invalid: true,
 				code: 'INVALID_DATE_FORMAT',
@@ -62,6 +65,7 @@ export class AvesConfigComponent extends CommonComponent {
 			this.avesConfigService.update(data).then(() => {
 				this.toggleDialogCreate();
 				this.ngOnInit();
+				this.showSuccess('Update success');
 			});
 		} else {
 			this.avesConfigService.create(data).then(() => {

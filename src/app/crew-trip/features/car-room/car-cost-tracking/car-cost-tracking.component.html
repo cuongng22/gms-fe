@@ -115,9 +115,12 @@
                 {{ element[col.key] | date: 'dd/MM/yyyy' }}
               </ng-container>
               <ng-template #otherFields>
-                <ng-container *ngIf="['unitPrice', 'accessBridge', 'toll','tollTotal', 'airportParkFee', 'transitDuty', 'totalCharge', 'totalChargeVnd'].includes(col.name); else defaultField">
+                <ng-container *ngIf="['unitPrice', 'accessBridge', 'toll','tollTotal', 'airportParkFee', 'transitDuty', 'totalCharge'].includes(col.name); else defaultField">
                   {{ element[col.key] | number }}
                 </ng-container>
+								<ng-container *ngIf="col.name === 'totalChargeVnd'" >
+									{{ element[col.key] | number: '1.0-0' }}
+								</ng-container>
                 <ng-template #defaultField>
                   {{ element[col.key] }}
                 </ng-template>
