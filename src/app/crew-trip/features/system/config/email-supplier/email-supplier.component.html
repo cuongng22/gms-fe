@@ -196,7 +196,8 @@
 </mat-card>
 
 <!-- Add New Popup-->
-<div [class.active]="showDialogCreate" class="add-new-popup">
+
+<div *ngIf="showDialogCreate" [class.active]="showDialogCreate" class="add-new-popup">
 	<div class="popup-dialog" style="min-width: 800px;">
 		<mat-card class="border-radius d-block bg-white border-0 shadow-none container">
 			<mat-card-header>

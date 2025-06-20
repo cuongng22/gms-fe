@@ -24,6 +24,7 @@ import {
 } from '@iplab/ngx-file-upload';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { Observable, of } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { ExchangeRateService } from 'src/app/crew-trip/core/services/exchange-rate.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
@@ -122,12 +123,20 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 		this.fileUpload.valueChanges.subscribe((value) => {
 			this.uploadFileError = {};
 		});
-		this.formGroupSearch.controls.startDate.valueChanges.subscribe(async () => {
-			this.changeCreatedDate();
-		});
-		this.formGroupSearch.controls.endDate.valueChanges.subscribe(async () => {
-			this.changeCreatedDate();
-		});
+
+		// Add debounce time of 500ms to startDate valueChanges
+		this.formGroupSearch.controls.startDate.valueChanges
+			.pipe(debounceTime(800)) // Wait 500ms after the last change
+			.subscribe(async () => {
+				this.changeCreatedDate();
+			});
+
+		// Add debounce time of 500ms to endDate valueChanges
+		this.formGroupSearch.controls.endDate.valueChanges
+			.pipe(debounceTime(800)) // Wait 500ms after the last change
+			.subscribe(async () => {
+				this.changeCreatedDate();
+			});
 	}
 
 	async initSearchVersion(params?: any) {

@@ -74,6 +74,7 @@ export class SelectMultipleComponent
 	@Input() isSearch = true;
 	selectOptionsRaw: any[] = [];
 	MESSAGE = MESSAGE;
+	allSelected = false;
 
 	destroyRef: DestroyRef = inject(DestroyRef);
 
@@ -82,31 +83,19 @@ export class SelectMultipleComponent
 		NgxControlValueAccessor,
 	);
 
-	// constructor(@Optional() @Self() public ngControl: NgControl) {
-	// 	if (this.ngControl) {
-	// 		this.ngControl.valueAccessor = this;
-	// 	}
-	// }
-
 	@Input() set options(options: any[]) {
-		this._options = options;
-		this.selectOptionsRaw = [...this._options];
+		this._options = options || []; // Default to empty array if undefined
+		this.selectOptionsRaw = Array.isArray(this._options)
+			? [...this._options]
+			: [];
 	}
 
 	get options(): any[] {
-		return this._options;
+		return this._options || []; // Return empty array if _options is undefined
 	}
 
 	ngOnInit(): void {
 		this.selectOptionsRaw = [...this.options];
-		// this.formControl.valueChanges
-		// 	.pipe(
-		// 		debounceTime(200),
-		// 		tap((value) => this.onChange(value)),
-		// 		takeUntilDestroyed(this.destroyRef),
-		// 	)
-		// 	.subscribe();
-
 		this.search.valueChanges.pipe(debounceTime(200)).subscribe((keySearch) => {
 			if (!keySearch) {
 				this.selectOptionsRaw = [...this.options];
@@ -119,6 +108,11 @@ export class SelectMultipleComponent
 				this.selectOptionsRaw =
 					filteredOptions.length > 0 ? filteredOptions : []; //[...this.options];
 			}
+		});
+		//kiểm tra checkall
+		this.formControl.valueChanges.pipe(debounceTime(200)).subscribe((value) => {
+			this.allSelected =
+				Array.isArray(value) && value.length === this.selectOptionsRaw.length;
 		});
 	}
 	ngAfterViewChecked(): void {}
@@ -137,6 +131,7 @@ export class SelectMultipleComponent
 		if (changes['readonly']) {
 			this.updateEnableState();
 		}
+		console.log('changedddddd', this.selectOptionsRaw);
 	}
 
 	get formControl(): FormControl {
@@ -148,36 +143,11 @@ export class SelectMultipleComponent
 		return this.formControl.hasValidator(Validators.required);
 	}
 
-	// @Input() set disabled(value: boolean) {
-	// 	if (this.setDisabledState) {
-	// 		this.setDisabledState(value);
-	// 	}
-	// }
-
 	writeValue(obj: any): void {
 		if (this.formControl?.value !== obj) {
 			this.formControl.setValue(obj, { emitEvent: false });
 		}
 	}
-
-	// registerOnChange(fn: any): void {
-	// 	this.onChange = fn;
-	// }
-
-	// registerOnTouched(fn: any): void {
-	// 	this.onTouched = fn;
-	// }
-
-	// setDisabledState?(isDisabled: boolean): void {
-	// 	if (isDisabled) {
-	// 		this.readonly = true;
-	// 	} else {
-	// 		this.readonly = false;
-	// 	}
-	// }
-
-	// onChange = (value: any) => { };
-	// onTouched = () => { };
 
 	getSelectTrigger(): string {
 		const selected = this.formControl?.value || [];
@@ -208,7 +178,7 @@ export class SelectMultipleComponent
 			this.formControl.disable({ emitEvent: false });
 		}
 	}
-	allSelected = false;
+
 	toggleSelectAll() {
 		this.allSelected = !this.allSelected;
 		const selectedValues = this.allSelected

@@ -146,7 +146,6 @@ export class EmailSupplierComponent
 		this.formGroupDetail.get('emailClass')?.valueChanges.subscribe((value) => {
 			return this.updateTargetObjectValidation(value);
 		});
-		console.log(this.formGroupDetail.controls.marketClass);
 	}
 
 	updateTargetObjectValidation(value?: string | null): void {

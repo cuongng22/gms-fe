@@ -23,7 +23,7 @@ import {
 	FileUploadValidators,
 } from '@iplab/ngx-file-upload';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
-import { Observable, of } from 'rxjs';
+import { debounceTime, Observable, of } from 'rxjs';
 import { ExchangeRateService } from 'src/app/crew-trip/core/services/exchange-rate.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
@@ -127,12 +127,16 @@ export class RatePlannedComponent extends CommonComponent implements OnInit {
 			this.uploadFileError = {};
 		});
 
-		this.formGroupSearch.controls.startDate.valueChanges.subscribe(() => {
-			this.changeCreatedDate();
-		});
-		this.formGroupSearch.controls.endDate.valueChanges.subscribe(() => {
-			this.changeCreatedDate();
-		});
+		this.formGroupSearch.controls.startDate.valueChanges
+			.pipe(debounceTime(700))
+			.subscribe(() => {
+				this.changeCreatedDate();
+			});
+		this.formGroupSearch.controls.endDate.valueChanges
+			.pipe(debounceTime(700))
+			.subscribe(() => {
+				this.changeCreatedDate();
+			});
 	}
 
 	override async exportFileOptions(
