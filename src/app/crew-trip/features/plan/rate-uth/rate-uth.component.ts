@@ -128,14 +128,18 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 		this.formGroupSearch.controls.startDate.valueChanges
 			.pipe(debounceTime(800)) // Wait 500ms after the last change
 			.subscribe(async () => {
-				this.changeCreatedDate();
+				if (!this.export) {
+					this.changeCreatedDate();
+				}
 			});
 
 		// Add debounce time of 500ms to endDate valueChanges
 		this.formGroupSearch.controls.endDate.valueChanges
 			.pipe(debounceTime(800)) // Wait 500ms after the last change
 			.subscribe(async () => {
-				this.changeCreatedDate();
+				if (!this.export) {
+					this.changeCreatedDate();
+				}
 			});
 	}
 
@@ -255,7 +259,6 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 		try {
 			await this.spinner.show();
 			const res = await this.baseService.exportData(null, 'uth/template');
-			console.log(res);
 			this.downloadFile(res.blob, filename ?? res.fileName);
 		} catch (e: any) {
 			console.log(e);
@@ -266,7 +269,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 			await this.spinner.hide();
 		}
 	}
-
+	export = false;
 	override async exportFileOptions(
 		body?: any,
 		filename?: string,
@@ -274,6 +277,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 	) {
 		try {
 			await this.spinner.show();
+			this.export = true;
 			let startDate = this.formGroupSearch.controls.startDate.value;
 			let endDate = this.formGroupSearch.controls.endDate.value;
 			if (startDate) {
