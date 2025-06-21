@@ -9,6 +9,7 @@ import {
 	MatCardSubtitle,
 	MatCardTitle,
 } from '@angular/material/card';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import {
@@ -33,6 +34,7 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataCalculateTotal } from 'src/app/crew-trip/shared/data-calculate-total';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { HotelExportDialogComponent } from './export-dialog/hotel-export-dialog.component';
 
 @Component({
 	selector: 'app-hotel-cost-tracking',
@@ -70,6 +72,7 @@ import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.co
 		DataCalculateTotal,
 		DatePipe,
 		MatNoDataRow,
+		MatDialogModule,
 	],
 })
 export class HotelCostTrackingComponent
@@ -77,6 +80,7 @@ export class HotelCostTrackingComponent
 	implements OnInit
 {
 	override baseService = inject(AvesCostRoomTrackingService);
+	override dialog = inject(MatDialog);
 	markets: string[] = [];
 	monthSelection = [
 		'01',
@@ -234,8 +238,8 @@ export class HotelCostTrackingComponent
 		this.formGroupSearch.controls['marketCode'].setValue(this.markets[0]);
 		//Create list year
 		const currentYear = new Date().getFullYear();
-		const startYear = Math.floor(currentYear / 100) * 100;
-		const endYear = startYear + 99;
+		const startYear = currentYear - 5;
+		const endYear = currentYear + 5;
 
 		for (let year = startYear; year <= endYear; year++) {
 			this.listYear.push(year);
@@ -243,9 +247,9 @@ export class HotelCostTrackingComponent
 
 		//default current month
 		const month = new Date().getMonth() + 1;
-		this.formGroupSearch.controls['month'].setValue(
-			month < 10 ? '0' + month : month.toString(),
-		);
+		const monthString = month < 10 ? '0' + month : month.toString();
+		this.formGroupSearch.controls['month'].setValue(monthString);
+
 		//default current year
 		this.formGroupSearch.controls['year'].setValue(new Date().getFullYear());
 		this.formGroupSearchInit = { ...this.formGroupSearch.value };
@@ -271,5 +275,23 @@ export class HotelCostTrackingComponent
 		let exportObj = this.formGroupSearch.getRawValue();
 		exportObj = { ...exportObj, export: true };
 		await this.exportFileOptions(exportObj);
+	}
+
+	openExportDialog() {
+		const dialogRef = this.dialog.open(HotelExportDialogComponent, {
+			width: '500px',
+			position: { top: '100px' },
+			data: {
+				markets: this.markets,
+				monthSelection: this.monthSelection,
+				listYear: this.listYear,
+			},
+		});
+
+		dialogRef.afterClosed().subscribe(async (result) => {
+			if (result) {
+				await this.exportFileOptions(result);
+			}
+		});
 	}
 }

@@ -14,7 +14,7 @@ import { MatChipsModule } from '@angular/material/chips';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatMenuModule } from '@angular/material/menu';
@@ -49,7 +49,6 @@ import { getFileName } from '../email-tracking.model';
 		ReactiveFormsModule,
 		MatSelectModule,
 		MatButtonModule,
-		MatFormField,
 		MatInputModule,
 		InputSizeComponent,
 		MatDatepickerModule,
@@ -86,17 +85,6 @@ export class DialogSendMailComponent implements OnInit {
 	Constant = Constant;
 	groupMails = [];
 	listTitle: any[];
-	// {
-	//   "scheType": "ESTIMATED_FLIGHT",
-	//   "marketCode": "string",
-	//   "marketType": "DOMESTIC",
-	//   "emails": "string",
-	//   "title": "string",
-	//   "content": "string",
-	//   "attachment": [
-	//     "string"
-	//   ]
-	// }
 
 	formGroupDetail = this.formBuilder.group({
 		id: [''],
@@ -107,6 +95,8 @@ export class DialogSendMailComponent implements OnInit {
 		scheType: [],
 		marketCode: [],
 		marketType: [],
+		exportTime: [],
+		exportBy: [],
 	});
 
 	editor: Editor;
@@ -154,6 +144,7 @@ export class DialogSendMailComponent implements OnInit {
 			this.spinner.hide();
 		});
 	}
+
 	onChangeTitle(event: any) {
 		if (event.value) {
 			this.formGroupDetail.patchValue({
@@ -179,7 +170,6 @@ export class DialogSendMailComponent implements OnInit {
 					attachment: this.fileAttachment,
 					title: data.title,
 				};
-
 				await this.emailTrackingService.create(body);
 				this.close();
 			} catch (error) {
@@ -201,9 +191,5 @@ export class DialogSendMailComponent implements OnInit {
 
 	get fileAttachment() {
 		return this.formGroupDetail.controls.attachment.value ?? [];
-		// if (value) {
-		//   return value.split(';')
-		// }
-		// return [];
 	}
 }

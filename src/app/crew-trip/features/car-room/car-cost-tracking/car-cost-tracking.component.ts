@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { MatButton } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
+import { MatDialog } from '@angular/material/dialog';
 import { MatFormField, MatLabel } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
 import {
@@ -33,6 +34,7 @@ import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
 import { DataCalculateTotal } from 'src/app/crew-trip/shared/data-calculate-total';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { ExportDialogComponent } from './export-dialog/export-dialog.component';
 
 @Component({
 	selector: 'app-car-cost-tracking',
@@ -83,6 +85,7 @@ export class CarCostTrackingComponent
 	fb: FormBuilder = inject(FormBuilder);
 	flightMarketService: FlightMarketService = inject(FlightMarketService);
 	override baseService = inject(AvesTransportationCostTrackingService);
+	override dialog = inject(MatDialog);
 	displayedColumnsTracking: any[] = [
 		{ name: '#', field: '#' },
 		{ name: 'fltNo', field: 'Flight No', key: 'flightno' },
@@ -106,7 +109,11 @@ export class CarCostTrackingComponent
 			field: 'Airport Parking Fee',
 			key: 'airportparkingfee',
 		},
-		{ name: 'totalCharge', field: 'Total Charge', key: 'totalcharge' },
+		{
+			name: 'totalCharge',
+			field: 'Total Charge (Currency)',
+			key: 'totalcharge',
+		},
 		{
 			name: 'totalChargeVnd',
 			field: 'Total Charge (VND)',
@@ -184,5 +191,23 @@ export class CarCostTrackingComponent
 		let exportObj = this.formGroupSearch.getRawValue();
 		exportObj = { ...exportObj, export: true };
 		await this.exportFileOptions(exportObj, 'export-car-cost-tracking.xlsx');
+	}
+
+	openExportDialog() {
+		const dialogRef = this.dialog.open(ExportDialogComponent, {
+			width: '500px',
+			position: { top: '100px' },
+			data: {
+				markets: this.markets,
+				monthSelection: this.monthSelection,
+				listYear: this.listYear,
+			},
+		});
+
+		dialogRef.afterClosed().subscribe(async (result) => {
+			if (result) {
+				await this.exportFileOptions(result, 'export-car-cost-tracking.xlsx');
+			}
+		});
 	}
 }

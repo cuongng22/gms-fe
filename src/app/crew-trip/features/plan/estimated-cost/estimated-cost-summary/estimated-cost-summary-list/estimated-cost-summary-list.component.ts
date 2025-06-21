@@ -49,6 +49,7 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
   bodySearch: any;
   round = round;
 
+
   override baseService = inject(PlanBudgetProcurementService);
   override formGroupDetail = this.formBuilder.group({
     id: ''
@@ -64,6 +65,17 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
     this.displayedColumnTotals = getDisplayedColumnTotals(type);
   }
 
+
+  setBodyExport(bodySearch: any) {
+    this.bodySearch = {
+      ...bodySearch,
+      planBudgetProcurementId: this.planBudgetProcurementId(),
+      category: this.categoryType(),
+      type: 'UTH'
+    }
+
+  }
+
   override async search(bodySearch?: any) {
     try {
       await this.spinner.show();
@@ -73,7 +85,7 @@ export class EstimatedCostSummaryListComponent extends CommonComponent implement
         category: this.categoryType(),
         ...bodySearch
       }
-      this.bodySearch = body
+      this.bodySearch = { ...body, type: 'UTH' };
       this.baseService.summarySearch(body).then((data: any) => {
         let firstHotelIndex = -1;
         let firstCarRentalIndex = -1;

@@ -105,6 +105,7 @@ export class EmailTrackingComponent extends CommonComponent {
 		'dataFile', //'fcFile', 'ccFile',
 		'totalFile',
 		'exportTime',
+		'exportBy',
 		'emailTime',
 		'isEmailSent',
 		'isSendSuccess',
@@ -161,6 +162,11 @@ export class EmailTrackingComponent extends CommonComponent {
 					id: data.id,
 					attachment: data.files,
 					fileType: data.fileType,
+					exportTime: this.dataTransformPipe.transform(data.exportTime, [
+						this.Constant.DATE,
+						Constant.LOCAL_DATE_FORMAT,
+					]),
+					exportBy: data.exportBy,
 				},
 			})
 			.afterClosed()

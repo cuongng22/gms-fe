@@ -1034,18 +1034,18 @@
       <div class="w-100 text-end">
         @if (formGroupDetail.getRawValue().doiTuongDichVu === '3') {
         <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxHotelRevert" class="mr-20"
-                      (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn
+                      (change)="onChangeTaxHotel($event)">Hotel Tax Refund
         </mat-checkbox>
         <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxCarRevert" class="mr-20"
-                      (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe
+                      (change)="onChangeTaxCar($event)">Transport Tax Refund
         </mat-checkbox>
         } @else if (formGroupDetail.getRawValue().doiTuongDichVu === '1') {
         <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxHotelRevert" class="mr-20"
-                      (change)="onChangeTaxHotel($event)">Hoàn thuế khách sạn
+                      (change)="onChangeTaxHotel($event)">Hotel Tax Refund
         </mat-checkbox>
         } @else {
         <mat-checkbox [disabled]="readMode || isPL()" [checked]="formGroupDetail.getRawValue().isTaxCarRevert" class="mr-20"
-                      (change)="onChangeTaxCar($event)">Hoàn thuế nhà xe
+                      (change)="onChangeTaxCar($event)">Transport Tax Refund
         </mat-checkbox>
         }
 
