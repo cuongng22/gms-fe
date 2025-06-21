@@ -128,6 +128,7 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
     }*/
   showDialogReconcile = false;
   listEmailTo: any[];
+  listEmailSubject: any[];
 
   constructor() {
     super();
@@ -425,17 +426,20 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
     try {
       let res: any = await this.paymentMailService.getAirportEmail(data.airportCode, data.partnerType == 'TRANSPORTATION' ? 'TRANSPORT' : 'HOTEL');
       if (res.status === HttpStatusCode.Ok) {
-        this.listEmailTo = res.data.map((s:any)=>s.emails);
+        this.listEmailTo = res.data.map((s: any) => ({groupName: s.groupName, emails: s.emails}));
       }
 
-      let res1: any = await this.emailSupplierService.getAirportEmailConfig({emailClass: 'INVOICE_CONFIRMATION', marketClass: data.contractServiceType,});
-      let emailTitle = res1.data?.content[0]?.title;
+      let res1: any = await this.emailSupplierService.content({emailClass: 'INVOICE_CONFIRMATION', marketCode: data.airportCode,});
+      if (res1.status === HttpStatusCode.Ok) {
+        this.listEmailSubject = res1.data;
+      }
+      /*let emailTitle = res1.data?.content[0]?.title;
       let emailContent = res1.data?.content[0]?.content;
       this.formGroupDetail.patchValue({
         // emailTo: res.status === HttpStatusCode.Ok ? res.data.emails : '',
         emailSubject: emailTitle ?? '',
         emailContent: emailContent ?? ''
-      })
+      })*/
     } finally {
       this.formGroupDetail.patchValue({
         id: data.id,
@@ -498,5 +502,10 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
 
   toggleDialogReconcile() {
     this.showDialogReconcile = !this.showDialogReconcile;
+  }
+
+  onChangeSubject(data: any) {
+    let content = this.listEmailSubject.find((s: any) => s.title === data);
+    this.formGroupDetail.patchValue({emailContent: content?.content ?? ''});
   }
 }

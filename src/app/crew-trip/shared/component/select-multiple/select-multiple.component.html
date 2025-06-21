@@ -1,41 +1,42 @@
 <div class="col" [sizeInput]="size">
-  <mat-form-field [matTooltip]="getSelectTrigger()" #tooltip="matTooltip" matTooltipPosition="above"
-    matTooltipClass="tooltip-with-300">
-    <mat-label i18n="@@costCategory">{{ label }}</mat-label>
-    <mat-select [formControl]="formControl" multiple (openedChange)="openedChange($event)">
-      <mat-select-trigger>
-        {{ getSelectTrigger() }}
-      </mat-select-trigger>
-      @if (isSearch) {
-      <form class="mb-2" sizeInput="sm">
-        <mat-form-field class="input-suggest">
-          <input trim="blur" [required]="required" matInput type="text" name="clearable-input" [formControl]="search"
-            i18n-placeholder="@@search" placeholder="Search">
-          @if (search.value) {
-          <button matSuffix mat-icon-button i18n-aria-label="@@clear" aria-label="Clear" (click)="search.setValue('')">
-            <i class="material-symbols-outlined">
-              close
-            </i>
-          </button>
-          }
-        </mat-form-field>
-      </form>
-      }
+	<mat-form-field [matTooltip]="getSelectTrigger()" #tooltip="matTooltip" matTooltipPosition="above"
+									matTooltipClass="tooltip-with-300">
+		<mat-label i18n="@@costCategory">{{ label }}</mat-label>
+		<mat-select [formControl]="formControl" multiple (openedChange)="openedChange($event)">
+			<mat-select-trigger>
+				{{ getSelectTrigger() }}
+			</mat-select-trigger>
+			@if (isSearch) {
+				<form class="mb-2" sizeInput="sm">
+					<mat-form-field class="input-suggest">
+						<input trim="blur" [required]="required" matInput type="text" name="clearable-input" [formControl]="search"
+									 i18n-placeholder="@@search" placeholder="Search">
+						@if (search.value) {
+							<button matSuffix mat-icon-button i18n-aria-label="@@clear" aria-label="Clear"
+											(click)="search.setValue('')">
+								<i class="material-symbols-outlined">
+									close
+								</i>
+							</button>
+						}
+					</mat-form-field>
+				</form>
+			}
 
-      @if (selectOptionsRaw && selectOptionsRaw.length > 0) {
-      <mat-option (click)="toggleSelectAll()" [value]="allSelected ? null : 'all'">
-        {{ allSelected ? 'Clear all' : 'Select all' }}
-      </mat-option>
-      @for (option of selectOptionsRaw; track $index) {
-      <mat-option [value]="attrValue?option[attrValue]:option">{{ attrDisplay ? option[attrDisplay] : option }}
-      </mat-option>
-      }
-      }
+			@if (selectOptionsRaw && selectOptionsRaw.length > 0) {
+				<mat-option (click)="toggleSelectAll()" [value]="allSelected ? null : 'all'">
+					{{ allSelected ? 'Clear all' : 'Select all' }}
+				</mat-option>
+				@for (option of selectOptionsRaw; track $index) {
+					<mat-option [value]="attrValue?option[attrValue]:option">{{ attrDisplay ? option[attrDisplay] : option }}
+					</mat-option>
+				}
+			}
 
-    </mat-select>
-    <mat-error *ngxControlError="formControl ?? undefined; track: 'required'">
-      {{ label }} {{ MESSAGE.REQUIRED }}
-    </mat-error>
-    <ng-content select="[mess-error]"></ng-content>
-  </mat-form-field>
+		</mat-select>
+		<mat-error *ngxControlError="formControl ?? undefined; track: 'required'">
+			{{ label }} {{ MESSAGE.REQUIRED }}
+		</mat-error>
+		<ng-content select="[mess-error]"></ng-content>
+	</mat-form-field>
 </div>

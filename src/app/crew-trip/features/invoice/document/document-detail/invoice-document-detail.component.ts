@@ -157,7 +157,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       idInvoiceForm: [],
       version: [1],
       ctype: [InvoiceDocumentTypeEnum.STANDARD],
-      invoiceNumber: [, [Validators.maxLength(50), Validators.pattern(PATTERN.STRING_NUMBER2)]],
+      invoiceNumber: [, [Validators.maxLength(50),]],
       invoiceDate: [],
       invoiceReceiveDate: [],
       periodFrom: [],
@@ -462,11 +462,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
       this.formGroupDetail.markAllAsTouched();
       this.formGroupDetail.updateValueAndValidity();
       if (this.formGroupDetail.invalid) {
-        let err = this.findInvalidControls(this.formGroupDetail);
-        if(err.length > 0) {
-          console.log(err.join('\n'))
-          this.showError(err.join('\n'));
-        }
+        this.findInvalidControls(this.formGroupDetail);
         return;
       }
       const update = !!this.formGroupDetail.getRawValue().id;
@@ -621,7 +617,7 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
             description: description
           })
           //paymentDueDate
-          let invoiceDate = this.formGroupDetail.getRawValue().invoiceDate;
+          let invoiceDate = this.formGroupDetail.getRawValue().invoiceReceiveDate;
           let _value = (moment(invoiceDate) || invoiceDate)?.add(res.data?.dueDateNumber || 0, 'days')
           this.formGroupDetail.patchValue({
             paymentDueDate: _value

@@ -435,7 +435,7 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
   getRowSpan(index: number, innerColumn: any, data: any): number {
     if (data.typeRoom === 'CC Twin room' && ['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
-      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm.filter((item: any) => item.typeRoom === 'CC Twin room');
+      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm;
       let currentRow = dtl[index];
       let nextRow = dtl[index + 1];
       // if (nextRow?.roomNo === currentRow?.roomNo && nextRow?.ciDate === currentRow?.ciDate) {

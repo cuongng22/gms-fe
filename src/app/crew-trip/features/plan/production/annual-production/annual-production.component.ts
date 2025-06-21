@@ -330,6 +330,9 @@ export class AnnualProductionComponent
 								: this.MESSAGE.INACTIVE,
 					}));
 					this.totalElement = res.data?.page?.totalElements;
+				} else {
+					this.createdDateResult = '';
+					this.totalFlightResult = 0;
 				}
 			});
 	}

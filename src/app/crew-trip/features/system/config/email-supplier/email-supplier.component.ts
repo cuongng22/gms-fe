@@ -24,7 +24,6 @@ import {
 	MatLabel,
 } from '@angular/material/form-field';
 import { MatInput, MatInputModule } from '@angular/material/input';
-import { MatList } from '@angular/material/list';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSelect } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
@@ -69,7 +68,6 @@ import { marketType, MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
 		MatPaginator,
 		MatAnchor,
 		HasPermissionDirective,
-		MatList,
 		BaseImport,
 	],
 	templateUrl: './email-supplier.component.html',
@@ -114,7 +112,7 @@ export class EmailSupplierComponent
 		title: ['', [Validators.maxLength(250)]],
 		note: ['', [Validators.maxLength(500)]],
 		active: [true],
-		airports: [''],
+		airports: ['', Validators.required],
 	});
 
 	constructor(private sanitizeService: SanitizeService) {
@@ -148,7 +146,6 @@ export class EmailSupplierComponent
 		this.formGroupDetail.get('emailClass')?.valueChanges.subscribe((value) => {
 			return this.updateTargetObjectValidation(value);
 		});
-		console.log(this.formGroupDetail.controls.marketClass);
 	}
 
 	updateTargetObjectValidation(value?: string | null): void {
@@ -308,7 +305,7 @@ export class EmailSupplierComponent
 				type: 'Domestic',
 			});
 			this.airports = marketList.data;
-			console.log(this.airports.length);
+			this.formGroupDetail.patchValue({ airports: '' });
 		} else {
 			const marketList = await this._flightMarketService.search({
 				option: 1,
@@ -316,7 +313,7 @@ export class EmailSupplierComponent
 				type: 'International',
 			});
 			this.airports = marketList.data;
-			console.log(this.airports.length);
+			this.formGroupDetail.patchValue({ airports: '' });
 		}
 	}
 

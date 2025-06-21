@@ -353,7 +353,9 @@ export class EstAnnualProductionComponent
 					this.versionResult = this.formGroupSearch.controls.versionId.value;
 					this.createdDateResult = res.data.createdDate;
 					this.yearSelect = this.formGroupSearch.controls.year.value;
-					this.totalFlightResult = res.data.totalFlight;
+					this.totalFlightResult = res.data.totalFlight
+						? res.data.totalFlight
+						: 0;
 					this.dataSource.data = res.data?.page?.content;
 					this.dataSource.data = this.dataSource.data.map((s: any) => ({
 						...s,
@@ -366,6 +368,9 @@ export class EstAnnualProductionComponent
 								: this.MESSAGE.INACTIVE,
 					}));
 					this.totalElement = res.data?.page?.totalElements;
+				} else {
+					this.createdDateResult = '';
+					this.totalFlightResult = 0;
 				}
 			});
 	}

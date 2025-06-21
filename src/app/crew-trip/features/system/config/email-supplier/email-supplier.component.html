@@ -196,7 +196,8 @@
 </mat-card>
 
 <!-- Add New Popup-->
-<div [class.active]="showDialogCreate" class="add-new-popup">
+
+<div *ngIf="showDialogCreate" [class.active]="showDialogCreate" class="add-new-popup">
 	<div class="popup-dialog" style="min-width: 800px;">
 		<mat-card class="border-radius d-block bg-white border-0 shadow-none container">
 			<mat-card-header>
@@ -280,7 +281,7 @@
 						</div>
 						<div class="col-3">
 							<div class="form-group mb-20" sizeInput="md">
-								<app-select-multiple size="sm" label="Airport code" [required]="false"
+								<app-select-multiple size="sm" label="Airport code" [required]="true"
 																		 [options]="airports"
 																		 [isSearch]="true"
 																		 formControlName="airports">

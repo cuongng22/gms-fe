@@ -24,6 +24,7 @@ import {
 } from '@iplab/ngx-file-upload';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { Observable, of } from 'rxjs';
+import { debounceTime } from 'rxjs/operators';
 import { ExchangeRateService } from 'src/app/crew-trip/core/services/exchange-rate.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
 import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
@@ -122,12 +123,24 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 		this.fileUpload.valueChanges.subscribe((value) => {
 			this.uploadFileError = {};
 		});
-		this.formGroupSearch.controls.startDate.valueChanges.subscribe(() => {
-			this.changeCreatedDate();
-		});
-		this.formGroupSearch.controls.endDate.valueChanges.subscribe(() => {
-			this.changeCreatedDate();
-		});
+
+		// Add debounce time of 500ms to startDate valueChanges
+		this.formGroupSearch.controls.startDate.valueChanges
+			.pipe(debounceTime(800)) // Wait 500ms after the last change
+			.subscribe(async () => {
+				if (!this.export) {
+					this.changeCreatedDate();
+				}
+			});
+
+		// Add debounce time of 500ms to endDate valueChanges
+		this.formGroupSearch.controls.endDate.valueChanges
+			.pipe(debounceTime(800)) // Wait 500ms after the last change
+			.subscribe(async () => {
+				if (!this.export) {
+					this.changeCreatedDate();
+				}
+			});
 	}
 
 	async initSearchVersion(params?: any) {
@@ -138,7 +151,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 		this.listVersion = data.data;
 		if (this.listVersion && this.listVersion.length > 0) {
 			const firstVersion = this.listVersion[0];
-			this.formGroupSearch.controls.version.patchValue(firstVersion.version);
+			this.formGroupSearch.patchValue({ version: firstVersion.version });
 			this.cdr.detectChanges();
 		} else {
 			this.formGroupSearch.controls.version.patchValue('');
@@ -246,7 +259,6 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 		try {
 			await this.spinner.show();
 			const res = await this.baseService.exportData(null, 'uth/template');
-			console.log(res);
 			this.downloadFile(res.blob, filename ?? res.fileName);
 		} catch (e: any) {
 			console.log(e);
@@ -257,7 +269,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 			await this.spinner.hide();
 		}
 	}
-
+	export = false;
 	override async exportFileOptions(
 		body?: any,
 		filename?: string,
@@ -265,6 +277,7 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 	) {
 		try {
 			await this.spinner.show();
+			this.export = true;
 			let startDate = this.formGroupSearch.controls.startDate.value;
 			let endDate = this.formGroupSearch.controls.endDate.value;
 			if (startDate) {
@@ -319,15 +332,29 @@ export class RateUthComponent extends CommonComponent implements OnInit {
 		}
 	}
 
-	changeCreatedDate() {
+	async changeCreatedDate() {
 		let startDate = this.formGroupSearch.controls.startDate.value;
 		let endDate = this.formGroupSearch.controls.endDate.value;
 		if (startDate && endDate) {
-			this.initSearchVersion({
+			await this.initSearchVersion({
 				startDate: this.dataTransformPipe.transform(startDate, [
 					'date',
 					Constant.LOCAL_DATE_FORMAT,
 				]),
+				endDate: this.dataTransformPipe.transform(endDate, [
+					'date',
+					Constant.LOCAL_DATE_FORMAT,
+				]),
+			});
+		} else if (startDate) {
+			await this.initSearchVersion({
+				startDate: this.dataTransformPipe.transform(startDate, [
+					'date',
+					Constant.LOCAL_DATE_FORMAT,
+				]),
+			});
+		} else if (endDate) {
+			await this.initSearchVersion({
 				endDate: this.dataTransformPipe.transform(endDate, [
 					'date',
 					Constant.LOCAL_DATE_FORMAT,
