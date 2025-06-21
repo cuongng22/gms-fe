@@ -71,7 +71,6 @@ import { SelectionComponent } from '../../../../shared/component/selection/selec
 export class PaymentEmailComponent extends CommonComponent implements OnInit {
 	override baseService = inject(PaymentMailService);
 	flightMarketService = inject(FlightMarketService);
-	activeTab = 0;
 	@ViewChild('marketCode') marketCode: ElementRef<HTMLInputElement>;
 	@ViewChild(MatAutocompleteTrigger)
 	autocompleteTrigger!: MatAutocompleteTrigger;
@@ -156,6 +155,10 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 					});
 				} else if (error.error.status === HttpStatusCode.Conflict) {
 					this.formGroupDetail.get('marketCode')?.setErrors({
+						conflict: true,
+						message: error.error.error,
+					});
+					this.formGroupDetail.get('groupName')?.setErrors({
 						conflict: true,
 						message: error.error.error,
 					});
