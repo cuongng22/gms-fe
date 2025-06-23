@@ -28,8 +28,7 @@ export class BudgetProcurementSummaryComponent extends CommonComponent implement
 
   searchSummary(data: any, type: string) {
     let bodySearch: any = {
-      status: data.status,
-      airportCodes: data.airportCodes
+      ...data
     }
     switch (type) {
       case 'All':
