@@ -52,13 +52,12 @@ export class AvesConfigComponent extends CommonComponent {
 		const month = data.month; //current format = JAN, FEB
 		const date = data.date; //current format = 01, 02, ..., 31
 		const currentYear = new Date().getFullYear();
-		if (!moment(month + date + currentYear, 'MMMDDYYYY').isValid()) {
+		if (moment(month + date + currentYear, 'MMMDDYYYY').isValid()) {
 			this.formGroupDetail.controls['date'].setErrors({
 				invalid: true,
 				code: 'INVALID_DATE_FORMAT',
 				message: 'Invalid date format. Please enter a valid date.',
 			});
-			console.log(this.formGroupDetail.controls['date'].getError('message'));
 			return;
 		}
 		if (data.id) {
