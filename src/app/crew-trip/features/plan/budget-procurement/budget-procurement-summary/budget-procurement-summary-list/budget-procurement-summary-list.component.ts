@@ -83,8 +83,7 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
       await this.spinner.show();
       const body = {
         ...bodySearch,
-        planBudgetProcurementId: this.planBudgetProcurementId(),
-        category: this.categoryType()
+        planBudgetProcurementId: this.planBudgetProcurementId()
       }
       this.bodySearch = body;
       const response = await this.baseService.summarySearch(body);
