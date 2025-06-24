@@ -1204,12 +1204,8 @@ export class ContractDetailComponent
         .priceUnitInfo?.filter((s: any) => s.active == false) || [];
     body.priceUnitInfo = [...this.tblPriceUnit.value, ...priceUnitInfoInactive];
     body.priceUnitInfo.forEach((s: any) => {
-      s.priceBeforeTax = (Math.ceil((s.priceNoTax ?? 0) * 100) / 100).toFixed(
-        2,
-      );
-      s.priceAfterTax = (Math.ceil((s.priceWithTax ?? 0) * 100) / 100).toFixed(
-        2,
-      );
+      s.priceBeforeTax = this.roundUpNumber(s.priceNoTax, 2);
+      s.priceAfterTax = this.roundUpNumber(s.priceWithTax, 2);
       s.serviceFeeCode = s.serviceCode;
       s.codeNghiepVu = s.vnaTransId;
       s.codeKHNS = s.expenseCatgId;
