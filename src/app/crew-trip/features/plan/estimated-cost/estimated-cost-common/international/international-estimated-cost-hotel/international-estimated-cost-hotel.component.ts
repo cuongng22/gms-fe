@@ -343,34 +343,27 @@ export class InternationalEstimatedCostHotelComponent implements OnInit, AfterVi
     this.setTotal('numberOfFlights');
     this.setTotal('totalSingleRoom');
     this.setTotal('totalDoubleRoom');
-    this.setTotal('totalAmountForeign', true);
-    this.setTotal('totalAmountForeignVat', true);
-    this.setTotal('totalAmount', true);
-    this.setTotal('totalAmountVat', true);
+    this.setTotal('totalAmountForeign', false, 0, true, 'totalAmountForeignGroup');
+    this.setTotal('totalAmountForeignVat', false, 0, true, 'totalAmountForeignVatGroup');
+    this.setTotal('totalAmount', false, 0, true, 'totalAmountGroup');
+    this.setTotal('totalAmountVat', false, 0, true, 'totalAmountVatGroup');
   }
 
   // TÍnh dòng tổng 
-  setTotal(control: string, isRound?: boolean, fractionDigits?: number) {
+  setTotal(control: string, isRound?: boolean, fractionDigits?: number, isSumByGroup?: boolean, controlGroup?: string) {
     //Cột Thành tiền VND - bao gồm VAT:   tính tổng từ T12/2024-T11/2025,   còn các cột còn lại đều tính tổng từ T1/2025-T12/2025
     let totalValue = 0
-    // if (control === 'totalAmountVat') {
-    //   // const endDatePlanGroup = new Date(this.yearPlan(), 10, 1);
-    //   totalValue = this.dataSource.data.map((t: any) => {
-    //     if (truncateDate(new Date(t['periodStart'])) <= truncateDate(this.endDatePlanGroup)) {
-    //       return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
-    //     } else {
-    //       return isRound ? round(Number(t['totalAmountYearPerformVat']), fractionDigits) : Number(t['totalAmountYearPerformVat'])
-    //     }
-    //   }).reduce((acc, value) => acc + value, 0);
-    //   this.resultTotal[control] = totalValue;
-    //   return;
-    // }
-    totalValue = this.dataSource.data.map((t: any) => {
-      // if (truncateDate(new Date(t['periodStart'])) >= truncateDate(this.startDatePlanGroup)) {
-      return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
-      // }
-      // return 0;
-    }).reduce((acc, value) => acc + value, 0);
+    if (isSumByGroup) {
+      Object.keys(this.totalByGroup).forEach((key: string) => {
+        if (this.totalByGroup[key][controlGroup ?? ''] !== undefined) {
+          totalValue += this.totalByGroup[key][controlGroup ?? ''];
+        }
+      })
+    } else {
+      totalValue = this.dataSource.data.map((t: any) => {
+        return isRound ? round(Number(t[control]), fractionDigits) : Number(t[control]);
+      }).reduce((acc, value) => acc + value, 0);
+    }
     this.resultTotal[control] = totalValue;
   }
 

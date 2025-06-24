@@ -38,28 +38,27 @@ export class BudgetProcurementSummaryComponent
 
 	CategoryEnum = CategoryEnum;
 
-	searchSummary(data: any, type: string) {
-		let bodySearch: any = {
-			status: data.status,
-			airportCodes: data.airportCodes,
-		};
-		switch (type) {
-			case 'All':
-				this.summaryAll.setDisplayedColumns(data.categoryOfPlan);
-				bodySearch.category = data.category;
-				this.summaryAll.search(bodySearch);
-				break;
-			case CategoryEnum.INTERNATIONAL:
-				this.summaryInternational.setDisplayedColumns(data.categoryOfPlan);
-				this.summaryInternational.search(bodySearch);
-				break;
-			case CategoryEnum.DOMESTIC:
-				this.summaryDomestic.setDisplayedColumns(data.categoryOfPlan);
-				this.summaryDomestic.search(bodySearch);
-				break;
-		}
-		console.log(data);
-	}
+  searchSummary(data: any, type: string) {
+    let bodySearch: any = {
+      ...data
+    }
+    switch (type) {
+      case 'All':
+        this.summaryAll.setDisplayedColumns(data.categoryOfPlan);
+        bodySearch.category = data.category;
+        this.summaryAll.search(bodySearch);
+        break;
+      case CategoryEnum.INTERNATIONAL:
+        this.summaryInternational.setDisplayedColumns(data.categoryOfPlan);
+        this.summaryInternational.search(bodySearch);
+        break;
+      case CategoryEnum.DOMESTIC:
+        this.summaryDomestic.setDisplayedColumns(data.categoryOfPlan);
+        this.summaryDomestic.search(bodySearch);
+        break;
+    }
+    console.log(data)
+  }
 
 	formSearchChange(data: any, type: string) {
 		let bodySearch: any = {
