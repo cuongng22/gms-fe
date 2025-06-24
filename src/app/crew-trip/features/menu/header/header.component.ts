@@ -1,53 +1,48 @@
+import { CommonModule, NgClass, NgIf } from '@angular/common';
+import { HttpStatusCode } from '@angular/common/http';
 import {
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  HostListener,
-  inject,
-  NO_ERRORS_SCHEMA, OnDestroy,
-  OnInit,
-  ViewChild
+	Component,
+	HostListener,
+	OnDestroy,
+	OnInit,
+	inject,
 } from '@angular/core';
-import {Router, RouterLink} from '@angular/router';
-import {MatMenuModule} from '@angular/material/menu';
-import {MatButtonModule} from '@angular/material/button';
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
-import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
-import {CustomizerSettingsService} from 'src/app/customizer-settings/customizer-settings.service';
-import {ToggleService} from 'src/app/common/header/toggle.service';
-import {UsersService} from 'src/app/crew-trip/core/services/users-service';
-import {MatDialog, MatDialogModule, MatDialogRef} from '@angular/material/dialog';
-import {UserLogin} from 'src/app/crew-trip/shared/models/userInfo';
-import {MatCardModule} from '@angular/material/card';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {format} from 'date-fns';
-import {MatCheckboxModule} from '@angular/material/checkbox';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
-import {MatOption, MatSelect} from '@angular/material/select';
-import {MatInput} from '@angular/material/input';
-import {Constant, MESSAGE} from 'src/app/crew-trip/shared/utils/constant';
 import {
-  AbstractControl,
-  FormBuilder,
-  FormGroup,
-  FormsModule,
-  ReactiveFormsModule,
-  ValidationErrors,
-  Validators
+	AbstractControl,
+	FormBuilder,
+	FormGroup,
+	FormsModule,
+	ReactiveFormsModule,
+	ValidationErrors,
+	Validators,
 } from '@angular/forms';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {NgxSpinnerService} from 'ngx-spinner';
-import {LanguageService} from 'src/app/crew-trip/core/services/language.service';
-import {Observable, Subscription} from 'rxjs';
-import {BaseService} from 'src/app/crew-trip/core/services/base-service';
-import {NgxTrimDirectiveModule} from 'ngx-trim-directive';
-import {HttpStatusCode} from '@angular/common/http';
-import {WebsocketService} from 'src/app/crew-trip/core/services/websocket-service';
-import {NotificationService} from 'src/app/crew-trip/core/services/notification.service';
-import {environment} from "src/environments/environment";
-import {MatTooltip} from "@angular/material/tooltip";
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
+import { MatDialog } from '@angular/material/dialog';
+import { MatError, MatFormField, MatLabel } from '@angular/material/form-field';
+import { MatInput } from '@angular/material/input';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatTableModule } from '@angular/material/table';
+import { Router, RouterLink } from '@angular/router';
+import { format } from 'date-fns';
+import { NgxSpinnerService } from 'ngx-spinner';
+import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { Observable, Subscription } from 'rxjs';
+import { ToggleService } from 'src/app/common/header/toggle.service';
+import { BaseService } from 'src/app/crew-trip/core/services/base-service';
+import { LanguageService } from 'src/app/crew-trip/core/services/language.service';
+import { NotificationService } from 'src/app/crew-trip/core/services/notification.service';
+import { UsersService } from 'src/app/crew-trip/core/services/users-service';
+import { WebsocketService } from 'src/app/crew-trip/core/services/websocket-service';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { UserLogin } from 'src/app/crew-trip/shared/models/userInfo';
+import { Constant, MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
+import { CustomizerSettingsService } from 'src/app/customizer-settings/customizer-settings.service';
+import { environment } from 'src/environments/environment';
 
 @Component({
 	selector: 'app-header',
@@ -63,12 +58,9 @@ import {MatTooltip} from "@angular/material/tooltip";
 		MatPaginatorModule,
 		NgIf,
 		MatCheckboxModule,
-		TitleCasePipe,
 		DataTransformPipe,
 		NgClass,
 		MatFormField,
-		MatSelect,
-		MatOption,
 		MatInput,
 		MatLabel,
 		ReactiveFormsModule,
@@ -76,7 +68,6 @@ import {MatTooltip} from "@angular/material/tooltip";
 		MatError,
 		NgxTrimDirectiveModule,
 		MatProgressSpinnerModule,
-		MatTooltip,
 	],
 	templateUrl: './header.component.html',
 	styleUrl: './header.component.scss',

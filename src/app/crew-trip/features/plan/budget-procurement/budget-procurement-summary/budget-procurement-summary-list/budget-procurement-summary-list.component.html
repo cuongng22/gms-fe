@@ -325,7 +325,7 @@
                             </mat-checkbox>
                         </td>
                         }
-                        <td mat-cell class="" [attr.colspan]="22" class="bg-success-200">
+                        <td mat-cell class="" [attr.colspan]="displayedColumns.length" class="bg-success-200">
                             <span class="fw-bold">A. <span i18n="@@hotel">Hotel</span></span>
                         </td>
                         }@else if (element.serviceType === 'CarRental') {
@@ -338,7 +338,7 @@
                         </td>
                         }
 
-                        <td mat-cell class="fw-bold" [attr.colspan]="22" class="bg-success-200">
+                        <td mat-cell class="fw-bold" [attr.colspan]="displayedColumns.length" class="bg-success-200">
                             <span class="fw-bold"> B. <span i18n="@@transportation">Transportation</span></span>
                         </td>
                         }

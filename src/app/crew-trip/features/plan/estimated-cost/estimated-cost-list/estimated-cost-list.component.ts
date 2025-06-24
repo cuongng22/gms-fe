@@ -191,6 +191,20 @@ export class EstimatedCostListComponent extends CommonComponent implements OnIni
   toggleDialogReject() {
     this.showDialogReject = !this.showDialogReject;
   }
+
+
+  export() {
+    if (this.selection.isEmpty()) {
+      this.baseService.showError($localize`:@@noPlanSelectedEst:Cannot export data if no estimated cost is selected`);
+      return;
+    }
+    if (this.selection.selected.length > 1) {
+      this.baseService.showError($localize`:@@cannotExportMultiplePlansEst:Cannot export multiple estimated cost at once`);
+      return;
+    }
+    this.exportFile.bind(this)({ planBudgetProcurementId: this.selection.selected[0].id, type: 'UTH' }, 'estimate-cost-summary.xlsx', 'summary/export');
+  }
+
 }
 
 
