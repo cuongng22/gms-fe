@@ -18,8 +18,11 @@
     <app-header/>
 
     <!-- Router Outlet -->
-    <ngx-spinner bdColor="rgba(0, 0, 0, 0.1)" size="medium" color="#2a6886" type="ball-climbing-dot"
-                 [fullScreen]="true"></ngx-spinner>
+    <!--<ngx-spinner bdColor="rgba(0, 0, 0, 0.1)" size="medium" color="#2a6886" type="ball-climbing-dot"
+                 [fullScreen]="true"></ngx-spinner>-->
+    <ngx-spinner [fullScreen]="true" bdColor="rgba(0, 0, 0, 0.1)" type="none">
+      <div class="loader"></div>
+    </ngx-spinner>
     <router-outlet></router-outlet>
 
 
