@@ -287,12 +287,10 @@ export class InvoiceDocumentDetailComponent extends CommonComponent implements O
   }
 
   async setReadMode(form: FormGroup) {
-    const disableFieldAdd = ['paymentDueDay', 'bizDocId', 'partnerCode', 'partnerName', 'currency',
-      'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version',
-      'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status'];
+    const disableFieldAdd = ['paymentDueDay', 'bizDocId', 'partnerCode', 'partnerName', 'currency', 'version',
+      'contractServiceType', 'exchangeRateType', 'status'];
     const disableFieldEdit = ['airportCode', 'paymentDueDay', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType',
-      'currency', 'amountFcBeforeVat', 'vatFc', 'amountVndBeforeVat', 'vatVnd', 'totalAmountFc', 'totalAmountVnd', 'version',
-      'contractServiceType', 'exchangeRate', 'exchangeRateType', 'status'];
+      'currency', 'version', 'contractServiceType', 'exchangeRateType', 'status'];
 
     Object.entries(form.controls).forEach(([k, v]) => {
       if (this.readMode) {
