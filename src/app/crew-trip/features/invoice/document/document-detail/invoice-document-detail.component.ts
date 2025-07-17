@@ -1,875 +1,1444 @@
-import {Component, ElementRef, EventEmitter, inject, Input, OnInit, Output, QueryList, ViewChild} from '@angular/core';
-import {MatTableDataSource} from '@angular/material/table';
-import {FormArray, FormBuilder, FormGroup, Validators} from '@angular/forms';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {DATE_FORMAT_DD_MM_YYYY, LOCALE, MESSAGE, PATTERN} from 'src/app/crew-trip/shared/utils/constant';
-import {NationService} from 'src/app/crew-trip/core/services/nation-service';
-import {cloneDeep, transform} from 'lodash';
-import {provideMomentDateAdapter} from '@angular/material-moment-adapter';
-import {ServiceFeeService} from 'src/app/crew-trip/core/services/service-fee-service';
-import * as InvoiceLookup from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {InvoiceDocumentStatusEnum, InvoiceDocumentTypeEnum} from "src/app/crew-trip/features/invoice/invoice-lookup";
-import {InvoiceDocumentService} from 'src/app/crew-trip/core/services/invoice-document-service';
-import {ContractService} from "src/app/crew-trip/core/services/contract-service";
-import {HttpStatusCode} from "@angular/common/http";
-import moment from "moment";
-import {BaseImport} from "src/app/crew-trip/shared/base-import";
-import {debounceTime, filter, pairwise} from "rxjs";
-import {afterValidator, beforeValidator} from "src/app/crew-trip/shared/utils/common";
-import {quantity} from "src/app/crew-trip/shared/utils/error-message";
-import {FlightMarketStatusEnum} from "src/app/crew-trip/features/category/flight-market/flight-market.model";
-import {MessageDialog} from 'src/app/crew-trip/shared/dialog/message-dialog/message-dialog';
-
+import { HttpStatusCode } from '@angular/common/http';
+import {
+	Component,
+	ElementRef,
+	EventEmitter,
+	inject,
+	Input,
+	OnInit,
+	Output,
+	QueryList,
+	ViewChild,
+} from '@angular/core';
+import { FormArray, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import { MatTableDataSource } from '@angular/material/table';
+import { cloneDeep, transform } from 'lodash';
+import moment from 'moment';
+import { debounceTime, filter, pairwise } from 'rxjs';
+import { ContractService } from 'src/app/crew-trip/core/services/contract-service';
+import { InvoiceDocumentService } from 'src/app/crew-trip/core/services/invoice-document-service';
+import { NationService } from 'src/app/crew-trip/core/services/nation-service';
+import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-service';
+import { FlightMarketStatusEnum } from 'src/app/crew-trip/features/category/flight-market/flight-market.model';
+import * as InvoiceLookup from 'src/app/crew-trip/features/invoice/invoice-lookup';
+import {
+	InvoiceDocumentStatusEnum,
+	InvoiceDocumentTypeEnum,
+} from 'src/app/crew-trip/features/invoice/invoice-lookup';
+import { BaseImport } from 'src/app/crew-trip/shared/base-import';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { MessageDialog } from 'src/app/crew-trip/shared/dialog/message-dialog/message-dialog';
+import {
+	afterValidator,
+	beforeValidator,
+} from 'src/app/crew-trip/shared/utils/common';
+import {
+	DATE_FORMAT_DD_MM_YYYY,
+	LOCALE,
+	MESSAGE,
+	PATTERN,
+} from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
-  selector: 'app-invoice-document-detail',
-  standalone: true,
-  imports: [BaseImport],
-  templateUrl: './invoice-document-detail.component.html',
-  styleUrl: './invoice-document-detail.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true})
-  ]
+	selector: 'app-invoice-document-detail',
+	standalone: true,
+	imports: [BaseImport],
+	templateUrl: './invoice-document-detail.component.html',
+	styleUrl: './invoice-document-detail.component.scss',
+	providers: [
+		provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, { useUtc: true }),
+	],
 })
+export class InvoiceDocumentDetailComponent
+	extends CommonComponent
+	implements OnInit
+{
+	override baseService = inject(InvoiceDocumentService);
+	nationService = inject(NationService);
+	serviceFeeService = inject(ServiceFeeService);
+	contractService = inject(ContractService);
+	fb = inject(FormBuilder);
 
+	//variable
+	@Input() id: any;
+	@Input() viewType: any;
+	@Input() readMode: any;
+	@Input() action: any;
+	@Input() dataObject: any;
+	@Input() contractObj: any;
+	@Output() nextStepEmit = new EventEmitter<any>();
+	@Output() backStepEmit = new EventEmitter<any>();
+	@Input() dialogMode: boolean = false;
+	@Output() dialogModeEmit = new EventEmitter<any>();
+	firstLoad: boolean = true;
+	//1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
+	@Input() formType: any;
+	@Input() titleHeader = $localize`Detailed Statement`;
+	expandList = new Set<string>(['tab1', 'tab2', 'tab3']);
+	formGroupFileUpload!: FormGroup;
+	showDialogDeleteFile = false;
+	dsInvoiceDocumentDtl = new MatTableDataSource<any>([]);
+	listDocumentType = InvoiceLookup.InvoiceDocumentType;
+	listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
+	listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
+	listInvoiceDocumentStatusPayment = InvoiceLookup.InvoiceDocumentStatusPayment;
+	today = new Date();
 
-export class InvoiceDocumentDetailComponent extends CommonComponent implements OnInit {
-  override baseService = inject(InvoiceDocumentService);
-  nationService = inject(NationService);
-  serviceFeeService = inject(ServiceFeeService);
-  contractService = inject(ContractService);
-  fb = inject(FormBuilder);
+	_displayedColumnsHeader1: string[] = [];
+	_displayedColumnsHeader2: string[] = [];
+	_displayedColumnsRow: string[] = [];
+	_displayedColumnsFooter: string[] = [];
+	_displayedColumnsAll: {
+		label: string;
+		value: string;
+		type?: string;
+		format?: string;
+		rowspan?: string;
+		colspan?: string;
+	}[] = [
+		{
+			label: 'Access Bridge',
+			value: 'accessBridge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Accommodation Tax Cc Charge',
+			value: 'accommodationTaxCcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Accommodation Tax Fc Charge',
+			value: 'accommodationTaxFcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Airport Parking Fee',
+			value: 'airportParkingFee',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Breakfast Cc',
+			value: 'breakfastCc',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Breakfast Fc',
+			value: 'breakfastFc',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{ label: 'Cc', value: 'cc', type: 'Constant.NUMBER', rowspan: '2' },
+		{
+			label: 'Ci Date',
+			value: 'ciDate',
+			type: 'Constant.DATE',
+			format: 'Constant.DATE_FORMAT',
+		},
+		{ label: 'Ci Fltno', value: 'ciFltno' },
+		{ label: 'Ci Time', value: 'ciTime' },
+		{
+			label: 'City Tax Cc Charge',
+			value: 'cityTaxCcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'City Tax Fc Charge',
+			value: 'cityTaxFcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Co Date',
+			value: 'coDate',
+			type: 'Constant.DATE',
+			format: 'Constant.DATE_FORMAT',
+		},
+		{ label: 'Co Fltno', value: 'coFltno' },
+		{ label: 'Co Time', value: 'coTime' },
+		{ label: 'Cdate', value: 'cdate', type: 'Constant.NUMBER', rowspan: '2' },
+		{ label: 'Detail', value: 'detail', type: 'Constant.NUMBER', rowspan: '2' },
+		{
+			label: 'Early Checkin',
+			value: 'earlyCheckin',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Eci Single Room Cc Charge',
+			value: 'eciSingleRoomCcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Eci Single Room Fc Charge',
+			value: 'eciSingleRoomFcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Eci Twin Room Cc Charge',
+			value: 'eciTwinRoomCcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{ label: 'Fc', value: 'fc', type: 'Constant.NUMBER', rowspan: '2' },
+		{ label: 'Fltno', value: 'fltno', type: 'Constant.NUMBER', rowspan: '2' },
+		{
+			label: 'Fullname',
+			value: 'fullname',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Late Checkout',
+			value: 'lateCheckout',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Lco Single Room Cc Charge',
+			value: 'lcoSingleRoomCcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Lco Single Room Fc Charge',
+			value: 'lcoSingleRoomFcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Lco Twin Room Cc Charge',
+			value: 'lcoTwinRoomCcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{ label: 'Night', value: 'night', type: 'Constant.NUMBER', rowspan: '2' },
+		{
+			label: 'Number Of Nights',
+			value: 'numberOfNights',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Number Of Vehicle',
+			value: 'numberOfVehicle',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{ label: 'Price', value: 'price', type: 'Constant.NUMBER', rowspan: '2' },
+		{ label: 'Remark', value: 'remark', type: 'Constant.NUMBER', rowspan: '2' },
+		{ label: 'Room No', value: 'roomNo', rowspan: '2' },
+		{
+			label: 'Service Tax Cc Charge',
+			value: 'serviceTaxCcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Service Tax Fc Charge',
+			value: 'serviceTaxFcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Single Room Cc',
+			value: 'singleRoomCc',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Single Room Cc Charge',
+			value: 'singleRoomCcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Single Room Fc',
+			value: 'singleRoomFc',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Single Room Fc Charge',
+			value: 'singleRoomFcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Time Stay',
+			value: 'timeStay',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{ label: 'Toll', value: 'toll', type: 'Constant.NUMBER', rowspan: '2' },
+		{
+			label: 'Toll (total)',
+			value: 'totalToll',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Amount Cc',
+			value: 'totalAmountCc',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Amount Currency',
+			value: 'totalAmountFc',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Breakfast Cc Charge',
+			value: 'breakfastCcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Breakfast Fc Charge',
+			value: 'breakfastFcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Charge',
+			value: 'totalCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Charges',
+			value: 'totalCharges',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Night',
+			value: 'totalNight',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Revenue',
+			value: 'totalRevenue',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Single Rooms Cc',
+			value: 'totalSingleRoomsCc',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Single Rooms Fc',
+			value: 'totalSingleRoomsFc',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Twin Rooms Cc',
+			value: 'totalTwinRoomsCc',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Total Vat',
+			value: 'totalVat',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Transit Duty',
+			value: 'transitDuty',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Number of transfers',
+			value: 'numberOfTransfers',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Transport Charge',
+			value: 'transportCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Twin Room Cc',
+			value: 'twinRoomCc',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Twin Room Cc Charge',
+			value: 'twinRoomCcCharge',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{
+			label: 'Unit Price',
+			value: 'unitPrice',
+			type: 'Constant.NUMBER',
+			rowspan: '2',
+		},
+		{ label: 'Type Room', value: 'typeRoom', rowspan: '2' },
+	];
+	ready: boolean = false;
+	@ViewChild(
+		'inputElementRef1, inputElementRef2, inputElementRef3, inputElementRef4',
+	)
+	inputElementRef: QueryList<ElementRef>;
+	@ViewChild('totalab') totalab: ElementRef;
+	public listDocumentParent: any[] = [];
+	showDialogFinish = false;
+	runSubscribe = true;
+	_showDialogDelete = false;
+	deleteObj: any;
+	protected readonly LOCALE = LOCALE;
+	protected readonly transform = transform;
+	protected readonly DATE_FORMAT_DD_MM_YYYY = DATE_FORMAT_DD_MM_YYYY;
 
+	constructor() {
+		super();
+		window.scrollTo({ top: 0, behavior: 'instant' });
+		this.formGroupDetail = this.fb.group({
+			id: [],
+			idParent: [],
+			idContract: [],
+			idInvoiceForm: [],
+			version: [1],
+			ctype: [InvoiceDocumentTypeEnum.STANDARD],
+			invoiceNumber: [, [Validators.maxLength(50)]],
+			invoiceDate: [],
+			invoiceReceiveDate: [],
+			periodFrom: [],
+			periodTo: [],
+			periodOccurrence: [, [Validators.required]],
+			paymentDueDay: [],
+			paymentDueDate: [],
+			bizDocId: [],
+			airportCode: [, [Validators.required]],
+			airportName: [],
+			partnerCode: [],
+			partnerName: [],
+			partnerType: ['HOTEL'],
+			contractServiceType: [],
+			currency: [],
+			exchangeRate: [1],
+			exchangeRateDate: [],
+			exchangeRateType: [],
+			description: [, [Validators.maxLength(500)]],
+			note: [, [Validators.maxLength(500)]],
+			status: [InvoiceDocumentStatusEnum.UNMATCHED],
+			statusEmail: [],
+			statusPayment: [],
+			amountFcBeforeVat: [],
+			vatFc: [],
+			totalAmountFc: [],
+			amountVndBeforeVat: [],
+			vatVnd: [],
+			totalAmountVnd: [],
+			reimbursementTotalFc: [],
+			reimbursementTotalVnd: [],
+			invoiceDocumentDtl: [],
+			fileAttachments: [],
+			fileUpload: [],
+			_id: [],
+			_invoiceNumber: [],
+			_invoiceDate: [],
 
-  //variable
-  @Input() id: any;
-  @Input() viewType: any;
-  @Input() readMode: any;
-  @Input() action: any;
-  @Input() dataObject: any;
-  @Input() contractObj: any;
-  @Output() nextStepEmit = new EventEmitter<any>();
-  @Output() backStepEmit = new EventEmitter<any>();
-  @Input() dialogMode: boolean = false;
-  @Output() dialogModeEmit = new EventEmitter<any>();
-  firstLoad: boolean = true;
-  //1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
-  @Input() formType: any;
-  @Input() titleHeader = $localize`Detailed Statement`;
-  expandList = new Set<string>(['tab1', 'tab2', 'tab3']);
-  formGroupFileUpload!: FormGroup;
-  showDialogDeleteFile = false;
-  dsInvoiceDocumentDtl = new MatTableDataSource<any>([]);
-  listDocumentType = InvoiceLookup.InvoiceDocumentType;
-  listInvoiceDocumentStatus = InvoiceLookup.InvoiceDocumentStatus;
-  listInvoiceDocumentStatusEmail = InvoiceLookup.InvoiceDocumentStatusEmail;
-  listInvoiceDocumentStatusPayment = InvoiceLookup.InvoiceDocumentStatusPayment;
-  today = new Date();
+			//table
+			tblInvoiceDocumentDtl: this.fb.array([]),
+		});
+		this.formGroupDetail.controls['invoiceDate'].setValidators([
+			beforeValidator(this.formGroupDetail.controls['periodFrom']),
+			beforeValidator(this.formGroupDetail.controls['periodTo']),
+		]);
+		this.formGroupDetail.controls['periodFrom'].setValidators([
+			afterValidator(this.formGroupDetail.controls['periodTo']),
+			afterValidator(
+				this.formGroupDetail.controls['invoiceDate'],
+				'invoiceDate',
+			),
+		]);
+		this.formGroupDetail.controls['periodTo'].setValidators([
+			beforeValidator(this.formGroupDetail.controls['periodFrom']),
+			afterValidator(
+				this.formGroupDetail.controls['invoiceDate'],
+				'invoiceDate',
+			),
+		]);
+		this.formGroupDetail.controls['invoiceReceiveDate'].setValidators([
+			beforeValidator(this.formGroupDetail.controls['invoiceDate']),
+		]);
+		if (!this.readMode) {
+			this.subscribeMain();
+		}
+	}
 
-  _displayedColumnsHeader1: string[] = [];
-  _displayedColumnsHeader2: string[] = [];
-  _displayedColumnsRow: string[] = [];
-  _displayedColumnsFooter: string[] = [];
-  _displayedColumnsAll: {
-    label: string; value: string, type?: string, format?: string, rowspan?: string, colspan?: string
-  }[] = [
-    {label: "Access Bridge", value: "accessBridge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Accommodation Tax Cc Charge", value: "accommodationTaxCcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Accommodation Tax Fc Charge", value: "accommodationTaxFcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Airport Parking Fee", value: "airportParkingFee", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Breakfast Cc", value: "breakfastCc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Breakfast Fc", value: "breakfastFc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Cc", value: "cc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Ci Date", value: "ciDate", type: "Constant.DATE", format: "Constant.DATE_FORMAT"},
-    {label: "Ci Fltno", value: "ciFltno"},
-    {label: "Ci Time", value: "ciTime"},
-    {label: "City Tax Cc Charge", value: "cityTaxCcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "City Tax Fc Charge", value: "cityTaxFcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Co Date", value: "coDate", type: "Constant.DATE", format: "Constant.DATE_FORMAT"},
-    {label: "Co Fltno", value: "coFltno"},
-    {label: "Co Time", value: "coTime"},
-    {label: "Cdate", value: "cdate", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Detail", value: "detail", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Early Checkin", value: "earlyCheckin", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Eci Single Room Cc Charge", value: "eciSingleRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Eci Single Room Fc Charge", value: "eciSingleRoomFcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Eci Twin Room Cc Charge", value: "eciTwinRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Fc", value: "fc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Fltno", value: "fltno", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Fullname", value: "fullname", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Late Checkout", value: "lateCheckout", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Lco Single Room Cc Charge", value: "lcoSingleRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Lco Single Room Fc Charge", value: "lcoSingleRoomFcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Lco Twin Room Cc Charge", value: "lcoTwinRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Night", value: "night", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Number Of Nights", value: "numberOfNights", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Number Of Vehicle", value: "numberOfVehicle", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Price", value: "price", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Remark", value: "remark", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Room No", value: "roomNo", rowspan: "2"},
-    {label: "Service Tax Cc Charge", value: "serviceTaxCcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Service Tax Fc Charge", value: "serviceTaxFcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Single Room Cc", value: "singleRoomCc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Single Room Cc Charge", value: "singleRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Single Room Fc", value: "singleRoomFc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Single Room Fc Charge", value: "singleRoomFcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Time Stay", value: "timeStay", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Toll", value: "toll", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Toll (total)", value: "totalToll", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Amount Cc", value: "totalAmountCc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Amount Currency", value: "totalAmountFc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Breakfast Cc Charge", value: "breakfastCcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Breakfast Fc Charge", value: "breakfastFcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Charge", value: "totalCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Charges", value: "totalCharges", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Night", value: "totalNight", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Revenue", value: "totalRevenue", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Single Rooms Cc", value: "totalSingleRoomsCc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Single Rooms Fc", value: "totalSingleRoomsFc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Twin Rooms Cc", value: "totalTwinRoomsCc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Total Vat", value: "totalVat", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Transit Duty", value: "transitDuty", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Number of transfers", value: "numberOfTransfers", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Transport Charge", value: "transportCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Twin Room Cc", value: "twinRoomCc", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Twin Room Cc Charge", value: "twinRoomCcCharge", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Unit Price", value: "unitPrice", type: "Constant.NUMBER", rowspan: "2"},
-    {label: "Type Room", value: "typeRoom", rowspan: "2"},
-  ];
-  ready: boolean = false;
-  @ViewChild('inputElementRef1, inputElementRef2, inputElementRef3, inputElementRef4') inputElementRef: QueryList<ElementRef>;
-  @ViewChild('totalab') totalab: ElementRef;
-  public listDocumentParent: any[] = [];
-  showDialogFinish = false;
-  runSubscribe = true;
-  _showDialogDelete = false;
-  deleteObj: any;
-  protected readonly LOCALE = LOCALE;
-  protected readonly transform = transform;
-  protected readonly DATE_FORMAT_DD_MM_YYYY = DATE_FORMAT_DD_MM_YYYY;
+	get tblInvoiceDocumentDtl(): FormArray<FormGroup> {
+		return this.formGroupDetail.get(
+			'tblInvoiceDocumentDtl',
+		) as FormArray<FormGroup>;
+	}
 
-  constructor() {
-    super();
-    window.scrollTo({top: 0, behavior: 'instant'});
-    this.formGroupDetail = this.fb.group({
-      id: [],
-      idParent: [],
-      idContract: [],
-      idInvoiceForm: [],
-      version: [1],
-      ctype: [InvoiceDocumentTypeEnum.STANDARD],
-      invoiceNumber: [, [Validators.maxLength(50),]],
-      invoiceDate: [],
-      invoiceReceiveDate: [],
-      periodFrom: [],
-      periodTo: [],
-      periodOccurrence: [, [Validators.required]],
-      paymentDueDay: [],
-      paymentDueDate: [],
-      bizDocId: [],
-      airportCode: [, [Validators.required]],
-      airportName: [],
-      partnerCode: [],
-      partnerName: [],
-      partnerType: ['HOTEL'],
-      contractServiceType: [],
-      currency: [],
-      exchangeRate: [1],
-      exchangeRateDate: [],
-      exchangeRateType: [],
-      description: [, [Validators.maxLength(500)]],
-      note: [, [Validators.maxLength(500)]],
-      status: [InvoiceDocumentStatusEnum.UNMATCHED],
-      statusEmail: [],
-      statusPayment: [],
-      amountFcBeforeVat: [],
-      vatFc: [],
-      totalAmountFc: [],
-      amountVndBeforeVat: [],
-      vatVnd: [],
-      totalAmountVnd: [],
-      reimbursementTotalFc: [],
-      reimbursementTotalVnd: [],
-      invoiceDocumentDtl: [],
-      fileAttachments: [],
-      fileUpload: [],
-      _id: [],
-      _invoiceNumber: [],
-      _invoiceDate: [],
+	set tblInvoiceDocumentDtl(value: FormArray) {
+		this.formGroupDetail.setControl('tblInvoiceDocumentDtl', value);
+		this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
+	}
 
-      //table
-      tblInvoiceDocumentDtl: this.fb.array([]),
+	override async ngOnInit() {
+		try {
+			await this.spinner.show();
+			await this.loadListDocumentParent();
+			await Promise.all([
+				this.detail(this.id),
+				this.loadListFlightMarket(
+					this.id ? {} : { status: FlightMarketStatusEnum.OPERATIONAL },
+				),
+				this.loadListFeeService(),
+				this.setReadMode(this.formGroupDetail),
+			]).then(() => {
+				this.formGroupDetail.patchValue({
+					idParent: this.formGroupDetail.getRawValue().idParent,
+				});
+				this.calTotal();
+				this.listFeeService = this.listFeeService.filter((s: any) => s.active);
+				this.setReadModeDtl([this.tblInvoiceDocumentDtl]);
+				if (this.isDataClone()) {
+					this.formGroupDetail.patchValue({
+						id: null,
+						idParent: null,
+						idInvoiceForm: null,
+						fileAttachments: [],
+					});
+				}
+			});
+		} catch (e) {
+			console.log(e);
+			this.baseService.showError(MESSAGE.ERROR);
+		} finally {
+			setTimeout(() => {
+				this.firstLoad = false;
+			}, 1000);
+			await this.spinner.hide();
+		}
+	}
 
-    });
-    this.formGroupDetail.controls['invoiceDate'].setValidators([beforeValidator(this.formGroupDetail.controls['periodFrom']),
-      beforeValidator(this.formGroupDetail.controls['periodTo'])]);
-    this.formGroupDetail.controls['periodFrom'].setValidators([afterValidator(this.formGroupDetail.controls['periodTo']),
-      afterValidator(this.formGroupDetail.controls['invoiceDate'], 'invoiceDate')]);
-    this.formGroupDetail.controls['periodTo'].setValidators([beforeValidator(this.formGroupDetail.controls['periodFrom']),
-      afterValidator(this.formGroupDetail.controls['invoiceDate'], 'invoiceDate')]);
-    this.formGroupDetail.controls['invoiceReceiveDate'].setValidators([beforeValidator(this.formGroupDetail.controls['invoiceDate'])]);
-    if (!this.readMode) {
-      this.subscribeMain();
-    }
-  }
+	goBack() {
+		this.backStepEmit.emit([]);
+		window.scrollTo({ top: 0, behavior: 'instant' });
+	}
 
-  get tblInvoiceDocumentDtl(): FormArray<FormGroup> {
-    return this.formGroupDetail.get('tblInvoiceDocumentDtl') as FormArray<FormGroup>;
-  }
+	saveAndNext() {
+		this.save().then((res) => {
+			if (res?.code == HttpStatusCode.Ok) {
+				this.nextStepEmit.emit([
+					res.data.id,
+					this.readMode,
+					3,
+					this.dataObject,
+				]);
+				window.scrollTo({ top: 0, behavior: 'instant' });
+			}
+		});
+	}
 
-  set tblInvoiceDocumentDtl(value: FormArray) {
-    this.formGroupDetail.setControl('tblInvoiceDocumentDtl', value);
-    this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
-  }
+	async saveAndFinish() {
+		this.formGroupDetail.patchValue({
+			status: InvoiceDocumentStatusEnum.FINISHED,
+		});
+		await this.save();
+		this.goBack();
+	}
 
-  override async ngOnInit() {
-    try {
-      await this.spinner.show();
-      await this.loadListDocumentParent();
-      await Promise.all([this.detail(this.id), this.loadListFlightMarket(this.id ? {} : {status: FlightMarketStatusEnum.OPERATIONAL}), this.loadListFeeService(), this.setReadMode(this.formGroupDetail)]).then(() => {
-        this.formGroupDetail.patchValue({idParent: this.formGroupDetail.getRawValue().idParent});
-        this.calTotal();
-        this.listFeeService = this.listFeeService.filter((s: any) => s.active);
-        this.setReadModeDtl([this.tblInvoiceDocumentDtl]);
-        if (this.isDataClone()) {
-          this.formGroupDetail.patchValue({
-            id: null,
-            idParent: null,
-            idInvoiceForm: null,
-            fileAttachments: []
-          });
-        }
-      });
-    } catch (e) {
-      console.log(e);
-      this.baseService.showError(MESSAGE.ERROR);
-    } finally {
-      setTimeout(() => {
-        this.firstLoad = false;
-      }, 1000);
-      await this.spinner.hide();
-    }
-  }
+	async doSave() {
+		let response = await this.save();
+		if (response) {
+			this.goBack();
+		}
+	}
 
-  goBack() {
-    this.backStepEmit.emit([]);
-    window.scrollTo({top: 0, behavior: 'instant'});
-  }
+	toggleDialogFinish() {
+		this.formGroupDetail.markAllAsTouched();
+		if (this.formGroupDetail.invalid) {
+			this.findInvalidControls(this.formGroupDetail);
+			return;
+		}
+		this.showDialogFinish = !this.showDialogFinish;
+	}
 
-  saveAndNext() {
-    this.save().then(res => {
-      if (res?.code == HttpStatusCode.Ok) {
-        this.nextStepEmit.emit([res.data.id, this.readMode, 3, this.dataObject]);
-        window.scrollTo({top: 0, behavior: 'instant'});
-      }
-    });
-  }
+	async setReadMode(form: FormGroup) {
+		const disableFieldAdd = [
+			'paymentDueDay',
+			'bizDocId',
+			'partnerCode',
+			'partnerName',
+			'currency',
+			'version',
+			'contractServiceType',
+			'exchangeRateType',
+			'status',
+		];
+		const disableFieldEdit = [
+			'airportCode',
+			'paymentDueDay',
+			'bizDocId',
+			'partnerCode',
+			'partnerName',
+			'partnerType',
+			'currency',
+			'version',
+			'contractServiceType',
+			'exchangeRateType',
+			'status',
+		];
 
-  async saveAndFinish() {
-    this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.FINISHED})
-    await this.save();
-    this.goBack();
-  }
+		Object.entries(form.controls).forEach(([k, v]) => {
+			if (this.readMode) {
+				v.disable();
+			} else {
+				//add
+				if (this.id === 0) {
+					if (disableFieldAdd.includes(k)) {
+						v.disable();
+					}
+				}
+				//edit
+				else {
+					//status finish
+					if (this.dataObject?.status === InvoiceDocumentStatusEnum.FINISHED) {
+						v.disable();
+						this.formGroupDetail.controls['exchangeRateDate'].enable();
+					} else {
+						if (disableFieldEdit.includes(k)) {
+							v.disable();
+						}
+					}
+				}
+			}
+		});
+	}
 
-  async doSave() {
-    let response = await this.save();
-    if (response) {
-      this.goBack();
-    }
-  }
+	async setReadModeDtl(formArrays?: any) {
+		if (!formArrays) {
+			formArrays = [this.tblInvoiceDocumentDtl];
+		}
+		formArrays.forEach((formArray: any) => {
+			if (!this.readMode) return;
+			const groups = formArray.controls as FormGroup[];
+			groups.forEach((fGroup) => {
+				Object.values(fGroup.controls).forEach((control) => {
+					control.disable();
+				});
+			});
+		});
+	}
 
-  toggleDialogFinish() {
-    this.formGroupDetail.markAllAsTouched();
-    if (this.formGroupDetail.invalid) {
-      this.findInvalidControls(this.formGroupDetail);
-      return;
-    }
-    this.showDialogFinish = !this.showDialogFinish;
-  }
+	calRow(row: any, column?: any) {
+		this.runSubscribe = false;
+		let rate = this.formGroupDetail.getRawValue().exchangeRate ?? 0;
+		if (column == 'price') {
+			//tinh don gian
+			let amount = +(row.getRawValue().amountFcBeforeVat ?? 0);
+			let quantity = +row.getRawValue().quantity;
+			row.patchValue({
+				unitPrice: this.roundUpNumber(amount / quantity, 2),
+			});
+			row.patchValue({
+				amountVndBeforeVat: this.roundUpNumber(
+					(row.getRawValue().quantity * row.getRawValue().unitPrice * rate) /
+						100,
+					0,
+				),
+				amountFcVat: this.isInternational()
+					? this.roundUpNumber(
+							(row.getRawValue().quantity *
+								row.getRawValue().unitPrice *
+								row.getRawValue().vat) /
+								100,
+							2,
+						)
+					: null,
+				amountVndVat: this.roundUpNumber(
+					((row.getRawValue().quantity * row.getRawValue().unitPrice * rate) /
+						100) *
+						row.getRawValue().vat,
+					0,
+				), // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
+			});
+		} else {
+			row.patchValue({
+				amountFcBeforeVat: this.isInternational()
+					? this.roundUpNumber(
+							row.getRawValue().quantity * row.getRawValue().unitPrice,
+							2,
+						)
+					: null,
+				amountVndBeforeVat: this.roundUpNumber(
+					(row.getRawValue().quantity * row.getRawValue().unitPrice * rate) /
+						100,
+					0,
+				),
+				amountFcVat: this.isInternational()
+					? this.roundUpNumber(
+							(row.getRawValue().quantity *
+								row.getRawValue().unitPrice *
+								row.getRawValue().vat) /
+								100,
+							2,
+						)
+					: null,
+				amountVndVat: this.roundUpNumber(
+					((row.getRawValue().quantity * row.getRawValue().unitPrice * rate) /
+						100) *
+						row.getRawValue().vat,
+					0,
+				), // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
+			});
+		}
+		setTimeout(() => {
+			this.runSubscribe = true;
+		}, 100);
+	}
 
-  async setReadMode(form: FormGroup) {
-    const disableFieldAdd = ['paymentDueDay', 'bizDocId', 'partnerCode', 'partnerName', 'currency', 'version',
-      'contractServiceType', 'exchangeRateType', 'status'];
-    const disableFieldEdit = ['airportCode', 'paymentDueDay', 'bizDocId', 'partnerCode', 'partnerName', 'partnerType',
-      'currency', 'version', 'contractServiceType', 'exchangeRateType', 'status'];
+	calTotal() {
+		let jsonValue = this.bodyBuilder();
+		let sum = jsonValue.invoiceDocumentDtl?.reduce(
+			(prev: any, cur: any) => {
+				prev.amountFcBeforeVat += +cur.amountFcBeforeVat;
+				prev.vatFc += +cur.amountFcVat;
+				prev.amountVndBeforeVat += +cur.amountVndBeforeVat;
+				prev.vatVnd += +cur.amountVndVat;
+				prev.totalAmountFc += +cur.amountFcBeforeVat + +cur.amountFcVat;
+				prev.totalAmountVnd += +cur.amountVndBeforeVat + +cur.amountVndVat;
+				return prev;
+			},
+			{
+				amountFcBeforeVat: 0,
+				vatFc: 0,
+				amountVndBeforeVat: 0,
+				vatVnd: 0,
+				totalAmountFc: 0,
+				totalAmountVnd: 0,
+			},
+		);
+		Object.keys(sum).forEach((key) => {
+			if (['amountFcBeforeVat', 'vatFc', 'totalAmountFc'].includes(key)) {
+				sum[key] = this.roundUpNumber(+sum[key], 2);
+			} else {
+				sum[key] = this.roundUpNumber(+sum[key], 0);
+			}
+		});
+		this.formGroupDetail.patchValue(sum);
 
-    Object.entries(form.controls).forEach(([k, v]) => {
-      if (this.readMode) {
-        v.disable();
-      } else {
-        //add
-        if (this.id === 0) {
-          if (disableFieldAdd.includes(k)) {
-            v.disable();
-          }
-        }
-        //edit
-        else {
-          //status finish
-          if (this.dataObject?.status === InvoiceDocumentStatusEnum.FINISHED) {
-            v.disable();
-            this.formGroupDetail.controls['exchangeRateDate'].enable();
-          } else {
-            if (disableFieldEdit.includes(k)) {
-              v.disable();
-            }
-          }
-        }
-
-      }
-    });
-  }
-
-  async setReadModeDtl(formArrays?: any) {
-    if (!formArrays) {
-      formArrays = [this.tblInvoiceDocumentDtl];
-    }
-    formArrays.forEach((formArray: any) => {
-      if (!this.readMode) return;
-      const groups = formArray.controls as FormGroup[];
-      groups.forEach((fGroup) => {
-        Object.values(fGroup.controls).forEach((control) => {
-          control.disable();
-        });
-      });
-    });
-  }
-
-  calRow(row: any, column?: any) {
-    this.runSubscribe = false;
-    let rate = this.formGroupDetail.getRawValue().exchangeRate ?? 0;
-    if (column == 'price') {//tinh don gian
-      let amount = +(row.getRawValue().amountFcBeforeVat ?? 0);
-      let quantity = +row.getRawValue().quantity;
-      row.patchValue({
-        unitPrice: this.roundUpNumber((amount / quantity), 2),
-      });
-      row.patchValue({
-        amountVndBeforeVat: this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100), 0),
-        amountFcVat: this.isInternational() ? this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat / 100), 2) : null,
-        amountVndVat: this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100 * row.getRawValue().vat), 0) // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
-      });
-
-    } else {
-      row.patchValue({
-        amountFcBeforeVat: this.isInternational() ? this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice), 2) : null,
-        amountVndBeforeVat: this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100), 0),
-        amountFcVat: this.isInternational() ? this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * row.getRawValue().vat / 100), 2) : null,
-        amountVndVat: this.roundUpNumber((row.getRawValue().quantity * row.getRawValue().unitPrice * rate / 100 * row.getRawValue().vat), 0) // unitPrice: row.getRawValue().quantity > 0 ? (row.getRawValue().amountFcBeforeVat / row.getRawValue().quantity) : 0
-      });
-    }
-    setTimeout(() => {
-      this.runSubscribe = true;
-    }, 100);
-  }
-
-  calTotal() {
-    let jsonValue = this.bodyBuilder();
-    let sum = jsonValue.invoiceDocumentDtl?.reduce((prev: any, cur: any) => {
-      prev.amountFcBeforeVat += +cur.amountFcBeforeVat;
-      prev.vatFc += +cur.amountFcVat;
-      prev.amountVndBeforeVat += +cur.amountVndBeforeVat;
-      prev.vatVnd += +cur.amountVndVat;
-      prev.totalAmountFc += +cur.amountFcBeforeVat + +cur.amountFcVat;
-      prev.totalAmountVnd += +cur.amountVndBeforeVat + +cur.amountVndVat;
-      return prev;
-    }, {amountFcBeforeVat: 0, vatFc: 0, amountVndBeforeVat: 0, vatVnd: 0, totalAmountFc: 0, totalAmountVnd: 0,});
-    Object.keys(sum).forEach(key => {
-      if (['amountFcBeforeVat', 'vatFc', 'totalAmountFc'].includes(key)) {
-        sum[key] = this.roundUpNumber(+sum[key], 2);
-      } else {
-        sum[key] = this.roundUpNumber(+sum[key], 0);
-      }
-    });
-    this.formGroupDetail.patchValue(sum);
-
-    /*const inputs = this.totalab.nativeElement.querySelectorAll('input');
+		/*const inputs = this.totalab.nativeElement.querySelectorAll('input');
     inputs.forEach((inputRef: any) => {
       inputRef.dispatchEvent(new Event('focus'));
       inputRef.dispatchEvent(new Event('blur'));
     });*/
-  }
+	}
 
-  async download(fileRow: any) {
-    try {
-      await this.spinner.show();
-      let res = await this.baseService.getFileData({
-        id: fileRow.id, url: fileRow.fileUrl, fileSize: fileRow.fileSize,
-      });
-      this.downloadFile(res, fileRow.fileName + "." + fileRow.fileType);
+	async download(fileRow: any) {
+		try {
+			await this.spinner.show();
+			let res = await this.baseService.getFileData({
+				id: fileRow.id,
+				url: fileRow.fileUrl,
+				fileSize: fileRow.fileSize,
+			});
+			this.downloadFile(res, fileRow.fileName + '.' + fileRow.fileType);
+		} catch (e) {
+			console.log(e);
+			this.baseService.showError(MESSAGE.ERROR);
+		} finally {
+			await this.spinner.hide();
+		}
+	}
 
-    } catch (e) {
-      console.log(e);
-      this.baseService.showError(MESSAGE.ERROR);
-    } finally {
-      await this.spinner.hide();
-    }
-  }
+	changeServiceFee(row: any) {
+		const data = row.getRawValue();
+		row.patchValue({
+			serviceName:
+				this.listFeeService.find((s: any) => s.code == data.serviceCode)
+					?.name || null,
+			unit:
+				this.listFeeService.find((s: any) => s.code == data.serviceCode)
+					?.unit || null,
+		});
+	}
 
-  changeServiceFee(row: any) {
-    const data = row.getRawValue();
-    row.patchValue({
-      serviceName: this.listFeeService.find((s: any) => s.code == data.serviceCode)?.name || null,
-      unit: this.listFeeService.find((s: any) => s.code == data.serviceCode)?.unit || null,
-    });
-  }
+	async actionUpload() {
+		try {
+			await this.spinner.show();
+			const formUpload = new FormData();
+			const fileUpload = this.formGroupDetail.getRawValue().fileUpload[0];
+			//validate
+			// if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
+			if (fileUpload.size > 20 * 1048576) {
+				this.baseService.showError('Attachment must not exceed 20MB');
+				return;
+			}
+			formUpload.append('file', fileUpload, fileUpload.name);
+			formUpload.append(
+				'body',
+				JSON.stringify({
+					fileFolder: '/document',
+				}),
+			);
+			this.baseService.uploadFileCommon(formUpload).then((res) => {
+				if (res.code == HttpStatusCode.Ok) {
+					let lastDotIndex = fileUpload.name.lastIndexOf('.');
+					let fileName = fileUpload.name.substring(0, lastDotIndex);
+					let listFile = [
+						...(this.formGroupDetail.getRawValue().fileAttachments || []),
+						{
+							ctype: 'MANUAL',
+							fileName: fileName,
+							fileSize: fileUpload.size,
+							fileUrl: res.data,
+							fileType: fileUpload.name.split('.').pop(),
+						},
+					];
+					this.formGroupDetail.patchValue({ fileAttachments: listFile });
+				}
+			});
+		} catch (e: any) {
+			console.log(e);
+			this.baseService.showError(
+				e.error?.error?.file ??
+					e.error?.error ??
+					e.error?.error?.code ??
+					MESSAGE.ERROR,
+			);
+		} finally {
+			await this.spinner.hide();
+			this.formGroupDetail.patchValue({ fileUpload: [] });
+		}
+	}
 
-  async actionUpload() {
-    try {
-      await this.spinner.show();
-      const formUpload = new FormData();
-      const fileUpload = this.formGroupDetail.getRawValue().fileUpload[0];
-      //validate
-      // if(!fileUpload.name.includes(this.COMMON_CONFIG.FILE_ACCEPT.split(',')) || fileUpload.size > 5 * 1048576){
-      if (fileUpload.size > 20 * 1048576) {
-        this.baseService.showError("Attachment must not exceed 20MB");
-        return;
-      }
-      formUpload.append('file', fileUpload, fileUpload.name);
-      formUpload.append('body', JSON.stringify({
-        fileFolder: '/document',
-      }));
-      this.baseService.uploadFileCommon(formUpload).then(res => {
-        if (res.code == HttpStatusCode.Ok) {
-          let lastDotIndex = fileUpload.name.lastIndexOf('.');
-          let fileName = fileUpload.name.substring(0, lastDotIndex);
-          let listFile = [...this.formGroupDetail.getRawValue().fileAttachments || [], {
-            ctype: 'MANUAL', fileName: fileName, fileSize: fileUpload.size, fileUrl: res.data, fileType: fileUpload.name.split('.').pop(),
-          }];
-          this.formGroupDetail.patchValue({fileAttachments: listFile});
-        }
-      });
-    } catch (e: any) {
-      console.log(e);
-      this.baseService.showError((e.error?.error?.file) ?? (e.error?.error) ?? (e.error?.error?.code) ?? MESSAGE.ERROR);
-    } finally {
-      await this.spinner.hide();
-      this.formGroupDetail.patchValue({fileUpload: []});
+	override async save(): Promise<any> {
+		try {
+			if (!this.formGroupDetail.getRawValue().bizDocId) {
+				this.showError($localize`Can not find any contract.`);
+				return;
+			}
+			let removeNull = this.formGroupDetail
+				.getRawValue()
+				.invoiceDocumentDtl?.filter((s: any) => s.serviceCode);
+			this.formGroupDetail.patchValue({ invoiceDocumentDtl: removeNull });
+			this.formGroupDetail.markAllAsTouched();
+			this.formGroupDetail.updateValueAndValidity();
+			if (this.formGroupDetail.invalid) {
+				this.findInvalidControls(this.formGroupDetail);
+				return;
+			}
+			const update = !!this.formGroupDetail.getRawValue().id;
+			await this.spinner.show();
+			let res;
+			let req = this.bodyBuilder();
+			if (update) {
+				res = await this.baseService.update(req);
+			} else {
+				res = await this.baseService.create(req);
+			}
+			this.baseService.showSuccess(
+				update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,
+			);
+			// this.goBack();
+			return res;
+		} catch (e: any) {
+			console.log(e);
+			this.baseService.showError(e.error?.message ?? this.MESSAGE.ERROR);
+		} finally {
+			await this.spinner.hide();
+		}
+	}
 
-    }
+	validField(row: any, cell: any, inputRef?: any) {
+		if (!row[cell]) {
+			return 'Not empty';
+		} else if (
+			(cell == 'col614' ||
+				cell == 'col624' ||
+				cell == 'col634' ||
+				cell == 'col635') &&
+			row[cell] > 2
+		) {
+			inputRef.control.setErrors({ invalid: true });
+			return 'Must less than 2';
+		} else if (cell == 'col633') {
+			const regex = /^(>?)([1-9]|1[0-9]|2[0-4])$/;
+			if (!regex.test(row[cell])) {
+				inputRef.control.setErrors({ invalid: true });
+				return 'Not valid';
+			}
+		} else if (cell == 'col613') {
+			const from = +row['col612'].replace(':', '');
+			const to = +row['col613'].replace(':', '');
+			if (to < from) {
+				inputRef.control.setErrors({ invalid: true });
+				return 'Must after from';
+			}
+		} else if (cell == 'col623') {
+			const from = +row['col622'].replace(':', '');
+			const to = +row['col623'].replace(':', '');
+			if (to < from) {
+				inputRef.control.setErrors({ invalid: true });
+				return 'Must after from';
+			}
+		} else if (cell == 'col632') {
+			const from = +row['col631'].replace(':', '');
+			const to = +row['col632'].replace(':', '');
+			if (to < from) {
+				inputRef.control.setErrors({ invalid: true });
+				return 'Must after from';
+			}
+		}
+		return '';
+	}
 
-  }
+	addDtl() {
+		let listDtl = [
+			...(this.formGroupDetail.getRawValue().invoiceDocumentDtl || []),
+			{},
+		];
+		this.formGroupDetail.patchValue({ invoiceDocumentDtl: listDtl });
+	}
 
-  override async save(): Promise<any> {
-    try {
-      if (!this.formGroupDetail.getRawValue().bizDocId) {
-        this.showError($localize`Can not find any contract.`);
-        return;
-      }
-      let removeNull = this.formGroupDetail.getRawValue().invoiceDocumentDtl?.filter((s: any) => s.serviceCode);
-      this.formGroupDetail.patchValue({invoiceDocumentDtl: removeNull});
-      this.formGroupDetail.markAllAsTouched();
-      this.formGroupDetail.updateValueAndValidity();
-      if (this.formGroupDetail.invalid) {
-        this.findInvalidControls(this.formGroupDetail);
-        return;
-      }
-      const update = !!this.formGroupDetail.getRawValue().id;
-      await this.spinner.show();
-      let res;
-      let req = this.bodyBuilder();
-      if (update) {
-        res = await this.baseService.update(req);
-      } else {
-        res = await this.baseService.create(req);
-      }
-      this.baseService.showSuccess(update ? MESSAGE.UPDATE_SUCCESS : MESSAGE.CREATE_SUCCESS,);
-      // this.goBack();
-      return res;
-    } catch (e: any) {
-      console.log(e)
-      this.baseService.showError(e.error?.message ?? this.MESSAGE.ERROR);
-    } finally {
-      await this.spinner.hide();
-    }
-  }
+	addRow(init?: any) {
+		let row: FormGroup = this.fb.group({
+			id: [''],
+			serviceCode: ['', [Validators.required]],
+			serviceName: [''],
+			unit: [''],
+			periodOccurrence: [
+				{
+					value: this.formGroupDetail.getRawValue().periodOccurrence,
+					disabled: true,
+				},
+				[Validators.required],
+			],
+			nsCode: ['D2'],
+			quantity: [
+				'',
+				[
+					Validators.min(0),
+					Validators.max(999),
+					Validators.pattern(PATTERN.NUMBER2),
+				],
+			],
+			unitPrice: [
+				'',
+				[Validators.max(999999999), Validators.pattern(PATTERN.NUMBER3)],
+			],
+			amountFcBeforeVat: [''],
+			amountVndBeforeVat: [''],
+			amountFcVat: [''],
+			amountVndVat: [''],
+			vatType: [''],
+			vat: [''],
+		});
+		init && row.patchValue(init);
+		this.subscribeMain(row);
+		this.tblInvoiceDocumentDtl.push(row);
+		this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
+		return row;
+	}
 
-  validField(row: any, cell: any, inputRef?: any) {
-    if (!row[cell]) {
-      return 'Not empty';
-    } else if ((cell == 'col614' || cell == 'col624' || cell == 'col634' || cell == 'col635') && row[cell] > 2) {
-      inputRef.control.setErrors({invalid: true});
-      return 'Must less than 2';
-    } else if (cell == 'col633') {
-      const regex = /^(>?)([1-9]|1[0-9]|2[0-4])$/;
-      if (!regex.test(row[cell])) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Not valid';
-      }
-    } else if (cell == 'col613') {
-      const from = +(row['col612'].replace(':', ''));
-      const to = +(row['col613'].replace(':', ''));
-      if (to < from) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Must after from';
-      }
-    } else if (cell == 'col623') {
-      const from = +(row['col622'].replace(':', ''));
-      const to = +(row['col623'].replace(':', ''));
-      if (to < from) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Must after from';
-      }
-    } else if (cell == 'col632') {
-      const from = +(row['col631'].replace(':', ''));
-      const to = +(row['col632'].replace(':', ''));
-      if (to < from) {
-        inputRef.control.setErrors({invalid: true});
-        return 'Must after from';
-      }
-    }
-    return '';
-  }
+	async loadListDocumentParent() {
+		if (!this.readMode) {
+			await this.baseService
+				.getListDocumentParent({
+					airportCode: this.isDataClone()
+						? this.dataObject?.airportCode
+						: this.formGroupDetail.getRawValue().airportCode,
+					partnerType: this.isDataClone()
+						? this.dataObject?.partnerType
+						: this.formGroupDetail.getRawValue().partnerType,
+				})
+				.then((res) => {
+					if (res.data) {
+						this.listDocumentParent = res.data;
+					}
+				});
+		}
+	}
 
-  addDtl() {
-    let listDtl = [...this.formGroupDetail.getRawValue().invoiceDocumentDtl || [], {}];
-    this.formGroupDetail.patchValue({invoiceDocumentDtl: listDtl});
-  }
+	override async detail(id: any) {
+		if (!!!id && !this.dataObject) {
+			return;
+		}
+		await super.detail(this.isDataClone() ? this.dataObject.id : id);
+		this.formGroupDetail.getRawValue().invoiceDocumentDtl?.forEach((s: any) => {
+			if (this.isDataClone()) {
+				s.id = null;
+				let generate = this.isDomestic()
+					? this.isHotel()
+						? `KSTB.${this.formGroupDetail.getRawValue().airportCode}.`
+						: `XETB.${this.formGroupDetail.getRawValue().airportCode}.`
+					: '';
+				this.formGroupDetail.patchValue({
+					invoiceNumber: generate,
+					status: InvoiceDocumentStatusEnum.UNMATCHED,
+				});
+			}
+			this.addRow(s);
+		});
+		// if (!!!id) {
+		//   this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.UNMATCHED});
+		// }
+		this.listDocumentParent = [
+			...this.listDocumentParent,
+			{
+				id: this.formGroupDetail.getRawValue()._id,
+				invoiceNumber: this.formGroupDetail.getRawValue()._invoiceNumber,
+				invoiceDate: this.formGroupDetail.getRawValue()._invoiceDate,
+			},
+		];
+	}
 
-  addRow(init?: any) {
-    let row: FormGroup = this.fb.group({
-      id: ['',],
-      serviceCode: ['', [Validators.required]],
-      serviceName: ['',],
-      unit: ['',],
-      periodOccurrence: [{value: this.formGroupDetail.getRawValue().periodOccurrence, disabled: true}, [Validators.required]],
-      nsCode: ['D2',],
-      quantity: ['', [Validators.min(0), Validators.max(999), Validators.pattern(PATTERN.NUMBER2)]],
-      unitPrice: ['', [Validators.max(999999999), Validators.pattern(PATTERN.NUMBER3)]],
-      amountFcBeforeVat: ['',],
-      amountVndBeforeVat: ['',],
-      amountFcVat: ['',],
-      amountVndVat: ['',],
-      vatType: ['',],
-      vat: ['',],
-    });
-    init && row.patchValue(init);
-    this.subscribeMain(row);
-    this.tblInvoiceDocumentDtl.push(row);
-    this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
-    return row;
-  }
+	findContract() {
+		this.formGroupDetail.patchValue({
+			paymentDueDay: '',
+			bizDocId: '',
+			partnerCode: '',
+			partnerName: '',
+			currency: '',
+			paymentDueDate: '',
+		});
+		if (
+			this.formGroupDetail.getRawValue().airportCode &&
+			this.formGroupDetail.getRawValue().partnerType &&
+			this.formGroupDetail.getRawValue().periodTo
+		) {
+			this.baseService
+				.findContract({
+					airportCode: this.formGroupDetail.getRawValue().airportCode,
+					partnerType: this.formGroupDetail.getRawValue().partnerType,
+					periodTo: this.formGroupDetail.getRawValue().periodTo,
+				})
+				.then((res: any) => {
+					if (res.data?.bizDocId) {
+						const place0 = this.isHotel() ? 'KSTB' : 'XE TB';
+						const place1 = this.formGroupDetail.getRawValue().airportCode;
+						const place2 = moment(
+							this.formGroupDetail.getRawValue().periodTo,
+						).format('MM/YYYY');
 
-  async loadListDocumentParent() {
-    if (!this.readMode) {
-      await this.baseService.getListDocumentParent({
-        airportCode: this.isDataClone() ?
-          this.dataObject?.airportCode : this.formGroupDetail.getRawValue().airportCode,
-        partnerType: this.isDataClone() ?
-          this.dataObject?.partnerType : this.formGroupDetail.getRawValue().partnerType
-      }).then((res) => {
-        if (res.data) {
-          this.listDocumentParent = res.data;
-        }
-      });
-    }
-  }
+						let description = `Hóa đơn ${place0} tại ${place1} tháng ${place2}`;
+						this.formGroupDetail.patchValue({
+							paymentDueDay: res.data?.dueDateNumber,
+							bizDocId: res.data?.bizDocId,
+							partnerCode: res.data?.partnerCode,
+							partnerName: res.data?.partnerName,
+							currency: res.data?.currency,
+							description: description,
+						});
+						//paymentDueDate
+						let invoiceDate =
+							this.formGroupDetail.getRawValue().invoiceReceiveDate;
+						let _value = (moment(invoiceDate) || invoiceDate)?.add(
+							res.data?.dueDateNumber || 0,
+							'days',
+						);
+						this.formGroupDetail.patchValue({
+							paymentDueDate: _value,
+						});
 
-  override async detail(id: any) {
-    if (!!!id && !this.dataObject) {
-      return;
-    }
-    await super.detail(this.isDataClone() ? this.dataObject.id : id);
-    this.formGroupDetail.getRawValue().invoiceDocumentDtl?.forEach((s: any) => {
-      if (this.isDataClone()) {
-        s.id = null;
-        let generate = this.isDomestic() ? this.isHotel() ? `KSTB.${this.formGroupDetail.getRawValue().airportCode}.` : `XETB.${this.formGroupDetail.getRawValue().airportCode}.` : '';
-        this.formGroupDetail.patchValue({
-          invoiceNumber: generate,
-          status: InvoiceDocumentStatusEnum.UNMATCHED
-        });
-      }
-      this.addRow(s);
-    });
-    // if (!!!id) {
-    //   this.formGroupDetail.patchValue({status: InvoiceDocumentStatusEnum.UNMATCHED});
-    // }
-    this.listDocumentParent = [...this.listDocumentParent, {
-      id: this.formGroupDetail.getRawValue()._id,
-      invoiceNumber: this.formGroupDetail.getRawValue()._invoiceNumber,
-      invoiceDate: this.formGroupDetail.getRawValue()._invoiceDate,
-    }];
-  }
+						//du lieu priceunit hd
+						if (this.tblInvoiceDocumentDtl.length > 0) {
+							const dialogRef = this.dialog.open(MessageDialog, {
+								data: {
+									icon: 'warning',
+									mainText: 'Changing the payment period',
+									subText:
+										'It will automatically update the corresponding contract and clear all detailed payment information of the current invoice. Are you sure you want to proceed?',
+								},
+							});
+							dialogRef.afterClosed().subscribe((result) => {
+								if (result) {
+									this.formGroupDetail.patchValue({
+										currency: res.data?.currency,
+									});
+									this.tblInvoiceDocumentDtl = this.fb.array([]);
+									res.data?.priceUnitInfo.forEach((s: any) => {
+										let item = {
+											serviceCode: s.serviceCode,
+											vat: s.taxRate,
+											vatType: s.taxCode,
+											unitPrice: s.priceNoTax,
+										};
+										let row = this.addRow(item);
+										this.changeServiceFee(row);
+									});
+								}
+							});
+						}
+					} else {
+						// this.showError($localize`Can not find any contract.`);
+					}
+				});
+		}
+	}
 
-  findContract() {
-    this.formGroupDetail.patchValue({
-      paymentDueDay: '', bizDocId: '', partnerCode: '', partnerName: '', currency: '', paymentDueDate: ''
-    });
-    if (this.formGroupDetail.getRawValue().airportCode && this.formGroupDetail.getRawValue().partnerType && this.formGroupDetail.getRawValue().periodTo) {
-      this.baseService.findContract({
-        airportCode: this.formGroupDetail.getRawValue().airportCode,
-        partnerType: this.formGroupDetail.getRawValue().partnerType,
-        periodTo: this.formGroupDetail.getRawValue().periodTo
-      }).then((res: any) => {
-        if (res.data?.bizDocId) {
-          const place0 = this.isHotel() ? "KSTB" : "XE TB";
-          const place1 = this.formGroupDetail.getRawValue().airportCode;
-          const place2 = moment(this.formGroupDetail.getRawValue().periodTo).format("MM/YYYY");
+	bodyBuilder() {
+		let body = this.formGroupDetail.getRawValue();
+		body.invoiceDocumentDtl = this.tblInvoiceDocumentDtl.getRawValue();
+		return body;
+	}
 
-          let description = `Hóa đơn ${place0} tại ${place1} tháng ${place2}`;
-          this.formGroupDetail.patchValue({
-            paymentDueDay: res.data?.dueDateNumber,
-            bizDocId: res.data?.bizDocId,
-            partnerCode: res.data?.partnerCode,
-            partnerName: res.data?.partnerName,
-            // currency: res.data?.currency,
-            description: description
-          })
-          //paymentDueDate
-          let invoiceDate = this.formGroupDetail.getRawValue().invoiceReceiveDate;
-          let _value = (moment(invoiceDate) || invoiceDate)?.add(res.data?.dueDateNumber || 0, 'days')
-          this.formGroupDetail.patchValue({
-            paymentDueDate: _value
-          });
+	isHotel() {
+		return this.formGroupDetail.getRawValue().partnerType === 'HOTEL';
+	}
 
-          //du lieu priceunit hd
-          if (this.tblInvoiceDocumentDtl.length > 0) {
-            const dialogRef = this.dialog.open(MessageDialog, {
-              data: {
-                icon: 'warning',
-                mainText: 'Changing the payment period',
-                subText: 'It will automatically update the corresponding contract and clear all detailed payment information of the current invoice. Are you sure you want to proceed?'
-              }
-            });
-            dialogRef.afterClosed().subscribe(result => {
-              if (result) {
-                this.formGroupDetail.patchValue({
-                  currency: res.data?.currency,
-                })
-                this.tblInvoiceDocumentDtl = this.fb.array([]);
-                res.data?.priceUnitInfo.forEach((s: any) => {
-                  let item = {
-                    serviceCode: s.serviceCode,
-                    vat: s.taxRate,
-                    vatType: s.taxCode,
-                    unitPrice: s.priceNoTax
-                  }
-                  let row = this.addRow(item);
-                  this.changeServiceFee(row);
-                })
-              }
-            });
-          }
-        } else {
-          // this.showError($localize`Can not find any contract.`);
-        }
-      })
-    }
-  }
+	isTransportation() {
+		return this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION';
+	}
 
-  bodyBuilder() {
-    let body = this.formGroupDetail.getRawValue();
-    body.invoiceDocumentDtl = this.tblInvoiceDocumentDtl.getRawValue();
-    return body;
-  }
+	isInternational() {
+		return (
+			this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL'
+		);
+	}
 
-  isHotel() {
-    return this.formGroupDetail.getRawValue().partnerType === 'HOTEL';
-  }
+	isDomestic() {
+		return (
+			this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC'
+		);
+	}
 
-  isTransportation() {
-    return this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION';
-  }
-
-  isInternational() {
-    return this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL';
-  }
-
-  isDomestic() {
-    return this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC';
-  }
-
-  async subscribeMain(row?: any) {
-    if (row) {
-      row.controls['unitPrice'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
-        if (prev !== curr && !this.firstLoad) {
-          this.calRow(row);
-          this.calTotal();
-        }
-      });
-      row.controls['quantity'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
-        if (prev !== curr && !this.firstLoad) {
-          this.calRow(row);
-          this.calTotal();
-        }
-      });
-      row.controls['amountFcBeforeVat'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
-        if (prev !== curr && !this.firstLoad) {
-          if (row.getRawValue().quantity && row.getRawValue().quantity > 0) {
-            this.calRow(row, 'price');
-          }
-          this.calTotal();
-        }
-      });
-      row.controls['amountVndBeforeVat'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
-        if (prev !== curr && !this.firstLoad) {
-          this.calTotal();
-        }
-      });
-      row.controls['amountFcVat'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
-        if (prev !== curr && !this.firstLoad) {
-          this.calTotal();
-        }
-      });
-      row.controls['amountVndVat'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
-        if (prev !== curr && !this.firstLoad) {
-          this.calTotal();
-        }
-      });
-      row.controls['vat'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe), pairwise()).subscribe(async ([prev, curr]: [any, any]) => {
-        if (prev !== curr && !this.firstLoad) {
-          this.calRow(row);
-          this.calTotal();
-        }
-      });
-    } else {
-      this.formGroupDetail.controls['airportCode'].valueChanges.pipe(debounceTime(300), filter(() => this.runSubscribe)).subscribe(async (value) => {
-        if (value && !this.firstLoad) {
-          try {
-            await this.spinner.show();
-            const [res, res2, res3] = await Promise.all([this.contractService.getMarket({marketCode: value.toUpperCase()}), this.findContract(), this.loadListDocumentParent()]);
-            if (res.data) {
-              this.formGroupDetail.patchValue({
-                contractServiceType: res.data.marketType.toUpperCase(),
-              })
-            }
-            let generate = this.isDomestic() ? this.isHotel() ? `KSTB.${value}.` : `XETB.${value}.` : '';
-            this.formGroupDetail.patchValue({
-              invoiceNumber: generate,
-            });
-          } catch (e) {
-            console.log(e);
-            this.baseService.showError(MESSAGE.ERROR);
-          } finally {
-            await this.spinner.hide();
-          }
-        }
-      });
-      this.formGroupDetail.controls['partnerType'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (value && !this.firstLoad) {
-          this.findContract();
-          if (this.formGroupDetail.getRawValue().airportCode) {
-            let generate = this.isDomestic() ? this.isHotel() ? `KSTB.${this.formGroupDetail.getRawValue().airportCode}.` : `XETB.${this.formGroupDetail.getRawValue().airportCode}.` : '';
-            this.formGroupDetail.patchValue({
-              invoiceNumber: generate,
-            });
-          }
-
-        }
-      });
-      this.formGroupDetail.controls['periodTo'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (value && !this.firstLoad) {
-          this.findContract();
-          // this.formGroupDetail.controls['invoiceDate'].updateValueAndValidity();
-        }
-      });
-      this.formGroupDetail.controls['periodFrom'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (value && !this.firstLoad) {
-          this.formGroupDetail.patchValue({
-            periodOccurrence: (moment(value) || value)?.format('YYYY-MM-DD') || '',
-          });
-        }
-      });
-      this.formGroupDetail.controls['invoiceDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (value && !this.firstLoad) {
-          /*this.formGroupDetail.patchValue({
+	async subscribeMain(row?: any) {
+		if (row) {
+			row.controls['unitPrice'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+					pairwise(),
+				)
+				.subscribe(async ([prev, curr]: [any, any]) => {
+					if (prev !== curr && !this.firstLoad) {
+						this.calRow(row);
+						this.calTotal();
+					}
+				});
+			row.controls['quantity'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+					pairwise(),
+				)
+				.subscribe(async ([prev, curr]: [any, any]) => {
+					if (prev !== curr && !this.firstLoad) {
+						this.calRow(row);
+						this.calTotal();
+					}
+				});
+			row.controls['amountFcBeforeVat'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+					pairwise(),
+				)
+				.subscribe(async ([prev, curr]: [any, any]) => {
+					if (prev !== curr && !this.firstLoad) {
+						if (row.getRawValue().quantity && row.getRawValue().quantity > 0) {
+							this.calRow(row, 'price');
+						}
+						this.calTotal();
+					}
+				});
+			row.controls['amountVndBeforeVat'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+					pairwise(),
+				)
+				.subscribe(async ([prev, curr]: [any, any]) => {
+					if (prev !== curr && !this.firstLoad) {
+						this.calTotal();
+					}
+				});
+			row.controls['amountFcVat'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+					pairwise(),
+				)
+				.subscribe(async ([prev, curr]: [any, any]) => {
+					if (prev !== curr && !this.firstLoad) {
+						this.calTotal();
+					}
+				});
+			row.controls['amountVndVat'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+					pairwise(),
+				)
+				.subscribe(async ([prev, curr]: [any, any]) => {
+					if (prev !== curr && !this.firstLoad) {
+						this.calTotal();
+					}
+				});
+			row.controls['vat'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+					pairwise(),
+				)
+				.subscribe(async ([prev, curr]: [any, any]) => {
+					if (prev !== curr && !this.firstLoad) {
+						this.calRow(row);
+						this.calTotal();
+					}
+				});
+		} else {
+			this.formGroupDetail.controls['airportCode'].valueChanges
+				.pipe(
+					debounceTime(300),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe(async (value) => {
+					if (value && !this.firstLoad) {
+						try {
+							await this.spinner.show();
+							const [res, res2, res3] = await Promise.all([
+								this.contractService.getMarket({
+									marketCode: value.toUpperCase(),
+								}),
+								this.findContract(),
+								this.loadListDocumentParent(),
+							]);
+							if (res.data) {
+								this.formGroupDetail.patchValue({
+									contractServiceType: res.data.marketType.toUpperCase(),
+								});
+							}
+							let generate = this.isDomestic()
+								? this.isHotel()
+									? `KSTB.${value}.`
+									: `XETB.${value}.`
+								: '';
+							this.formGroupDetail.patchValue({
+								invoiceNumber: generate,
+							});
+						} catch (e) {
+							console.log(e);
+							this.baseService.showError(MESSAGE.ERROR);
+						} finally {
+							await this.spinner.hide();
+						}
+					}
+				});
+			this.formGroupDetail.controls['partnerType'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						this.findContract();
+						if (this.formGroupDetail.getRawValue().airportCode) {
+							let generate = this.isDomestic()
+								? this.isHotel()
+									? `KSTB.${this.formGroupDetail.getRawValue().airportCode}.`
+									: `XETB.${this.formGroupDetail.getRawValue().airportCode}.`
+								: '';
+							this.formGroupDetail.patchValue({
+								invoiceNumber: generate,
+							});
+						}
+					}
+				});
+			this.formGroupDetail.controls['periodTo'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						this.findContract();
+						// this.formGroupDetail.controls['invoiceDate'].updateValueAndValidity();
+					}
+				});
+			this.formGroupDetail.controls['periodFrom'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						this.formGroupDetail.patchValue({
+							periodOccurrence:
+								(moment(value) || value)?.format('YYYY-MM-DD') || '',
+						});
+					}
+				});
+			this.formGroupDetail.controls['invoiceDate'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						/*this.formGroupDetail.patchValue({
             invoiceReceiveDate: '',
             periodFrom: '',
             periodTo: ''
           });*/
-          // this.formGroupDetail.controls['periodTo'].updateValueAndValidity();
-          // this.formGroupDetail.controls['periodFrom'].updateValueAndValidity();
-        }
-      });
-      this.formGroupDetail.controls['idParent'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (!this.firstLoad) {
-          this.formGroupDetail.patchValue({version: value ? 2 : 1});
-        }
-      });
-      this.formGroupDetail.controls['currency'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (value) {
-          this.formGroupDetail.controls['exchangeRateDate'].enable();
-        } else {
-          this.formGroupDetail.controls['exchangeRateDate'].disable();
-        }
-      });
-      this.formGroupDetail.controls['exchangeRateDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (value && !this.firstLoad) {
-          this.baseService.getExchangeRate({
-            currency: this.formGroupDetail.getRawValue().currency, exchangeRateDate: this.formGroupDetail.getRawValue().exchangeRateDate,
-          }).then((res: any) => {
-            if (res.data) {
-              this.formGroupDetail.patchValue({
-                exchangeRate: res.data.price, exchangeRateType: res.data.type,
-              });
-              this.tblInvoiceDocumentDtl.controls.forEach(s => {
-                this.calRow(s);
-              })
-            }
-          });
-        }
-      });
-      this.formGroupDetail.controls['invoiceReceiveDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (!this.firstLoad) {
-          let _value = 0;
-          if (this.formGroupDetail.getRawValue().paymentDueDate) {
-            _value = value?.diff(this.formGroupDetail.getRawValue().paymentDueDate, 'days') ?? 0;
-          }
-          this.formGroupDetail.patchValue({
-            paymentDueDay: Math.abs(_value),
-          });
-          // let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
+						// this.formGroupDetail.controls['periodTo'].updateValueAndValidity();
+						// this.formGroupDetail.controls['periodFrom'].updateValueAndValidity();
+					}
+				});
+			this.formGroupDetail.controls['idParent'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (!this.firstLoad) {
+						this.formGroupDetail.patchValue({ version: value ? 2 : 1 });
+					}
+				});
+			this.formGroupDetail.controls['currency'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value) {
+						this.formGroupDetail.controls['exchangeRateDate'].enable();
+					} else {
+						// this.formGroupDetail.controls['exchangeRateDate'].disable();
+					}
+				});
+			this.formGroupDetail.controls['exchangeRateDate'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						this.baseService
+							.getExchangeRate({
+								currency: this.formGroupDetail.getRawValue().currency,
+								exchangeRateDate:
+									this.formGroupDetail.getRawValue().exchangeRateDate,
+							})
+							.then((res: any) => {
+								if (res.data) {
+									this.formGroupDetail.patchValue({
+										exchangeRate: res.data.price,
+										exchangeRateType: res.data.type,
+									});
+									this.tblInvoiceDocumentDtl.controls.forEach((s) => {
+										this.calRow(s);
+									});
+								}
+							});
+					}
+				});
+			this.formGroupDetail.controls['invoiceReceiveDate'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (!this.firstLoad) {
+						let _value = 0;
+						if (this.formGroupDetail.getRawValue().paymentDueDate) {
+							_value =
+								value?.diff(
+									this.formGroupDetail.getRawValue().paymentDueDate,
+									'days',
+								) ?? 0;
+						}
+						this.formGroupDetail.patchValue({
+							paymentDueDay: Math.abs(_value),
+						});
+						// let _value = (moment(value) || value)?.add(this.formGroupDetail.getRawValue().paymentDueDay || 0, 'days')
+					}
+				});
+			this.formGroupDetail.controls['paymentDueDate'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						let _value = 0;
+						if (this.formGroupDetail.getRawValue().invoiceReceiveDate) {
+							_value = value.diff(
+								this.formGroupDetail.getRawValue().invoiceReceiveDate,
+								'days',
+							);
+						}
+						this.formGroupDetail.patchValue({
+							paymentDueDay: Math.abs(_value),
+						});
+					}
+				});
+			this.formGroupDetail.controls['periodOccurrence'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						this.tblInvoiceDocumentDtl.controls.forEach((row: FormGroup) => {
+							row.patchValue({ periodOccurrence: value });
+						});
+					}
+				});
+		}
+	}
 
-        }
-      });
-      this.formGroupDetail.controls['paymentDueDate'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (value && !this.firstLoad) {
-          let _value = 0;
-          if (this.formGroupDetail.getRawValue().invoiceReceiveDate) {
-            _value = value.diff(this.formGroupDetail.getRawValue().invoiceReceiveDate, 'days');
-          }
-          this.formGroupDetail.patchValue({
-            paymentDueDay: Math.abs(_value),
-          });
-        }
-      });
-      this.formGroupDetail.controls['periodOccurrence'].valueChanges.pipe(debounceTime(100), filter(() => this.runSubscribe)).subscribe((value) => {
-        if (value && !this.firstLoad) {
-          this.tblInvoiceDocumentDtl.controls.forEach((row: FormGroup) => {
-            row.patchValue({periodOccurrence: value})
-          });
-        }
-      });
+	async _confirmDelete(element?: any, index?: any, type?: any) {
+		this.deleteObj = {
+			...(element.value ?? element),
+			index: index,
+			type: type,
+		};
+		this._showDialogDelete = true;
+	}
 
-    }
-  }
+	async _closeConfirmDelete() {
+		this._showDialogDelete = false;
+	}
 
-  async _confirmDelete(element?: any, index?: any, type?: any) {
-    this.deleteObj = {...element.value ?? element, index: index, type: type};
-    this._showDialogDelete = true;
-  }
+	async _doDelete() {
+		try {
+			if (this.deleteObj.type == 'file') {
+				let currentList = cloneDeep(
+					this.formGroupDetail.getRawValue().fileAttachments,
+				);
+				currentList.splice(this.deleteObj.index, 1);
+				this.formGroupDetail.patchValue({ fileAttachments: currentList });
+			} else {
+				this.tblInvoiceDocumentDtl.removeAt(this.deleteObj.index);
+				this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
+			}
+		} catch (e) {
+			console.log(e);
+		} finally {
+			this._showDialogDelete = false;
+		}
+	}
 
-  async _closeConfirmDelete() {
-    this._showDialogDelete = false;
-  }
-
-  async _doDelete() {
-    try {
-      if (this.deleteObj.type == 'file') {
-        let currentList = cloneDeep(this.formGroupDetail.getRawValue().fileAttachments);
-        currentList.splice(this.deleteObj.index, 1);
-        this.formGroupDetail.patchValue({fileAttachments: currentList});
-      } else {
-        this.tblInvoiceDocumentDtl.removeAt(this.deleteObj.index);
-        this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
-      }
-    } catch (e) {
-      console.log(e);
-    } finally {
-      this._showDialogDelete = false;
-    }
-  }
-
-  isDataClone() {
-    return this.id === 0 && this.dataObject;
-  }
+	isDataClone() {
+		return this.id === 0 && this.dataObject;
+	}
 }
