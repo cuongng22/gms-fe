@@ -7,7 +7,7 @@ WORKDIR /app
 RUN chown -R 0:0 /app
 # Copy các file package và cài đặt dependencies
 COPY package*.json ./
-RUN npm install --force
+RUN npm install --legacy-peer-deps
 
 # Copy toàn bộ mã nguồn và build ứng dụng
 # Ở đây chúng ta sử dụng môi trường staging
