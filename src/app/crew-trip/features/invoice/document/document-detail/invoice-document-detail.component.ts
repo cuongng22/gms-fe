@@ -659,8 +659,7 @@ export class InvoiceDocumentDetailComponent
 			});
 			row.patchValue({
 				amountVndBeforeVat: this.roundUpNumber(
-					(row.getRawValue().quantity * row.getRawValue().unitPrice * rate) /
-						100,
+					row.getRawValue().quantity * row.getRawValue().unitPrice * rate,
 					0,
 				),
 				amountFcVat: this.isInternational()
@@ -688,8 +687,7 @@ export class InvoiceDocumentDetailComponent
 						)
 					: null,
 				amountVndBeforeVat: this.roundUpNumber(
-					(row.getRawValue().quantity * row.getRawValue().unitPrice * rate) /
-						100,
+					(row.getRawValue().quantity * row.getRawValue().unitPrice * rate),
 					0,
 				),
 				amountFcVat: this.isInternational()
