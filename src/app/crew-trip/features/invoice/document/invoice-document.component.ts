@@ -167,6 +167,11 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
   }
 
   override async ngOnInit() {
+    // Khôi phục filter từ localStorage nếu có
+    const savedFilters = localStorage.getItem('invoiceDocumentFilters');
+    if (savedFilters) {
+      this.formGroupSearch.patchValue(JSON.parse(savedFilters));
+    }
     try {
       this.editor = new Editor();
       // await Promise.all([this.loadListFlightMarket(), this.loadListHotel(), this.loadListVehiclesPartner(),]).then(() => {
@@ -191,6 +196,8 @@ export class InvoiceDocumentComponent extends CommonComponent implements OnInit,
   }
 
   async nextStep(id?: any, readMode?: any, step?: any, dataObject?: any) {
+    // Lưu filter vào localStorage khi chuyển sang màn chi tiết
+    localStorage.setItem('invoiceDocumentFilters', JSON.stringify(this.formGroupSearch.getRawValue()));
     this.id = id;
     this.step = step;
     this.readMode = readMode;

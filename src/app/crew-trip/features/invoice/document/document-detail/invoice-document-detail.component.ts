@@ -59,7 +59,7 @@ export class InvoiceDocumentDetailComponent
 	serviceFeeService = inject(ServiceFeeService);
 	contractService = inject(ContractService);
 	fb = inject(FormBuilder);
-
+	step: number;
 	//variable
 	@Input() id: any;
 	@Input() viewType: any;
@@ -538,7 +538,8 @@ export class InvoiceDocumentDetailComponent
 	}
 
 	goBack() {
-		this.backStepEmit.emit([]);
+		this.step = 1;
+		this.backStepEmit.emit([this.step]);
 		window.scrollTo({ top: 0, behavior: 'instant' });
 	}
 
@@ -649,13 +650,15 @@ export class InvoiceDocumentDetailComponent
 
 	calRow(row: any, column?: any) {
 		this.runSubscribe = false;
-		let rate = this.formGroupDetail.getRawValue().exchangeRate ?? 0;
+		const rate = this.formGroupDetail.getRawValue().exchangeRate ?? 0;
 		if (column == 'price') {
 			//tinh don gian
-			let amount = +(row.getRawValue().amountFcBeforeVat ?? 0);
-			let quantity = +row.getRawValue().quantity;
+			const amount = +(row.getRawValue().amountFcBeforeVat ?? 0);
+			const quantity = +row.getRawValue().quantity;
 			row.patchValue({
-				unitPrice: this.roundUpNumber(amount / quantity, 2),
+				unitPrice: this.isInternational()
+					? this.roundUpNumber(amount / quantity, 4)
+					: this.roundUpNumber(amount / quantity, 2),
 			});
 			row.patchValue({
 				amountVndBeforeVat: this.roundUpNumber(
@@ -687,7 +690,7 @@ export class InvoiceDocumentDetailComponent
 						)
 					: null,
 				amountVndBeforeVat: this.roundUpNumber(
-					(row.getRawValue().quantity * row.getRawValue().unitPrice * rate),
+					row.getRawValue().quantity * row.getRawValue().unitPrice * rate,
 					0,
 				),
 				amountFcVat: this.isInternational()
@@ -1299,6 +1302,9 @@ export class InvoiceDocumentDetailComponent
           });*/
 						// this.formGroupDetail.controls['periodTo'].updateValueAndValidity();
 						// this.formGroupDetail.controls['periodFrom'].updateValueAndValidity();
+						this.formGroupDetail.patchValue({
+							exchangeRateDate: value,
+						});
 					}
 				});
 			this.formGroupDetail.controls['idParent'].valueChanges
@@ -1399,6 +1405,19 @@ export class InvoiceDocumentDetailComponent
 						this.tblInvoiceDocumentDtl.controls.forEach((row: FormGroup) => {
 							row.patchValue({ periodOccurrence: value });
 						});
+					}
+				});
+			this.formGroupDetail.controls['exchangeRate'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						this.tblInvoiceDocumentDtl.controls.forEach((row: FormGroup) => {
+							this.calRow(row);
+						});
+						this.calTotal();
 					}
 				});
 		}
