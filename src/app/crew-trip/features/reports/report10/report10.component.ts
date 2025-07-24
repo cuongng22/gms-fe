@@ -45,7 +45,7 @@ import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant'
 	templateUrl: './report10.component.html',
 	styleUrl: './report10.component.scss',
 })
-export class reportcomponent10 extends CommonComponent implements OnInit {
+export class report10Component extends CommonComponent implements OnInit {
 	override baseService = inject(ReportService);
 	iframeUrl: SafeResourceUrl;
 	codeReport = 'BC_7_10';
@@ -79,7 +79,9 @@ export class reportcomponent10 extends CommonComponent implements OnInit {
 			await this.spinner.show();
 			await this.baseService
 				.getReportLink(this.codeReport, sync)
-				.then((res) => {});
+				.then((res) => {
+					this.iframeUrl = this.sanitizeUrl(res.data);
+				});
 		} catch (Error: any) {
 			await this.spinner.hide();
 			console.log(Error);
