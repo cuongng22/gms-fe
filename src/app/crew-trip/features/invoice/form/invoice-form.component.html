@@ -106,12 +106,13 @@
           @for (innerColumn of _displayedColumns; track innerColumn.value) {
             <ng-container matColumnDef="{{innerColumn.value}}">
               <th mat-sort-header mat-header-cell *matHeaderCellDef>{{ innerColumn.label | titlecase }}</th>
-              <td mat-cell *matCellDef="let element">
+              <td mat-cell *matCellDef="let element"
+									[ngClass]="{'text-right': innerColumn.style !== undefined && innerColumn.style === 'text-right'}">
               <span [ngClass]="{
           'badge rounded-pill': innerColumn.value === 'isActiveLabel',
           'text-bg-vna': innerColumn.value === 'isActiveLabel' && element['isActive'] == 1,
           'text-bg-vna-danger': innerColumn.value === 'isActiveLabel' && element['isActive'] == 0
-          }">{{
+          }" >{{
                       element[innerColumn.value]|dataTransformPipe:[innerColumn.type, innerColumn.format]
                 }}</span>
               </td>
