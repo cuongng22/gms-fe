@@ -1,32 +1,30 @@
+import { CommonModule } from '@angular/common';
 import {
-  Component, CUSTOM_ELEMENTS_SCHEMA,
-  inject,
-  OnInit
+	Component,
+	CUSTOM_ELEMENTS_SCHEMA,
+	inject,
+	OnInit,
 } from '@angular/core';
-import {CommonComponent} from 'src/app/crew-trip/shared/common.component';
-import {CommonModule, NgClass, NgIf, TitleCasePipe} from '@angular/common';
-import {MatCardModule} from '@angular/material/card';
-import {MatButtonModule} from '@angular/material/button';
-import {MatTableModule} from '@angular/material/table';
-import {MatPaginatorModule} from '@angular/material/paginator';
-import {DataTransformPipe} from 'src/app/crew-trip/shared/data-transform.pipe';
-import {MatError, MatFormField, MatFormFieldModule, MatLabel, MatPrefix, MatSuffix} from '@angular/material/form-field';
-import {MatOption, MatSelect, MatSelectModule} from '@angular/material/select';
-import {MatInput, MatInputModule} from '@angular/material/input';
-import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {InputSizeComponent} from 'src/app/crew-trip/shared/input/input-size.component';
-import {MatDatepickerModule} from '@angular/material/datepicker';
-import {DomSanitizer, SafeResourceUrl} from '@angular/platform-browser';
-import {
-  MatNativeDateModule,
-} from '@angular/material/core';
-import {MatAutocompleteModule, MatAutocompleteTrigger} from '@angular/material/autocomplete';
-import {NgxMaterialTimepickerModule} from 'ngx-material-timepicker';
-import {Constant, DATE_FORMAT_DD_MM_YYYY} from 'src/app/crew-trip/shared/utils/constant';
-import {MAT_MOMENT_DATE_FORMATS, provideMomentDateAdapter} from '@angular/material-moment-adapter';
-import {ReportService} from 'src/app/crew-trip/core/services/report-service';
-import {HasPermissionDirective} from "src/app/crew-trip/shared/directive/has-permission.directive";
-
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { provideMomentDateAdapter } from '@angular/material-moment-adapter';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatButtonModule } from '@angular/material/button';
+import { MatCardModule } from '@angular/material/card';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSelectModule } from '@angular/material/select';
+import { MatTableModule } from '@angular/material/table';
+import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
+import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
+import { ReportService } from 'src/app/crew-trip/core/services/report-service';
+import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
+import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
+import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
+import { DATE_FORMAT_DD_MM_YYYY } from 'src/app/crew-trip/shared/utils/constant';
 
 @Component({
 	selector: 'app-report',
@@ -58,7 +56,7 @@ import {HasPermissionDirective} from "src/app/crew-trip/shared/directive/has-per
 	templateUrl: './report1.component.html',
 	styleUrl: './report1.component.scss',
 })
-export class reportcomponent extends CommonComponent implements OnInit {
+export class reportComponent extends CommonComponent implements OnInit {
 	override baseService = inject(ReportService);
 	iframeUrl: SafeResourceUrl;
 	codeReport = 'BC_7_1';
@@ -87,17 +85,20 @@ export class reportcomponent extends CommonComponent implements OnInit {
 		}
 	}
 
-  async refreshReport(sync?: boolean) {
-    try {
-      await this.spinner.show();
-      await this.baseService.getReportLink(this.codeReport, sync).then((res) => {
-      });
-    } catch (Error: any) {
-      await this.spinner.hide();
-      console.log(Error);
-    }
-    await this.spinner.hide();
-  }
+	async refreshReport(sync?: boolean) {
+		try {
+			await this.spinner.show();
+			await this.baseService
+				.getReportLink(this.codeReport, sync)
+				.then((res) => {
+					this.iframeUrl = this.sanitizeUrl(res.data);
+				});
+		} catch (Error: any) {
+			await this.spinner.hide();
+			console.log(Error);
+		}
+		await this.spinner.hide();
+	}
 
 	sanitizeUrl(url: string): SafeResourceUrl {
 		return this.sanitizer.bypassSecurityTrustResourceUrl(url);

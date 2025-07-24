@@ -60,16 +60,16 @@ import { CharterDetailComponent } from './crew-trip/features/plan/wet-lease-char
 import { WetLeaseCharterComponent } from './crew-trip/features/plan/wet-lease-charter/wet-lease-charter.component';
 import { ProcurementTrackingDetailComponent } from './crew-trip/features/procurement-tracking/procurement-tracking-detail/procurement-tracking-detail.component';
 import { ProcurementTrackingComponent } from './crew-trip/features/procurement-tracking/procurement-tracking.component';
-import { reportcomponent } from './crew-trip/features/reports/report1/report1.component';
-import { reportcomponent10 } from './crew-trip/features/reports/report10/report10.component';
-import { reportcomponent2 } from './crew-trip/features/reports/report2/report2.component';
-import { reportcomponent3 } from './crew-trip/features/reports/report3/report3.component';
-import { reportcomponent4 } from './crew-trip/features/reports/report4/report4.component';
-import { reportcomponent5 } from './crew-trip/features/reports/report5/report5.component';
-import { reportcomponent6 } from './crew-trip/features/reports/report6/report6.component';
-import { reportcomponent7 } from './crew-trip/features/reports/report7/report7.component';
-import { reportcomponent8 } from './crew-trip/features/reports/report8/report8.component';
-import { reportcomponent9 } from './crew-trip/features/reports/report9/report9.component';
+import { reportComponent } from './crew-trip/features/reports/report1/report1.component';
+import { report10Component } from './crew-trip/features/reports/report10/report10.component';
+import { report2Component } from './crew-trip/features/reports/report2/report2.component';
+import { report3Component } from './crew-trip/features/reports/report3/report3.component';
+import { report4Component } from './crew-trip/features/reports/report4/report4.component';
+import { report5Component } from './crew-trip/features/reports/report5/report5.component';
+import { report6Component } from './crew-trip/features/reports/report6/report6.component';
+import { report7Component } from './crew-trip/features/reports/report7/report7.component';
+import { report8Component } from './crew-trip/features/reports/report8/report8.component';
+import { report9Component } from './crew-trip/features/reports/report9/report9.component';
 import { EmailNotificationHistoryComponent } from './crew-trip/features/system/history/email-notification-history/email-notification-history.component';
 import { LoginHistoryComponent } from './crew-trip/features/system/history/login-history/login-history.component';
 
@@ -549,16 +549,16 @@ export const routes: Routes = [
 			{
 				path: 'reports',
 				children: [
-					{ path: 'report1', component: reportcomponent },
-					{ path: 'report2', component: reportcomponent2 },
-					{ path: 'report3', component: reportcomponent3 },
-					{ path: 'report4', component: reportcomponent4 },
-					{ path: 'report5', component: reportcomponent5 },
-					{ path: 'report6', component: reportcomponent6 },
-					{ path: 'report7', component: reportcomponent7 },
-					{ path: 'report8', component: reportcomponent8 },
-					{ path: 'report9', component: reportcomponent9 },
-					{ path: 'report10', component: reportcomponent10 },
+					{ path: 'report1', component: reportComponent },
+					{ path: 'report2', component: report2Component },
+					{ path: 'report3', component: report3Component },
+					{ path: 'report4', component: report4Component },
+					{ path: 'report5', component: report5Component },
+					{ path: 'report6', component: report6Component },
+					{ path: 'report7', component: report7Component },
+					{ path: 'report8', component: report8Component },
+					{ path: 'report9', component: report9Component },
+					{ path: 'report10', component: report10Component },
 					{ path: 'report11', component: Report11Component },
 					{ path: 'dashboard', component: DashboardComponent },
 				],
