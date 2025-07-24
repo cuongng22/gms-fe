@@ -84,7 +84,10 @@ export class report6Component extends CommonComponent implements OnInit {
 			await this.baseService
 				.getReportLink(this.codeReport, sync)
 				.then((res) => {
-					this.iframeUrl = this.sanitizeUrl(res.data);
+					setTimeout(() => {
+						this.iframeUrl = this.sanitizeUrl(res.data);
+						this.spinner.hide();
+					}, 3000);
 				});
 		} catch (Error: any) {
 			await this.spinner.hide();
