@@ -1,0 +1,25 @@
+<div [sizeInput]="size">
+  <mat-form-field [ngClass]="{'edit-inline-table':editInlineTable}">
+    @if (label) {
+    <mat-label i18n>{{ label }}</mat-label>
+    }
+    <input type="text" matInput #inputSearch [matAutocomplete]="auto" (input)="filter()" 
+      [required]="requiredControl" [formControl]="viewControl" [matTooltip]="viewControl.value"
+      (blur)="onInputBlur()">
+    @if (viewControl.value && !viewControl.disabled) {
+    <i class="material-symbols-outlined mr-15 pe-clear-input" matSuffix (click)="clearInput()">
+      close
+    </i>
+    }
+    <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onSelectionChange($event)">
+      @for (option of filtered(); track option) {
+      <mat-option [value]="attrValue?option[attrValue]:option">{{ attrDisplay ? option[attrDisplay] : option }}
+      @if(attrDisplay2){  -  {{option[attrDisplay2]}}}
+      </mat-option>
+      }
+    </mat-autocomplete>
+    <mat-error *ngxControlError="viewControl; track: ['required', 'conflict']">
+      {{ label?label:label2 }} {{MESSAGE.REQUIRED}}
+    </mat-error>
+  </mat-form-field>
+</div> 
