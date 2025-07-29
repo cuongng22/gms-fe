@@ -31,7 +31,7 @@ import { NgxControlError } from 'ngxtension/control-error';
 import { EmailSupplierService } from 'src/app/crew-trip/core/services/email-supplier-service';
 import { EmailTrackingService } from 'src/app/crew-trip/core/services/email-tracking.service';
 import { GroupMailService } from 'src/app/crew-trip/core/services/group-mail.service';
-import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
+import { SelectSuggestFreeTextComponent } from 'src/app/crew-trip/shared/component/select-suggest-free-text/select-suggest-free-text.component';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { DetailResponse } from 'src/app/crew-trip/shared/models/common.model';
 import { Constant, MESSAGE } from 'src/app/crew-trip/shared/utils/constant';
@@ -62,12 +62,11 @@ import { getFileName } from '../email-tracking.model';
 		RouterModule,
 		FileUploadModule,
 		NgxTrimDirectiveModule,
-		SelectionSuggestComponent,
+		SelectSuggestFreeTextComponent,
 		NgxEditorModule,
 		MatMenuModule,
 		NgxControlError,
 		MatIconModule,
-		SelectionSuggestComponent,
 	],
 	templateUrl: './dialog-send-mail.component.html',
 	styleUrl: './dialog-send-mail.component.scss',
@@ -80,7 +79,7 @@ export class DialogSendMailComponent implements OnInit {
 	readonly groupMailService = inject(GroupMailService);
 	readonly emailSupplierService = inject(EmailSupplierService);
 	readonly spinner = inject(NgxSpinnerService);
-
+	fileAttachment: string[] = [];
 	MESSAGE = MESSAGE;
 	Constant = Constant;
 	groupMails = [];
@@ -113,7 +112,9 @@ export class DialogSendMailComponent implements OnInit {
 
 	getFileName = getFileName;
 	environment = environment;
-
+	constructor() {
+		this.fileAttachment = this.data.attachment || [];
+	}
 	async ngOnInit() {
 		this.editor = new Editor();
 
@@ -146,10 +147,15 @@ export class DialogSendMailComponent implements OnInit {
 	}
 
 	onChangeTitle(event: any) {
-		if (event.value) {
+		if (event.value && !event.isFreeText) {
 			this.formGroupDetail.patchValue({
 				title: event.value,
 				content: event.value.content,
+			});
+		} else {
+			this.formGroupDetail.patchValue({
+				title: event.value,
+				// content: '',
 			});
 		}
 	}
@@ -168,7 +174,7 @@ export class DialogSendMailComponent implements OnInit {
 				const body = {
 					...this.formGroupDetail.getRawValue(),
 					attachment: this.fileAttachment,
-					title: data.title,
+					title: data.title ?? data,
 				};
 				await this.emailTrackingService.create(body);
 				this.close();
@@ -189,7 +195,15 @@ export class DialogSendMailComponent implements OnInit {
 		this.formGroupDetail.controls.attachment.markAsTouched();
 	}
 
-	get fileAttachment() {
-		return this.formGroupDetail.controls.attachment.value ?? [];
+	openAttachment(url: string): void {
+		window.open(url, '_blank');
 	}
+
+	// get fileAttachment() {
+	// 	console.log(
+	// 		'fileAttachment',
+	// 		this.formGroupDetail.controls.attachment.value?.length,
+	// 	);
+	// 	return this.formGroupDetail.controls.attachment.value ?? [];
+	// }
 }

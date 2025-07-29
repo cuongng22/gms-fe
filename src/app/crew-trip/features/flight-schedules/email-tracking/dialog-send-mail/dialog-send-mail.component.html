@@ -17,9 +17,9 @@
 			<div class="row">
 				<div class="col">
 					<div class="form-group mb-20" sizeInput="sm">
-						<app-selection-suggest [options]="groupMails" label="Recipient" i18n-label="@@Recipient"
+						<app-select-suggest-free-text [options]="groupMails" label="Recipient" i18n-label="@@Recipient"
 																	 attrValue="groupId" attrDisplay="groupName"
-																	 formControlName="groupMailId"></app-selection-suggest>
+																	 formControlName="groupMailId"></app-select-suggest-free-text>
 						<!-- <input trim="blur" type="email" matInput formControlName="email" required> -->
 						<!-- <mat-error *ngxControlError="formGroupDetail.controls.email; track: 'required'"
 								i18n="@@recipientRequired">
@@ -40,9 +40,10 @@
 			<div class="row">
 				<div class="col">
 					<div class="form-group mb-20">
-						<app-selection-suggest size="sm" formControlName="title" attrDisplay="title" [options]="listTitle"
+						<!-- Sử dụng component mới select-suggest-free-text -->
+						<app-select-suggest-free-text size="sm" formControlName="title" attrDisplay="title" [options]="listTitle"
 																	 label="Subject" (selectionChange)="onChangeTitle($event)">
-						</app-selection-suggest>
+						</app-select-suggest-free-text>
 					</div>
 				</div>
 			</div>
@@ -71,7 +72,7 @@
 						</mat-label>
 						<mat-chip-listbox class="mat-mdc-chip-set-stacked" aria-label="Cutest dog breeds">
 							@for (item of fileAttachment; track $index) {
-								<mat-chip-row (removed)="removeAttachment(item)">
+								<mat-chip-row (removed)="removeAttachment(item)" (click)="openAttachment(item)" class="mat-mdc-chip">
 									<span class="attach-file">{{ getFileName(item) }}</span>
 									<button matChipRemove>
 										<i class="material-symbols-outlined">
