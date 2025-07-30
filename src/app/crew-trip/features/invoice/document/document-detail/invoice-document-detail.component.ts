@@ -69,9 +69,9 @@ export class InvoiceDocumentDetailComponent
 	@Input() contractObj: any;
 	@Output() nextStepEmit = new EventEmitter<any>();
 	@Output() backStepEmit = new EventEmitter<any>();
-	@Input() dialogMode: boolean = false;
+	@Input() dialogMode = false;
 	@Output() dialogModeEmit = new EventEmitter<any>();
-	firstLoad: boolean = true;
+	firstLoad = true;
 	//1=hotel quoc te ; 2=hotel quoc noi ; 3=xe quoc te ; 4=xe quoc noi
 	@Input() formType: any;
 	@Input() titleHeader = $localize`Detailed Statement`;
@@ -395,7 +395,6 @@ export class InvoiceDocumentDetailComponent
 		},
 		{ label: 'Type Room', value: 'typeRoom', rowspan: '2' },
 	];
-	ready: boolean = false;
 	@ViewChild(
 		'inputElementRef1, inputElementRef2, inputElementRef3, inputElementRef4',
 	)
@@ -420,16 +419,16 @@ export class InvoiceDocumentDetailComponent
 			idInvoiceForm: [],
 			version: [1],
 			ctype: [InvoiceDocumentTypeEnum.STANDARD],
-			invoiceNumber: [, [Validators.maxLength(50)]],
+			invoiceNumber: ['', [Validators.maxLength(50)]],
 			invoiceDate: [],
 			invoiceReceiveDate: [],
 			periodFrom: [],
 			periodTo: [],
-			periodOccurrence: [, [Validators.required]],
+			periodOccurrence: ['', [Validators.required]],
 			paymentDueDay: [],
 			paymentDueDate: [],
 			bizDocId: [],
-			airportCode: [, [Validators.required]],
+			airportCode: ['', [Validators.required]],
 			airportName: [],
 			partnerCode: [],
 			partnerName: [],
@@ -439,8 +438,8 @@ export class InvoiceDocumentDetailComponent
 			exchangeRate: [1],
 			exchangeRateDate: [],
 			exchangeRateType: [],
-			description: [, [Validators.maxLength(500)]],
-			note: [, [Validators.maxLength(500)]],
+			description: ['', [Validators.maxLength(500)]],
+			note: ['', [Validators.maxLength(500)]],
 			status: [InvoiceDocumentStatusEnum.UNMATCHED],
 			statusEmail: [],
 			statusPayment: [],
@@ -527,7 +526,7 @@ export class InvoiceDocumentDetailComponent
 				}
 			});
 		} catch (e) {
-			console.log(e);
+			// console.log(e);
 			this.baseService.showError(MESSAGE.ERROR);
 		} finally {
 			setTimeout(() => {
@@ -566,7 +565,7 @@ export class InvoiceDocumentDetailComponent
 	}
 
 	async doSave() {
-		let response = await this.save();
+		const response = await this.save();
 		if (response) {
 			this.goBack();
 		}
@@ -716,8 +715,8 @@ export class InvoiceDocumentDetailComponent
 	}
 
 	calTotal() {
-		let jsonValue = this.bodyBuilder();
-		let sum = jsonValue.invoiceDocumentDtl?.reduce(
+		const jsonValue = this.bodyBuilder();
+		const sum = jsonValue.invoiceDocumentDtl?.reduce(
 			(prev: any, cur: any) => {
 				prev.amountFcBeforeVat += +cur.amountFcBeforeVat;
 				prev.vatFc += +cur.amountFcVat;
@@ -755,14 +754,14 @@ export class InvoiceDocumentDetailComponent
 	async download(fileRow: any) {
 		try {
 			await this.spinner.show();
-			let res = await this.baseService.getFileData({
+			const res = await this.baseService.getFileData({
 				id: fileRow.id,
 				url: fileRow.fileUrl,
 				fileSize: fileRow.fileSize,
 			});
 			this.downloadFile(res, fileRow.fileName + '.' + fileRow.fileType);
 		} catch (e) {
-			console.log(e);
+			// console.log(e);
 			this.baseService.showError(MESSAGE.ERROR);
 		} finally {
 			await this.spinner.hide();
@@ -801,9 +800,9 @@ export class InvoiceDocumentDetailComponent
 			);
 			this.baseService.uploadFileCommon(formUpload).then((res) => {
 				if (res.code == HttpStatusCode.Ok) {
-					let lastDotIndex = fileUpload.name.lastIndexOf('.');
-					let fileName = fileUpload.name.substring(0, lastDotIndex);
-					let listFile = [
+					const lastDotIndex = fileUpload.name.lastIndexOf('.');
+					const fileName = fileUpload.name.substring(0, lastDotIndex);
+					const listFile = [
 						...(this.formGroupDetail.getRawValue().fileAttachments || []),
 						{
 							ctype: 'MANUAL',
@@ -817,7 +816,7 @@ export class InvoiceDocumentDetailComponent
 				}
 			});
 		} catch (e: any) {
-			console.log(e);
+			// console.log(e);
 			this.baseService.showError(
 				e.error?.error?.file ??
 					e.error?.error ??
@@ -836,7 +835,7 @@ export class InvoiceDocumentDetailComponent
 				this.showError($localize`Can not find any contract.`);
 				return;
 			}
-			let removeNull = this.formGroupDetail
+			const removeNull = this.formGroupDetail
 				.getRawValue()
 				.invoiceDocumentDtl?.filter((s: any) => s.serviceCode);
 			this.formGroupDetail.patchValue({ invoiceDocumentDtl: removeNull });
@@ -849,7 +848,7 @@ export class InvoiceDocumentDetailComponent
 			const update = !!this.formGroupDetail.getRawValue().id;
 			await this.spinner.show();
 			let res;
-			let req = this.bodyBuilder();
+			const req = this.bodyBuilder();
 			if (update) {
 				res = await this.baseService.update(req);
 			} else {
@@ -861,7 +860,7 @@ export class InvoiceDocumentDetailComponent
 			// this.goBack();
 			return res;
 		} catch (e: any) {
-			console.log(e);
+			// console.log(e);
 			this.baseService.showError(e.error?.message ?? this.MESSAGE.ERROR);
 		} finally {
 			await this.spinner.hide();
@@ -912,7 +911,7 @@ export class InvoiceDocumentDetailComponent
 	}
 
 	addDtl() {
-		let listDtl = [
+		const listDtl = [
 			...(this.formGroupDetail.getRawValue().invoiceDocumentDtl || []),
 			{},
 		];
@@ -920,7 +919,7 @@ export class InvoiceDocumentDetailComponent
 	}
 
 	addRow(init?: any) {
-		let row: FormGroup = this.fb.group({
+		const row: FormGroup = this.fb.group({
 			id: [''],
 			serviceCode: ['', [Validators.required]],
 			serviceName: [''],
@@ -979,14 +978,14 @@ export class InvoiceDocumentDetailComponent
 	}
 
 	override async detail(id: any) {
-		if (!!!id && !this.dataObject) {
+		if (!id && !this.dataObject) {
 			return;
 		}
 		await super.detail(this.isDataClone() ? this.dataObject.id : id);
 		this.formGroupDetail.getRawValue().invoiceDocumentDtl?.forEach((s: any) => {
 			if (this.isDataClone()) {
 				s.id = null;
-				let generate = this.isDomestic()
+				const generate = this.isDomestic()
 					? this.isHotel()
 						? `KSTB.${this.formGroupDetail.getRawValue().airportCode}.`
 						: `XETB.${this.formGroupDetail.getRawValue().airportCode}.`
@@ -1039,7 +1038,7 @@ export class InvoiceDocumentDetailComponent
 							this.formGroupDetail.getRawValue().periodTo,
 						).format('MM/YYYY');
 
-						let description = `Hóa đơn ${place0} tại ${place1} tháng ${place2}`;
+						const description = `Hóa đơn ${place0} tại ${place1} tháng ${place2}`;
 						this.formGroupDetail.patchValue({
 							paymentDueDay: res.data?.dueDateNumber,
 							bizDocId: res.data?.bizDocId,
@@ -1049,9 +1048,9 @@ export class InvoiceDocumentDetailComponent
 							description: description,
 						});
 						//paymentDueDate
-						let invoiceDate =
+						const invoiceDate =
 							this.formGroupDetail.getRawValue().invoiceReceiveDate;
-						let _value = (moment(invoiceDate) || invoiceDate)?.add(
+						const _value = (moment(invoiceDate) || invoiceDate)?.add(
 							res.data?.dueDateNumber || 0,
 							'days',
 						);
@@ -1076,13 +1075,13 @@ export class InvoiceDocumentDetailComponent
 									});
 									this.tblInvoiceDocumentDtl = this.fb.array([]);
 									res.data?.priceUnitInfo.forEach((s: any) => {
-										let item = {
+										const item = {
 											serviceCode: s.serviceCode,
 											vat: s.taxRate,
 											vatType: s.taxCode,
 											unitPrice: s.priceNoTax,
 										};
-										let row = this.addRow(item);
+										const row = this.addRow(item);
 										this.changeServiceFee(row);
 									});
 								}
@@ -1096,7 +1095,7 @@ export class InvoiceDocumentDetailComponent
 	}
 
 	bodyBuilder() {
-		let body = this.formGroupDetail.getRawValue();
+		const body = this.formGroupDetail.getRawValue();
 		body.invoiceDocumentDtl = this.tblInvoiceDocumentDtl.getRawValue();
 		return body;
 	}
@@ -1228,7 +1227,7 @@ export class InvoiceDocumentDetailComponent
 									contractServiceType: res.data.marketType.toUpperCase(),
 								});
 							}
-							let generate = this.isDomestic()
+							const generate = this.isDomestic()
 								? this.isHotel()
 									? `KSTB.${value}.`
 									: `XETB.${value}.`
@@ -1237,7 +1236,7 @@ export class InvoiceDocumentDetailComponent
 								invoiceNumber: generate,
 							});
 						} catch (e) {
-							console.log(e);
+							// console.log(e);
 							this.baseService.showError(MESSAGE.ERROR);
 						} finally {
 							await this.spinner.hide();
@@ -1253,7 +1252,7 @@ export class InvoiceDocumentDetailComponent
 					if (value && !this.firstLoad) {
 						this.findContract();
 						if (this.formGroupDetail.getRawValue().airportCode) {
-							let generate = this.isDomestic()
+							const generate = this.isDomestic()
 								? this.isHotel()
 									? `KSTB.${this.formGroupDetail.getRawValue().airportCode}.`
 									: `XETB.${this.formGroupDetail.getRawValue().airportCode}.`
@@ -1420,6 +1419,66 @@ export class InvoiceDocumentDetailComponent
 						this.calTotal();
 					}
 				});
+			this.formGroupDetail.controls['reimbursementTotalFc'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						this.formGroupDetail.patchValue({
+							reimbursementTotalVnd: this.roundUpNumber(
+								value * this.formGroupDetail.getRawValue().exchangeRate,
+								0,
+							),
+						});
+					}
+				});
+			this.formGroupDetail.controls['amountFcBeforeVat'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						this.formGroupDetail.patchValue({
+							amountVndBeforeVat: this.roundUpNumber(
+								value * this.formGroupDetail.getRawValue().exchangeRate,
+								0,
+							),
+						});
+					}
+				});
+			this.formGroupDetail.controls['totalAmountFc'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						this.formGroupDetail.patchValue({
+							totalAmountVnd: this.roundUpNumber(
+								value * this.formGroupDetail.getRawValue().exchangeRate,
+								0,
+							),
+						});
+					}
+				});
+			this.formGroupDetail.controls['vatFc'].valueChanges
+				.pipe(
+					debounceTime(100),
+					filter(() => this.runSubscribe),
+				)
+				.subscribe((value) => {
+					if (value && !this.firstLoad) {
+						this.formGroupDetail.patchValue({
+							vatVnd: this.roundUpNumber(
+								value * this.formGroupDetail.getRawValue().exchangeRate,
+								0,
+							),
+						});
+					}
+				});
 		}
 	}
 
@@ -1439,7 +1498,7 @@ export class InvoiceDocumentDetailComponent
 	async _doDelete() {
 		try {
 			if (this.deleteObj.type == 'file') {
-				let currentList = cloneDeep(
+				const currentList = cloneDeep(
 					this.formGroupDetail.getRawValue().fileAttachments,
 				);
 				currentList.splice(this.deleteObj.index, 1);
@@ -1449,7 +1508,7 @@ export class InvoiceDocumentDetailComponent
 				this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
 			}
 		} catch (e) {
-			console.log(e);
+			this.baseService.showError(MESSAGE.ERROR);
 		} finally {
 			this._showDialogDelete = false;
 		}
