@@ -45,14 +45,15 @@ export class BudgetProcurementSummaryComponent
     switch (type) {
       case 'All':
         this.summaryAll.setDisplayedColumns(data.categoryOfPlan);
-        bodySearch.category = data.category;
         this.summaryAll.search(bodySearch);
         break;
       case CategoryEnum.INTERNATIONAL:
+        bodySearch.category = type;
         this.summaryInternational.setDisplayedColumns(data.categoryOfPlan);
         this.summaryInternational.search(bodySearch);
         break;
       case CategoryEnum.DOMESTIC:
+        bodySearch.category = type;
         this.summaryDomestic.setDisplayedColumns(data.categoryOfPlan);
         this.summaryDomestic.search(bodySearch);
         break;
@@ -67,13 +68,14 @@ export class BudgetProcurementSummaryComponent
 		};
 		switch (type) {
 			case 'All':
-				bodySearch.category = data.category;
 				this.summaryAll.setBodyExport(bodySearch);
 				break;
 			case CategoryEnum.INTERNATIONAL:
+				bodySearch.category = data.category;
 				this.summaryInternational.setBodyExport(bodySearch);
 				break;
 			case CategoryEnum.DOMESTIC:
+				bodySearch.category = data.category;
 				this.summaryDomestic.setBodyExport(bodySearch);
 				break;
 		}
