@@ -60,7 +60,7 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
   }
   override ngOnInit(): void {
     this.setDisplayedColumns('');
-    this.search();
+    this.search({ 'category': this.categoryType() });
   }
 
   setDisplayedColumns(type: string) {
@@ -80,6 +80,7 @@ export class BudgetProcurementSummaryListComponent extends CommonComponent imple
 
   override async search(bodySearch?: any) {
     try {
+      debugger
       await this.spinner.show();
       const body = {
         ...bodySearch,
