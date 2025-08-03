@@ -434,12 +434,13 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   }
 
   getRowSpan(index: number, innerColumn: any, data: any): number {
-    if (data.typeRoom === 'CC Twin room' && ['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
-      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm;
+    if (data.typeRoom === 'CC Twin room' &&
+      ['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
+      let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl;
       let currentRow = dtl[index];
       let nextRow = dtl[index + 1];
-      // if (nextRow?.roomNo === currentRow?.roomNo && nextRow?.ciDate === currentRow?.ciDate) {
-      if (nextRow?.roomNo === currentRow?.roomNo) {
+      if (nextRow?.roomNo === currentRow?.roomNo && nextRow?.ciDate === currentRow?.ciDate) {
+        // if (nextRow?.roomNo === currentRow?.roomNo) {
         return 2;
       } else return 1;
     } else {return 1;}
@@ -447,8 +448,12 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
 
   shouldShowRowSpan(index: number, innerColumn: any): boolean {
     if (['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
-      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm
-      return (index === 0 || dtl[index]?.typeRoom !== 'CC Twin room' || dtl[index]?.roomNo !== dtl[index - 1]?.roomNo
+      let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl
+      return (
+        index === 0 || dtl[index]?.typeRoom !== 'CC Twin room' ||
+        dtl[index]?.roomNo !== dtl[index - 1]?.roomNo ||
+        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate) ||
+        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate === dtl[index - 1]?.ciDate && dtl[index]?.ciTime !== dtl[index - 1]?.ciTime)
         // (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
       );
     } else return true;
