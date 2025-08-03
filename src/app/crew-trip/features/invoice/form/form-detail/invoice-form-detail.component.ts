@@ -320,7 +320,8 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
       return (
         index === 0 || dtl[index]?.typeRoom !== 'CC Twin room' ||
         dtl[index]?.roomNo !== dtl[index - 1]?.roomNo ||
-        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
+        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate) ||
+        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate === dtl[index - 1]?.ciDate && dtl[index]?.ciTime !== dtl[index - 1]?.ciTime)
         // (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
       );
     } else return true;
