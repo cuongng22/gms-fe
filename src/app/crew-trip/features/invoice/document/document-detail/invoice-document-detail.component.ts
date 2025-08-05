@@ -458,7 +458,7 @@ export class InvoiceDocumentDetailComponent
 			_id: [],
 			_invoiceNumber: [],
 			_invoiceDate: [],
-
+			isReimbursement: [],
 			//table
 			tblInvoiceDocumentDtl: this.fb.array([]),
 		});
@@ -523,6 +523,8 @@ export class InvoiceDocumentDetailComponent
 						idParent: null,
 						idInvoiceForm: null,
 						fileAttachments: [],
+						reimbursementTotalFc: this.formGroupDetail.getRawValue().vatFc,
+						reimbursementTotalVnd: this.formGroupDetail.getRawValue().vatVnd,
 					});
 				}
 			});
@@ -736,8 +738,15 @@ export class InvoiceDocumentDetailComponent
 				totalAmountVnd: 0,
 			},
 		);
+
+		//hop dong co tich hoan thue
+		if(this.formGroupDetail.getRawValue().isReimbursement){
+			sum.reimbursementTotalFc = sum.vatFc;
+			sum.reimbursementTotalVnd = sum.vatVnd;
+		}
+
 		Object.keys(sum).forEach((key) => {
-			if (['amountFcBeforeVat', 'vatFc', 'totalAmountFc'].includes(key)) {
+			if (['amountFcBeforeVat', 'vatFc', 'totalAmountFc','reimbursementTotalFc'].includes(key)) {
 				sum[key] = this.roundUpNumber(+sum[key], 2);
 			} else {
 				sum[key] = this.roundUpNumber(+sum[key], 0);
@@ -1047,6 +1056,7 @@ export class InvoiceDocumentDetailComponent
 							partnerName: res.data?.partnerName,
 							currency: res.data?.currency,
 							description: description,
+							isReimbursement:  (res.data?.isTaxHotelRevert || res.data?.isTaxCarRevert)
 						});
 						//paymentDueDate
 						let invoiceDate =
