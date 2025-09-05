@@ -621,7 +621,7 @@ export class InvoiceDocumentDetailComponent
 				}
 				//edit
 				else {
-					//status finish
+        /*cho sua ngay ca khi da finish					//status finish
 					if (this.dataObject?.status === InvoiceDocumentStatusEnum.FINISHED) {
 						v.disable();
 						this.formGroupDetail.controls['exchangeRateDate'].enable();
@@ -629,7 +629,11 @@ export class InvoiceDocumentDetailComponent
 						if (disableFieldEdit.includes(k)) {
 							v.disable();
 						}
-					}
+					}*/
+          this.formGroupDetail.controls['exchangeRateDate'].enable();
+          if (disableFieldEdit.includes(k)) {
+            v.disable();
+          }
 				}
 			}
 		});
