@@ -2,13 +2,13 @@ export const ContractSpec = [
 	{ key: 1, value: $localize`Standard` },
 	{ key: 2, value: $localize`Wet Lease` },
 	{ key: 3, value: $localize`Charter` },
+	{ key: 4, value: 'Other' },
 ];
 export const ContractType = [
 	{ key: 1, value: $localize`Package contract` },
 	{ key: 2, value: $localize`Fixed price contract` },
 	{ key: 3, value: $localize`Adjusted unit price contract` },
 	{ key: 4, value: $localize`Contract principles` },
-	{ key: 5, value: `Other` },
 ];
 
 export const ContractForm = [
