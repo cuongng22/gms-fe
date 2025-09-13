@@ -116,7 +116,7 @@
           </div>
         </div>
 
-        <div class="col-sm-12 col-md-12">
+        <div class="col-12">
           <div class="form-group mb-20" sizeInput="md">
             <mat-form-field class="mb-1">
               <mat-label i18n="@@country">Country</mat-label>
@@ -133,7 +133,18 @@
             </mat-form-field>
           </div>
         </div>
-
+        <div class="col-12">
+          <div class="form-group mb-20" sizeInput="md">
+            <mat-form-field class="mb-1">
+              <mat-label i18n="@@contractType">Contract type</mat-label>
+              <mat-select formControlName="contractType">
+                <mat-option value="VNA" i18n="@@fullTime">VNA</mat-option>
+                <mat-option value="PA" i18n="@@partTime">PA</mat-option>
+                <mat-option value="VACCO" i18n="@@contract">Vacco</mat-option>
+              </mat-select>
+            </mat-form-field>
+          </div>
+        </div>
       </div>
 
       <div class="btn-box d-flex justify-content-end">

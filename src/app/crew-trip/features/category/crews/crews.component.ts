@@ -83,6 +83,7 @@ export class CrewsComponent extends CommonComponent implements OnInit {
 			class: 'text-center',
 		},
 		{ label: $localize`:@@base:Base`, value: 'base', class: 'text-center' },
+		{ label: $localize`:@@nation:ContractType`, value: 'contractType' },
 		{ label: $localize`:@@type:Type`, value: 'sourceType' },
 	];
 
