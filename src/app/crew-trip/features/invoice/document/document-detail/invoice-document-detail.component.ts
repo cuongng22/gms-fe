@@ -1426,7 +1426,7 @@ export class InvoiceDocumentDetailComponent
 						this.calTotal();
 					}
 				});
-			this.formGroupDetail.controls['reimbursementTotalFc'].valueChanges
+			/*this.formGroupDetail.controls['reimbursementTotalFc'].valueChanges
 				.pipe(
 					debounceTime(100),
 					filter(() => this.runSubscribe),
@@ -1485,7 +1485,7 @@ export class InvoiceDocumentDetailComponent
 							),
 						});
 					}
-				});
+				});*/
 		}
 	}
 
