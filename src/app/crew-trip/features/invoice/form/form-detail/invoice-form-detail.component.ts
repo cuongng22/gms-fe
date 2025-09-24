@@ -209,7 +209,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
       await this.spinner.show();
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         this.setReadMode(this.formGroupDetail)]).then(() => {
-        if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
+        if (this.isInternational() && this.isHotel()) {
           this.formType = 1;
           this._displayedColumnsHeader1 = ['stt', 'checkin2col', 'checkout2col', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights', 'earlyCheckin',
             'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge', 'singleRoomCcCharge',
@@ -224,20 +224,20 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
             'accommodationTaxFcCharge', 'accommodationTaxCcCharge', 'numberOfTransfers', 'transportCharge', 'totalCharges', 'remark'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
           this.totalColSpan = 5;
-        } else if (this.formGroupDetail.getRawValue().ctype === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'HOTEL') {
+        } else if (this.isDomestic() && this.isHotel()) {
           this.formType = 2;
           this._displayedColumnsHeader1 = ['stt', 'fullname', 'checkin3col', 'checkout3col', 'roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge', 'remark', 'typeRoom'];
           this._displayedColumnsHeader2 = ['ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime',];
           this._displayedColumnsRow = ['stt', 'fullname', 'ciFltno', 'ciDate', 'ciTime', 'coFltno', 'coDate', 'coTime', 'roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge', 'remark', 'typeRoom'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item) && item != 'fullname');
           this.totalColSpan = 8;
-        } else if (this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
+        } else if (this.isInternational() && this.isTransportation()) {
           this.formType = 3;
           this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice','accessBridge','toll','totalToll','transitDuty','airportParkingFee', 'totalCharge', 'remark'];
           this._displayedColumnsHeader2 = [];
           this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice','accessBridge','toll','totalToll','transitDuty','airportParkingFee', 'totalCharge', 'remark'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
-        } else if (this.formGroupDetail.getRawValue().ctype === 'DOMESTIC' && this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION') {
+        } else if (this.isDomestic() && this.isTransportation()) {
           this.formType = 4;
           this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'totalCharge', 'remark'];
           this._displayedColumnsHeader2 = [];
@@ -315,15 +315,42 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   }
 
   shouldShowRowSpan(index: number, innerColumn: any): boolean {
-    if (['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
-      let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl
-      return (
-        index === 0 || dtl[index]?.typeRoom !== 'CC Twin room' ||
-        dtl[index]?.roomNo !== dtl[index - 1]?.roomNo ||
-        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate) ||
-        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate === dtl[index - 1]?.ciDate && dtl[index]?.ciTime !== dtl[index - 1]?.ciTime)
-        // (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
-      );
-    } else return true;
+    if (!(this.isHotel() && this.isDomestic())) return true;
+
+    const mergeCols = ['roomNo', 'night', 'timeStay',
+      'earlyCheckin', 'lateCheckout',
+      'totalNight', 'price', 'totalCharge'
+    ];
+
+    if (!mergeCols.includes(innerColumn.value)) return true;
+
+    const dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm;
+    if (index === 0) return true;
+
+    const prev = dtl[index - 1];
+    const curr = dtl[index];
+
+    if (curr?.typeRoom !== 'CC Twin room') return true;
+
+    return (
+      curr?.roomNo !== prev?.roomNo ||
+      curr?.ciDate !== prev?.ciDate ||
+      curr?.ciTime !== prev?.ciTime
+    );
+  }
+  isHotel() {
+    return this.formGroupDetail.getRawValue().partnerType === 'HOTEL';
+  }
+
+  isTransportation() {
+    return this.formGroupDetail.getRawValue().partnerType === 'TRANSPORTATION';
+  }
+
+  isInternational() {
+    return this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL';
+  }
+
+  isDomestic() {
+    return this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC';
   }
 }

@@ -85,4 +85,10 @@ export class InvoiceFormService extends BaseService {
     };
     return firstValueFrom(this.http.get<Blob>(url, httpOptionsExport));
   }
+
+  logFileAttachment<T = any>(body: any): Promise<ListResponse<T> | any> {
+    const url = `${this.api}/invoice/common/log-file-attachment`;
+    const params = new HttpParams({fromObject: body});
+    return firstValueFrom(this.http.get<ListResponse<T>>(url, {params}));
+  }
 }

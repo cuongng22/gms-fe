@@ -395,9 +395,6 @@ export class InvoiceDocumentDetailComponent
 		},
 		{ label: 'Type Room', value: 'typeRoom', rowspan: '2' },
 	];
-	@ViewChild(
-		'inputElementRef1, inputElementRef2, inputElementRef3, inputElementRef4',
-	)
 	inputElementRef: QueryList<ElementRef>;
 	@ViewChild('totalab') totalab: ElementRef;
 	public listDocumentParent: any[] = [];
@@ -1123,15 +1120,11 @@ export class InvoiceDocumentDetailComponent
 	}
 
 	isInternational() {
-		return (
-			this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL'
-		);
+    return this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL';
 	}
 
 	isDomestic() {
-		return (
-			this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC'
-		);
+    return this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC';
 	}
 
 	async subscribeMain(row?: any) {

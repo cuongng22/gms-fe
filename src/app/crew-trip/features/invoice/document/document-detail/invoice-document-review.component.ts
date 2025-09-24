@@ -447,16 +447,28 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   }
 
   shouldShowRowSpan(index: number, innerColumn: any): boolean {
-    if (['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
-      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm
-      return (
-        index === 0 || dtl[index]?.typeRoom !== 'CC Twin room' ||
-        dtl[index]?.roomNo !== dtl[index - 1]?.roomNo ||
-        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate) ||
-        (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate === dtl[index - 1]?.ciDate && dtl[index]?.ciTime !== dtl[index - 1]?.ciTime)
-        // (dtl[index]?.roomNo === dtl[index - 1]?.roomNo && dtl[index]?.ciDate !== dtl[index - 1]?.ciDate)
-      );
-    } else return true;
+    if (!(this.isHotel() && this.isDomestic())) return true;
+
+    const mergeCols = ['roomNo', 'night', 'timeStay',
+      'earlyCheckin', 'lateCheckout',
+      'totalNight', 'price', 'totalCharge'
+    ];
+
+    if (!mergeCols.includes(innerColumn.value)) return true;
+
+    const dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm;
+    if (index === 0) return true;
+
+    const prev = dtl[index - 1];
+    const curr = dtl[index];
+
+    if (curr?.typeRoom !== 'CC Twin room') return true;
+
+    return (
+      curr?.roomNo !== prev?.roomNo ||
+      curr?.ciDate !== prev?.ciDate ||
+      curr?.ciTime !== prev?.ciTime
+    );
   }
 
   reviewMatch() {

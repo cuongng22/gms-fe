@@ -17,7 +17,7 @@
   </div>
   <!--    List data-->
   <div>
-    <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]="partnerType==='HOTEL'?0:1"
+    <mat-tab-group (selectedTabChange)="onTabChange($event)" [selectedIndex]=getSelectedIndex()
                    mat-align-tabs="start" mat-stretch-tabs="false">
       <mat-tab label="Hotel">
         @if (partnerType === 'HOTEL') {
@@ -27,6 +27,11 @@
       <mat-tab label="Transportation">
         @if (partnerType === 'TRANSPORTATION') {
           <app-invoice-form [partnerType]="partnerType" (nextStepEmit)="nextStepEmit($event)"/>
+        }
+      </mat-tab>
+      <mat-tab label="Log History">
+        @if (partnerType === 'HISTORY') {
+        <app-invoice-history [partnerType]="partnerType" (nextStepEmit)="nextStepEmit($event)"/>
         }
       </mat-tab>
     </mat-tab-group>
