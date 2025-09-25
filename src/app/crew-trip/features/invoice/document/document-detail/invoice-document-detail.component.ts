@@ -1513,6 +1513,7 @@ export class InvoiceDocumentDetailComponent
 			} else {
 				this.tblInvoiceDocumentDtl.removeAt(this.deleteObj.index);
 				this.dsInvoiceDocumentDtl.data = this.tblInvoiceDocumentDtl.controls;
+        this.calTotal();
 			}
 		} catch (e) {
 			this.baseService.showError(MESSAGE.ERROR);
