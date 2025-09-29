@@ -63,8 +63,8 @@ export class GroupMailComponent extends CommonComponent implements OnInit {
 	}[] = [
 		{ label: $localize`:@@name:Name`, value: 'groupName' },
 		{ label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
-		{ label: $localize`:@@note:Description`, value: 'notes' },
-		// { label: $localize`:@@status:Status`, value: 'status' }
+		{ label: $localize`:@@note:Remarks`, value: 'notes' },
+		{ label: $localize`:@@supplier:Supplier`, value: 'supplierName' },
 	];
 
 	constructor() {

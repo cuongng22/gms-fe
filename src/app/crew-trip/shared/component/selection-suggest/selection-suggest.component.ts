@@ -89,9 +89,6 @@ export class SelectionSuggestComponent
 
 	setRequired(isFormControl?: boolean) {
 		if (isFormControl) {
-			debugger;
-		}
-		if (isFormControl) {
 			this.formControl.addValidators(Validators.required);
 			this.formControl.updateValueAndValidity();
 		}
@@ -216,8 +213,6 @@ export class SelectionSuggestComponent
 
 	filter(): void {
 		const filterValue = this.inputSearch.nativeElement.value;
-		/*this.formControl.setValue(null);
-		this.formControl.updateValueAndValidity();*/
 		this.keySearch.next(filterValue);
 	}
 
