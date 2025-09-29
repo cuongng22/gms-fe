@@ -30,11 +30,20 @@
         <div class="col-sm-6 col-md-6">
           <div class="form-group mb-20">
             <app-selection-suggest i18n-label="@@marketCode" label="Airport code" required [options]="markets"
-                                   formControlName="marketCode" size="sm"/>
+                                   formControlName="marketCode" size="sm" (selectionChange)="onMarketCodeChange($event)"/>
             @if (!!formGroupDetail.controls['marketCode'].hasError('existCode')) {
               <span class="required">There has already been a mail group in this airport code</span>
             }
           </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="form-group">
+          <app-selection-suggest i18n-label="@@supplier" label="Supplier" [options]="listSuppliers"
+                         formControlName="supplier" size="sm" attrValue="code" attrDisplay="name"
+                         (selectionChange)="onSupplierChange($event)">
+
+          </app-selection-suggest>
         </div>
       </div>
       <div class="row">
@@ -42,12 +51,12 @@
           <div class="form-group">
             <mat-form-field>
               <mat-label i18n="@@description">
-                Description
+                Remarks
               </mat-label>
               <textarea matInput matTextareaAutosize cdkTextareaAutosize #autosize="cdkTextareaAutosize"
                         cdkAutosizeMinRows="2" cdkAutosizeMaxRows="10" formControlName="notes"></textarea>
               @if (!!formGroupDetail.controls['notes'].hasError('maxlength')) {
-                <mat-error><span i18n>Description must be less than 500 characters</span></mat-error>
+                <mat-error><span i18n>Remarks must be less than 500 characters</span></mat-error>
               }
             </mat-form-field>
           </div>

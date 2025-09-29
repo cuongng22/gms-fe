@@ -30,6 +30,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatTableModule } from '@angular/material/table';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { ContractService } from 'src/app/crew-trip/core/services/contract-service';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { PaymentMailService } from 'src/app/crew-trip/core/services/payment-mail.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
@@ -83,7 +84,6 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 			display: $localize`:@@transportation:Transportation`,
 		},
 	];
-
 	_displayedColumns: {
 		label: string;
 		value: string;
@@ -94,15 +94,17 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 		{ label: $localize`:@@type:Type`, value: 'type' },
 		{ label: $localize`:@@airportCode:Airport code`, value: 'marketCode' },
 		{ label: $localize`:@@name:Email`, value: 'emails' },
+		{ label: 'Supplier', value: 'supplierName' },
 		{ label: $localize`:@@note:Remark`, value: 'note' },
 		// { label: $localize`:@@status:Status`, value: 'status' }
 	];
-
 	readonly emails = signal<string[]>([]);
 	readonly announcer = inject(LiveAnnouncer);
 	regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 	mailFormatInvalid = false;
 	readonly separatorKeysCodes = [ENTER, COMMA, SEMICOLON] as const;
+	listSuppliers: any[] = [];
+	contractService = inject(ContractService);
 
 	constructor() {
 		super();
@@ -121,6 +123,9 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 		emails: [[''], [Validators.required]],
 		type: ['', [Validators.required]],
 		groupName: ['', [Validators.required, Validators.maxLength(100)]],
+		supplierCode: [''],
+		supplierName: [''],
+		bizdocid: [''],
 	});
 
 	override async ngOnInit() {
@@ -138,9 +143,6 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 		try {
 			const emailInput = this.formGroupDetail.controls.emailsInput?.value;
 			if (emailInput) {
-				// const emailList = emailInput
-				//   .split(';')
-				//   .map((email: string) => email.trim());
 				this.formGroupDetail.patchValue({
 					emails: emailInput,
 				});
@@ -183,6 +185,10 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 			const emailList = res.data.emails
 				.split('; ')
 				.map((email: string) => email.trim());
+			const prefilledMarket = res.data.marketCode;
+			if (prefilledMarket) {
+				await this.onMarketCodeChange({ value: prefilledMarket });
+			}
 			this.formGroupDetail.patchValue({
 				id: res.data.id,
 				marketCode: res.data.marketCode,
@@ -190,7 +196,12 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 				emails: emailList,
 				type: res.data.type,
 				groupName: res.data.groupName,
+				supplierCode: res.data.supplierCode,
+				supplierName: res.data.supplierName,
+				bizdocid: res.data.bizdocid,
 			});
+			this.formGroupDetail.markAllAsTouched();
+			console.log(this.formGroupDetail.getRawValue());
 			this.emails.set(emailList);
 			await this.spinner.hide();
 		}
@@ -208,7 +219,6 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 
 	add(event: MatChipInputEvent): void {
 		const value = (event.value || '').trim();
-
 		// Add our fruit
 		if (value) {
 			if (this.regexEmail.test(value)) {
@@ -257,8 +267,33 @@ export class PaymentEmailComponent extends CommonComponent implements OnInit {
 	}
 
 	override async closeDetail() {
-		await super.closeDetail();
+		this.formGroupDetail.reset();
+		this.formGroupDetail.markAsUntouched();
+		this.formGroupDetail.markAsPristine();
+		this.formGroupDetail.updateValueAndValidity();
 		this.emails.set([]);
+		this.toggleDialogCreate();
+	}
+	async onMarketCodeChange(event: any): Promise<void> {
+		const airportCode = event.value;
+		this.listSuppliers = (
+			await this.contractService.getListPartnerAndContractInfo({
+				airportCode,
+			})
+		).data;
+	}
+
+	onSupplierChange(event: any): void {
+		const supplierCode = event.value;
+		const supplierName = event.viewValue;
+		if (supplierCode) {
+			this.formGroupDetail.patchValue({
+				supplierName: supplierName,
+				supplierCode: supplierCode,
+				bizdocid: this.listSuppliers.find((item) => item.code === supplierCode)
+					?.bizdocId,
+			});
+		}
 	}
 }
 

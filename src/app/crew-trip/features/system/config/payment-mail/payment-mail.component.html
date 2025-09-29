@@ -148,9 +148,16 @@
 						</div>
 						<div class="col-sm-12 col-md-12 mb-2">
 							<app-selection-suggest i18n-label="@@airportCodes" label="Airport code" [options]="markets"
-																		 formControlName="marketCode" size="sm">
+																		 formControlName="marketCode" size="sm" (selectionChange)="onMarketCodeChange($event)">
 							</app-selection-suggest>
 						</div>
+            <div class="col-12 mb-2">
+              <app-selection-suggest i18n-label="@@supplier" label="Supplier" [options]="listSuppliers"
+                             formControlName="supplierCode" size="sm" attrValue="code" attrDisplay="name"
+                             (selectionChange)="onSupplierChange($event)">
+
+              </app-selection-suggest>
+            </div>
 						<div class="col-sm-12 col-md-12 mb-2">
 							<mat-form-field>
 								<mat-label i18n>Supplier payment email</mat-label>
@@ -166,7 +173,7 @@
 											</button>
 										</mat-chip-row>
 									}
-									<input placeholder="New email..." [matChipInputFor]="chipGrid" (input)="emailInputChange($event)"
+									<input placeholder="New email..." [matChipInputFor]="chipGrid" (change)="emailInputChange($event)"
 												 [matChipInputSeparatorKeyCodes]="separatorKeysCodes" [matChipInputAddOnBlur]="true"
 												 (matChipInputTokenEnd)="add($event)" sizeInput="sm" />
 

@@ -131,7 +131,6 @@ export class SelectMultipleComponent
 		if (changes['readonly']) {
 			this.updateEnableState();
 		}
-		console.log('changedddddd', this.selectOptionsRaw);
 	}
 
 	get formControl(): FormControl {

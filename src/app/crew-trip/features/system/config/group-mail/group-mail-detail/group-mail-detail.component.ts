@@ -33,6 +33,7 @@ import { MatTableModule } from '@angular/material/table';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { BehaviorSubject, debounceTime, Observable } from 'rxjs';
 import { map, startWith } from 'rxjs/operators';
+import { ContractService } from 'src/app/crew-trip/core/services/contract-service';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { GroupMailService } from 'src/app/crew-trip/core/services/group-mail.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
@@ -75,6 +76,7 @@ export class GroupMailDetailComponent
 {
 	override baseService = inject(GroupMailService);
 	flightMarketSv = inject(FlightMarketService);
+	contractService = inject(ContractService);
 	private cdr = inject(ChangeDetectorRef);
 	@ViewChild('marketCode', { static: true }) marketCode!: ElementRef;
 	markets: any[] = [];
@@ -93,6 +95,7 @@ export class GroupMailDetailComponent
 	public locale: string;
 	filteredEmails: Observable<string[]>[] = []; // Mảng Observable cho gợi ý
 	emailsSugget: string[] = [];
+	listSuppliers: any[] = [];
 
 	override formGroupDetail = this.formBuilder.group({
 		id: [],
@@ -100,6 +103,9 @@ export class GroupMailDetailComponent
 		notes: ['', Validators.maxLength(500)],
 		marketCode: ['', [Validators.required, this.existCodeValidator.bind(this)]],
 		groupEmail: [[] as string[], Validators.required],
+		supplier: [''],
+		supplierName: [''],
+		bizdocid: [''],
 	});
 
 	override keyEvent(event: KeyboardEvent) {
@@ -159,17 +165,14 @@ export class GroupMailDetailComponent
 					]),
 			);
 			this.updateFilteredEmails();
+			// Auto load suppliers when editing and marketCode is pre-filled
+			const prefilledMarket = this.formGroupDetail.value.marketCode;
+			if (prefilledMarket) {
+				await this.onMarketCodeChange({ value: prefilledMarket });
+			}
 		}
-		await this.baseService
-			.getEmailSuggets()
-			.then((response: any) => {
-				this.emailsSugget = response.data || []; // Xử lý API trả về { data: [] }
-				this.updateFilteredEmails();
-			})
-			.catch((error) => {
-				this.emailsSugget = [];
-				this.updateFilteredEmails();
-			});
+		this.emailsSugget = (await this.baseService.getEmailSuggets()).data || [];
+		this.updateFilteredEmails();
 	}
 
 	private updateFilteredEmails(): void {
@@ -178,13 +181,10 @@ export class GroupMailDetailComponent
 				startWith(''),
 				debounceTime(300),
 				map((value) => {
-					const filtered = this.filterEmails(value || '');
-					console.log('Filtered emails:', filtered);
-					return filtered;
+					return this.filterEmails(value || '');
 				}),
 			),
 		);
-		console.log('this.filteredEmails:', this.filteredEmails);
 	}
 	close(): void {
 		this.dialogRef.close();
@@ -196,11 +196,6 @@ export class GroupMailDetailComponent
 			email.toLowerCase().includes(filterValue),
 		);
 	}
-
-	// addEmailRow(): void {
-	//   this.emailList.push({email: '', isEditing: true});
-	//   this.emailList = [...this.emailList];
-	// }
 
 	addEmailRow(): void {
 		this.emailList.push({
@@ -221,9 +216,7 @@ export class GroupMailDetailComponent
 				startWith(''),
 				debounceTime(300),
 				map((value) => {
-					const filtered = this.filterEmails(value || '');
-					console.log('Filtered emails for new row:', filtered);
-					return filtered;
+					return this.filterEmails(value || '');
 				}),
 			),
 		);
@@ -247,45 +240,9 @@ export class GroupMailDetailComponent
 		} else if (this.checkDuplicate(email, index)) {
 			this.emailList[index].isDuplicate = true;
 		}
-		console.log(`Input email at index ${index}:`, email, 'State:', {
-			isEmpty: this.emailList[index].isEmpty,
-			isInvalid: this.emailList[index].isInvalid,
-			isDuplicate: this.emailList[index].isDuplicate,
-		});
 		this.emailList = [...this.emailList];
 		this.cdr.detectChanges();
 	}
-
-	// editEmail(index: number): void {
-	//   this.emailList[index].isEditing = true;
-	//   this.emailList = [...this.emailList];
-	//   this.emailList[index].isEmpty = this.emailList[index].email === '';
-	// }
-	//
-	// saveEmail(index: number): void {
-	//   const emailValue = this.emailList[index]?.email.toLowerCase();
-	//   if (!emailValue) {
-	//     this.emailList[index].isEmpty = !emailValue;
-	//     return;
-	//   }
-	//   const exist = this.emailListCheck.some((emailObj, i) =>
-	//     emailObj.email.toLowerCase() === emailValue && i !== index
-	//   );
-	//   if (exist) {
-	//     this.emailList[index].isDuplicate = true;
-	//     this.emailList[index].isEditing = true;
-	//   } else {
-	//     this.emailList[index].isEmpty = !emailValue;
-	//     this.emailList[index].isEditing = false;
-	//     this.emailListCheck = this.emailList;
-	//   }
-	// }
-	//
-	// deleteEmail(index: number): void {
-	//   const emailToDelete = this.emailList[index]?.email.toLowerCase();
-	//   this.emailList = this.emailList.filter((_, i) => i !== index);
-	//   this.emailListCheck = this.emailListCheck.filter(emailObj => emailObj.email.toLowerCase() !== emailToDelete);
-	// }
 
 	editEmail(index: number): void {
 		this.emailList[index].isEditing = true;
@@ -297,37 +254,24 @@ export class GroupMailDetailComponent
 			this.emailList[index].email,
 			index,
 		);
-		console.log(
-			`Edit email at index ${index}:`,
-			this.emailList[index].email,
-			'State:',
-			{
-				isEmpty: this.emailList[index].isEmpty,
-				isInvalid: this.emailList[index].isInvalid,
-				isDuplicate: this.emailList[index].isDuplicate,
-			},
-		);
+
 		this.emailList = [...this.emailList];
 		this.cdr.detectChanges();
 	}
 
 	saveEmail(index: number): void {
 		const emailValue = this.emailList[index]?.email.toLowerCase();
-		console.log(`Saving email at index ${index}:`, emailValue);
 		if (!emailValue) {
 			this.emailList[index].isEmpty = true;
-			console.log(`Email empty at index ${index}`);
 			return;
 		}
 		if (this.emailControls[index].invalid) {
 			this.emailList[index].isInvalid = true;
-			console.log(`Email invalid at index ${index}`);
 			return;
 		}
 		if (this.checkDuplicate(emailValue, index)) {
 			this.emailList[index].isDuplicate = true;
 			this.emailList[index].isEditing = true;
-			console.log(`Email duplicate at index ${index}:`, emailValue);
 			return;
 		}
 		this.emailList[index].isEditing = false;
@@ -336,7 +280,6 @@ export class GroupMailDetailComponent
 		this.emailList[index].isDuplicate = false;
 		this.emailListCheck = [...this.emailList];
 		this.emailList = [...this.emailList];
-		console.log(`Email saved at index ${index}:`, emailValue);
 		this.cdr.detectChanges();
 	}
 
@@ -404,11 +347,6 @@ export class GroupMailDetailComponent
 		if (this.checkDuplicate(selectedEmail, index)) {
 			this.emailList[index].isDuplicate = true;
 		}
-		console.log(`Selected email at index ${index}:`, selectedEmail, 'State:', {
-			isEmpty: this.emailList[index].isEmpty,
-			isInvalid: this.emailList[index].isInvalid,
-			isDuplicate: this.emailList[index].isDuplicate,
-		});
 		this.emailList = [...this.emailList];
 		this.cdr.detectChanges();
 	}
@@ -422,5 +360,27 @@ export class GroupMailDetailComponent
 					i !== index && emailObj.email.toLowerCase() === email.toLowerCase(),
 			)
 		);
+	}
+
+	async onMarketCodeChange(event: any): Promise<void> {
+		const airportCode = event.value;
+		this.listSuppliers = (
+			await this.contractService.getListPartnerAndContractInfo({
+				airportCode,
+			})
+		).data;
+	}
+
+	onSupplierChange(event: any): void {
+		const supplierCode = event.value;
+		const supplierName = event.viewValue;
+		if (supplierCode) {
+			this.formGroupDetail.patchValue({
+				supplier: supplierCode,
+				supplierName: supplierName,
+				bizdocid: this.listSuppliers.find((item) => item.code === supplierCode)
+					?.bizdocId,
+			});
+		}
 	}
 }

@@ -36,15 +36,15 @@
 			@if (showCustomInput && allowCustomInput) {
 				<div class="custom-input-section">
 					<mat-form-field class="custom-input-field">
-						<input 
-							matInput 
-							type="text" 
+						<input
+							matInput
+							type="text"
 							[formControl]="customInput"
-							placeholder="Nhập giá trị mới..."
+							placeholder="Insert new value..."
 							(keydown)="onCustomInputKeydown($event)">
-						<button 
-							matSuffix 
-							mat-icon-button 
+						<button
+							matSuffix
+							mat-icon-button
 							type="button"
 							(click)="addCustomValue()"
 							[disabled]="!customInputValue"
@@ -56,7 +56,7 @@
 					</mat-form-field>
 					<div class="custom-input-hint">
 						<i class="material-symbols-outlined">info</i>
-						<span>Nhấn Enter hoặc click nút + để thêm giá trị mới</span>
+						<span>Enter or click + button to add new value</span>
 					</div>
 				</div>
 			}
