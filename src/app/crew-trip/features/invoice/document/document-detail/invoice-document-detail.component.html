@@ -496,14 +496,16 @@
                 Amount Currency Before Vat
               </th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
-                <div class="input-cell">
-                  <mat-form-field class="edit-inline-table">
-                    <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput trim="blur">
-                    <mat-error>
-                      <app-control-error controlName="amountFcBeforeVat"></app-control-error>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                @if (isInternational()) {
+                  <div class="input-cell">
+                    <mat-form-field class="edit-inline-table">
+                      <input appThousandsSeparator formControlName="amountFcBeforeVat" matInput trim="blur">
+                      <mat-error>
+                        <app-control-error controlName="amountFcBeforeVat"></app-control-error>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                }
               </td>
             </ng-container>
             <ng-container matColumnDef="amountVndBeforeVat">
@@ -524,14 +526,16 @@
             <ng-container matColumnDef="amountFcVat">
               <th *matHeaderCellDef class="text-center" i18n mat-header-cell mat-sort-header rowspan="2">Amount Currency</th>
               <td *matCellDef="let row; let i = index" [formGroup]="row" mat-cell>
-                <div class="input-cell">
-                  <mat-form-field class="edit-inline-table">
-                    <input appThousandsSeparator formControlName="amountFcVat" matInput trim="blur">
-                    <mat-error>
-                      <app-control-error controlName="amountFcVat"></app-control-error>
-                    </mat-error>
-                  </mat-form-field>
-                </div>
+                @if (isInternational()) {
+                  <div class="input-cell">
+                    <mat-form-field class="edit-inline-table">
+                      <input appThousandsSeparator formControlName="amountFcVat" matInput trim="blur">
+                      <mat-error>
+                        <app-control-error controlName="amountFcVat"></app-control-error>
+                      </mat-error>
+                    </mat-form-field>
+                  </div>
+                }
               </td>
             </ng-container>
             <ng-container matColumnDef="amountVndVat">
@@ -774,7 +778,7 @@
         @if (!readMode) {
           <div class="row mt-25">
             <div class="col-lg-6" sizeInput='sm'>
-              <file-upload (change)="actionUpload()" [accept]="COMMON_CONFIG.FILE_ACCEPT" [multiple]="false"
+              <file-upload (change)="actionUpload()" [accept]="COMMON_CONFIG.FILE_ACCEPT" [multiple]="true"
                            class="file-uploader"
                            formControlName="fileUpload"></file-upload>
             </div>

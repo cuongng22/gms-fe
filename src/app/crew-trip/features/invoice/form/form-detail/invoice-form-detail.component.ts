@@ -347,10 +347,10 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   }
 
   isInternational() {
-    return this.formGroupDetail.getRawValue().contractServiceType === 'INTERNATIONAL';
+    return this.formGroupDetail.getRawValue().ctype === 'INTERNATIONAL';
   }
 
   isDomestic() {
-    return this.formGroupDetail.getRawValue().contractServiceType === 'DOMESTIC';
+    return this.formGroupDetail.getRawValue().ctype === 'DOMESTIC';
   }
 }

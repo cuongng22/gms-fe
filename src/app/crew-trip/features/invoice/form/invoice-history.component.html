@@ -41,16 +41,16 @@
             <mat-form-field>
               <mat-label i18n>Created Date</mat-label>
               <mat-date-range-input [rangePicker]="picker">
-                <input formControlName="periodFrom" matStartDate placeholder="dd/mm/yyyy">
-                <input formControlName="periodTo" matEndDate placeholder="dd/mm/yyyy">
+                <input formControlName="createdDateFrom" matStartDate placeholder="dd/mm/yyyy">
+                <input formControlName="createdDateTo" matEndDate placeholder="dd/mm/yyyy">
               </mat-date-range-input>
               <!--              <mat-hint>DD/MM/YYYY – DD/MM/YYYY</mat-hint>-->
               <mat-datepicker-toggle [for]="picker" matIconSuffix></mat-datepicker-toggle>
               <mat-date-range-picker #picker></mat-date-range-picker>
-              @if (!!formGroupSearch.controls['periodFrom'].hasError('matDatepickerParse')) {
+              @if (!!formGroupSearch.controls['createdDateFrom'].hasError('matDatepickerParse')) {
                 <mat-error>Invalid start date</mat-error>
               }
-              @if (!!formGroupSearch.controls['periodTo'].hasError('matDatepickerParse')) {
+              @if (!!formGroupSearch.controls['createdDateTo'].hasError('matDatepickerParse')) {
                 <mat-error>Invalid end date</mat-error>
               }
             </mat-form-field>

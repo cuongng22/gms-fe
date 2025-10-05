@@ -73,8 +73,8 @@ export class InvoiceHistoryComponent extends CommonComponent implements OnInit {
       partnerType: [],
       airportCode: [],
       listAirportCode: [],
-      periodFrom: [this.startOfMonth],
-      periodTo: [moment().format('YYYY-MM-DD')],
+      createdDateFrom: [this.startOfMonth],
+      createdDateTo: [moment().format('YYYY-MM-DD')],
     });
     this.formGroupDetail = this.fb.group({
       id: [],
@@ -138,11 +138,11 @@ export class InvoiceHistoryComponent extends CommonComponent implements OnInit {
       }
       let res;
       let req = body || this.formGroupSearch.getRawValue();
-      req.periodFrom = moment(req.periodFrom).isValid()
-        ? moment(req.periodFrom).format(Constant.LOCAL_DATE_FORMAT)
+      req.createdDateFrom = moment(req.createdDateFrom).isValid()
+        ? moment(req.createdDateFrom).startOf('day').format(Constant.LOCAL_DATE_TIME_FORMAT)
         : null;
-      req.periodTo = moment(req.periodTo).isValid()
-        ? moment(req.periodTo).format(Constant.LOCAL_DATE_FORMAT)
+      req.createdDateTo = moment(req.createdDateTo).isValid()
+        ? moment(req.createdDateTo).endOf('day').format(Constant.LOCAL_DATE_TIME_FORMAT)
         : null;
       this.displayedColumns = [
         'stt',
