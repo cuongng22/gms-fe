@@ -324,7 +324,7 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
 
     if (!mergeCols.includes(innerColumn.value)) return true;
 
-    const dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm;
+    const dtl = this.formGroupDetail.getRawValue().invoiceFormDtl;
     if (index === 0) return true;
 
     const prev = dtl[index - 1];
