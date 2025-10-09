@@ -49,7 +49,7 @@ import {elementAt} from "rxjs";
   imports: [DataTransformPipe, FormsModule, InputSizeComponent, MatAccordion, MatButtonModule, MatCardModule, MatCheckboxModule, MatError, MatExpansionPanel, MatExpansionPanelDescription, MatExpansionPanelHeader, MatExpansionPanelTitle, MatFormField, MatInput, MatLabel, MatMenuModule, MatOption, MatPaginatorModule, MatPrefix, MatRadioModule, MatSelect, MatSuffix, MatTab, MatTabGroup, MatTableModule, NgClass, NgIf, NgxEditorModule, ReactiveFormsModule, RouterLink, TitleCasePipe, MatHint, MatDatepickerModule, MatDatepicker, MatDatepickerToggle, MatNativeDateModule, FileUploadModule, ClickOutside, MatAutocomplete, MatAutocompleteTrigger, NgxTrimDirectiveModule, NgxMaterialTimepickerModule, NgxMatTimepickerFieldComponent, NgForOf, NgxMaterialTimepickerModule, DigitOnlyModule, DecimalPipe],
   templateUrl: './invoice-form-detail.component.html',
   styleUrl: './invoice-form-detail.component.scss',
-  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY,{useUtc: true}),
+  providers: [provideMomentDateAdapter(DATE_FORMAT_DD_MM_YYYY, {useUtc: true}),
 
   ]
 })
@@ -209,13 +209,14 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
       await this.spinner.show();
       await Promise.all([this.detail(this.id), // this.loadListKhoanMucKhns(),
         this.setReadMode(this.formGroupDetail)]).then(() => {
+        this.buildView();
         if (this.isInternational() && this.isHotel()) {
           this.formType = 1;
           this._displayedColumnsHeader1 = ['stt', 'checkin2col', 'checkout2col', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights', 'earlyCheckin',
             'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge', 'singleRoomCcCharge',
             'twinRoomCcCharge', 'eciSingleRoomFcCharge', 'eciSingleRoomCcCharge', 'eciTwinRoomCcCharge', 'lcoSingleRoomFcCharge', 'lcoSingleRoomCcCharge', 'lcoTwinRoomCcCharge',
             'breakfastFcCharge', 'breakfastCcCharge', 'cityTaxFcCharge', 'cityTaxCcCharge', 'serviceTaxFcCharge', 'serviceTaxCcCharge', 'accommodationTaxFcCharge',
-            'accommodationTaxCcCharge', 'numberOfTransfers' , 'transportCharge', 'totalCharges', 'remark'];
+            'accommodationTaxCcCharge', 'numberOfTransfers', 'transportCharge', 'totalCharges', 'remark'];
           this._displayedColumnsHeader2 = ['ciFltno', 'ciDate', 'coFltno', 'coDate'];
           this._displayedColumnsRow = ['stt', 'ciFltno', 'ciDate', 'coFltno', 'coDate', 'fc', 'cc', 'singleRoomFc', 'singleRoomCc', 'twinRoomCc', 'numberOfNights',
             'earlyCheckin', 'lateCheckout', 'totalSingleRoomsFc', 'totalSingleRoomsCc', 'totalTwinRoomsCc', 'breakfastFc', 'breakfastCc', 'singleRoomFcCharge',
@@ -233,9 +234,9 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
           this.totalColSpan = 8;
         } else if (this.isInternational() && this.isTransportation()) {
           this.formType = 3;
-          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice','accessBridge','toll','totalToll','transitDuty','airportParkingFee', 'totalCharge', 'remark'];
+          this._displayedColumnsHeader1 = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'accessBridge', 'toll', 'totalToll', 'transitDuty', 'airportParkingFee', 'totalCharge', 'remark'];
           this._displayedColumnsHeader2 = [];
-          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice','accessBridge','toll','totalToll','transitDuty','airportParkingFee', 'totalCharge', 'remark'];
+          this._displayedColumnsRow = ['stt', 'fltno', 'cdate', 'detail', 'numberOfVehicle', 'unitPrice', 'accessBridge', 'toll', 'totalToll', 'transitDuty', 'airportParkingFee', 'totalCharge', 'remark'];
           this._displayedColumnsFooter = this._displayedColumnsRow.filter(item => !this._displayedColumnsHeader2.includes(item));
         } else if (this.isDomestic() && this.isTransportation()) {
           this.formType = 4;
@@ -302,42 +303,39 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   }
 
   getRowSpan(index: number, innerColumn: any, data: any): number {
-    if (data.typeRoom === 'CC Twin room' &&
-      ['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
-      let dtl = this.formGroupDetail.getRawValue().invoiceFormDtl;
-      let currentRow = dtl[index];
-      let nextRow = dtl[index + 1];
-      if (nextRow?.roomNo === currentRow?.roomNo && nextRow?.ciDate === currentRow?.ciDate) {
-      // if (nextRow?.roomNo === currentRow?.roomNo) {
-        return 2;
-      } else return 1;
-    } else {return 1;}
-  }
-
-  shouldShowRowSpan(index: number, innerColumn: any): boolean {
-    if (!(this.isHotel() && this.isDomestic())) return true;
-
     const mergeCols = ['roomNo', 'night', 'timeStay',
       'earlyCheckin', 'lateCheckout',
       'totalNight', 'price', 'totalCharge'
     ];
-
-    if (!mergeCols.includes(innerColumn.value)) return true;
-
-    const dtl = this.formGroupDetail.getRawValue().invoiceFormDtl;
-    if (index === 0) return true;
-
-    const prev = dtl[index - 1];
-    const curr = dtl[index];
-
-    if (curr?.typeRoom !== 'CC Twin room') return true;
-
-    return (
-      curr?.roomNo !== prev?.roomNo ||
-      curr?.ciDate !== prev?.ciDate ||
-      curr?.ciTime !== prev?.ciTime
-    );
+    if (mergeCols.includes(innerColumn.value) && data.isHead) return 2;
+    else return 1;
   }
+
+  shouldShowRowSpan(index: number, innerColumn: any, data: any): string {
+    const mergeCols = ['roomNo', 'night', 'timeStay',
+      'earlyCheckin', 'lateCheckout',
+      'totalNight', 'price', 'totalCharge'
+    ];
+    if (mergeCols.includes(innerColumn.value) && data.isTail) return 'none';
+    else return '';
+  }
+
+  async buildView() {
+    if (!(this.isHotel() && this.isDomestic())) return;
+    let dataDtl = this.formGroupDetail.getRawValue().invoiceFormDtl;
+    for (let i = 0; i < dataDtl.length; i++) {
+      let currentRow = dataDtl[i];
+      let nextRow = dataDtl[i + 1];
+      if (currentRow.typeRoom === 'CC Twin room' &&
+        nextRow?.roomNo === currentRow?.roomNo &&
+        nextRow?.ciDate === currentRow?.ciDate &&
+        !currentRow?.isTail) {
+        currentRow.isHead = true;
+        nextRow.isTail = true;
+      }
+    }
+  }
+
   isHotel() {
     return this.formGroupDetail.getRawValue().partnerType === 'HOTEL';
   }
@@ -353,4 +351,5 @@ export class InvoiceFormDetailComponent extends CommonComponent implements OnIni
   isDomestic() {
     return this.formGroupDetail.getRawValue().ctype === 'DOMESTIC';
   }
+
 }
