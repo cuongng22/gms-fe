@@ -434,41 +434,37 @@ export class InvoiceDocumentReviewComponent extends CommonComponent implements O
   }
 
   getRowSpan(index: number, innerColumn: any, data: any): number {
-    if (data.typeRoom === 'CC Twin room' &&
-      ['roomNo', 'night', 'timeStay', 'earlyCheckin', 'lateCheckout', 'totalNight', 'price', 'totalCharge'].includes(innerColumn.value)) {
-      let dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm;
-      let currentRow = dtl[index];
-      let nextRow = dtl[index + 1];
-      if (nextRow?.roomNo === currentRow?.roomNo && nextRow?.ciDate === currentRow?.ciDate) {
-        // if (nextRow?.roomNo === currentRow?.roomNo) {
-        return 2;
-      } else return 1;
-    } else {return 1;}
-  }
-
-  shouldShowRowSpan(index: number, innerColumn: any): boolean {
-    if (!(this.isHotel() && this.isDomestic())) return true;
-
     const mergeCols = ['roomNo', 'night', 'timeStay',
       'earlyCheckin', 'lateCheckout',
       'totalNight', 'price', 'totalCharge'
     ];
+    if (mergeCols.includes(innerColumn.value) && data.isHead) return 2;
+    else return 1;
+  }
 
-    if (!mergeCols.includes(innerColumn.value)) return true;
+  shouldShowRowSpan(index: number, innerColumn: any, data: any): string {
+    const mergeCols = ['roomNo', 'night', 'timeStay',
+      'earlyCheckin', 'lateCheckout',
+      'totalNight', 'price', 'totalCharge'
+    ];
+    if (mergeCols.includes(innerColumn.value) && data.isTail) return 'none';
+    else return '';
+  }
 
-    const dtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm;
-    if (index === 0) return true;
-
-    const prev = dtl[index - 1];
-    const curr = dtl[index];
-
-    if (curr?.typeRoom !== 'CC Twin room') return true;
-
-    return (
-      curr?.roomNo !== prev?.roomNo ||
-      curr?.ciDate !== prev?.ciDate ||
-      curr?.ciTime !== prev?.ciTime
-    );
+  async buildView() {
+    if (!(this.isHotel() && this.isDomestic())) return;
+    let dataDtl = this.formGroupDetail.getRawValue().invoiceDocumentReviewForm;
+    for (let i = 0; i < dataDtl.length; i++) {
+      let currentRow = dataDtl[i];
+      let nextRow = dataDtl[i + 1];
+      if (currentRow.typeRoom === 'CC Twin room' &&
+        nextRow?.roomNo === currentRow?.roomNo &&
+        nextRow?.ciDate === currentRow?.ciDate &&
+        !currentRow?.isTail) {
+        currentRow.isHead = true;
+        nextRow.isTail = true;
+      }
+    }
   }
 
   reviewMatch() {
