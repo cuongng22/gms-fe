@@ -7,7 +7,6 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatCheckboxModule } from '@angular/material/checkbox';
-import { UsersService } from 'src/app/crew-trip/core/services/users-service';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { MatError, MatFormField, MatLabel, MatPrefix, MatSuffix } from '@angular/material/form-field';
 import { MatOption, MatSelect } from '@angular/material/select';
@@ -25,7 +24,6 @@ import {
 } from '@angular/material/expansion';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { FunctionsService } from 'src/app/crew-trip/core/services/functions-service';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 
 
@@ -43,8 +41,6 @@ import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-p
 
 export class RoleFunctionComponent extends CommonComponent implements OnInit {
   override baseService = inject(RolesService);
-  usersService = inject(UsersService);
-  functionsService = inject(FunctionsService);
   fb = inject(FormBuilder);
 
   //variable

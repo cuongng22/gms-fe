@@ -17,11 +17,7 @@ import { saveAs } from 'file-saver';
 import { NgxSpinnerService } from 'ngx-spinner';
 import { ToggleService } from 'src/app/common/header/toggle.service';
 import { BaseService } from 'src/app/crew-trip/core/services/base-service';
-import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
-import { HotelService } from 'src/app/crew-trip/core/services/hotel-service';
-import { ServiceFeeService } from 'src/app/crew-trip/core/services/service-fee-service';
 import { UltilService } from 'src/app/crew-trip/core/services/ultil-service';
-import { VehicleService } from 'src/app/crew-trip/core/services/vehicle.service';
 import {
 	COMMON_CONFIG,
 	Constant,
@@ -53,10 +49,6 @@ export class CommonComponent
 	toggleService = inject(ToggleService);
 	ultilService = inject(UltilService);
 	themeService = inject(CustomizerSettingsService);
-	_flightMarketService = inject(FlightMarketService);
-	_hotelService = inject(HotelService);
-	_vehicleService = inject(VehicleService);
-	_serviceFeeService = inject(ServiceFeeService);
 	displayedColumns: string[] = [];
 	dataSource = new MatTableDataSource<any, MatPaginator>();
 	selection = new SelectionModel<any>(true, []);
@@ -404,60 +396,4 @@ export class CommonComponent
 		console.log(invalid);
 		return errorMessages;
 	}
-
-	async loadListFlightMarket(param?: any) {
-		await this._flightMarketService
-			.search({ option: 1, ...param })
-			.then((res) => {
-				if (res.data) {
-					this.listFlightMarketAll = res.data;
-					this.listFlightMarket = res.data;
-				}
-			});
-	}
-
-	async loadListFeeService() {
-		await this._serviceFeeService
-			.search({ page: 0, limit: 9999 })
-			.then((res) => {
-				if (res.data) {
-					this.listFeeService = res.data.content.filter(
-						(s: any) => s.active == true,
-					);
-				}
-			});
-	}
-
-	async loadListHotel() {
-		await this._hotelService.search({ limit: 9999 }).then((res) => {
-			if (res.data) {
-				this.listHotels = res.data.content;
-			}
-		});
-	}
-
-	async loadListVehicle() {
-		await this._vehicleService.search({ limit: 9999 }).then((res) => {
-			if (res.data) {
-				this.listVehicles = res.data.content;
-			}
-		});
-	}
-
-	getErrorMessage(errorKey: string) {
-		return this.errorMessages[errorKey];
-	}
-
-	roundUpNumber(value: any, fix: any) {
-		let _value = value ?? 0;
-		const _fix = fix == 0 ? 100 : Math.pow(10, fix);
-		return (Math.round(_value * _fix) / _fix).toFixed(fix);
-	}
-
-	/*displayColumnHasData(column: string, data: any): boolean {
-    return data.some(row => {
-      const value = row[column];
-      return value !== null && value !== undefined && value !== '';
-    });
-  }*/
 }
