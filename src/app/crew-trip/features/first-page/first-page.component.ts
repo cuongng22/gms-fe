@@ -24,7 +24,6 @@ export class FirstPageComponent {
   themeService = inject(CustomizerSettingsService);
   // isSidebarToggled
   isSidebarToggled = false;
-
   // isToggled
   isToggled = false;
 

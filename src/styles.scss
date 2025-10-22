@@ -3,27 +3,87 @@
 /* Font fallback for Inter */
 //@import 'https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap';
 //@import "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0";
+//:root {
+//  --fontFamily: "Inter", "Aperto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+//  --blackColor: #3A4252;
+//  --whiteColor: #ffffff;
+//  --bodyColor: #64748B;
+//  --borderColor: #ECEEF2;
+//  --transition: .2s;
+//  --fontSize: 15px;
+//  --primaryColor: #605DFF;
+//  --secondaryColor: #3584FC;
+//  --successColor: #25B003;
+//  --dangerColor: #FF4023;
+//  --warningColor: #ffc107;
+//  --infoColor: #0dcaf0;
+//  --lightColor: #f8f9fa;
+//  --darkColor: #212529;
+//  --purpleColor: #AD63F6;
+//  --orangeColor: #FD5812;
+//  --vnaXanhColor: #2a6886;
+//  --vnaVangColor: #d3a023;
+//  //--vnaXanhColor: #006E8C;
+//
+//  --gray-100: #f8f9fa;
+//  --gray-200: #e9ecef;
+//  --gray-300: #dee2e6;
+//  --gray-400: #ced4da;
+//  --gray-500: #adb5bd;
+//  --gray-600: #6c757d;
+//  --gray-700: #495057;
+//  --gray-800: #343a40;
+//  --gray-900: #212529;
+//
+//
+//  --warningColor-100: #f8de90;
+//  --warningColor-200: #f7d05d;
+//  --warningColor-300: #ecbd2f;
+//  --warningColor-400: #d7a613;
+//  --warningColor-500: #ca9906;
+//  --warningColor-600: #a67d03;
+//  --warningColor-700: #7a5b01;
+//  --warningColor-800: #6e5404;
+//
+//  --orangeColor-100: #f7b99f;
+//  --orangeColor-200: #f8a683;
+//  --orangeColor-300: #ff9a6f;
+//  --orangeColor-400: #f88554;
+//  --orangeColor-500: #f77842;
+//  --orangeColor-600: #fc6423;
+//  --orangeColor-700: #fb550e;
+//  --orangeColor-800: #ff4e03;
+//
+//
+//  --purpleColor-100: #dcc5f3;
+//  --purpleColor-200: #bb7ef8;
+//  --purpleColor-300: #b06bf5;
+//  --purpleColor-400: #a756f7;
+//  --purpleColor-500: #993cf5;
+//  --purpleColor-600: #8d26f5;
+//  --purpleColor-700: #8717f7;
+//  --purpleColor-800: #7e07f6;
+//}
 :root {
   --fontFamily: "Inter", "Aperto", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-  --blackColor: #3A4252;
-  --whiteColor: #ffffff;
-  --bodyColor: #64748B;
-  --borderColor: #ECEEF2;
+  --blackColor: #3A4252; /* giữ nguyên */
+  --whiteColor: #ffffff; /* giữ nguyên */
+  --bodyColor: #647F64; /* từ #64748B xanh dương → xanh lá trung tính */
+  --borderColor: #ECEEF2; /* giữ nguyên nếu muốn trung tính */
   --transition: .2s;
   --fontSize: 15px;
-  --primaryColor: #605DFF;
-  --secondaryColor: #3584FC;
-  --successColor: #25B003;
-  --dangerColor: #FF4023;
-  --warningColor: #ffc107;
-  --infoColor: #0dcaf0;
-  --lightColor: #f8f9fa;
-  --darkColor: #212529;
-  --purpleColor: #AD63F6;
-  --orangeColor: #FD5812;
-  --vnaXanhColor: #2a6886;
-  --vnaVangColor: #d3a023;
-  //--vnaXanhColor: #006E8C;
+  --primaryColor: #005234; /* từ #605DFF → xanh lá tươi sáng */
+  --secondaryColor: #38FC58; /* từ #3584FC → xanh lá mạnh hơn */
+  --successColor: #25B003; /* giữ nguyên (đã xanh lá) */
+  --dangerColor: #FF4023; /* giữ nguyên hoặc đổi sang đỏ cam tùy ý */
+  --warningColor: #C4F02F; /* từ vàng → vàng xanh lá nhạt */
+  --infoColor: #0DCF58; /* từ xanh dương → xanh lá sáng */
+  --lightColor: #f8f9fa; /* giữ nguyên */
+  --darkColor: #212529; /* giữ nguyên */
+  --purpleColor: #9CF66B; /* từ tím → xanh lá nhạt */
+  --orangeColor: #FDCB42; /* từ cam → vàng xanh lá nhạt */
+  --vnaXanhColor: #2A865A; /* từ #2a6886 → xanh lá đậm */
+  --vnaVangColor: #D3C623; /* từ vàng → vàng xanh lá nhạt */
 
   --gray-100: #f8f9fa;
   --gray-200: #e9ecef;
@@ -35,34 +95,32 @@
   --gray-800: #343a40;
   --gray-900: #212529;
 
+  --warningColor-100: #F0FFB0;
+  --warningColor-200: #E2FF7A;
+  --warningColor-300: #D4FF3F;
+  --warningColor-400: #BFFF14;
+  --warningColor-500: #A6E600;
+  --warningColor-600: #84B800;
+  --warningColor-700: #5B7A00;
+  --warningColor-800: #545E00;
 
-  --warningColor-100: #f8de90;
-  --warningColor-200: #f7d05d;
-  --warningColor-300: #ecbd2f;
-  --warningColor-400: #d7a613;
-  --warningColor-500: #ca9906;
-  --warningColor-600: #a67d03;
-  --warningColor-700: #7a5b01;
-  --warningColor-800: #6e5404;
+  --orangeColor-100: #FFF3B0;
+  --orangeColor-200: #FFF083;
+  --orangeColor-300: #FFED6F;
+  --orangeColor-400: #FFE854;
+  --orangeColor-500: #FFE342;
+  --orangeColor-600: #FFD823;
+  --orangeColor-700: #FFCC0E;
+  --orangeColor-800: #FFC903;
 
-  --orangeColor-100: #f7b99f;
-  --orangeColor-200: #f8a683;
-  --orangeColor-300: #ff9a6f;
-  --orangeColor-400: #f88554;
-  --orangeColor-500: #f77842;
-  --orangeColor-600: #fc6423;
-  --orangeColor-700: #fb550e;
-  --orangeColor-800: #ff4e03;
-
-
-  --purpleColor-100: #dcc5f3;
-  --purpleColor-200: #bb7ef8;
-  --purpleColor-300: #b06bf5;
-  --purpleColor-400: #a756f7;
-  --purpleColor-500: #993cf5;
-  --purpleColor-600: #8d26f5;
-  --purpleColor-700: #8717f7;
-  --purpleColor-800: #7e07f6;
+  --purpleColor-100: #E6F3C5;
+  --purpleColor-200: #C5F87E;
+  --purpleColor-300: #B0F56B;
+  --purpleColor-400: #A7F756;
+  --purpleColor-500: #99F53C;
+  --purpleColor-600: #8DF526;
+  --purpleColor-700: #87F717;
+  --purpleColor-800: #7EF607;
 }
 
 *, ::after, ::before {
@@ -477,7 +535,7 @@ button {
   width: 40px;
   aspect-ratio: 1;
   position: relative;
-  background-image: url('/images/airplane_loading.gif');
+  background-image: url('/images/loading.png');
   background-size: contain;
   background-repeat: no-repeat;
   background-position: center;
