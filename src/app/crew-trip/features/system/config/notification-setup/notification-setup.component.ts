@@ -1,13 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { HttpStatusCode } from '@angular/common/http';
-import {
-	Component,
-	ElementRef,
-	Inject,
-	inject,
-	OnInit,
-	ViewChild,
-} from '@angular/core';
+import { Component, Inject, inject, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import {
 	MatAutocompleteModule,
@@ -18,28 +11,34 @@ import { MatCardModule } from '@angular/material/card';
 import { MatCheckbox } from '@angular/material/checkbox';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MAT_DIALOG_DATA, MatDialog, MatDialogActions, MatDialogClose, MatDialogContent, MatDialogRef, MatDialogTitle } from '@angular/material/dialog';
+import {
+	MAT_DIALOG_DATA,
+	MatDialogActions,
+	MatDialogClose,
+	MatDialogContent,
+	MatDialogRef,
+	MatDialogTitle,
+} from '@angular/material/dialog';
 import { MatFormField, MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSelectModule } from '@angular/material/select';
 import { MatTableModule } from '@angular/material/table';
 import { RouterModule } from '@angular/router';
-import { DigitOnlyDirective, DigitOnlyModule } from '@uiowa/digit-only';
+import { DigitOnlyModule } from '@uiowa/digit-only';
 import { NgxEditorModule } from 'ngx-editor';
 import { NgxMaterialTimepickerModule } from 'ngx-material-timepicker';
 import { NgxTrimDirectiveModule } from 'ngx-trim-directive';
+import { NgxControlError } from 'ngxtension/control-error';
 import { FlightMarketService } from 'src/app/crew-trip/core/services/flight-market.service';
 import { NotificationSetupService } from 'src/app/crew-trip/core/services/notification-setup.service';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
+import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
+import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 import { DataTransformPipe } from 'src/app/crew-trip/shared/data-transform.pipe';
 import { HasPermissionDirective } from 'src/app/crew-trip/shared/directive/has-permission.directive';
 import { InputSizeComponent } from 'src/app/crew-trip/shared/input/input-size.component';
 import { SelectOptions } from 'src/app/crew-trip/shared/select-option';
-import { FlightMarketStatusEnum } from '../../../category/flight-market/flight-market.model';
-import { SelectionSuggestComponent } from 'src/app/crew-trip/shared/component/selection-suggest/selection-suggest.component';
-import { NgxControlError } from 'ngxtension/control-error';
-import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection/selection.component';
 
 @Component({
 	selector: 'app-notification-setup',
@@ -63,16 +62,21 @@ import { SelectionComponent } from 'src/app/crew-trip/shared/component/selection
 		RouterModule,
 		MatCheckbox,
 		NgxEditorModule,
-		NgxTrimDirectiveModule, HasPermissionDirective, DigitOnlyModule, SelectionSuggestComponent, NgxControlError,
-		SelectionComponent
+		NgxTrimDirectiveModule,
+		HasPermissionDirective,
+		DigitOnlyModule,
+		SelectionSuggestComponent,
+		NgxControlError,
+		SelectionComponent,
 	],
 	templateUrl: './notification-setup.component.html',
 	styleUrl: './notification-setup.component.scss',
-	providers: [HasPermissionDirective]
+	providers: [HasPermissionDirective],
 })
 export class NotificationSetupComponent
 	extends CommonComponent
-	implements OnInit {
+	implements OnInit
+{
 	override baseService = inject(NotificationSetupService);
 	flightMarketService = inject(FlightMarketService);
 	notiSetupType = SelectOptions.NOTI_SETUP_TYPE;
@@ -80,7 +84,8 @@ export class NotificationSetupComponent
 	listAirrportCode = [];
 	filteredOptionsMarket: any[];
 	// @ViewChild('airportCode') airportCode: ElementRef<HTMLInputElement>;
-	@ViewChild(MatAutocompleteTrigger) autocompleteTrigger!: MatAutocompleteTrigger;
+	@ViewChild(MatAutocompleteTrigger)
+	autocompleteTrigger!: MatAutocompleteTrigger;
 
 	_displayedColumns: {
 		label: string;
@@ -88,20 +93,20 @@ export class NotificationSetupComponent
 		type?: string;
 		format?: string;
 	}[] = [
-			{ label: $localize`:@@name:Type`, value: 'type' },
-			{
-				label: $localize`:@@airportCode:Notification settings`,
-				value: 'notiSetting',
-			},
-			{ label: $localize`:@@note:Regular notification`, value: 'regularNoti' },
-			{ label: $localize`:@@note:Airport Code`, value: 'airportCode' },
-			{ label: $localize`:@@note:Remark`, value: 'note' },
-			{ label: $localize`:@@status:Status`, value: 'active' },
-		];
+		{ label: $localize`:@@name:Type`, value: 'type' },
+		{
+			label: $localize`:@@airportCode:Notification settings`,
+			value: 'notiSetting',
+		},
+		{ label: $localize`:@@note:Regular notification`, value: 'regularNoti' },
+		{ label: $localize`:@@note:Airport Code`, value: 'airportCode' },
+		{ label: $localize`:@@note:Remark`, value: 'note' },
+		{ label: $localize`:@@status:Status`, value: 'active' },
+	];
 
 	override formGroupDetail = this.formBuilder.group({
-		id: []
-	})
+		id: [],
+	});
 
 	constructor() {
 		super();
@@ -119,17 +124,13 @@ export class NotificationSetupComponent
 			...this._displayedColumns.map((s) => s.value),
 			'action',
 		];
-		await Promise.all([this.search()]).then(
-			() => { },
-		);
+		await Promise.all([this.search()]).then(() => {});
 	}
-
-
 
 	override async showDialogDetail(id?: any, type?: string) {
 		const dialogDetailRef = this.dialog.open(DialogNotificationSetupDetail, {
 			data: { id: id },
-			minWidth: 700
+			minWidth: 700,
 		});
 		dialogDetailRef.afterClosed().subscribe(async (res) => {
 			await this.search();
@@ -157,9 +158,9 @@ export class NotificationSetupComponent
 		} else if (value === 'No. of year') {
 			return 'Năm';
 		} else if (value === 'Per.(%)') {
-			return '%'
+			return '%';
 		}
-		return ''
+		return '';
 	}
 
 	// NOTI_REGULAR_TYPE: [
@@ -170,26 +171,52 @@ export class NotificationSetupComponent
 	// 	}
 	//   ],
 	getRegularNotiUnit(value: any, notiRegularType: any) {
-		if (notiRegularType && notiRegularType.toUpperCase() === 'Day in month'.toUpperCase()) {
+		if (
+			notiRegularType &&
+			notiRegularType.toUpperCase() === 'Day in month'.toUpperCase()
+		) {
 			return value + ' hàng tháng ';
-		} else if (notiRegularType && notiRegularType.toUpperCase() === 'Month'.toUpperCase()) {
+		} else if (
+			notiRegularType &&
+			notiRegularType.toUpperCase() === 'Month'.toUpperCase()
+		) {
 			return 'Tháng ' + value;
 		}
 		return ''; // Default return value
 	}
 }
 
-
 @Component({
 	selector: 'dialog-notification-setup-detail',
 	templateUrl: 'dialog-notification-setup-detail.component.html',
 	standalone: true,
-	imports: [MatDialogTitle, MatDialogContent, MatDialogActions, MatDialogClose,
-		MatCardModule, FormsModule, MatFormFieldModule, ReactiveFormsModule, MatSelectModule, MatButtonModule,
-		MatFormField, MatInputModule, InputSizeComponent, MatDatepickerModule,
-		MatNativeDateModule, NgxMaterialTimepickerModule, MatAutocompleteModule, CommonModule,
-		MatTableModule, MatPaginatorModule, DataTransformPipe, RouterModule, DigitOnlyModule,
-		NgxControlError, SelectionSuggestComponent, MatCheckbox,
+	imports: [
+		MatDialogTitle,
+		MatDialogContent,
+		MatDialogActions,
+		MatDialogClose,
+		MatCardModule,
+		FormsModule,
+		MatFormFieldModule,
+		ReactiveFormsModule,
+		MatSelectModule,
+		MatButtonModule,
+		MatFormField,
+		MatInputModule,
+		InputSizeComponent,
+		MatDatepickerModule,
+		MatNativeDateModule,
+		NgxMaterialTimepickerModule,
+		MatAutocompleteModule,
+		CommonModule,
+		MatTableModule,
+		MatPaginatorModule,
+		DataTransformPipe,
+		RouterModule,
+		DigitOnlyModule,
+		NgxControlError,
+		SelectionSuggestComponent,
+		MatCheckbox,
 	],
 })
 export class DialogNotificationSetupDetail extends CommonComponent {
@@ -221,17 +248,19 @@ export class DialogNotificationSetupDetail extends CommonComponent {
 	override async ngOnInit() {
 		super.ngOnInit();
 		this.loadListFlightMarket({
-			status: FlightMarketStatusEnum.OPERATIONAL,
-		})
+			status: null,
+		});
 		if (this.data?.id) {
 			await this.detail(this.data?.id);
 			this.formGroupDetail.controls.type.disable();
 		}
 		this.typeValueChanges({ value: this.formGroupDetail.controls.type.value });
 		this.setRegularNotiMax(this.formGroupDetail.controls.regularType.value);
-		this.formGroupDetail.controls.regularType.valueChanges.subscribe((value) => {
-			this.setRegularNotiMax(value)
-		})
+		this.formGroupDetail.controls.regularType.valueChanges.subscribe(
+			(value) => {
+				this.setRegularNotiMax(value);
+			},
+		);
 	}
 
 	setRegularNotiMax(value: any) {
@@ -240,7 +269,10 @@ export class DialogNotificationSetupDetail extends CommonComponent {
 		} else {
 			this.regularNotiMax = 12;
 		}
-		if (Number(this.formGroupDetail.controls.regularNoti.value) >= this.regularNotiMax) {
+		if (
+			Number(this.formGroupDetail.controls.regularNoti.value) >=
+			this.regularNotiMax
+		) {
 			this.formGroupDetail.controls.regularNoti.setValue(null);
 		}
 	}
@@ -248,7 +280,7 @@ export class DialogNotificationSetupDetail extends CommonComponent {
 		try {
 			console.log(this.formGroupDetail.value);
 			await super.save();
-			this.close()
+			this.close();
 		} catch (e: any) {
 			if (e.status === HttpStatusCode.Conflict) {
 				this.formGroupDetail.controls.type.setErrors({
@@ -274,6 +306,6 @@ export class DialogNotificationSetupDetail extends CommonComponent {
 	}
 
 	close() {
-		this.dialogRef.close()
+		this.dialogRef.close();
 	}
 }

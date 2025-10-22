@@ -19,14 +19,13 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
 import { RoleFunctionComponent } from 'src/app/crew-trip/features/roles/role-function/role-function.component';
 import { NoDataRowOutlet } from '@angular/cdk/table';
 import { CommonComponent } from 'src/app/crew-trip/shared/common.component';
-import { ContractDetailComponent } from 'src/app/crew-trip/features/contract/contract-detail/contract-detail.component';
 import { HasPermissionDirective } from '../../shared/directive/has-permission.directive';
 
 
 @Component({
   selector: 'app-roles',
   standalone: true,
-  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet, ContractDetailComponent,
+  imports: [RouterLink, CommonModule, MatCardModule, MatButtonModule, MatMenuModule, MatTableModule, MatPaginatorModule, NgIf, MatCheckboxModule, TitleCasePipe, DataTransformPipe, NgClass, MatFormField, MatSelect, MatOption, MatInput, MatLabel, ReactiveFormsModule, InputSizeComponent, MatError, MatPrefix, MatSuffix, MatTab, MatTabGroup, RoleFunctionComponent, NoDataRowOutlet,
     HasPermissionDirective
   ],
   templateUrl: './roles.component.html',
