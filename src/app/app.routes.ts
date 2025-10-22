@@ -4,7 +4,6 @@ import { ProfileComponent } from 'src/app/crew-trip/core/auth/profile/profile.co
 import { ResetPasswordComponent } from 'src/app/crew-trip/core/auth/reset-password/reset-password.component';
 import { SignInComponent } from 'src/app/crew-trip/core/auth/sign-in/sign-in.component';
 import { AuthGuard } from 'src/app/crew-trip/core/guards/menu.guard';
-import { RedirectGuard } from 'src/app/crew-trip/core/guards/redirect-guard';
 import { FirstPageComponent } from 'src/app/crew-trip/features/first-page/first-page.component';
 import { RolesComponent } from 'src/app/crew-trip/features/roles/roles.component';
 import { AircraftDataComponent } from 'src/app/crew-trip/features/system/config/aircraft-data/aircraft-data.component';
@@ -21,14 +20,14 @@ export const routes: Routes = [
 	{
 		path: '',
 		component: FirstPageComponent,
-		canActivate: [RedirectGuard],
+		// canActivate: [RedirectGuard],
 		// redirectTo: 'auth/login',
 		// pathMatch: 'full',
 	},
 	{
 		path: '',
 		component: FirstPageComponent,
-		canActivate: [AuthGuard],
+		// canActivate: [AuthGuard],
 		data: { permissionCodes: [] },
 		children: [
 			{
@@ -110,11 +109,6 @@ export const routes: Routes = [
 						},
 					},
 				],
-			},
-			{
-				path: 'category',
-				children: [
-					],
 			},
 			{ path: 'profile', component: ProfileComponent },
 		],
